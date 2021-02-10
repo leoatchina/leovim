@@ -1,0 +1,1078 @@
+*far.vim*   Find And Replace
+
+Author:         Oleg Khalidov <brooth@gmail.com>
+Description:    Find And Replace
+Homepage:       https://github.com/brooth/far.vim/
+Version:        beta3
+
+==============================================================================
+
+>
+           _|_|                                  _|
+         _|        _|_|_|  _|  _|_|  _|      _|      _|_|_|  _|_|
+       _|_|_|_|  _|    _|  _|_|      _|      _|  _|  _|    _|    _|
+         _|      _|    _|  _|          _|  _|    _|  _|    _|    _|
+         _|        _|_|_|  _|  _|        _|      _|  _|    _|    _|
+<
+
+==============================================================================
+CONTENTS                                                        *far-contents*
+
+   1. Intro ...................................................... |far-intro|
+   2. Usage ...................................................... |far-usage|
+   2.1  Hello, World! .................................... |far-quick-example|
+   2.2  Far, F ................................................... |:Far| |:F|
+   2.3  Farp ......................................................... |:Farp|
+   3.4  Farr Farf ............................................ |:Farr| |:Farf|
+   2.5  Fardo Farundo .................................... |:Fardo| |:Farundo|
+   2.6  Refar ....................................................... |:Refar|
+   3. Extras .................................................... |far-extras|
+   3.1  Multiline Replacement ................................ |far-multiline|
+   3.2  Highlighting ......................................... |far-highlight|
+   3.2  Command-Line Completion ............................... |far-complete|
+   3.3  Preview Window ......................................... |far-preview|
+   3.4  Jump to source ............................................ |far-jump|
+   3.5  Consistency Check .................................. |far-consistency|
+   3.6  Ranges ................................................... |far-range|
+   4. File mask .............................................. |far-file-mask|
+   5. Configuration ............................................. |far-config|
+   6. Mappings ................................................ |far-mappings|
+   7. Command Params ............................................ |far-params|
+   8. Bugs ........................................................ |far-bugs|
+   9. Changelog .............................................. |far-changelog|
+   10. License .................................................. |far-license|
+
+==============================================================================
+INTRO                                                              *far-intro*
+
+    Far.vim makes it easier to find and replace text through multiple files.
+    It's inspired by fancy IDEs, like IntelliJ and Eclipse, that provide
+    cozy tools for such tasks.
+
+==============================================================================
+USAGE                                                              *far-usage*
+
+"Hello, World!"                                            *far-quick-example*
+
+    No time to read? Here is the quick example:
+>
+    :Far foo bar **/*.py<CR>
+    :Fardo<CR>
+<
+*:Far* {pattern} {replace-with} {file-mask} [params]
+    Find the text to replace. Similar to |:substitute| command.
+    The arguments are separated by space (" "). To escape space character
+    use "\s" or "\ ". To escape double quote use "\"".  To escape backslash
+    use "\\\\".
+    For the {pattern} see |pattern|. You can also use '*' as {pattern} for
+    multiline replacement. See |far-multiline|.
+    {replace-with} can be a literal string, or |sub-replace-special|.
+    {file-mask} is a simple file mask pattern, see |far-file-mask| for details.
+    Note: Use '%' as {file-mask} to search in current buffer.
+    Note: Use rg defined types as {file-mask} to search when using rg or rgnvim
+    sources. eg. 'html' 'py' 'js'
+    For [params] see |far-params|
+    See |mappings| to acquaint yourself with the shortcuts available for far buffer.
+
+*:F* {pattern} {file-mask} [params]
+    Find {pattern} in {file-mask} files. Similar to |Far| without
+    {replace-with}.
+    For {pattern}, {file-mask} and [params] see |Far|.
+
+*:Farp* [params]
+    |Farp| command allows to enter {pattern}, {replace-with} and {file-mask}
+    one after the other:
+>
+     :Farp [<params>]
+     >Search (pattern): {pattern}
+     >Replace with: [replace-with]
+     >File mask: {file-mask}
+<
+    Note: You don't have to escape space character.
+    Note: |Farp| allows empty [replace-with] if you need to remove matched text.
+    For {pattern}, {replace-with}, {file-mask} and [params] see |Far| command.
+
+*:Farr* [params]
+*:Farf* [params]
+    |Farr| command allows to enter {pattern}, {replace-with} and {file-mask}
+    one after the other; |Farf| is similar to |Farr| without {replace-with}.
+    |Farr| and |Farf| provides a searching mode status bar fo regex, case
+    sensitive, word boundary and replacement.
+>
+     :Farr [<params>]
+     .*(^X) Aa(^C) ""(^W) ⬇ (^S)
+     >Find: {pattern}
+     >Replace with: [replace-with]
+     >File mask: {file-mask}
+<
+>
+     :Farf [<params>]
+     .*(^X) Aa(^C) ""(^W) ⬇ (^S)
+     >Find: {pattern}
+     >File mask: {file-mask}
+<
+    Below are the icon of each mode and the key mapping to toggle it. A mode
+    is on when its icon in the mode status bar is highlighted.
+
+                ------------------------------------------
+                icon    mode                        toggle
+                ------------------------------------------
+                [.*]    regex                       CTRL-X
+                [Aa]    case-sentive,               CTRL-A
+                [""]    word boundary               CTRL-W
+                [⬇ ]    replacement (substitution)  CTRL-S
+                        quit |Farr| or |Farf|       <Esc>
+                ------------------------------------------
+
+    For {pattern}, {replace-with}, {file-mask} and [params] see |Far| command.
+    Note: You don't have to escape space character.
+    Note: |Farr| allows empty [replace-with] if you need to remove matched text.
+
+    Customer settings:
+    To change the key mappings, see |g:far#prompt_mapping|.
+    To set initial mode status on starting vim, see |g:far#mode_open|.
+    To enable/disable mapping prompt like (^X), see |g:far#show_prompt_key|.
+
+*:Fardo* [params]
+    |Fardo| starts the replacement task. This command must be executed in a FAR
+    buffer (buffer with |Far| or |Farp| result).
+    For [params] see |fardo-params|.
+
+*:Farundo* [params]
+    |Farundo| undos the last replacement task taken by |Fardo|. This command is
+    only available when you set 'let |g:far#enable_undo|=1'.
+    For [params] see |farundo-params|.
+
+*:Refar* [params]
+    |Refar| reruns |Far| or |Farp| with the same arguments or you can change
+    any via [params].
+    For [params] see |refar-params|.
+    Note: It must be executed in a FAR buffer.
+    You can use |Refar| in case the data's been changed so you need to update
+    the search result.
+
+==============================================================================
+EXTRAS                                                            *far-extras*
+
+Multiline Replacement                                          *far-multiline*
+
+    It's allowed to use oneline or multiline text as {pattern} or/and
+    {replace-with} expressions for |Far|, |Farp| and |F| commands.
+
+    a) The first approach is to use visual selection. Go to Visual mode,
+    highlight the text you want to replace and hit ':'. Use '*' as {pattern}:
+>
+    :'<,'>Far * {replace-with} {file-mask} [params]
+<
+    and resp. for |Farp|:
+>
+     :'<,'>Farp [<params>]
+     >Search (pattern): *
+     >Replace with: [replace-with]
+     >File mask: {file-mask}
+<
+    For |Farr| and |Farf|, '*' is unnecessary. They will automatically use the
+    visual selection as searching pattern:
+>
+     :'<,'>Farr [<params>]
+     >Replace with: [replace-with]
+     >File mask: {file-mask}
+<
+>
+     :'<,'>Farf [<params>]
+     >File mask: {file-mask}
+<
+
+    b) The second approach - simply paste yanked text.
+>
+    :Far <^ra> <^rb> {file-mask} [params]
+<
+     and resp. for |Farp|:
+>
+     :Farp [<params>]
+     >Search (pattern): <^ra>
+     >Replace with: <^rb>
+     >File mask: {file-mask}
+<
+    Note: you need to explicitly escape all special characters. See |pattern|.
+
+
+Highlighting                                                   *far-highlight*
+
+    If |g:far#highlight_match| flag is set, far.vim adds per line highlighting
+    for each matched and resulting item. Since per-line highlighting is a CPU
+    depending feature in vim, it's better sometimes to turn it off for a big
+    amount of data (Avg. 200+ items).
+
+    If the highlighting feature is off, the following abbreviations are added
+    to the beginning of resp. lines:
+        X - Item excluded
+        R - Item replaced
+        B - Item broken (see |far-consistency|)
+
+    See |far-highlight-config|.
+
+
+Command-Line Completion                                         *far-complete*
+
+    Far.vim supports built-in command-line completion (see |'wildmenu'|).
+    Hit <tab> while entering |Far|, |Farp| or |Fardo| command to auto-complete
+    predefined or previously used arguments.
+    Far.vim also supports auto-completion of |far-params| values. Hit <tab>
+    after '=' character:
+>
+    :Far foo bar % --win-l<tab>         ->  :Far foo bar % --win-layout
+    :Far foo bar % --win-layout=c<tab>  ->  :Far foo bar % --win-layout=current
+<
+    See also |g:far#file_mask_favorites|.
+
+
+Preview Window                                                   *far-preview*
+
+    Far.vim allows previewing the code snippet where the item was found. If
+    |g:far#auto_preview| flag is set, far.vim automatically opens and scrolls
+    the preview window on cursor movement. If |g:far#auto_preview| is set to 0,
+    you can control preview window manually (see |far-mappings|). You can also
+    scroll preview window up and down from a FAR buffer (no need to switch
+    focus to the preview window). By default <c-k> scrolls up and <c-j> scrolls
+    down.
+
+    When |g:far#auto_preview| = 1 , if |g:far#auto_preview_on_start| flag is
+    set to 1, the preview window will be opened on cursor movement, once starting
+    the result window; if |g:far#auto_preview_on_start| flag is set to 0, the
+    preview window will not be opened on cursor movement, until you press 'p',
+    the key mapping to manually open the preview window. For the key mapping in
+    result window see |default-far-mappings|.
+
+    See |far-mappings|, |g:far#preview_window_scroll_step|,
+        |g:far#auto_preview|, |g:far#auto_preview_on_start|,
+        |g:far#preview_window_layout|,|g:far#preview_window_width|,
+        |g:far#preview_window_height|.
+
+
+Jump to source                                                      *far-jump*
+
+    If there is an open buffer for a matched item, you can jump to it from a
+    FAR window by hitting <CR> (by default) button. If there is no such buffer,
+    far.vim opens it in current (FAR) window.
+
+    See |far-mappings|
+
+
+Consistency Check                                            *far-consistency*
+
+    Since the search (|Far| or |Farp| command) to the replacement (|Fardo|),
+    the file's content can be modified. During the replacement far.vim is
+    checking that respective item's been replaced successfully. If not, this
+    item is marked as 'broken'. You can see these items in |FarBrokenItem|
+    highlighting or with *B* prefix if |g:far#highlight_match| is set to 0.
+
+    See |far-highlight|, |g:far#highlight_match|.
+
+Ranges                                                             *far-range*
+
+    You can specify the line-range to search in. Available for |Far|, |Farp|,
+    |F| and |Refar| commands.
+
+    Example: find candidates in 10-20 lines only:
+>
+    :10,20Far foo bar **/*.py
+<
+
+    Example: find candidates under 500 line:
+>
+    :0,499Far foo bar **/*.py
+<
+    See also: |far-multiline|
+
+==============================================================================
+FILE MASK                                                      *far-file-mask*
+
+    The format of {filemask} is different for different source searchers.
+
+    {filemask} for all source searchers:
+        'vimgrep' : see |far-vimgrep-file-mask|
+        'rg' 'rgnvim' 'ack' 'acknvim' 'ag' 'agnvim' : see |far-glob|
+
+
+    NOTE: To set glob source in '.vimrc', see |g:far#source|.
+    NOTE: To set source in command, see '--source' in |far-params|.
+          This override |g:far#source|
+
+    The terminology used below:
+        current file: the file opened in the current buffer.
+        cwd: the directory that the current buffer's file is in.
+
+------------------------------------------------------------------------------
+'vimgrep'                                               *far-vimgrep-file-mask*
+
+    Uses the glob syntax for the file-mask
+
+    '%'        : the current file
+
+    '*'
+        any zero or more chars, its regex is ".*"
+        can not contain dir separator.
+        can contain '.'
+        can not start with '.', cant no be hidden
+
+    '.*'
+        any zero or more chars, its regex is "\..*"
+        can not contain dir separator.
+        can contain '.'
+        start with '.', is hidden
+
+    '**'
+        any zero or more chars,
+        can contain dir separator
+        can contain '.', can not be hidden
+        can not start with '.'
+
+    '.**'
+        any zero or more chars,
+        can contain dir separator
+        can contain '.', can not be hidden
+        can start with '.' or not
+
+    -------------------------------------------------------------------------
+                                 (DCV)             (override
+                                 direct   indirect DCV)
+                  root  subdir   child    subdir   file     file
+    filemask      dir   #layer   visible  visible  visible  regex
+    -------------------------------------------------------------------------
+    '[xx/]' =
+        '' './'   cwd    0
+        '/'       /      0
+        '<path>/' <path> 0
+    -------------------------------------------------------------------------
+    '[xx/]*'      [xx/]  0        Y       -         Y       '^[^\.].*$'
+    '[xx/]*/yy'   [xx/]  1        Y       -         -       -
+    '[xx/].*'     [xx/]  0        Y/N     -         Y/N     '^[^\.].*$'
+    '[xx/].*/yy'  [xx/]  1        Y/N     -         -       -
+    -------------------------------------------------------------------------
+    '[xx/]**'     [xx/]  >=0      Y       Y         Y       '^[^\.].*$'
+    '[xx/]**/yy'  [xx/]  >=0      Y       Y         Y/N     -
+    '[xx/].**'    [xx/]  >=0      Y/N     Y         Y       '^[^\.].*$'
+    '[xx/].**/yy' [xx/]  >=0      Y/N     Y         -       -
+    -------------------------------------------------------------------------
+    '[xx]/.below' [xx/]  0        Y/N     -         Y/N     '^[\.]*below$'
+    '[xx/]*'      [xx/]  0        Y       -         Y       '^[^\.].*$'
+    '[xx]/*.*'    [xx/]  0        Y       -         Y       '^[^\.].*\..*$'
+    '[xx]/*.sh'   [xx/]  0        Y       -         Y       '^[^\.].*\.sh$'
+    '[xx]/*yy*'   [xx/]  0        Y       -         Y       '^[^\.].*yy.*$'
+    '[xx]/*yy*zz' [xx/]  0        Y       -         Y       '^[^\.].*yy.*zz$'
+    -------------------------------------------------------------------------
+    e.g.
+    '/' +<below>  is equivalent
+    '*'           cwd    0        Y       -         Y       '^[^\.].*$'
+    '*.*'         cwd    0        Y       -         Y       '^[^\.].*\..*$'
+    '*.sh'        cwd    0        Y       -         Y       '^[^\.].*\.sh$'
+    '**'          cwd    >=0      Y       Y         Y       '^[^\.].*$'
+    '**/*'        cwd    >=0      Y       Y         Y       '^[^\.].*$'
+    '.**'         cwd    >=0      Y/N     Y         Y       '^[^\.].*$'
+    '.**/*'       cwd    >=0      Y/N     Y         Y       '^[^\.].*$'
+    '.**/*.sh'    cwd    >=0      Y/N     Y         Y       '^[^\.].*\.sh$'
+    -------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+'rg' 'rgnvim' 'ag' 'agnvim' 'ack' ''acknvim'                       *far-glob*
+
+    Those searching engines use far.vim's own glob expression supported by
+    python 'pathlib.glob'. It searches all visible and hidden dirs and files
+    excepted ignored files. Rules to ignore files are loaded from files in list
+    |g:far#ignore_files|. You can create one or more such files and append them
+    to |g:far#ignore_files|.
+
+    Both {file-mask} and ignore-rules are in the following format, which is a
+    bit different from the format of 'vimgrep' {file-mask} and .gitignore.
+
+    NOTE:
+        'xx': a glob expression, can contain '/', doesn't end with '/'.
+        'yy': a glob expression, can contain '/', doesn't start with '/'.
+        'zz': a glob expression, can contain/start with/end with '/'.
+    NOTE:
+        {file-mask} can be glob expressions joint by ',' without whitespace.
+
+    heading
+
+        '/xx'
+            'xx' is directly under the 'root' dir
+
+        'xx'
+            'xx' is recursively under the 'root' dir
+
+    tailing
+
+        'xx'
+            File.
+
+        'xx/'
+            Dir. Far.vim returns all files recursively under the dir.
+
+    special chars
+
+        '%'
+            The current file.
+
+        '*'
+            Any >=0 chars except the path separator '/'.
+
+        '?'
+            Any one char except the path separator '/'.
+
+        'xx/**'
+            All dirs recursively under 'xx' dir include 'xx' dir itself.
+            Far.vim returns the same result as 'xx/'.
+
+        'xx/**/yy'
+            'yy' glob expression recursively under 'xx' dir.
+
+    examples
+
+        '/' '*' '**' '**/*'
+            All files under the 'root' dir.
+
+        '*.sh'
+            All files with '.sh' extension, recursively under cwd.
+            Including 'xx.sh' '.sh' '.xx.sh'
+
+        '*.*'
+            All files with '.' in name, recursively under cwd.
+            Including '.xx','xx.','xx.xx'
+
+        '/*.sh'
+            All '*.sh' files directly under cwd.
+
+        '/xx/*test*/'
+            All dirs with 'test' in name, directly under '<cwd>/xx/' dir.
+            Including '/xx/test/' '/xx/test2/' '/xx/1test2/' '/xx/test/'
+
+        'foo'
+            All files named 'foo', and all files under dirs named 'foo'.
+
+    only for ignore_rules:
+        'zz'
+            Ignoring rule, to ignores xx.
+
+        '!zz'
+            Exception rule, to never ignore xx, overrides all ignoring-rules.
+
+
+==============================================================================
+CONFIGURATION                                                     *far-config*
+
+    You can change next variables in order to configure far.vim behavior.
+
+*g:far#source*
+    Specify the source. Far source controls candidates gathering.
+    Far.vim provides next sources out of the box:
+
+        'vimgrep'
+            Synchronous source. Uses |:vimgrep| to find candidates.
+            Doesn't need external dependencies.
+            Supports multiline search.
+
+        'ag'
+            Synchronous source. Uses "Ag" (The Silver Searcher) to find
+            candidates. Requires 'ag' installation.
+            Note: Doesn't support multiline search.
+
+        'agnvim'
+            Asynchronous source. Same as 'ag' but uses Neovim asynchronous API
+            to search candidates in a separate thread.
+            Requires 'nvim' and 'ag' installation.
+
+        'rg'
+            Synchronous source. Uses "rg" (Ripgrep) to find candidates.
+            Requires 'rg' installation.
+            Note: Support multiline search.
+
+        'rgnvim'
+            Asynchronous source. Same as 'rg' but uses Neovim asynchronous API
+            to search candidates in a separate thread.
+            Requires 'nvim' and 'rg' installation.
+
+        'ack'
+            Synchronous source. Uses "Ack" ("http://beyondgrep.com/") to find
+            candidates. Requires 'ack' installation.
+            Note: Doesn't support multiline search.
+
+        'acknvim'
+            Asynchronous source. Same as 'ack' but uses Neovim asynchronous API
+            to search candidates in a separate thread.
+            Requires 'nvim' and 'ack' installation.
+
+*g:far#limit*
+    Limit the maximum amount of candidates.
+
+    Default: 1000
+
+*g:far#max_columns*
+    Limit the maximum length of a matched line to avoid matching binary files.
+
+    Default: 400
+
+*g:far#ignore_files*
+    A list. Files of rules to ignore file during matching.
+    Paths can be absolute or relative to the current working directory.
+    See |far-glob|, |g:far#cwd|
+
+    Default: [ '<path-to-far.vim-repo>/farignore' ]
+
+*g:far#cwd*
+    Specify the current working directory. In this directory where Far.vim
+    searches candidates.
+
+    Default: |getpwd()| value.
+
+*g:far#default_mappings*
+    Apply default mappings to each FAR buffer. See |far-mappings|.
+
+    Options: 0, 1
+    Default: 1
+
+*g:far#auto_preview*
+    Automatically open/scroll preview window on cursor movement.
+    See |far-preview|, |--auto-preview|
+
+    Options: 0, 1
+    Default: 1
+
+*g:far#auto_preview_on_start*
+    Automatically open/scroll preview window on starting result windows.
+    See |far-preview|, |--auto-preview-on-start|
+
+    Options: 0, 1
+    Default: 1
+
+*g:far#result_preview*
+    Show result preview to the right of matched text.
+    See |--result-preview|
+
+    Options: 0, 1
+    Default: 1
+
+*g:far#highlight_match*
+    Enable highlight feature.
+    See |far-highlight|, |--hl-match|.
+
+    Options: 0, 1
+    Default: 1
+
+*g:far#window_layout*
+    FAR window layout.
+    See |--win-layout|.
+
+    Options: 'top', 'left', 'right', 'bottom', 'tab', 'current'
+    Default: 'right'
+
+*g:far#window_width*
+    FAR window width.
+    See |--win-width|.
+
+    Default: 100
+
+*g:far#window_height*
+    FAR window height.
+    See |--win-height|.
+
+    Default: 20
+
+*g:far#preview_window_layout*
+    Preview window layout (relative to FAR window).
+    See |far-preview|, |--preview-win-layout|.
+
+    Options: 'top', 'left', 'right', 'bottom'
+    Default: 'bottom'
+
+*g:far#preview_window_width*
+    Preview window width.
+    See |far-preview|, |--preview-win-width|.
+
+    Default: 100
+
+*g:far#preview_window_height*
+    Preview window height.
+    See |far-preview|, |--preview-win-height|.
+
+    Default: 11
+
+*g:far#file_mask_favorites*
+    List of favorite file masks provided for command-line completion.
+    See |far-complete|
+
+    Default: ['%', '**/*.*', '**/*.html', '**/*.js', '**/*.css']
+
+*g:far#default_file_mask*
+    This value is used as the file-mask if it wasn't specified through the command.
+
+    Default: '%'
+
+*g:far#collapse_result*
+    Auto collapse result tree.
+    See |--collapse|
+
+    Options: 0, 1
+    Default: 0
+
+*g:far#preview_window_scroll_step*
+    Step size for preview window scrolling.
+    See |far-preview|, |far-mappings|.
+
+    Default: 1
+
+*g:far#auto_write_replaced_buffers*
+    Automatically write replaced buffer (if it hasn't been unsaved)
+    See |--auto-write-bufs|
+
+    Options: 0, 1
+    Default: 0
+
+*g:far#auto_delete_replaced_buffers*
+    Automatically delete replaced buffer (if it hasn't been loaded)
+    See |--auto-delete-bufs|
+
+    Options: 0, 1
+    Default: 0
+
+*g:far#enable_undo*
+    To enable |:Farundo| set this variable to 1. This setting will override
+    |g:far#auto_write_replaced_buffers| and |g:far#auto_delete_replaced_buffers,
+    so that |:Fardo| and |:Farundo| automatically write replaced/undone buffers
+    (if it hasn't been loaded), and do not delete those buffers.
+
+    Options: 0, 1
+    Default: 0
+
+*g:far#window_min_content_width*
+    Minimal width of a FAR buffer content.
+
+    Default: 60
+
+*g:far#check_window_resize_period*
+    The period of time in milliseconds in which timer checks FAR buffer width
+    and updates its content if the width has been changed.
+
+    Default: 2000
+
+*g:far#repl_devider*
+    This variable controls the icon between matched and resulting text.
+
+    Default: '  ➝  '
+
+*g:far#multiline_sign*
+    This variable controls multiline node icon.
+    See |far-multiline|
+
+    Default: '⬎'
+
+*g:far#cut_text_sign*
+    This variable controls the icon of cut text.
+
+    Default: '…'
+
+*g:far#collapse_sign*
+    This variable controls expanded node icon.
+
+    Default: '-'
+
+*g:far#expand_sign*
+    This variable controls collapsed node icon.
+
+    Default: '+'
+
+*g:far#mode_open*
+    This variable controls the initial (when vim starts) searching mode status
+    in |Farr| and |Farf|.
+    It is a dictionary, where the keys are searching modes and the values are
+    0/1 for off/on.
+
+    Default: { "regex": 1, "case_sensitive": 0, "word": 0, "substitute": 0 }
+
+*g:far#show_prompt_key*
+    This variable controls whether to display prompt for the key mappings in
+    |Farr| and |Farf|.
+
+    Default: 1
+
+------------------------------------------------------------------------------
+Highlighting Groups:                                    *far-highlight-config*
+
+    In order to configure FAR buffer appearance you can modify next
+    highlight groups.
+
+*FarFileStats*
+    Controls buffer statistic appearance.
+
+    Default:
+>
+    hi def link FarFileStats Comment
+<
+*FarFilePath*
+    Controls buffer name (path) appearance.
+
+    Default:
+>
+    hi def link FarFilePath Directory
+<
+*FarSearchVal*
+    Controls matched item appearance.
+
+    Default:
+>
+    hi def link FarSearchVal Keyword
+<
+*FarReplaceVal*
+    Controls resulting item appearance.
+
+    Default:
+>
+    hi def link FarReplaceVal String
+<
+*FarExcludedItem*
+    Controls excluded item appearance.
+
+    Default:
+>
+    hi def link FarExcludedItem NonText
+<
+*FarReplacedItem*
+    Controls replaced item appearance.
+>
+    hi def link FarReplacedItem String
+>
+*FarBrokenItem*
+    Controls broken items appearance.
+    See |far-consistency|
+
+    Default:
+>
+    hi def link FarBrokenItem Error
+<
+*FarLineCol*
+    Controls line number text appearance.
+
+    Default:
+>
+    hi def link FarLineCol LineNr
+<
+*FarPreviewMatch*
+    Controls |:match| highlighting in preview windows.
+
+    Default:
+>
+    hi def link FarPreviewMatch Search
+<
+==============================================================================
+MAPPINGS                                                        *far-mappings*
+
+    Next bindings are applied to each FAR buffer if |g:far#default_mappings|
+    is set.
+    Note: If you want to define custom mapping, you need to set to 0
+    |g:far#default_mappings| variable and explicitly configure all the bindings.
+
+------------------------------------------------------------------------------
+Default Mappings:                                       *default-far-mappings*
+
+    Below are the default mappings and corresponding variable names in
+    |g:far#mapping| to set customer mappings.
+
+x v_x                                               *g:far#mapping['exclude']*
+    Exclude item under the cursor.
+
+i v_i                                               *g:far#mapping['include']*
+    Include item under the cursor.
+
+t v_t                                        *g:far#mapping['toggle_exclude']*
+    Toggle item exclusion under the cursor.
+
+f v_f                                       *g:far#mapping['stoggle_exclude']*
+    Smartly toggle item exclusion under the cursor: exclude all items when all
+    are excluded, otherwise exclude all items.
+
+X                                               *g:far#mapping['exclude_all']*
+    Exclude all items.
+
+I                                               *g:far#mapping['include_all']*
+    Include all items.
+
+T                                        *g:far#mapping['toggle_exclude_all']*
+    Toggle exclusion for all items.
+
+F                                       *g:far#mapping['stoggle_exclude_all']*
+    Smartly toggle exclusion for all items: include all items when all are
+    excluded, otherwise exclude all items.
+
+<CR>                                         *g:far#mapping['jump_to_source']*
+    Jump to the source code of the item under the cursor.
+    See |far-jump|
+
+p                                              *g:far#mapping['open_preview']*
+    Open preview window (if not) and scroll to the item under
+    the cursor.
+    See |far-preview|
+
+P                                             *g:far#mapping['close_preview']*
+    Close preview window.
+    See |far-preview|
+
+CTRL-K                                    *g:far#mapping['preview_scroll_up']*
+    Scroll preview window up (if open).
+    See |far-preview|, |g:far#preview_window_scroll_step|
+
+
+CTRL-J                                  *g:far#mapping['preview_scroll_down']*
+    Scroll preview window down (if open).
+    See |far-preview|, |g:far#preview_window_scroll_step|
+
+zo                                                   *g:far#mapping['expand']*
+    Expand node under the cursor.
+
+zc                                                 *g:far#mapping['collapse']*
+    Collapse node under the cursor.
+
+za                                            *g:far#mapping['toggle_expand']*
+    Toggle node expanding under the cursor.
+
+zs                                       *g:far#mapping['stoggle_expand_all']*
+    Smartly toggle exclusion for all nodes: expand all nodes when all are
+    collapsed, otherwise collapse all nodes.
+
+zr v_zr                                          *g:far#mapping['expand_all']*
+    Expand all nodes.
+
+zm v_zm                                        *g:far#mapping['collapse_all']*
+    Collapse all nodes.
+
+zA v_zA                                   *g:far#mapping['toggle_expand_all']*
+    Toggle exclusion for all nodes.
+
+zS v_zS
+    Smartly toggle exclusion for all nodes: expand all nodes when all are
+    collapsed, otherwise collapse all nodes.
+
+s v_s                                            *g:far#mapping['replace_do']*
+    Execute |:Fardo|<CR>, to replace all included items.
+
+u v_s                                          *g:far#mapping['replace_undo']*
+    Execute |:Farundo|<CR>, to undo the last replacement by |:Fardo|.
+
+U v_U                                      *g:far#mapping['replace_undo_all']*
+    Execute |:Farundo| --all=1<CR>, to undo all replacements by |:Fardo|.
+    For param '--all=' see |farundo-params|.
+
+q v_q                                                  *g:far#mapping['quit']*
+    Close searching result buffer and its preview buffer (if exists)
+
+------------------------------------------------------------------------------
+Customer Mappings:
+
+*g:far#mapping*
+    By setting |g:far#mapping| as below, you can override the corresponding
+    variables in |default-far-mappings| with customer mappings.
+
+>
+    let g:far#mapping = {
+        \ "stoggle_exclude_all" : ["s", "S"],
+        \ "jump_to_source" : ["<cr>", "<2-LeftMouse>"],
+        \ "close_preview" : ["P", "q"],
+        \ "preview_scroll_up" : "<PageUp>",
+        \ "preview_scroll_down" : "<PageDown>",
+        \ }
+<
+
+*g:far#prompt_mapping*
+    Set customer key mappings for |Farr| and |Farf| as blow.
+    This variable is a dictionary which has keys as below, and each value is a
+    sub-dictionary.
+    The sub-dictionary has two keys: 'key' is used to set key mappings and
+    'prompt' is displayed in the mode status bar of |Farr| and |Farf|.
+
+>
+    let g:far#prompt_mapping = {
+        \ 'quit'           : { 'key' : '<esc>', 'prompt' : 'Esc' },
+        \ 'regex'          : { 'key' : '<c-x>', 'prompt' : '^X'  },
+        \ 'case_sensitive' : { 'key' : '<c-a>', 'prompt' : '^A'  },
+        \ 'word'           : { 'key' : '<c-w>', 'prompt' : "^W"  },
+        \ 'substitute'     : { 'key' : '<c-f>', 'prompt' : '^F'  },
+        \ }
+<
+
+==============================================================================
+COMMAND PARAMS
+
+    Command params is used to temporarily (for current execution only)
+    define several |far-config| variables.
+
+--source                                                        *far-params*
+    |Far|, |Farp| and |F| param. Changes |g:far#source| value for current
+    execution.
+
+--limit
+    |Far|, |Farp| and |F| param. Changes |g:far#limit| value for current
+    execution.
+
+--cwd
+    |Far|, |Farp| and |F| param. Changes |g:far#cwd| value for current
+    execution.
+
+--win-layout
+    |Far|, |Farp| and |F| param. Changes |g:far#window_layout| value for
+    current execution.
+
+--win-width
+    |Far|, |Farp| and |F| param. Changes |g:far#window_width| value for current
+    execution.
+
+--win-height
+    |Far|, |Farp| and |F| param. Changes |g:far#window_height| value for current
+    execution.
+
+--preview-win-layout
+    |Far|, |Farp| and |F| param. Changes |g:far#preview_window_layout| value for
+    current execution.
+
+--preview-win-width
+    |Far|, |Farp| and |F| param. Changes |g:far#preview_window_width| value for
+    current execution.
+
+--preview-win-height
+    |Far|, |Farp| and |F| param. Changes |g:far#preview_window_height| value for
+    current execution.
+
+--auto-preview
+    |Far|, |Farp| and |F| param. Changes |g:far#auto_preview| value for
+    current execution.
+
+---auto-preview-on-start
+    |Far|, |Farp| and |F| param. Changes |g:far#auto_preview_on_start| value for
+    current execution.
+
+--hl-match
+    |Far|, |Farp| and |F| param. Changes |g:far#highlight_match| value for
+    current execution.
+
+--collapse
+    |Far|, |Farp| and |F| param. Changes |g:far#collapse_result| value for
+    current execution.
+
+--result-preview
+    |Far| and |Farp| param. Changes |g:far#result_preview| value for
+    current execution.
+
+--auto-write-bufs                                               *fardo-params*
+    |Fardo| param. Changes |g:far#auto_write_replaced_buffers| value for
+    current execution.
+
+--auto-delete-bufs
+    |Fardo| param. Changes |g:far#auto_delete_replaced_buffers| value for
+    current execution.
+
+--auto-write-bufs                                            *farundo-params*
+    |Farundo| param. Changes |g:far#auto_write_replaced_buffers| value for
+    current execution.
+
+--auto-delete-bufs
+    |Farundo| param. Changes |g:far#auto_delete_replaced_buffers| value for
+    current execution.
+
+--all
+    |Farundo| param. Set '--all=1' to undo all replacements taken by |:Fardo|,
+    otherwise to undo the last replacement.
+
+--pattern                                                       *refar-params*
+    |Refar| param. Changes {pattern} value for current execution.
+
+--replace-with
+    |Refar| param. Changes {replace-with} value for current execution.
+
+--file-mask
+    |Refar| param. Changes {file-mask} value for current execution.
+
+--source
+    |Refar| param. Changes |g:far#source| value for current execution.
+
+--limit
+    |Refar| param. Changes |g:far#limit| value for current execution.
+
+--cwd
+    |Refar| param. Changes |g:far#cwd| value for current execution.
+
+
+==============================================================================
+BUGS                                                                *far-bugs*
+
+    Know issues:
+     - highlight issue:
+     Far number num **/*.py --win-layout=top --preview-layout=right
+
+    If you find a bug, please, follow this easy-peasy steps:
+
+     0)  Make sure you're using latest far.vim version.
+
+     1)  Search for existing issues on https://github.com/brooth/far.vim/issues.
+         If there is one and it's open, please, submit a reply.
+
+     2)  Turn on debug mode. In '.vimrc' ('init.vim') set this flag:
+>
+         let g:far#debug = 1
+<
+         restart vim and reproduce the bug.
+
+     3)  Create new issue (or submit a reply to existing) on
+         https://github.com/brooth/far.vim/issues. Add brief description
+         and attach '~/far.vim.log' log file.
+
+     4) Turn off debug mode.
+
+    Thank you in advance!
+
+==============================================================================
+CHANGELOG                                                      *far-changelog*
+
+    beta3
+     - fix: single quote in Far/F expression
+     - syntax renamed from far_vim to far #50:wq
+     - ripgrep file mask changed to --glob
+     - default file-mask
+     - Farundo deprecated
+
+    beta2
+     - status line
+     - Farundo
+     - cut filename to far buffer if long
+     - closing preview window disables auto preview
+     - fix: jump to buffer fails on file names with spaces
+     - Refar params [--pattern=,--replace-with, --file-mask]
+     - alternative sources. source as command param
+     - Ag (the silver searcher) support
+     - remap review scrolling to <c-j><c-k>
+     - cwd param (current working directory)
+     - limit (g:far#limit var and --limit command)
+     - Neovim async support
+     - fix: far#log -> far#log masked as broken
+     - fix: set filetype=off if already open
+     - fix: visual selection inside one line work as full line, syn is broken as
+            well
+     - remove jump setting, always open in far window
+     - fix: fails on 500 found items.
+     - cmdargs: pass to source not processed as cmd params
+     - complete Refar with current values
+     - complete cwd
+     - fix_cnum: search column number manually. modes: 'all' - grep?,
+                 'next' - ag,ack
+     - Ack support
+     - fix: command completion doesn't respect cursor position
+     - F command - only find (--result-preview=0 by default)
+     - remove greppg source
+     - override source args, 'suggest' flag (suggest for completion)
+     - return tmp file instead of items for big results
+     - <range> support
+
+    beta1       first public version.
+
+==============================================================================
+LICENSE                                                          *far-license*
+
+    MIT License. https://opensource.org/licenses/MIT
