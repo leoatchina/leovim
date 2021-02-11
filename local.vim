@@ -1,8 +1,8 @@
+" legacy vim has not completion
 if v:version <= 704 && !has('nvim')
-    " legacy vim has not completion
     let g:plugs_group=['no-complete']
 else
-    let g:plugs_group=[]
+    let g:plugs_group=['theme']
 endif
 
 if WINDOWS()
@@ -27,6 +27,7 @@ if executable('gtags') && executable('gtags-cscope')
     " let $GTAGSCONF=$HOME.'/.local/share/gtags/gtags.conf'
 endif
 
+" let g:vimtex_view_method = 'zathura'
+
 " let g:header_field_author = 'Your Name'
 " let g:header_field_author_email = 'your@mail.com'
-" let g:vimtex_view_method='zathura'
