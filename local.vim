@@ -1,10 +1,3 @@
-" legacy vim has not completion
-if v:version <= 704 && !has('nvim')
-    let g:plugs_group=['no-complete']
-else
-    let g:plugs_group=['theme']
-endif
-
 if WINDOWS()
     " set guifont=Consolas:h10
     " set guifont=Cascadia_Code:h12
