@@ -285,9 +285,9 @@ endif
 " ------------------------
 " has_truecolor
 " ------------------------
-if has('termguicolors') && !HasPlug('no-truecolor')
-    let g:has_truecolor = 1
-elseif WINDOWS()
+if exists('g:has_truecolor') && g:has_truecolor <= 0 || !has('termguicolors')
+    let g:has_truecolor = 0
+elseif has('termguicolors') || WINDOWS()
     let g:has_truecolor = 1
 else
     let g:has_truecolor = 0
@@ -298,6 +298,7 @@ if g:has_truecolor == 1
         let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
         let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     endif
+    nnoremap <M-m>g :set notermguicolors! notermguicolors?<CR>
 endif
 " ------------------------
 " easy-align
@@ -1204,7 +1205,6 @@ nnoremap <M-m>u :set invrelativenumber<CR>
 nnoremap <M-m>f :set nofoldenable! nofoldenable?<CR>
 nnoremap <M-m>w :set nowrap! nowrap?<CR>
 nnoremap <M-m>h :set nohlsearch? nohlsearch!<CR>
-nnoremap <M-m>g :set notermguicolors! notermguicolors?<CR>
 nnoremap <M-m>s :colorscheme<Space>
 nnoremap <M-m>t :setfiletype<Space>
 nnoremap <M-m>c :command<Cr>
