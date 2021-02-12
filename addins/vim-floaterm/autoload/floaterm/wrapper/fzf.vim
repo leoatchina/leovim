@@ -7,7 +7,16 @@
 
 function! floaterm#wrapper#fzf#(cmd) abort
   let s:fzf_tmpfile = tempname()
-  let cmd = a:cmd . ' > ' . s:fzf_tmpfile
+  let cmd = a:cmd
+  if cmd !~ '--preview'
+    if executable('bat')
+      let cmd .= ' --preview ' . shellescape('bat --style=numbers --color=always {}')
+    else
+      let cmd .= ' --preview ' . shellescape('cat -n {}')
+    endif
+  endif
+  let cmd .= ' > ' . s:fzf_tmpfile
+  let cmd = [&shell, &shellcmdflag, cmd]
   return [cmd, {'on_exit': funcref('s:fzf_callback')}, v:false]
 endfunction
 
@@ -18,9 +27,12 @@ function! s:fzf_callback(...) abort
       if has('nvim')
         call floaterm#window#hide(bufnr('%'))
       endif
+      let locations = []
       for filename in filenames
-        execute g:floaterm_open_command . ' ' . fnameescape(filename)
+        let dict = {'filename': fnamemodify(filename, ':p')}
+        call add(locations, dict)
       endfor
+      call floaterm#util#open(locations)
     endif
   endif
 endfunction

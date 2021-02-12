@@ -100,7 +100,7 @@ click uninstall.cmd with administrator right
     - [x] fix bugs in install and upgrade scripts
 - [x] leaderf as default fuzzy_finder when with python3 support, other wise fzf or ctrlp 
 - [x] fix coc.nvim vsplitly open definition declaration etc.
-- [ ] settings plugins to install list in ./install/plugs.vim
+- [x] settings plugins to install list in ./install/plugs.vim
+- [x] Copy && Paste using tmux
 - [ ] floaterm repl config 
-- [ ] Copy && Paste using tmux
 - [ ] rewrite readme

@@ -8,33 +8,38 @@
 "-----------------------------------------------------------------------------
 " script level variables and environment variables
 "-----------------------------------------------------------------------------
+" Used in bin/floaterm.cmd
 let $VIM_SERVERNAME = v:servername
 let $VIM_EXE = v:progpath
 
-let s:home = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-let s:script = fnamemodify(s:home . '/../bin', ':p')
-let s:windows = has('win32') || has('win64')
-
-if stridx($PATH, s:script) < 0
-  if s:windows == 0
+if !empty(g:floaterm_opener)
+  " For `git commit`
+  call floaterm#edita#setup#enable()
+  " For `floaterm xxx`
+  let s:home = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+  let s:script = fnamemodify(s:home . '/../bin', ':p')
+  if has('win32') == 0
     let $PATH .= ':' . s:script
   else
     let $PATH .= ';' . s:script
   endif
 endif
 
-if !empty(g:floaterm_gitcommit)
-  call floaterm#edita#setup#enable()
-endif
-
 " ----------------------------------------------------------------------------
 " wrapper function for `floaterm#new()` and `floaterm#update()` since they
 " share the same argument: `config`
 " ----------------------------------------------------------------------------
-function! floaterm#run(action, bang, ...) abort
+function! floaterm#run(action, bang, rangeargs, ...) abort
   let [cmd, config] = floaterm#cmdline#parse(a:000)
   if a:action == 'new'
-    call floaterm#new(a:bang, cmd, {}, config)
+    let [visualmode, range, line1, line2] = a:rangeargs
+    if range > 0
+      let lines = floaterm#util#get_selected_text(visualmode, range, line1, line2)
+    endif
+    let bufnr = floaterm#new(a:bang, cmd, {}, config)
+    if range > 0 && !empty(lines)
+      call floaterm#terminal#send(bufnr, lines)
+    endif
   elseif a:action == 'update'
     call floaterm#update(config)
   endif
@@ -48,14 +53,19 @@ function! floaterm#new(bang, cmd, jobopts, config) abort
     let wrappers = map(wrappers_path, "substitute(fnamemodify(v:val, ':t'), '\\..\\{-}$', '', '')")
     let maybe_wrapper = split(a:cmd, '\s')[0]
     if index(wrappers, maybe_wrapper) >= 0
-      let WrapFunc = function(printf('floaterm#wrapper#%s#', maybe_wrapper))
-      let [name, jobopts, send2shell] = WrapFunc(a:cmd)
-      if send2shell
-        let bufnr = floaterm#terminal#open(-1, g:floaterm_shell, {}, a:config)
-        call floaterm#terminal#send(bufnr, [name])
-      else
-        let bufnr = floaterm#terminal#open(-1, name, jobopts, a:config)
-      endif
+      try
+        let [shell, shellslash, shellcmdflag, shellxquote] = floaterm#util#use_sh_or_cmd()
+        let WrapFunc = function(printf('floaterm#wrapper#%s#', maybe_wrapper))
+        let [name, jobopts, send2shell] = WrapFunc(a:cmd)
+        if send2shell
+          let bufnr = floaterm#terminal#open(-1, g:floaterm_shell, {}, a:config)
+          call floaterm#terminal#send(bufnr, [name])
+        else
+          let bufnr = floaterm#terminal#open(-1, name, jobopts, a:config)
+        endif
+      finally
+        let [&shell, &shellslash, &shellcmdflag, &shellxquote] = [shell, shellslash, shellcmdflag, shellxquote]
+      endtry
     elseif a:bang
       let bufnr = floaterm#terminal#open(-1, g:floaterm_shell, a:jobopts, a:config)
       call floaterm#terminal#send(bufnr, [a:cmd])

@@ -19,6 +19,7 @@ function! floaterm#wrapper#vifm#(cmd) abort
   endif
 
   exe "lcd " . original_dir
+  let cmd = [&shell, &shellcmdflag, cmd]
   return [cmd, {'on_exit': funcref('s:vifm_callback')}, v:false]
 endfunction
 
@@ -29,9 +30,12 @@ function! s:vifm_callback(...) abort
       if has('nvim')
         call floaterm#window#hide(bufnr('%'))
       endif
+      let locations = []
       for filename in filenames
-        execute g:floaterm_open_command . ' ' . fnameescape(filename)
+        let dict = {'filename': fnamemodify(filename, ':p')}
+        call add(locations, dict)
       endfor
+      call floaterm#util#open(locations)
     endif
   endif
 endfunction

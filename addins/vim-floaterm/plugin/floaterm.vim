@@ -21,14 +21,13 @@ let g:floaterm_autohide         = get(g:, 'floaterm_autohide', 1)
 let g:floaterm_position         = get(g:, 'floaterm_position', 'center')
 let g:floaterm_borderchars      = get(g:, 'floaterm_borderchars', '─│─│┌┐┘└')
 let g:floaterm_rootmarkers      = get(g:, 'floaterm_rootmarkers', ['.project', '.git', '.hg', '.svn', '.root'])
-let g:floaterm_open_command     = get(g:, 'floaterm_open_command', 'edit')
-let g:floaterm_gitcommit        = get(g:, 'floaterm_gitcommit', '')
+let g:floaterm_opener           = get(g:, 'floaterm_opener', 'vsplit')
 let g:floaterm_complete_options = get(g:, 'floaterm_complete_options', {'shortcut': 'floaterm', 'priority': 5, 'filter_length': [5, 20]})
 
-command! -nargs=* -bang -complete=customlist,floaterm#cmdline#complete
-                          \ FloatermNew    call floaterm#run('new', <bang>0, <f-args>)
-command! -nargs=*       -complete=customlist,floaterm#cmdline#complete
-                          \ FloatermUpdate call floaterm#run('update', 0, <f-args>)
+command! -nargs=* -complete=customlist,floaterm#cmdline#complete -bang -range
+                          \ FloatermNew    call floaterm#run('new', <bang>0, [visualmode(), <range>, <line1>, <line2>], <f-args>)
+command! -nargs=* -complete=customlist,floaterm#cmdline#complete
+                          \ FloatermUpdate call floaterm#run('update', 0, [], <f-args>)
 command! -nargs=? -count=0 -bang -complete=customlist,floaterm#cmdline#complete_names1
                           \ FloatermShow   call floaterm#show(<bang>0, <count>, <q-args>)
 command! -nargs=? -count=0 -bang -complete=customlist,floaterm#cmdline#complete_names1
@@ -73,9 +72,3 @@ call s:bind_keymap(g:floaterm_keymap_hide,   'FloatermHide')
 call s:bind_keymap(g:floaterm_keymap_show,   'FloatermShow')
 call s:bind_keymap(g:floaterm_keymap_kill,   'FloatermKill')
 call s:bind_keymap(g:floaterm_keymap_toggle, 'FloatermToggle')
-
-"-----------------------------------------------------------------------------
-" options broken by breaking changes
-if g:floaterm_gitcommit == 'floaterm'
-  let g:floaterm_gitcommit = 'vsplit'
-endif
