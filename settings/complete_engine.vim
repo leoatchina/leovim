@@ -271,7 +271,6 @@ elseif Installed('coc.nvim')
     nnoremap <C-p>  :CocFzfList<CR>
     nnoremap <M-h>; :CocList<Space>
     nnoremap <M-h>. :CocFzfListResume<CR>
-    nnoremap <M-h>y :CocFzfList yank<CR>
     nnoremap <M-h>l :CocFzfList location<Cr>
     nnoremap <M-k>o :CocFzfList outline<CR>
     nnoremap <M-l>c :CocFzfList commands<Cr>

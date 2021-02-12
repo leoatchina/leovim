@@ -102,5 +102,6 @@ click uninstall.cmd with administrator right
 - [x] fix coc.nvim vsplitly open definition declaration etc.
 - [x] settings plugins to install list in ./install/plugs.vim
 - [x] Copy && Paste using tmux
+- [ ] fzf yank 
 - [ ] floaterm repl config 
 - [ ] rewrite readme
