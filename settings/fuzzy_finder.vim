@@ -14,7 +14,7 @@ if Installed("fzf.vim") && Installed("fzf")
             nnoremap <M-h>f :Floaterms<Cr>
         endif
     endif
-    if has('nvim-0.4') || has('patch-8.2.191')
+    if has('nvim') || has('patch-8.2.191')
         let g:fzf_layout = {'up':'~90%', 'window': {'width': 0.8, 'height': 0.8, 'yoffset': 0.5, 'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp'}}
         if WINDOWS()
             let g:fzf_preview_window = ['up:30%:hidden', 'ctrl-/']
@@ -216,7 +216,7 @@ if g:fuzzy_finder == 'leaderf'
     let g:Lf_NoChdir           = 1
     let g:Lf_ShowDevIcons      = 0
     let g:Lf_PythonVersion     = float2nr(g:python_version)
-    if has('nvim-0.4.2') || has('patch-8.1.1615')
+    if has('nvim') || has('patch-8.1.1615')
         let g:Lf_PreviewInPopup = 1
         let g:Lf_WindowPosition = 'popup'
         let g:Lf_PopupWidth     = 0.85

@@ -55,7 +55,7 @@ endif
 " ------------------------------
 " debug vimspector
 " ------------------------------
-if g:python_version > 3.6 && HasPlug('debug') && (has('nvim-0.4.3') || v:version >= 802)
+if g:python_version > 3.6 && HasPlug('debug') && (has('nvim') || v:version >= 802)
     let vimspector_install = " ./install_gadget.py --all --disable-tcl --update-gadget-config"
     MyPlug 'puremourning/vimspector', {'do': g:python_exe_path . vimspector_install}
 endif
@@ -183,7 +183,7 @@ endif
 " ------------------------------
 " quickui
 " ------------------------------
-if has('nvim-0.4') && executable('nvr') || v:version >= 802 && !has('nvim')
+if has('nvim') && executable('nvr') || v:version >= 802 && !has('nvim')
     call AddPlugSymbol('quickui')
     MyPlug 'skywind3000/vim-quickui'
 endif
@@ -247,7 +247,7 @@ if has('nvim') || v:version >= 800
     MyPlug 'voldikss/vim-translate-me'
     nmap <silent> M <Plug>Translate
     xmap <silent> M <Plug>TranslateV
-    if (has('nvim-0.4.0') || has('patch-8.1.1615'))
+    if (has('nvim') || has('patch-8.1.1615'))
         "翻译光标下的文本，在窗口中显示
         nmap <silent> zw <Plug>TranslateW
         xmap <silent> zw <Plug>TranslateWV
@@ -312,7 +312,7 @@ endif
 " ------------------------------
 " tree_browser
 " ------------------------------
-if v:version >= 801 || has('nvim-0.4')
+if v:version >= 801 || has('nvim')
     MyPlug 'lambdalisue/fern.vim'
     MyPlug 'lambdalisue/fern-hijack.vim'
     MyPlug 'lambdalisue/fern-git-status.vim'

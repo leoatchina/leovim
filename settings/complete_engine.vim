@@ -530,7 +530,7 @@ elseif Installed('vim-lsp')
     nnoremap ,cn :LspRename<CR>
     nnoremap ,c; :LspCodeAction<CR>
     nnoremap ,c, :LspCodeLens<CR>
-    if has('patch-8.1.1517') || has('nvim-0.4')
+    if has('patch-8.1.1517') || has('nvim')
         autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
         nnoremap H      :LspHover<CR>
         nnoremap <M-j>h :LspPeekDefinition<Cr>

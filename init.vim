@@ -1,8 +1,11 @@
 " --------------------------
 " version require
 " --------------------------
-if v:version < 703 && !has('nvim') || !has('nvim-0.2.2') && has('nvim')
-    echoe 'This vim config requires Vim 7.3+/neovim 0.2.2+'
+if v:version < 703 && !has('nvim')
+    echoe 'For vim, in leovim config, vim 7.3+ is at least required.'
+    finish
+elseif !has('nvim-0.4.3') && has('nvim')
+    echoe 'For neovim, in leovim config, neovim 0.4.3+ is at least required.'
     finish
 else
     " set rtp
@@ -10,8 +13,8 @@ else
     let $ADDINS_PATH   = expand('~/.vim.conf/addins')
     let $PLUGINS_PATH  = expand('~/.vim.conf/plugins')
     let $SETTINGS_PATH = expand('~/.vim.conf/settings')
-    " plugs install path, NOTE the plug installed will not be deleted by PlugClean
-    let $INSTALL_PATH  = expand('~/.vim.plugins')
+    " plugs install path, please NOTE the plugs installed would not be deleted by command :PlugClean
+    let $INSTALL_PATH = expand('~/.vim.plugins')
 endif
 " --------------------------
 " important plugins
@@ -663,7 +666,7 @@ set switchbuf=useopen,usetab,newtab
 " wildmenu
 " -----------------------------------
 set wildmenu
-if has('nvim-0.4')
+if has('nvim')
     set wildoptions+=pum
     cnoremap <expr> <up>   pumvisible() ? '<left>'  : '<up>'
     cnoremap <expr> <down> pumvisible() ? '<right>' : '<down>'
@@ -1221,13 +1224,10 @@ nmap <M-o> :set nopaste! nopaste?<CR>
 for i in range(26)
     let l_char = nr2char(char2nr('a') + i)
     let u_char = nr2char(char2nr('A') + i)
-    exec 'nnoremap <leader>y' . l_char . ' "'. l_char . 'yy'
-    exec 'nnoremap <leader>y' . u_char . ' "'. u_char . 'yy'
-    exec 'xnoremap <leader>y' . l_char . ' "'. l_char . 'y'
-    exec 'xnoremap <leader>y' . u_char . ' "'. u_char . 'y'
-    " copy word
-    exec 'nnoremap ,y' . l_char . ' viw"'. l_char . 'y'
-    exec 'nnoremap ,y' . u_char . ' viw"'. u_char . 'y'
+    exec 'nnoremap ,y' . l_char . ' "'. l_char . 'yy'
+    exec 'nnoremap ,y' . u_char . ' "'. u_char . 'yy'
+    exec 'xnoremap ,y' . l_char . ' "'. l_char . 'y'
+    exec 'xnoremap ,y' . u_char . ' "'. u_char . 'y'
 endfor
 " for help
 au FileType vim nnoremap <M-y>k :help <C-r><C-w>
@@ -1553,7 +1553,7 @@ if get(g:, 'has_terminal', 0) > 0
     " --------------------------
     " terminal-help
     " --------------------------
-    if has('nvim-0.3') || g:has_terminal == 2
+    if has('nvim') || g:has_terminal == 2
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/vim-terminal-help
         endif
@@ -1587,7 +1587,7 @@ if get(g:, 'has_terminal', 0) > 0
     " --------------------------
     " floaterm
     " --------------------------
-    if (has('nvim-0.4.2') && executable('nvr') || v:version >= 802 && !has('nvim')) && (!HasPlug('inweb') || g:gui_running > 0 || WINDOWS())
+    if (has('nvim') && executable('nvr') || v:version >= 802 && !has('nvim')) && (!HasPlug('inweb') || g:gui_running > 0 || WINDOWS())
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/vim-floaterm
         endif
@@ -1597,7 +1597,7 @@ if get(g:, 'has_terminal', 0) > 0
         else
             let g:terminal_plus .= '-floaterm'
         endif
-        if has('nvim-0.4') || has('patch-8.1.1615')
+        if has('nvim') || has('patch-8.1.1615')
             let g:floaterm_position = 'topright'
             let g:floaterm_width    = 0.5
             let g:floaterm_height   = 0.65
@@ -1721,7 +1721,7 @@ if v:version >= 704
     set ttimeout
     set timeoutlen=300
     set updatetime=200
-    if has('patch-8.1.1615') || has('nvim-0.4.0')
+    if has('patch-8.1.1615') || has('nvim')
         let g:which_key_use_floating_win = 1
     else
         let g:which_key_use_floating_win = 0

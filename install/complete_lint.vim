@@ -18,14 +18,14 @@ if !HasPlug('no-complete')
     if HasPlug('apc')
         let g:complete_engine = "apc"
     elseif HasPlug('YCM')
-        if (has('nvim-0.4') || v:version >= 800) && g:python_version > 3.5
+        if (has('nvim') || v:version >= 800) && g:python_version > 3.5
             if WINDOWS() && exists("$YCM_WINDIR") && isdirectory($YCM_WINDIR)
                 let g:complete_engine = "YCM"
             elseif executable('cmake') && executable('g++')
                 let msg = system('g++ --version')
                 let gpp_version = matchstr(msg, '\zs\d\{1,\}.\d\{1,\}.\d\{1,\}\ze')
                 let gpp_version = str2nr(matchstr(gpp_version, '\zs\d\{1,\}\ze'))
-                if gpp_version >= 9 && g:python_version > 3.6 && (has('patch-8.1.2269') || has('nvim-0.4.4'))
+                if gpp_version >= 9 && g:python_version > 3.6 && (has('patch-8.1.2269') || has('nvim'))
                     let g:complete_engine = "YCM"
                 else
                     let g:complete_engine = "YCM-legacy"
@@ -39,7 +39,7 @@ if !HasPlug('no-complete')
             let s:smart_engine_select = 1
         endif
     elseif HasPlug('coc') && executable('node') && (executable('npm') || executable('yarn'))
-        if v:version >= 802 || has('nvim-0.4.3')
+        if v:version >= 802 || has('nvim')
             let g:complete_engine = 'coc'
         else
             echoe "Cannot install coc, smart select a complete_engine."
@@ -158,7 +158,7 @@ if get(g:, 'complete_engine', '') =~ "YCM"
             let b:ycm_lsp_install = b:ycm_lsp_install . " --enable-julia"
         endif
         MyPlug 'ycm-core/lsp-examples', {'do': g:python_exe_path . b:ycm_lsp_install}
-        if !has('patch-8.1.1517') && !has('nvim-0.4')
+        if !has('patch-8.1.1517') && !has('nvim')
             MyPlug 'Shougo/echodoc.vim'
             let g:echodoc_enable_at_startup = 1
             set cmdheight=2
@@ -257,13 +257,13 @@ elseif get(g:, 'complete_engine', '') == "vim-lsp"
     endif
     " vim-lsp
     MyPlug 'prabirshrestha/vim-lsp'
-    if !has('patch-8.1.1517') && !has('nvim-0.4')
+    if !has('patch-8.1.1517') && !has('nvim')
         MyPlug 'Shougo/echodoc.vim'
         let g:echodoc_enable_at_startup = 1
         set cmdheight=2
     endif
 endif
-" TODO nvim-lsp also use vim-lsp-settings to install lsp engine
+" TODO, nvim-lsp also use vim-lsp-settings to install lsp engine
 if index(['vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
     MyPlug 'mattn/vim-lsp-settings'
 endif

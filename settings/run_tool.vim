@@ -231,7 +231,7 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
     " ----------------
     " asynctasks
     " ----------------
-    if has('nvim-0.3') || v:version >= 801
+    if has('nvim') || v:version >= 801
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/asynctasks.vim
         endif

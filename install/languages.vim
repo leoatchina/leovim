@@ -1,7 +1,7 @@
 " --------------------------
 " file syntax support
 " --------------------------
-if has('nvim-0.3') || v:version >= 800
+if has('nvim') || v:version >= 800
     MyPlug 'sheerun/vim-polyglot'
 endif
 " --------------------------
