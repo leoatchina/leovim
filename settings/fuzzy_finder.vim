@@ -123,40 +123,48 @@ if Installed("fzf.vim") && Installed("fzf")
         let opts = extend(opts, g:fzf_layout)
         call fzf#run(opts, 0)
     endfunction
-    command! -bang FzfRegistersp call s:fzf_registers(<bang>0)
-    command! -bang FzfRegistersP call s:fzf_registers(<bang>1)
-    nnoremap <silent> <leader>p :FzfRegistersP<Cr>
-    nnoremap <silent> ,p        :FzfRegistersp<Cr>
-    xnoremap <silent> <leader>p :<C-u>FzfRegistersP<Cr>
-    xnoremap <silent> ,p        :<C-u>FzfRegistersp<Cr>
+    command! -bang FZFRegisterp call s:fzf_registers(<bang>0)
+    command! -bang FZFRegisterP call s:fzf_registers(<bang>1)
+    nnoremap <silent> <leader>p :FZFRegisterP<Cr>
+    nnoremap <silent> ,p        :FZFRegisterp<Cr>
+    xnoremap <silent> <leader>p :<C-u>FZFRegisterP<Cr>
+    xnoremap <silent> ,p        :<C-u>FZFRegisterp<Cr>
     " --------------------
-    " history jumps
+    " FZFYank
     " --------------------
-    function! s:jumpListFormat(val) abort
-        let l:file_name = bufname('%')
-        let l:file_name = empty(l:file_name) ? 'Unknown file name' : l:file_name
-        let l:curpos = getcurpos()
-        let l:l = matchlist(a:val, '\(>\?\)\s*\(\d*\)\s*\(\d*\)\s*\(\d*\) \?\(.*\)')
-        let [l:mark, l:jump, l:line, l:col, l:content] = l:l[1:5]
-        if empty(trim(l:mark)) | let l:mark = '-' | endif
-        if filereadable(expand(fnameescape(l:content)))
-            let l:file_name = expand(l:content)
-            let l:bn = bufnr(l:file_name)
-            if l:bn > -1 && buflisted(l:bn) > 0
-                let l:content = getbufline(l:bn, l:line)
-                let l:content = empty(l:content) ? "" : l:content[0]
-            else
-                let l:content = system("sed -n " . l:line . "p " . l:file_name)
-            endif
-        elseif empty(trim(l:content))
-            if empty(trim(l:line))
-                let [l:line, l:col] = l:curpos[1:2]
-            endif
-            let l:content = getline(l:line, l:line)[0]
-        endif
-        return l:mark . " " . l:file_name . ":" . l:line . ":" . l:col . " " . l:content
-    endfunction
+    " store yank history
+    if !exists('g:yank_list')
+        let g:yank_list = []
+    endif
+    au TextYankPost * if len(v:event['regcontents']) == 1 | let g:yank_list = v:event['regcontents'] + g:yank_list | endif
+    " --------------------
+    " FZFJumps
+    " --------------------
     if g:has_execute_func > 0
+        function! s:jumpListFormat(val) abort
+            let l:file_name = bufname('%')
+            let l:file_name = empty(l:file_name) ? 'Unknown file name' : l:file_name
+            let l:curpos = getcurpos()
+            let l:l = matchlist(a:val, '\(>\?\)\s*\(\d*\)\s*\(\d*\)\s*\(\d*\) \?\(.*\)')
+            let [l:mark, l:jump, l:line, l:col, l:content] = l:l[1:5]
+            if empty(trim(l:mark)) | let l:mark = '-' | endif
+            if filereadable(expand(fnameescape(l:content)))
+                let l:file_name = expand(l:content)
+                let l:bn = bufnr(l:file_name)
+                if l:bn > -1 && buflisted(l:bn) > 0
+                    let l:content = getbufline(l:bn, l:line)
+                    let l:content = empty(l:content) ? "" : l:content[0]
+                else
+                    let l:content = system("sed -n " . l:line . "p " . l:file_name)
+                endif
+            elseif empty(trim(l:content))
+                if empty(trim(l:line))
+                    let [l:line, l:col] = l:curpos[1:2]
+                endif
+                let l:content = getline(l:line, l:line)[0]
+            endif
+            return l:mark . " " . l:file_name . ":" . l:line . ":" . l:col . " " . l:content
+        endfunction
         function! s:jumpList() abort
             let l:jl = execute('jumps')
             return map(reverse(split(l:jl, '\n')[1:]), 's:jumpListFormat(v:val)')
@@ -173,7 +181,7 @@ if Installed("fzf.vim") && Installed("fzf")
             call cursor(str2nr(l:line), str2nr(l:col))
             normal! zvzz
         endfunction
-        function! s:FzfJumps() abort
+        function! s:FZFJumps() abort
             if WINDOWS()
                 call fzf#run(fzf#wrap({
                         \ 'source': s:jumpList(),
@@ -194,7 +202,7 @@ if Installed("fzf.vim") && Installed("fzf")
                         \ }))
             endif
         endfunction
-        command! -bang -nargs=* FZFJumps call s:FzfJumps()
+        command! -bang -nargs=* FZFJumps call s:FZFJumps()
         nnoremap <M-h>j :FZFJumps<cr>
     endif
 endif

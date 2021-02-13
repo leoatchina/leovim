@@ -306,8 +306,8 @@ endif
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easy-align
 endif
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
+xmap g= <Plug>(EasyAlign)
+nmap g= <Plug>(EasyAlign)
 let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
 " ------------------------
@@ -1253,6 +1253,7 @@ nnoremap <leader>cF ?\v^[<\|=>]{7}( .*\|$)<CR>
 " --------------------------
 " autocmd
 " --------------------------
+" goto last visited line
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 " optional reset cursor on start:
 aug resetCursor
