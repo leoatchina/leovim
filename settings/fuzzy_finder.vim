@@ -76,10 +76,6 @@ if Installed("fzf.vim") && Installed("fzf")
     nnoremap <M-g>b :FzfBCommits<Cr>
     nnoremap <M-g>c :FzfCommits<Cr>
     nnoremap <M-g>f :FzfGFiles?<CR>
-    " helptags
-    if executable('perl')
-        nnoremap <M-h>h :FzfHelptags<CR>
-    endif
     " --------------------
     " FzfRegisters
     " --------------------
@@ -268,6 +264,8 @@ if g:fuzzy_finder == 'leaderf'
     nnoremap <M-m>s :Leaderf colorscheme<Cr>
     nnoremap <M-m>t :Leaderf filetype<Cr>
     nnoremap <M-m>c :Leaderf command<Cr>
+    " help tags
+    nnoremap <M-h>h :Leaderf help<Cr>
     " search cword
     nnoremap \| :Leaderf line --no-sort --cword<Cr>
     xnoremap \| <ESC>:Leaderf line --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
@@ -377,6 +375,10 @@ elseif g:fuzzy_finder == 'fzf'
     nnoremap <M-k>l :FZFBLines<CR>
     nnoremap <M-k>b :FZFBTags<CR>
     nnoremap <M-k>m :FzfLines<CR>
+    " helptags
+    if executable('perl')
+        nnoremap <M-h>h :FzfHelptags<CR>
+    endif
 endif
 if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
     if !exists('g:leovim_loaded')
