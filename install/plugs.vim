@@ -36,6 +36,7 @@ endif
 if v:version >= 704 || has('nvim')
     MyPlug 'junegunn/fzf.vim'
     MyPlug 'chengzeyi/fzf-preview.vim'
+    MyPlug 'svermeulen/vim-yoink'
     if WINDOWS()
         MyPlug 'junegunn/fzf', {'do': 'Powershell ./install.ps1'}
     else

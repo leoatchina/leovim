@@ -132,6 +132,15 @@ if Installed("fzf.vim") && Installed("fzf")
     " --------------------
     " FZFYank
     " --------------------
+    if Installed('vim-yoink')
+        nmap <leader>zp <plug>(YoinkPostPasteSwapBack)
+        nmap ,zp        <plug>(YoinkPostPasteSwapForward)
+        nmap <leader>zy <plug>(YoinkRotateBack)
+        nmap ,zy        <plug>(YoinkRotateForward)
+        nmap qy <plug>(YoinkPostPasteToggleFormat)
+        nmap p  <plug>(YoinkPaste_p)
+        nmap P  <plug>(YoinkPaste_P)
+    endif
     " --------------------
     " FZFJumps
     " --------------------

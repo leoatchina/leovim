@@ -1171,8 +1171,7 @@ else
     nnoremap <silent><M-C> "zyy
     nnoremap <silent>Y     "zy$
 endif
-nnoremap <leader>Y y$
-nnoremap ,Y viwy
+nnoremap ,y viwy
 xnoremap <M-V> <C-c>`.``gvp``P
 "缩进等
 imap <M-x>   <BS>
