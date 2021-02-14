@@ -280,8 +280,8 @@ endif
 " ------------------------------
 MyPlug 'dhruvasagar/vim-table-mode'
 let g:table_mode_map_prefix = '<leader>o'
-nnoremap gT :Tableize<Space>
-xnoremap gT :Tableize<Space>
+nnoremap g= :Tableize<Space>
+xnoremap g= :Tableize<Space>
 function! s:isAtStartOfLine(mapping)
     let text_before_cursor = getline('.')[0 : col('.')-1]
     let mapping_pattern = '\V' . escape(a:mapping, '\')

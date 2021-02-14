@@ -79,36 +79,36 @@ if Installed("fzf.vim") && Installed("fzf")
     " --------------------
     " FZFRegisters
     " --------------------
-    function! s:paste_select(select) range
+    function! s:paste_select(select)
         let reg = a:select[1]
         call feedkeys("\"" . reg . "P")
     endfunction
-    function! s:fzf_registers() range
+    function! s:fzf_registers()
         redir => registers
         silent registers
         redir END
         let reg_lst = split(registers, '\n')
         " cut head
         if reg_lst[0][0:3] == 'Type'
-            let cut5 = 1
+            let cut_head = 1
         else
-            let cut5 = 0
+            let cut_head = 0
         endif
         let lst = []
         for reg in reg_lst[1:]
-            if cut5 > 0
+            if cut_head > 0
                 let reg = reg[5:]
             endif
             let reg = substitute(reg, "\\^J", "\\r", "g")
             call add(lst, reg)
         endfor
         call fzf#run(extend({
-            \ 'source':  lst,
-            \ 'sink':    function('s:paste_select'),
+            \ 'source': lst,
+            \ 'sink': function('s:paste_select'),
             \ 'options': '--ansi -x --prompt "Registers>"'
             \ }, g:fzf_layout), 0)
     endfunction
-    command! FZFRegister call s:fzf_registers()
+    command! -range FZFRegister call s:fzf_registers()
     nnoremap <silent> <leader>p :FZFRegister<Cr>
     " --------------------
     " FZFYank
@@ -129,7 +129,7 @@ if Installed("fzf.vim") && Installed("fzf")
             redir END
             return split(ys, '\n')[1:]
         endfunction
-        function! s:yank_handler(reg) range
+        function! s:yank_handler(reg)
             let reg = a:reg
             if empty(reg)
                 echo "aborted register paste"
@@ -138,11 +138,11 @@ if Installed("fzf.vim") && Installed("fzf")
                 call feedkeys("\"0P")
             endif
         endfunction
-        command! FZFYank call fzf#run(extend({
+        command! -range FZFYank call fzf#run(extend({
                     \ 'source': <sid>yank_list(),
-                    \ 'sink': function('<sid>yank_handler'),
+                    \ 'sink': function('s:yank_handler'),
                     \ 'options': '--ansi -x --prompt "FZFYank>"'
-                    \ }, g:fzf_layout))
+                    \ }, g:fzf_layout), 0)
         nnoremap <silent> ,p :FZFYank<Cr>
     endif
     " --------------------

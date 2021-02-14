@@ -1174,7 +1174,7 @@ else
     nnoremap <silent>Y     "zy$
 endif
 xnoremap <M-V> <C-c>`.``gvp``P
-"缩进等
+" 缩进等
 imap <M-x>   <BS>
 imap <M-a>   <Del>
 nmap <M-.>   >>
@@ -1183,6 +1183,7 @@ xmap <Tab>   >gv
 nmap <M-,>   <<
 xmap <M-,>   <gv
 xmap <S-Tab> <gv
+nnoremap gV `[v`]
 " ------------------------
 " marks
 " ------------------------
