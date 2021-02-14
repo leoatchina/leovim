@@ -1224,13 +1224,11 @@ nmap <M-o> :set nopaste! nopaste?<CR>
 for i in range(26)
     let l_char = nr2char(char2nr('a') + i)
     let u_char = nr2char(char2nr('A') + i)
-    exec 'nnoremap ,y' . l_char . ' "'. l_char . 'yy'
-    exec 'nnoremap ,y' . u_char . ' "'. u_char . 'yy'
-    exec 'xnoremap ,y' . l_char . ' "'. l_char . 'y'
-    exec 'xnoremap ,y' . u_char . ' "'. u_char . 'y'
+    exec 'nnoremap <leader>y' . l_char . ' "'. l_char . 'yy'
+    exec 'nnoremap <leader>y' . u_char . ' "'. u_char . 'yy'
+    exec 'xnoremap <leader>y' . l_char . ' "'. l_char . 'y'
+    exec 'xnoremap <leader>y' . u_char . ' "'. u_char . 'y'
 endfor
-" for help
-au FileType vim nnoremap <M-y>k :help <C-r><C-w>
 " ------------------------
 " map for fold
 " ------------------------

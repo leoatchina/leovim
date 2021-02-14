@@ -77,7 +77,7 @@ if Installed("fzf.vim") && Installed("fzf")
     nnoremap <M-g>c :FzfCommits<Cr>
     nnoremap <M-g>f :FzfGFiles?<CR>
     " --------------------
-    " FzfRegisters
+    " FZFRegisters
     " --------------------
     function! s:paste_select(select) abort
         let reg = a:select[1]
@@ -132,11 +132,6 @@ if Installed("fzf.vim") && Installed("fzf")
     " --------------------
     " FZFYank
     " --------------------
-    " store yank history
-    if !exists('g:yank_list')
-        let g:yank_list = []
-    endif
-    au TextYankPost * if len(v:event['regcontents']) == 1 | let g:yank_list = v:event['regcontents'] + g:yank_list | endif
     " --------------------
     " FZFJumps
     " --------------------
@@ -173,7 +168,7 @@ if Installed("fzf.vim") && Installed("fzf")
             let l:l = matchlist(a:jp, '\(.\)\s\(.*\):\(\d\+\):\(\d\+\)\(.*\)')
             let [l:file_name, l:line, l:col, l:content] = l:l[2:5]
             if empty(l:file_name) || empty(l:line) | return | endif
-            " 判断文件是否已经存在buffer中
+            " 判断文件是否已经存在 buffer 中
             let l:bn = bufnr(l:file_name)
             " 未打开
             if l:bn == -1 | if filereadable(l:file_name) | execute 'e ' . 'l:file_name' | endif
