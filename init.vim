@@ -2,10 +2,10 @@
 " version require
 " --------------------------
 if v:version < 703 && !has('nvim')
-    echoe 'For vim, in leovim config, vim 7.3+ is at least required.'
+    echoe 'For vim, to use leovim config vim 7.3 is at least required.'
     finish
-elseif !has('nvim-0.4.3') && has('nvim')
-    echoe 'For neovim, in leovim config, neovim 0.4.3+ is at least required.'
+elseif !has('nvim-0.4.4') && has('nvim')
+    echoe 'For neovim, to use leovim config neovim 0.4.4 is at least required.'
     finish
 else
     " set rtp
@@ -1587,11 +1587,11 @@ if get(g:, 'has_terminal', 0) > 0
     " --------------------------
     " floaterm
     " --------------------------
-    if (has('nvim') && executable('nvr') || v:version >= 802 && !has('nvim')) && (!HasPlug('inweb') || g:gui_running > 0 || WINDOWS())
+    if (has('nvim') && executable('nvr') || v:version >= 802 && !has('nvim')) && !HasPlug('inweb')
+        autocmd User Startified setlocal buflisted
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/vim-floaterm
         endif
-        autocmd User Startified setlocal buflisted
         if get(g:, 'terminal_plus', '') == ''
             let g:terminal_plus = 'floaterm'
         else
