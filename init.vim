@@ -306,10 +306,12 @@ endif
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easy-align
 endif
-xmap g= <Plug>(EasyAlign)
-nmap g= <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
+nnoremap ,a ga
+xnoremap ,a ga
 " ------------------------
 " windows jump
 " ------------------------
@@ -1171,7 +1173,6 @@ else
     nnoremap <silent><M-C> "zyy
     nnoremap <silent>Y     "zy$
 endif
-nnoremap ,y viwy
 xnoremap <M-V> <C-c>`.``gvp``P
 "缩进等
 imap <M-x>   <BS>

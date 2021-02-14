@@ -79,16 +79,11 @@ if Installed("fzf.vim") && Installed("fzf")
     " --------------------
     " FZFRegisters
     " --------------------
-    function! s:paste_select(select) abort
-        let reg = a:select[1]
-        call feedkeys("\"" . reg . "p")
-    endfunction
-    function! s:Paste_select(select) abort
+    function! s:paste_select(select) range
         let reg = a:select[1]
         call feedkeys("\"" . reg . "P")
     endfunction
-    function! s:fzf_registers(bang) abort
-        let bang = a:bang
+    function! s:fzf_registers() range
         redir => registers
         silent registers
         redir END
@@ -107,39 +102,48 @@ if Installed("fzf.vim") && Installed("fzf")
             let reg = substitute(reg, "\\^J", "\\r", "g")
             call add(lst, reg)
         endfor
-        if bang > 0
-            let opts = {
-                \ 'source':  lst,
-                \ 'sink':    function('s:Paste_select'),
-                \ 'options': '--ansi -x --prompt "Registers_P>"'
-                \ }
-        else
-            let opts = {
-                \ 'source':  lst,
-                \ 'sink':    function('s:paste_select'),
-                \ 'options': '--ansi -x --prompt "Registers_p>"'
-                \ }
-        endif
-        let opts = extend(opts, g:fzf_layout)
-        call fzf#run(opts, 0)
+        call fzf#run(extend({
+            \ 'source':  lst,
+            \ 'sink':    function('s:paste_select'),
+            \ 'options': '--ansi -x --prompt "Registers>"'
+            \ }, g:fzf_layout), 0)
     endfunction
-    command! -bang FZFRegisterp call s:fzf_registers(<bang>0)
-    command! -bang FZFRegisterP call s:fzf_registers(<bang>1)
-    nnoremap <silent> <leader>p :FZFRegisterP<Cr>
-    nnoremap <silent> ,p        :FZFRegisterp<Cr>
-    xnoremap <silent> <leader>p :<C-u>FZFRegisterP<Cr>
-    xnoremap <silent> ,p        :<C-u>FZFRegisterp<Cr>
+    command! FZFRegister call s:fzf_registers()
+    nnoremap <silent> <leader>p :FZFRegister<Cr>
     " --------------------
     " FZFYank
     " --------------------
     if Installed('vim-yoink')
-        nmap <leader>zp <plug>(YoinkPostPasteSwapBack)
-        nmap ,zp        <plug>(YoinkPostPasteSwapForward)
-        nmap <leader>zy <plug>(YoinkRotateBack)
-        nmap ,zy        <plug>(YoinkRotateForward)
-        nmap qy <plug>(YoinkPostPasteToggleFormat)
-        nmap p  <plug>(YoinkPaste_p)
-        nmap P  <plug>(YoinkPaste_P)
+        let g:yoinkMaxItems = 32
+        nmap ,yb <plug>(YoinkPostPasteSwapBack)
+        nmap ,yf <plug>(YoinkPostPasteSwapForward)
+        nmap ,yp <plug>(YoinkRotateBack)
+        nmap ,yn <plug>(YoinkRotateForward)
+        nmap ,yy <plug>(YoinkPostPasteToggleFormat)
+        nmap ,yc :ClearYanks<Cr>
+        nmap p   <plug>(YoinkPaste_p)
+        nmap P   <plug>(YoinkPaste_P)
+        function! s:yank_list()
+            redir => ys
+            silent Yanks
+            redir END
+            return split(ys, '\n')[1:]
+        endfunction
+        function! s:yank_handler(reg) range
+            let reg = a:reg
+            if empty(reg)
+                echo "aborted register paste"
+            else
+                let @0 = split(reg, ' ')[3]
+                call feedkeys("\"0P")
+            endif
+        endfunction
+        command! FZFYank call fzf#run(extend({
+                    \ 'source': <sid>yank_list(),
+                    \ 'sink': function('<sid>yank_handler'),
+                    \ 'options': '--ansi -x --prompt "FZFYank>"'
+                    \ }, g:fzf_layout))
+        nnoremap <silent> ,p :FZFYank<Cr>
     endif
     " --------------------
     " FZFJumps
