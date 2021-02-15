@@ -285,9 +285,7 @@ endif
 " ------------------------
 " has_truecolor
 " ------------------------
-if exists('g:has_truecolor') && g:has_truecolor <= 0 || !has('termguicolors')
-    let g:has_truecolor = 0
-elseif has('termguicolors') || WINDOWS()
+if has('termguicolors') || WINDOWS() || g:gui_running > 0
     let g:has_truecolor = 1
 else
     let g:has_truecolor = 0
