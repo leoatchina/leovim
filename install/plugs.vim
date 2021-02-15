@@ -36,7 +36,6 @@ endif
 if v:version >= 704 || has('nvim')
     MyPlug 'junegunn/fzf.vim'
     MyPlug 'chengzeyi/fzf-preview.vim'
-    MyPlug 'svermeulen/vim-yoink'
     if WINDOWS()
         MyPlug 'junegunn/fzf', {'do': 'Powershell ./install.ps1'}
     else
@@ -110,9 +109,6 @@ if v:version >= 800 || has('nvim')
         endif
     endif
 endif
-" ------------------------------
-" install plugs_symbol
-" ------------------------------
 if HasPlugSymbol('tagbar')
     MyPlug 'majutsushi/tagbar'
 endif
@@ -126,7 +122,7 @@ if HasPlugSymbol('gtags')
     MyPlug 'skywind3000/gutentags_plus'
 endif
 " ------------------------------
-" theme if has trucolor
+" theme if has_trucolor
 " ------------------------------
 if get(g:, 'has_truecolor', 0) > 0
     " sainnhe's themes
@@ -326,7 +322,7 @@ endif
 " undotool
 " ------------------------------
 if has("persistent_undo") && g:has_lambda > 0
-    if g:python_version >= 2.4 && !HasPlug('undotree') && g:has_lambda > 0
+    if g:python_version >= 2.4
         let g:mundo_width = 60
         let g:mundo_preview_height = 20
         let g:mundo_right = 1
@@ -354,3 +350,9 @@ if HasPlug('projectionist')
     nnoremap <leader>ip :ProjectDo<Space>
 endif
 MyPlug 'tpope/vim-apathy'
+" ------------------------------
+" yoink
+" ------------------------------
+if has('nvim') || v:version >= 800
+    MyPlug 'svermeulen/vim-yoink'
+endif
