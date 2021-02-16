@@ -1,7 +1,7 @@
-rm -rf ~/.vim/.vim-swap
-rm -rf ~/.vim/.vim-views
-rm -rf ~/.vim/.vim-backup
-mkdir ~/.vim/.vim-swap
-mkdir ~/.vim/.vim-views
-mkdir ~/.vim/.vim-backup
-echo "$HOME/.vim/.vim-swap $HOME/.vim/.vim-views $HOME/.vim/.vim-backup cleaned"
+rm -rf ~/.vim/swap
+rm -rf ~/.vim/views
+rm -rf ~/.vim/backup
+mkdir ~/.vim/swap
+mkdir ~/.vim/views
+mkdir ~/.vim/backup
+echo "$HOME/.vim/swap $HOME/.vim/views $HOME/.vim/backup cleaned"

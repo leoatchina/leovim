@@ -40,7 +40,6 @@ let g:startify_custom_header = [
             \ '             L::::::::::::::::::::::LE::::::::::::::::::::E   OO:::::::::OO              V:::V           I::::::::IM::::::M               M::::::M ',
             \ '             LLLLLLLLLLLLLLLLLLLLLLLLEEEEEEEEEEEEEEEEEEEEEE     OOOOOOOOO                 VVV            IIIIIIIIIIMMMMMMMM               MMMMMMMM ',
             \ ]
-let g:startify_session_dir    = expand("~/.cache/session")
 let g:startify_files_number   = 10
 let g:startify_session_number = 10
 let g:startify_list_order = [
@@ -57,12 +56,9 @@ let g:startify_commands = [
             \ {'v': ['重要插件', 'call Version()']},
             \ {'V': ['基本信息', 'version']},
             \ ]
+let g:startify_session_dir    = expand("~/.cache/sessions")
 if !isdirectory(g:startify_session_dir)
-    try
-        call mkdir(g:startify_session_dir)
-    catch /.*/
-        " pass
-    endtry
+    silent! call mkdir(g:startify_session_dir, "p")
 endif
 " --------------------------
 " System Type
@@ -111,12 +107,12 @@ endtry
 " -----------------------------------
 function! InitializeDirectories()
     let dir_list = {
-        \ 'backupdir': '.vim/vim-backup',
-        \ 'viewdir':   '.vim/vim-views',
-        \ 'directory': '.vim/vim-swap',
+        \ 'backupdir': '.vim/backup',
+        \ 'viewdir':   '.vim/views',
+        \ 'directory': '.vim/swap',
         \ }
     if has('persistent_undo')
-        let dir_list['undodir'] = '.vim-undo'
+        let dir_list['undodir'] = '.vim/undo'
     endif
     for [settingname, dirname] in items(dir_list)
         if WINDOWS()
@@ -124,11 +120,11 @@ function! InitializeDirectories()
         else
             let directory = $HOME . '/'. dirname
         endif
-        if isdirectory(directory) && settingname !~ 'session'
+        if isdirectory(directory)
             exec "set " . settingname . "=" . directory
         else
             try
-                call mkdir(directory)
+                silent! call mkdir(directory, "p")
             catch
                 echo "Unable to create it. Try mkdir -p " . directory
             endtry

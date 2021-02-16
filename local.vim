@@ -17,7 +17,7 @@ endif
 
 " gtags settings
 if executable('gtags') && executable('gtags-cscope')
-    " let $GTAGSCONF=$HOME.'/.local/share/gtags/gtags.conf'
+    " let $GTAGSCONF=$HOME."/.local/share/gtags/gtags.conf"
 endif
 
 " let g:vimtex_view_method = 'zathura'
