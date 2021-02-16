@@ -280,13 +280,6 @@ elseif Installed('coc.nvim')
     endfunction
     command! CocFile call CocFile()
     nnoremap <leader>f :CocFile<Cr>
-    augroup mygroup
-        autocmd!
-        " Setup formatexpr specified filetype(s).
-        autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-        " Update signature help on jump placeholder
-        autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    augroup end
     " multi cursors
     nmap ,cp <Plug>(coc-cursors-position)
     nmap ,co <Plug>(coc-cursors-operator)
@@ -381,12 +374,12 @@ elseif Installed('coc.nvim')
     call coc#config('rust-analyzer.inlayHints.typeHints', v:false)
     let g:coc_snippet_next = "<C-n>"
     let g:coc_snippet_prev = "<C-p>"
-    augroup mygroup
-	autocmd!
-	" Setup formatexpr specified filetype(s).
-	autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-	" Update signature help on jump placeholder.
-	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    augroup cocgroup
+        autocmd!
+        " Setup formatexpr specified filetype(s).
+        autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+        " Update signature help on jump placeholder.
+        autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
     augroup end
     function! s:show_documentation()
         if (index(['vim','help'], &filetype) >= 0)
