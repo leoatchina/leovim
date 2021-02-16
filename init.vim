@@ -300,12 +300,10 @@ endif
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easy-align
 endif
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
+xmap ,a <Plug>(EasyAlign)
+nmap ,a <Plug>(EasyAlign)
 let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
-nnoremap ,a ga
-xnoremap ,a ga
 " ------------------------
 " windows jump
 " ------------------------
@@ -417,7 +415,7 @@ if v:version >= 704 || has('nvim')
     endif
     " map for uri
     nmap <leader>vu viu
-    nmap qvu vau
+    nmap ,vu vau
     " ------------------------
     " function find space
     " ------------------------
@@ -456,7 +454,7 @@ if v:version >= 704 || has('nvim')
                 \   },
                 \ })
     nmap <leader>vs viS
-    nmap qvs vaS
+    nmap ,vs vaS
     " ------------------------
     " function find block
     " ------------------------
@@ -504,7 +502,7 @@ if v:version >= 704 || has('nvim')
                 \   },
                 \ })
     nmap <leader>vb viB
-    nmap qvb vaB
+    nmap ,vb vaB
 endif
 nmap g0 viio<C-[>
 " --------------------------
@@ -553,9 +551,9 @@ xmap am <Plug>(textobj-sandwich-literal-query-a)
 omap im <Plug>(textobj-sandwich-literal-query-i)
 omap am <Plug>(textobj-sandwich-literal-query-a)
 nmap <leader>vn vin
-nmap qvn van
+nmap ,vn van
 nmap <leader>vm vim
-nmap qvm vam
+nmap ,vm vam
 " ------------------------
 " easymotion
 " ------------------------
@@ -954,7 +952,7 @@ nnoremap ,q        :qall!<Cr>
 nnoremap q          <Nop>
 nnoremap qq         <C-w>z
 xnoremap qq         <C-w>z
-nnoremap qc        :tabclose<Cr>
+nnoremap qt        :tabclose<Cr>
 nnoremap qb        :bd!<Cr>
 " ------------------------
 " esc
@@ -982,8 +980,8 @@ inoremap <M-S> <ESC>:wa!<Cr>li
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
 " 设置分割页面
-nnoremap ,v           :vsplit<Space>
-nnoremap ,x           :split<Space>
+nnoremap qv           :vsplit<Space>
+nnoremap qx           :split<Space>
 nnoremap ,t           <C-w>T
 nnoremap ,<Cr>        :tabe<Cr>
 nnoremap <leader><Cr> :e!<Cr>
@@ -1520,15 +1518,15 @@ if get(g:, 'has_terminal', 0) > 0
     tnoremap <M-W> <C-\><C-n>:qall!<Cr>
     if has('nvim')
         if WINDOWS()
-            nnoremap qt :tabe term://cmd<cr>i
+            nnoremap qm :tabe term://cmd<cr>i
         else
-            nnoremap qt :tabe term://bash<cr>i
+            nnoremap qm :tabe term://bash<cr>i
         endif
     else
         if WINDOWS()
-            nnoremap qt :tab terminal<Cr>cmd<Cr>
+            nnoremap qm :tab terminal<Cr>cmd<Cr>
         else
-            nnoremap qt :tab terminal<Cr>bash<Cr>
+            nnoremap qm :tab terminal<Cr>bash<Cr>
         endif
     endif
     if g:has_terminal == 2
