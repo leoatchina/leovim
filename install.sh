@@ -102,7 +102,7 @@ else
 fi
 
 echo
-if [ "$APP_PATH" == "$HOME/.leovim.conf"]
+if [ "$APP_PATH" == "$HOME/.leovim.conf" ]; then
     echo "leovim is already installed in $HOME/.leovim.conf"
 else
     echo "leovim is going to be linked to $HOME/.leovim.conf"
