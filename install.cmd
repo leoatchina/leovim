@@ -21,7 +21,7 @@ call mklink "%HOME%\.vimrc.clean" "%APP_PATH%\clean.cmd"
 
 REM cp vimrc 
 echo if filereadable(expand("~/.vimrc.test")) > "%HOME%\.vimrc"  
-echo    source ~/.vimrc.test>> "%HOME%\.vimrc"  
+echo source ~/.vimrc.test>> "%HOME%\.vimrc"  
 echo else >> "%HOME%\.vimrc"  
 echo    source ~/.leovim.conf/init.vim >> "%HOME%\.vimrc"  
 echo endif >> "%HOME%\.vimrc"  
