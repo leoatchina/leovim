@@ -79,13 +79,10 @@ if Installed("fzf.vim") && Installed("fzf")
     " --------------------
     " FZFRegisters
     " --------------------
-    function! s:Paste_select(select)
+    function! s:paste_select(select) dict
+        " NOTE select[1] is the name of register
         let reg = a:select[1]
-        call feedkeys("\"" . reg . "P")
-    endfunction
-    function! s:paste_select(select)
-        let reg = a:select[1]
-        call feedkeys("\"" . reg . "p")
+        call feedkeys("\"" . reg . self.paste)
     endfunction
     function! s:fzf_registers()
         redir => registers
@@ -108,18 +105,18 @@ if Installed("fzf.vim") && Installed("fzf")
         endfor
         return lst
     endfunction
-    command! FZFRegisterP call fzf#run(extend({
-            \ 'source': <sid>fzf_registers(),
-            \ 'sink': function('s:Paste_select'),
-            \ 'options': '--ansi -x --prompt "Registers>"'
+    command! FZFRegisterBefore call fzf#run(extend({
+            \ 'source': s:fzf_registers(),
+            \ 'sink': function('s:paste_select', {'paste': 'P'}),
+            \ 'options': '--ansi -x --prompt "PasteBefore>"'
             \ }, g:fzf_layout), 0)
-    command! FZFRegisterp call fzf#run(extend({
-            \ 'source': <sid>fzf_registers(),
-            \ 'sink': function('s:paste_select'),
-            \ 'options': '--ansi -x --prompt "Registers>"'
+    command! FZFRegisterAfter call fzf#run(extend({
+            \ 'source': s:fzf_registers(),
+            \ 'sink': function('s:paste_select', {'paste': 'p'}),
+            \ 'options': '--ansi -x --prompt "PasteAfter>"'
             \ }, g:fzf_layout), 0)
-    nnoremap <silent> <leader>p :FZFRegisterP<Cr>
-    nnoremap <silent> <leader>P :FZFRegisterp<Cr>
+    nnoremap <silent> <leader>p :FZFRegisterBefore<Cr>
+    nnoremap <silent> <leader>P :FZFRegisterAfter<Cr>
     " --------------------
     " FZFYank
     " --------------------
@@ -139,36 +136,27 @@ if Installed("fzf.vim") && Installed("fzf")
             redir END
             return split(ys, '\n')[1:]
         endfunction
-        function! s:Paste_yank(reg)
-            let reg = a:reg
-            if empty(reg)
+        function! s:paste_yank(select) dict
+            let select = a:select
+            if empty(select)
                 echo "aborted register paste"
             else
-                let @0 = split(reg, ' ')[3]
-                call feedkeys("\"0P")
+                let @0 = split(select, ' ')[3]
+                call feedkeys("\"0" . self.paste)
             endif
         endfunction
-        function! s:paste_yank(reg)
-            let reg = a:reg
-            if empty(reg)
-                echo "aborted register paste"
-            else
-                let @0 = split(reg, ' ')[3]
-                call feedkeys("\"0p")
-            endif
-        endfunction
-        command! FZFYankP call fzf#run(extend({
-                    \ 'source': <sid>yank_list(),
-                    \ 'sink': function('s:Paste_yank'),
-                    \ 'options': '--ansi -x --prompt "FZFYankP>"'
+        command! FZFYankBefore call fzf#run(extend({
+                    \ 'source': s:yank_list(),
+                    \ 'sink': function('s:paste_yank', {'paste': 'P'}),
+                    \ 'options': '--ansi -x --prompt "YankBefore>"'
                     \ }, g:fzf_layout), 0)
-        command! FZFYankp call fzf#run(extend({
-                    \ 'source': <sid>yank_list(),
-                    \ 'sink': function('s:paste_yank'),
-                    \ 'options': '--ansi -x --prompt "FZFYankp>"'
+        command! FZFYankAfter call fzf#run(extend({
+                    \ 'source': s:yank_list(),
+                    \ 'sink': function('s:paste_yank', {'paste': 'p'}),
+                    \ 'options': '--ansi -x --prompt "YankAfter>"'
                     \ }, g:fzf_layout), 0)
-        nnoremap <silent> ,p :FZFYankP<Cr>
-        nnoremap <silent> ,P :FZFYankp<Cr>
+        nnoremap <silent> ,p :FZFYankBefore<Cr>
+        nnoremap <silent> ,P :FZFYankAfter<Cr>
     endif
     " --------------------
     " FZFJumps
@@ -218,7 +206,7 @@ if Installed("fzf.vim") && Installed("fzf")
             if WINDOWS()
                 call fzf#run(fzf#wrap({
                         \ 'source': s:jumpList(),
-                        \ 'sink': function('<SID>jumpHandler'),
+                        \ 'sink': function('s:jumpHandler'),
                         \ 'options': [
                             \ '--prompt=Jumps'
                         \ ],
@@ -226,7 +214,7 @@ if Installed("fzf.vim") && Installed("fzf")
             else
                 call fzf#run(fzf#wrap({
                         \ 'source': s:jumpList(),
-                        \ 'sink': function('<SID>jumpHandler'),
+                        \ 'sink': function('s:jumpHandler'),
                         \ 'options': [
                             \ '--prompt=Jumps',
                             \ '--preview', $ADDINS_PATH . '/preview.sh {2}',

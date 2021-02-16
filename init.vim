@@ -1135,6 +1135,7 @@ if has('clipboard')
     cnoremap <silent><M-v> <C-r><C-o>*
     nnoremap <silent><M-v> "*gP
     xnoremap <silent><M-v> "*gP
+    nnoremap <silent><leader>vy viw"*y
     if has('nvim')
         nnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
         xnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
@@ -1153,6 +1154,7 @@ if has('clipboard')
         nnoremap <silent>Y     "*y$
     endif
 else
+    nnoremap <silent><leader>vy viwy
     inoremap <silent><M-v> <C-r><C-o>z
     cnoremap <silent><M-v> <C-r><C-o>z
     nnoremap <silent><M-v> "zgP
@@ -1217,6 +1219,7 @@ nmap <M-o> :set nopaste! nopaste?<CR>
 for i in range(26)
     let l_char = nr2char(char2nr('a') + i)
     let u_char = nr2char(char2nr('A') + i)
+    exec 'nnoremap ,vy' . l_char . ' viw"'. l_char . 'y'
     exec 'nnoremap <leader>y' . l_char . ' "'. l_char . 'yy'
     exec 'nnoremap <leader>y' . u_char . ' "'. u_char . 'yy'
     exec 'xnoremap <leader>y' . l_char . ' "'. l_char . 'y'
