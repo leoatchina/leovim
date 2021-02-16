@@ -417,7 +417,6 @@ elseif g:fuzzy_finder == 'fzf'
     " fzf-funky
     if Installed('fzf-funky')
         nnoremap f<Cr> :FzfFunky<Cr>
-        nnoremap F<Cr> :FzfFunky <C-r><C-w><Cr>
     endif
 endif
 if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
