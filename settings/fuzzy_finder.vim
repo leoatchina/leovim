@@ -414,6 +414,11 @@ elseif g:fuzzy_finder == 'fzf'
     if executable('perl')
         nnoremap <M-h>h :FzfHelptags<CR>
     endif
+    " fzf-funky
+    if Installed('fzf-funky')
+        nnoremap f<Cr> :FzfFunky<Cr>
+        nnoremap F<Cr> :FzfFunky <C-r><C-w><Cr>
+    endif
 endif
 if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
     if !exists('g:leovim_loaded')
@@ -436,7 +441,7 @@ if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>a    :CtrlPBufTagAll<CR>
         nnoremap <silent> <M-k>l    :CtrlPLine<Cr>
-        if &rtp !~ 'quickui' && !exists('g:leovim_loaded')
+        if !installed('fzf-funky')
             set rtp+=$ADDINS_PATH/ctrlp-funky
             nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
         endif
@@ -553,7 +558,4 @@ if Installed('vim-quickui')
     nnoremap <leader>em :call quickui#tools#display_messages()<Cr>
     nnoremap <silent><M-down> :call quickui#preview#scroll(1)<Cr>
     nnoremap <silent><M-up>   :call quickui#preview#scroll(-1)<Cr>
-    if g:fuzzy_finder != 'leaderf'
-        nnoremap <silent> f<Cr> :call quickui#tools#list_function()<Cr>
-    endif
 endif

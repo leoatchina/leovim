@@ -50,6 +50,9 @@ if v:version >= 704 || has('nvim')
         if get(g:, 'terminal_plus', '') =~ 'floaterm'
             MyPlug 'voldikss/fzf-floaterm'
         endif
+        if has('nvim') || has('patch-8.1615')
+            MyPlug 'tracyone/fzf-funky'
+        endif
     endif
 endif
 " ------------------------------
