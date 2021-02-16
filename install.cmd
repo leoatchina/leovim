@@ -1,5 +1,6 @@
 @if not exist "%HOME%" @set HOME=%USERPROFILE%
-@set APP_PATH=%~dp0
+@set PWD=%~dp0
+@set APP_PATH=%PWD:~0,-1%
 
 REM mkdir necesarry
 call md "%HOME%\AppData\local\nvim"
@@ -8,12 +9,11 @@ call md "%HOME%\.cache\tags"
 call md "%HOME%\.cache\session"
 
 REM mklink of config dir
-echo %APP_PATH%
-IF "%APP_PATH%" == "%HOME%\.leovim.conf\" (
+IF "%APP_PATH%" == "%HOME%\.leovim.conf" (
     echo "leovim is already installed in %HOME%\.leovim.conf"
 ) ELSE (
     echo "leovim is going to be linked to %HOME%\.leovim.conf"
-		call rmdir     "%HOME%\.leovim.conf"
+		call rmdir "%HOME%\.leovim.conf"
 		call mklink /d "%HOME%\.leovim.conf" "%APP_PATH%"
 )
 

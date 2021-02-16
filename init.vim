@@ -56,7 +56,7 @@ let g:startify_commands = [
             \ {'v': ['重要插件', 'call Version()']},
             \ {'V': ['基本信息', 'version']},
             \ ]
-let g:startify_session_dir = expand("~/.cache/sessions")
+let g:startify_session_dir = expand("~/.cache/session")
 if !isdirectory(g:startify_session_dir)
     silent! call mkdir(g:startify_session_dir, "p")
 endif
