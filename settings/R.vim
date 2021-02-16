@@ -85,7 +85,7 @@ if Installed("Nvim-R")
     if $TMUX != '' && get(g:, '', '') == ''
         let R_in_buffer     = 0
         let R_externam_term = 'tilix -a session-add-down -e'
-        let R_source        = '~/.vim.conf/addins/tmux_split.vim'
+        let R_source        = '~/.leovim.conf/addins/tmux_split.vim'
     elseif get(g:, 'R_externam_term', '') != ''
         let R_in_buffer = 0
     else

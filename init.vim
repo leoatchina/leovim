@@ -9,12 +9,12 @@ elseif !has('nvim-0.4.4') && has('nvim')
     finish
 else
     " set rtp
-    let $CONFIG_PATH   = expand('~/.vim.conf')
-    let $ADDINS_PATH   = expand('~/.vim.conf/addins')
-    let $PLUGINS_PATH  = expand('~/.vim.conf/plugins')
-    let $SETTINGS_PATH = expand('~/.vim.conf/settings')
+    let $CONFIG_PATH   = expand('~/.leovim.conf')
+    let $ADDINS_PATH   = expand('~/.leovim.conf/addins')
+    let $PLUGINS_PATH  = expand('~/.leovim.conf/plugins')
+    let $SETTINGS_PATH = expand('~/.leovim.conf/settings')
     " plugs install path, please NOTE the plugs installed would not be deleted by command :PlugClean
-    let $INSTALL_PATH = expand('~/.vim.plugins')
+    let $INSTALL_PATH  = expand('~/.leovim.plug')
 endif
 " --------------------------
 " important plugins
@@ -111,9 +111,9 @@ endtry
 " -----------------------------------
 function! InitializeDirectories()
     let dir_list = {
-        \ 'backupdir': '.vim-backup',
-        \ 'viewdir':   '.vim-views',
-        \ 'directory': '.vim-swap',
+        \ 'backupdir': '.vim/vim-backup',
+        \ 'viewdir':   '.vim/vim-views',
+        \ 'directory': '.vim/vim-swap',
         \ }
     if has('persistent_undo')
         let dir_list['undodir'] = '.vim-undo'
@@ -164,14 +164,14 @@ let g:maplocalleader = '\'
 " ------------------------
 " reload config
 " ------------------------
-nnoremap \<Cr> :source ~/.vim.conf/init.vim<Cr>
+nnoremap \<Cr> :source ~/.leovim.conf/init.vim<Cr>
 " ------------------------
 " open config file
 " ------------------------
-nnoremap <leader>ei :tabe ~/.vim.conf/init.vim<CR>
+nnoremap <leader>ei :tabe ~/.leovim.conf/init.vim<CR>
 nnoremap <leader>el :tabe ~/.vimrc.local<CR>
-nnoremap <leader>ep :tabe ~/.config/.vimrc.plugs<Cr>
-nnoremap <leader>ec :tabe ~/.config/.vimrc<Cr>
+nnoremap <leader>ep :tabe ~/.vim/.vimrc.plugs<Cr>
+nnoremap <leader>ec :tabe ~/.vim/.vimrc<Cr>
 " --------------------------
 " HasPlug define
 " --------------------------
@@ -1667,7 +1667,7 @@ if has('statusline')
     endif
     source $SETTINGS_PATH/lightline.vim
 endif
-if filereadable(expand("~/.config/.vimrc.plugs")) | source $HOME/.config/.vimrc.plugs | endif
+if filereadable(expand("~/.vim/.vimrc.plugs")) | source $HOME/.vim/.vimrc.plugs | endif
 silent! call plug#end()
 " --------------------------
 " common addvanced settings
@@ -1832,7 +1832,7 @@ nnoremap <M-m>V :version<Cr>
 " --------------------------
 " more config
 " --------------------------
-if filereadable(expand("~/.config/.vimrc")) | source $HOME/.config/.vimrc | endif
+if filereadable(expand("~/.vim/.vimrc")) | source $HOME/.vim/.vimrc | endif
 " --------------------------
 " inweb setting
 " --------------------------

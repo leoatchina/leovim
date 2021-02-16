@@ -8,7 +8,7 @@ die() {
     exit 1
 }
 
-rm $HOME/.vim.conf
+rm $HOME/.leovim.conf
 rm $HOME/.vimrc
 rm $HOME/.config/nvim/init.vim
 rm $HOME/.vimrc.clean

@@ -57,7 +57,7 @@ create_vimrc(){
 if filereadable(expand("~/.vimrc.test"))
     source ~/.vimrc.test
 else
-    source ~/.vim.conf/init.vim
+    source ~/.leovim.conf/init.vim
 endif
 EOF
     success "Setted up vimrc $vimrc"
@@ -103,7 +103,7 @@ fi
 
 echo
 
-create_symlinks "$APP_PATH"           "$HOME/.vim.conf"
+create_symlinks "$APP_PATH"           "$HOME/.leovim.conf"
 create_symlinks "$APP_PATH/clean.sh"  "$HOME/.vimrc.clean"
 create_symlinks "$APP_PATH/update.sh" "$HOME/.vimrc.update"
 echo

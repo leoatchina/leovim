@@ -8,8 +8,8 @@ call md "%HOME%\.cache\tags"
 call md "%HOME%\.cache\session"
 
 REM mklink of config dir
-call rmdir     "%HOME%\.vim.conf"
-call mklink /d "%HOME%\.vim.conf" "%APP_PATH%"
+call rmdir     "%HOME%\.leovim.conf"
+call mklink /d "%HOME%\.leovim.conf" "%APP_PATH%"
 
 REM delete files
 call del "%HOME%\.vimrc.clean"
@@ -23,7 +23,7 @@ REM cp vimrc
 echo if filereadable(expand("~/.vimrc.test")) > "%HOME%\.vimrc"  
 echo    source ~/.vimrc.test>> "%HOME%\.vimrc"  
 echo else >> "%HOME%\.vimrc"  
-echo    source ~/.vim.conf/init.vim >> "%HOME%\.vimrc"  
+echo    source ~/.leovim.conf/init.vim >> "%HOME%\.vimrc"  
 echo endif >> "%HOME%\.vimrc"  
 call copy "%HOME%\.vimrc" "%HOME%\AppData\local\nvim\init.vim"
 
