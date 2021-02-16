@@ -8,8 +8,14 @@ call md "%HOME%\.cache\tags"
 call md "%HOME%\.cache\session"
 
 REM mklink of config dir
-call rmdir     "%HOME%\.leovim.conf"
-call mklink /d "%HOME%\.leovim.conf" "%APP_PATH%"
+echo %APP_PATH%
+IF "%APP_PATH%" == "%HOME%\.leovim.conf\" (
+    echo "leovim is already installed in %HOME%\.leovim.conf"
+) ELSE (
+    echo "leovim is going to be linked to %HOME%\.leovim.conf"
+		call rmdir     "%HOME%\.leovim.conf"
+		call mklink /d "%HOME%\.leovim.conf" "%APP_PATH%"
+)
 
 REM delete files
 call del "%HOME%\.vimrc.clean"
@@ -26,6 +32,7 @@ echo else >> "%HOME%\.vimrc"
 echo    source ~/.leovim.conf/init.vim >> "%HOME%\.vimrc"
 echo endif >> "%HOME%\.vimrc"
 call copy "%HOME%\.vimrc" "%HOME%\AppData\local\nvim\init.vim"
+call copy "%HOME%\.vimrc" "%HOME%\.gvimrc"
 
 REM mkdir for install
 IF NOT EXIST "%HOME%\.vim" (
