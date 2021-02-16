@@ -106,6 +106,8 @@ else
     echo "leovim is going to be linked to $HOME/.leovim.conf"
     create_symlinks "$APP_PATH" "$HOME/.leovim.conf"
 fi
+
+echo
 create_symlinks "$APP_PATH/clean.sh"  "$HOME/.vimrc.clean"
 create_symlinks "$APP_PATH/update.sh" "$HOME/.vimrc.update"
 

@@ -16,6 +16,7 @@ IF "%APP_PATH%" == "%HOME%\.leovim.conf" (
 		call rmdir "%HOME%\.leovim.conf"
 		call mklink /d "%HOME%\.leovim.conf" "%APP_PATH%"
 )
+echo
 
 REM delete files
 call del "%HOME%\.vimrc.clean"
