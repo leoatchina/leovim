@@ -56,7 +56,7 @@ let g:startify_commands = [
             \ {'v': ['重要插件', 'call Version()']},
             \ {'V': ['基本信息', 'version']},
             \ ]
-let g:startify_session_dir    = expand("~/.cache/sessions")
+let g:startify_session_dir = expand("~/.cache/sessions")
 if !isdirectory(g:startify_session_dir)
     silent! call mkdir(g:startify_session_dir, "p")
 endif
@@ -221,12 +221,12 @@ augroup END
 " set TERM && screen
 " --------------------------
 if WINDOWS()
-    if isdirectory($HOME. "\\.vim-support")
-        let $PATH = $HOME . "\\.vim-support\\tools;" . $HOME . "\\.vim-support\\tools\\gtags\\bin;" . $HOME . "\\.vim-support\\tools\\cppcheck;" . $PATH
+    if isdirectory($HOME. "\\.leovim.plug\\windows-tools")
+        let $PATH = $HOME . "\\.leovim.plug\\windows-tools\\tools;" . $HOME . "\\.leovim.plug\\windows-tools\\tools\\gtags\\bin;" . $HOME . "\\.leovim.plug\\windows-tools\\tools\\cppcheck;" . $PATH
     endif
     set winaltkeys=no
     if has('libcall') && !has('nvim') && has('gui_running')
-        let g:gvimfullscreendll = $HOME."\\.vim-support\\tools\\gvimfullscreen.dll"
+        let g:gvimfullscreendll = $HOME."\\.leovim.plug\\windows-tools\\tools\\gvimfullscreen.dll"
         function! ToggleFullScreen()
             call libcallnr(g:gvimfullscreendll, "ToggleFullScreen", -1)
         endfunction

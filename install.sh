@@ -102,10 +102,15 @@ else
 fi
 
 echo
-
-create_symlinks "$APP_PATH"           "$HOME/.leovim.conf"
+if [ "$APP_PATH" == "$HOME/.leovim.conf"]
+    echo "leovim is already installed in $HOME/.leovim.conf"
+else
+    echo "leovim is going to be linked to $HOME/.leovim.conf"
+    create_symlinks "$APP_PATH" "$HOME/.leovim.conf"
+fi
 create_symlinks "$APP_PATH/clean.sh"  "$HOME/.vimrc.clean"
 create_symlinks "$APP_PATH/update.sh" "$HOME/.vimrc.update"
+
 echo
 create_vimrc "$HOME/.vimrc"
 create_vimrc "$HOME/.gvimrc"

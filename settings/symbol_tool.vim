@@ -144,7 +144,7 @@ if executable('ctags')
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')
         " 将自动生成的 tags 文件全部放入 leaderf 目录中，避免污染工程目录
-        let g:Lf_CacheDirectory   = expand("~/.vim/leaderf")
+        let g:Lf_CacheDirectory   = expand("~/.cache/leaderf")
         let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory.'/.LfCache/gtags')
         if isdirectory(g:gutentags_cache_dir)
             silent! call mkdir(g:gutentags_cache_dir, 'p')
