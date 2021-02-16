@@ -234,9 +234,10 @@ if Installed('YouCompleteMe')
                     \ }]
     endif
 elseif Installed('coc.nvim')
+    let g:coc_data_home   = expand("~/.leovim.plug/coc")
+    let g:coc_config_home = expand("~/.vim/coc-config")
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         nnoremap <M-F>  :Leaderf self<cr>
-        nnoremap <M-l>f :Leaderf<Space>
     endif
     " as lsp engine
     nmap H :call <SID>show_documentation()<CR>
@@ -306,7 +307,7 @@ elseif Installed('coc.nvim')
     xmap ig <Plug>(coc-git-chunk-inner)
     omap ag <Plug>(coc-git-chunk-outer)
     xmap ag <Plug>(coc-git-chunk-outer)
-    call coc#config('git.enableGutters', v:false)
+    call coc#config('git.enableGutters',   v:false)
     call coc#config('git.realtimeGutters', v:false)
     " coc-explorer
     call coc#config('explorer.keyMappings.global', {
