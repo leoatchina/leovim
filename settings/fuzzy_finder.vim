@@ -79,11 +79,6 @@ if Installed("fzf.vim") && Installed("fzf")
     " --------------------
     " FZFRegisters
     " --------------------
-    function! s:paste_select(select) dict
-        " NOTE select[1] is the name of register
-        let reg = a:select[1]
-        call feedkeys("\"" . reg . self.paste)
-    endfunction
     function! s:fzf_registers()
         redir => registers
         silent registers
@@ -105,18 +100,26 @@ if Installed("fzf.vim") && Installed("fzf")
         endfor
         return lst
     endfunction
-    command! FZFRegisterBefore call fzf#run(extend({
+    function! s:paste_select(select) dict
+        " NOTE select[1] is the name of register
+        let reg = a:select[1]
+        let cmd = "\"" . reg . self.paste
+        call feedkeys(cmd)
+    endfunction
+    command! -range FZFRegisterBefore call fzf#run(extend({
             \ 'source': s:fzf_registers(),
-            \ 'sink': function('s:paste_select', {'paste': 'P'}),
+            \ 'sink': function('s:paste_select', {'paste': 'P', 'range': <range>}),
             \ 'options': '--ansi -x --prompt "PasteBefore>"'
             \ }, g:fzf_layout), 0)
-    command! FZFRegisterAfter call fzf#run(extend({
+    command! -range FZFRegisterAfter call fzf#run(extend({
             \ 'source': s:fzf_registers(),
-            \ 'sink': function('s:paste_select', {'paste': 'p'}),
+            \ 'sink': function('s:paste_select', {'paste': 'p', 'range': <range>}),
             \ 'options': '--ansi -x --prompt "PasteAfter>"'
             \ }, g:fzf_layout), 0)
     nnoremap <silent> <leader>p :FZFRegisterBefore<Cr>
     nnoremap <silent> <leader>P :FZFRegisterAfter<Cr>
+    xnoremap <silent> <leader>p :<C-u>FZFRegisterBefore<Cr>
+    xnoremap <silent> <leader>P :<C-u>FZFRegisterAfter<Cr>
     " --------------------
     " FZFYank
     " --------------------
@@ -142,21 +145,24 @@ if Installed("fzf.vim") && Installed("fzf")
                 echo "aborted register paste"
             else
                 let @0 = split(select, ' ')[3]
-                call feedkeys("\"0" . self.paste)
+                let cmd = "\"0" . self.paste
+                call feedkeys(cmd)
             endif
         endfunction
-        command! FZFYankBefore call fzf#run(extend({
+        command! -range FZFYankBefore call fzf#run(extend({
                     \ 'source': s:yank_list(),
-                    \ 'sink': function('s:paste_yank', {'paste': 'P'}),
+                    \ 'sink': function('s:paste_yank', {'paste': 'P', 'range': <range>}),
                     \ 'options': '--ansi -x --prompt "YankBefore>"'
                     \ }, g:fzf_layout), 0)
-        command! FZFYankAfter call fzf#run(extend({
+        command! -range FZFYankAfter call fzf#run(extend({
                     \ 'source': s:yank_list(),
-                    \ 'sink': function('s:paste_yank', {'paste': 'p'}),
+                    \ 'sink': function('s:paste_yank', {'paste': 'p', 'range': <range>}),
                     \ 'options': '--ansi -x --prompt "YankAfter>"'
                     \ }, g:fzf_layout), 0)
         nnoremap <silent> ,p :FZFYankBefore<Cr>
         nnoremap <silent> ,P :FZFYankAfter<Cr>
+        xnoremap <silent> ,p :<C-u>FZFYankBefore<Cr>
+        xnoremap <silent> ,P :<C-u>FZFYankAfter<Cr>
     endif
     " --------------------
     " FZFJumps
