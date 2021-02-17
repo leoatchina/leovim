@@ -558,3 +558,20 @@ if Installed('vim-quickui')
     nnoremap <silent><M-down> :call quickui#preview#scroll(1)<Cr>
     nnoremap <silent><M-up>   :call quickui#preview#scroll(-1)<Cr>
 endif
+" --------------------------
+" quickui
+" --------------------------
+if Installed('vim-fugitive')
+    nnoremap <M-g>s :Gstatus<Cr>
+    nnoremap <M-g>. :Git blame<Cr>
+    nnoremap <M-g>, :Git<Space>
+    nnoremap <M-g>m :Git commit -a -v<CR>
+elseif executable('git')
+    if g:has_terminal > 0
+        nnoremap <M-g>s :AsyncRun -mode=term -focus=1 git status<Cr>
+        nnoremap <M-g>, :AsyncRun -mode=term -focus=1 git<Space>
+    else
+        nnoremap <M-g>s :AsyncRun! -focus=1 git status<Cr>
+        nnoremap <M-g>, :AsyncRun! -focus=1 git<Space>
+    endif
+endif

@@ -7,7 +7,6 @@ catch
     try
         set completeopt=menu,menuone,noselect
     catch
-        set completeopt=menu,preview
         call AddPlug('no-complete')
     endtry
 endtry

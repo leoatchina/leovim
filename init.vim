@@ -1735,6 +1735,7 @@ if v:version >= 704
     xnoremap [       :WhichKeyVisual '['<Cr>
     xnoremap ]       :WhichKeyVisual ']'<Cr>
     " M- keys
+    nnoremap <M-g> :WhichKey '<lt>M-g>'<Cr>
     nnoremap <M-h> :WhichKey '<lt>M-h>'<Cr>
     nnoremap <M-j> :WhichKey '<lt>M-j>'<Cr>
     nnoremap <M-k> :WhichKey '<lt>M-k>'<Cr>
@@ -1746,9 +1747,6 @@ if v:version >= 704
     if get(g:, 'fly_grep', '') != ''
         nnoremap <M-f> :WhichKey '<lt>M-f>'<Cr>
         xnoremap <M-f> :WhichKeyVisual '<lt>M-f>'<Cr>
-    endif
-    if &rtp =~ 'fugitive'
-        nnoremap <M-g> :WhichKey '<lt>M-g>'<Cr>
     endif
     if Installed('vimspector')
         nnoremap <M-u> :WhichKey '<lt>M-u>'<Cr>

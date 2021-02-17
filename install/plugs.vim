@@ -156,11 +156,11 @@ endif
 " ------------------------------
 " git
 " ------------------------------
-MyPlug 'tpope/vim-fugitive'
-nnoremap <M-g>s :Gstatus<Cr>
-nnoremap <M-g>. :Git blame<Cr>
-nnoremap <M-g>, :Git<Space>
-nnoremap <M-g>m :Git commit -a -v<CR>
+let git_version = matchstr(system('git --version'), '\zs\d\{1,\}.\d\{1,\}.\d\{1\}\ze')
+let git_version = str2nr(substitute(git_version, "\\.", "", "g"))
+if git_version >= 185
+    MyPlug 'tpope/vim-fugitive'
+endif
 " ------------------------------
 " signify
 " ------------------------------
