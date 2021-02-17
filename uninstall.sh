@@ -11,8 +11,8 @@ die() {
 rm $HOME/.leovim.conf
 rm $HOME/.vimrc
 rm $HOME/.config/nvim/init.vim
-rm $HOME/.vimrc.clean
-rm $HOME/.vimrc.update
+rm $HOME/.leovim.clean
+rm $HOME/.leovim.update
 
 
 rm -rf $HOME/.vim

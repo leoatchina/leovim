@@ -19,12 +19,12 @@ IF "%APP_PATH%" == "%HOME%\.leovim.conf" (
 echo
 
 REM delete files
-call del "%HOME%\.vimrc.clean"
+call del "%HOME%\.leovim.clean"
 call del "%HOME%\.vimrc"
 call del "%HOME%\AppData\local\nvim\init.vim"
 
 REM mklink clean script
-call mklink "%HOME%\.vimrc.clean" "%APP_PATH%\clean.cmd"
+call mklink "%HOME%\.leovim.clean" "%APP_PATH%\clean.cmd"
 
 REM cp vimrc
 echo if filereadable(expand("~/.vimrc.test")) > "%HOME%\.vimrc"

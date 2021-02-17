@@ -1,5 +1,5 @@
 @if not exist "%HOME%" @set HOME=%USERPROFILE%
-call del "%HOME%\.vimrc.clean"
+call del "%HOME%\.leovim.clean"
 call del "%HOME%\.leovim.conf"
 call del "%HOME%\.vimrc"
 call del "%HOME%\.gvimrc"

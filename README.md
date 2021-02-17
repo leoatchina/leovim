@@ -48,7 +48,7 @@ cd leovim
 ```
 OR
 ```bash
-~/.vimrc.update
+~/.leovim.update
 ```
 OR
 ```bash

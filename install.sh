@@ -108,8 +108,8 @@ else
 fi
 
 echo
-create_symlinks "$APP_PATH/clean.sh"  "$HOME/.vimrc.clean"
-create_symlinks "$APP_PATH/update.sh" "$HOME/.vimrc.update"
+create_symlinks "$APP_PATH/clean.sh"  "$HOME/.leovim.clean"
+create_symlinks "$APP_PATH/update.sh" "$HOME/.leovim.update"
 
 echo
 create_vimrc "$HOME/.vimrc"
