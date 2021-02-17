@@ -124,7 +124,7 @@ if Installed("fzf.vim") && Installed("fzf")
     " FZFYank
     " --------------------
     if Installed('vim-yoink')
-        let g:yoinkMaxItems = 99
+        let g:yoinkMaxItems = 100
         nmap ,yb <plug>(YoinkPostPasteSwapBack)
         nmap ,yf <plug>(YoinkPostPasteSwapForward)
         nmap ,yp <plug>(YoinkRotateBack)
@@ -144,10 +144,12 @@ if Installed("fzf.vim") && Installed("fzf")
             if empty(select)
                 echo "aborted register paste"
             else
-                if str2nr(select[1]) == ' '
+                if select[1] == ' '
                     let @0 = select[4:]
+                    let cnt = str2nr(select[0])
                 else
                     let @0 = select[5:]
+                    let cnt = str2nr(select[:1])
                 endif
                 let cmd = "\"0" . self.paste
                 call feedkeys(cmd)
