@@ -581,5 +581,6 @@ elseif executable('git')
         nnoremap <M-g>s :!git status<Cr>
         nnoremap <M-g>m :!git commit -a -m<Space>
         nnoremap <M-g>, :!git<Space>
+        nnoremap <M-G>  :!git<Space>
     endif
 endif
