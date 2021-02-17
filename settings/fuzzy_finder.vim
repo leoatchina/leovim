@@ -440,7 +440,7 @@ if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>a    :CtrlPBufTagAll<CR>
         nnoremap <silent> <M-k>l    :CtrlPLine<Cr>
-        if !installed('fzf-funky')
+        if !Installed('fzf-funky')
             set rtp+=$ADDINS_PATH/ctrlp-funky
             nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
         endif
