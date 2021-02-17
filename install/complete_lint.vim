@@ -177,7 +177,6 @@ elseif get(g:, 'complete_engine', '') == 'coc'
             \ 'coc-lists',
             \ 'coc-xml',
             \ 'coc-marketplace',
-            \ 'coc-yank',
             \ 'coc-vimlsp',
             \ 'coc-pyright',
             \ 'coc-snippets',
