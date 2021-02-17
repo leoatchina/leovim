@@ -1,16 +1,5 @@
-if executable('rg')
-    if !MACVIM() && Installed('LeaderF')
-        let g:fly_grep = "leaderf"
-    elseif Installed('coc.nvim')
-        let g:fly_grep = "coc"
-    endif
-endif
 if Installed('ctrlsf.vim')
-    if g:fly_grep == ''
-        let g:fly_grep = "ctrlsf"
-    else
-        let g:fly_grep .= "-ctrlsf"
-    endif
+    let g:fly_grep = "ctrlsf"
     let g:ctrlsf_position='right'
     let g:ctrlsf_default_root='project'
     let g:ctrlsf_extra_root_markers=['.root', '.git', '.svn', '.hg']
@@ -29,6 +18,21 @@ if Installed('ctrlsf.vim')
     nmap <M-f>/ <Plug>CtrlSFCwordPath
     nmap <M-f>; <Plug>CtrlSFPwordPath
     nmap <M-f>, <Plug>CtrlSFCCwordPath
+endif
+if executable('rg')
+    if !MACVIM() && Installed('LeaderF')
+        if get(g:, 'fly_grep', '') == ''
+            let g:fly_grep = "leaderf"
+        else
+            let g:fly_grep .= "-leaderf"
+        endif
+    elseif Installed('coc.nvim')
+        if get(g:, 'fly_grep', '') == ''
+            let g:fly_grep = "coc"
+        else
+            let g:fly_grep .= "-coc"
+        endif
+    endif
 endif
 if get(g:, 'fly_grep', '') =~ 'leaderf'
     if get(g:,'Lf_PreviewInPopup', 0) == 1
