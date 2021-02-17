@@ -158,7 +158,7 @@ endif
 " ------------------------------
 MyPlug 'tpope/vim-fugitive'
 nnoremap <M-g>s :Gstatus<Cr>
-nnoremap <M-g>. :Gblame<Cr>
+nnoremap <M-g>. :Git blame<Cr>
 nnoremap <M-g>, :Git<Space>
 nnoremap <M-g>m :Git commit -a -v<CR>
 " ------------------------------
