@@ -235,7 +235,7 @@ if Installed('YouCompleteMe')
     endif
 elseif Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
-    let g:coc_config_home = expand("~/.vim/coc")
+    let g:coc_config_home = expand("~/.config/coc")
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         nnoremap <M-F>  :Leaderf self<cr>
     endif
