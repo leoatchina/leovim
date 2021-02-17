@@ -2,10 +2,10 @@
 " version require
 " --------------------------
 if v:version < 703 && !has('nvim')
-    echoe 'For vim, to use leovim config vim 7.3 is at least required.'
+    echoe 'If vim, to use leovim config vim 7.3 is at least required.'
     finish
 elseif !has('nvim-0.4.4') && has('nvim')
-    echoe 'For neovim, to use leovim config neovim 0.4.4 is at least required.'
+    echoe 'If neovim, to use leovim config neovim 0.4.4 is at least required.'
     finish
 else
     " set rtp
@@ -166,8 +166,8 @@ nnoremap \<Cr> :source ~/.leovim.conf/init.vim<Cr>
 " ------------------------
 nnoremap <leader>ei :tabe ~/.leovim.conf/init.vim<CR>
 nnoremap <leader>el :tabe ~/.vimrc.local<CR>
-nnoremap <leader>ep :tabe ~/.vim/.vimrc.plugs<Cr>
-nnoremap <leader>ev :tabe ~/.vim/.vimrc<Cr>
+nnoremap <leader>ep :tabe ~/.config/.vimrc.plug<Cr>
+nnoremap <leader>ev :tabe ~/.config/.vimrc<Cr>
 " --------------------------
 " HasPlug define
 " --------------------------
@@ -1664,7 +1664,7 @@ if has('statusline')
     endif
     source $SETTINGS_PATH/lightline.vim
 endif
-if filereadable(expand("~/.vim/.vimrc.plugs")) | source $HOME/.vim/.vimrc.plugs | endif
+if filereadable(expand("~/.config/.vimrc.plug")) | source $HOME/.config/.vimrc.plug | endif
 silent! call plug#end()
 " --------------------------
 " common addvanced settings
@@ -1705,7 +1705,7 @@ endtry
 " --------------------------
 if v:version >= 704
     if !exists('g:leovim_loaded')
-        if (v:version >= 800 || has('nvim')) && !HasPlug('whichkey-legacy')
+        if v:version >= 800 || has('nvim')
             set rtp+=$ADDINS_PATH/vim-which-key
         else
             set rtp+=$ADDINS_PATH/vim-which-key-legacy
@@ -1829,7 +1829,7 @@ nnoremap <M-m>V :version<Cr>
 " --------------------------
 " more config
 " --------------------------
-if filereadable(expand("~/.vim/.vimrc")) | source $HOME/.vim/.vimrc | endif
+if filereadable(expand("~/.config/.vimrc")) | source $HOME/.config/.vimrc | endif
 " --------------------------
 " inweb setting
 " --------------------------

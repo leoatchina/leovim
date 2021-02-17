@@ -160,7 +160,7 @@ MyPlug 'tpope/vim-fugitive'
 nnoremap <M-g>s :Gstatus<Cr>
 nnoremap <M-g>. :Gblame<Cr>
 nnoremap <M-g>, :Git<Space>
-nnoremap <M-g>m :Gcommit -a -v<CR>
+nnoremap <M-g>m :Git commit -a -v<CR>
 " ------------------------------
 " signify
 " ------------------------------
