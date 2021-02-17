@@ -527,7 +527,7 @@ au Filetype far nnoremap \F :Refar<Space>
 if !exists('g:leovim_loaded') && (has('nvim') || v:version >=800)
     set rtp+=$ADDINS_PATH/vim-visual-multi
 endif
-let g:VM_custom_remaps = {'<c-j>': '<ESC>'}
+let g:VM_custom_remaps = {'<c-j>': '<ESC>', '<c-k>': 'q', '<c-h>': 'Q'}
 " --------------------------
 " surround
 " --------------------------
