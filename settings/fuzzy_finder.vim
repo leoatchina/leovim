@@ -567,11 +567,17 @@ if Installed('vim-fugitive')
     nnoremap <M-g>, :Git<Space>
     nnoremap <M-g>m :Git commit -a -v<CR>
 elseif executable('git')
-    if g:has_terminal > 0
-        nnoremap <M-g>s :AsyncRun -mode=term -focus=1 git status<Cr>
-        nnoremap <M-g>, :AsyncRun -mode=term -focus=1 git<Space>
+    if &rtp =~ 'asyncrun'
+        if g:has_terminal > 0
+            nnoremap <M-g>s :AsyncRun -mode=term -focus=1 git status<Cr>
+            nnoremap <M-g>m :AsyncRun -mode=term -focus=1 git commit -a -m<Cr>
+            nnoremap <M-g>, :AsyncRun -mode=term -focus=1 git<Space>
+        else
+            nnoremap <M-g>s :AsyncRun! -focus=1 git status<Cr>
+            nnoremap <M-g>m :AsyncRun! -focus=1 git commit -a -m<Cr>
+            nnoremap <M-g>, :AsyncRun! -focus=1 git<Space>
+        endif
     else
-        nnoremap <M-g>s :AsyncRun! -focus=1 git status<Cr>
-        nnoremap <M-g>, :AsyncRun! -focus=1 git<Space>
+        nnoremap <M-g>s :!git status<Cr>
     endif
 endif
