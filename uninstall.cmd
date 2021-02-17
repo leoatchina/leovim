@@ -8,4 +8,4 @@ call del "%HOME%\AppData\local\nvim\ginit.vim"
 
 
 call rmdir /Q /S "%HOME%\.vim"
-call rmdir /Q /S "%HOME%\.vim.plugins"
+call rmdir /Q /S "%HOME%\.leovim.plug"

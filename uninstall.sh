@@ -16,4 +16,4 @@ rm $HOME/.vimrc.update
 
 
 rm -rf $HOME/.vim
-rm -rf $HOME/.vim.plugins
+rm -rf $HOME/.leovim.plug

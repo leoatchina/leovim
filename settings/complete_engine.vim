@@ -21,7 +21,7 @@ if Installed('ultisnips')
         inoremap <c-x><c-j> <c-\><c-o>:Leaderf snippet<cr>
     endif
     " Ulti 的代码片段的文件夹
-    let g:UltiSnipsSnippetsDir        = $HOME.'/.vim.plugins/ultisnips'
+    let g:UltiSnipsSnippetsDir        = $HOME.'/.leovim.plug/ultisnips'
     let g:UltiSnipsSnippetDirectories = ["UltiSnips"]
     " Ulti python version
     let g:UltiSnipsUsePythonVersion = 3
