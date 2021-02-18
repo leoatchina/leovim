@@ -179,6 +179,7 @@ let g:signify_disable_by_default = 1
 if executable('tmux') && g:gui_running == 0 && (has('nvim') || has('patch-8.0.1394'))
     MyPlug 'roxma/vim-tmux-clipboard'
     MyPlug 'tmux-plugins/vim-tmux-focus-events'
+    MyPlug 'preservim/vimux'
 endif
 " ------------------------------
 " quickui
