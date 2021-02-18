@@ -145,14 +145,14 @@ if Installed("fzf.vim") && Installed("fzf")
                 echo "aborted register paste"
             else
                 if select[1] == ' '
-                    let @0 = select[4:]
                     let cnt = str2nr(select[0])
                 else
-                    let @0 = select[5:]
                     let cnt = str2nr(select[:1])
                 endif
-                let cmd = "\"0" . self.paste
-                call feedkeys(cmd)
+                if cnt > 0
+                    call yoink#rotate(cnt)
+                endif
+                call feedkeys(self.paste)
             endif
         endfunction
         command! -range FZFYankBefore call fzf#run(extend({
