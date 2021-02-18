@@ -89,9 +89,13 @@ click uninstall.cmd with administrator right
 - [x] fly_grep using leaderf or fzf
 - [x] auto choose yes to kill job when confirm quit termina
 - [x] MyPlug to install plunins in to $INSTALL_PATH by default
-- [x] leaderf as default fuzzy_finder when with python3 support, other wise fzf or ctrlp 
+- [x] leaderf as default fuzzy_finder when with +python3 support, otherwise fzf or ctrlp 
 - [x] fix coc.nvim vsplitly open definition declaration etc.
 - [x] settings plugins to install list in ./install/plugs.vim
 - [x] Copy && Paste using tmux
 - [x] fzf yank, using ,p 
+- [ ] leaderf extra
+    - [ ] leaderf paste 
+    - [ ] leaderf yank 
+    - [ ] leaderf jumps
 - [ ] rewrite readme
