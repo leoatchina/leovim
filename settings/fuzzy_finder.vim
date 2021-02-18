@@ -137,22 +137,31 @@ if Installed("fzf.vim") && Installed("fzf")
             redir => ys
             silent Yanks
             redir END
-            return split(ys, '\n')[1:]
+            let lst = split(ys, '\n')[1:]
+            " 如果Yank list第一个和"存储器内容不同，使用"存储器内容
+            if @" != lst[0][4:]
+                let lst = ["\"   " . @"] + lst[1:]
+            endif
+            return lst
         endfunction
         function! s:paste_yank(select) dict
             let select = a:select
             if empty(select)
                 echo "aborted register paste"
             else
-                if select[1] == ' '
-                    let cnt = str2nr(select[0])
+                if select[0] == "\""
+                    call feedkeys(self.paste)
                 else
-                    let cnt = str2nr(select[:1])
+                    if select[1] == ' '
+                        let idx = str2nr(select[0])
+                    else
+                        let idx = str2nr(select[:1])
+                    endif
+                    if idx > 0
+                        call yoink#rotate(idx)
+                    endif
+                    call feedkeys(self.paste)
                 endif
-                if cnt > 0
-                    call yoink#rotate(cnt)
-                endif
-                call feedkeys(self.paste)
             endif
         endfunction
         command! -range FZFYankBefore call fzf#run(extend({
