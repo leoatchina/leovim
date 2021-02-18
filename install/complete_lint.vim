@@ -141,7 +141,7 @@ if get(g:, 'complete_engine', '') =~ "YCM"
         endif
         if g:complete_engine =~ 'legacy'
             if g:python_version > 3.6
-                MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'commit':'d98f896'}
+                MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'branch': 'legacy-vim'}
             elseif g:python_version > 3.5
                 MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'commit':'9f77732bde3'}
             endif
