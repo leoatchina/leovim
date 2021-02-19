@@ -1586,7 +1586,7 @@ if get(g:, 'has_terminal', 0) > 0
     " --------------------------
     " floaterm
     " --------------------------
-    if (has('nvim') && executable('nvr') || v:version >= 802 && !has('nvim')) && !HasPlug('inweb')
+    if (has('nvim') || v:version >= 802 && !has('nvim')) && !HasPlug('inweb')
         autocmd User Startified setlocal buflisted
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/vim-floaterm
