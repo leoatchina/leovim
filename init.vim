@@ -1208,7 +1208,6 @@ nnoremap <M-m>h :set nohlsearch? nohlsearch!<CR>
 nnoremap <M-m>s :colorscheme<Space>
 nnoremap <M-m>t :setfiletype<Space>
 nnoremap <M-m>c :command<Cr>
-nnoremap <M-m>r :registers<Cr>
 " ------------------------
 " pastemode toggle
 " ------------------------

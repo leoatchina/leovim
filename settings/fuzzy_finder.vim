@@ -76,54 +76,54 @@ if Installed("fzf.vim") && Installed("fzf")
     nnoremap <M-g>b :FzfBCommits<Cr>
     nnoremap <M-g>c :FzfCommits<Cr>
     nnoremap <M-g>f :FzfGFiles?<CR>
-    " --------------------
-    " FZFRegisters
-    " --------------------
-    function! s:fzf_registers()
-        redir => registers
-        silent registers
-        redir END
-        let reg_lst = split(registers, '\n')
-        " cut head
-        if reg_lst[0][0:3] == 'Type'
-            let cut_head = 1
-        else
-            let cut_head = 0
-        endif
-        let lst = []
-        for reg in reg_lst[1:]
-            if cut_head > 0
-                let reg = reg[5:]
-            endif
-            let reg = substitute(reg, "\\^J", "\\r", "g")
-            call add(lst, reg)
-        endfor
-        return lst
-    endfunction
-    function! s:paste_select(select) dict
-        " NOTE select[1] is the name of register
-        let reg = a:select[1]
-        let cmd = "\"" . reg . self.paste
-        call feedkeys(cmd)
-    endfunction
-    command! -range FZFRegisterBefore call fzf#run(extend({
-            \ 'source': s:fzf_registers(),
-            \ 'sink': function('s:paste_select', {'paste': 'P', 'range': <range>}),
-            \ 'options': '--ansi -x --prompt "PasteBefore>"'
-            \ }, g:fzf_layout), 0)
-    command! -range FZFRegisterAfter call fzf#run(extend({
-            \ 'source': s:fzf_registers(),
-            \ 'sink': function('s:paste_select', {'paste': 'p', 'range': <range>}),
-            \ 'options': '--ansi -x --prompt "PasteAfter>"'
-            \ }, g:fzf_layout), 0)
-    nnoremap <silent> <leader>p :FZFRegisterBefore<Cr>
-    nnoremap <silent> <leader>P :FZFRegisterAfter<Cr>
-    xnoremap <silent> <leader>p :<C-u>FZFRegisterBefore<Cr>
-    xnoremap <silent> <leader>P :<C-u>FZFRegisterAfter<Cr>
-    " --------------------
-    " FZFYank
-    " --------------------
     if Installed('vim-yoink')
+        " --------------------
+        " FZFRegisters
+        " --------------------
+        function! s:fzf_registers()
+            redir => registers
+            silent registers
+            redir END
+            let reg_lst = split(registers, '\n')
+            " cut head
+            if reg_lst[0][0:3] == 'Type'
+                let cut_head = 1
+            else
+                let cut_head = 0
+            endif
+            let lst = []
+            for reg in reg_lst[1:]
+                if cut_head > 0
+                    let reg = reg[5:]
+                endif
+                let reg = substitute(reg, "\\^J", "\\r", "g")
+                call add(lst, reg)
+            endfor
+            return lst
+        endfunction
+        function! s:paste_select(select) dict
+            " NOTE select[1] is the name of register
+            let reg = a:select[1]
+            let cmd = "\"" . reg . self.paste
+            call feedkeys(cmd)
+        endfunction
+        command! -range FZFRegisterBefore call fzf#run(extend({
+                \ 'source': s:fzf_registers(),
+                \ 'sink': function('s:paste_select', {'paste': 'P', 'range': <range>}),
+                \ 'options': '--ansi -x --prompt "PasteBefore>"'
+                \ }, g:fzf_layout), 0)
+        command! -range FZFRegisterAfter call fzf#run(extend({
+                \ 'source': s:fzf_registers(),
+                \ 'sink': function('s:paste_select', {'paste': 'p', 'range': <range>}),
+                \ 'options': '--ansi -x --prompt "PasteAfter>"'
+                \ }, g:fzf_layout), 0)
+        nnoremap <silent> <leader>p :FZFRegisterBefore<Cr>
+        nnoremap <silent> <leader>P :FZFRegisterAfter<Cr>
+        xnoremap <silent> <leader>p :<C-u>FZFRegisterBefore<Cr>
+        xnoremap <silent> <leader>P :<C-u>FZFRegisterAfter<Cr>
+        " --------------------
+        " FZFYank
+        " --------------------
         let g:yoinkMaxItems = 100
         nmap ,yb <plug>(YoinkPostPasteSwapBack)
         nmap ,yf <plug>(YoinkPostPasteSwapForward)
@@ -443,10 +443,13 @@ if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
     nnoremap <silent> <C-p>  :CtrlPMenu<CR>
-    nnoremap <silent> <M-h>y :CtrlPYankring<Cr>
     nnoremap <M-h>;   :CtrlP
     let g:ctrlp_map = '<leader>f'
     let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
+    if !Installed('vim-yoink')
+        nnoremap <silent> ,p        :CtrlPYankring<Cr>
+        nnoremap <silent> <leader>p :registers<Cr>
+    endif
     if g:fuzzy_finder == 'ctrlp'
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>
