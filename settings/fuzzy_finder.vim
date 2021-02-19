@@ -137,21 +137,26 @@ if Installed("fzf.vim") && Installed("fzf")
             redir => ys
             silent Yanks
             redir END
-            let lst = split(ys, '\n')[1:]
-            " 如果Yank list第一个和"存储器内容不同，使用"存储器内容
-            if @" != lst[0][4:]
-                let lst = ["\"   " . @"] + lst[1:]
-            endif
-            return lst
+            if len(ys) >= 1
+                let lst = split(ys, '\n')[1:]
+                " 如果Yank list第一个和"存储器内容不同，使用"存储器内容
+                if @" != lst[0][4:]
+                    if len(lst) == 1
+                        let lst = ["\"   " . @"]
+                    else
+                        let lst = ["\"   " . @"] + lst[1:]
+                    endif
+                endif
+                return lst
+            else
+                return ["\"   " . @"]
+            endtry
         endfunction
         function! s:paste_yank(select) dict
-            let select = a:select
-            if empty(select)
+            if empty(a:select)
                 echo "aborted register paste"
             else
-                if select[0] == "\""
-                    call feedkeys(self.paste)
-                else
+                if select[0] != "\""
                     if select[1] == ' '
                         let idx = str2nr(select[0])
                     else
@@ -160,8 +165,8 @@ if Installed("fzf.vim") && Installed("fzf")
                     if idx > 0
                         call yoink#rotate(idx)
                     endif
-                    call feedkeys(self.paste)
                 endif
+                call feedkeys(self.paste)
             endif
         endfunction
         command! -range FZFYankBefore call fzf#run(extend({
@@ -450,6 +455,10 @@ if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
         nnoremap <silent> ,p        :CtrlPYankring<Cr>
         nnoremap <silent> <leader>p :registers<Cr>
     endif
+    if !Installed('fzf-funky')
+        set rtp+=$ADDINS_PATH/ctrlp-funky
+        nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
+    endif
     if g:fuzzy_finder == 'ctrlp'
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>
@@ -458,14 +467,10 @@ if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>a    :CtrlPBufTagAll<CR>
         nnoremap <silent> <M-k>l    :CtrlPLine<Cr>
-        if !Installed('fzf-funky')
-            set rtp+=$ADDINS_PATH/ctrlp-funky
-            nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
-        endif
         if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
-            nnoremap <silent> <M-t> :CtrlPTag<CR>
-        else
             nnoremap <silent> <M-k>t :CtrlPTag<CR>
+        else
+            nnoremap <silent> <M-t> :CtrlPTag<CR>
         endif
         let g:ctrlp_working_path_mode = 'ra'
         let g:ctrlp_custom_ignore = {
