@@ -316,7 +316,6 @@ nnoremap <M-w>h <C-w>H
 nnoremap <M-w>j <C-w>J
 nnoremap <M-w>k <C-w>K
 nnoremap <M-w>l <C-w>L
-nnoremap <M-w>t <C-w>T
 " ------------------------
 " winresizer
 " ------------------------
@@ -987,7 +986,7 @@ nnoremap <leader><Tab> :tabe<Space>
 " 设置分割页面
 nnoremap qv           :vsplit<Space>
 nnoremap qx           :split<Space>
-nnoremap ,t           :tab split<CR>
+nnoremap ,x           :tab split<CR>
 nnoremap ,<Cr>        :tabe<Cr>
 nnoremap <leader><Cr> :e!<Cr>
 " remap for cusor move insert mode
@@ -1000,6 +999,7 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
+nnoremap ,t <C-w>T
 nnoremap <silent> gh :tabprevious<CR>
 nnoremap <silent> ,l :tabm +1<CR>
 nnoremap <silent> ,h :tabm -1<CR>
