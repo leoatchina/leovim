@@ -987,7 +987,7 @@ nnoremap <leader><Tab> :tabe<Space>
 nnoremap qv           :vsplit<Space>
 nnoremap qx           :split<Space>
 nnoremap ,t           <C-w>T
-nnoremap ,x           :tab split<Cr>
+nnoremap ,x           :tab split<CR>
 nnoremap ,<Cr>        :tabe<Cr>
 nnoremap <leader><Cr> :e!<Cr>
 " remap for cusor move insert mode
@@ -1208,7 +1208,6 @@ nnoremap <M-m>h :set nohlsearch? nohlsearch!<CR>
 nnoremap <M-m>s :colorscheme<Space>
 nnoremap <M-m>t :setfiletype<Space>
 nnoremap <M-m>c :command<Cr>
-nnoremap <M-m>r :registers<Cr>
 " ------------------------
 " pastemode toggle
 " ------------------------
@@ -1587,7 +1586,7 @@ if get(g:, 'has_terminal', 0) > 0
     " --------------------------
     " floaterm
     " --------------------------
-    if (has('nvim') && executable('nvr') || v:version >= 802 && !has('nvim')) && !HasPlug('inweb')
+    if (has('nvim') || v:version >= 802 && !has('nvim')) && !HasPlug('inweb')
         autocmd User Startified setlocal buflisted
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/vim-floaterm
@@ -1681,21 +1680,14 @@ source $SETTINGS_PATH/run_tool.vim
 source $SETTINGS_PATH/lint_tool.vim
 source $SETTINGS_PATH/symbol_tool.vim
 source $SETTINGS_PATH/debug_tool.vim
-" --------------------------
 " sidebar
-" --------------------------
 source $SETTINGS_PATH/sidebar.vim
-" --------------------------
 " language support
 source $SETTINGS_PATH/R.vim
 source $SETTINGS_PATH/markdown.vim
-" --------------------------
 " scheme
-" --------------------------
 source $SETTINGS_PATH/schemes.vim
-" --------------------------
 " searchindex
-" --------------------------
 try
     if Installed("vim-searchindex")
         set shortmess+=S
