@@ -72,10 +72,6 @@ if Installed("fzf.vim") && Installed("fzf")
     nnoremap z, :FZF
     " locate file
     nnoremap <M-f>l :FZFLocate<Space>
-    " for git
-    nnoremap <M-g>b :FzfBCommits<Cr>
-    nnoremap <M-g>c :FzfCommits<Cr>
-    nnoremap <M-g>f :FzfGFiles?<CR>
     if Installed('vim-yoink')
         " --------------------
         " FZFRegisters

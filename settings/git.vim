@@ -21,3 +21,8 @@ elseif executable('git')
         nnoremap <M-g>u :!git push<Space>
     endif
 endif
+if executable('git') && Installed('fzf.vim')
+    nnoremap <M-g>b :FzfBCommits<Cr>
+    nnoremap <M-g>c :FzfCommits<Cr>
+    nnoremap <M-g>f :FzfGFiles?<CR>
+endif
