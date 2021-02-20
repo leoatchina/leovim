@@ -1617,10 +1617,6 @@ if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-plug
 endif
 let g:plug_threads = 8
-command! MyPlugInstall PlugClean! | PlugInstall --sync
-command! MyPlugUpdate  PlugClean! | PlugUpdate --sync
-nnoremap ,U        :MyPlugInstall<Cr>
-nnoremap <leader>U :MyPlugUpdate<Cr>
 " --------------------------
 " begin of vim-plug
 " --------------------------
@@ -1667,7 +1663,19 @@ if has('statusline')
     source $SETTINGS_PATH/lightline.vim
 endif
 if filereadable(expand("~/.config/.vimrc.plug")) | source $HOME/.config/.vimrc.plug | endif
+" --------------------------
+" end of vim-plug
+" --------------------------
 silent! call plug#end()
+" --------------------------
+" Update an Install
+" --------------------------
+if executable('git')
+    command! MyPlugInstall PlugClean! | PlugInstall --sync
+    command! MyPlugUpdate  PlugClean! | PlugUpdate --sync
+    nnoremap ,U        :MyPlugInstall<Cr>
+    nnoremap <leader>U :MyPlugUpdate<Cr>
+endif
 " --------------------------
 " common addvanced settings
 " --------------------------
