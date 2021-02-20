@@ -1,14 +1,11 @@
 " mY oWn VimIM.
 " Author: Wu, Yue <ywupub@163.com>
-" Last Change:	2020-03-13
-" Release Version: 1.29
+" Last Change:	2020-11-02
+" Release Version: 1.33
 " License: BSD
 
-" ~/projects/vimscript/ywvim/changelog
-" ~/projects/vimscript/ywvim/manual
-
 " FIXME matchexact=1 空码时，应该屏幕有显示，但输出为空码
-" FIXME 输入状态显示来回切换时有问题
+" x为临拼时输入不了x开头的字
 
 " ？TODO GB support doesnlt work as expected when swithing im.
 " TODO ExpandChar=~ 模似小小的空码时不过滤常用字。Ywvim_comp()加一个参数不过滤
@@ -163,12 +160,12 @@ function s:Ywvim_loadmb(...) "{{{
         let s:ywvim_{mbintername}_usedcodes =substitute(matchstr(matchstr(descriptlst, '^UsedCodes'), '^[^=]\+=\s*\zs.*'), '\s', '', 'g')
         let s:ywvim_{mbintername}_usedcodes_specialpunc ="'".substitute(matchstr(matchstr(descriptlst, '^SpecialPunctuation'), '^[^=]\+=\s*\zs.*'), '\s', '', 'g')."'"
         let s:ywvim_{mbintername}_endcodes = '[' . matchstr(matchstr(descriptlst, '^EndCodes'), '^[^=]\+=\zs.*') . ']'
-        call <SID>Ywvim_SetMbVar(mbintername, 'maxphraselength', matchstr(matchstr(descriptlst, '^MaxElement'), '^[^=]\+=\s*\zs.*'))
+        call <SID>Ywvim_SetMbInitVar(mbintername, 'maxphraselength', matchstr(matchstr(descriptlst, '^MaxElement'), '^[^=]\+=\s*\zs.*'))
         let s:ywvim_{mbintername}_enchar = matchstr(matchstr(descriptlst, '^EnChar'), '^[^=]\+=\s*\zs.*')
         let s:ywvim_{mbintername}_pychar = matchstr(matchstr(descriptlst, '^PyChar'), '^[^=]\+=\s*\zs.*')
-        call <SID>Ywvim_SetMbVar(mbintername, 'inputzh_secondkeys', matchstr(matchstr(descriptlst, '^InputZhSecKeys'), '^[^=]\+=\zs.*'))
-        call <SID>Ywvim_SetMbVar(mbintername, 'inputzh_keys', matchstr(matchstr(descriptlst, '^InputZhKeys'), '^[^=]\+=\zs.*'))
-        call <SID>Ywvim_SetMbVar(mbintername, 'inputen_keys', matchstr(matchstr(descriptlst, '^InputEnKeys'), '^[^=]\+=\zs.*'))
+        call <SID>Ywvim_SetMbInitVar(mbintername, 'inputzh_secondkeys', matchstr(matchstr(descriptlst, '^InputZhSecKeys'), '^[^=]\+=\zs.*'))
+        call <SID>Ywvim_SetMbInitVar(mbintername, 'inputzh_keys', matchstr(matchstr(descriptlst, '^InputZhKeys'), '^[^=]\+=\zs.*'))
+        call <SID>Ywvim_SetMbInitVar(mbintername, 'inputen_keys', matchstr(matchstr(descriptlst, '^InputEnKeys'), '^[^=]\+=\zs.*'))
         let s:ywvim_{mbintername}_altpageupkeys = matchstr(matchstr(descriptlst, '^AltPageUpKeys'), '^[^=]\+=\zs.*')
         let s:ywvim_{mbintername}_altpagednkeys = matchstr(matchstr(descriptlst, '^AltPageDnKeys'), '^[^=]\+=\zs.*')
         let s:ywvim_{mbintername}_pageupkeys = '[' . s:ywvim_pageupkeys . s:ywvim_{mbintername}_altpageupkeys . ']'
@@ -218,7 +215,7 @@ function s:Ywvim_SetScriptVar(m, n) "{{{
         let s:ywvim_{a:m}_{a:n} = s:ywvim_{a:m}[a:n]
     endif
 endfunction "}}}
-function s:Ywvim_SetMbVar(m, n, v) "{{{
+function s:Ywvim_SetMbInitVar(m, n, v) "{{{ FIXME 各码表文件中的设置，优先于vimrc中的设置 Ywvim_SetVar
     let s:ywvim_{a:m}_{a:n} = a:v
     if s:ywvim_{a:m}_{a:n} == ''
         let s:ywvim_{a:m}_{a:n} = s:ywvim_{a:n}
@@ -294,7 +291,7 @@ function s:YwvimHighlight() "{{{
         else
             highlight ywvimIMnormal ctermfg=black guifg=black ctermbg=LightGrey guibg=LightGrey
             highlight ywvimIMname ctermfg=DarkBlue guifg=Blue ctermbg=LightGrey guibg=LightGrey
-            highlight ywvimIMCursor ctermbg=DarkBlue guibg=Blue
+            highlight ywvimIMCursor ctermbg=Red ctermfg=White guibg=LightRed guifg=White
             highlight ywvimIMnr term=underline ctermfg=DarkBlue guifg=Blue ctermbg=LightGrey guibg=LightGrey
             highlight ywvimIMcode ctermfg=Red guifg=Red ctermbg=LightGrey guibg=LightGrey
         endif
@@ -377,11 +374,12 @@ function s:Ywvim_puncp(p) "{{{
     let pmap = s:ywvim_{b:ywvim_parameters["active_mb"]}_puncdic[a:p]
     let lenpmap = len(pmap)
     let intelligent_punc_lang='zh'
-    let intelligent_punc_del_prepunc=0
-    if s:ywvim_intelligent_punc && match('ic', mode())>=0 && match(s:ywvim_intelligent_punclist, a:p)>=0
+    let intelligent_punc_del_prepunc=0 " 判断是否需要替换英文标点为中文标点
+    let b:ywvim_parameters["lastinputpunc_punc"] = getline('.')[col('.')-2] " 判断是否连续输入相同的符点
+    if s:ywvim_intelligent_punc && match('ic', mode())>=0 && match(s:ywvim_intelligent_punclist, escape(a:p, '~'))>=0
         " 20181109 智能标点，在数字后输入标点默认先输入英文标点，连续快速再按标点会变成中文标点。
         if exists('b:ywvim_parameters["lastinputpunc_time"]')
-            if localtime() - b:ywvim_parameters["lastinputpunc_time"] < 3
+            if (localtime() - b:ywvim_parameters["lastinputpunc_time"] < 3) && (a:p == b:ywvim_parameters["lastinputpunc_punc"])
                 let intelligent_punc_del_prepunc=1
             endif
             call remove(b:ywvim_parameters, "lastinputpunc_time")
@@ -389,14 +387,14 @@ function s:Ywvim_puncp(p) "{{{
         let prechar=getline('.')[col('.')-2]
         " test if previous char is number.
         if prechar =~ '\d'
-            let intelligent_punc_lang='en'
+            let intelligent_punc_lang='en' " 数字后英文标点
             let returnpunc=a:p
             let b:ywvim_parameters["lastinputpunc_time"] = localtime()
             let b:ywvim_parameters["lastinputpunc_pos"] = getcurpos()[0:2]
             let b:ywvim_parameters["lastinputpunc_pos"][2] += 1
         endif
     endif
-    if s:ywvim_intelligent_punc && intelligent_punc_del_prepunc==1
+    if s:ywvim_intelligent_punc && intelligent_punc_del_prepunc==1 && exists('b:ywvim_parameters["lastinput_zhpunc"]')
         let returnpunc = b:ywvim_parameters["lastinput_zhpunc"]
         call remove(b:ywvim_parameters, "lastinput_zhpunc")
         if returnpunc != '' && b:ywvim_parameters["lastinputpunc_pos"] == getcurpos()[0:2] " 删掉之前输入的英文标点，再输入相应的中文标点。
@@ -450,7 +448,7 @@ function s:Ywvim_keymap(setup,cat) "{{{
     endif
     if (a:cat == 'a') || (a:cat == 'e')
         if s:ywvim_{b:ywvim_parameters["active_mb"]}_enchar != ''
-            execute 'lnoremap <buffer> <expr> '.s:ywvim_{b:ywvim_parameters["active_mb"]}_enchar.' <SID>Ywvim_NewEnmode()'
+            execute 'lnoremap <buffer> <expr> '.s:ywvim_{b:ywvim_parameters["active_mb"]}_enchar.' <SID>Ywvim_NewEnmode("'.s:ywvim_{b:ywvim_parameters["active_mb"]}_enchar.'")'
         endif
     endif
     if (a:cat == 'a') || (a:cat == 'y')
@@ -734,7 +732,10 @@ function s:Ywvim_comp(zhcode,...) "{{{1
     let exactp = s:ywvim_{b:ywvim_parameters["active_mb"]}_matchexact ? '\>' : ''
     let zhcodep = '\V'.escape(a:zhcode, '\').exactp
     let s:ywvim_zhcode_idxs = match(s:ywvim_{b:ywvim_parameters["active_mb"]}_mbdb, '^'.zhcodep, a:1)
-    let s:ywvim_zhcode_idxe = match(s:ywvim_{b:ywvim_parameters["active_mb"]}_mbdb, '^\%('.zhcodep.'\)\@!', s:ywvim_zhcode_idxs)
+    if s:ywvim_zhcode_idxs == -1 " 空码时退出。
+        return s:ywvim_complst
+    endif
+    let s:ywvim_zhcode_idxe = match(s:ywvim_{b:ywvim_parameters["active_mb"]}_mbdb, '^\%('.zhcodep.'\)\@!', s:ywvim_zhcode_idxs) - 1 " 确定候选项所在行。
     if s:ywvim_zhcode_idxe == -2
         let s:ywvim_zhcode_idxe = a:2
     endif
@@ -964,28 +965,47 @@ function s:Ywvim_echofinalresult(list) "{{{1
     endif
 endfunction "}}}
 
-function s:Ywvim_NewEnmode() "{{{
-    let enmodekey = s:ywvim_{b:ywvim_parameters["active_mb"]}_enchar
-    let mode=mode()
-    echohl ywvimIMname
-    echo "[EnMode]"
-    let keycode = getchar()
-    let keychar = nr2char(keycode)
-    if (keycode == 10) || (keycode == 13) || (keycode == 27)
-        " 10: ESC   13: <RE>    27: <Ctrl-j>
-        let enstr = ''
-    elseif keycode != char2nr(enmodekey)
-        let b:ywvim_parameters["enmode"] = b:ywvim_parameters["active_mb"]
-        let enchar = s:ywvim_{b:ywvim_parameters["active_mb"]}_enchar
-        call <SID>Ywvim_LoadNewIM('ywvimenmode')
-        execute 'lnoremap <buffer> <expr> '.enmodekey.' <SID>Ywvim_LoadNewIM("'.b:ywvim_parameters["enmode"].'")'
-        let enstr = keychar
-    elseif s:ywvim_{b:ywvim_parameters["active_mb"]}_zhpunc && has_key(s:ywvim_{b:ywvim_parameters["active_mb"]}_puncdic, enmodekey)
-        let enstr = <SID>Ywvim_puncp(enmodekey)
-    else
-        let enstr = enmodekey
+function s:Ywvim_NewEnmode(char) "{{{
+    let enstr = a:char
+    if exists('b:ywvim_parameters["lastenmode_time"]') && (localtime() - b:ywvim_parameters["lastenmode_time"] < 2) && (b:ywvim_parameters["lastenmode_pos"] == getcurpos()[0:2])
+        if b:ywvim_parameters["enmodeLastMode"] == 'zh'
+            let b:ywvim_parameters["active_mb"] = b:ywvim_parameters["enmode"]
+            call <SID>Ywvim_LoadNewIM(b:ywvim_parameters["enmode"])
+            let enstr = <SID>Ywvim_puncp(enstr)
+            unlet b:ywvim_parameters["enmode"]
+        else
+            let mode=mode()
+            let b:ywvim_parameters["enmode"] = b:ywvim_parameters["active_mb"]
+            call <SID>Ywvim_LoadNewIM('ywvimenmode')
+            execute 'lnoremap <buffer> <expr> '.a:char.' <SID>Ywvim_NewEnmode("'.a:char.'")'
+            execute 'highlight lCursor '.s:ywvim_hl_lcursor
+            execute 'highlight Cursor '.s:ywvim_hl_cursor
+            " let enstr = enstr . mode()=='c' ? " \<BS>" : " \<BS>"
+        endif
+        unlet b:ywvim_parameters["lastenmode_time"]
+        return enstr . " \<BS>"
     endif
-    return mode()=='c' ? enstr." \<BS>" : enstr
+    if !exists('b:ywvim_parameters["enmode"]') " 进入英文模式
+        let b:ywvim_parameters["lastenmode_time"] = localtime()
+        let b:ywvim_parameters["lastenmode_pos"] = getcurpos()[0:2]
+        let b:ywvim_parameters["enmodeLastMode"] = 'zh'
+        let mode=mode()
+        let b:ywvim_parameters["enmode"] = b:ywvim_parameters["active_mb"]
+        call <SID>Ywvim_LoadNewIM('ywvimenmode')
+        execute 'lnoremap <buffer> <expr> '.a:char.' <SID>Ywvim_NewEnmode("'.a:char.'")'
+        execute 'highlight lCursor '.s:ywvim_hl_lcursor
+        execute 'highlight Cursor '.s:ywvim_hl_cursor
+        return mode()=='c' ? " \<BS>" : ""
+    else
+        let b:ywvim_parameters["lastenmode_time"] = localtime()
+        let b:ywvim_parameters["lastenmode_pos"] = getcurpos()[0:2]
+        let b:ywvim_parameters["active_mb"] = b:ywvim_parameters["enmode"]
+        call <SID>Ywvim_LoadNewIM(b:ywvim_parameters["enmode"])
+        let b:ywvim_parameters["enmodeLastMode"] = 'en'
+        unlet b:ywvim_parameters["enmode"]
+        let enstr = ''
+        return enstr
+    endif
 endfunction "}}}
 
 function s:Ywvim_LoadNewIM(mb) "{{{
@@ -996,6 +1016,8 @@ function s:Ywvim_LoadNewIM(mb) "{{{
     if mode()!='c'
         redraw
     endif
+    highlight! link lCursor ywvimIMCursor
+    highlight! link Cursor ywvimIMCursor
     return ''
 endfunction "}}}
 
@@ -1052,8 +1074,7 @@ function s:Ywvim_ReturnChar(s) "{{{
     return sb
 endfunction "}}}
 
-function Ywvim_toggle(...) "{{{1
-    " a:1=='n' -- normal mode toggle
+function Ywvim_toggle() "{{{1
     let mode=mode()
     if !exists("s:ywvim_ims")
         call <SID>Ywvim_initvar()
@@ -1067,13 +1088,8 @@ function Ywvim_toggle(...) "{{{1
     else
         call <SID>Ywvim_toggle_off(mode)
     endif
-    if exists("a:1") && a:1=='n'
-        let iminsert= &iminsert == 1 ? 0 : 1
-        execute 'set iminsert='.iminsert
-    else
-        let togglekey = "\<C-^>"
-        return togglekey
-    endif
+    let togglekey = "\<C-^>"
+    return togglekey
 endfunction "}}}
 
 function s:Ywvim_Indicator() "{{{1 输入法开关提示 FIXME
@@ -1101,16 +1117,26 @@ function s:Ywvim_toggle_on(mode) "{{{1
         let b:ywvim_parameters["active_mb"] = b:ywvim_parameters["enmode"]
         unlet b:ywvim_parameters["enmode"]
     endif
+    if !exists('s:ywvim_hl_lcursor')
+        redir => ywvim_hl_lcursor
+        silent highlight lCursor
+        redir END
+        let s:ywvim_hl_lcursor = matchstr(ywvim_hl_lcursor, 'xxx\s*\zs[^\n]*')
+        redir => ywvim_hl_cursor
+        silent highlight Cursor
+        redir END
+        let s:ywvim_hl_cursor = matchstr(ywvim_hl_cursor, 'xxx\s*\zs[^\n]*')
+    endif
     call <SID>Ywvim_loadmb()
     call <SID>Ywvim_keymap('y','a')
-    let b:ywvim_parameters["mode"] .= a:mode
-    let b:ywvim_parameters["idt"] = '<'.s:ywvim_{b:ywvim_parameters["active_mb"]}_nameabbr.'>'
     " FIXME call <SID>Ywvim_Indicator()
-    " redir => b:ywvim_hl_cursor
-    " silent highlight Cursor
-    " redir END
-    " let b:ywvim_parameters["hl_cursor"] = matchstr(b:ywvim_hl_cursor, 'xxx\s*\zs.*')
-    " highlight! link Cursor ywvimIMCursor
+    if match(b:ywvim_parameters["mode"], a:mode) == -1
+        let b:ywvim_parameters["mode"] .= a:mode
+    endif
+    let b:ywvim_parameters["idt"] = '<'.s:ywvim_{b:ywvim_parameters["active_mb"]}_nameabbr.'>'
+    set iminsert=1
+    highlight! link lCursor ywvimIMCursor
+    highlight! link Cursor ywvimIMCursor
     return ''
 endfunction "}}}
 function s:Ywvim_toggle_off(mode) "{{{1
@@ -1122,32 +1148,65 @@ function s:Ywvim_toggle_off(mode) "{{{1
         unlet b:{p}
     endfor
     let b:ywvim_parameters["mode"] = substitute(b:ywvim_parameters["mode"], a:mode, '', '')
-    " execute 'highlight Cursor '.b:ywvim_parameters["hl_cursor"]
     setlocal iminsert=0
     lmapclear <buffer>
     unlet b:ywvim_parameters["idt"]
     " FIXME call <SID>Ywvim_Indicator()
     let b:ywvim_parameters["idt"] = 0
+    execute 'highlight lCursor '.s:ywvim_hl_lcursor
+    execute 'highlight Cursor '.s:ywvim_hl_cursor
     return ''
 endfunction "}}}
 
 function s:Ywvim_NewBufFix() "{{{1 Fix new buffer's (lang) bug
-    if !exists("b:ywvim_parameters") && (&iminsert == 1)
+    let hl_p = 0
+    if exists("b:ywvim_parameters") && (match(b:ywvim_parameters["mode"], 'i') != -1)
+            let hl_p = 1
+    endif
+    if hl_p
+        highlight! link lCursor ywvimIMCursor
+        highlight! link Cursor ywvimIMCursor
+    elseif exists('s:ywvim_hl_lcursor')
+        execute 'highlight lCursor '.s:ywvim_hl_lcursor
+        execute 'highlight Cursor '.s:ywvim_hl_cursor
         setlocal iminsert=0
     endif
 endfunction "}}}
 autocmd BufEnter * call <SID>Ywvim_NewBufFix()
 
-nmap <silent> <C-\> :call Ywvim_toggle('n')<CR>
+function s:Ywvim_CmdlineEnterFix(e) "{{{
+    " a:e: i: CmdlineEnter o: CmdlineLeave
+    if !exists('b:ywvim_parameters')
+        return ''
+    endif
+    if exists("b:ywvim_parameters")
+        if (a:e == 'i')
+            if match(b:ywvim_parameters["mode"], 'c') == -1
+                call <SID>Ywvim_toggle_off('c')
+            endif
+        elseif (a:e == 'o')
+            if exists('b:ywvim_parameters["mode"]') && (match(b:ywvim_parameters["mode"], 'c') != -1)
+                call <SID>Ywvim_toggle_off('c') " FIXME cmdline退出时不关闭输入法会导致下次进cmdline后输入状态混乱
+            endif
+            if match(b:ywvim_parameters["mode"], 'i') != -1
+                call <SID>Ywvim_toggle_on('i')
+            endif
+        endif
+    endif
+endfunction "}}}
+autocmd CmdlineEnter * call <SID>Ywvim_CmdlineEnterFix('i')
+autocmd CmdlineLeave * call <SID>Ywvim_CmdlineEnterFix('o')
+
+nmap <silent> <C-\> :call Ywvim_toggle()<CR>
 imap <silent> <C-\> <C-R>=Ywvim_toggle()<CR>
 cmap <silent> <C-\> <C-R>=Ywvim_toggle()<CR>
-nmap <silent> <C-Space> :call Ywvim_toggle('n')<CR>
+nmap <silent> <C-Space> :call Ywvim_toggle()<CR>
 imap <silent> <C-Space> <C-R>=Ywvim_toggle()<CR>
 cmap <silent> <C-Space> <C-R>=Ywvim_toggle()<CR>
-nmap <silent> <C-S-Space> :call Ywvim_toggle('n')<CR>
+nmap <silent> <C-S-Space> :call Ywvim_toggle()<CR>
 imap <silent> <C-S-Space> <C-R>=Ywvim_toggle()<CR>
 cmap <silent> <C-S-Space> <C-R>=Ywvim_toggle()<CR>
-nmap <silent> <C-@> :call Ywvim_toggle('n')<CR>
+nmap <silent> <C-@> :call Ywvim_toggle()<CR>
 imap <silent> <C-@> <C-R>=Ywvim_toggle()<CR>
 cmap <silent> <C-@> <C-R>=Ywvim_toggle()<CR>
 
