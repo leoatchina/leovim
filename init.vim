@@ -1673,6 +1673,7 @@ silent! call plug#end()
 " --------------------------
 " common addvanced settings
 " --------------------------
+source $SETTINGS_PATH/git.vim
 source $SETTINGS_PATH/fuzzy_finder.vim
 source $SETTINGS_PATH/fly_grep.vim
 source $SETTINGS_PATH/complete_engine.vim
