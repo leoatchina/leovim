@@ -987,6 +987,7 @@ nnoremap <leader><Tab> :tabe<Space>
 nnoremap qv           :vsplit<Space>
 nnoremap qx           :split<Space>
 nnoremap ,t           <C-w>T
+nnoremap ,x           :tab split<Cr>
 nnoremap ,<Cr>        :tabe<Cr>
 nnoremap <leader><Cr> :e!<Cr>
 " remap for cusor move insert mode
