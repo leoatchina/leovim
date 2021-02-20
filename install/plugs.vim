@@ -156,9 +156,9 @@ endif
 " ------------------------------
 " git
 " ------------------------------
-let git_version = matchstr(system('git --version'), '\zs\d\{1,\}.\d\{1,\}.\d\{1\}\ze')
-let git_version = str2nr(substitute(git_version, "\\.", "", "g"))
-if git_version >= 185
+let git_version = matchstr(system('git --version'), '\zs\d\{1,\}.\d\{1,\}.\d\{1,\}\ze')
+let git_version = str2float(substitute(git_version, "\\.", "", ""))
+if git_version >= 18.5
     MyPlug 'tpope/vim-fugitive'
 endif
 " ------------------------------
