@@ -1461,7 +1461,7 @@ let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 " --------------------------
 " ywvim
 " --------------------------
-if HasPlug('wubi') || HasPlug('pinyin')
+if (HasPlug('wubi') || HasPlug('pinyin')) && exists('#lCursor')
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ywvim
     endif
@@ -1480,7 +1480,6 @@ if HasPlug('wubi') || HasPlug('pinyin')
     let g:ywvim_preconv          = 'g2b'
     let g:ywvim_conv             = ''
     let g:ywvim_intelligent_punc = 1
-    let g:ywvim_popupwin         = 0
     if HasPlug('wubi')
         let g:input_method = 'wubi'
         let g:ywvim_ims=[
@@ -1493,6 +1492,14 @@ if HasPlug('wubi') || HasPlug('pinyin')
                     \ ['py', '拼', 'pinyin.ywvim'],
                     \ ['wb', '五', 'wubi.ywvim'],
                     \ ]
+    endif
+    if v:version >= 802 && !has('nvim')
+        let g:ywvim_popupwin               = 1
+        let g:ywvim_popupwin_follow_cursor = 1
+        let g:ywvim_popupwin_horizontal    = 1
+        let g:ywvim_popupwin_force_cmdline = 1
+    else
+        let g:ywvim_popupwin = 0
     endif
 endif
 " --------------------------
@@ -1845,3 +1852,5 @@ endif
 " set loaded
 " --------------------------
 let g:leovim_loaded = 1
+
+
