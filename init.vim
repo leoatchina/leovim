@@ -700,7 +700,6 @@ let g:input_method     = ''
 let g:ctags_version    = ''
 let g:fly_grep         = ''
 let g:ai_engine        = ''
-let g:python_version   = 0
 let g:fuzzy_finder     = 'ctrlp'
 " --------------------------
 " python_support
@@ -819,18 +818,10 @@ endif
 " --------------------------
 " Alt_to_meta
 " --------------------------
-if exists('g:keys_insert_map')
-    for i in ['e', 'y', '-', 'u', 'd']
-        if index(g:keys_insert_map, i) < 0
-            let g:keys_insert_map += [i]
-        endif
-    endfor
-else
-    let g:keys_insert_map = ['e', 'y', '-', 'u', 'd']
-endif
-let s:list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
+let s:keys_insert_map  = ['e', 'y', '-', 'u', 'd']
+let s:punctuation_list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
 function! MetaCode(key)
-    if index(g:keys_insert_map, a:key) < 0
+    if index(s:keys_insert_map, a:key) < 0
         exec "imap <M-".a:key."> <Nop>"
     endif
     if !has('nvim') && g:gui_running == 0
@@ -843,13 +834,13 @@ for i in range(26)
     " 65 ascii of A
     call MetaCode(nr2char(65 + i))
 endfor
-for c in s:list
+for c in s:punctuation_list
     call MetaCode(c)
 endfor
 for i in range(10)
     call MetaCode(nr2char(char2nr('0') + i))
 endfor
-unlet s:list
+unlet s:punctuation_list
 " --------------------------
 " keymaps
 " --------------------------
