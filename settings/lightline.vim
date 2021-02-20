@@ -129,7 +129,7 @@ elseif get(g:, 'lint_tool', '') == 'neomake' && Installed('lightline-neomake')
             \ 'linter_infos', 'linter_errors', 'linter_warnings', 'linter_ok'
             \ ])
 endif
-if get(g:, ai_engine, '') =~ 'kite'
+if get(g:, 'ai_engine', '') =~ 'kite'
     function KiteStatus()
         return kite#statusline()
     endfunction

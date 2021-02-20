@@ -60,7 +60,7 @@ if get(g:, 'fly_grep', '') =~ 'leaderf'
     xnoremap <M-f>a :<C-U><C-R>=printf("Leaderf! --stayOpen --right rg --append %s ", leaderf#Rg#visual())<CR>
     nnoremap <M-f>a :<C-R>=printf("Leaderf! --stayOpen --right rg --append %s ", expand("<cword>"))<CR>
 elseif g:fuzzy_finder != 'ctrlp'
-    if g:fly_grep =~ 'coc'
+    if get(g:, "fly_grep", '') =~ 'coc'
         nnoremap <M-f>s :CocSearch -S -L<Space>
         nnoremap <M-f>c :CocSearch -S -L <C-R>=expand("<cword>")<CR><CR>
         xnoremap <M-f>c :<C-U>CocSearch -S -L <C-R>=GetVisualSelection()<CR><CR>
