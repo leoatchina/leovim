@@ -1461,7 +1461,7 @@ let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 " --------------------------
 " ywvim
 " --------------------------
-if (HasPlug('wubi') || HasPlug('pinyin')) && exists('#lCursor')
+if (HasPlug('wubi') || HasPlug('pinyin')) && exists('#lCursor') && get(g:, 'input_method', '') == ''
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ywvim
     endif
