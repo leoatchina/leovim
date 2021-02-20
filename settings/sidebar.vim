@@ -22,7 +22,7 @@ if Installed('vim-sidebar-manager')
                         \ }
             nnoremap <silent> <leader>t :call sidebar#toggle('vista')<CR>
         endif
-        if get(g:, 'ctags_version', '') == 'Universal-json'
+        if get(g:, 'ctags_version', '') =~ 'json'
             let g:sidebars.vista_ctags = {
                         \ 'position': 'left',
                         \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ 'vista'},

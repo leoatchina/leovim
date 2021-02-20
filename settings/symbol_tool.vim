@@ -31,7 +31,7 @@ if Installed('tagbar')
     else
         let g:tagbar_position = 'leftabove vertical'
     endif
-    if g:ctags_version =~ "Universal"
+    if get(g:, "ctags_version", '') =~ "Universal"
         if executable('tstags')
             let g:tagbar_type_typescript = {
                         \ 'ctagstype': 'typescript',
@@ -53,7 +53,7 @@ if Installed('tagbar')
                         \ ]
                         \ }
         endif
-    elseif g:ctags_version =~ "Exuberant"
+    elseif get(g:, "ctags_version", '') =~ "Exuberant"
         if executable('tstags')
             let g:tagbar_type_typescript = {
                         \ 'ctagstype': 'typescript',

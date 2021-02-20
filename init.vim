@@ -694,14 +694,6 @@ set guioptions-=R
 set guioptions-=M
 set guioptions-=m
 " --------------------------
-" self defined variables
-" --------------------------
-let g:input_method     = ''
-let g:ctags_version    = ''
-let g:fly_grep         = ''
-let g:ai_engine        = ''
-let g:fuzzy_finder     = 'ctrlp'
-" --------------------------
 " python_support
 " --------------------------
 let g:python3_host_prog = get(g:, 'python3_host_prog', '')
@@ -1681,6 +1673,7 @@ endif
 " --------------------------
 source $SETTINGS_PATH/git.vim
 source $SETTINGS_PATH/fuzzy_finder.vim
+source $SETTINGS_PATH/tree_browser.vim
 source $SETTINGS_PATH/fly_grep.vim
 source $SETTINGS_PATH/complete_engine.vim
 source $SETTINGS_PATH/run_tool.vim

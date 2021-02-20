@@ -435,7 +435,8 @@ elseif g:fuzzy_finder == 'fzf'
         nnoremap f<Cr> :FzfFunky<Cr>
     endif
 endif
-if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf' && Installed('fzf.vim')
+let g:fuzzy_finder = get(g:, 'fuzzy_finder', 'ctrlp')
+if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf'
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ctrlp.vim
         set rtp+=$ADDINS_PATH/ctrlp-extensions.vim
