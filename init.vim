@@ -700,7 +700,6 @@ let g:input_method     = ''
 let g:ctags_version    = ''
 let g:fly_grep         = ''
 let g:ai_engine        = ''
-let g:python_version   = 0
 let g:fuzzy_finder     = 'ctrlp'
 " --------------------------
 " python_support
@@ -819,18 +818,10 @@ endif
 " --------------------------
 " Alt_to_meta
 " --------------------------
-if exists('g:keys_insert_map')
-    for i in ['e', 'y', '-', 'u', 'd']
-        if index(g:keys_insert_map, i) < 0
-            let g:keys_insert_map += [i]
-        endif
-    endfor
-else
-    let g:keys_insert_map = ['e', 'y', '-', 'u', 'd']
-endif
-let s:list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
+let s:keys_insert_map  = ['e', 'y', '-', 'u', 'd']
+let s:punctuation_list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
 function! MetaCode(key)
-    if index(g:keys_insert_map, a:key) < 0
+    if index(s:keys_insert_map, a:key) < 0
         exec "imap <M-".a:key."> <Nop>"
     endif
     if !has('nvim') && g:gui_running == 0
@@ -843,13 +834,13 @@ for i in range(26)
     " 65 ascii of A
     call MetaCode(nr2char(65 + i))
 endfor
-for c in s:list
+for c in s:punctuation_list
     call MetaCode(c)
 endfor
 for i in range(10)
     call MetaCode(nr2char(char2nr('0') + i))
 endfor
-unlet s:list
+unlet s:punctuation_list
 " --------------------------
 " keymaps
 " --------------------------
@@ -986,6 +977,7 @@ nnoremap <leader><Tab> :tabe<Space>
 " 设置分割页面
 nnoremap qv           :vsplit<Space>
 nnoremap qx           :split<Space>
+nnoremap ,t           <C-w>T
 nnoremap ,x           :tab split<CR>
 nnoremap ,<Cr>        :tabe<Cr>
 nnoremap <leader><Cr> :e!<Cr>
@@ -999,7 +991,6 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
-nnoremap ,t <C-w>T
 nnoremap <silent> gh :tabprevious<CR>
 nnoremap <silent> ,l :tabm +1<CR>
 nnoremap <silent> ,h :tabm -1<CR>
@@ -1461,7 +1452,7 @@ let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 " --------------------------
 " ywvim
 " --------------------------
-if HasPlug('wubi') || HasPlug('pinyin')
+if (HasPlug('wubi') || HasPlug('pinyin')) && exists('#lCursor') && get(g:, 'input_method', '') == ''
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ywvim
     endif
@@ -1480,7 +1471,6 @@ if HasPlug('wubi') || HasPlug('pinyin')
     let g:ywvim_preconv          = 'g2b'
     let g:ywvim_conv             = ''
     let g:ywvim_intelligent_punc = 1
-    let g:ywvim_popupwin         = 0
     if HasPlug('wubi')
         let g:input_method = 'wubi'
         let g:ywvim_ims=[
@@ -1493,6 +1483,14 @@ if HasPlug('wubi') || HasPlug('pinyin')
                     \ ['py', '拼', 'pinyin.ywvim'],
                     \ ['wb', '五', 'wubi.ywvim'],
                     \ ]
+    endif
+    if v:version >= 802 && !has('nvim')
+        let g:ywvim_popupwin               = 1
+        let g:ywvim_popupwin_follow_cursor = 1
+        let g:ywvim_popupwin_horizontal    = 1
+        let g:ywvim_popupwin_force_cmdline = 1
+    else
+        let g:ywvim_popupwin = 0
     endif
 endif
 " --------------------------
@@ -1846,3 +1844,5 @@ endif
 " set loaded
 " --------------------------
 let g:leovim_loaded = 1
+
+
