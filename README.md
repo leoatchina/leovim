@@ -18,14 +18,12 @@ LLLLLLLLLLLLLLLLLLLLLLLLEEEEEEEEEEEEEEEEEEEEEE     OOOOOOOOO                 VVV
 ## 中文介绍
 
 这里是本人的 vim 配置，在近四年的使用时间里，我不断调整，从其他人的配置中吸取经验，对参数进行微调，以适应在不同的系统环境条件下达到较好的使用体验。在`macOS` `windows` `linx`下都可以安装使用，已经可作为一个小型轻量 **IDE** 使用。
-**PLEASE FORGIVE ME FOR MY POOR ENGLISH!!**
-**And the short key now is modified, and I will find some time to rewrite this readme**
 
 ## Requirements
-`Git 1.7` and `Vim7.3` is at least required. `Vim8.2` or `neovim-0.4.2` and `Git 2.0+` is prefered for advanced features.
-And I wish you have a basic understanding of vim, know how to read the config files to find what I have not mentioned in README.
+至少要`Git 1.7` 和 `Vim7.3`, `neovim`则至少要`0.4.4`以上版本，建议安装`Vim8.2` 和 `Git 2.0+`。
+建议学习一下 vim 脚本知识，以对本配置有更好的了解。
 
-## Install
+## 安装方法 
 ### Linux, \*nix, Mac OSX
 ```bash
 git clone https://gitee.com/leoatchina/leovim.git
@@ -40,7 +38,7 @@ click install.cmd with administrator rights
 open vim, do `:MyPlugInstall` or `:PlugInstall`
 ```
 
-## Upgrade plugins
+## 升级插件 
 ### Linux, \*nix, Mac OSX
 ```bash
 cd leovim
@@ -89,13 +87,13 @@ click uninstall.cmd with administrator right
 - [x] fly_grep using leaderf or fzf
 - [x] auto choose yes to kill job when confirm quit termina
 - [x] MyPlug to install plunins in to $INSTALL_PATH by default
-- [x] leaderf as default fuzzy_finder when with +python3 support, otherwise fzf or ctrlp 
+- [x] leaderf as default fuzzy_finder when with +python3 support, otherwise fzf or ctrlp
 - [x] fix coc.nvim vsplitly open definition declaration etc.
 - [x] settings plugins to install list in ./install/plugs.vim
 - [x] Copy && Paste using tmux
-- [x] fzf yank, using ,p 
+- [x] fzf yank, using ,p
 - [ ] leaderf extra
-    - [ ] leaderf paste 
-    - [ ] leaderf yank 
+    - [ ] leaderf paste
+    - [ ] leaderf yank
     - [ ] leaderf jumps
 - [ ] rewrite readme
