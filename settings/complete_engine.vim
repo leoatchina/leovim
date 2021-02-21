@@ -105,6 +105,18 @@ nnoremap <silent> g<cr> :call GoToDefinitionOrTagOrSearch("v")<Cr>
 " --------------------------
 " complete_engine
 " --------------------------
+let g:ycm_filetype_blacklist = {
+    \ 'coc-explorer': 1,
+    \ 'tagbar':       1,
+    \ 'vista':        1,
+    \ 'leaderf':      1,
+    \ 'fzf':          1,
+    \ 'gitcommit':    1,
+    \ 'php':          1,
+    \ 'markdown':     1,
+    \ 'text':         1,
+    \ 'log':          1,
+    \ }
 if Installed('YouCompleteMe')
     let g:ycm_python_binary_path = g:python3_host_prog
     if WINDOWS()
@@ -112,18 +124,6 @@ if Installed('YouCompleteMe')
     else
         let g:ycm_global_ycm_extra_conf = $INATLL_PATH . "/YCM/.ycm_extra_conf.py"
     endif
-    let g:ycm_filetype_blacklist = {
-        \ 'coc-explorer': 1,
-        \ 'tagbar':       1,
-        \ 'vista':        1,
-        \ 'leaderf':      1,
-        \ 'fzf':          1,
-        \ 'gitcommit':    1,
-        \ 'php':          1,
-        \ 'markdown':     1,
-        \ 'text':         1,
-        \ 'log':          1,
-        \ }
     let g:ycm_add_preview_to_completeopt                = 0
     let g:ycm_autoclose_preview_window_after_completion = 1
     let g:ycm_autoclose_preview_window_after_insertion  = 1
@@ -551,7 +551,7 @@ endif
 if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
     set rtp+=$ADDINS_PATH/vim-dict
 endif
-if get(g:, 'complete_engine', '') == 'apc' || get(g:, 'complete_engine', '') == 'YCM'
+if index(['coc', ''], get(g:, 'complete_engine', '')) < 0
     if get(g:, 'complete_engine', '') == 'apc'
         let g:apc_enable_ft = get(g:, 'apc_enable_ft', {'*':1})
     else

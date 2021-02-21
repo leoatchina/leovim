@@ -231,7 +231,6 @@ elseif get(g:, 'complete_engine', '') == "vim-lsp"
     MyPlug 'prabirshrestha/asyncomplete.vim'
     MyPlug 'prabirshrestha/asyncomplete-file.vim'
     MyPlug 'prabirshrestha/asyncomplete-buffer.vim'
-    MyPlug 'yuki-ycino/asyncomplete-dictionary'
     if executable('tmux')
         MyPlug 'wellle/tmux-complete.vim'
     endif
