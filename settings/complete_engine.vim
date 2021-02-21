@@ -6,6 +6,7 @@ syntax enable
 filetype on
 filetype plugin on
 filetype plugin indent on
+set cpt=w,b,.,k
 " --------------------------
 " complete_snippet
 " --------------------------
@@ -104,18 +105,6 @@ nnoremap <silent> g<cr> :call GoToDefinitionOrTagOrSearch("v")<Cr>
 " --------------------------
 " complete_engine
 " --------------------------
-let g:ycm_filetype_blacklist = {
-    \ 'coc-explorer': 1,
-    \ 'tagbar':       1,
-    \ 'vista':        1,
-    \ 'leaderf':      1,
-    \ 'fzf':          1,
-    \ 'gitcommit':    1,
-    \ 'php':          1,
-    \ 'markdown':     1,
-    \ 'text':         1,
-    \ 'log':          1,
-    \ }
 if Installed('YouCompleteMe')
     let g:ycm_python_binary_path = g:python3_host_prog
     if WINDOWS()
@@ -123,6 +112,18 @@ if Installed('YouCompleteMe')
     else
         let g:ycm_global_ycm_extra_conf = $INATLL_PATH . "/YCM/.ycm_extra_conf.py"
     endif
+    let g:ycm_filetype_blacklist = {
+        \ 'coc-explorer': 1,
+        \ 'tagbar':       1,
+        \ 'vista':        1,
+        \ 'leaderf':      1,
+        \ 'fzf':          1,
+        \ 'gitcommit':    1,
+        \ 'php':          1,
+        \ 'markdown':     1,
+        \ 'text':         1,
+        \ 'log':          1,
+        \ }
     let g:ycm_add_preview_to_completeopt                = 0
     let g:ycm_autoclose_preview_window_after_completion = 1
     let g:ycm_autoclose_preview_window_after_insertion  = 1
@@ -556,15 +557,13 @@ if get(g:, 'complete_engine', '') == 'apc' || get(g:, 'complete_engine', '') == 
     else
         let g:apc_enable_ft = g:ycm_filetype_blacklist
     endif
-    let g:apc_enable_tab = get(g:, 'apc_enable_tab', 1) && get(g:, 'complete_snippet', '') == '' " remap tab
-    let g:apc_min_length = get(g:, 'apc_min_length', 2)   " minimal length to open popup
-    let g:apc_key_ignore = get(g:, 'apc_key_ignore', [])  " ignore keywords
-
+    let g:apc_enable_tab = get(g:, 'apc_enable_tab', 1)  " remap tab
+    let g:apc_min_length = get(g:, 'apc_min_length', 2)  " minimal length to open popup
+    let g:apc_key_ignore = get(g:, 'apc_key_ignore', []) " ignore keywords
     " get word before cursor
     function! s:get_context()
         return strpart(getline('.'), 0, col('.') - 1)
     endfunc
-
     function! s:meets_keyword(context)
         if g:apc_min_length <= 0
             return 0
@@ -580,7 +579,6 @@ if get(g:, 'complete_engine', '') == 'apc' || get(g:, 'complete_engine', '') == 
         endfor
         return 1
     endfunc
-
     function! s:on_backspace()
         if pumvisible() == 0
             return "\<BS>"
@@ -588,7 +586,6 @@ if get(g:, 'complete_engine', '') == 'apc' || get(g:, 'complete_engine', '') == 
         let text = matchstr(s:get_context(), '.*\ze.')
         return s:meets_keyword(text)? "\<BS>" : "\<c-e>\<bs>"
     endfunc
-
     " autocmd for CursorMovedI
     function! s:feed_popup()
         let enable = get(b:, 'apc_enable', 0)
@@ -625,14 +622,12 @@ if get(g:, 'complete_engine', '') == 'apc' || get(g:, 'complete_engine', '') == 
         endif
         return 0
     endfunc
-
     " autocmd for CompleteDone
     function! s:complete_done()
         let b:apc_lastx = col('.') - 1
         let b:apc_lasty = line('.') - 1
         let b:apc_tick = b:changedtick
     endfunc
-
     " enable apc
     function! s:apc_enable()
         call s:apc_disable()
@@ -720,4 +715,3 @@ if get(g:, 'complete_engine', '') != ''
         imap <expr><Cr> pumvisible()? "\<C-e>" :"\<CR>"
     endif
 endif
-set cpt=w,b,.,k
