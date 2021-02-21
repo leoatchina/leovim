@@ -1269,6 +1269,7 @@ au WinEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
             \ | lcd %:p:h | endif
 nmap <leader>cd :lcd %:p:h<Cr>
 augroup AUTOClose
+		autocmd FileType * if ZFVimIME_started() | setlocal omnifunc= | endif
     " 离开InsertMode时，关闭补全，非paste模式，还有不往后move cursor
     au InsertLeave * set nopaste
     au InsertLeave * if pumvisible() == 0 | pclose | endif
@@ -1622,10 +1623,6 @@ if get(g:, 'input_method', '') == 'zfvim'
     endif
     MyPlug 'ZSaberLv0/ZFVimIM_pinyin'
     MyPlug 'ZSaberLv0/ZFVimIM_openapi'
-    augroup ZFVIM
-				autocmd!
-				autocmd FileType * if ZFVimIME_started() | setlocal omnifunc= | endif
-		augroup END
 elseif HasPlug('wubi') || HasPlug('pinyin')
 " --------------------------
 " ywvim
