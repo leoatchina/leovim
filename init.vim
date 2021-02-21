@@ -1444,45 +1444,54 @@ let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 " --------------------------
 " ywvim
 " --------------------------
-if (HasPlug('wubi') || HasPlug('pinyin')) && exists('#lCursor') && get(g:, 'input_method', '') == ''
-    if !exists('g:leovim_loaded')
-        set rtp+=$ADDINS_PATH/ywvim
-    endif
-    let g:ywvim_py               = {'helpim':'wb', 'gb':0}
-    let g:ywvim_zhpunc           = 2
-    let g:ywvim_listmax          = 8
-    let g:ywvim_esc_autoff       = 1
-    let g:ywvim_autoinput        = 2
-    let g:ywvim_circlecandidates = 1
-    let g:ywvim_helpim_on        = 0
-    let g:ywvim_matchexact       = 0
-    let g:ywvim_chinesecode      = 1
-    let g:ywvim_gb               = 0
-    let g:ywvim_lockb            = 1
-    let g:ywvim_intelligent_punc = 1
-    let g:ywvim_preconv          = 'g2b'
-    let g:ywvim_conv             = ''
-    let g:ywvim_intelligent_punc = 1
-    if HasPlug('wubi')
-        let g:input_method = 'wubi'
-        let g:ywvim_ims=[
-                    \ ['wb', '五', 'wubi.ywvim'],
-                    \ ['py', '拼', 'pinyin.ywvim'],
-                    \ ]
+if HasPlug('wubi') || HasPlug('pinyin')
+    if get(g:, 'input_method', '') == 'zfvim'
+        MyPlug 'ZSaberLv0/ZFVimIM'
+        MyPlug 'ZSaberLv0/ZFVimJob'
+        MyPlug 'ZSaberLv0/ZFVimIM_pinyin'
+        MyPlug 'ZSaberLv0/ZFVimIM_openapi'
+        if HasPlug('wubi')
+            MyPlug 'ZSaberLv0/ZFVimIM_wubi_base'
+        endif
     else
-        let g:input_method = 'pinyin'
-        let g:ywvim_ims=[
-                    \ ['py', '拼', 'pinyin.ywvim'],
-                    \ ['wb', '五', 'wubi.ywvim'],
-                    \ ]
-    endif
-    if v:version >= 802 && !has('nvim')
-        let g:ywvim_popupwin               = 1
-        let g:ywvim_popupwin_follow_cursor = 1
-        let g:ywvim_popupwin_horizontal    = 1
-        let g:ywvim_popupwin_force_cmdline = 1
-    else
-        let g:ywvim_popupwin = 0
+        if !exists('g:leovim_loaded')
+            let g:input_method = 'ywvim'
+            set rtp+=$ADDINS_PATH/ywvim
+        endif
+        let g:ywvim_py               = {'helpim':'wb', 'gb':0}
+        let g:ywvim_zhpunc           = 2
+        let g:ywvim_listmax          = 8
+        let g:ywvim_esc_autoff       = 1
+        let g:ywvim_autoinput        = 2
+        let g:ywvim_circlecandidates = 1
+        let g:ywvim_helpim_on        = 0
+        let g:ywvim_matchexact       = 0
+        let g:ywvim_chinesecode      = 1
+        let g:ywvim_gb               = 0
+        let g:ywvim_lockb            = 1
+        let g:ywvim_intelligent_punc = 1
+        let g:ywvim_preconv          = 'g2b'
+        let g:ywvim_conv             = ''
+        let g:ywvim_intelligent_punc = 1
+        if HasPlug('wubi')
+            let g:ywvim_ims=[
+                        \ ['wb', '五', 'wubi.ywvim'],
+                        \ ['py', '拼', 'pinyin.ywvim'],
+                        \ ]
+        else
+            let g:ywvim_ims=[
+                        \ ['py', '拼', 'pinyin.ywvim'],
+                        \ ['wb', '五', 'wubi.ywvim'],
+                        \ ]
+        endif
+        if v:version >= 802 && !has('nvim')
+            let g:ywvim_popupwin               = 1
+            let g:ywvim_popupwin_follow_cursor = 1
+            let g:ywvim_popupwin_horizontal    = 1
+            let g:ywvim_popupwin_force_cmdline = 1
+        else
+            let g:ywvim_popupwin = 0
+        endif
     endif
 endif
 " --------------------------
