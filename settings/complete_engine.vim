@@ -550,8 +550,7 @@ endif
 if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
     set rtp+=$ADDINS_PATH/vim-dict
 endif
-" if get(g:, 'complete_engine', '') == 'apc' || get(g:, 'complete_engine', '') == 'YCM'
-if get(g:, 'complete_engine', '') != ''
+if get(g:, 'complete_engine', '') == 'apc' || get(g:, 'complete_engine', '') == 'YCM'
     if get(g:, 'complete_engine', '') == 'apc'
         let g:apc_enable_ft = get(g:, 'apc_enable_ft', {'*':1})
     else
