@@ -1622,7 +1622,7 @@ if get(g:, 'input_method', '') == 'zfvim'
     endif
     MyPlug 'ZSaberLv0/ZFVimIM_pinyin'
     MyPlug 'ZSaberLv0/ZFVimIM_openapi'
-elseif HasPlug('wubi') || HasPlug('pinyin')
+elseif (HasPlug('wubi') || HasPlug('pinyin')) && exists('#CmdlineEnter')
 " --------------------------
 " ywvim
 " --------------------------
