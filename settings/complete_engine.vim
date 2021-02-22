@@ -557,7 +557,7 @@ if index(['coc', ''], get(g:, 'complete_engine', '')) < 0
     else
         let g:apc_enable_ft = g:ycm_filetype_blacklist
     endif
-    let g:apc_enable_tab = get(g:, 'apc_enable_tab', 1)  " remap tab
+    let g:apc_enable_tab = get(g:, 'apc_enable_tab', 1) && get(g:, 'complete_snippet', '') == '' " remap tab
     let g:apc_min_length = get(g:, 'apc_min_length', 2)  " minimal length to open popup
     let g:apc_key_ignore = get(g:, 'apc_key_ignore', []) " ignore keywords
     " get word before cursor
