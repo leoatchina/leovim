@@ -1614,7 +1614,7 @@ if filereadable(expand("~/.config/.vimrc.plug")) | source $HOME/.config/.vimrc.p
 " --------------------------
 " zfvim
 " --------------------------
-if get(g:, 'input_method', '') == 'zfvim' && get(g:, 'complete_engine', '') != 'vim-lsp'
+if get(g:, 'input_method', '') == 'zfvim'
     MyPlug 'ZSaberLv0/ZFVimIM'
     MyPlug 'ZSaberLv0/ZFVimJob'
     if HasPlug('wubi')
