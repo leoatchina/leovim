@@ -65,6 +65,8 @@ if Installed("fzf.vim") && Installed("fzf")
     else
         imap <c-x><c-l> <plug>(fzf-complete-line)
     endif
+    imap <M-e> <c-x><c-l>
+    imap <M-f> <c-x><c-f>
     " ----------------------
     " short cuts for fzf
     " ----------------------
