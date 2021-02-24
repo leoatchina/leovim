@@ -183,9 +183,6 @@ elseif get(g:, 'complete_engine', '') == 'coc'
             \ 'coc-dictionary',
             \ 'coc-explorer',
             \ ]
-    if get(g:, 'ai_engine', '') == 'tabnine'
-        let g:coc_global_extensions += ['coc-tabnine']
-    endif
     if WINDOWS()
         let g:coc_global_extensions += ['coc-powershell']
     else
@@ -214,31 +211,33 @@ elseif get(g:, 'complete_engine', '') == 'coc'
             \ 'coc-vetur'
             \ ]
     endif
-    if HasPlug('go')
-        let g:coc_global_extensions += ['coc-go']
+    if HasPlug('R')
+        let g:coc_global_extensions += ['coc-r-lsp']
     endif
     if HasPlug('rust')
         let g:coc_global_extensions += ['coc-rust-analyzer']
     endif
-    if HasPlug('R')
-        let g:coc_global_extensions += ['coc-r-lsp']
+    if HasPlug('go')
+        let g:coc_global_extensions += ['coc-go']
+    endif
+    if get(g:, 'ai_engine', '') == 'tabnine'
+        let g:coc_global_extensions += ['coc-tabnine']
     endif
     if HasPlug('latex')
         let g:coc_global_extensions += ['coc-vimtex']
     endif
 elseif get(g:, 'complete_engine', '') == "vim-lsp"
-    MyPlug 'prabirshrestha/asyncomplete-lsp.vim'
+    MyPlug 'prabirshrestha/vim-lsp'
     MyPlug 'prabirshrestha/asyncomplete.vim'
+    MyPlug 'prabirshrestha/asyncomplete-lsp.vim'
     MyPlug 'prabirshrestha/asyncomplete-file.vim'
     MyPlug 'prabirshrestha/asyncomplete-buffer.vim'
     if executable('tmux')
         MyPlug 'wellle/tmux-complete.vim'
     endif
-    " ctags
     if executable('ctags')
         MyPlug 'prabirshrestha/asyncomplete-tags.vim'
     endif
-    " tabnine
     if get(g:, 'ai_engine', '') == 'tabine'
         if WINDOWS()
             MyPlug 'kitagry/asyncomplete-tabnine.vim', {'do': 'powershell.exe .\install.ps1'}
@@ -246,14 +245,11 @@ elseif get(g:, 'complete_engine', '') == "vim-lsp"
             MyPlug 'kitagry/asyncomplete-tabnine.vim', {'do': './install.sh'}
         endif
     endif
-    " snippets
     if g:complete_snippet == 'ultisnips'
         MyPlug 'prabirshrestha/asyncomplete-ultisnips.vim'
     else
         MyPlug 'prabirshrestha/asyncomplete-neosnippet.vim'
     endif
-    " vim-lsp
-    MyPlug 'prabirshrestha/vim-lsp'
     if !has('patch-8.1.1517') && !has('nvim')
         MyPlug 'Shougo/echodoc.vim'
         let g:echodoc_enable_at_startup = 1
