@@ -592,8 +592,13 @@ else
     endif
     nnoremap <M-h>;         :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
+    if !Installed('vim-yoink')
+        nnoremap <silent> ,p :CtrlPYankring<Cr>
+    endif
+    if !Installed('fzf-funky')
+        nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
+    endif
     if g:fuzzy_finder == 'ctrlp'
-        nnoremap <silent> f<Cr>     :CtrlPFunky<Cr>
         nnoremap <silent> ,p        :CtrlPYankring<Cr>
         nnoremap <silent> <leader>p :registers<Cr>
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
