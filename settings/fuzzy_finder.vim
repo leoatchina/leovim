@@ -590,7 +590,7 @@ else
         command! CtrlPMenu call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap <M-h>;         :CtrlP
+    nnoremap <M-h>;         :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if g:fuzzy_finder == 'ctrlp'
         nnoremap <silent> f<Cr>     :CtrlPFunky<Cr>
