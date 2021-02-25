@@ -397,8 +397,6 @@ if g:fuzzy_finder == 'leaderf'
     " Customize normal mode mapping using g:Lf_NormalMap
     let g:Lf_NormalMap.Filer = [['B', ':LeaderfBookmark<CR>']]
 elseif g:fuzzy_finder == 'fzf'
-    nnoremap <C-p>     :FZF<tab>
-    nnoremap <M-h>;    :Fzf<tab>
     nnoremap ,f        :FZFFiles<Cr>
     nnoremap <leader>b :FzfBuffers<CR>
     " replace origin command
@@ -436,6 +434,8 @@ elseif g:fuzzy_finder == 'fzf'
 endif
 let g:fuzzy_finder = get(g:, 'fuzzy_finder', 'ctrlp')
 if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf'
+    nnoremap <M-h>;         :CtrlP
+    nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ctrlp.vim
         set rtp+=$ADDINS_PATH/ctrlp-extensions.vim
@@ -454,8 +454,6 @@ if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf'
         nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
     endif
     if g:fuzzy_finder == 'ctrlp'
-        nnoremap <M-h>;             :CtrlP
-        nnoremap <silent> <C-p>     :CtrlPMenu<CR>
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>
         nnoremap <silent> <M-h>,    :CtrlPCmdline<CR>
