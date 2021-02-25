@@ -529,11 +529,6 @@ if Installed('coc.nvim')
             \ ">>":      "gitStage",
             \ "<<":      "gitUnstage",
             \ })
-    " config as fuzzy_finder
-    call coc#config('suggest.floatEnable', v:true)
-    call coc#config('signature.target', "float")
-    call coc#config('coc.preferences.hoverTarget', "float")
-    call coc#config('coc.preferences.enableFloatHighlight', v:true)
     call coc#config('list', {
                 \ 'nextKeymap':     '<C-j>',
                 \ 'previousKeymap': '<C-k>',
@@ -551,7 +546,6 @@ if Installed('coc.nvim')
                 \ '<C-j>': 'normal:next',
                 \ '<C-k>': 'normal:previous'
                 \ })
-    call coc#config('rust-analyzer.inlayHints.typeHints', v:false)
     function! FloatScroll(forward) abort
         let float = coc#util#get_float()
         if !float | return '' | endif
@@ -584,29 +578,24 @@ if Installed('coc.nvim')
     inoremap <silent><expr> <M-Y>  coc#util#has_float() ? FloatScroll(0) : "\<Up>""
     inoremap <silent><expr> <Down> coc#util#has_float() ? FloatScroll(1) : "\<Down>"
     inoremap <silent><expr> <Up>   coc#util#has_float() ? FloatScroll(0) : "\<Up>""
-endif
-let g:fuzzy_finder = get(g:, 'fuzzy_finder', 'ctrlp')
-if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf'
-    nnoremap <M-h>;         :CtrlP
-    nnoremap <silent> <C-p> :CtrlPMenu<CR>
+else
+    let g:fuzzy_finder == get(g:, 'fuzzy_finder', 'ctrlp')
+    let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ctrlp.vim
         set rtp+=$ADDINS_PATH/ctrlp-extensions.vim
+        set rtp+=$ADDINS_PATH/ctrlp-funky
         command! CtrlPCmdline call ctrlp#init(ctrlp#cmdline#id())
         command! CtrlPMenu call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    let g:ctrlp_map = '<leader>f'
-    let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
-    if !Installed('vim-yoink')
+    nnoremap <M-h>;         :CtrlP
+    nnoremap <silent> <C-p> :CtrlPMenu<CR>
+    let g:ctrlp_map        = '<leader>f'
+    if g:fuzzy_finder == 'ctrlp'
+        nnoremap <silent> f<Cr>     :CtrlPFunky<Cr>
         nnoremap <silent> ,p        :CtrlPYankring<Cr>
         nnoremap <silent> <leader>p :registers<Cr>
-    endif
-    if !Installed('fzf-funky')
-        set rtp+=$ADDINS_PATH/ctrlp-funky
-        nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
-    endif
-    if g:fuzzy_finder == 'ctrlp'
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>
         nnoremap <silent> <M-h>,    :CtrlPCmdline<CR>

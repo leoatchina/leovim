@@ -239,6 +239,12 @@ elseif Installed('coc.nvim')
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         nnoremap <M-F> :Leaderf self
     endif
+    " config as complete_engine
+    call coc#config('suggest.floatEnable', v:true)
+    call coc#config('signature.target', "float")
+    call coc#config('coc.preferences.hoverTarget', "float")
+    call coc#config('coc.preferences.enableFloatHighlight', v:true)
+    call coc#config('rust-analyzer.inlayHints.typeHints', v:false)
     " as lsp engine
     nmap H :call <SID>show_documentation()<CR>
     nmap S <Plug><coc-definition>
