@@ -531,9 +531,9 @@ let g:VM_custom_remaps = {'<c-j>': '<ESC>', '<c-k>': 'q', '<c-h>': 'Q'}
 " --------------------------
 " surround
 " --------------------------
-nmap ,w viwS
-nmap ,e v$hS
-nmap ,s vt<Space>S
+nmap ,ew viwS
+nmap ,ee v$hS
+nmap ,es vt<Space>S
 " --------------------------
 " sandwich
 " --------------------------
@@ -1898,5 +1898,3 @@ endif
 " set loaded
 " --------------------------
 let g:leovim_loaded = 1
-
-
