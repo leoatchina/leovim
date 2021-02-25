@@ -398,6 +398,7 @@ if g:fuzzy_finder == 'leaderf'
     let g:Lf_NormalMap.Filer = [['B', ':LeaderfBookmark<CR>']]
 elseif g:fuzzy_finder == 'fzf'
     nnoremap <C-p>     :FZF<tab>
+    nnoremap <M-h>;    :Fzf<tab>
     nnoremap ,f        :FZFFiles<Cr>
     nnoremap <leader>b :FzfBuffers<CR>
     " replace origin command
@@ -442,8 +443,6 @@ if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf'
         command! CtrlPMenu call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap <silent> <C-p>  :CtrlPMenu<CR>
-    nnoremap <M-h>;   :CtrlP
     let g:ctrlp_map = '<leader>f'
     let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
     if !Installed('vim-yoink')
@@ -455,6 +454,8 @@ if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf'
         nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
     endif
     if g:fuzzy_finder == 'ctrlp'
+        nnoremap <M-h>;             :CtrlP
+        nnoremap <silent> <C-p>     :CtrlPMenu<CR>
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>
         nnoremap <silent> <M-h>,    :CtrlPCmdline<CR>
