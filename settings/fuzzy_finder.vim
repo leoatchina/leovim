@@ -579,7 +579,8 @@ if Installed('coc.nvim')
     inoremap <silent><expr> <Down> coc#util#has_float() ? FloatScroll(1) : "\<Down>"
     inoremap <silent><expr> <Up>   coc#util#has_float() ? FloatScroll(0) : "\<Up>""
 else
-    let g:fuzzy_finder == get(g:, 'fuzzy_finder', 'ctrlp')
+    let g:ctrlp_map        = '<leader>f'
+    let g:fuzzy_finder    == get(g:, 'fuzzy_finder', 'ctrlp')
     let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ctrlp.vim
@@ -591,7 +592,6 @@ else
     endif
     nnoremap <M-h>;         :CtrlP
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
-    let g:ctrlp_map        = '<leader>f'
     if g:fuzzy_finder == 'ctrlp'
         nnoremap <silent> f<Cr>     :CtrlPFunky<Cr>
         nnoremap <silent> ,p        :CtrlPYankring<Cr>
