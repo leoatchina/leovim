@@ -1803,7 +1803,7 @@ endif
 " --------------------------
 " show impport config
 " --------------------------
-function! GetVimVersion()
+function! s:getVimVersion()
     let l:result=[]
     if has('nvim')
         if g:gui_running > 0
@@ -1828,13 +1828,15 @@ function! GetVimVersion()
 endfunction
 function! Version()
     let params_dict = {
-                \ 'version':         GetVimVersion(),
-                \ 'python':          g:python_version,
-                \ 'complete_engine': get(g:, 'complete_engine', ''),
-                \ 'fuzzy_finder':    g:fuzzy_finder,
-                \ 'colors':          g:colors_name,
-                \ 'tree_browser':    g:tree_browser,
+                \ 'version':      s:getVimVersion(),
+                \ 'python':       g:python_version,
+                \ 'colors':       g:colors_name,
+                \ 'fuzzy_finder': g:fuzzy_finder,
+                \ 'tree_browser': g:tree_browser,
                 \ }
+    if get(g:, 'complete_engine', '') != ''
+        let params_dict['complete_engine'] = g:complete_engine
+    endif
     if get(g:, 'complete_sinippet', '') != ''
         let params_dict['complete_sinippet'] = g:complete_sinippet
     endif
