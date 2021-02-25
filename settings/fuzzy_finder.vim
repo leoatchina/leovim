@@ -70,8 +70,8 @@ if Installed("fzf.vim") && Installed("fzf")
     " ----------------------
     " short cuts for fzf
     " ----------------------
-    nnoremap z; :Fzf
-    nnoremap z, :FZF
+    nnoremap z; :Fzf<tab><tab>
+    nnoremap z, :FZF<tab>
     " locate file
     nnoremap <M-f>l :FZFLocate<Space>
     if Installed('vim-yoink')
@@ -397,11 +397,7 @@ if g:fuzzy_finder == 'leaderf'
     " Customize normal mode mapping using g:Lf_NormalMap
     let g:Lf_NormalMap.Filer = [['B', ':LeaderfBookmark<CR>']]
 elseif g:fuzzy_finder == 'fzf'
-    if has('nvim')
-        nnoremap <C-p> :FZF<C-i>
-    else
-        nnoremap <C-p> :FZF
-    endif
+    nnoremap <C-p>     :FZF<tab>
     nnoremap ,f        :FZFFiles<Cr>
     nnoremap <leader>b :FzfBuffers<CR>
     " replace origin command

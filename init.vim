@@ -633,6 +633,7 @@ set smartcase
 set ignorecase
 set showmatch
 set expandtab
+set wildcharm=<tab>
 set background=dark
 set shiftwidth=4
 set softtabstop=4
