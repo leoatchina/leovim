@@ -237,9 +237,9 @@ if Installed('YouCompleteMe')
     endif
 elseif Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
-    let g:coc_config_home = expand("~/.config/coc")
+    let g:coc_config_home = expand("~/.leovim.plug/coc-config")
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
-        nnoremap <M-F>  :Leaderf self<cr>
+        nnoremap <M-F> :Leaderf self
     endif
     " as lsp engine
     nmap H :call <SID>show_documentation()<CR>

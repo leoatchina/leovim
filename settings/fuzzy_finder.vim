@@ -286,7 +286,7 @@ if g:fuzzy_finder == 'leaderf'
                 \ "Function":    [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<CR>']],
                 \ "Colorscheme": [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
                 \ }
-    let g:Lf_CommandMap = {'<C-]>': ['<C-V>'], '<C-V>': ['<M-v>'], '<C-j>':['<Down>', '<C-j>'], '<C-k>':['<Up>', '<C-k>']}
+    let g:Lf_CommandMap = {'<C-]>': ['<C-V>'], '<C-V>': ['<M-v>', '<C-y>'], '<C-j>':['<Down>', '<C-j>'], '<C-k>':['<Up>', '<C-k>'], '<F5>': ['<C-e>']}
     " show fuzzy functions
     nnoremap <silent><C-p> :Leaderf self<Cr>
     " main selector
