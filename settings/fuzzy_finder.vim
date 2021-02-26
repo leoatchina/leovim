@@ -397,8 +397,6 @@ if g:fuzzy_finder == 'leaderf'
     " Customize normal mode mapping using g:Lf_NormalMap
     let g:Lf_NormalMap.Filer = [['B', ':LeaderfBookmark<CR>']]
 elseif g:fuzzy_finder == 'fzf'
-    nnoremap <C-p>     :FZF<tab>
-    nnoremap <M-h>;    :Fzf<tab>
     nnoremap ,f        :FZFFiles<Cr>
     nnoremap <leader>b :FzfBuffers<CR>
     " replace origin command
@@ -434,28 +432,175 @@ elseif g:fuzzy_finder == 'fzf'
         nnoremap f<Cr> :FzfFunky<Cr>
     endif
 endif
-let g:fuzzy_finder = get(g:, 'fuzzy_finder', 'ctrlp')
-if g:fuzzy_finder == 'ctrlp' || g:fuzzy_finder == 'fzf'
+if Installed('coc.nvim')
+    let g:coc_data_home   = expand("~/.leovim.plug/coc")
+    let g:coc_config_home = expand("~/.leovim.plug/coc-config")
+    nnoremap <C-p>  :CocFzfList<CR>
+    nnoremap <M-h>; :CocList<Space>
+    nnoremap <M-h>. :CocFzfListResume<CR>
+    nnoremap <M-h>l :CocFzfList location<Cr>
+    nnoremap <M-k>o :CocFzfList outline<CR>
+    nnoremap <M-l>c :CocFzfList commands<Cr>
+    nnoremap <M-l>; :Coc
+    nnoremap <M-l>, :CocInstall<Space>
+    " CocFile
+    nnoremap <leader>f :CocFile<Cr>
+    function! CocFile() abort
+        exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
+    endfunction
+    command! CocFile call CocFile()
+    " codeaction and others
+    xmap ,c; <Plug>(coc-codeaction-selected)
+    nmap ,c; <Plug>(coc-codeaction)
+    nmap ,c, <Plug>(coc-codelens)
+    nmap ,ca :CocFzfList actions<Cr>
+    nmap ,cl <Plug>(coc-codeaction-line)
+    xmap ,cf <Plug>(coc-format-selected)
+    nmap ,cf <Plug>(coc-format)
+    nmap ,cn <Plug>(coc-rename)
+    nmap ,cc <Plug>(coc-fix-current)
+    nmap ,cs <Plug>(coc-range-select)
+    " multi cursors
+    nmap ,cp <Plug>(coc-cursors-position)
+    nmap ,co <Plug>(coc-cursors-operator)
+    " Fix autofix problem of current line
+    nmap ,cq <Plug>(coc-fix-current)
+    " more
+    nmap ,ch <Plug>(coc-float-hide)
+    nmap ,cj <Plug>(coc-float-jump)
+    " Create mappings for function text object, requires document symbols feature of languageserver.
+    xmap if <Plug>(coc-funcobj-i)
+    xmap af <Plug>(coc-funcobj-a)
+    omap if <Plug>(coc-funcobj-i)
+    omap af <Plug>(coc-funcobj-a)
+    " Do default action for next item.
+    nnoremap <silent> ,cn :CocNext<CR>
+    " Do default action for previous item.
+    nnoremap <silent> ,cp :CocPrev<CR>
+    " coc git
+    " navigate chunks of current buffer
+    nmap [g <Plug>(coc-git-prevchunk)
+    nmap ]g <Plug>(coc-git-nextchunk)
+    " create text object for git chunks
+    omap ig <Plug>(coc-git-chunk-inner)
+    xmap ig <Plug>(coc-git-chunk-inner)
+    omap ag <Plug>(coc-git-chunk-outer)
+    xmap ag <Plug>(coc-git-chunk-outer)
+    call coc#config('git.enableGutters',   v:false)
+    call coc#config('git.realtimeGutters', v:false)
+    " coc-explorer
+    call coc#config('explorer.keyMappings.global', {
+            \ ",":       "actionMenu",
+            \ "<tab>":   "toggleSelection",
+            \ "<bs>":    "gotoParent",
+            \ "<cr>":    "open",
+            \ "n":       "rename",
+            \ "t":       "open:tab",
+            \ "v":       "open:vsplit",
+            \ "x":       "open:split",
+            \ "h":       "collapse",
+            \ "l":       "expand",
+            \ "<space>": "expandOrCollapse",
+            \ "<C-j>":   ["normal:j"],
+            \ "<C-k>":   ["normal:k"],
+            \ "J":       ["toggleSelection", "normal:j"],
+            \ "K":       ["toggleSelection", "normal:k"],
+            \ "c":       "copyFilepath",
+            \ "C":       "copyFilename",
+            \ "y":       "copyFile",
+            \ "m":       "cutFile",
+            \ "p":       "pasteFile",
+            \ "d":       "delete",
+            \ "D":       "deleteForever",
+            \ "a":       "addFile",
+            \ "A":       "addDirectory",
+            \ "<F1>":    "help",
+            \ "H":       "toggleHidden",
+            \ "r":       "refresh",
+            \ "q":       "quit",
+            \ "X":       "systemExecute",
+            \ "f":       "search",
+            \ "F":       "searchRecursive",
+            \ "gl":      "expandRecursive",
+            \ "gh":      "collapseRecursive",
+            \ "gp":      "diagnosticPrev",
+            \ "gn":      "diagnosticNext",
+            \ "gd":      "listDrive",
+            \ ">>":      "gitStage",
+            \ "<<":      "gitUnstage",
+            \ })
+    call coc#config('list', {
+                \ 'nextKeymap':     '<C-j>',
+                \ 'previousKeymap': '<C-k>',
+                \ 'extendedSearchMode': v:true,
+                \ })
+    call coc#config('list.insertMappings', {
+                \ '<C-n>': "",
+                \ '<C-p>': "",
+                \ '<C-j>': 'normal:j',
+                \ '<C-k>': 'normal:k'
+                \ })
+    call coc#config('list.normalMappings', {
+                \ '<C-n>': "",
+                \ '<C-p>': "",
+                \ '<C-j>': 'normal:next',
+                \ '<C-k>': 'normal:previous'
+                \ })
+    function! FloatScroll(forward) abort
+        let float = coc#util#get_float()
+        if !float | return '' | endif
+        let buf = nvim_win_get_buf(float)
+        let buf_height = nvim_buf_line_count(buf)
+        let win_height = nvim_win_get_height(float)
+        if buf_height < win_height | return '' | endif
+        let pos = nvim_win_get_cursor(float)
+        if a:forward
+            if pos[0] == 1
+                let pos[0] += 3 * win_height / 4
+            elseif pos[0] + win_height / 2 + 1 < buf_height
+                let pos[0] += win_height / 2 + 1
+            else
+                let pos[0] = buf_height
+            endif
+        else
+            if pos[0] == buf_height
+                let pos[0] -= 3 * win_height / 4
+            elseif pos[0] - win_height / 2 + 1  > 1
+                let pos[0] -= win_height / 2 + 1
+            else
+                let pos[0] = 1
+            endif
+        endif
+        call nvim_win_set_cursor(float, pos)
+        return ''
+    endfunction
+    inoremap <silent><expr> <M-E>  coc#util#has_float() ? FloatScroll(1) : "\<Down>"
+    inoremap <silent><expr> <M-Y>  coc#util#has_float() ? FloatScroll(0) : "\<Up>""
+    inoremap <silent><expr> <Down> coc#util#has_float() ? FloatScroll(1) : "\<Down>"
+    inoremap <silent><expr> <Up>   coc#util#has_float() ? FloatScroll(0) : "\<Up>""
+else
+    let g:ctrlp_map        = '<leader>f'
+    let g:fuzzy_finder     = get(g:, 'fuzzy_finder', 'ctrlp')
+    let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ctrlp.vim
         set rtp+=$ADDINS_PATH/ctrlp-extensions.vim
+        set rtp+=$ADDINS_PATH/ctrlp-funky
         command! CtrlPCmdline call ctrlp#init(ctrlp#cmdline#id())
         command! CtrlPMenu call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    let g:ctrlp_map = '<leader>f'
-    let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
+    nnoremap <M-h>;         :CtrlP<tab>
+    nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
-        nnoremap <silent> ,p        :CtrlPYankring<Cr>
-        nnoremap <silent> <leader>p :registers<Cr>
+        nnoremap <silent> ,p :CtrlPYankring<Cr>
     endif
     if !Installed('fzf-funky')
-        set rtp+=$ADDINS_PATH/ctrlp-funky
         nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
     endif
     if g:fuzzy_finder == 'ctrlp'
-        nnoremap <M-h>;             :CtrlP
-        nnoremap <silent> <C-p>     :CtrlPMenu<CR>
+        nnoremap <silent> ,p        :CtrlPYankring<Cr>
+        nnoremap <silent> <leader>p :registers<Cr>
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>
         nnoremap <silent> <M-h>,    :CtrlPCmdline<CR>
