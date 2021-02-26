@@ -913,11 +913,13 @@ xnoremap <C-m> %
 nnoremap *     *``
 nnoremap #     #``
 nnoremap !     :!
-xnoremap !     :<C-u>!<C-r>=GetVisualSelection()<Cr>
+" xmap
 xnoremap .     :<C-u>normal .<Cr>
-xnoremap g/    /<C-u><C-r>=GetVisualSelection()<Cr>
-xnoremap g;    :<C-u>%s/<C-r>=GetVisualSelection()<Cr>
-xnoremap g:    :<C-u><C-r>=GetVisualSelection()<Cr>
+xnoremap !     y:<C-u>!<C-r>"
+xnoremap g/    y/<C-u><C-r>"
+xnoremap g?    y?<C-u><C-r>"
+xnoremap g;    y:<C-u>%s/<C-r>"
+xnoremap g:    y:<C-u><C-r>"<Cr>
 " ------------------------
 " search visual select range
 " ------------------------
