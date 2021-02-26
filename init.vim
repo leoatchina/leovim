@@ -916,10 +916,6 @@ nnoremap !     :!
 " xmap
 xnoremap .     :<C-u>normal .<Cr>
 xnoremap !     y:<C-u>!<C-r>"
-xnoremap g/    y/<C-u><C-r>"
-xnoremap g?    y?<C-u><C-r>"
-xnoremap g;    y:<C-u>%s/<C-r>"
-xnoremap g:    y:<C-u><C-r>"<Cr>
 " ------------------------
 " search visual select range
 " ------------------------
