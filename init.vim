@@ -675,15 +675,11 @@ if has('nvim')
 else
     set wildmode=longest,list
 endif
-if has('conceal')
-    set conceallevel=0
-    set concealcursor=niv
-endif
 if has('patch-7.4.2201') || has('nvim')
     set signcolumn=yes
 endif
 if has('wildignore')
-    set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.zip,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar
+    set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar,*.gz,*.pyd
 endif
 " no gui menu
 set guioptions-=e
