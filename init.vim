@@ -675,10 +675,6 @@ if has('nvim')
 else
     set wildmode=longest,list
 endif
-if has('conceal')
-    set conceallevel=0
-    set concealcursor=niv
-endif
 if has('patch-7.4.2201') || has('nvim')
     set signcolumn=yes
 endif
