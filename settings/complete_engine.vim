@@ -226,15 +226,6 @@ if Installed('YouCompleteMe')
                     \     'cmdline': g:ycm_julia_cmdline
                     \ }]
     endif
-    if executable('ccls')
-        let g:ycm_language_server +=
-                    \ [{
-                    \   'name': 'ccls',
-                    \   'cmdline': [ 'ccls' ],
-                    \   'filetypes': [ 'c', 'cpp', 'cuda', 'objc', 'objcpp' ],
-                    \   'project_root_files': [ '.ccls-root', 'compile_commands.json' ]
-                    \ }]
-    endif
 elseif Installed('coc.nvim')
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         nnoremap <M-F> :Leaderf self

@@ -127,7 +127,7 @@ if get(g:, 'complete_engine', '') =~ "YCM"
         set rtp+=$YCM_WINDIR
     else
         let b:ycm_install = " ./install.py"
-        if HasPlug('c') && !executable('ccls')
+        if HasPlug('c')
             let b:ycm_install = b:ycm_install . " --clangd-completer"
         endif
         if HasPlug('rust')
