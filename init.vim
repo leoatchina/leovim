@@ -850,18 +850,6 @@ onoremap <C-f> $
 onoremap <C-b> ^
 inoremap <C-f> <ESC>A
 inoremap <C-b> <ESC>I
-" z remap
-nnoremap zw <Nop>
-nnoremap zW <Nop>
-nnoremap zg <Nop>
-nnoremap zG <Nop>
-nnoremap zl zL
-nnoremap zh zH
-nnoremap zr zR
-nnoremap z= zT
-nnoremap z- zB
-nnoremap ZT zt
-nnoremap zt z<CR>
 " search replace
 nnoremap <silent> c<Cr> *Ncgn
 " ------------------------
@@ -1211,6 +1199,22 @@ for i in range(26)
     exec 'xnoremap <leader>y' . l_char . ' "'. l_char . 'y'
     exec 'xnoremap <leader>y' . u_char . ' "'. u_char . 'y'
 endfor
+" ------------------------
+" z remap
+" ------------------------
+nnoremap zs <Nop>
+nnoremap zS <Nop>
+nnoremap zw <Nop>
+nnoremap zW <Nop>
+nnoremap zg <Nop>
+nnoremap zG <Nop>
+nnoremap zl zL
+nnoremap zh zH
+nnoremap zr zR
+nnoremap z= zT
+nnoremap z- zB
+nnoremap ZT zt
+nnoremap zt z<CR>
 " ------------------------
 " map for fold
 " ------------------------
