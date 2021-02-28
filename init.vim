@@ -897,7 +897,6 @@ xnoremap <C-m> %
 nnoremap *     *``
 nnoremap #     #``
 nnoremap !     :!
-" xmap
 xnoremap .     :<C-u>normal .<Cr>
 xnoremap !     y:<C-u>!<C-r>"
 " ------------------------
@@ -905,6 +904,7 @@ xnoremap !     y:<C-u>!<C-r>"
 " ------------------------
 xnoremap <silent> * :<C-u>call EscapedSearch()<CR>/<C-R>=@/<CR><CR>N
 xnoremap <silent> # :<C-u>call EscapedSearch()<CR>?<C-R>=@/<CR><CR>N
+xnoremap g; y:<C-u>%s/<C-R>"/
 function! EscapedSearch() range
     let l:saved_reg = @"
     execute 'normal! vgvy'
