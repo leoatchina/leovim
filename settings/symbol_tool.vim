@@ -92,20 +92,18 @@ if Installed('vista.vim')
     endif
     if get(g:, 'complete_engine', '') == 'coc'
         let g:vista_default_executive = 'coc'
-        nnoremap <M-'> :Vista finder coc<Cr>
+        nnoremap <M-/> :Vista finder coc<Cr>
     elseif get(g:, 'complete_engine', '') == 'vim-lsp'
         let g:vista_default_executive = 'vim_lsp'
-        nnoremap <M-'> :Vista finder vim_lsp<Cr>
-    else
-        nnoremap <M-'> :Vista finder fzf<Cr>
-    endif
-    if get(g:, 'ctags_version', '') =~ 'json'
+        nnoremap <M-/> :Vista finder vim_lsp<Cr>
+    elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
+        let g:vista_default_executive = 'nvim_lsp'
+        nnoremap <M-/> :Vista finder nvim_lsp<Cr>
+    elseif get(g:, 'ctags_version', '') =~ 'json'
+        let g:vista_default_executiveista = 'ctags'
         nnoremap <M-/> :Vista finder ctags<Cr>
-        if get(g:, 'vista_default_executive', '') == ''
-            let g:vista_default_executiveista = 'ctags'
-        endif
     else
-        nnoremap <M-/> <Nop>
+        nnoremap <M-/> :Vista finder fzf<Cr>
     endif
 endif
 " --------------------------
