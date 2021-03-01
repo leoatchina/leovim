@@ -227,9 +227,6 @@ if Installed('YouCompleteMe')
                     \ }]
     endif
 elseif Installed('coc.nvim')
-    if get(g:, 'fuzzy_finder', '') == 'leaderf'
-        nnoremap <M-F> :Leaderf self
-    endif
     " config as complete_engine
     call coc#config('suggest.floatEnable', v:true)
     call coc#config('signature.target', "float")

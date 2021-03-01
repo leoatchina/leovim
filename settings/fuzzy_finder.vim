@@ -289,6 +289,7 @@ if g:fuzzy_finder == 'leaderf'
     let g:Lf_CommandMap = {'<C-]>': ['<C-V>'], '<C-V>': ['<M-v>', '<C-y>'], '<C-j>':['<Down>', '<C-j>'], '<C-k>':['<Up>', '<C-k>'], '<F5>': ['<C-e>']}
     " show fuzzy functions
     nnoremap <silent><C-p> :Leaderf self<Cr>
+    nnoremap <M-F> :Leaderf self
     " main selector
     nnoremap <leader>w :Leaderf window<Cr>
     nnoremap <leader>b :Leaderf buffer<Cr>
@@ -578,7 +579,9 @@ if Installed('coc.nvim')
     inoremap <silent><expr> <M-Y>  coc#util#has_float() ? FloatScroll(0) : "\<Up>""
     inoremap <silent><expr> <Down> coc#util#has_float() ? FloatScroll(1) : "\<Down>"
     inoremap <silent><expr> <Up>   coc#util#has_float() ? FloatScroll(0) : "\<Up>""
-else
+endif
+let g:fuzzy_finder = get(g:, 'fuzzy_finder', 'ctrlp')
+if g:fuzzy_finder == 'ctrlp'
     let g:ctrlp_map        = '<leader>f'
     let g:fuzzy_finder     = get(g:, 'fuzzy_finder', 'ctrlp')
     let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
