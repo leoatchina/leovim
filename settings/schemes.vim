@@ -40,8 +40,8 @@ elseif HasPlug('codedark')
     colorscheme codedark
 elseif HasPlug('space-vim')
     colorscheme space-vim-dark
-elseif HasPlug('two-firewatch')
-    colorscheme two-firewatch
+elseif HasPlug('one')
+    colorscheme one
 " --------------------------
 " schmes need truecolor
 " --------------------------
@@ -72,7 +72,7 @@ elseif get(g:, 'complete_engine', '') == ''
     colorscheme space-vim-dark
 elseif get(g:, 'complete_engine', '') == 'apc'
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        call SetScheme('edge', 'codedark')
+        call SetScheme('edge', 'one')
     else
         call SetScheme('dogrun', 'atom-dark-256')
     endif
@@ -92,7 +92,7 @@ elseif g:fuzzy_finder == 'leaderf'
     elseif get(g:, 'complete_engine', '') == 'vim-lsp'
         call SetScheme('OceanicNext', 'hybrid')
     else
-        call SetScheme('tokyonight', 'two-firewatch')
+        call SetScheme('tokyonight', 'codedark')
     endif
 else
     call SetScheme('embark', 'dracula')
