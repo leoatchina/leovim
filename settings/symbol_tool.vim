@@ -90,20 +90,23 @@ if Installed('vista.vim')
     else
         let g:vista_fzf_preview = ['up:30%']
     endif
-    if get(g:, 'complete_engine', '') == 'coc'
-        let g:vista_default_executive = 'coc'
-        nnoremap <M-/> :Vista finder coc<Cr>
-    elseif get(g:, 'complete_engine', '') == 'vim-lsp'
-        let g:vista_default_executive = 'vim_lsp'
-        nnoremap <M-/> :Vista finder vim_lsp<Cr>
-    elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
-        let g:vista_default_executive = 'nvim_lsp'
-        nnoremap <M-/> :Vista finder nvim_lsp<Cr>
-    elseif get(g:, 'ctags_version', '') =~ 'json'
+    if get(g:, 'ctags_version', '') =~ 'json'
         let g:vista_default_executiveista = 'ctags'
         nnoremap <M-/> :Vista finder ctags<Cr>
     else
-        nnoremap <M-/> :Vista finder fzf<Cr>
+        nnoremap <M-/> :echo "Please instal Universal-ctags with json support."<Cr>
+    endif
+    if get(g:, 'complete_engine', '') == 'coc'
+        let g:vista_default_executive = 'coc'
+        nnoremap <M-l>f :Vista finder coc<Cr>
+    elseif get(g:, 'complete_engine', '') == 'vim-lsp'
+        let g:vista_default_executive = 'vim_lsp'
+        nnoremap <M-l>f :Vista finder vim_lsp<Cr>
+    elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
+        let g:vista_default_executive = 'nvim_lsp'
+        nnoremap <M-l>f :Vista finder nvim_lsp<Cr>
+    else
+        nnoremap <M-l>f :Vista finder fzf<Cr>
     endif
 endif
 " --------------------------
