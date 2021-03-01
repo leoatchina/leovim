@@ -94,7 +94,7 @@ if Installed('vista.vim')
         let g:vista_default_executiveista = 'ctags'
         nnoremap <M-/> :Vista finder ctags<Cr>
     else
-        nnoremap <M-/> :echo "Please instal Universal-ctags with json support."<Cr>
+        nnoremap <M-/> :echoe "Please install universal-ctags with json support."<Cr>
     endif
     if get(g:, 'complete_engine', '') == 'coc'
         let g:vista_default_executive = 'coc'
