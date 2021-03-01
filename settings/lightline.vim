@@ -39,6 +39,7 @@ function! LightlineFugitive()
             return ''
         endif
     catch
+            return ''
     endtry
     return ''
 endfunction
@@ -186,4 +187,3 @@ endfunction
 augroup UpdateLightline
     autocmd ColorScheme,WinEnter,BufEnter,BufWritePost,VimEnter * call UpdateLightline()
 augroup END
-
