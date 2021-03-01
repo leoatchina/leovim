@@ -51,6 +51,8 @@ elseif HasPlug('edge')
     call SetScheme('edge')
 elseif HasPlug('dogrun')
     call SetScheme('dogrun')
+elseif HasPlug('embark')
+    call SetScheme('embark')
 elseif HasPlug('oceanicnext')
     call SetScheme('OceanicNext')
 elseif HasPlug('sonokai')
@@ -70,9 +72,9 @@ elseif get(g:, 'complete_engine', '') == ''
     colorscheme space-vim-dark
 elseif get(g:, 'complete_engine', '') == 'apc'
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        call SetScheme('edge', 'dracula')
+        call SetScheme('dogrun', 'atom-dark-256')
     else
-        call SetScheme('dogrun', 'codedark')
+        call SetScheme('embark', 'dracula')
     endif
 elseif get(g:, 'complete_engine', '') == 'coc'
     if g:fuzzy_finder == 'leaderf'
@@ -93,7 +95,7 @@ elseif g:fuzzy_finder == 'leaderf'
         call SetScheme('tokyonight', 'two-firewatch')
     endif
 else
-    call SetScheme('quantum', 'atom-dark-256')
+    call SetScheme('edge', 'codedark')
 endif
 " settings for scheme
 try
@@ -119,6 +121,8 @@ try
     elseif g:colors_name == 'tokyonight'
         let g:tokyonight_style = get(g:, 'tokyonight', 'night')
         let g:tokyonight_enable_italic = 0
+    elseif g:colors_name == 'embark'
+        let g:embark_terminal_italics = 0
     elseif g:colors_name == 'ayu'
         let g:ayucolor = get(g:, 'ayucolor', 'mirage')
     elseif g:colors_name == 'OceanicNext'

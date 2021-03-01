@@ -132,14 +132,13 @@ if get(g:, 'has_truecolor', 0) > 0
     MyPlug 'sainnhe/edge'
     MyPlug 'sainnhe/sonokai'
     MyPlug 'sainnhe/gruvbox-material'
-    " thems will be auto selected
-    MyPlug 'wadackel/vim-dogrun'
-    MyPlug 'ghifarit53/tokyonight-vim'
-    MyPlug 'hardcoreplayers/oceanic-material'
     " others
     MyPlug 'ayu-theme/ayu-vim'
+    MyPlug 'wadackel/vim-dogrun'
     MyPlug 'mhartington/oceanic-next'
-    MyPlug 'tyrannicaltoucan/vim-quantum'
+    MyPlug 'ghifarit53/tokyonight-vim'
+    MyPlug 'hardcoreplayers/oceanic-material'
+    MyPlug 'embark-theme/vim', {'as': 'embark', 'dir': '~/.leovim.plug/embark'}
 endif
 " ------------------------------
 " fullscreen
