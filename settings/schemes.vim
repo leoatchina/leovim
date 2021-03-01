@@ -72,9 +72,9 @@ elseif get(g:, 'complete_engine', '') == ''
     colorscheme space-vim-dark
 elseif get(g:, 'complete_engine', '') == 'apc'
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        call SetScheme('dogrun', 'atom-dark-256')
+        call SetScheme('edge', 'codedark')
     else
-        call SetScheme('embark', 'dracula')
+        call SetScheme('dogrun', 'atom-dark-256')
     endif
 elseif get(g:, 'complete_engine', '') == 'coc'
     if g:fuzzy_finder == 'leaderf'
@@ -95,7 +95,7 @@ elseif g:fuzzy_finder == 'leaderf'
         call SetScheme('tokyonight', 'two-firewatch')
     endif
 else
-    call SetScheme('edge', 'codedark')
+    call SetScheme('embark', 'dracula')
 endif
 " settings for scheme
 try
