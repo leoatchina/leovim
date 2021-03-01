@@ -675,15 +675,11 @@ if has('nvim')
 else
     set wildmode=longest,list
 endif
-if has('conceal')
-    set conceallevel=0
-    set concealcursor=niv
-endif
 if has('patch-7.4.2201') || has('nvim')
     set signcolumn=yes
 endif
 if has('wildignore')
-    set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.zip,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar
+    set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar,*.gz,*.pyd
 endif
 " no gui menu
 set guioptions-=e
@@ -850,18 +846,6 @@ onoremap <C-f> $
 onoremap <C-b> ^
 inoremap <C-f> <ESC>A
 inoremap <C-b> <ESC>I
-" z remap
-nnoremap zw <Nop>
-nnoremap zW <Nop>
-nnoremap zg <Nop>
-nnoremap zG <Nop>
-nnoremap zl zL
-nnoremap zh zH
-nnoremap zr zR
-nnoremap z= zT
-nnoremap z- zB
-nnoremap ZT zt
-nnoremap zt z<CR>
 " search replace
 nnoremap <silent> c<Cr> *Ncgn
 " ------------------------
@@ -913,7 +897,6 @@ xnoremap <C-m> %
 nnoremap *     *``
 nnoremap #     #``
 nnoremap !     :!
-" xmap
 xnoremap .     :<C-u>normal .<Cr>
 xnoremap !     y:<C-u>!<C-r>"
 " ------------------------
@@ -921,6 +904,7 @@ xnoremap !     y:<C-u>!<C-r>"
 " ------------------------
 xnoremap <silent> * :<C-u>call EscapedSearch()<CR>/<C-R>=@/<CR><CR>N
 xnoremap <silent> # :<C-u>call EscapedSearch()<CR>?<C-R>=@/<CR><CR>N
+xnoremap g; y:<C-u>%s/<C-R>"/
 function! EscapedSearch() range
     let l:saved_reg = @"
     execute 'normal! vgvy'
@@ -1211,6 +1195,22 @@ for i in range(26)
     exec 'xnoremap <leader>y' . l_char . ' "'. l_char . 'y'
     exec 'xnoremap <leader>y' . u_char . ' "'. u_char . 'y'
 endfor
+" ------------------------
+" z remap
+" ------------------------
+nnoremap zs <Nop>
+nnoremap zS <Nop>
+nnoremap zw <Nop>
+nnoremap zW <Nop>
+nnoremap zg <Nop>
+nnoremap zG <Nop>
+nnoremap zl zL
+nnoremap zh zH
+nnoremap zr zR
+nnoremap z= zT
+nnoremap z- zB
+nnoremap ZT zt
+nnoremap zt z<CR>
 " ------------------------
 " map for fold
 " ------------------------

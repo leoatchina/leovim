@@ -157,7 +157,7 @@ if Installed('YouCompleteMe')
     " hover
     let g:ycm_auto_hover = ''
     nmap     H       <Plug>(YCMHover)
-    nnoremap S      :YcmCompleter GoToDefinition<Cr>
+    nnoremap M      :YcmCompleter GoToDefinition<Cr>
     nnoremap L      :vs<Cr>:YcmCompleter GoToDefinition<Cr>
     nnoremap <M-l>; :YcmCompleter<Space>
     nnoremap <M-l>k :YcmCompleter GetDoc<CR>
@@ -226,15 +226,6 @@ if Installed('YouCompleteMe')
                     \     'cmdline': g:ycm_julia_cmdline
                     \ }]
     endif
-    if executable('ccls')
-        let g:ycm_language_server +=
-                    \ [{
-                    \   'name': 'ccls',
-                    \   'cmdline': [ 'ccls' ],
-                    \   'filetypes': [ 'c', 'cpp', 'cuda', 'objc', 'objcpp' ],
-                    \   'project_root_files': [ '.ccls-root', 'compile_commands.json' ]
-                    \ }]
-    endif
 elseif Installed('coc.nvim')
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         nnoremap <M-F> :Leaderf self
@@ -247,7 +238,7 @@ elseif Installed('coc.nvim')
     call coc#config('rust-analyzer.inlayHints.typeHints', v:false)
     " as lsp engine
     nmap H :call <SID>show_documentation()<CR>
-    nmap S <Plug><coc-definition>
+    nmap M <Plug><coc-definition>
     nmap L :vs<Cr>:execute "normal \<Plug><coc-definition>"<Cr>
     " basic plug
     nmap <M-j>w :CocFzfList symbols<CR>
@@ -364,7 +355,7 @@ elseif Installed('vim-lsp')
     nnoremap <M-l>r :vs<Cr>:LspReferences<CR>
     nnoremap <M-l>i :vs<Cr>:LspImplementation<CR>
     " jump to
-    nnoremap S      :LspDefinition<Cr>
+    nnoremap M      :LspDefinition<Cr>
     nnoremap L      :vs<Cr>:LspDefinition()<Cr>
     nnoremap <M-j>d :LspDeclaration<CR>
     nnoremap <M-j>t :LspTypeDefinition<CR>
