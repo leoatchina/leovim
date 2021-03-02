@@ -105,9 +105,6 @@ if Installed('vista.vim')
     elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
         let g:vista_default_executive = 'nvim_lsp'
         execute "nnoremap " . s:vista_finder_shortcut . " :Vista finder nvim_lsp<Cr>"
-    else
-        let g:vista_default_executive = 'fzf'
-        execute "nnoremap " . s:vista_finder_shortcut . " :Vista finder fzf<Cr>"
     endif
     unlet s:vista_finder_shortcut
 endif
@@ -135,14 +132,6 @@ if executable('ctags')
         au FileType qf noremap <silent><buffer> <C-k> :call quickui#tools#preview_quickfix()<cr>
         au FileType qf noremap <silent><buffer> <tab> :call quickui#tools#preview_quickfix()<cr>
         nnoremap <C-k> :<C-u>call quickui#tools#preview_tag('')<Cr>
-        " preview in popup
-        function! s:PreviewFileW(filename) abort
-            let filename = a:filename
-            let fopts = {'cursor':-1, 'number':1, 'persist':0, 'w':80, 'h':64}
-            call quickui#preview#open(filename, fopts)
-        endfunction
-        command! -nargs=1 -complete=file PreviewFileW call s:PreviewFileW(<f-args>)
-        nnoremap \<Tab> :PreviewFileW<Space>
     endif
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')
@@ -197,7 +186,7 @@ if Installed('gutentags_plus')
     nnoremap <silent> <leader>gz :GscopeFind z <C-R><C-W><cr>
     nnoremap <leader>g, :GutentagsToggleTrace<CR>
     nnoremap <leader>g; :GutentagsToggleEnable<CR>
-    if g:fuzzy_finder == 'leaderf'
+    if get(g:, 'fuzzy_finder', '') == 'leaderf'
         call AddPlugSymbol('leaderf')
         let g:Lf_Gtagsconf           = $GTAGSCONF
         let g:Lf_GtagsGutentags      = 1

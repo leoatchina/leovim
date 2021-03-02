@@ -19,7 +19,6 @@ Use (neo)vim terminal in the floating/popup window.
   - [How to define more wrappers](#how-to-define-more-wrappers)
   - [How to write sources for fuzzy finder plugins](#how-to-write-sources-for-fuzzy-finder-plugins)
 - [Contributing](#contributing)
-- [Wiki](#wiki)
 - [FAQ](#faq)
 - [Breaking changes](#breaking-changes)
 - [Related projects](#related-projects)
@@ -33,18 +32,14 @@ Use (neo)vim terminal in the floating/popup window.
 - Customizable terminal window style
 - Switch/preview floating terminal buffers using fuzzy-finder plugins such as
   [denite.nvim](https://github.com/Shougo/denite.nvim) or
-  [coc.nvim](https://github.com/neoclide/coc.nvim), etc.
+  [fzf](https://github.com/junegunn/fzf), etc.
 - Use with other external command-line tools(ranger, fzf, ripgrep etc.)
-- Autocompletion from within floaterms(require [coc.nvim](https://github.com/neoclide/coc.nvim)
-  or [deoplete.nvim](https://github.com/Shougo/deoplete.nvim))
 - Use as a custom task runner for [asynctasks.vim](https://github.com/skywind3000/asynctasks.vim)
   or [asyncrun.vim](https://github.com/skywind3000/asyncrun.vim)
 
 ## Requirements
 
 - Vim or neovim with `terminal` feature
-
-Run `:checkhealth` for more info.
 
 ## Installation
 
@@ -91,9 +86,10 @@ external terminals.
     you may toggle it afterwards
   - `disposable` If `--disposable` is given, the floaterm will be destroyed
     once it is hidden.
-  - `height` see `g:floaterm_height`
-  - `width` see `g:floaterm_width`
   - `title` see `g:floaterm_title`
+  - `width` see `g:floaterm_width`
+  - `height` see `g:floaterm_height`
+  - `opener` see `g:floaterm_opener`
   - `wintype` see `g:floaterm_wintype`
   - `position` see `g:floaterm_position`
   - `autoclose` see `g:floaterm_autoclose`
@@ -115,7 +111,7 @@ For example, the command
 :FloatermNew --height=0.6 --width=0.4 --wintype=float --name=floaterm1 --position=topleft --autoclose=2 ranger --cmd="cd ~"
 ```
 
-will open a new floating/popup floaterm instance named `floaterm1` running 
+will open a new floating/popup floaterm instance named `floaterm1` running
 `ranger --cmd="cd ~"` in the `topleft` corner of the main window.
 
 The following command allows you to compile and run your C code in the floaterm window:
@@ -260,11 +256,10 @@ Default: `['.project', '.git', '.hg', '.svn', '.root']`
 
 Type `String`. Command used for opening a file in the outside nvim from within `:terminal`.
 
-Available: `'edit'`, `'split'`, `'vsplit'`, `'tabe'`, `'drop'`.
+Available: `'edit'`, `'split'`, `'vsplit'`, `'tabe'`, `'drop'` or 
+[user-defined commands](https://github.com/voldikss/vim-floaterm/issues/259)
 
-Set to `''` to disable [git commit](#git) and [floaterm](#floaterm) functionality in floaterm.
-
-Default: `'vsplit'`
+Default: `'split'`
 
 #### **`g:floaterm_autoclose`**
 
@@ -294,22 +289,6 @@ Default: `1`.
 Type `Boolean`. Whether to enter Terminal-mode after opening a floaterm.
 
 Default: `v:true`
-
-#### **`g:floaterm_complete_options`**
-
-Type `Dict`. Autocompletion options (Note that completion from floaterm is
-synchronous)
-
-Available options:
-
-- `shortcut`: A string.
-- `priority`: Number between 0-99.
-- `filetypes`: Array of filetype names this source should be triggered by.
-  Available for all filetypes when ommited and for no filetypes when empty
-- `filter_length`: Array of 2 numbers. Candidates whose length is not
-  in the range will be removed.
-
-Default value: `{'shortcut': 'floaterm', 'priority': 5, 'filter_length': [5, 20]}`
 
 ### Keymaps
 
@@ -582,7 +561,7 @@ This can also work for other languages which have interactive shells, such as lu
 
 Use vim-clap to switch/preview floating terminal buffers.
 
-Try `:Clap floaterm`
+Install [clap-floaterm](https://github.com/voldikss/clap-floaterm) and try `:Clap floaterm`
 
 <details>
 <summary>Demo</summary>
@@ -593,7 +572,7 @@ Try `:Clap floaterm`
 
 Use denite to switch/preview/open floating terminal buffers.
 
-Try `:Denite floaterm`
+Install [denite-floaterm](https://github.com/delphinus/denite-floaterm) and try `:Denial floaterm`
 
 <details>
 <summary>Demo</summary>
@@ -641,23 +620,24 @@ There are two ways for a command to be spawned:
   [fzf wrapper](./autoload/floaterm/wrapper/fzf.vim)
 
   ```vim
-  function! floaterm#wrapper#fzf#() abort
-    return ['floaterm $(fzf)', {}, v:true]
+  function! floaterm#wrapper#fzf#(cmd, jobopts, config) abort
+    return [v:true, 'floaterm $(fzf)']
   endfunction
   ```
 
   The code above returns a list. `floaterm $(fzf)` is the command to be
   executed. `v:true` means the command will be executed after the `&shell`
-  startup. In this way, the second element of the list must be `{}`.
+  startup.
 
 - To be executed through `termopen()`/`term_start()` function, in that case, a
   callback option can be provided. See [fzf wrapper](./autoload/floaterm/wrapper/fzf.vim)
 
   ```vim
-  function! floaterm#wrapper#fzf#(cmd) abort
+  function! floaterm#wrapper#fzf#(cmd, jobopts, config) abort
     let s:fzf_tmpfile = tempname()
     let cmd = a:cmd . ' > ' . s:fzf_tmpfile
-    return [cmd, {'on_exit': funcref('s:fzf_callback')}, v:false]
+    let a:jobopts.on_exit = funcref('s:fzf_callback')
+    return [v:false, cmd]
   endfunction
 
   function! s:fzf_callback(...) abort
@@ -679,13 +659,32 @@ There are two ways for a command to be spawned:
   ```
 
   In the example above, after executing `:FloatermNew fzf`, function
-  `floaterm#wrapper#fzf#` will return `['fzf > /tmp/atmpfilename', {'on_exit': funcref('s:fzf_callback')}, v:false]`.
+  `floaterm#wrapper#fzf#` will return
 
-  Here `v:false` means `cmd`(`fzf > /tmp/atmpfilename`) will be passed through
-  `termopen()`(neovim) or `term_start()`(vim). As a result, an fzf interactive
-  will be opened in a floaterm window. After choosing a file using `<CR>`, fzf
-  exits and the filepath will be written in `/tmp/atmpfilename`. Then the
-  function `s:fzf_callback()` will be invoked to open the file.
+  ```vim
+  [v:false, 'fzf > /tmp/atmpfilename'].
+  ```
+
+  Here `v:false` means `cmd`
+
+  ```vim
+  fzf > /tmp/atmpfilename
+  ```
+
+  will be passed through `termopen()`(neovim) or `term_start()`(vim). As the
+  result, an fzf interactive will be opened in a floaterm window.
+
+  When user picks a file using `ENTER`, fzf exits and the filepath will be
+  written in `/tmp/atmpfilename` and `s:fzf_callback()` will be invoked to
+  open the file. Note that the function `s: fzf_callback()` is registered by
+
+  ```vim
+  let a:jobopts.on_exit = funcref('s:fzf_callback')
+  ```
+
+  The variable `a:jobopts` in the above code will be eventually passed to
+  `termopen()`(neovim) or `term_start()`(vim). For more info, see
+  `:help jobstart-options`(neovim) or `:help job-options`(vim)
 
 ### How to write sources for fuzzy finder plugins
 
@@ -693,16 +692,12 @@ Function `floaterm#buflist#gather()` returns a list contains all the floaterm bu
 
 Function `floaterm#terminal#open_existing({bufnr})` opens the floaterm whose buffer number is `{bufnr}`.
 
-For reference, see [floaterm source for vim-clap](./autoload/clap/provider/floaterm.vim).
+For reference, see [floaterm source for LeaderF](https://github.com/voldikss/LeaderF-floaterm/blob/master/autoload/lf_floaterm.vim).
 
 ## Contributing
 
 - Improve the documentation
 - Help resolve issues labeled as [help wanted](https://github.com/voldikss/vim-floaterm/issues?q=is%3Aissue+label%3A%22help+wanted%22)
-
-## Wiki
-
-https://github.com/voldikss/vim-floaterm/wiki
 
 ## FAQ
 
@@ -718,17 +713,15 @@ https://github.com/voldikss/vim-floaterm/issues?q=label%3A%22breaking+change%22
 - [coc-floaterm](https://github.com/voldikss/coc-floaterm)
 - [fzf-floaterm](https://github.com/voldikss/fzf-floaterm)
 - [popc-floaterm](https://github.com/yehuohan/popc-floaterm)
-- [Leaderf-floaterm](https://github.com/voldikss/LeaderF-floaterm)
+- [LeaderF-floaterm](https://github.com/voldikss/LeaderF-floaterm)
 
 ## Credits
 
 - [Vim](https://github.com/vim/vim/) and [Neovim](https://github.com/neovim/neovim/) the editor God
 
-- [floaterm executable](https://github.com/voldikss/vim-floaterm/blob/master/bin/floaterm) is modified
-  from [vim-terminal-help](https://github.com/skywind3000/vim-terminal-help/blob/master/tools/utils/drop)
+- [vim-terminal-help](https://github.com/skywind3000/vim-terminal-help/blob/master/tools/utils/drop)
 
-- [edita.vim](https://github.com/lambdalisue/edita.vim) for pseudo `$EDITOR` in
-  floaterm
+- [edita.vim](https://github.com/lambdalisue/edita.vim)
 
 ## License
 

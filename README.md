@@ -84,7 +84,7 @@ click uninstall.cmd with administrator right
 - [x] Easymotion, within line jump
 - [x] far.vim
 - [x] fern.vim as tree_browser
-- [x] fly_grep using leaderf or fzf
+- [x] grep_tool using leaderf or fzf
 - [x] auto choose yes to kill job when confirm quit termina
 - [x] MyPlug to install plunins in to $INSTALL_PATH by default
 - [x] leaderf as default fuzzy_finder when with +python3 support, otherwise fzf or ctrlp

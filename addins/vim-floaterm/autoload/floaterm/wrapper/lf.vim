@@ -5,7 +5,7 @@
 " GitHub: https://github.com/benwoodward
 " ============================================================================
 
-function! floaterm#wrapper#lf#(cmd) abort
+function! floaterm#wrapper#lf#(cmd, jobopts, config) abort
   let s:lf_tmpfile = tempname()
   let original_dir = getcwd()
   lcd %:p:h
@@ -20,10 +20,12 @@ function! floaterm#wrapper#lf#(cmd) abort
 
   exe "lcd " . original_dir
   let cmd = [&shell, &shellcmdflag, cmd]
-  return [cmd, {'on_exit': funcref('s:lf_callback')}, v:false]
+  let jobopts = {'on_exit': funcref('s:lf_callback')}
+  call floaterm#util#deep_extend(a:jobopts, jobopts)
+  return [v:false, cmd]
 endfunction
 
-function! s:lf_callback(...) abort
+function! s:lf_callback(job, data, event, opener) abort
   if filereadable(s:lf_tmpfile)
     let filenames = readfile(s:lf_tmpfile)
     if !empty(filenames)
@@ -35,7 +37,7 @@ function! s:lf_callback(...) abort
         let dict = {'filename': fnamemodify(filename, ':p')}
         call add(locations, dict)
       endfor
-      call floaterm#util#open(locations)
+      call floaterm#util#open(locations, a:opener)
     endif
   endif
 endfunction

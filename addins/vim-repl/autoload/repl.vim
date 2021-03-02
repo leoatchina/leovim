@@ -28,6 +28,14 @@ EOF
     end
 endfunction
 
+function! repl#ReverseStr(string)
+pythonx << EOF
+import vim
+value = vim.eval("a:string")[::-1]
+EOF
+return pyxeval("value")
+endfunction
+
 function! repl#RStrip(string)
     return substitute(a:string, '\s*$', '', '')
 endfunction
@@ -56,6 +64,19 @@ function! repl#StartWith(string, substring)
     else
         return 0
     endif
+endfunction
+
+function! repl#EndWith(string, substring)
+    return repl#StartWith(repl#ReverseStr(a:string), repl#ReverseStr(a:substring))
+endfunction
+
+function! repl#EndWithAny(string, substringlist)
+    for l:substring in a:substringlist
+        if repl#EndWith(a:string, l:substring)
+            return 1
+        endif
+    endfor
+    return 0
 endfunction
 
 function! repl#StartWithAny(string, substringlist)
@@ -429,7 +450,7 @@ function! repl#REPLToggle(...)
                 let l:code_tobe_sent = []
                 for l:line_number in range(1, line("$"))
                     let l:gl = repl#Strip(getline(l:line_number))
-                    if l:gl =~# '^import ' || l:gl =~# '^from .* import .*'
+                    if l:gl =~# '^import ' || l:gl =~# '^from .* import .*' || l:gl =~# '^sys.path '
                         let l:code_tobe_sent = l:code_tobe_sent + [l:gl]
                     endif
                 endfor
@@ -460,6 +481,13 @@ function! repl#SendCurrentLine()
         endif
         if repl#REPLGetShortName() =~# '.*python.*'
             if exists('g:repl_auto_sends') && repl#StartWithAny(repl#Trim(getline('.')), g:repl_auto_sends)
+                let l:end_line_number = repl#SendWholeBlock()
+                if g:repl_cursor_down
+                    call cursor(l:end_line_number + 1, l:cursor_pos[2])
+                endif
+                return
+            endif
+            if exists('g:repl_auto_sends') && repl#EndWith(repl#RStrip(getline(".")), "\\")
                 let l:end_line_number = repl#SendWholeBlock()
                 if g:repl_cursor_down
                     call cursor(l:end_line_number + 1, l:cursor_pos[2])
@@ -559,7 +587,7 @@ endfunction
 
 function! repl#CheckInputState()
     let l:tl = repl#GetTerminalLine()
-    if g:currentrepltype ==# 'ipython' && (g:taskprocess == 0 || g:tasks[g:taskprocess-1] ==# '') && (g:taskprocess == len(g:tasks) || (g:tasks[g:taskprocess] !=# ''))
+    if g:currentrepltype ==# 'ipython' && (g:taskprocess == 0 || g:tasks[g:taskprocess-1] ==# '') && (g:taskprocess == len(g:tasks) || (g:tasks[g:taskprocess] !=# '')) && (len(g:tasks) > 1)
         if match(l:tl, 'In') != -1
             return 1
         else
@@ -781,7 +809,7 @@ last_out = GetLastOutput(terminal_content, "ipython")
 EOF
         if a:0 == 1
             try
-                execute "let @" . a:1 . " = '" . py3eval("last_out") . "'"
+                execute "let @" . a:1 . " = '" . pyeval("last_out") . "'"
             catch /.*/
                 echom v:exception
             endtry

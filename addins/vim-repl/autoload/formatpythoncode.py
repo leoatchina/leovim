@@ -2,7 +2,7 @@ import sys
 import os
 
 currentpath = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(currentpath)
+sys.path = [currentpath] + sys.path
 
 """
 sys.path.append("/Users/zhangyiteng/.vim/plugged/vim-repl/autoload")
@@ -13,6 +13,9 @@ sys.path.append("/Users/zhangyiteng/.vim/plugged/vim-repl/autoload")
 # except Exception:
 import replpython
 from filemanager import path
+import filemanager
+
+# print(filemanager.__file__)
 
 class UnfinishType:
     LEFT_PARAENTHESE = 1 # (
@@ -42,7 +45,7 @@ class pythoncodes:
         self.removecomments()
         if len(self.rawcontents) == 0:
             return self
-        if self.flag_mergefinishline == 1:
+        if self.flag_mergefinishline == 1 and len(self.rawcontents) > 1:
             self.mergeunfinishline()
         self.analysepythonindent()
         self.seperateintoblocks()
@@ -63,15 +66,15 @@ class pythoncodes:
                 p = path(self.filepath)
                 dot_number = len(code.split()[1]) - len(code.split()[1].lstrip("."))
                 for _ in range(dot_number - 1):
-                    p = p.parent
+                    p = p.parent()
                 # print(p)
                 if "__init__.py" not in [t[-1] for t in p.ls()]:
                     temp = code[:code.index(".")] + code[code.index(".")+dot_number:]
                 else:
                     extra = ""
                     while p and "__init__.py" in [t[-1] for t in p.ls()]:
-                        extra = p.name + "." + extra
-                        p = p.parent
+                        extra = p.name() + "." + extra
+                        p = p.parent()
                     temp = code[:code.index(".")] + extra + code[code.index(".") + dot_number:]
                 self.blocks[index] = ([temp], self.blocks[index][1])
                 # print(self.blocks)
@@ -119,9 +122,6 @@ class pythoncodes:
                 i += 1
                 continue
             if self.rawcontents[i].strip().startswith("#"):
-                # self.rawcontents = self.rawcontents[:i] + self.rawcontents[i + 1:]
-                # self.removecomments()
-                # return
                 i += 1
                 continue
             if finishflag and self.rawcontents[i].strip().startswith('"""'):
@@ -131,9 +131,6 @@ class pythoncodes:
                         break
                 i = j + 1
                 continue
-                # self.rawcontents = self.rawcontents[:i] + self.rawcontents[j+1:]
-                # self.removecomments()
-                # return
             newrawcontents.append(self.tructcomments(self.rawcontents[i]))
             i += 1
         self.rawcontents = newrawcontents
@@ -142,42 +139,34 @@ class pythoncodes:
         tempcodeindent = replpython.getpythonindent_multiline(self.rawcontents)
         newrawcontents = list()
         i = 0
-        while i < len(tempcodeindent):
+        while i < len(self.rawcontents):
             tempcodeline = ""
             j = i
-            while True:
+            while j < len(self.rawcontents):
                 tobeadded = self.rawcontents[j]
                 Flag_NeedMerge = not tempcodeindent[j][1]
                 if j != i and tempcodeindent[j-1][2] not in {UnfinishType.DOUBLEQUOTE, UnfinishType.SINGLEQUOTE, UnfinishType.LONGSTRING, UnfinishType.COMMENT}:
                     tobeadded = tobeadded.lstrip()
                 if tempcodeindent[j][2] not in {UnfinishType.LONGSTRING}:
                     tobeadded = tobeadded.rstrip()
+                if tempcodeindent[j][2] in {UnfinishType.LONGSTRING, UnfinishType.COMMENT}:
+                    tobeadded = tobeadded + "\\n"
+                    Flag_NeedMerge = True
                 if tempcodeindent[j][2] not in {UnfinishType.LONGSTRING} and self.rawcontents[j][-1] == "\\":
-                    tobeadded = tobeadded[:-1]
+                    if tempcodeindent[j][2] not in {UnfinishType.DOUBLEQUOTE, UnfinishType.SINGLEQUOTE}:
+                        tobeadded = tobeadded[:-1] + " "
+                    else:
+                        tobeadded = tobeadded[:-1]
                     Flag_NeedMerge = True
                 tempcodeline += tobeadded
                 if Flag_NeedMerge:
                     j = j + 1
                 else:
-                    i = j + 1
                     break
+            i = j + 1
             newrawcontents.append(tempcodeline)
         self.rawcontents = newrawcontents
 
-
-        # for i in range(len(self.rawcontents)):
-        #     indentlevel, finishflag, unfinishtype = replpython.getpythonindent(self.rawcontents[:i])
-        #     if not finishflag:
-        #         if unfinishtype in {UnfinishType.DOUBLEQUOTE, UnfinishType.SINGLEQUOTE, UnfinishType.LONGSTRING, UnfinishType.COMMENT}:
-        #             templine = self.rawcontents[i - 1] + self.rawcontents[i]
-        #             self.rawcontents = self.rawcontents[:i-1] + [templine] + self.rawcontents[i+1:]
-        #             self.mergeunfinishline()
-        #             return self
-        #         else:
-        #             templine = self.rawcontents[i - 1] + self.rawcontents[i].lstrip()
-        #             self.rawcontents = self.rawcontents[:i-1] + [templine] + self.rawcontents[i+1:]
-        #             self.mergeunfinishline()
-        #             return self
         return self
 
     def getindentlevel(self, line):
@@ -185,10 +174,6 @@ class pythoncodes:
 
     def analysepythonindent(self):
         self.codeindent = replpython.getpythonindent_multiline(self.rawcontents)
-        # self.codeindent = list()
-        # for i in range(len(self.rawcontents)):
-        #     indentlevel, finishflag, finishtype = replpython.getpythonindent(self.rawcontents[:(i+1)])
-        #     self.codeindent.append((indentlevel, finishflag, finishtype))
 
     def isstartofline(self, index):
         if index == 0:
@@ -210,7 +195,6 @@ class pythoncodes:
             return False
         else:
             return True
-
 
     def seperateintoblocks(self):
         index = 0
@@ -420,10 +404,10 @@ class pythoncodes:
             newcode += self.blocks[i][0]
         return newcode
 
-# @profile
 def format_to_repl(codes, pythonprogram = "ipython", mergeunfinishline=False, version="", filepath=""):
     pc = pythoncodes(replprogram=pythonprogram, flag_mergefinishline=mergeunfinishline, version=version, filepath=filepath)
     pc.getcode(codes)
+    # print(pc.generatecodes())
     return pc.generatecodes()
 
 class testreplpython:

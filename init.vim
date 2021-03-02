@@ -506,22 +506,6 @@ if v:version >= 704 || has('nvim')
 endif
 nmap g0 viio<C-[>
 " --------------------------
-" far.vim
-" --------------------------
-if !exists('g:leovim_loaded')
-    set rtp+=$ADDINS_PATH/far.vim
-endif
-let g:far#enable_undo=1
-nnoremap s<tab> :Farr<Cr>
-xnoremap s<tab> :<C-u>Farr<Cr>
-nnoremap f<tab> :F <C-r><C-w>
-xnoremap f<tab> :<C-u>F <C-r>=GetVisualSelection()<Cr>
-nnoremap F<tab> :Farf<Cr>
-xnoremap F<tab> :<C-u>Farf<Cr>
-nnoremap ,F :<C-u>Farundo<Cr>
-au FileType far nnoremap <leader>F :Fardo<Cr>
-au Filetype far nnoremap \F :Refar<Space>
-" --------------------------
 " vim-visual-multi
 " --------------------------
 if !exists('g:leovim_loaded') && (has('nvim') || v:version >=800)
@@ -592,16 +576,6 @@ nmap ;     <Plug>(clever-f-repeat-forward)
 nmap <M-z> <Plug>(clever-f-repeat-back)
 xmap ;     <Plug>(clever-f-repeat-forward)
 xmap <M-z> <Plug>(clever-f-repeat-back)
-" ------------------------
-" vim-swap
-" ------------------------
-if !exists('g:leovim_loaded')
-    set rtp+=$ADDINS_PATH/vim-swap
-endif
-omap i, <Plug>(swap-textobject-i)
-xmap i, <Plug>(swap-textobject-i)
-omap a, <Plug>(swap-textobject-a)
-xmap a, <Plug>(swap-textobject-a)
 " --------------------------
 " local settings
 " --------------------------
@@ -1724,7 +1698,7 @@ endif
 source $SETTINGS_PATH/git.vim
 source $SETTINGS_PATH/fuzzy_finder.vim
 source $SETTINGS_PATH/tree_browser.vim
-source $SETTINGS_PATH/fly_grep.vim
+source $SETTINGS_PATH/grep_tool.vim
 source $SETTINGS_PATH/complete_engine.vim
 source $SETTINGS_PATH/run_tool.vim
 source $SETTINGS_PATH/lint_tool.vim
@@ -1791,7 +1765,7 @@ if v:version >= 704
     nnoremap <M-r> :WhichKey '<lt>M-r>'<Cr>
     nnoremap <M-y> :WhichKey '<lt>M-y>'<Cr>
     " search
-    if get(g:, 'fly_grep', '') != ''
+    if get(g:, 'grep_tool', '') != ''
         nnoremap <M-f> :WhichKey '<lt>M-f>'<Cr>
         xnoremap <M-f> :WhichKeyVisual '<lt>M-f>'<Cr>
     endif
@@ -1842,8 +1816,8 @@ function! Version()
     if get(g:, 'python_exe_path', '') != ''
         let params_dict['python_exe_path'] = g:python_exe_path
     endif
-    if get(g:, 'fly_grep', '') != ''
-        let params_dict['fly_grep'] = g:fly_grep
+    if get(g:, 'grep_tool', '') != ''
+        let params_dict['grep_tool'] = g:grep_tool
     endif
     if get(g:, 'debug_tool', '') != ''
         let params_dict['debug_tool'] = g:debug_tool

@@ -48,10 +48,6 @@ git clone --depth 1 https://github.com/skywind3000/vim-terminal-help.git
 rm -rf vim-sandwich
 git clone --depth 1 https://github.com/machakann/vim-sandwich.git
 
-# vim-swap
-rm -rf vim-swap
-git clone --depth 1 https://github.com/itchyny/vim-swap.git
-
 # lightline 
 rm -rf lightline.vim 
 git clone --depth 1 https://github.com/itchyny/lightline.vim 
@@ -67,6 +63,12 @@ git clone --depth 1 https://github.com/voldikss/vim-floaterm.git
 # vim-dict 
 rm -rf vim-dict
 git clone --depth 1 https://github.com/skywind3000/vim-dict.git
+
+# vim-grepper
+rm -rf vim-grepper 
+git clone --depth 1  https://github.com/mhinz/vim-grepper.git
+rm -rf vim-grepper/pictures
+
 
 find . -type f | grep \.gitignore$ | xargs rm -f
 find . -type d | grep \.github$ | xargs rm -rf

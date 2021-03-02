@@ -526,6 +526,27 @@ CONFIGURATION                                                     *far-config*
 
     Default: |getpwd()| value.
 
+*g:far#glob_mode*
+    When using a source other than 'vimgrep', specifies how file globbing
+    should be preformed.  It can take these values:
+
+        'far'
+            Use far.vim's built-in globbing mechanism to retrieve the list of
+            files to search.  Has no external dependencies.  This is the
+            default.
+
+        'native'
+            Use the search source tool's own globbing mechanism.  Currently,
+            for sources other than 'rg'/'rgnvim' (which contains a
+            globbing mechanism), this means that a file or directory is
+            specified as the glob.
+
+        'rg'
+            This uses ripgrep's globbing mechanism, and requires ripgrep to be
+            installed.  It can be used with any external search source.  When
+            using with the 'rg' or 'rgnvim' source, it's equivalent and faster
+            to use 'native' instead.
+
 *g:far#default_mappings*
     Apply default mappings to each FAR buffer. See |far-mappings|.
 
@@ -597,6 +618,12 @@ CONFIGURATION                                                     *far-config*
     See |far-preview|, |--preview-win-height|.
 
     Default: 11
+
+*g:far#open_in_parent_window*
+    Jump to results in original window instead of the far buffer.
+
+    Options: 0, 1
+    Default: 0
 
 *g:far#file_mask_favorites*
     List of favorite file masks provided for command-line completion.
@@ -695,6 +722,13 @@ CONFIGURATION                                                     *far-config*
     |Farr| and |Farf|.
 
     Default: 1
+
+*g:far#cmdparse_mode*
+    This variable controls how arguments to :F... commands are parsed.  If set
+    to 'vim', uses a style of escaping best suited to vim patterns.  If
+    set to 'shell', it uses bash-style escaping and quoting semantics to parse
+    arguments.  The default is to use 'vim' for the 'vimgrep' source and
+    to use 'shell' for other sources.
 
 ------------------------------------------------------------------------------
 Highlighting Groups:                                    *far-highlight-config*
