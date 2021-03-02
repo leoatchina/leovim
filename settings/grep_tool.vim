@@ -7,6 +7,7 @@ let g:grepper = { 'next_tool': '<leader>s' }
 nmap gs  <plug>(GrepperOperator)
 xmap gs  <plug>(GrepperOperator)
 if Installed('ctrlsf.vim')
+    nmap <silent>qc :CtrlSFToggle<Cr>
     let g:grep_tool .= "-ctrlsf"
     let g:ctrlsf_position='right'
     let g:ctrlsf_default_root='project'
@@ -20,7 +21,6 @@ if Installed('ctrlsf.vim')
     nmap s<tab> :CtrlSFUpdate<Cr>
     xmap F<Tab> <Plug>CtrlSFVwordPath
     nmap F<Tab> <Plug>CtrlSFCwordPath
-    nmap <M-f>. :CtrlSFToggle<Cr>
     xmap <M-f>; <Plug>CtrlSFVwordExec
     nmap <M-f>; <Plug>CtrlSFCwordExec
     nmap <M-f>/ <Plug>CtrlSFPwordPath
