@@ -170,7 +170,7 @@ else
 endif
 nnoremap <M-g>d    :SignifyDiff<Cr>
 nnoremap <M-g>;    :Signify
-nnoremap <leader>s :SignifyToggle<Cr>
+nnoremap ,s :SignifyToggle<Cr>
 let g:signify_disable_by_default = 1
 " ------------------------------
 " tmux

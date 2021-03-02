@@ -5,7 +5,7 @@
 " GitHub: https://github.com/kazhala
 " ============================================================================
 
-function! floaterm#wrapper#vifm#(cmd) abort
+function! floaterm#wrapper#vifm#(cmd, jobopts, config) abort
   let s:vifm_tmpfile = tempname()
   let original_dir = getcwd()
   lcd %:p:h
@@ -20,10 +20,12 @@ function! floaterm#wrapper#vifm#(cmd) abort
 
   exe "lcd " . original_dir
   let cmd = [&shell, &shellcmdflag, cmd]
-  return [cmd, {'on_exit': funcref('s:vifm_callback')}, v:false]
+  let jobopts = {'on_exit': funcref('s:vifm_callback')}
+  call floaterm#util#deep_extend(a:jobopts, jobopts)
+  return [v:false, cmd]
 endfunction
 
-function! s:vifm_callback(...) abort
+function! s:vifm_callback(job, data, event, opener) abort
   if filereadable(s:vifm_tmpfile)
     let filenames = readfile(s:vifm_tmpfile)
     if !empty(filenames)
@@ -35,7 +37,7 @@ function! s:vifm_callback(...) abort
         let dict = {'filename': fnamemodify(filename, ':p')}
         call add(locations, dict)
       endfor
-      call floaterm#util#open(locations)
+      call floaterm#util#open(locations, a:opener)
     endif
   endif
 endfunction

@@ -4,8 +4,8 @@
 "
 " Maintainer: skywind3000 (at) gmail.com, 2020
 "
-" Last Modified: 2021/02/14 19:17
-" Verision: 1.8.6
+" Last Modified: 2021/02/26 01:18
+" Verision: 1.8.7
 "
 " for more information, please visit:
 " https://github.com/skywind3000/asynctasks.vim
@@ -580,7 +580,7 @@ function! s:collect_rtp_config() abort
 			let names += [t]
 		endif
 		if $XDG_CONFIG_HOME != ''
-			let t = $XDG_CONFIG_HOME . '/' . rtp_name
+			let t = $XDG_CONFIG_HOME . '/nvim/' . rtp_name
 		else
 			let t = expand('~/.config/nvim') . '/' . rtp_name
 		endif
@@ -1314,6 +1314,82 @@ let s:template = [
 
 
 "----------------------------------------------------------------------
+" returns a dictionary of {'name': [template-content], ... }
+"----------------------------------------------------------------------
+function! s:template_load()
+	if type(g:asynctasks_template) == 0
+		return {}
+	elseif type(g:asynctasks_template) == type({})
+		return g:asynctasks_template
+	elseif type(g:asynctasks_template) != type('')
+		return {}
+	endif
+	let template = {}
+	if has_key(s:private, 'template') == 0
+		let s:private.template = {}
+	endif
+	let fname = g:asynctasks_template
+	let fname = (strpart(fname, 0, 1) == '~')? expand(fname) : fname
+	if filereadable(fname)
+		let ts = getftime(fname)
+		if ts > get(s:private.template, 'ts', -1)
+			let text = readfile(fname)
+			let s:private.template = {'content': text, 'ts': ts, 'tp': {} }
+			let [name, body] = ['', []]
+			for line in s:private.template.content
+				if line =~ '^\s*{.*}\s*$'
+					let key = matchstr(line, '^\s*{\zs.*\ze}\s*$')
+					let key = s:strip(key)
+					if name != ''
+						let valid = []
+						for text in body
+							if s:strip(text) == ''
+								let valid += (len(valid) > 0)? [text] : []
+							else
+								let valid += [text]
+							endif
+						endfor
+						if len(valid) > 0
+							let s:private.template.tp[name] = valid
+						endif
+					endif
+					let [name, body] = [key, []]
+				else
+					let body += [line]
+				endif
+			endfor
+			if name != ''
+				let valid = []
+				for text in body
+					if s:strip(text) == ''
+						let valid += (len(valid) > 0)? [text] : []
+					else
+						let valid += [text]
+					endif
+				endfor
+				if len(valid) > 0
+					let s:private.template.tp[name] = valid
+				endif
+			endif
+			for key in keys(s:private.template.tp)
+				let body = s:private.template.tp[key]
+				while len(body) > 0
+					let pos = len(body) - 1
+					if s:strip(body[pos]) != ''
+						break
+					endif
+					call remove(body, pos)
+				endwhile
+				call extend(body, [''])
+			endfor
+		endif
+		let template = s:private.template.tp
+	endif
+	return template
+endfunc
+
+
+"----------------------------------------------------------------------
 " edit task
 "----------------------------------------------------------------------
 function! s:task_edit(mode, path, template)
@@ -1367,12 +1443,13 @@ function! s:task_edit(mode, path, template)
 		if g:asynctasks_template == 0
 			let template = ['# vim: set fenc=utf-8 ft=dosini:', '']
 		endif
-	elseif type(g:asynctasks_template) == type({})
+	else
+		let templates = s:template_load()
 		let template = ['# vim: set fenc=utf-8 ft=dosini:', '']
 		if a:template == ''
 			if get(g:, 'asynctasks_template_ask', 1) != 0
 				let choices = ['&0 empty']
-				let names = keys(g:asynctasks_template)
+				let names = keys(templates)
 				for key in names
 					if len(choices) < 10
 						let idx = len(choices)
@@ -1387,12 +1464,12 @@ function! s:task_edit(mode, path, template)
 						return 0
 					elseif choice > 1
 						let key = names[choice - 2]
-						let template += g:asynctasks_template[key]
+						let template += templates[key]
 					endif
 				endif
 			endif
-		elseif has_key(g:asynctasks_template, a:template)
-			let template += g:asynctasks_template[a:template]
+		elseif has_key(templates, a:template)
+			let template += templates[a:template]
 		endif
 	endif
 	let mods = s:strip(g:asynctasks_edit_split)
@@ -1720,11 +1797,9 @@ endfunc
 " complete for template
 "----------------------------------------------------------------------
 function! s:complete_edit(ArgLead, CmdLine, CursorPos)
-	if type(g:asynctasks_template) != type({})
-		return []
-	endif
+	let template = s:template_load()
 	let candidate = []
-	for key in keys(g:asynctasks_template)
+	for key in keys(template)
 		if key != ''
 			if stridx(key, a:ArgLead) == 0
 				let candidate += [key]

@@ -1,5 +1,13 @@
+let g:grep_tool = 'grepper'
+if !exists('g:leovim_loaded')
+    set rtp+=$ADDINS_PATH/vim-grepper
+endif
+nnoremap <leader>s :Grepper<Space>
+let g:grepper = { 'next_tool': '<leader>s' }
+nmap gs  <plug>(GrepperOperator)
+xmap gs  <plug>(GrepperOperator)
 if Installed('ctrlsf.vim')
-    let g:grep_tool = "ctrlsf"
+    let g:grep_tool .= "-ctrlsf"
     let g:ctrlsf_position='right'
     let g:ctrlsf_default_root='project'
     let g:ctrlsf_extra_root_markers=['.root', '.git', '.svn', '.hg']
@@ -18,7 +26,7 @@ if Installed('ctrlsf.vim')
     nmap <M-f>/ <Plug>CtrlSFPwordPath
     nmap <M-f>, <Plug>CtrlSFCCwordPath
 else
-    let g:grep_tool = "far"
+    let g:grep_tool .= "-far"
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/far.vim
     endif
@@ -35,17 +43,9 @@ else
 endif
 if executable('rg')
     if !MACVIM() && Installed('LeaderF')
-        if get(g:, 'grep_tool', '') == ''
-            let g:grep_tool = "leaderf"
-        else
-            let g:grep_tool .= "-leaderf"
-        endif
+        let g:grep_tool .= "-leaderf"
     elseif Installed('coc.nvim')
-        if get(g:, 'grep_tool', '') == ''
-            let g:grep_tool = "coc"
-        else
-            let g:grep_tool .= "-coc"
-        endif
+        let g:grep_tool .= "-coc"
     endif
 endif
 if get(g:, 'grep_tool', '') =~ 'leaderf'
@@ -87,11 +87,7 @@ elseif g:fuzzy_finder != 'ctrlp'
         nnoremap <M-f>x :CocSearch -S -L -x <C-R>=expand("<cword>")<CR>
         xnoremap <M-f>x :<C-U>CocSearch -S -L -x <C-R>=GetVisualSelection()<CR>
     endif
-    if get(g:, 'grep_tool', '') == ''
-        let g:grep_tool  = 'fzf'
-    else
-        let g:grep_tool .= '-fzf'
-    endif
+    let g:grep_tool .= '-fzf'
     if executable('rg')
         let s:fzf_flygrep_cmd  = 'FZFRg'
         let g:grep_tool .= 'rg'

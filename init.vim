@@ -576,16 +576,6 @@ nmap ;     <Plug>(clever-f-repeat-forward)
 nmap <M-z> <Plug>(clever-f-repeat-back)
 xmap ;     <Plug>(clever-f-repeat-forward)
 xmap <M-z> <Plug>(clever-f-repeat-back)
-" ------------------------
-" vim-swap
-" ------------------------
-if !exists('g:leovim_loaded')
-    set rtp+=$ADDINS_PATH/vim-swap
-endif
-omap i, <Plug>(swap-textobject-i)
-xmap i, <Plug>(swap-textobject-i)
-omap a, <Plug>(swap-textobject-a)
-xmap a, <Plug>(swap-textobject-a)
 " --------------------------
 " local settings
 " --------------------------
