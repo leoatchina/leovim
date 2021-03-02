@@ -98,7 +98,7 @@ endif
 " gtags
 " ------------------------------
 if WINDOWS()
-    let $GTAGSCONF = expand("$HOME/.vim-support/tools/gtags/share/gtags/gtags.conf")
+    let $GTAGSCONF = expand("$HOME/.leovim.plug/windows-tools/tools/gtags/share/gtags/gtags.conf")
 endif
 if v:version >= 800 || has('nvim')
     if executable('ctags')
