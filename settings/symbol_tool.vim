@@ -106,9 +106,6 @@ if Installed('vista.vim')
     elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
         let g:vista_default_executive = 'nvim_lsp'
         execute "nnoremap " . s:vista_finder_shortcut . " :Vista finder nvim_lsp<Cr>"
-    else
-        let g:vista_default_executive = 'fzf'
-        execute "nnoremap " . s:vista_finder_shortcut . " :Vista finder fzf<Cr>"
     endif
     unlet s:vista_finder_shortcut
 endif
