@@ -18,10 +18,6 @@ git clone --depth 1 https://github.com/ctrlpvim/ctrlp.vim.git
 rm -rf ctrlp-funky
 git clone --depth 1 https://github.com/tacahiroy/ctrlp-funky.git
 
-# ctrlp-py-mather
-rm -rf ctrlp-py-matcher
-git clone --depth 1 https://github.com/FelikZ/ctrlp-py-matcher.git
-
 # ctrlp-extensions
 rm -rf ctrlp-extensions.vim
 git clone --depth 1 https://github.com/sgur/ctrlp-extensions.vim.git

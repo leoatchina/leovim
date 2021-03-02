@@ -637,10 +637,6 @@ if g:fuzzy_finder == 'ctrlp'
                     \ },
                     \ 'fallback': s:ctrlp_fallback
                     \ }
-        if g:python_version > 2
-            set rtp+=$ADDINS_PATH/ctrlp-py-matcher
-            let g:ctrlp_match_func = {'match': 'pymatcher#PyMatch'}
-        endif
     endif
 endif
 " --------------------------

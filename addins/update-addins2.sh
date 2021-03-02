@@ -64,7 +64,7 @@ git clone --depth 1 https://github.com/voldikss/vim-floaterm.git
 rm -rf vim-dict
 git clone --depth 1 https://github.com/skywind3000/vim-dict.git
 
-# vim-dict 
+# vim-grepper
 rm -rf vim-grepper 
 git clone --depth 1  https://github.com/mhinz/vim-grepper.git
 rm -rf vim-grepper/pictures
