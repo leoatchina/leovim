@@ -302,7 +302,7 @@ let g:table_mode_header_fillchar='='
 MyPlug 'hotoo/pangu.vim'
 nnoremap qp :Pangu<Cr>
 " ------------------------------
-" fly_grep
+" grep_tool
 " ------------------------------
 MyPlug 'google/vim-searchindex'
 let g:searchindex_line_limit = 2048

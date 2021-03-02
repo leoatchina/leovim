@@ -1,5 +1,5 @@
 if Installed('ctrlsf.vim')
-    let g:fly_grep = "ctrlsf"
+    let g:grep_tool = "ctrlsf"
     let g:ctrlsf_position='right'
     let g:ctrlsf_default_root='project'
     let g:ctrlsf_extra_root_markers=['.root', '.git', '.svn', '.hg']
@@ -18,7 +18,7 @@ if Installed('ctrlsf.vim')
     nmap <M-f>/ <Plug>CtrlSFPwordPath
     nmap <M-f>, <Plug>CtrlSFCCwordPath
 else
-    let g:fly_grep = "far"
+    let g:grep_tool = "far"
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/far.vim
     endif
@@ -35,20 +35,20 @@ else
 endif
 if executable('rg')
     if !MACVIM() && Installed('LeaderF')
-        if get(g:, 'fly_grep', '') == ''
-            let g:fly_grep = "leaderf"
+        if get(g:, 'grep_tool', '') == ''
+            let g:grep_tool = "leaderf"
         else
-            let g:fly_grep .= "-leaderf"
+            let g:grep_tool .= "-leaderf"
         endif
     elseif Installed('coc.nvim')
-        if get(g:, 'fly_grep', '') == ''
-            let g:fly_grep = "coc"
+        if get(g:, 'grep_tool', '') == ''
+            let g:grep_tool = "coc"
         else
-            let g:fly_grep .= "-coc"
+            let g:grep_tool .= "-coc"
         endif
     endif
 endif
-if get(g:, 'fly_grep', '') =~ 'leaderf'
+if get(g:, 'grep_tool', '') =~ 'leaderf'
     if get(g:,'Lf_PreviewInPopup', 0) == 1
         let g:Lf_Rg_pos = "popup"
     else
@@ -74,7 +74,7 @@ if get(g:, 'fly_grep', '') =~ 'leaderf'
     xnoremap <M-f>a :<C-U><C-R>=printf("Leaderf! --stayOpen --right rg --append %s ", leaderf#Rg#visual())<CR>
     nnoremap <M-f>a :<C-R>=printf("Leaderf! --stayOpen --right rg --append %s ", expand("<cword>"))<CR>
 elseif g:fuzzy_finder != 'ctrlp'
-    if get(g:, "fly_grep", '') =~ 'coc'
+    if get(g:, "grep_tool", '') =~ 'coc'
         nnoremap <M-f>s :CocSearch -S -L<Space>
         nnoremap <M-f>c :CocSearch -S -L <C-R>=expand("<cword>")<CR><CR>
         xnoremap <M-f>c :<C-U>CocSearch -S -L <C-R>=GetVisualSelection()<CR><CR>
@@ -87,23 +87,23 @@ elseif g:fuzzy_finder != 'ctrlp'
         nnoremap <M-f>x :CocSearch -S -L -x <C-R>=expand("<cword>")<CR>
         xnoremap <M-f>x :<C-U>CocSearch -S -L -x <C-R>=GetVisualSelection()<CR>
     endif
-    if get(g:, 'fly_grep', '') == ''
-        let g:fly_grep  = 'fzf'
+    if get(g:, 'grep_tool', '') == ''
+        let g:grep_tool  = 'fzf'
     else
-        let g:fly_grep .= '-fzf'
+        let g:grep_tool .= '-fzf'
     endif
     if executable('rg')
         let s:fzf_flygrep_cmd  = 'FZFRg'
-        let g:fly_grep .= 'rg'
+        let g:grep_tool .= 'rg'
     elseif executable('ag')
         let s:fzf_flygrep_cmd  = 'FZFAg'
-        let g:fly_grep .= 'ag'
+        let g:grep_tool .= 'ag'
     elseif executable('git')
         let s:fzf_flygrep_cmd  = 'FZFGGrep'
-        let g:fly_grep .= 'ggrep'
+        let g:grep_tool .= 'ggrep'
     else
         let s:fzf_flygrep_cmd  = 'FZFGrep'
-        let g:fly_grep .= 'grep'
+        let g:grep_tool .= 'grep'
     endif
     function! s:fzf_flygrep(...)
         let fzf_flygrep_cmd = s:fzf_flygrep_cmd

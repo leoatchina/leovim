@@ -1708,7 +1708,7 @@ endif
 source $SETTINGS_PATH/git.vim
 source $SETTINGS_PATH/fuzzy_finder.vim
 source $SETTINGS_PATH/tree_browser.vim
-source $SETTINGS_PATH/fly_grep.vim
+source $SETTINGS_PATH/grep_tool.vim
 source $SETTINGS_PATH/complete_engine.vim
 source $SETTINGS_PATH/run_tool.vim
 source $SETTINGS_PATH/lint_tool.vim
@@ -1775,7 +1775,7 @@ if v:version >= 704
     nnoremap <M-r> :WhichKey '<lt>M-r>'<Cr>
     nnoremap <M-y> :WhichKey '<lt>M-y>'<Cr>
     " search
-    if get(g:, 'fly_grep', '') != ''
+    if get(g:, 'grep_tool', '') != ''
         nnoremap <M-f> :WhichKey '<lt>M-f>'<Cr>
         xnoremap <M-f> :WhichKeyVisual '<lt>M-f>'<Cr>
     endif
@@ -1826,8 +1826,8 @@ function! Version()
     if get(g:, 'python_exe_path', '') != ''
         let params_dict['python_exe_path'] = g:python_exe_path
     endif
-    if get(g:, 'fly_grep', '') != ''
-        let params_dict['fly_grep'] = g:fly_grep
+    if get(g:, 'grep_tool', '') != ''
+        let params_dict['grep_tool'] = g:grep_tool
     endif
     if get(g:, 'debug_tool', '') != ''
         let params_dict['debug_tool'] = g:debug_tool
