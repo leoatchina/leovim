@@ -7,17 +7,31 @@ if Installed('ctrlsf.vim')
                 \ "normal" : 0,
                 \ "compact": 0
                 \ }
-    nnoremap <M-j>/ :CtrlSF<Space>
-    nnoremap <M-j>, :CtrlSF <C-R><C-w>
-    xnoremap <M-j>, :<C-U>CtrlSF <C-R>=GetVisualSelection()<CR>
-    nnoremap <M-j>; :CtrlSF<Cr>
-    xnoremap <M-j>; :<C-U>CtrlSF<Cr>
-    nnoremap <M-j>. :CtrlSFUpdate<Cr>
-    nnoremap <M-j>c :CtrlSFToggle<Cr>
-    xmap <M-f>/ <Plug>CtrlSFVwordPath
-    nmap <M-f>/ <Plug>CtrlSFCwordPath
-    nmap <M-f>; <Plug>CtrlSFPwordPath
+    xmap f<tab> :<C-U>CtrlSF <C-R>=GetVisualSelection()<CR>
+    nmap f<tab> :CtrlSF<Space>
+    nmap s<tab> :CtrlSFUpdate<Cr>
+    xmap F<Tab> <Plug>CtrlSFVwordPath
+    nmap F<Tab> <Plug>CtrlSFCwordPath
+    nmap <M-f>. :CtrlSFToggle<Cr>
+    xmap <M-f>; <Plug>CtrlSFVwordExec
+    nmap <M-f>; <Plug>CtrlSFCwordExec
+    nmap <M-f>/ <Plug>CtrlSFPwordPath
     nmap <M-f>, <Plug>CtrlSFCCwordPath
+else
+    let g:fly_grep = "far"
+    if !exists('g:leovim_loaded')
+        set rtp+=$ADDINS_PATH/far.vim
+    endif
+    let g:far#enable_undo=1
+    nnoremap s<tab> :Farr<Cr>
+    xnoremap s<tab> :<C-u>Farr<Cr>
+    nnoremap f<tab> :F <C-r><C-w>
+    xnoremap f<tab> :<C-u>F <C-r>=GetVisualSelection()<Cr>
+    nnoremap F<tab> :Farf<Cr>
+    xnoremap F<tab> :<C-u>Farf<Cr>
+    nnoremap ,F :<C-u>Farundo<Cr>
+    au FileType far nnoremap <leader>F :Fardo<Cr>
+    au Filetype far nnoremap \F :Refar<Space>
 endif
 if executable('rg')
     if !MACVIM() && Installed('LeaderF')

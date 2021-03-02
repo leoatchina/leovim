@@ -506,22 +506,6 @@ if v:version >= 704 || has('nvim')
 endif
 nmap g0 viio<C-[>
 " --------------------------
-" far.vim
-" --------------------------
-if !exists('g:leovim_loaded')
-    set rtp+=$ADDINS_PATH/far.vim
-endif
-let g:far#enable_undo=1
-nnoremap s<tab> :Farr<Cr>
-xnoremap s<tab> :<C-u>Farr<Cr>
-nnoremap f<tab> :F <C-r><C-w>
-xnoremap f<tab> :<C-u>F <C-r>=GetVisualSelection()<Cr>
-nnoremap F<tab> :Farf<Cr>
-xnoremap F<tab> :<C-u>Farf<Cr>
-nnoremap ,F :<C-u>Farundo<Cr>
-au FileType far nnoremap <leader>F :Fardo<Cr>
-au Filetype far nnoremap \F :Refar<Space>
-" --------------------------
 " vim-visual-multi
 " --------------------------
 if !exists('g:leovim_loaded') && (has('nvim') || v:version >=800)
