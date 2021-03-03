@@ -91,10 +91,10 @@ if Installed('vista.vim')
     endif
     if get(g:, 'ctags_version', '') =~ 'json'
         let g:vista_default_executiveista = 'ctags'
-        nnoremap <M-/> :Vista finder ctags<Cr>
+        nnoremap <M-'> :Vista finder ctags<Cr>
         let s:vista_finder_shortcut = '<M-l>f'
     else
-        let s:vista_finder_shortcut = '<M-/>'
+        let s:vista_finder_shortcut = "<M-'>"
     endif
     if get(g:, 'complete_engine', '') == 'coc'
         let g:vista_default_executive = 'coc'

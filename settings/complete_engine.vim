@@ -232,7 +232,7 @@ elseif Installed('coc.nvim')
     call coc#config('signature.target', "float")
     call coc#config('coc.preferences.hoverTarget', "float")
     call coc#config('coc.preferences.enableFloatHighlight', v:true)
-    call coc#config('rust-analyzer.inlayHints.typeHints', v:false)
+    call coc#config('rust-analyzer.inlayHints.enable', v:false)
     " as lsp engine
     nmap H :call <SID>show_documentation()<CR>
     nmap M <Plug><coc-definition>
