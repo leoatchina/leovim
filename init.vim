@@ -1404,7 +1404,7 @@ let g:cycle_default_groups = [
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/indentLine/after
 endif
-nnoremap <M-/> :IndentLinesToggle<Cr>
+nnoremap <M-m>i :IndentLinesToggle<Cr>
 let g:indentLine_color_dark      = 1 " (default: 2)
 let g:indentLine_color_tty_light = 7 " (default: 4)
 let g:indentLine_enabled         = 0
