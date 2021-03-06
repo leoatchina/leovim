@@ -11,11 +11,7 @@ function! SetScheme(scheme, ...) abort
         endif
     catch
         try
-            if get(s:, 'tried_true_color', 0) == 0
-                execute('colorscheme '. defaultscheme)
-            else
-                colorscheme darkblue
-            endif
+            execute('colorscheme '. defaultscheme)
         catch
             colorscheme darkblue
         endtry
