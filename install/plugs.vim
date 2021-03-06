@@ -127,7 +127,7 @@ endif
 " ------------------------------
 " theme if has_trucolor
 " ------------------------------
-if get(g:, 'has_truecolor', 0) > 0 && HasPlug('theme')
+if get(g:, 'has_truecolor', 0) > 0 && HasPlug('truecolor')
     " sainnhe's themes
     MyPlug 'sainnhe/edge'
     MyPlug 'sainnhe/sonokai'
