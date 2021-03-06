@@ -10,11 +10,7 @@ function! SetScheme(scheme, ...) abort
             execute('colorscheme '. defaultscheme)
         endif
     catch
-        try
-            execute('colorscheme '. defaultscheme)
-        catch
-            colorscheme darkblue
-        endtry
+        colorscheme darkblue
     endtry
 endfunction
 " --------------------------
