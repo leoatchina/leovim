@@ -614,7 +614,7 @@ if g:fuzzy_finder == 'ctrlp'
         if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
             nnoremap <silent> <M-k>t :CtrlPTag<CR>
         else
-            nnoremap <silent> <M-t> :CtrlPTag<CR>
+            nnoremap <silent> <leader>t :CtrlPTag<CR>
         endif
         let g:ctrlp_working_path_mode = 'ra'
         let g:ctrlp_custom_ignore = {

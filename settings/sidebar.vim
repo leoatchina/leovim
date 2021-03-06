@@ -10,7 +10,7 @@ if Installed('vim-sidebar-manager')
                     \ 'open': 'TagbarOpen',
                     \ 'close': 'TagbarClose'
                     \ }
-        nnoremap <silent> <M-t> :call sidebar#toggle('tagbar')<CR>
+        nnoremap <silent> <leader>t :call sidebar#toggle('tagbar')<CR>
     endif
     if g:symbol_tool =~ 'vista'
         if get(g:, 'complete_engine', '') == 'coc' || get(g:, 'complete_engine', '') == 'vim-lsp'
@@ -20,7 +20,7 @@ if Installed('vim-sidebar-manager')
                         \ 'open': 'Vista',
                         \ 'close': 'Vista!'
                         \ }
-            nnoremap <silent> <leader>t :call sidebar#toggle('vista')<CR>
+            nnoremap <silent> <leader>T :call sidebar#toggle('vista')<CR>
         endif
         if get(g:, 'ctags_version', '') =~ 'json'
             let g:sidebars.vista_ctags = {
@@ -29,7 +29,7 @@ if Installed('vim-sidebar-manager')
                         \ 'open': 'Vista ctags',
                         \ 'close': 'Vista!'
                         \ }
-            nnoremap <silent> <M-t> :call sidebar#toggle('vista_ctags')<CR>
+            nnoremap <silent> <leader>t :call sidebar#toggle('vista_ctags')<CR>
         endif
     endif
     " =====================
@@ -134,14 +134,14 @@ if Installed('vim-sidebar-manager')
 else
     " symbol_tool
     if g:symbol_tool =~ 'vista'
-        nnoremap <leader>t :Vista!!<Cr>
+        nnoremap <leader>T :Vista!!<Cr>
         let g:vista_sidebar_position = 'vertical topleft'
         if get(g:, 'ctags_version', '') =~ 'json'
-            nnoremap <silent> <M-t> :Vista ctags<CR>
+            nnoremap <silent> <leader>t :Vista ctags<CR>
         endif
     elseif g:symbol_tool =~ 'tagbar'
         let g:tagbar_left = 1
-        nnoremap <M-t> :TagbarToggle<Cr>
+        nnoremap <leader>t :TagbarToggle<Cr>
     endif
 endif
 " AUTOClose is initied in init.vim

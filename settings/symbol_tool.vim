@@ -106,7 +106,6 @@ if Installed('vista.vim')
         let g:vista_default_executive = 'nvim_lsp'
         execute "nnoremap " . s:vista_finder_shortcut . " :Vista finder nvim_lsp<Cr>"
     endif
-    unlet s:vista_finder_shortcut
 endif
 " --------------------------
 " ctags
@@ -122,10 +121,10 @@ if executable('ctags')
     if Installed('vim-preview')
         let g:preview#preview_position = "rightbottom"
         let g:preview#preview_size = get(g:, 'preview_rows', 8)
-        nnoremap <silent> <M-:>  <C-w>}
-        nnoremap <silent> <M-;>  :PreviewTag<Cr>
-        nnoremap <silent> <M-?>  :PreviewSignature!<Cr>
-        nnoremap <silent> g<tab> :ToggleQuickfix<Cr>:PreviewList<Cr>
+        nnoremap <silent> <M-t> :ToggleQuickfix<Cr>:PreviewList<Cr>
+        nnoremap <silent> <M-:> <C-w>}
+        nnoremap <silent> <M-;> :PreviewTag<Cr>
+        nnoremap <silent> <M-?> :PreviewSignature!<Cr>
     endif
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
