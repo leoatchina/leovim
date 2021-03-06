@@ -76,12 +76,12 @@ elseif get(g:, 'complete_engine', '') == 'coc'
     if g:fuzzy_finder == 'leaderf'
         call SetScheme('sonokai', 'sublime')
     else
-        call SetScheme('ayu', 'sublime')
+        call SetScheme('ayu', 'deus')
     endif
 elseif g:fuzzy_finder == 'leaderf'
     if get(g:, 'complete_engine', '') =~ 'YCM'
         if g:complete_engine =~ 'legacy'
-            call SetScheme('oceanic_material', 'deus')
+            call SetScheme('oceanic_material', 'gruvbox')
         else
             call SetScheme('gruvbox-material', 'gruvbox')
         endif
