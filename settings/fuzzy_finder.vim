@@ -313,7 +313,7 @@ if g:fuzzy_finder == 'leaderf'
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
     nnoremap <M-h>m :Leaderf mru<Cr>
     nnoremap <M-k>b :Leaderf bufTag<cr>
-    nnoremap <M-k>a :Leaderf bufTag --all<cr>
+    nnoremap <M-k>t :Leaderf bufTag --all<cr>
     " replace origin command
     nnoremap <M-m>s :Leaderf colorscheme<Cr>
     nnoremap <M-m>t :Leaderf filetype<Cr>
@@ -424,7 +424,7 @@ elseif g:fuzzy_finder == 'fzf'
     nnoremap <M-h>m :FZFMru<CR>
     nnoremap <M-k>l :FZFBLines<CR>
     nnoremap <M-k>m :FzfLines<CR>
-    nnoremap <M-k>b :FZFBTags<CR>
+    nnoremap <M-k>b :FzfBTags<CR>
     " helptags
     if executable('perl')
         nnoremap <M-h>h :FzfHelptags<CR>
@@ -610,7 +610,7 @@ if g:fuzzy_finder == 'ctrlp'
         nnoremap <silent> <M-h>,    :CtrlPCmdline<CR>
         nnoremap <silent> <M-h>m    :CtrlPMRU<CR>
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
-        nnoremap <silent> <M-k>a    :CtrlPBufTagAll<CR>
+        nnoremap <silent> <M-k>t    :CtrlPBufTagAll<CR>
         nnoremap <silent> <M-k>l    :CtrlPLine<Cr>
         if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
             nnoremap <silent> <M-k>t :CtrlPTag<CR>
