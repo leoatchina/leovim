@@ -51,9 +51,9 @@ if Installed("fzf.vim") && Installed("fzf")
                 \ 'ctrl-v': 'vsplit'
                 \ }
     " basic shortcuts for all fuzzy_finders
-    nmap t<tab> <plug>(fzf-maps-n)
-    xmap t<tab> <plug>(fzf-maps-x)
-    omap t<tab> <plug>(fzf-maps-o)
+    nmap m<tab> <plug>(fzf-maps-n)
+    xmap m<tab> <plug>(fzf-maps-x)
+    omap m<tab> <plug>(fzf-maps-o)
     imap <c-x><c-f> <plug>(fzf-complete-path)
     if executable('rg')
         imap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
@@ -300,7 +300,7 @@ if g:fuzzy_finder == 'leaderf'
         let g:Lf_ShortcutF = '<leader>f'
     endif
     if Installed('LeaderF-marks')
-        nnoremap m<Tab> :Leaderf marks<Cr>
+        nnoremap m<Cr> :Leaderf marks<Cr>
     endif
     nnoremap qf :Leaderf quickfix<Cr>
     nnoremap ql :Leaderf loclist<Cr>
@@ -405,11 +405,11 @@ elseif g:fuzzy_finder == 'fzf'
     nnoremap <M-m>t :FzfFiletypes<CR>
     nnoremap <M-m>c :FzfCommands<CR>
     if WINDOWS()
-        nnoremap m<Tab>    :FzfMarks<CR>
+        nnoremap m<Cr>     :FzfMarks<CR>
         nnoremap <leader>w :FzfWindows<CR>
     " FZF
     else
-        nnoremap m<Tab>    :FZFMarks<CR>
+        nnoremap m<Cr>     :FZFMarks<CR>
         nnoremap <leader>w :FZFWindows<CR>
     endif
     nnoremap \| :FZFBLines <C-R>=expand('<cword>')<Cr><Cr>

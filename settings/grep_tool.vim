@@ -19,8 +19,8 @@ if Installed('ctrlsf.vim')
     xmap f<tab> :<C-U>CtrlSF <C-R>=GetVisualSelection()<CR>
     nmap f<tab> :CtrlSF<Space>
     nmap s<tab> :CtrlSFUpdate<Cr>
-    xmap F<Tab> <Plug>CtrlSFVwordPath
-    nmap F<Tab> <Plug>CtrlSFCwordPath
+    xmap t<tab> <Plug>CtrlSFVwordPath
+    nmap t<tab> <Plug>CtrlSFCwordPath
     xmap <M-f>; <Plug>CtrlSFVwordExec
     nmap <M-f>; <Plug>CtrlSFCwordExec
     nmap <M-f>/ <Plug>CtrlSFPwordPath
@@ -35,8 +35,8 @@ else
     xnoremap s<tab> :<C-u>Farr<Cr>
     nnoremap f<tab> :F <C-r><C-w>
     xnoremap f<tab> :<C-u>F <C-r>=GetVisualSelection()<Cr>
-    nnoremap F<tab> :Farf<Cr>
-    xnoremap F<tab> :<C-u>Farf<Cr>
+    nnoremap t<tab> :Farf<Cr>
+    xnoremap t<tab> :<C-u>Farf<Cr>
     nnoremap ,F :<C-u>Farundo<Cr>
     au FileType far nnoremap <leader>F :Fardo<Cr>
     au Filetype far nnoremap \F :Refar<Space>

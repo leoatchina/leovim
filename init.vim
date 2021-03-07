@@ -1125,7 +1125,7 @@ nnoremap gV `[v`]
 " ------------------------
 " marks
 " ------------------------
-nnoremap m<Tab>  :marks<Cr>
+nnoremap m<Cr>  :marks<Cr>
 function! Delmarks()
     let l:m = join(filter(
                 \ map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)'),
@@ -1134,7 +1134,7 @@ function! Delmarks()
         exe 'delmarks' l:m
     endif
 endfunction
-nnoremap <silent> m<Cr> :<c-u>call Delmarks()<cr>
+nnoremap <silent> m<Space> :call Delmarks()<cr>
 " ------------------------
 " basic toggle and show
 " ------------------------
