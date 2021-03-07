@@ -91,21 +91,21 @@ if Installed('vista.vim')
     endif
     if get(g:, 'ctags_version', '') =~ 'json'
         let g:vista_default_executiveista = 'ctags'
-        nnoremap <M-'> :Vista finder ctags<Cr>
+        nnoremap <M-/> :Vista finder ctags<Cr>
     else
-        nnoremap <M-'> <Nop>
+        nnoremap <M-/> <Nop>
     endif
     if get(g:, 'complete_engine', '') == 'coc'
         let g:vista_default_executive = 'coc'
-        nnoremap <M-/> :Vista finder coc<Cr>
+        nnoremap <M-?> :Vista finder coc<Cr>
     elseif get(g:, 'complete_engine', '') == 'vim-lsp'
         let g:vista_default_executive = 'vim_lsp'
-        nnoremap <M-/> :Vista finder vim_lsp<Cr>
+        nnoremap <M-?> :Vista finder vim_lsp<Cr>
     elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
         let g:vista_default_executive = 'nvim_lsp'
-        nnoremap <M-/> :Vista finder nvim_lsp<Cr>
+        nnoremap <M-?> :Vista finder nvim_lsp<Cr>
     else
-        nnoremap <M-/> <Nop>
+        nnoremap <M-?> <Nop>
     endif
 endif
 " --------------------------
@@ -122,16 +122,17 @@ if executable('ctags')
     if Installed('vim-preview')
         let g:preview#preview_position = "rightbottom"
         let g:preview#preview_size = get(g:, 'preview_rows', 8)
-        nnoremap <silent> <M-t> :ToggleQuickfix<Cr>:PreviewList<Cr>
         nnoremap <silent> <M-:> <C-w>}
         nnoremap <silent> <M-;> :PreviewTag<Cr>
-        nnoremap <silent> <M-?> :PreviewSignature!<Cr>
+        nnoremap <silent> <M-'> :ToggleQuickfix<Cr>:PreviewList<Cr>
     endif
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
         au FileType qf noremap <silent><buffer> <C-k> :call quickui#tools#preview_quickfix()<cr>
         au FileType qf noremap <silent><buffer> <tab> :call quickui#tools#preview_quickfix()<cr>
         nnoremap <C-k> :<C-u>call quickui#tools#preview_tag('')<Cr>
+    elseif Installed('vim-preview')
+        nnoremap <silent> <C-k> :PreviewSignature!<Cr>
     endif
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')

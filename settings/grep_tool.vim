@@ -4,8 +4,8 @@ if !exists('g:leovim_loaded')
 endif
 nnoremap <leader>s :Grepper<Tab>
 let g:grepper = {'next_tool': '<leader>s'}
-nmap gs  <plug>(GrepperOperator)
-xmap gs  <plug>(GrepperOperator)
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
 if Installed('ctrlsf.vim')
     nmap <silent>qt :CtrlSFToggle<Cr>
     let g:grep_tool .= "-ctrlsf"

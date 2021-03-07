@@ -345,7 +345,7 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
                         \     'Lf_hl_funcDirname': '^\S\+\s*\zs<.*>\ze\s*:',
                         \ },
                         \ }
-            nnoremap <M-a> :Leaderf tasks<Cr>
+            nnoremap <M-t> :Leaderf tasks<Cr>
         elseif g:fuzzy_finder == 'fzf' || g:fuzzy_finder == 'coc'
             function! s:fzf_sink(what)
                 let p1 = stridx(a:what, '<')
@@ -374,7 +374,7 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
                 call fzf#run(opts)
             endfunction
             command! -nargs=0 FZFAsyncTask call s:fzf_task()
-            nnoremap <M-a> :FZFAsyncTask<Cr>
+            nnoremap <M-t> :FZFAsyncTask<Cr>
         endif
     endif
 endif
