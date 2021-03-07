@@ -304,6 +304,7 @@ if g:fuzzy_finder == 'leaderf'
     endif
     nnoremap qf :Leaderf quickfix<Cr>
     nnoremap ql :Leaderf loclist<Cr>
+    nnoremap t<cr>  :Leaderf tag<Cr>
     nnoremap f<Cr>  :Leaderf function<Cr>
     nnoremap F<Cr>  :Leaderf function --all<Cr>
     nnoremap <M-h>, :Leaderf searchHistory<Cr>
@@ -311,7 +312,6 @@ if g:fuzzy_finder == 'leaderf'
     nnoremap <M-h>. :Leaderf --recall<Cr>
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
     nnoremap <M-h>m :Leaderf mru<Cr>
-    nnoremap <M-k>t :Leaderf tag<Cr>
     nnoremap <M-k>b :Leaderf bufTag<cr>
     nnoremap <M-k>a :Leaderf bufTag --all<cr>
     " replace origin command
@@ -418,12 +418,13 @@ elseif g:fuzzy_finder == 'fzf'
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap qf :FZFQuickFix<CR>
     nnoremap ql :FZFLocList<CR>
+    nnoremap t<cr>  :FZFTags<CR>
     nnoremap <M-h>, :FZFHistory/<CR>
     nnoremap <M-h>c :FZFHistory:<CR>
     nnoremap <M-h>m :FZFMru<CR>
     nnoremap <M-k>l :FZFBLines<CR>
-    nnoremap <M-k>b :FZFBTags<CR>
     nnoremap <M-k>m :FzfLines<CR>
+    nnoremap <M-k>b :FZFBTags<CR>
     " helptags
     if executable('perl')
         nnoremap <M-h>h :FzfHelptags<CR>

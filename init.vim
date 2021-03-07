@@ -562,7 +562,6 @@ omap ,k <Plug>(easymotion-tn)
 nmap gj <Plug>(easymotion-w)
 nmap gk <Plug>(easymotion-b)
 nmap s<Cr> <Plug>(easymotion-s2)
-nmap t<Cr> <Plug>(easymotion-t2)
 " within line jump
 map gl <Plug>(easymotion-bd-jk)
 " ------------------------

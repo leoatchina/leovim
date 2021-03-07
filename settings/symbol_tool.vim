@@ -10,7 +10,6 @@ if Installed('vim-preview')
     nnoremap <silent> <leader>E :PreviewGoto edit<Cr><C-w>z
     nnoremap <silent> <leader>V :PreviewGoto vsplit<Cr><C-w>z
     nnoremap <silent> <leader>X :PreviewGoto split<Cr><C-w>z
-    nnoremap <silent> <leader>T :PreviewGoto tabedit<Cr>gT<C-w>zgt
 endif
 " --------------------------
 " plugs_symbol
