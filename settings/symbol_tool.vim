@@ -7,9 +7,10 @@ if Installed('vim-preview')
     au FileType qf nnoremap <silent><buffer> <C-m> :PreviewQuickfix<cr>
     " preview file and openit
     nnoremap ,<Tab> :PreviewFile<Space>
-    nnoremap <silent> <leader>E :PreviewGoto edit<Cr><C-w>z
-    nnoremap <silent> <leader>V :PreviewGoto vsplit<Cr><C-w>z
-    nnoremap <silent> <leader>X :PreviewGoto split<Cr><C-w>z
+    nnoremap <silent> ,E :PreviewGoto edit<Cr><C-w>z
+    nnoremap <silent> ,V :PreviewGoto vsplit<Cr><C-w>z
+    nnoremap <silent> ,X :PreviewGoto split<Cr><C-w>z
+    nnoremap <silent> ,T :PreviewGoto tabe<Cr>gT<C-w>zgt
 endif
 " --------------------------
 " plugs_symbol
