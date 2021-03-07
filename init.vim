@@ -552,7 +552,7 @@ nnoremap L <Nop>
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easymotion
 endif
-let g:EasyMotion_keys = 'hklyuiopnm,qwertzxcvbasdgjf;'
+let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;23456789'
 map  ,. <Plug>(easymotion-repeat)
 map  ,; <Plug>(easymotion-next)
 map  ,, <Plug>(easymotion-prev)
