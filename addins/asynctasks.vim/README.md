@@ -22,6 +22,7 @@ The generic way to handle building/running/testing/deploying tasks by imitating 
     - [Ask for user input](#ask-for-user-input)
     - [Task with different profiles](#task-with-different-profiles)
     - [Different system with different commands](#different-system-with-different-commands)
+    - [Internal variables](#internal-variables)
     - [Data source for fuzzy finders](#data-source-for-fuzzy-finders)
     - [Customize runners](#customize-runners)
     - [Options](#options)
@@ -431,6 +432,7 @@ Bonus: When using `AsyncTaskProfile` command with more than one arguments:
 ```
 
 A dialog will popup to allow you pick between `debug` and `release`, and previous selected item is remembered.
+
 ### Different system with different commands
 
 This plugin can select command for given system:
@@ -454,6 +456,32 @@ let g:asynctasks_system = 'macos'
 
 Then command ending with `/macos` will be selected.
 
+### Internal variables
+
+Internal variables can be defined in the `[*]` section:
+
+```ini
+[*]
+foo=100
+bar=200
+
+[test]
+command=echo foo is $(VIM:foo) !!
+```
+
+Patterns which match `$(VIM:var_name)` in the `command` field will be substituted with the corresponding value defined in the `[*]` section. 
+
+Which means, the new command will become:
+
+    echo foo is 100
+
+Internal variable can also be defined in `g:asynctasks_environ`:
+
+    let g:asynctasks_environ = {'foo': '100', 'bar': '200' }
+
+If a variable is defined both in the `[*]` section and `g:asynctasks_environ` dict, the one in the `g:asynctasks_environ` will get higher priority.
+
+
 ### Data source for fuzzy finders
 
 A fuzzy finder can help you pick a task easily:
@@ -468,7 +496,7 @@ let current_tasks = asynctasks#list("")
 
 It returns a list of items, each item represents a task. And it can be used as the data source for fuzzy finders like `fzf.vim` or `Leaderf`.
 
-Here is a [instruction](https://github.com/skywind3000/asynctasks.vim/wiki/UI-Integration) to integrate with `fzf`, `leaderf` and `coc-list`.
+Here is an [instruction](https://github.com/skywind3000/asynctasks.vim/wiki/UI-Integration) to integrate with `fzf`, `leaderf` and `coc-list`.
 
 ### Customize runners
 
@@ -547,25 +575,41 @@ Set to zero to skip filename confirmation in `:AsyncTaskEdit`.
 
 ##### The `g:asynctasks_template` option
 
-Command `:AsyncTaskEdit` accept a template name, the content of template will be used if you are creating a new task config file:
+Command `:AsyncTaskEdit` accept a template file name, the content of template will be used if you are creating a new task config file:
 
 ```VimL
-let g:asynctasks_template = {}
-let g:asynctasks_template.cargo = [
-			\ "[project-init]",
-			\ "command=cargo update",
-			\ "cwd=<root>",
-			\ "",
-			\ "[project-build]",
-			\ "command=cargo build",
-			\ "cwd=<root>",
-			\ "errorformat=%. %#--> %f:%l:%c",
-			\ "",
-			\ "[project-run]",
-			\ "command=cargo run",
-			\ "cwd=<root>",
-			\ "output=terminal",
-			\ ]
+let g:asynctask_template = '~/.vim/task_template.ini'
+```
+
+And templates can be defined in your `~/.vim/task_template.ini` like:
+
+```ini
+{cmake}
+
+[project-init]
+command=mkdir build && cd build && cmake ..
+cwd=<root>
+[project-build]
+command=cmake --build build
+cwd=<root>
+errorformat=%. %#--> %f:%l:%c
+[project-run]
+command=build/$(VIM_PRONAME)
+cwd=<root>
+output=terminal
+
+{cargo}
+
+[project-init]
+command=cargo update
+cwd=<root>
+[project-build]
+command=cargo build
+cwd=<root>
+[project-run]
+command=cargo run
+cwd=<root>
+output=terminal
 ```
 
 Command:

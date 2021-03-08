@@ -5,11 +5,16 @@ function! floaterm#edita#vim#editor#open(target, bufnr)
   let opener = floaterm#config#get(a:bufnr, 'opener', g:floaterm_opener)
   call floaterm#util#open([{'filename': fnameescape(a:target)}], opener)
   let b:edita = a:bufnr
-  if index(['gitcommit', 'gitrebase'], &ft) > -1
+  if index([
+        \ 'COMMIT_EDITMSG',
+        \ 'git-rebase-todo',
+        \ 'addp-hunk-edit.diff'
+        \ ], expand('%:t')) > -1
     setlocal bufhidden=wipe
     augroup edita_buffer
       autocmd! * <buffer>
       autocmd BufDelete <buffer> call s:BufDelete()
+      autocmd BufDelete <buffer> call timer_start(100, {->floaterm#curr()})
     augroup END
   else
     if !has('win32')

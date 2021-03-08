@@ -73,9 +73,9 @@ class pythoncodes:
                 else:
                     extra = ""
                     while p and "__init__.py" in [t[-1] for t in p.ls()]:
-                        extra = p.name() + "." + extra
-                        p = p.parent()
-                    temp = code[:code.index(".")] + extra + code[code.index(".") + dot_number:]
+                        extra = p.name + ("." if extra else "") + extra
+                        p = p.parent
+                    temp = code[:code.index(".")] + extra + ("." if not code[code.index(".") + dot_number:].startswith(" ") else "") + code[code.index(".") + dot_number:]
                 self.blocks[index] = ([temp], self.blocks[index][1])
                 # print(self.blocks)
         # print(self.blocks)
