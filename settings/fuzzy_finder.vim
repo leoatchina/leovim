@@ -8,7 +8,7 @@ if Installed("fzf.vim") && Installed("fzf")
         let g:fuzzy_finder = 'fzf'
     endif
     if get(g:, 'terminal_plus', '') =~ 'floaterm'
-        if g:fuzzy_finder == 'leaderf'
+        if get(g:, 'fuzzy_finder', '') == 'leaderf'
             nnoremap <M-h>f :Leaderf floaterm<Cr>
         elseif Installed('fzf-floaterm')
             nnoremap <M-h>f :Floaterms<Cr>
@@ -251,7 +251,7 @@ if Installed("fzf.vim") && Installed("fzf")
         nnoremap <M-a> :FZFJumps<cr>
     endif
 endif
-if g:fuzzy_finder == 'leaderf'
+if get(g:, 'fuzzy_finder', '') == 'leaderf'
     au FileType leaderf set nonu
     if executable('ctags')
         if WINDOWS()
@@ -397,7 +397,7 @@ if g:fuzzy_finder == 'leaderf'
                 \}
     " Customize normal mode mapping using g:Lf_NormalMap
     let g:Lf_NormalMap.Filer = [['B', ':LeaderfBookmark<CR>']]
-elseif g:fuzzy_finder == 'fzf'
+elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap ,f        :FZFFiles<Cr>
     nnoremap <leader>b :FzfBuffers<CR>
     " replace origin command
@@ -581,10 +581,11 @@ if Installed('coc.nvim')
     inoremap <silent><expr> <Down> coc#util#has_float() ? FloatScroll(1) : "\<Down>"
     inoremap <silent><expr> <Up>   coc#util#has_float() ? FloatScroll(0) : "\<Up>""
 endif
-let g:fuzzy_finder = get(g:, 'fuzzy_finder', 'ctrlp')
-if g:fuzzy_finder == 'ctrlp'
+if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf'
+    if g:fuzzy_finder == ''
+        let g:fuzzy_finder = 'ctrlp'
+    endif
     let g:ctrlp_map        = '<leader>f'
-    let g:fuzzy_finder     = get(g:, 'fuzzy_finder', 'ctrlp')
     let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ctrlp.vim
@@ -602,7 +603,7 @@ if g:fuzzy_finder == 'ctrlp'
     if !Installed('fzf-funky')
         nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
     endif
-    if g:fuzzy_finder == 'ctrlp'
+    if get(g:, 'fuzzy_finder', '') == 'ctrlp'
         nnoremap <silent> ,p        :CtrlPYankring<Cr>
         nnoremap <silent> <leader>p :registers<Cr>
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
