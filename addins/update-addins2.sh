@@ -70,8 +70,9 @@ git clone --depth 1  https://github.com/mhinz/vim-grepper.git
 rm -rf vim-grepper/pictures
 
 
+# delete files and dirs
 find . -type f | grep \.gitignore$ | xargs rm -f
-find . -type d | grep \.github$ | xargs rm -rf
-find . -type d | grep \.git$ | xargs rm -rf
-find . -type d | grep test$ | xargs rm -rf
-find . -type d | grep asses$ | xargs rm -rf
+find . -type d | grep \.github$    | xargs rm -rf
+find . -type d | grep \.git$       | xargs rm -rf
+find . -type d | grep test$        | xargs rm -rf
+find . -type d | grep asses$       | xargs rm -rf
