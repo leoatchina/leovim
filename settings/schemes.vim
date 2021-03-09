@@ -65,7 +65,7 @@ elseif HasPlug('oceanic_material')
 " schmes auto selected
 " --------------------------
 elseif get(g:, 'complete_engine', '') == ''
-    colorscheme space-vim-dark
+    colorscheme dracula
 elseif get(g:, 'complete_engine', '') == 'apc'
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
         call SetScheme('dogrun', 'atom-dark-256')
@@ -91,7 +91,7 @@ elseif g:fuzzy_finder == 'leaderf'
         call SetScheme('tokyonight', 'codedark')
     endif
 else
-    call SetScheme('embark', 'dracula')
+    call SetScheme('embark', 'space-vim-dark')
 endif
 " settings for scheme
 try
