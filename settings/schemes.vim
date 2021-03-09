@@ -68,9 +68,9 @@ elseif get(g:, 'complete_engine', '') == ''
     colorscheme space-vim-dark
 elseif get(g:, 'complete_engine', '') == 'apc'
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        call SetScheme('edge', 'one')
-    else
         call SetScheme('dogrun', 'atom-dark-256')
+    else
+        call SetScheme('edge', 'one')
     endif
 elseif get(g:, 'complete_engine', '') == 'coc'
     if g:fuzzy_finder == 'leaderf'
