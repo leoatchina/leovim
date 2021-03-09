@@ -68,7 +68,7 @@ elseif get(g:, 'complete_engine', '') == ''
     colorscheme dracula
 elseif get(g:, 'complete_engine', '') == 'apc'
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        call SetScheme('dogrun', 'atom-dark-256')
+        call SetScheme('dogrun', 'space-vim-dark')
     else
         call SetScheme('embark', 'space-vim-dark')
     endif
@@ -125,5 +125,5 @@ try
         let g:oceanic_next_terminal_bold = get(g:, 'oceanic_next_terminal_bold', 0)
     endif
 catch
-    colorscheme desert
+    colorscheme atom-dark-256
 endtry
