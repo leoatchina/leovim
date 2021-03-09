@@ -11,4 +11,8 @@ if get(g:, 'markdown_tool', '') =~ 'markdown'
         au FileType markdown nmap <leader>R <Plug>MarkdownPreview
         au FileType markdown nmap <leader>S <Plug>MarkdownPreviewStop
     endif
+    if Installed("preview-markdown.vim")
+        au FileType markdown nmap <leader>M :PreviewMarkdown<cr>
+        let g:preview_markdown_vertical = 1
+    endif
 endif

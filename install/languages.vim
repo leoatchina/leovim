@@ -123,6 +123,9 @@ if HasPlug('writing')
         MyPlug 'iamcco/markdown-preview.vim', {'for':'markdown'}
         MyPlug 'iamcco/mathjax-support-for-mkdp', {'for':'markdown'}
     endif
+    if executable('mdr') && (has('nvim') || has('vim-8.1.1401'))
+        MyPlug 'skanehira/preview-markdown.vim'
+    endif
 endif
 " --------------------------
 " latex

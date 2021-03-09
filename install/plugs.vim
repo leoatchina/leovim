@@ -245,12 +245,12 @@ endif
 if has('nvim') || v:version >= 800
     " translate
     MyPlug 'voldikss/vim-translate-me'
-    nmap <silent> S <Plug>Translate
-    xmap <silent> S <Plug>TranslateV
+    nmap <silent> zs <Plug>Translate
+    xmap <silent> zs <Plug>TranslateV
     if (has('nvim') || has('patch-8.1.1615'))
         "翻译光标下的文本，在窗口中显示
-        nmap <silent> zs <Plug>TranslateW
-        xmap <silent> zs <Plug>TranslateWV
+        nmap <silent> zw <Plug>TranslateW
+        xmap <silent> zw <Plug>TranslateWV
     endif
     if HasPlug('document')
         if MACOS()
@@ -262,7 +262,8 @@ if has('nvim') || v:version >= 800
             MyPlug 'KabbAmine/zeavim.vim'
             nmap z/ :Zeavim
             nmap z\ <Plug>ZVKeyDocset
-            nmap zw <Plug>ZVOperator
+            nmap gz <Plug>ZVOperator
+            omap gz <Plug>ZVOperator
             nmap zg <Plug>Zeavim
             xmap zg <Plug>ZVVisSelection
         endif
