@@ -70,7 +70,7 @@ elseif get(g:, 'complete_engine', '') == 'apc'
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
         call SetScheme('dogrun', 'atom-dark-256')
     else
-        call SetScheme('edge', 'one')
+        call SetScheme('embark', 'space-vim-dark')
     endif
 elseif get(g:, 'complete_engine', '') == 'coc'
     if g:fuzzy_finder == 'leaderf'
@@ -91,7 +91,7 @@ elseif g:fuzzy_finder == 'leaderf'
         call SetScheme('tokyonight', 'codedark')
     endif
 else
-    call SetScheme('embark', 'space-vim-dark')
+    call SetScheme('edge', 'one')
 endif
 " settings for scheme
 try
