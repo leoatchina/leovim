@@ -5,15 +5,15 @@ if get(g:, 'complete_engine', '') == 'YCM'
     nnoremap <M-k>d :YcmDiags<Cr>
 endif
 if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
-    " if WINDOWS()
-    "     if get(g:, 'fuzzy_finder', '') == 'leaderf'
-    "         nnoremap <silent> <leader>d :CocDiagnostics<CR>:CloseQuickfix<Cr>:Leaderf loclist<Cr>
-    "     else
-    "         nnoremap <silent> <leader>d :CocDiagnostics<CR>
-    "     endif
-    " else
-    "     nnoremap <silent> <leader>d :CocFzfList diagnostics<CR>
-    " endif
+    if WINDOWS()
+        if get(g:, 'fuzzy_finder', '') == 'leaderf'
+            nnoremap <silent> <leader>d :silent CocDiagnostics<CR>:lclose<Cr>:Leaderf loclist<Cr>
+        else
+            nnoremap <silent> <leader>d :CocDiagnostics<CR>
+        endif
+    else
+        nnoremap <silent> <leader>d :CocFzfList diagnostics<CR>
+    endif
     nmap <silent> <M-k>n <Plug>(coc-diagnostic-next-error)
     nmap <silent> <M-k>p <Plug>(coc-diagnostic-prev-error)
     highlight def CocUnderLine cterm=NONE gui=NONE
@@ -31,25 +31,32 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
                 \ "--max-line-length=160",
                 \ "--ignore=" . s:flake8_ignore,
                 \ ])
-endif
-if get(g:, 'lint_tool', '') != ''
+elseif get(g:, 'lint_tool', '') != ''
     function! s:showLint() abort
-        if g:lint_tool == 'ale'
-            silent ALELint
-        elseif g:lint_tool == 'coc'
-            silent CocDiagnostics
-        elseif g:lint_tool == 'vim-lsp'
-            silent LspDocumentDiagnostic
-            if len(getloclist(0)) > 0
-                lclose
+        if get(g:, 'fuzzy_finder', '') == 'leaderf' || !WINDOWS() && get(g:, 'fuzzy_finder', '') == 'fzf'
+            if g:lint_tool == 'ale'
+                silent ALELint
+            elseif g:lint_tool == 'vim-lsp'
+                silent LspDocumentDiagnostic
+                if len(getloclist(0)) > 0
+                    lclose
+                endif
+            else
+                silent Neomake!
             endif
-        elseif g:lint_tool == 'neomake'
-            silent Neomake!
-        endif
-        if g:fuzzy_finder == 'leaderf'
-            LeaderfLocList
+            if g:fuzzy_finder == 'leaderf'
+                LeaderfLocList
+            else
+                FZFLocList
+            endif
         else
-            FZFLocList
+            if g:lint_tool == 'ale'
+                ALELint
+            elseif g:lint_tool == 'vim-lsp'
+                LspDocumentDiagnostic
+            else
+                Neomake!
+            endif
         endif
     endf
     command! -bang -nargs=* ShowLint call s:showLint()
