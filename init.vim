@@ -606,12 +606,10 @@ set smartcase
 set ignorecase
 set showmatch
 set expandtab
+set list listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:+
 set wildcharm=<tab>
-set background=dark
 set shiftwidth=4
 set softtabstop=4
-set buftype=
-set switchbuf=split
 set backspace=indent,eol,start
 set linespace=0
 set enc=utf8
@@ -634,6 +632,7 @@ endtry
 " -----------------------------------
 " switchbuf
 " -----------------------------------
+set buftype=
 set switchbuf=useopen,usetab,newtab
 " -----------------------------------
 " wildmenu
