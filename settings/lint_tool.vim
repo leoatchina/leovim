@@ -6,11 +6,13 @@ if get(g:, 'complete_engine', '') == 'YCM'
 endif
 if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
     if WINDOWS()
-        nnoremap <silent> <leader>d :CocDiagnostics<CR>
-        nnoremap <M-k>c :CocDiagnostics
+        if get(g:, 'fuzzy_finder', '') == 'leaderf'
+            nnoremap <silent> <leader>d :CocDiagnostics<CR>:CloseQuickfix<Cr>:Leaderf loclist<Cr>
+        else
+            nnoremap <silent> <leader>d :CocDiagnostics<CR>
+        endif
     else
         nnoremap <silent> <leader>d :CocFzfList diagnostics<CR>
-        nnoremap <M-k>c :CocFzfList diagnostics
     endif
     nmap <silent> <M-k>n <Plug>(coc-diagnostic-next-error)
     nmap <silent> <M-k>p <Plug>(coc-diagnostic-prev-error)
@@ -62,9 +64,9 @@ elseif get(g:, 'lint_tool', '') != ''
         nnoremap <silent> <M-k>, :LspPreviousDiagnostic<Cr>
         nnoremap <silent> <M-k>; :LspNextDiagnostic<Cr>
     elseif g:lint_tool == 'ale' && Installed('ale')
+        nmap <M-k>c :ALE<Tab>
         nmap <M-k>p <Plug>(ale_previous_error)
         nmap <M-k>n <Plug>(ale_next_error)
-        nnoremap <M-k>c :ALE
         let g:ale_disable_lsp          = 0
         let g:ale_completion_enabled   = 0
         let g:ale_virtualtext_cursor   = 0
@@ -145,7 +147,7 @@ elseif get(g:, 'lint_tool', '') != ''
                     \ 'text': '-',
                     \ 'texthl': 'NeomakeMessage',
                     \ }
-        nnoremap <M-k>c :Neomake
+        nnoremap <M-k>c :Neomake<Tab>
         nnoremap <M-k>p :cprev<cr>
         nnoremap <M-k>n :cnext<cr>
     endif

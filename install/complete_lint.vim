@@ -40,6 +40,9 @@ if !HasPlug('no-complete')
     elseif HasPlug('coc') && executable('node') && (executable('npm') || executable('yarn'))
         if v:version >= 802 || has('nvim')
             let g:complete_engine = 'coc'
+            if WINDOWS()
+                let g:lint_tool = 'coc'
+            endif
         else
             echoe "Cannot install coc, smart select a complete_engine."
             let s:smart_engine_select = 1
@@ -47,6 +50,9 @@ if !HasPlug('no-complete')
     elseif HasPlug('vim-lsp')
         if has('nvim') || v:version >= 800
             let g:complete_engine = "vim-lsp"
+            if WINDOWS()
+                let g:lint_tool = 'vim-lsp'
+            endif
         else
             echoe "Cannot install vim-lsp, smart select a complete_engine."
             let s:smart_engine_select = 1
