@@ -5,15 +5,15 @@ if get(g:, 'complete_engine', '') == 'YCM'
     nnoremap <M-k>d :YcmDiags<Cr>
 endif
 if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
-    if WINDOWS()
-        if get(g:, 'fuzzy_finder', '') == 'leaderf'
-            nnoremap <silent> <leader>d :CocDiagnostics<CR>:CloseQuickfix<Cr>:Leaderf loclist<Cr>
-        else
-            nnoremap <silent> <leader>d :CocDiagnostics<CR>
-        endif
-    else
-        nnoremap <silent> <leader>d :CocFzfList diagnostics<CR>
-    endif
+    " if WINDOWS()
+    "     if get(g:, 'fuzzy_finder', '') == 'leaderf'
+    "         nnoremap <silent> <leader>d :CocDiagnostics<CR>:CloseQuickfix<Cr>:Leaderf loclist<Cr>
+    "     else
+    "         nnoremap <silent> <leader>d :CocDiagnostics<CR>
+    "     endif
+    " else
+    "     nnoremap <silent> <leader>d :CocFzfList diagnostics<CR>
+    " endif
     nmap <silent> <M-k>n <Plug>(coc-diagnostic-next-error)
     nmap <silent> <M-k>p <Plug>(coc-diagnostic-prev-error)
     highlight def CocUnderLine cterm=NONE gui=NONE
@@ -31,10 +31,13 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
                 \ "--max-line-length=160",
                 \ "--ignore=" . s:flake8_ignore,
                 \ ])
-elseif get(g:, 'lint_tool', '') != ''
+endif
+if get(g:, 'lint_tool', '') != ''
     function! s:showLint() abort
         if g:lint_tool == 'ale'
             silent ALELint
+        elseif g:lint_tool == 'coc'
+            silent CocDiagnostics
         elseif g:lint_tool == 'vim-lsp'
             silent LspDocumentDiagnostic
             if len(getloclist(0)) > 0
