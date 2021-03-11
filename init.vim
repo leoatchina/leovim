@@ -1571,6 +1571,8 @@ if has('statusline')
     set laststatus=2
     if get(g:, 'lint_tool', '') == 'ale'
         MyPlug 'maximbaz/lightline-ale'
+    elseif get(g:, 'lint_tool', '') == 'vim-lsp'
+        MyPlug 'halkn/lightline-lsp'
     endif
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/lightline.vim
