@@ -40,9 +40,6 @@ if !HasPlug('no-complete')
     elseif HasPlug('coc') && executable('node') && (executable('npm') || executable('yarn'))
         if v:version >= 802 || has('nvim')
             let g:complete_engine = 'coc'
-            if WINDOWS()
-                let g:lint_tool = 'coc'
-            endif
         else
             echoe "Cannot install coc, smart select a complete_engine."
             let s:smart_engine_select = 1
@@ -50,9 +47,6 @@ if !HasPlug('no-complete')
     elseif HasPlug('vim-lsp')
         if has('nvim') || v:version >= 800
             let g:complete_engine = "vim-lsp"
-            if WINDOWS()
-                let g:lint_tool = 'vim-lsp'
-            endif
         else
             echoe "Cannot install vim-lsp, smart select a complete_engine."
             let s:smart_engine_select = 1
@@ -74,10 +68,12 @@ endif
 " ------------------------------
 if has('timers') && get(g:, 'complete_engine', '') != 'apc' && get(g:, 'complete_engine', '') != ''
     let g:lsp_diagnostics_enabled = 0
-    if get(g:, 'complete_engine', '') == "vim-lsp" && get(g:, 'lint_tool', '') == 'vim-lsp'
+    if get(g:, 'complete_engine', '') == "vim-lsp" && (get(g:, 'lint_tool', '') == 'vim-lsp' || WINDOWS())
+        let g:lint_tool = 'vim-lsp'
         let g:lsp_diagnostics_enabled = 1
         nnoremap <silent> <M-k>d :<C-u>LspDocumentDiagnostic<Cr>
-    elseif get(g:, 'complete_engine', '') == 'coc' && get(g:, 'lint_tool', '') == 'coc'
+    elseif get(g:, 'complete_engine', '') == 'coc' && (get(g:, 'lint_tool', '') == 'coc' || WINDOWS())
+        let g:lint_tool = 'coc'
         nnoremap <M-k>d :<C-u>CocDiagnostics<Cr>
     elseif (has('nvim') || v:version >= 800) && get(g:, 'lint_tool', '') != 'neomake'
         let g:lint_tool = 'ale'

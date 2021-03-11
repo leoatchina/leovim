@@ -43,7 +43,7 @@ elseif get(g:, 'lint_tool', '') != ''
         elseif g:lint_tool == 'neomake'
             silent Neomake!
         endif
-        if g:fuzzy_finder == 'leaderf' && !WINDOWS()
+        if g:fuzzy_finder == 'leaderf'
             LeaderfLocList
         else
             FZFLocList
