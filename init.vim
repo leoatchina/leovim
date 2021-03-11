@@ -606,9 +606,6 @@ set smartcase
 set ignorecase
 set showmatch
 set expandtab
-if !WINDOWS() || has('nvim')
-    set list listchars=tab: \ ,extends: ,precedes: ,nbsp:+
-endif
 set wildcharm=<tab>
 set shiftwidth=4
 set softtabstop=4
