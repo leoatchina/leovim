@@ -1520,10 +1520,10 @@ if get(g:, 'has_terminal', 0) > 0
         endif
         nnoremap <M-h>o :Floaterm
         nnoremap <M-h>n :FloatermNew<Space>
-        let g:floaterm_keymap_new   = '<Nop>'
-        let g:floaterm_keymap_prev  = '<M-{>'
-        let g:floaterm_keymap_next  = '<M-}>'
-        let g:floaterm_open_command = 'drop'
+        let g:floaterm_keymap_new    = '<Nop>'
+        let g:floaterm_keymap_prev   = '<M-{>'
+        let g:floaterm_keymap_next   = '<M-}>'
+        let g:floaterm_open_command  = 'drop'
         let g:floaterm_keymap_toggle = '<M-=>'
     endif
 endif
@@ -1571,8 +1571,6 @@ if has('statusline')
     set laststatus=2
     if get(g:, 'lint_tool', '') == 'ale'
         MyPlug 'maximbaz/lightline-ale'
-    elseif get(g:, 'lint_tool', '') == 'neomake'
-        MyPlug 'sinetoami/lightline-neomake'
     endif
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/lightline.vim

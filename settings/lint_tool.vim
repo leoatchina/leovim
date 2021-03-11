@@ -34,15 +34,13 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
 elseif get(g:, 'lint_tool', '') != ''
     function! s:showLint() abort
         if get(g:, 'fuzzy_finder', '') == 'leaderf' || !WINDOWS() && get(g:, 'fuzzy_finder', '') == 'fzf'
-            if g:lint_tool == 'ale'
-                silent ALELint
-            elseif g:lint_tool == 'vim-lsp'
+            if g:lint_tool == 'vim-lsp'
                 silent LspDocumentDiagnostic
                 if len(getloclist(0)) > 0
                     lclose
                 endif
             else
-                silent Neomake!
+                silent ALELint
             endif
             if g:fuzzy_finder == 'leaderf'
                 LeaderfLocList
@@ -50,30 +48,28 @@ elseif get(g:, 'lint_tool', '') != ''
                 FZFLocList
             endif
         else
-            if g:lint_tool == 'ale'
-                ALELint
-            elseif g:lint_tool == 'vim-lsp'
+            if g:lint_tool == 'vim-lsp'
                 LspDocumentDiagnostic
             else
-                Neomake!
+                ALELint
             endif
         endif
-    endf
+    endfunction
     command! -bang -nargs=* ShowLint call s:showLint()
     nnoremap <silent> <leader>d :ShowLint<Cr>
     if get(g:, 'complete_engine', '') == 'coc' && Installed('coc.nvim')
         call coc#config('diagnostic.enable', v:false)
     endif
-    if g:lint_tool == 'vim-lsp'
-	let g:lsp_diagnostics_echo_cursor = 1
-	let g:lsp_highlights_enabled      = 1
-	let g:lsp_virtual_text_enabled    = 0
-	let g:lsp_textprop_enabled        = 0
+    if g:lint_tool == 'vim-lsp' && Installed('vim-lsp')
+        let g:lsp_diagnostics_echo_cursor = 1
+        let g:lsp_highlights_enabled      = 1
+        let g:lsp_virtual_text_enabled    = 0
+        let g:lsp_textprop_enabled        = 0
         nnoremap <silent> <M-k>p :LspPreviousError<Cr>
         nnoremap <silent> <M-k>n :LspNextError<Cr>
         nnoremap <silent> <M-k>, :LspPreviousDiagnostic<Cr>
         nnoremap <silent> <M-k>; :LspNextDiagnostic<Cr>
-    elseif g:lint_tool == 'ale' && Installed('ale')
+    elseif Installed('ale')
         nmap <M-k>c :ALE<Tab>
         nmap <M-k>p <Plug>(ale_previous_error)
         nmap <M-k>n <Plug>(ale_next_error)
@@ -114,51 +110,5 @@ elseif get(g:, 'lint_tool', '') != ''
         if get(g:, 'complete_engine', '') == 'coc' && Installed('coc.nvim')
             call coc#config('diagnostic.displayByAle', v:true)
         endif
-    elseif g:lint_tool == 'neomake' && Installed('neomake')
-        call neomake#configure#automake('rw', 500)
-        let g:neomake_open_list = 0
-        let g:neomake_virtualtext_current_error = 0
-        let g:neomake_echo_current_error        = 1
-        let g:neomake_echo_current_error        = 1
-        let g:neomake_highlight_columns         = 1
-        let g:neomakemp_exclude_files    = ['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
-        let g:neomakemp_exclude_dirs     = ['.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn']
-        let g:neomake_python_flake8_maker = {
-                    \ 'args': ['--max-line-length=160', '--ignore=' . s:flake8_ignore],
-                    \ 'errorformat':
-                    \ '%E%f:%l: could not compile,%-Z%p^,' .
-                    \ '%A%f:%l:%c: %t%n %m,' .
-                    \ '%A%f:%l: %t%n %m,' .
-                    \ '%-G%.%#',
-                    \ }
-        let g:neomake_python_enabled_makers = ['flake8']
-        let g:neomake_r_lintr_maker = {
-                    \ 'exe': 'R',
-                    \ 'args': ['-e lintr::lint("%:p")'],
-                    \ 'errorformat':
-                    \ '%W%f:%l:%c: style: %m,' .
-                    \ '%W%f:%l:%c: warning: %m,' .
-                    \ '%E%f:%l:%c: error: %m,'
-                    \ }
-        let g:neomake_r_enabled_makers = ['lintr']
-        let g:neomake_error_sign = {
-                    \ 'text': 'x',
-                    \ 'texthl': 'NeomakeError',
-                    \ }
-        let g:neomake_warning_sign = {
-                    \ 'text': '!',
-                    \ 'texthl': 'NeomakeWarning',
-                    \ }
-        let g:neomake_info_sign = {
-                    \ 'text': '>',
-                    \ 'texthl': 'NeomakeInfo'
-                    \ }
-        let g:neomake_message_sign = {
-                    \ 'text': '-',
-                    \ 'texthl': 'NeomakeMessage',
-                    \ }
-        nnoremap <M-k>c :Neomake<Tab>
-        nnoremap <M-k>p :cprev<cr>
-        nnoremap <M-k>n :cnext<cr>
     endif
 endif

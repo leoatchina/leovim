@@ -66,7 +66,7 @@ endif
 " ------------------------------
 " lint tool
 " ------------------------------
-if get(g:, 'complete_engine', '') != 'apc' && get(g:, 'complete_engine', '') != ''
+if index(['YCM', 'vim-lsp', 'coc'], get(g:, 'complete_engine', '')) >=0
     let g:lsp_diagnostics_enabled = 0
     if get(g:, 'complete_engine', '') == "vim-lsp" && (get(g:, 'lint_tool', '') == 'vim-lsp' || WINDOWS())
         let g:lint_tool = 'vim-lsp'
@@ -75,13 +75,14 @@ if get(g:, 'complete_engine', '') != 'apc' && get(g:, 'complete_engine', '') != 
     elseif get(g:, 'complete_engine', '') == 'coc' && (get(g:, 'lint_tool', '') == 'coc' || WINDOWS())
         let g:lint_tool = 'coc'
         nnoremap <M-k>d :<C-u>CocDiagnostics<Cr>
-    elseif (has('nvim') || v:version >= 800) && get(g:, 'lint_tool', '') != 'neomake'
+    elseif has('nvim') || v:version >= 800
         let g:lint_tool = 'ale'
         MyPlug 'dense-analysis/ale'
-    elseif (has('nvim') || has('patch-7.4.503')) && index(['', 'neomake'], get(g:, 'lint_tool', '')) >= 0
-        let g:lint_tool = 'neomake'
-        MyPlug 'neomake/neomake'
+    else
+        let g:lint_tool = ''
     endif
+else
+    let g:lint_tool = ''
 endif
 " ------------------------------
 " ai_engine
