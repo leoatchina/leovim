@@ -389,13 +389,15 @@ elseif Installed('vim-lsp')
                     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
                     \ })
     endif
-else
+elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'
+else
+    let g:complete_engine = ''
 endif
 """"""""""""""""""""
 " APC settings
 """"""""""""""""""""
-if get(g:, 'complete_engine', '') != '' && !HasPlug('no-complete')
+if get(g:, 'complete_engine', '') != ''
     if get(g:, 'complete_engine', '') == 'apc'
         let g:apc_enable_ft = get(g:, 'apc_enable_ft', {'*':1})
     else
