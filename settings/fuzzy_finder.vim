@@ -582,7 +582,7 @@ if Installed('coc.nvim')
     inoremap <silent><expr> <Up>   coc#util#has_float() ? FloatScroll(0) : "\<Up>""
 endif
 if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf'
-    if g:fuzzy_finder == ''
+    if get(g:, 'fuzzy_finder', '') == ''
         let g:fuzzy_finder = 'ctrlp'
     endif
     let g:ctrlp_map        = '<leader>f'
