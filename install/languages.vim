@@ -1,10 +1,4 @@
 " --------------------------
-" file syntax support
-" --------------------------
-if has('nvim') || v:version >= 800
-    MyPlug 'sheerun/vim-polyglot'
-endif
-" --------------------------
 " R language
 " --------------------------
 if HasPlug('R') && executable('R') && (has('nvim') || v:version >= 801)
