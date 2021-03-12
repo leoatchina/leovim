@@ -106,6 +106,21 @@ nnoremap <silent> g<cr> :call GoToDefinitionOrTagOrSearch("v")<Cr>
 " --------------------------
 " complete_engine
 " --------------------------
+let g:ycm_filetype_blacklist = {
+    \ 'coc-explorer': 1,
+    \ 'tagbar':       1,
+    \ 'vista':        1,
+    \ 'leaderf':      1,
+    \ 'fzf':          1,
+    \ 'gitcommit':    1,
+    \ 'php':          1,
+    \ 'markdown':     1,
+    \ 'text':         1,
+    \ 'nginx':        1,
+    \ 'yml':          1,
+    \ 'json':         1,
+    \ 'log':          1,
+    \ }
 if Installed('YouCompleteMe')
     let g:ycm_python_binary_path = g:python3_host_prog
     if WINDOWS()
@@ -374,29 +389,13 @@ elseif Installed('vim-lsp')
                     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
                     \ })
     endif
-endif
-if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
-    set rtp+=$ADDINS_PATH/vim-dict
+else
+    let g:complete_engine = 'apc'
 endif
 """"""""""""""""""""
 " APC settings
 """"""""""""""""""""
-let g:ycm_filetype_blacklist = {
-    \ 'coc-explorer': 1,
-    \ 'tagbar':       1,
-    \ 'vista':        1,
-    \ 'leaderf':      1,
-    \ 'fzf':          1,
-    \ 'gitcommit':    1,
-    \ 'php':          1,
-    \ 'markdown':     1,
-    \ 'text':         1,
-    \ 'nginx':        1,
-    \ 'yml':          1,
-    \ 'json':         1,
-    \ 'log':          1,
-    \ }
-if get(g:, 'complete_engine', '') != ''
+if get(g:, 'complete_engine', '') != '' && !HasPlug('no-complete')
     if get(g:, 'complete_engine', '') == 'apc'
         let g:apc_enable_ft = get(g:, 'apc_enable_ft', {'*':1})
     else
@@ -542,6 +541,11 @@ if get(g:, 'complete_engine', '') != ''
         au BufEnter * call s:apc_check_init()
         au TabEnter * call s:apc_check_init()
     augroup END
+else
+    let g:complete_engine = ''
+endif
+if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
+    set rtp+=$ADDINS_PATH/vim-dict
 endif
 " --------------------------
 " vim-lsp-settings
