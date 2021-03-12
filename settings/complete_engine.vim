@@ -391,6 +391,7 @@ elseif Installed('vim-lsp')
     endif
 elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'
+    let lint_tool = ''
 else
     let g:complete_engine = ''
 endif
@@ -543,8 +544,6 @@ if get(g:, 'complete_engine', '') != ''
         au BufEnter * call s:apc_check_init()
         au TabEnter * call s:apc_check_init()
     augroup END
-else
-    let g:complete_engine = ''
 endif
 if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
     set rtp+=$ADDINS_PATH/vim-dict
