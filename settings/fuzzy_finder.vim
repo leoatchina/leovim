@@ -302,8 +302,8 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if Installed('LeaderF-marks')
         nnoremap m<Cr> :Leaderf marks<Cr>
     endif
-    nnoremap qf :Leaderf quickfix<Cr>
-    nnoremap ql :Leaderf loclist<Cr>
+    nnoremap qf :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
+    nnoremap ql :CloseQuickfix<Cr>:Leaderf loclist<Cr>
     nnoremap t<cr>  :Leaderf tag<Cr>
     nnoremap f<Cr>  :Leaderf function<Cr>
     nnoremap F<Cr>  :Leaderf function --all<Cr>
@@ -416,8 +416,8 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     xnoremap \| <ESC>:FZFBLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :FzfLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap qf :FZFQuickFix<CR>
-    nnoremap ql :FZFLocList<CR>
+    nnoremap qf :CloseQuickfix<Cr>:FZFQuickFix<CR>
+    nnoremap ql :CloseQuickfix<Cr>:FZFLocList<CR>
     nnoremap t<cr>  :FZFTags<CR>
     nnoremap <M-h>, :FZFHistory/<CR>
     nnoremap <M-h>c :FZFHistory:<CR>
@@ -581,7 +581,7 @@ if Installed('coc.nvim')
     inoremap <silent><expr> <Down> coc#util#has_float() ? FloatScroll(1) : "\<Down>"
     inoremap <silent><expr> <Up>   coc#util#has_float() ? FloatScroll(0) : "\<Up>""
 endif
-if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf'
+if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || get(g:, 'fuzzy_finder', '') == 'ctrlp'
     if get(g:, 'fuzzy_finder', '') == ''
         let g:fuzzy_finder = 'ctrlp'
     endif
@@ -613,6 +613,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf'
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>t    :CtrlPBufTagAll<CR>
         nnoremap <silent> <M-k>l    :CtrlPLine<Cr>
+        nnoremap <silent> qf :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
         if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
             nnoremap <silent> <M-k>t :CtrlPTag<CR>
         else
