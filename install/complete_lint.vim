@@ -66,7 +66,7 @@ endif
 " ------------------------------
 " lint tool
 " ------------------------------
-if index(['YCM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >=0
+if index(['YCM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
     let g:lsp_diagnostics_enabled = 0
     if get(g:, 'complete_engine', '') == "vim-lsp" && get(g:, 'lint_tool', '') != 'ale'
         let g:lint_tool = 'vim-lsp'
