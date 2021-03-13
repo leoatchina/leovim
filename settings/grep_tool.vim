@@ -2,15 +2,15 @@ let g:grep_tool = 'grepper'
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-grepper
 endif
-if exists(":GrepperRg")
+if exists(":GrepperRg") > 0
     nnoremap <leader>s :GrepperRg<Space>
-elseif exists(":GrepperAg")
+elseif exists(":GrepperAg") > 0
     nnoremap <leader>s :GrepperAg<Space>
-elseif exists(":GrepperAck")
+elseif exists(":GrepperAck") > 0
     nnoremap <leader>s :GrepperAck<Space>
-elseif exists(":GrepperGit")
+elseif exists(":GrepperGit") > 0
     nnoremap <leader>s :GrepperGit<Space>
-elseif exists(":GrepperFindstr")
+elseif exists(":GrepperFindstr") > 0
     nnoremap <leader>s :GrepperFindstr<Space>
 else
     nnoremap <leader>s :GrepperGrep<Space>
