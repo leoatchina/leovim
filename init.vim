@@ -71,7 +71,7 @@ function! LINUX() abort
 endfunction
 function! CYGWIN()
     return has('win32unix') && !has('macunix')
-endif
+endfunction
 function! MACOS() abort
     return has('macunix')
 endfunction
