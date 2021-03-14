@@ -66,11 +66,14 @@ endif
 function! WINDOWS() abort
     return has('win32') || has('win64')
 endfunction
-function! MACOS() abort
-    return has('macunix')
-endfunction
 function! LINUX() abort
     return has('unix') && !has('macunix') && !has('win32unix')
+endfunction
+function! CYGWIN()
+    return has('win32unix') && !has('macunix')
+endif
+function! MACOS() abort
+    return has('macunix')
 endfunction
 function! MACVIM() abort
     return has('gui_running') && MACOS()
