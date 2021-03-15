@@ -446,11 +446,13 @@ if Installed('coc.nvim')
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
     " CocFile
-    nnoremap <leader>f :CocFile<Cr>
-    function! CocFile() abort
-        exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
-    endfunction
-    command! CocFile call CocFile()
+    if has('nvim')
+        nnoremap <leader>f :CocFile<Cr>
+        function! CocFile() abort
+            exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
+        endfunction
+        command! CocFile call CocFile()
+    endif
     " codeaction and others
     xmap ,c; <Plug>(coc-codeaction-selected)
     nmap ,c; <Plug>(coc-codeaction)
