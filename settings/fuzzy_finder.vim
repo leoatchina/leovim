@@ -4,8 +4,10 @@
 if Installed("fzf.vim") && Installed("fzf")
     if Installed("LeaderF")
         let g:fuzzy_finder = 'leaderf'
+        let g:Lf_ShortcutF = ',f'
     else
         let g:fuzzy_finder = 'fzf'
+        nnoremap ,f :FZFFiles<Cr>
     endif
     if get(g:, 'terminal_plus', '') =~ 'floaterm'
         if get(g:, 'fuzzy_finder', '') == 'leaderf'
@@ -293,12 +295,6 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     " main selector
     nnoremap <leader>w :Leaderf window<Cr>
     nnoremap <leader>b :Leaderf buffer<Cr>
-    if Installed('LeaderF-filer')
-        nnoremap <leader>f :Leaderf filer<Cr>
-        let g:Lf_ShortcutF = ',f'
-    else
-        let g:Lf_ShortcutF = '<leader>f'
-    endif
     if Installed('LeaderF-marks')
         nnoremap m<Cr> :Leaderf marks<Cr>
     endif
@@ -398,7 +394,6 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     " Customize normal mode mapping using g:Lf_NormalMap
     let g:Lf_NormalMap.Filer = [['B', ':LeaderfBookmark<CR>']]
 elseif get(g:, 'fuzzy_finder', '') == 'fzf'
-    nnoremap ,f        :FZFFiles<Cr>
     nnoremap <leader>b :FzfBuffers<CR>
     " replace origin command
     nnoremap <M-m>s :FzfColors<CR>
@@ -445,14 +440,6 @@ if Installed('coc.nvim')
     nnoremap <M-l>c :CocFzfList commands<Cr>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
-    " CocFile
-    if has('nvim')
-        nnoremap <leader>f :CocFile<Cr>
-        function! CocFile() abort
-            exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
-        endfunction
-        command! CocFile call CocFile()
-    endif
     " codeaction and others
     xmap ,c; <Plug>(coc-codeaction-selected)
     nmap ,c; <Plug>(coc-codeaction)
@@ -643,6 +630,15 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
                     \ 'fallback': s:ctrlp_fallback
                     \ }
     endif
+endif
+if Installed('LeaderF-filer')
+    nnoremap <leader>f :Leaderf filer<Cr>
+elseif get(g:, 'complete_engine', '') == 'coc'
+    nnoremap <leader>f :CocFile<Cr>
+    function! CocFile() abort
+        exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
+    endfunction
+    command! CocFile call CocFile()
 endif
 " --------------------------
 " quickui

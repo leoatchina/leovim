@@ -17,16 +17,18 @@ if exists("g:header_field_author")
     nnoremap <leader>ea :AddHeader<Cr>
 endif
 " ------------------------------
-" fuzzy_finder install
+" fuzzy_finder
 " ------------------------------
-if (has('nvim') || has('patch-7.4.330')) && g:python_version > 0 && g:has_winnr && !HasPlug('fzf')
+if (has('nvim') || has('patch-7.4.330')) && g:python_version > 0 && g:has_winnr > 0 && !HasPlug('fzf')
     call AddPlug('leaderf')
-    MyPlug 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension' }
+    MyPlug 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
     if has('nvim') || v:version >= 800
-        MyPlug 'tamago324/LeaderF-filer'
         MyPlug 'Yggdroot/LeaderF-marks'
         if get(g:, 'complete_snippet', '') == 'ultisnips'
             MyPlug 'skywind3000/leaderf-snippet'
+        endif
+        if get(g:, 'complete_engine', '') != 'coc' || get(g:, 'complete_engine', '') == 'coc' && !has('nvim')
+            MyPlug 'tamago324/LeaderF-filer'
         endif
     endif
     if get(g:, 'terminal_plus', '') =~ 'floaterm'
