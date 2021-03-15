@@ -36,6 +36,10 @@ git clone --depth 1 https://github.com/skywind3000/asyncrun.extra.git
 rm -rf asynctasks.vim
 git clone --depth 1 https://github.com/skywind3000/asynctasks.vim.git
 
+# vim-preview 
+rm -rf vim-preview 
+git clone --depth 1 https://github.com/skywind3000/vim-preview
+
 # vim-cycle
 rm -rf vim-cycle
 git clone --depth 1 https://github.com/bootleq/vim-cycle.git

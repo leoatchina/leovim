@@ -2,16 +2,17 @@
 " preview
 " --------------------------
 let g:plugs_symbol = []
-if Installed('vim-preview')
-    au FileType qf nnoremap <silent><buffer> qq    :PreviewClose<cr>
-    au FileType qf nnoremap <silent><buffer> <C-m> :PreviewQuickfix<cr>
-    " preview file and openit
-    nnoremap ,<Tab> :PreviewFile<Space>
-    nnoremap <silent> ,E :PreviewGoto edit<Cr><C-w>z
-    nnoremap <silent> ,V :PreviewGoto vsplit<Cr><C-w>z
-    nnoremap <silent> ,X :PreviewGoto split<Cr><C-w>z
-    nnoremap <silent> ,T :PreviewGoto tabe<Cr>gT<C-w>zgt
+if !exists('g:leovim_loaded')
+    set rtp+=$ADDINS_PATH/vim-preview
 endif
+au FileType qf nnoremap <silent><buffer> qq    :PreviewClose<cr>
+au FileType qf nnoremap <silent><buffer> <C-m> :PreviewQuickfix<cr>
+" preview file and openit
+nnoremap ,<Tab> :PreviewFile<Space>
+nnoremap <silent> ,E :PreviewGoto edit<Cr><C-w>z
+nnoremap <silent> ,V :PreviewGoto vsplit<Cr><C-w>z
+nnoremap <silent> ,X :PreviewGoto split<Cr><C-w>z
+nnoremap <silent> ,T :PreviewGoto tabe<Cr>gT<C-w>zgt
 " --------------------------
 " plugs_symbol
 " --------------------------
@@ -119,19 +120,18 @@ if executable('ctags')
     else
         let &tags = './.tags;,.tags'
     endif
-    if Installed('vim-preview')
-        let g:preview#preview_position = "rightbottom"
-        let g:preview#preview_size = get(g:, 'preview_rows', 8)
-        nnoremap <silent> <M-:> <C-w>}
-        nnoremap <silent> <M-;> :PreviewTag<Cr>
-        nnoremap <silent> <M-'> :ToggleQuickfix<Cr>:PreviewList<Cr>
-    endif
+    " vim-preview
+    let g:preview#preview_position = "rightbottom"
+    let g:preview#preview_size = get(g:, 'preview_rows', 8)
+    nnoremap <silent> <M-:> <C-w>}
+    nnoremap <silent> <M-;> :PreviewTag<Cr>
+    nnoremap <silent> <M-'> :ToggleQuickfix<Cr>:PreviewList<Cr>
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
         au FileType qf noremap <silent><buffer> <C-k> :call quickui#tools#preview_quickfix()<cr>
         au FileType qf noremap <silent><buffer> <tab> :call quickui#tools#preview_quickfix()<cr>
         nnoremap <C-k> :<C-u>call quickui#tools#preview_tag('')<Cr>
-    elseif Installed('vim-preview')
+    else
         nnoremap <silent> <C-k> :PreviewSignature!<Cr>
     endif
     if Installed('vim-gutentags')

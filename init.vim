@@ -66,11 +66,14 @@ endif
 function! WINDOWS() abort
     return has('win32') || has('win64')
 endfunction
-function! MACOS() abort
-    return has('macunix')
-endfunction
 function! LINUX() abort
     return has('unix') && !has('macunix') && !has('win32unix')
+endfunction
+function! CYGWIN()
+    return has('win32unix') && !has('macunix')
+endfunction
+function! MACOS() abort
+    return has('macunix')
 endfunction
 function! MACVIM() abort
     return has('gui_running') && MACOS()
@@ -1520,10 +1523,10 @@ if get(g:, 'has_terminal', 0) > 0
         endif
         nnoremap <M-h>o :Floaterm
         nnoremap <M-h>n :FloatermNew<Space>
-        let g:floaterm_keymap_new   = '<Nop>'
-        let g:floaterm_keymap_prev  = '<M-{>'
-        let g:floaterm_keymap_next  = '<M-}>'
-        let g:floaterm_open_command = 'drop'
+        let g:floaterm_keymap_new    = '<Nop>'
+        let g:floaterm_keymap_prev   = '<M-{>'
+        let g:floaterm_keymap_next   = '<M-}>'
+        let g:floaterm_open_command  = 'drop'
         let g:floaterm_keymap_toggle = '<M-=>'
     endif
 endif
@@ -1571,8 +1574,8 @@ if has('statusline')
     set laststatus=2
     if get(g:, 'lint_tool', '') == 'ale'
         MyPlug 'maximbaz/lightline-ale'
-    elseif get(g:, 'lint_tool', '') == 'neomake'
-        MyPlug 'sinetoami/lightline-neomake'
+    elseif get(g:, 'lint_tool', '') == 'vim-lsp'
+        MyPlug 'halkn/lightline-lsp'
     endif
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/lightline.vim
