@@ -110,7 +110,7 @@ endif
 " complete_snippet
 " ------------------------------
 if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != "apc"
-    if g:python_version > 3
+    if g:python_version > 3 && !CYGWIN()
         let g:complete_snippet = "ultisnips"
         MyPlug 'SirVer/ultisnips'
         MyPlug 'honza/vim-snippets'

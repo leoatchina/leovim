@@ -22,7 +22,7 @@ endif
 if (has('nvim') || has('patch-7.4.330')) && g:python_version > 0 && g:has_winnr > 0 && !HasPlug('fzf')
     call AddPlug('leaderf')
     MyPlug 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
-    if (has('nvim') || v:version >= 800) && !CYGWIN()
+    if has('nvim') || v:version >= 800
         MyPlug 'Yggdroot/LeaderF-marks'
         if get(g:, 'complete_snippet', '') == 'ultisnips'
             MyPlug 'skywind3000/leaderf-snippet'
