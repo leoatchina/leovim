@@ -787,7 +787,7 @@ function! MetaCode(key)
     if index(s:keys_insert_map, a:key) < 0
         exec "imap <M-".a:key."> <Nop>"
     endif
-    if !has('nvim') && g:gui_running == 0
+    if !has('nvim') && g:gui_running == 0 || CYGWIN()
         exec "set <M-".a:key.">=\e".a:key
     endif
 endfunction
@@ -1723,7 +1723,7 @@ endtry
 " --------------------------
 " whichkey
 " --------------------------
-if v:version >= 704
+if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     if !exists('g:leovim_loaded')
         if v:version >= 800 || has('nvim')
             set rtp+=$ADDINS_PATH/vim-which-key
