@@ -35,7 +35,7 @@ if (has('nvim') || has('patch-7.4.330')) && g:python_version > 0 && g:has_winnr 
         MyPlug 'voldikss/LeaderF-floaterm'
     endif
 endif
-if v:version >= 704 || has('nvim')
+if (v:version >= 704 || has('nvim')) && !CYGWIN()
     MyPlug 'junegunn/fzf.vim'
     MyPlug 'chengzeyi/fzf-preview.vim'
     if WINDOWS()
