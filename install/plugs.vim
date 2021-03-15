@@ -65,12 +65,6 @@ if g:python_version > 3.6 && HasPlug('debug') && (has('nvim') || v:version >= 80
     MyPlug 'puremourning/vimspector', {'do': g:python_exe_path . vimspector_install}
 endif
 " ------------------------------
-" preview
-" ------------------------------
-if has('patch-7.3.1058') || has('nvim')
-    MyPlug 'skywind3000/vim-preview'
-endif
-" ------------------------------
 " ctags
 " ------------------------------
 if executable('ctags')
