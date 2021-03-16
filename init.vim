@@ -1112,8 +1112,8 @@ else
     nnoremap <silent><M-C> "zyy
     nnoremap <silent>Y     "zy$
 endif
-xnoremap p "_c<ESC>p"
-xnoremap P "_c<ESC>P"
+xnoremap zp "_c<ESC>p"
+xnoremap zP "_c<ESC>P"
 xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
 imap <M-x>   <BS>
@@ -1150,6 +1150,7 @@ nnoremap <M-m>h :set nohlsearch? nohlsearch!<CR>
 nnoremap <M-m>s :colorscheme<Space>
 nnoremap <M-m>t :setfiletype<Space>
 nnoremap <M-m>c :command<Cr>
+nnoremap <M-m>r :registers<Cr>
 " ------------------------
 " pastemode toggle
 " ------------------------
