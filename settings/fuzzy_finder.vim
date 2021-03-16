@@ -77,53 +77,6 @@ if Installed("fzf.vim") && Installed("fzf")
     " locate file
     nnoremap <M-f>l :FZFLocate<Space>
     if Installed('vim-yoink')
-        " --------------------
-        " FZFRegisters
-        " --------------------
-        function! s:fzf_registers()
-            redir => registers
-            silent registers
-            redir END
-            let reg_lst = split(registers, '\n')
-            " cut head
-            if reg_lst[0][0:3] == 'Type'
-                let cut_head = 1
-            else
-                let cut_head = 0
-            endif
-            let lst = []
-            for reg in reg_lst[1:]
-                if cut_head > 0
-                    let reg = reg[5:]
-                endif
-                let reg = substitute(reg, "\\^J", "\\r", "g")
-                call add(lst, reg)
-            endfor
-            return lst
-        endfunction
-        function! s:paste_select(select) dict
-            " NOTE select[1] is the name of register
-            let reg = a:select[1]
-            let cmd = "\"" . reg . self.paste
-            call feedkeys(cmd)
-        endfunction
-        command! -range FZFRegisterBefore call fzf#run(extend({
-                \ 'source': s:fzf_registers(),
-                \ 'sink': function('s:paste_select', {'paste': 'P', 'range': <range>}),
-                \ 'options': '--ansi -x --prompt "PasteBefore>"'
-                \ }, g:fzf_layout), 0)
-        command! -range FZFRegisterAfter call fzf#run(extend({
-                \ 'source': s:fzf_registers(),
-                \ 'sink': function('s:paste_select', {'paste': 'p', 'range': <range>}),
-                \ 'options': '--ansi -x --prompt "PasteAfter>"'
-                \ }, g:fzf_layout), 0)
-        nnoremap <silent> <leader>p :FZFRegisterBefore<Cr>
-        nnoremap <silent> <leader>P :FZFRegisterAfter<Cr>
-        xnoremap <silent> <leader>p :<C-u>FZFRegisterBefore<Cr>
-        xnoremap <silent> <leader>P :<C-u>FZFRegisterAfter<Cr>
-        " --------------------
-        " FZFYank
-        " --------------------
         let g:yoinkMaxItems = 100
         nmap ,yb <plug>(YoinkPostPasteSwapBack)
         nmap ,yf <plug>(YoinkPostPasteSwapForward)
@@ -133,6 +86,9 @@ if Installed("fzf.vim") && Installed("fzf")
         nmap ,yc :ClearYanks<Cr>
         nmap p   <plug>(YoinkPaste_p)
         nmap P   <plug>(YoinkPaste_P)
+        " --------------------
+        " FZFYank
+        " --------------------
         function! s:yank_list()
             redir => ys
             silent Yanks
@@ -150,7 +106,7 @@ if Installed("fzf.vim") && Installed("fzf")
                 return lst
             else
                 return ["\"   " . @"]
-            endtry
+            endif
         endfunction
         function! s:paste_yank(select) dict
             if empty(a:select)
@@ -184,6 +140,51 @@ if Installed("fzf.vim") && Installed("fzf")
         xnoremap <silent> ,p :<C-u>FZFYankBefore<Cr>
         xnoremap <silent> ,P :<C-u>FZFYankAfter<Cr>
     endif
+    " --------------------
+    " FZFRegisters
+    " --------------------
+    function! s:fzf_registers()
+        redir => registers
+        silent registers
+        redir END
+        let reg_lst = split(registers, '\n')
+        " cut head
+        if reg_lst[0][0:3] == 'Type'
+            let cut_head = 1
+        else
+            let cut_head = 0
+        endif
+        let lst = []
+        for reg in reg_lst[1:]
+            if cut_head > 0
+                let reg = reg[5:]
+            endif
+            let reg = substitute(reg, "\\^J", "\\r", "g")
+            call add(lst, reg)
+        endfor
+        return lst
+    endfunction
+    " TODO xmap paste by using gv
+    function! s:paste_select(select) dict
+        " NOTE: select[1] is the name of register
+        let reg = a:select[1]
+        let cmd = "\"" . reg . self.paste
+        call feedkeys(cmd)
+    endfunction
+    command! -range FZFRegisterBefore call fzf#run(extend({
+            \ 'source': s:fzf_registers(),
+            \ 'sink': function('s:paste_select', {'paste': 'P', 'range': <range>}),
+            \ 'options': '--ansi -x --prompt "PasteBefore>"'
+            \ }, g:fzf_layout), 0)
+    command! -range FZFRegisterAfter call fzf#run(extend({
+            \ 'source': s:fzf_registers(),
+            \ 'sink': function('s:paste_select', {'paste': 'p', 'range': <range>}),
+            \ 'options': '--ansi -x --prompt "PasteAfter>"'
+            \ }, g:fzf_layout), 0)
+    nnoremap <silent> <leader>p :FZFRegisterBefore<Cr>
+    nnoremap <silent> <leader>P :FZFRegisterAfter<Cr>
+    xnoremap <silent> <leader>p :<C-u>FZFRegisterBefore<Cr>
+    xnoremap <silent> <leader>P :<C-u>FZFRegisterAfter<Cr>
     " --------------------
     " FZFJumps
     " --------------------
