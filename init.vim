@@ -1112,6 +1112,8 @@ else
     nnoremap <silent><M-C> "zyy
     nnoremap <silent>Y     "zy$
 endif
+xnoremap p "_c<ESC>p"
+xnoremap P "_c<ESC>P"
 xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
 imap <M-x>   <BS>
