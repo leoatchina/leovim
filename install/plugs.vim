@@ -164,9 +164,9 @@ if has('nvim') || has('patch-8.0.902')
 else
     MyPlug 'mhinz/vim-signify', {'tag': 'legacy', 'dir': '$INSTALL_PATH/vim-signify-legacy'}
 endif
-nnoremap <M-g>d    :SignifyDiff<Cr>
-nnoremap <M-g>;    :Signify
-nnoremap ,s :SignifyToggle<Cr>
+nnoremap <M-m>; :SignifyDiff<Cr>
+nnoremap <M-m>, :Signify
+nnoremap <M-m>o :SignifyToggle<Cr>
 let g:signify_disable_by_default = 1
 " ------------------------------
 " tmux
@@ -205,7 +205,7 @@ if has('signs')
     if executable('go') && !WINDOWS()
         MyPlug 'RRethy/vim-hexokinase', {'for': ['css', 'html', 'less', 'scss', 'sass', 'stylus'], 'do': 'make hexokinase'}
         let g:Hexokinase_highlighters  = ['backgroundfull']
-        nnoremap <M-m>o :HexokinaseToggle<Cr>
+        nnoremap <M-m>k :HexokinaseToggle<Cr>
     else
         MyPlug 'gorodinskiy/vim-coloresque', {'for': ['css', 'html', 'less', 'scss', 'sass', 'stylus']}
     endif

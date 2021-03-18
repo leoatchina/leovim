@@ -32,8 +32,8 @@ if Installed('tagbar')
     else
         let g:tagbar_position = 'leftabove vertical'
     endif
-    if get(g:, "ctags_version", '') =~ "Universal"
-        if executable('tstags')
+    if executable('tstags')
+        if get(g:, "ctags_version", '') =~ "Universal"
             let g:tagbar_type_typescript = {
                         \ 'ctagstype': 'typescript',
                         \ 'ctagsbin':  'tstags',
@@ -53,9 +53,7 @@ if Installed('tagbar')
                         \ 'c:const:0:1'
                         \ ]
                         \ }
-        endif
-    elseif get(g:, "ctags_version", '') =~ "Exuberant"
-        if executable('tstags')
+        elseif get(g:, "ctags_version", '') =~ "Exuberant"
             let g:tagbar_type_typescript = {
                         \ 'ctagstype': 'typescript',
                         \ 'kinds': [
@@ -80,9 +78,9 @@ if Installed('vista.vim')
         let g:vista_sidebar_position = 'vertical topright'
     endif
     nnoremap <M-k>v :Vista<Space>
+    let g:vista_sidebar_width        = 35
     let g:vista_echo_cursor          = 0
     let g:vista_stay_on_open         = 0
-    let g:vista_sidebar_width        = 35
     let g:vista#renderer#enable_icon = 0
     let g:vista_icon_indent          = ["╰─▸ ", "├─▸ "]
     if WINDOWS()
@@ -90,21 +88,25 @@ if Installed('vista.vim')
     else
         let g:vista_fzf_preview = ['up:30%']
     endif
-    if get(g:, 'ctags_version', '') =~ 'json'
-        let g:vista_default_executiveista = 'ctags'
-        nnoremap <M-/> :Vista finder ctags<Cr>
+    if get(g:, 'complete_engine', '') == 'coc'
+        let g:vista_default_executive = 'coc'
+        nnoremap <M-/> :Vista finder coc<Cr>
+    elseif get(g:, 'complete_engine', '') == 'vim-lsp'
+        let g:vista_default_executive = 'vim_lsp'
+        nnoremap <M-/> :Vista finder vim_lsp<Cr>
+    elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
+        let g:vista_default_executive = 'nvim_lsp'
+        nnoremap <M-/> :Vista finder nvim_lsp<Cr>
     else
         nnoremap <M-/> <Nop>
     endif
-    if get(g:, 'complete_engine', '') == 'coc'
-        let g:vista_default_executive = 'coc'
-        nnoremap <M-?> :Vista finder coc<Cr>
-    elseif get(g:, 'complete_engine', '') == 'vim-lsp'
-        let g:vista_default_executive = 'vim_lsp'
-        nnoremap <M-?> :Vista finder vim_lsp<Cr>
-    elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
-        let g:vista_default_executive = 'nvim_lsp'
-        nnoremap <M-?> :Vista finder nvim_lsp<Cr>
+    if get(g:, 'ctags_version', '') =~ 'json'
+        let g:vista_default_executiveista = 'ctags'
+        if execute(":map <M-/>") =~ 'Nop'
+            nnoremap <M-/> :Vista finder ctags<Cr>
+        else
+            nnoremap <M-?> :Vista finder ctags<Cr>
+        endif
     else
         nnoremap <M-?> <Nop>
     endif
