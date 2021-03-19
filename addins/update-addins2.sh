@@ -36,10 +36,6 @@ git clone --depth 1 https://github.com/skywind3000/asyncrun.extra.git
 rm -rf asynctasks.vim
 git clone --depth 1 https://github.com/skywind3000/asynctasks.vim.git
 
-# vim-preview 
-rm -rf vim-preview 
-git clone --depth 1 https://github.com/skywind3000/vim-preview
-
 # vim-cycle
 rm -rf vim-cycle
 git clone --depth 1 https://github.com/bootleq/vim-cycle.git
@@ -52,24 +48,24 @@ git clone --depth 1 https://github.com/skywind3000/vim-terminal-help.git
 rm -rf vim-sandwich
 git clone --depth 1 https://github.com/machakann/vim-sandwich.git
 
-# lightline 
-rm -rf lightline.vim 
-git clone --depth 1 https://github.com/itchyny/lightline.vim 
+# lightline
+rm -rf lightline.vim
+git clone --depth 1 https://github.com/itchyny/lightline.vim
 
 # startify
-rm -rf vim-startify 
+rm -rf vim-startify
 git clone --depth 1 https://github.com/mhinz/vim-startify
 
 # vim-floaterm
 rm -rf vim-floaterm
 git clone --depth 1 https://github.com/voldikss/vim-floaterm.git
 
-# vim-dict 
+# vim-dict
 rm -rf vim-dict
 git clone --depth 1 https://github.com/skywind3000/vim-dict.git
 
 # vim-grepper
-rm -rf vim-grepper 
+rm -rf vim-grepper
 git clone --depth 1  https://github.com/mhinz/vim-grepper.git
 rm -rf vim-grepper/pictures
 

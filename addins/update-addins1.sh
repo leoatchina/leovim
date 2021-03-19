@@ -1,3 +1,7 @@
+# vim-preview
+rm -rf vim-preview
+git clone --depth 1 https://github.com/skywind3000/vim-preview
+
 # easy-align
 rm -rf vim-easy-align
 git clone --depth 1 https://github.com/junegunn/vim-easy-align.git
