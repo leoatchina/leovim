@@ -65,12 +65,12 @@ elseif HasPlug('oceanic_material')
 " schmes auto selected
 " --------------------------
 elseif get(g:, 'complete_engine', '') == ''
-    colorscheme dracula
+    colorscheme space-vim-dark
 elseif get(g:, 'complete_engine', '') == 'apc'
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        call SetScheme('dogrun', 'space-vim-dark')
+        call SetScheme('dogrun', 'dracula')
     else
-        call SetScheme('embark', 'space-vim-dark')
+        call SetScheme('embark', 'dracula')
     endif
 elseif get(g:, 'complete_engine', '') == 'coc'
     if g:fuzzy_finder == 'leaderf'
