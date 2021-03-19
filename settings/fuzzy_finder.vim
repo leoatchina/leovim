@@ -319,8 +319,10 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
                 \ }
     let g:Lf_CommandMap = {'<C-]>': ['<C-V>'], '<C-V>': ['<M-v>', '<C-y>'], '<C-j>':['<Down>', '<C-j>'], '<C-k>':['<Up>', '<C-k>'], '<F5>': ['<C-e>']}
     " show fuzzy functions
-    nnoremap <silent><C-p> :Leaderf self<Cr>
-    nnoremap <M-F> :Leaderf self
+    if !Installed('coc.nvim')
+        nnoremap <silent><C-p> :Leaderf self<Cr>
+    endif
+    nnoremap <M-F> :Leaderf<Tab>
     " main selector
     nnoremap <leader>w :Leaderf window<Cr>
     nnoremap <leader>b :Leaderf buffer<Cr>
