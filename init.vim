@@ -1528,13 +1528,14 @@ if get(g:, 'has_terminal', 0) > 0
         else
             let g:floaterm_position = 'right'
         endif
-        nnoremap <M-h>o :Floaterm
-        nnoremap <M-h>n :FloatermNew<Space>
+        nnoremap <M-h>o   :Floaterm
+        nnoremap <M-h>n   :FloatermNew<Space>
+        nnoremap <silent> <M-=> :FloatermToggle<CR>
+        tnoremap <silent> <M-=> <C-\><C-n>:FloatermToggle<CR>
         let g:floaterm_keymap_new    = '<Nop>'
         let g:floaterm_keymap_prev   = '<M-{>'
         let g:floaterm_keymap_next   = '<M-}>'
         let g:floaterm_open_command  = 'drop'
-        let g:floaterm_keymap_toggle = '<M-=>'
     endif
 endif
 " --------------------------
