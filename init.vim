@@ -1116,6 +1116,7 @@ else
     nnoremap <silent><M-C> "zyy
     nnoremap <silent>Y     "zy$
 endif
+xnoremap -  gq
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 xnoremap <M-V> <C-c>`.``gvp``P
