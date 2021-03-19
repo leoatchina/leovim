@@ -228,7 +228,11 @@ if WINDOWS()
         let $PATH = $HOME . "\\.leovim.plug\\windows-tools\\tools;" . $HOME . "\\.leovim.plug\\windows-tools\\tools\\gtags\\bin;" . $HOME . "\\.leovim.plug\\windows-tools\\tools\\cppcheck;" . $PATH
     endif
     set winaltkeys=no
-    if has('libcall') && !has('nvim') && has('gui_running')
+    if g:gui_running > 0
+        set lines=999
+        set columns=999
+    endif
+    if has('libcall') && !has('nvim') && g:gui_running > 0
         let g:gvimfullscreendll = $HOME."\\.leovim.plug\\windows-tools\\tools\\gvimfullscreen.dll"
         function! ToggleFullScreen()
             call libcallnr(g:gvimfullscreendll, "ToggleFullScreen", -1)
