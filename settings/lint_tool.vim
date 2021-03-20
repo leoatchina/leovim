@@ -34,7 +34,7 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
 elseif get(g:, 'lint_tool', '') != ''
     function! s:showLint() abort
         if get(g:, 'fuzzy_finder', '') == 'leaderf' || !WINDOWS() && get(g:, 'fuzzy_finder', '') == 'fzf'
-            if g:lint_tool == 'vim-lsp'
+            if get(g:, 'lint_tool', '') == 'vim-lsp'
                 silent LspDocumentDiagnostic
                 if len(getloclist(0)) > 0
                     lclose
@@ -42,13 +42,13 @@ elseif get(g:, 'lint_tool', '') != ''
             else
                 silent ALELint
             endif
-            if g:fuzzy_finder == 'leaderf'
+            if get(g:, 'fuzzy_finder', '') == 'leaderf'
                 LeaderfLocList
             else
                 FZFLocList
             endif
         else
-            if g:lint_tool == 'vim-lsp'
+            if get(g:, 'lint_tool', '') == 'vim-lsp'
                 LspDocumentDiagnostic
             else
                 ALELint
@@ -60,7 +60,7 @@ elseif get(g:, 'lint_tool', '') != ''
     if get(g:, 'complete_engine', '') == 'coc' && Installed('coc.nvim')
         call coc#config('diagnostic.enable', v:false)
     endif
-    if g:lint_tool == 'vim-lsp' && Installed('vim-lsp')
+    if get(g:, 'lint_tool', '') == 'vim-lsp' && Installed('vim-lsp')
         let g:lsp_diagnostics_echo_cursor = 1
         let g:lsp_highlights_enabled      = 1
         let g:lsp_virtual_text_enabled    = 0
