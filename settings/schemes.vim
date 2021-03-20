@@ -73,14 +73,14 @@ elseif get(g:, 'complete_engine', '') == 'apc'
         call SetScheme('embark', 'dracula')
     endif
 elseif get(g:, 'complete_engine', '') == 'coc'
-    if g:fuzzy_finder == 'leaderf'
+    if get(g:, 'fuzzy_finder', '') == 'leaderf'
         call SetScheme('sonokai', 'sublime')
     else
         call SetScheme('ayu', 'deus')
     endif
-elseif g:fuzzy_finder == 'leaderf'
+elseif get(g:, 'fuzzy_finder', '') == 'leaderf'
     if get(g:, 'complete_engine', '') =~ 'YCM'
-        if g:complete_engine =~ 'legacy'
+        if get(g:, 'complete_engine', '') =~ 'legacy'
             call SetScheme('oceanic_material', 'gruvbox')
         else
             call SetScheme('gruvbox-material', 'gruvbox')
@@ -95,33 +95,33 @@ else
 endif
 " settings for scheme
 try
-    if g:colors_name == 'edge'
+    if get(g:, 'colors_name', '') == 'edge'
         let g:edge_style                  = get(g:, 'edge_style', 'aura')
         let g:edge_enable_italic          = 0
         let g:edge_disable_italic_comment = 0
-    elseif g:colors_name == 'sonokai'
+    elseif get(g:, 'colors_name', '') == 'sonokai'
         let g:sonokai_style                  = get(g:, 'sonokai_style', 'andromeda')
         let g:sonokai_enable_italic          = 0
         let g:sonokai_disable_italic_comment = 0
-    elseif g:colors_name == 'gruvbox-material'
+    elseif get(g:, 'colors_name', '') == 'gruvbox-material'
         let g:gruvbox_material_background             = get(g:, 'gruvbox_material_background', 'medium')
         let g:gruvbox_material_palette                = get(g:, 'gruvbox_material_palette', 'mix')
         let g:gruvbox_material_visual                 = 'reverse'
         let g:gruvbox_material_enable_italic          = 0
         let g:gruvbox_material_disable_italic_comment = 0
-    elseif g:colors_name == 'oceanic_material'
+    elseif get(g:, 'colors_name', '') == 'oceanic_material'
         let g:oceanic_material_background      = get(g:, 'oceanic_material_background', 'deep')
         let g:oceanic_material_allow_italic    = 0
         let g:oceanic_material_allow_undercurl = 0
         let g:oceanic_material_allow_reverse   = 1
-    elseif g:colors_name == 'tokyonight'
+    elseif get(g:, 'colors_name', '') == 'tokyonight'
         let g:tokyonight_style = get(g:, 'tokyonight', 'night')
         let g:tokyonight_enable_italic = 0
-    elseif g:colors_name == 'embark'
+    elseif get(g:, 'colors_name', '') == 'embark'
         let g:embark_terminal_italics = 0
-    elseif g:colors_name == 'ayu'
+    elseif get(g:, 'colors_name', '') == 'ayu'
         let g:ayucolor = get(g:, 'ayucolor', 'mirage')
-    elseif g:colors_name == 'OceanicNext'
+    elseif get(g:, 'colors_name', '') == 'OceanicNext'
         let g:oceanic_next_terminal_bold = get(g:, 'oceanic_next_terminal_bold', 0)
     endif
 catch
