@@ -244,12 +244,11 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
         " asynctask shortcuts
         nnoremap <M-r>; :<C-u>AsyncTask
         nnoremap <M-r>m :<C-u>AsyncTaskMacro<Cr>
-        nnoremap <M-r>l :<C-u>AsyncTaskList<Cr>
         nnoremap <M-r>e :<C-u>AsyncTaskEdit<Space>
         " run shortcuts
         nnoremap <M-r><M-r> :<C-u>AsyncTask project-run<Cr>
-        nnoremap <M-r>b :<C-u>AsyncTask project-build<Cr>
         nnoremap <M-r>r :<C-u>AsyncTask project-run<Cr>
+        nnoremap <M-r>b :<C-u>AsyncTask project-build<Cr>
         nnoremap <M-r>d :<C-u>AsyncTask project-debug<Cr>
         nnoremap <M-r>c :<C-u>AsyncTask project-compile<Cr>
         nnoremap <M-r>t :<C-u>AsyncTask project-test<Cr>
