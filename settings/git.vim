@@ -26,7 +26,7 @@ if executable('git') && Installed('fzf.vim')
         nnoremap <M-g>b :CocFzfList bcommits<Cr>
         nnoremap <M-g>c :CocFzfList commits<Cr>
         nnoremap <M-g>f :CocFzfList gfiles<CR>
-    elseif !WINODWS() && !CYGWIN()
+    elseif !WINDOWS() && !CYGWIN()
         nnoremap <M-g>b :FzfBCommits<Cr>
         nnoremap <M-g>c :FzfCommits<Cr>
         nnoremap <M-g>f :FzfGFiles?<CR>
