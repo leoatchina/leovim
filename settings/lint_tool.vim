@@ -27,6 +27,7 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
     call coc#config('diagnostic.warningSign', "!")
     call coc#config('diagnostic.infoSign', ">")
     call coc#config('diagnostic.hintSign', "-")
+    call coc#config('python.linting.flake8Enabled', v:true)
     call coc#config('python.linting.flake8Args', [
                 \ "--max-line-length=160",
                 \ "--ignore=" . s:flake8_ignore,
