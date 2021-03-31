@@ -22,7 +22,13 @@ elseif executable('git')
     endif
 endif
 if executable('git') && Installed('fzf.vim')
-    nnoremap <M-g>b :FzfBCommits<Cr>
-    nnoremap <M-g>c :FzfCommits<Cr>
-    nnoremap <M-g>f :FzfGFiles?<CR>
+    if Installed('coc.nvim') && WINDOWS()
+        nnoremap <M-g>b :CocFzfList bcommits<Cr>
+        nnoremap <M-g>c :CocFzfList commits<Cr>
+        nnoremap <M-g>f :CocFzfList gfiles<CR>
+    elseif !WINDOWS() && !CYGWIN()
+        nnoremap <M-g>b :FzfBCommits<Cr>
+        nnoremap <M-g>c :FzfCommits<Cr>
+        nnoremap <M-g>f :FzfGFiles?<CR>
+    endif
 endif
