@@ -335,6 +335,19 @@ if has("persistent_undo") && g:has_lambda > 0
     endif
 endif
 " ------------------------------
+" projectionist
+" ------------------------------
+MyPlug 'tpope/vim-projectionist'
+nnoremap <leader>ia :A<Space>
+nnoremap <leader>ie :A<Cr>
+nnoremap <leader>ix :AS<Space>
+nnoremap <leader>iv :AV<Space>
+nnoremap <leader>it :AT<Space>
+nnoremap <leader>id :AD<Space>
+nnoremap <leader>ic :Pcd<Space>
+nnoremap <leader>il :Plcd<Space>
+nnoremap <leader>ip :ProjectDo<Space>
+" ------------------------------
 " yoink
 " ------------------------------
 if has('nvim') || v:version >= 800

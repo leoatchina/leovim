@@ -265,7 +265,7 @@ if Installed("fzf.vim") && Installed("fzf")
                         \ 'source': s:jumpList(),
                         \ 'sink': function('s:jumpHandler'),
                         \ 'options': [
-                            \ '--prompt=Jumps'
+                            \ '--prompt=Jumps>'
                         \ ],
                         \ }))
             else
@@ -273,7 +273,7 @@ if Installed("fzf.vim") && Installed("fzf")
                         \ 'source': s:jumpList(),
                         \ 'sink': function('s:jumpHandler'),
                         \ 'options': [
-                            \ '--prompt=Jumps',
+                            \ '--prompt=Jumps>',
                             \ '--preview', $ADDINS_PATH . '/preview.sh {2}',
                             \ '--preview-window=up:35%'
                         \ ],
