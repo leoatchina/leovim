@@ -450,7 +450,7 @@ function! repl#REPLToggle(...)
                 let l:code_tobe_sent = []
                 for l:line_number in range(1, line("$"))
                     let l:gl = repl#Strip(getline(l:line_number))
-                    if l:gl =~# '^import ' || l:gl =~# '^from .* import .*' || l:gl =~# '^sys.path '
+                    if l:gl =~# '^import ' || l:gl =~# '^from .* import .*' || l:gl =~# '^sys\.path'
                         let l:code_tobe_sent = l:code_tobe_sent + [l:gl]
                     endif
                 endfor
@@ -482,15 +482,37 @@ function! repl#SendCurrentLine()
         if repl#REPLGetShortName() =~# '.*python.*'
             if exists('g:repl_auto_sends') && repl#StartWithAny(repl#Trim(getline('.')), g:repl_auto_sends)
                 let l:end_line_number = repl#SendWholeBlock()
+                " if g:repl_cursor_down
+                "     call cursor(l:end_line_number + 1, l:cursor_pos[2])
+                " endif
                 if g:repl_cursor_down
-                    call cursor(l:end_line_number + 1, l:cursor_pos[2])
+                    let l:next_line_number = l:end_line_number + 1
+                    while l:next_line_number <= line("$") && (repl#Strip(getline(l:next_line_number)) == "" || repl#StartWith(repl#Strip(getline(l:next_line_number)), "#"))
+                        let l:next_line_number = l:next_line_number + 1
+                    endwhile
+                    call cursor(l:next_line_number, l:cursor_pos[2])
                 endif
                 return
             endif
             if exists('g:repl_auto_sends') && repl#EndWith(repl#RStrip(getline(".")), "\\")
                 let l:end_line_number = repl#SendWholeBlock()
                 if g:repl_cursor_down
-                    call cursor(l:end_line_number + 1, l:cursor_pos[2])
+                    let l:next_line_number = l:end_line_number + 1
+                    while l:next_line_number <= line("$") && (repl#Strip(getline(l:next_line_number)) == "" || repl#StartWith(repl#Strip(getline(l:next_line_number)), "#"))
+                        let l:next_line_number = l:next_line_number + 1
+                    endwhile
+                    call cursor(l:next_line_number, l:cursor_pos[2])
+                endif
+                return
+            endif
+            if exists('g:repl_python_auto_send_unfinish_line') && !repl#IsCodeFinish(repl#Strip(getline(".")))
+                let l:end_line_number = repl#SendCompleteLine()
+                if g:repl_cursor_down
+                    let l:next_line_number = l:end_line_number + 1
+                    while l:next_line_number <= line("$") && (repl#Strip(getline(l:next_line_number)) == "" || repl#StartWith(repl#Strip(getline(l:next_line_number)), "#"))
+                        let l:next_line_number = l:next_line_number + 1
+                    endwhile
+                    call cursor(l:next_line_number, l:cursor_pos[2])
                 endif
                 return
             endif
@@ -532,6 +554,38 @@ endfunction
 
 function! repl#ToVimScript(lines)
     return formatvimscript#Format_to_repl(a:lines)
+endfunction
+
+function! repl#IsCodeFinish(code)
+    if has('python3')
+python3 << EOF
+import vim
+import sys
+sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
+import replpython
+code = vim.eval("a:code")
+if isinstance(code, list):
+    finish_flag = int(replpython.getpythonindent(code)[1])
+else:
+    finish_flag = int(replpython.getpythonindent([code])[1])
+EOF
+        return py3eval("finish_flag")
+    elseif has('python')
+python << EOF
+import vim
+import sys
+sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
+import replpython
+code = vim.eval("a:code")
+if isinstance(code, list):
+    finish_flag = int(replpython.getpythonindent(code)[1])
+else:
+    finish_flag = int(replpython.getpythonindent([code])[1])
+EOF
+        return pyeval("finish_flag")
+    else
+        return 1
+    end
 endfunction
 
 function! repl#ToREPLPythonCode(lines, pythonprogram)
@@ -587,7 +641,7 @@ endfunction
 
 function! repl#CheckInputState()
     let l:tl = repl#GetTerminalLine()
-    if g:currentrepltype ==# 'ipython' && (g:taskprocess == 0 || g:tasks[g:taskprocess-1] ==# '') && (g:taskprocess == len(g:tasks) || (g:tasks[g:taskprocess] !=# '')) && (len(g:tasks) > 1)
+    if g:currentrepltype ==# 'ipython' && (!exists("g:repl_tasks") || (g:taskprocess == 0 || g:repl_tasks[g:taskprocess-1] ==# '') && (g:taskprocess == len(g:repl_tasks) || (g:repl_tasks[g:taskprocess] !=# '')) && (len(g:repl_tasks) > 1))
         if match(l:tl, 'In') != -1
             return 1
         else
@@ -607,15 +661,19 @@ function! repl#Sends(tasks, symbols)
     if len(a:tasks) == 0
         return
     end
-    let g:tasks = a:tasks
+    if exists("g:repl_tasks")
+        let g:repl_tasks = g:repl_tasks + a:tasks
+        return
+    endif
+    let g:repl_tasks = a:tasks
     let g:waitforsymbols = repl#AsList(a:symbols)
     let g:taskprocess = 0
     let g:currentlinenumber = -1
     let g:currentrepltype = repl#REPLGetShortName()
     if repl#REPLWin32Return()
-        let g:term_send_task_codes = ['LABEL Start', 'sleep 10', 'wait repl#CheckInputState()', 'call term_sendkeys("' . repl#GetConsoleName() . '", g:tasks[g:taskprocess] . "\r\n")', 'let g:taskprocess = g:taskprocess + 1', 'if g:taskprocess == len(g:tasks)', 'return', 'endif', 'GOTO Start']
+        let g:term_send_task_codes = ['LABEL Start', 'sleep 10', 'wait repl#CheckInputState()', 'call term_sendkeys("' . repl#GetConsoleName() . '", g:repl_tasks[g:taskprocess] . "\r\n")', 'let g:taskprocess = g:taskprocess + 1', 'if g:taskprocess == len(g:repl_tasks)', 'unlet g:repl_tasks', 'return', 'endif', 'GOTO Start']
     else
-        let g:term_send_task_codes = ['LABEL Start', 'sleep 10', 'wait repl#CheckInputState()', 'call term_sendkeys("' . repl#GetConsoleName() . '", g:tasks[g:taskprocess] . "\n")', 'let g:taskprocess = g:taskprocess + 1', 'if g:taskprocess == len(g:tasks)', 'return', 'endif', 'GOTO Start']
+        let g:term_send_task_codes = ['LABEL Start', 'sleep 10', 'wait repl#CheckInputState()', 'call term_sendkeys("' . repl#GetConsoleName() . '", g:repl_tasks[g:taskprocess] . "\n")', 'let g:taskprocess = g:taskprocess + 1', 'if g:taskprocess == len(g:repl_tasks)', 'unlet g:repl_tasks','return', 'endif', 'GOTO Start']
     endif
     if exists("g:repl_output_copy_to_register") && repl#REPLGetShortName() ==# "ipython"
         let g:term_send_task_codes = g:term_send_task_codes[:-4] + ["sleep 300", "wait repl#CheckInputState()", "call repl#GetTerminalLastOutput('" . g:repl_output_copy_to_register . "')"] + g:term_send_task_codes[-3:]
@@ -764,7 +822,7 @@ function! repl#SendWholeBlock() abort
     let l:end_line_number = line('$')
     for i in range(line('.') + 1, line('$'))
         if repl#GetIndent(getline(i)) <= l:begin_indent
-            if repl#GetIndent(getline(i)) == l:begin_indent && repl#StartWithAny(repl#LStrip(getline(i)), ['else:', 'elif '])
+            if repl#GetIndent(getline(i)) == l:begin_indent && repl#StartWithAny(repl#LStrip(getline(i)), ['else:', 'elif ', 'except:', 'finally:'])
                 continue
             end
             if i == l:begin_line_number + 1 && repl#StartWith(repl#LStrip(l:begin_line), "@") && repl#StartWith(repl#LStrip(getline(i)), 'def ')
@@ -778,13 +836,34 @@ function! repl#SendWholeBlock() abort
     return l:end_line_number
 endfunction
 
+function! repl#SendCompleteLine() abort
+    let l:begin_line = getline('.')
+    let l:begin_line_number = line('.')
+    let l:end_line_number = line('$')
+    let l:codes = [getline('.')]
+    for i in range(line('.') + 1, line('$'))
+        let l:codes = l:codes + [getline(i)]
+        if repl#IsCodeFinish(l:codes)
+            let l:end_line_number = i
+            break
+        endif
+        if i > line('.') + 100
+            let l:end_line_number = l:begin_line_number
+            break
+        endif
+    endfor
+    call repl#SendLines(l:begin_line_number, l:end_line_number)
+    return l:end_line_number
+endfunction
+
 function! repl#GetTerminalContent() abort
     return getbufline(repl#GetConsoleName(), max([1, line("$", bufwinid(repl#GetConsoleName())) - 300]), "$")
 endfunction
 
 function! repl#GetTerminalLastOutput(...) abort
     let l:terminal_content = repl#GetTerminalContent()
-    if has('python3')
+    try
+        if has('python3')
 python3 << EOF
 import vim
 sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
@@ -792,14 +871,14 @@ from replpython import GetLastOutput
 terminal_content = vim.eval("l:terminal_content")
 last_out = GetLastOutput(terminal_content, "ipython")
 EOF
-        if a:0 == 1
-            try
-                execute "let @" . a:1 . " = '" . py3eval("last_out") . "'"
-            catch /.*/
-                echom v:exception
-            endtry
-        endif
-    elseif has('python')
+            if a:0 == 1
+                try
+                    execute "let @" . a:1 . " = '" . py3eval("last_out") . "'"
+                catch /.*/
+                    echom v:exception
+                endtry
+            endif
+        elseif has('python')
 python << EOF
 import vim
 sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
@@ -807,14 +886,17 @@ from replpython import GetLastOutput
 terminal_content = vim.eval("l:terminal_content")
 last_out = GetLastOutput(terminal_content, "ipython")
 EOF
-        if a:0 == 1
-            try
-                execute "let @" . a:1 . " = '" . pyeval("last_out") . "'"
-            catch /.*/
-                echom v:exception
-            endtry
+            if a:0 == 1
+                try
+                    execute "let @" . a:1 . " = '" . pyeval("last_out") . "'"
+                catch /.*/
+                    echom v:exception
+                endtry
+            endif
         endif
-    endif
+    catch /.*/
+        echo 'Something went wrong, but I do not know what'
+    endtry
 endfunction
 
 function! repl#REPLDebug() abort

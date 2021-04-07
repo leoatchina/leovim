@@ -41,7 +41,7 @@ if !exists('g:sendtorepl_invoke_key')
 endif
 
 if !exists('g:repl_auto_sends')
-    let g:repl_auto_sends = ['class ', 'def ', 'for ', 'if ', 'while ', 'with ', 'async def', '@']
+    let g:repl_auto_sends = ['class ', 'def ', 'for ', 'if ', 'while ', 'with ', 'async def', '@', 'try']
 endif
 
 if !exists('g:repl_cursor_down')
@@ -95,6 +95,10 @@ endif
 
 if !exists('g:repl_python_auto_import')
     let g:repl_python_auto_import = 1
+endif
+
+if !exists('g:repl_python_auto_send_unfinish_line')
+    let g:repl_python_auto_send_unfinish_line = 1
 endif
 
 if !exists('g:repl_sendvariable_template')

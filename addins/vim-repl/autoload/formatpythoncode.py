@@ -15,7 +15,8 @@ import replpython
 from filemanager import path
 import filemanager
 
-# print(filemanager.__file__)
+THREE_DOUBLEQUOTE = '"' * 3
+THREE_SINGLEQUOTE = '"' * 3
 
 class UnfinishType:
     LEFT_PARAENTHESE = 1 # (
@@ -24,6 +25,8 @@ class UnfinishType:
     DOUBLEQUOTE = 4 # "
     SINGLEQUOTE = 5 # '
     LONGSTRING = 11 # '''
+    RAWLONGSTRING = 12
+    RAWCOMMENT = 13
     COMMENT = 6 # """
     TYPEHINT = 7 # def f(a: int)
     TYPEALPHA = 10
@@ -39,7 +42,6 @@ class pythoncodes:
         self.filepath = filepath
         self.blocks = list() # List[List[str], List[int]]
 
-    # @profile
     def getcode(self, code):
         self.rawcontents = [line for line in code if len(line.strip()) != 0]
         self.removecomments()
@@ -56,18 +58,14 @@ class pythoncodes:
     def expand_import_from_relative_path(self):
         if self.filepath == "":
             return
-        # print(self.blocks)
         for index in range(len(self.blocks)):
             block = self.blocks[index]
-            # print(block)
             if len(block[0]) == 1 and (block[0][0].lstrip().startswith("import .") or block[0][0].lstrip().startswith("from .")):
-                # print(block)
                 code = block[0][0]
                 p = path(self.filepath)
                 dot_number = len(code.split()[1]) - len(code.split()[1].lstrip("."))
                 for _ in range(dot_number - 1):
                     p = p.parent()
-                # print(p)
                 if "__init__.py" not in [t[-1] for t in p.ls()]:
                     temp = code[:code.index(".")] + code[code.index(".")+dot_number:]
                 else:
@@ -77,8 +75,6 @@ class pythoncodes:
                         p = p.parent
                     temp = code[:code.index(".")] + extra + ("." if not code[code.index(".") + dot_number:].startswith(" ") else "") + code[code.index(".") + dot_number:]
                 self.blocks[index] = ([temp], self.blocks[index][1])
-                # print(self.blocks)
-        # print(self.blocks)
 
     def tructcomments(self, line):
         doublecomment = False
@@ -109,22 +105,20 @@ class pythoncodes:
     def removecomments(self):
         newrawcontents = list()
         i = 0
-        # for i in range(len(self.rawcontents)):
         multi_indent = replpython.getpythonindent_multiline(self.rawcontents)
         while i < len(self.rawcontents):
-            # indentlevel, finishflag, unfinishtype = replpython.getpythonindent(self.rawcontents[:(i)])
             if i == 0:
                 indentlevel, finishflag, unfinishtype = (0, False, -1)
             else:
                 indentlevel, finishflag, unfinishtype = multi_indent[i - 1]
-            if unfinishtype in {UnfinishType.DOUBLEQUOTE, UnfinishType.SINGLEQUOTE, UnfinishType.LONGSTRING, UnfinishType.COMMENT}:
+            if unfinishtype in {UnfinishType.DOUBLEQUOTE, UnfinishType.SINGLEQUOTE, UnfinishType.LONGSTRING, UnfinishType.COMMENT, UnfinishType.RAWCOMMENT, UnfinishType.RAWLONGSTRING}:
                 newrawcontents.append(self.rawcontents[i])
                 i += 1
                 continue
             if self.rawcontents[i].strip().startswith("#"):
                 i += 1
                 continue
-            if finishflag and self.rawcontents[i].strip().startswith('"""'):
+            if finishflag and self.rawcontents[i].strip().startswith(THREE_DOUBLEQUOTE):
                 for j in range(i, len(self.rawcontents)):
                     j_indentlevel, j_finishflag, j_unfinishtype = replpython.getpythonindent(self.rawcontents[i:j+1])
                     if j_finishflag == True:
@@ -145,14 +139,20 @@ class pythoncodes:
             while j < len(self.rawcontents):
                 tobeadded = self.rawcontents[j]
                 Flag_NeedMerge = not tempcodeindent[j][1]
-                if j != i and tempcodeindent[j-1][2] not in {UnfinishType.DOUBLEQUOTE, UnfinishType.SINGLEQUOTE, UnfinishType.LONGSTRING, UnfinishType.COMMENT}:
+                if j != i and tempcodeindent[j-1][2] not in {UnfinishType.DOUBLEQUOTE, UnfinishType.SINGLEQUOTE, UnfinishType.LONGSTRING, UnfinishType.COMMENT, UnfinishType.RAWLONGSTRING}:
                     tobeadded = tobeadded.lstrip()
-                if tempcodeindent[j][2] not in {UnfinishType.LONGSTRING}:
+                if tempcodeindent[j][2] not in {UnfinishType.LONGSTRING, UnfinishType.COMMENT, UnfinishType.RAWCOMMENT, UnfinishType.RAWLONGSTRING}:
                     tobeadded = tobeadded.rstrip()
                 if tempcodeindent[j][2] in {UnfinishType.LONGSTRING, UnfinishType.COMMENT}:
                     tobeadded = tobeadded + "\\n"
                     Flag_NeedMerge = True
-                if tempcodeindent[j][2] not in {UnfinishType.LONGSTRING} and self.rawcontents[j][-1] == "\\":
+                if tempcodeindent[j][2] in {UnfinishType.RAWCOMMENT}:
+                    tobeadded = tobeadded + THREE_DOUBLEQUOTE + ' "\\n" ' + THREE_DOUBLEQUOTE
+                    Flag_NeedMerge = True
+                if tempcodeindent[j][2] in {UnfinishType.RAWLONGSTRING}:
+                    tobeadded = tobeadded + THREE_SINGLEQUOTE + ' "\\n" ' + THREE_SINGLEQUOTE
+                    Flag_NeedMerge = True
+                if tempcodeindent[j][2] not in {UnfinishType.LONGSTRING, UnfinishType.COMMENT, UnfinishType.RAWCOMMENT, UnfinishType.RAWLONGSTRING} and self.rawcontents[j][-1] == "\\":
                     if tempcodeindent[j][2] not in {UnfinishType.DOUBLEQUOTE, UnfinishType.SINGLEQUOTE}:
                         tobeadded = tobeadded[:-1] + " "
                     else:
