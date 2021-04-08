@@ -1172,11 +1172,30 @@ for i in range(26)
     let l_char = nr2char(char2nr('a') + i)
     let u_char = nr2char(char2nr('A') + i)
     exec 'nnoremap ,vy' . l_char . ' viw"'. l_char . 'y'
-    exec 'nnoremap <leader>y' . l_char . ' "'. l_char . 'yy'
-    exec 'nnoremap <leader>y' . u_char . ' "'. u_char . 'yy'
-    exec 'xnoremap <leader>y' . l_char . ' "'. l_char . 'y'
-    exec 'xnoremap <leader>y' . u_char . ' "'. u_char . 'y'
+    exec 'nnoremap <leader>yy' . l_char . ' "'. l_char . 'yy'
+    exec 'nnoremap <leader>yy' . u_char . ' "'. u_char . 'yy'
+    exec 'xnoremap <leader>yy' . l_char . ' "'. l_char . 'y'
+    exec 'xnoremap <leader>yy' . u_char . ' "'. u_char . 'y'
 endfor
+
+"Yank a line without leading whitespaces and line break
+nnoremap <leader>yu mp_yg_`p
+"Copy a line without leading whitespaces and line break to clipboard
+nnoremap <leader>yc mp_"+yg_`P
+"Copy file path
+nnoremap <leader>yp :let @*=expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
+"Copy file name
+nnoremap <leader>yf :let @*=expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
+"Copy bookmark position reference
+nnoremap <leader>cb :let @*=expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark  copied=-'<cr>'
+" cd git project root
+command! CDR cd %:h | cd `git rev-parse --show-toplevel`
+nnoremap <leader>cr :CDR<CR>
+" cd module root
+command! CDM cd %:h | exec 'cd' fnameescape(fnamemodify(findfile("pom.xml",
+nnoremap <leader>cm :CDM<CR>
+" cd folder of current file
+nnoremap <leader>cd :lcd %:p:h<Cr>
 " ------------------------
 " z remap
 " ------------------------
@@ -1247,7 +1266,6 @@ au WinEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
             \ && bufname("")[0] != "!"                 " some special buf
             \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
             \ | lcd %:p:h | endif
-nmap <leader>cd :lcd %:p:h<Cr>
 augroup AUTOClose
     " 离开InsertMode时，关闭补全，非paste模式，还有不往后move cursor
     au InsertLeave * set nopaste
