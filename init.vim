@@ -228,7 +228,7 @@ if WINDOWS()
         let $PATH = $HOME . "\\.leovim.plug\\windows-tools\\tools;" . $HOME . "\\.leovim.plug\\windows-tools\\tools\\gtags\\bin;" . $HOME . "\\.leovim.plug\\windows-tools\\tools\\cppcheck;" . $PATH
     endif
     set winaltkeys=no
-    if g:gui_running > 0
+    if get(g:,'gui_running', 0) > 0
         set lines=999
         set columns=999
     endif
@@ -1187,7 +1187,7 @@ nnoremap <leader>yp :let @*=expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
 "Copy file name
 nnoremap <leader>yf :let @*=expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
 "Copy bookmark position reference
-nnoremap <leader>cb :let @*=expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark  copied=-'<cr>'
+nnoremap <leader>yb :let @*=expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark  copied=-'<cr>'
 " cd git project root
 command! CDR cd %:h | cd `git rev-parse --show-toplevel`
 nnoremap <leader>cr :CDR<CR>
