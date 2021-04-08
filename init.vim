@@ -1192,7 +1192,7 @@ nnoremap <leader>cb :let @*=expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-
 command! CDR cd %:h | cd `git rev-parse --show-toplevel`
 nnoremap <leader>cr :CDR<CR>
 " cd module root
-command! CDM cd %:h | exec 'cd' fnameescape(fnamemodify(findfile("pom.xml",
+command! CDM cd %:h | exec 'cd' fnameescape(fnamemodify(findfile("pom.xml", escape(expand('%:p:h'), ' ') . ";"), ':h'))
 nnoremap <leader>cm :CDM<CR>
 " cd folder of current file
 nnoremap <leader>cd :lcd %:p:h<Cr>
