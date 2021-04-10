@@ -13,8 +13,8 @@ IF "%APP_PATH%" == "%HOME%\.leovim.conf" (
     echo "leovim is already installed in %HOME%\.leovim.conf"
 ) ELSE (
     echo "leovim is going to be linked to %HOME%\.leovim.conf"
-		call rmdir "%HOME%\.leovim.conf"
-		call mklink /d "%HOME%\.leovim.conf" "%APP_PATH%"
+    call rmdir "%HOME%\.leovim.conf"
+    call mklink /d "%HOME%\.leovim.conf" "%APP_PATH%"
 )
 echo
 
@@ -28,7 +28,7 @@ call mklink "%HOME%\.leovim.clean" "%APP_PATH%\clean.cmd"
 
 REM cp vimrc
 echo if filereadable(expand("~/.vimrc.test")) > "%HOME%\.vimrc"
-echo    source ~/.vimrc.test>> "%HOME%\.vimrc"
+echo    source ~/.vimrc.test >> "%HOME%\.vimrc"
 echo else >> "%HOME%\.vimrc"
 echo    source ~/.leovim.conf/init.vim >> "%HOME%\.vimrc"
 echo endif >> "%HOME%\.vimrc"
