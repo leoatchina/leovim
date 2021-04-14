@@ -152,10 +152,10 @@ if Installed("fzf.vim") && Installed("fzf")
                     \ 'sink': function('s:paste_yank', {'paste': 'p', 'visual': 1}),
                     \ 'options': '--ansi -x --prompt "YankAfter>"'
                     \ }, g:fzf_layout), 0)
-        nnoremap <silent> ,p :FZFYankBefore<Cr>
-        nnoremap <silent> ,P :FZFYankAfter<Cr>
-        xnoremap <silent> ,p :<C-u>FZFYankBeforeV<Cr>
-        xnoremap <silent> ,P :<C-u>FZFYankAfterV<Cr>
+        nnoremap <silent> <leader>i :FZFYankBefore<Cr>
+        nnoremap <silent> <leader>i :FZFYankAfter<Cr>
+        xnoremap <silent> <leader>i :<C-u>FZFYankBeforeV<Cr>
+        xnoremap <silent> <leader>i :<C-u>FZFYankAfterV<Cr>
     endif
     " --------------------
     " FZFRegisters
@@ -620,13 +620,13 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
     nnoremap <M-h>;         :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
-        nnoremap <silent> ,p :CtrlPYankring<Cr>
+        nnoremap <silent> <leader>i :CtrlPYankring<Cr>
     endif
     if !Installed('fzf-funky')
         nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
     endif
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        nnoremap <silent> ,p        :CtrlPYankring<Cr>
+        nnoremap <silent> <leader>i        :CtrlPYankring<Cr>
         nnoremap <silent> <leader>p :registers<Cr>
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>
