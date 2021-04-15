@@ -18,16 +18,16 @@ if Installed('vimspector')
     nnoremap <M-u>w :VimspectorWatch
     " ========== jump to windows in vimspector
     nnoremap <M-u>o :call GoToVimspectorWindow('output')<Cr>
-    nnoremap <M-u>S :call GoToVimspectorWindow('server')<Cr>
     nnoremap <M-u>s :call GoToVimspectorWindow('stderr')<Cr>
     nnoremap <M-u>c :call GoToVimspectorWindow('Console')<Cr>
     nnoremap <M-u>t :call GoToVimspectorWindow('Telemetry')<Cr>
     nnoremap <M-u>v :call GoToVimspectorWindow('Vimspector')<Cr>
-    nnoremap <M-u>1 :call GoToVimspectorWindow('variables')<Cr>
-    nnoremap <M-u>2 :call GoToVimspectorWindow('watches')<Cr>
-    nnoremap <M-u>3 :call GoToVimspectorWindow('stacktrace')<Cr>
-    nnoremap <M-u>4 :call GoToVimspectorWindow('code')<Cr>
-    nnoremap <M-u>5 :call GoToVimspectorWindow('terminal')<Cr>
+    nnoremap ,1 :call GoToVimspectorWindow('variables')<Cr>
+    nnoremap ,2 :call GoToVimspectorWindow('watches')<Cr>
+    nnoremap ,3 :call GoToVimspectorWindow('stacktrace')<Cr>
+    nnoremap ,4 :call GoToVimspectorWindow('code')<Cr>
+    nnoremap ,5 :call GoToVimspectorWindow('terminal')<Cr>
+    nnoremap ,6 :call GoToVimspectorWindow('server')<Cr>
     " ========== others
     nnoremap <M-u>; :Vimspector
     nnoremap <M-u>, :call vimspector#
