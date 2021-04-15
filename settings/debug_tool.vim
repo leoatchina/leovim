@@ -11,15 +11,15 @@ if Installed('vimspector')
     nmap <silent> ,o <Plug>VimspectorStepOver
     nmap <silent> ,n <Plug>VimspectorStepInto
     nmap <silent> ,u <Plug>VimspectorStepOut
-    nnoremap ,x :VimspectorEval
-    nnoremap ,w :VimspectorWatch
     nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>f <Plug>VimspectorAddFunctionBreakpoint
     nmap <silent> <M-u>. :VimspectorUpdate<Cr>
+    nnoremap <M-u>e :VimspectorEval
+    nnoremap <M-u>w :VimspectorWatch
     " ========== jump to windows in vimspector
     nnoremap <M-u>o :call GoToVimspectorWindow('output')<Cr>
-    nnoremap <M-u>s :call GoToVimspectorWindow('server')<Cr>
-    nnoremap <M-u>e :call GoToVimspectorWindow('stderr')<Cr>
+    nnoremap <M-u>S :call GoToVimspectorWindow('server')<Cr>
+    nnoremap <M-u>s :call GoToVimspectorWindow('stderr')<Cr>
     nnoremap <M-u>c :call GoToVimspectorWindow('Console')<Cr>
     nnoremap <M-u>t :call GoToVimspectorWindow('Telemetry')<Cr>
     nnoremap <M-u>v :call GoToVimspectorWindow('Vimspector')<Cr>

@@ -80,12 +80,7 @@ if Installed("fzf.vim") && Installed("fzf")
     nnoremap <M-f>l :FZFLocate<Space>
     if Installed('vim-yoink')
         let g:yoinkMaxItems = 100
-        nmap ,yb <plug>(YoinkPostPasteSwapBack)
-        nmap ,yf <plug>(YoinkPostPasteSwapForward)
-        nmap ,yp <plug>(YoinkRotateBack)
-        nmap ,yn <plug>(YoinkRotateForward)
-        nmap ,yy <plug>(YoinkPostPasteToggleFormat)
-        nmap ,yc :ClearYanks<Cr>
+        nmap <leader>yc :ClearYanks<Cr>
         nmap p   <plug>(YoinkPaste_p)
         nmap P   <plug>(YoinkPaste_P)
         " --------------------
