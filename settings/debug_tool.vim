@@ -8,9 +8,9 @@ if Installed('vimspector')
     nmap <silent> ,d :call vimspector#ClearLineBreakpoint(expand('%:p'), line('.'))<Cr>
     nmap <silent> ,D :call vimspector#ClearBreakpoints()<Cr>
     nmap <silent> ,r :call vimspector#Restart()<Cr>
-    nmap <silent> ,n <Plug>VimspectorStepOver
-    nmap <silent> ,i <Plug>VimspectorStepInto
-    nmap <silent> ,o <Plug>VimspectorStepOut
+    nmap <silent> ,o <Plug>VimspectorStepOver
+    nmap <silent> ,n <Plug>VimspectorStepInto
+    nmap <silent> ,u <Plug>VimspectorStepOut
     nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>f <Plug>VimspectorAddFunctionBreakpoint
     nmap <silent> <M-u>u :VimspectorUpdate<Cr>

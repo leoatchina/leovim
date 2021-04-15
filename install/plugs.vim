@@ -338,15 +338,15 @@ endif
 " projectionist
 " ------------------------------
 MyPlug 'tpope/vim-projectionist'
-nnoremap ,pa :A<Space>
-nnoremap ,pe :A<Cr>
-nnoremap ,px :AS<Space>
-nnoremap ,pv :AV<Space>
-nnoremap ,pt :AT<Space>
-nnoremap ,pd :AD<Space>
-nnoremap ,pc :Pcd<Space>
-nnoremap ,pl :Plcd<Space>
-nnoremap ,pp :ProjectDo<Space>
+nnoremap <leader>ma :A<Space>
+nnoremap <leader>me :A<Cr>
+nnoremap <leader>mx :AS<Space>
+nnoremap <leader>mv :AV<Space>
+nnoremap <leader>mt :AT<Space>
+nnoremap <leader>md :AD<Space>
+nnoremap <leader>mc :Pcd<Space>
+nnoremap <leader>ml :Plcd<Space>
+nnoremap <leader>mp :ProjectDo<Space>
 " ------------------------------
 " yoink
 " ------------------------------
