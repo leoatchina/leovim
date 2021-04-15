@@ -153,9 +153,9 @@ if Installed("fzf.vim") && Installed("fzf")
                     \ 'options': '--ansi -x --prompt "YankAfter>"'
                     \ }, g:fzf_layout), 0)
         nnoremap <silent> <leader>i :FZFYankBefore<Cr>
-        nnoremap <silent> <leader>i :FZFYankAfter<Cr>
+        nnoremap <silent> <leader>p :FZFYankAfter<Cr>
         xnoremap <silent> <leader>i :<C-u>FZFYankBeforeV<Cr>
-        xnoremap <silent> <leader>i :<C-u>FZFYankAfterV<Cr>
+        xnoremap <silent> <leader>p :<C-u>FZFYankAfterV<Cr>
     endif
     " --------------------
     " FZFRegisters
@@ -211,10 +211,10 @@ if Installed("fzf.vim") && Installed("fzf")
             \ 'sink': function('s:paste_select', {'paste': 'p', 'visual': 1}),
             \ 'options': '--ansi -x --prompt "PasteAfter>"'
             \ }, g:fzf_layout), 0)
-    nnoremap <silent> <leader>p :FZFRegisterBefore<Cr>
-    nnoremap <silent> <leader>P :FZFRegisterAfter<Cr>
-    xnoremap <silent> <leader>p :<C-u>FZFRegisterBeforeV<Cr>
-    xnoremap <silent> <leader>P :<C-u>FZFRegisterAfterV<Cr>
+    nnoremap <silent> ,i :FZFRegisterBefore<Cr>
+    nnoremap <silent> ,p :FZFRegisterAfter<Cr>
+    xnoremap <silent> ,i :<C-u>FZFRegisterBeforeV<Cr>
+    xnoremap <silent> ,p :<C-u>FZFRegisterAfterV<Cr>
     " --------------------
     " FZFJumps
     " --------------------
@@ -613,8 +613,8 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         set rtp+=$ADDINS_PATH/ctrlp.vim
         set rtp+=$ADDINS_PATH/ctrlp-extensions.vim
         set rtp+=$ADDINS_PATH/ctrlp-funky
-        command! CtrlPCmdline call ctrlp#init(ctrlp#cmdline#id())
-        command! CtrlPMenu call ctrlp#init(ctrlp#menu#id())
+        command! CtrlPCmdline  call ctrlp#init(ctrlp#cmdline#id())
+        command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
     nnoremap <M-h>;         :CtrlP<tab>
@@ -626,7 +626,6 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
     endif
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        nnoremap <silent> <leader>i        :CtrlPYankring<Cr>
         nnoremap <silent> <leader>p :registers<Cr>
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>

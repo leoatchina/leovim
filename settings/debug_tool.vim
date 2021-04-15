@@ -8,9 +8,9 @@ if Installed('vimspector')
     nmap <silent> ,d :call vimspector#ClearLineBreakpoint(expand('%:p'), line('.'))<Cr>
     nmap <silent> ,D :call vimspector#ClearBreakpoints()<Cr>
     nmap <silent> ,r :call vimspector#Restart()<Cr>
-    nmap <silent> ,n <Plug>VimspectorStepOver
-    nmap <silent> ,i <Plug>VimspectorStepInto
-    nmap <silent> ,o <Plug>VimspectorStepOut
+    nmap <silent> ,o <Plug>VimspectorStepOver
+    nmap <silent> ,n <Plug>VimspectorStepInto
+    nmap <silent> ,u <Plug>VimspectorStepOut
     nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>f <Plug>VimspectorAddFunctionBreakpoint
     nmap <silent> <M-u>u :VimspectorUpdate<Cr>
@@ -57,4 +57,15 @@ if Installed('vimspector')
             execute windowNr . 'wincmd w'
         endif
     endfunction
+endif
+if Installed("vim-projectionist")
+    nnoremap <leader>ma :A<Space>
+    nnoremap <leader>me :A<Cr>
+    nnoremap <leader>mx :AS<Space>
+    nnoremap <leader>mv :AV<Space>
+    nnoremap <leader>mt :AT<Space>
+    nnoremap <leader>md :AD<Space>
+    nnoremap <leader>mc :Pcd<Space>
+    nnoremap <leader>ml :Plcd<Space>
+    nnoremap <leader>mp :ProjectDo<Space>
 endif
