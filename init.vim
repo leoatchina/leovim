@@ -928,12 +928,12 @@ inoremap <M-S> <ESC>:wa!<Cr>li
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
 " 设置分割页面
-nnoremap ,t           <C-w>T
-nnoremap ,x           :tab split<CR>
+nnoremap ,t           :tab split<CR>
+nnoremap ,T           <C-w>T
 nnoremap <leader>V    :vsplit<Space>
 nnoremap <leader>X    :split<Space>
-nnoremap ,<Cr>        :tabe<Cr>
 nnoremap <leader><Cr> :e!<Cr>
+nnoremap ,<Cr>        :tabe<Cr>
 " remap for cusor move insert mode
 inoremap <M-l> <Right>
 inoremap <M-h> <Left>

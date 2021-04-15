@@ -11,9 +11,11 @@ if Installed('vimspector')
     nmap <silent> ,o <Plug>VimspectorStepOver
     nmap <silent> ,n <Plug>VimspectorStepInto
     nmap <silent> ,u <Plug>VimspectorStepOut
+    nnoremap ,x :VimspectorEval
+    nnoremap ,w :VimspectorWatch
     nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>f <Plug>VimspectorAddFunctionBreakpoint
-    nmap <silent> <M-u>u :VimspectorUpdate<Cr>
+    nmap <silent> <M-u>. :VimspectorUpdate<Cr>
     " ========== jump to windows in vimspector
     nnoremap <M-u>o :call GoToVimspectorWindow('output')<Cr>
     nnoremap <M-u>s :call GoToVimspectorWindow('server')<Cr>
@@ -29,12 +31,10 @@ if Installed('vimspector')
     " ========== others
     nnoremap <M-u>; :Vimspector
     nnoremap <M-u>, :call vimspector#
-    nnoremap <M-u>. :VimspectorEval
     nnoremap <M-u>p :call vimspector#Pause()<Cr>
     nnoremap <M-u>q :call vimspector#Stop()<Cr>
     nnoremap <M-u>r :call vimspector#Reset()<Cr>
     nnoremap <M-u>l :call vimspector#Launch()<Cr>
-    nnoremap <M-u>w :VimspectorWatch
     function! GoToVimspectorWindow(name) abort
         let windowNr = 0
         let name = a:name
