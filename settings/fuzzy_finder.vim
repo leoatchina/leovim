@@ -593,10 +593,6 @@ if Installed('coc.nvim')
         call nvim_win_set_cursor(float, pos)
         return ''
     endfunction
-    inoremap <silent><expr> <M-E>  coc#util#has_float() ? FloatScroll(1) : "\<Down>"
-    inoremap <silent><expr> <M-Y>  coc#util#has_float() ? FloatScroll(0) : "\<Up>""
-    inoremap <silent><expr> <Down> coc#util#has_float() ? FloatScroll(1) : "\<Down>"
-    inoremap <silent><expr> <Up>   coc#util#has_float() ? FloatScroll(0) : "\<Up>""
 endif
 if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || get(g:, 'fuzzy_finder', '') == 'ctrlp'
     if get(g:, 'fuzzy_finder', '') == ''
@@ -673,8 +669,6 @@ endif
 if Installed('vim-quickui')
     let g:quickui_border_style = 2
     nnoremap <leader>em :call quickui#tools#display_messages()<Cr>
-    nnoremap <silent><M-down> :call quickui#preview#scroll(1)<Cr>
-    nnoremap <silent><M-up>   :call quickui#preview#scroll(-1)<Cr>
     " preview in popup
     function! s:PreviewFileW(filename) abort
         let filename = a:filename
@@ -684,3 +678,12 @@ if Installed('vim-quickui')
     command! -nargs=1 -complete=file PreviewFileW call s:PreviewFileW(<f-args>)
     nnoremap \<Tab> :PreviewFileW<Space>
 endif
+function Scroll(step)
+    if Installed('vim-quickui') && quickui#preview#visible() > 0
+        call quickui#preview#scroll(a:step)
+    elseif Installed('coc.nvim') && coc#util#has_float() > 0
+        call FloatScroll(a:step)
+    endif
+endfunction
+nnoremap <silent><leader>] :call Scroll(1)<Cr>
+nnoremap <silent><leader>[ :call Scroll(-1)<Cr>
