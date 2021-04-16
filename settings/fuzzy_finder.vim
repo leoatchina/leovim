@@ -685,5 +685,7 @@ function Scroll(step)
         call FloatScroll(a:step)
     endif
 endfunction
-nnoremap <silent><leader>] :call Scroll(1)<Cr>
-nnoremap <silent><leader>[ :call Scroll(-1)<Cr>
+nnoremap <silent>q]        :call Scroll(1)<Cr>
+nnoremap <silent>q[        :call Scroll(-1)<Cr>
+nnoremap <silent><leader>] :call Scroll(5)<Cr>
+nnoremap <silent><leader>[ :call Scroll(-5)<Cr>
