@@ -593,6 +593,8 @@ if Installed('coc.nvim')
         call nvim_win_set_cursor(float, pos)
         return ''
     endfunction
+    inoremap <silent><expr> <M-E>  coc#util#has_float() ? FloatScroll(1) : "\<Down>"
+    inoremap <silent><expr> <M-Y>  coc#util#has_float() ? FloatScroll(0) : "\<Up>""
 endif
 if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || get(g:, 'fuzzy_finder', '') == 'ctrlp'
     if get(g:, 'fuzzy_finder', '') == ''
