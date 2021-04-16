@@ -276,8 +276,8 @@ elseif Installed('coc.nvim')
         endif
     endfunction
     if has('nvim-0.4.0') || has('patch-8.2.0750')
-        inoremap <silent><nowait><expr> <Up>   coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Up>"
-        inoremap <silent><nowait><expr> <Down> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Down>"
+        inoremap <silent><nowait><expr> <M-e> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<M-e>"
+        inoremap <silent><nowait><expr> <M-y> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<M-y>"
     endif
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
@@ -394,8 +394,8 @@ elseif Installed('vim-lsp')
                     \ })
     endif
     if has('nvim-0.4.0') || has('patch-8.1.1615')
-        inoremap <buffer> <expr><up>   lsp#scroll(+1)
-        inoremap <buffer> <expr><down> lsp#scroll(-1)
+        inoremap <buffer> <expr><M-e>   lsp#scroll(+1)
+        inoremap <buffer> <expr><M-y> lsp#scroll(-1)
     endif
 elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'
