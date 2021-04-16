@@ -641,6 +641,10 @@ endif
 if Installed('vim-quickui')
     let g:quickui_border_style = 2
     nnoremap <leader>em :call quickui#tools#display_messages()<Cr>
+    nnoremap <silent>q]        :call quickui#preview#scroll(1)<Cr>
+    nnoremap <silent>q[        :call quickui#preview#scroll(-1)<Cr>
+    nnoremap <silent><leader>] :call quickui#preview#scroll(5)<Cr>
+    nnoremap <silent><leader>[ :call quickui#preview#scroll(-5)<Cr>
     " preview in popup
     function! s:PreviewFileW(filename) abort
         let filename = a:filename
@@ -650,14 +654,3 @@ if Installed('vim-quickui')
     command! -nargs=1 -complete=file PreviewFileW call s:PreviewFileW(<f-args>)
     nnoremap \<Tab> :PreviewFileW<Space>
 endif
-function Scroll(step)
-    if Installed('vim-quickui') && quickui#preview#visible() > 0
-        call quickui#preview#scroll(a:step)
-    elseif Installed('coc.nvim') && coc#util#has_float() > 0
-        call FloatScroll(a:step)
-    endif
-endfunction
-nnoremap <silent>q]        :call Scroll(1)<Cr>
-nnoremap <silent>q[        :call Scroll(-1)<Cr>
-nnoremap <silent><leader>] :call Scroll(5)<Cr>
-nnoremap <silent><leader>[ :call Scroll(-5)<Cr>
