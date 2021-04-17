@@ -126,14 +126,14 @@ if Installed('YouCompleteMe')
     if WINDOWS()
         let g:ycm_global_ycm_extra_conf = $YCM_WINDIR . "\\.ycm_extra_conf.py"
     else
-        let g:ycm_global_ycm_extra_conf = $INATLL_PATH . "/YCM/.ycm_extra_conf.py"
+        let g:ycm_global_ycm_extra_conf = $INATLL_PATH . "/YouCompleteMe/.ycm_extra_conf.py"
     endif
     let g:ycm_add_preview_to_completeopt                = 0
     let g:ycm_autoclose_preview_window_after_completion = 1
     let g:ycm_autoclose_preview_window_after_insertion  = 1
     let g:ycm_key_list_select_completion                = ['<C-n>', '<Down>']
     let g:ycm_key_list_previous_completion              = ['<C-p>', '<Up>']
-    let g:ycm_confirm_extra_conf                        = 0 " 加载.ycm_extra_conf.py 提示
+    let g:ycm_confirm_extra_conf                        = 1 " 加载.ycm_extra_conf.py 提示
     let g:ycm_min_num_of_chars_for_completion           = 2 " 从第 2 个键入字符就开始罗列匹配项
     let g:ycm_seed_identifiers_with_syntax              = 1 " 语法关键字补全
     let g:ycm_complete_in_comments                      = 1
@@ -142,17 +142,6 @@ if Installed('YouCompleteMe')
     let g:ycm_disable_signature_help                    = 0
     let g:ycm_collect_identifiers_from_tags_files           = 1
     let g:ycm_collect_identifiers_from_comments_and_strings = 1
-    let g:ycm_semantic_triggers =  {
-        \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-        \ 'cs,lua,javascript': ['re!\w{2}'],
-        \ 'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s', 're!\[.*\]\s'],
-        \ 'ocaml' : ['.', '#'],
-        \ 'objcpp' : ['->', '.', '::'],
-        \ 'perl' : ['->'],
-        \ 'php' : ['->', '::'],
-        \ 'typescript,d,perl6,scala,vb,elixir' : ['.'],
-        \ 'ruby' : ['.', '::'],
-        \ }
     if exists('+completepopup') != 0
         set completeopt+=popup
         set completepopup=align:menu,border:off,highlight:WildMenu
