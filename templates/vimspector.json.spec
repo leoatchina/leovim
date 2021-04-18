@@ -49,7 +49,7 @@
         "request": "launch",
         "stopOnEntry": true,
         "MIMode": "gdb",
-        "program": "${workspaceRoot}/target/debug/${projectname}"
+        "program": "${workspaceRoot}/target/debug/${fileWorkspaceFolder}"
       }
     }
   }
