@@ -1096,6 +1096,14 @@ else
     nnoremap <silent><M-C> "zyy
     nnoremap <silent>Y     "zy$
 endif
+nnoremap ,y :0,-y<Cr>
+nnoremap ,Y vGy
+function! YankFromBeginning() abort
+    let original_cursor_position = getpos('.')
+    exec("normal! v^y")
+    call setpos('.', original_cursor_position)
+endfunction
+nnoremap gy :call YankFromBeginning()<Cr>:echo "Yank from line beginning"<Cr>
 xnoremap -  gq
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
