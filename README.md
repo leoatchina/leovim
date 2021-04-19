@@ -92,6 +92,7 @@ click uninstall.cmd with administrator right
 - [x] settings plugins to install list in ./install/plugs.vim
 - [x] Copy && Paste using tmux
 - [x] fzf yank, using ,p
+- [ ] vim-lsp warning colorscheme
 - [ ] leaderf extra
     - [ ] leaderf paste
     - [ ] leaderf yank
