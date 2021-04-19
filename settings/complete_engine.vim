@@ -265,8 +265,8 @@ elseif Installed('coc.nvim')
         endif
     endfunction
     if has('nvim-0.4.0') || has('patch-8.2.0750')
-        inoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-d>"
-        inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-u>"
+        inoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "<Nop>"
+        inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "<Nop>"
         xnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
         xnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
         nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
@@ -389,8 +389,6 @@ elseif Installed('vim-lsp')
     if has('nvim-0.4.0') || has('patch-8.1.1615')
         inoremap <buffer> <expr><C-d> lsp#scroll(+3)
         inoremap <buffer> <expr><C-u> lsp#scroll(-3)
-        nnoremap <buffer> <expr><C-d> lsp#scroll(+3)
-        nnoremap <buffer> <expr><C-u> lsp#scroll(-3)
     endif
 elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'
