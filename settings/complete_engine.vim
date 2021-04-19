@@ -265,12 +265,12 @@ elseif Installed('coc.nvim')
         endif
     endfunction
     if has('nvim-0.4.0') || has('patch-8.2.0750')
-        inoremap <silent><nowait><expr> <M-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<M-d>"
-        inoremap <silent><nowait><expr> <M-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<M-u>"
-        xnoremap <silent><nowait><expr> <M-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<M-d>"
-        xnoremap <silent><nowait><expr> <M-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<M-u>"
-        nnoremap <silent><nowait><expr> <M-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<M-d>"
-        nnoremap <silent><nowait><expr> <M-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<M-u>"
+        inoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-d>"
+        inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-u>"
+        xnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
+        xnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
+        nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
+        nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
     endif
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
@@ -387,10 +387,10 @@ elseif Installed('vim-lsp')
                     \ })
     endif
     if has('nvim-0.4.0') || has('patch-8.1.1615')
-        inoremap <buffer> <expr><M-d> lsp#scroll(+3)
-        inoremap <buffer> <expr><M-u> lsp#scroll(-3)
-        nnoremap <buffer> <expr><M-d> lsp#scroll(+3)
-        nnoremap <buffer> <expr><M-u> lsp#scroll(-3)
+        inoremap <buffer> <expr><C-d> lsp#scroll(+3)
+        inoremap <buffer> <expr><C-u> lsp#scroll(-3)
+        nnoremap <buffer> <expr><C-d> lsp#scroll(+3)
+        nnoremap <buffer> <expr><C-u> lsp#scroll(-3)
     endif
 elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'

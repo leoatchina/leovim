@@ -33,8 +33,8 @@ if g:has_terminal > 0
     if has('nvim') && get(g:, 'terminal_plus', '') =~ 'floaterm'
         au FileType python,sh,perl,javascript,lua xmap <M-e> :FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua nmap <M-e> :FloatermSend<Cr>j
-        au FileType python,sh,perl,javascript,lua xmap <M-y> :FloatermSend<Cr>j
-        au FileType python,sh,perl,javascript,lua nmap <M-y> vaB:FloatermSend<Cr>j:call search('# %%', 'eW')<Cr>j
+        au FileType python,sh,perl,javascript,lua xmap <M-d> :FloatermSend<Cr>j
+        au FileType python,sh,perl,javascript,lua nmap <M-d> vaB:FloatermSend<Cr>j:call search('# %%', 'eW')<Cr>j
         au FileType python nnoremap <leader>R :FloatermNew ipython --no-autoindent<Cr>
     " vim-repl only for vim8+
     elseif v:version >= 800 && !has('nvim')
@@ -71,8 +71,8 @@ if g:has_terminal > 0
         " map
         au Filetype python,sh,perl,javascript,lua call s:set_repl_map()
         function! s:set_repl_map() abort
-            nmap <M-y> vaB<M-e>
-            xmap <M-y> <M-e>
+            nmap <M-d> vaB<M-e>
+            xmap <M-d> <M-e>
             nnoremap <leader>R :<C-u>REPLToggle<Cr>
             nnoremap <leader>rr :REPL
         endfunction

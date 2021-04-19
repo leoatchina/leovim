@@ -51,9 +51,10 @@ if Installed("Nvim-R")
                 \ 'open': 'ToggleObjBrw',
                 \ 'close': 'ToggleObjBrw'
                 \ }
+
     au FileType r nnoremap <silent> <M-T> :call sidebar#toggle('robjb')<CR>
     au FileType r nnoremap <M-A>  :ToggleEnvLib<Cr>
-    au FileType r nnoremap <M-y>  :call SendFunctionToR('echo', "down")<CR>
+    au FileType r nnoremap <M-d>  :call SendFunctionToR('echo', "down")<CR>
     au FileType r nnoremap <M-e>  :call SendLineToR("down")<CR>
     au FileType r xnoremap <M-e>  :call SendLineToR("down")<CR>
     au FileType r nnoremap <leader>rs :call RClearConsole()<Cr>

@@ -821,6 +821,10 @@ onoremap <C-f> $
 onoremap <C-b> ^
 inoremap <C-f> <ESC>A
 inoremap <C-b> <ESC>I
+inoremap <C-d> <Nop>
+inoremap <C-u> <Nop>
+inoremap <M-d> <C-d>
+inoremap <M-u> <C-u>
 " search replace
 nnoremap <silent> c<Cr> *Ncgn
 " ------------------------
@@ -843,24 +847,6 @@ map <F10> <Nop>
 map <F11> <Nop>
 map <F12> <Nop>
 map <C-z> <Nop>
-" keys keeped for tmux
-map <M-p> <Nop>
-map <M-P> <Nop>
-map <M-n> <Nop>
-map <M-N> <Nop>
-map <M-i> <Nop>
-map <M-I> <Nop>
-map <M-b> <Nop>
-map <M-B> <Nop>
-" keys preserver
-map <M-y> <Nop>
-map <M-u> <Nop>
-map <M-h> <Nop>
-map <M-j> <Nop>
-map <M-k> <Nop>
-map <M-l> <Nop>
-map <M--> <Nop>
-map <M-=> <Nop>
 " ------------------------
 " some enhanced shortcuts
 " ------------------------
@@ -1788,6 +1774,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     endif
     if Installed('vimspector')
         nnoremap <M-b> :WhichKey '<lt>M-b>'<Cr>
+        nnoremap <M-u> :WhichKey '<lt>M-u>'<Cr>
     endif
 endif
 " --------------------------
