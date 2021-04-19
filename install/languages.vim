@@ -15,40 +15,40 @@ endif
 " --------------------------
 if HasPlug('c')
     MyPlug 'chxuan/cpp-mode', {'for': ['c', 'cpp']}
-    au Filetype c,cpp nnoremap <M-y>y :CopyCode<cr>
-    au Filetype c,cpp nnoremap <M-y>p :PasteCode<cr>
-    au Filetype c,cpp nnoremap <M-y>g :GoToFunImpl<cr>
-    au Filetype c,cpp nnoremap <M-y>s :Switch<cr>
-    au Filetype c,cpp nnoremap <M-y>f :FormatFunParam<cr>
-    au Filetype c,cpp nnoremap <M-y>i :FormatIf<cr>
-    au Filetype c,cpp nnoremap <M-y>g :GenTryCatch<cr>
-    au Filetype c,cpp xnoremap <M-y>g :GenTryCatch<cr>
+    au Filetype c,cpp nnoremap <leader>ry :CopyCode<cr>
+    au Filetype c,cpp nnoremap <leader>rp :PasteCode<cr>
+    au Filetype c,cpp nnoremap <leader>rg :GoToFunImpl<cr>
+    au Filetype c,cpp nnoremap <leader>rs :Switch<cr>
+    au Filetype c,cpp nnoremap <leader>rf :FormatFunParam<cr>
+    au Filetype c,cpp nnoremap <leader>ri :FormatIf<cr>
+    au Filetype c,cpp nnoremap <leader>rg :GenTryCatch<cr>
+    au Filetype c,cpp xnoremap <leader>rg :GenTryCatch<cr>
     if executable('cppman')
         MyPlug 'skywind3000/vim-cppman', {'for': ['c', 'cpp']}
         autocmd FileType c,cpp setlocal keywordprg=:Cppman
         autocmd FileType c,cpp nnoremap <leader>cm :Cppman<Space>
         autocmd FileType c,cpp nnoremap <leader>cM :Cppman!<Space>
-        autocmd FileType c,cpp nnoremap <M-y>k :Cppman <C-r><C-w>
-        autocmd FileType c,cpp xnoremap <M-y>k :Cppman <C-r>=GetVisualSelection()<Cr>
+        autocmd FileType c,cpp nnoremap <leader>rk :Cppman <C-r><C-w>
+        autocmd FileType c,cpp xnoremap <leader>rk :Cppman <C-r>=GetVisualSelection()<Cr>
     endif
     if executable('ccls')
         MyPlug 'm-pilia/vim-ccls', {'for': ['c', 'cpp']}
-        au Filetype c,cpp nnoremap <M-y>l  :Ccls
-        au Filetype c,cpp nnoremap <M-y>b  :CclsBase<Cr>
-        au Filetype c,cpp nnoremap <M-y>hb :CclsBaseHierarchy<Cr>
-        au Filetype c,cpp nnoremap <M-y>d  :CclsDerived<Cr>
-        au Filetype c,cpp nnoremap <M-y>hd :CclsDerivedHierarchy<Cr>
-        au Filetype c,cpp nnoremap <M-y>c  :CclsCallers<Cr>
-        au Filetype c,cpp nnoremap <M-y>hc :CclsCallHierarchy<Cr>
-        au Filetype c,cpp nnoremap <M-y>e  :CclsCallees<Cr>
-        au Filetype c,cpp nnoremap <M-y>he :CclsCalleeHierarchy<Cr>
-        au Filetype c,cpp xnoremap <M-y>v  :CclsVars<Cr>
-        au Filetype c,cpp nnoremap <M-y>mm :CclsMembers<Cr>
-        au Filetype c,cpp nnoremap <M-y>hm :CclsMemberHierarchy<Cr>
-        au Filetype c,cpp nnoremap <M-y>mf :CclsMemberFunctions<Cr>
-        au Filetype c,cpp nnoremap <M-y>hf :CclsMemberFunctionHierarchy<Cr>
-        au Filetype c,cpp nnoremap <M-y>mt :CclsMemberTypes<Cr>
-        au Filetype c,cpp nnoremap <M-y>ht :CclsMemberTypeHierarchy<Cr>
+        au Filetype c,cpp nnoremap <leader>rl  :Ccls
+        au Filetype c,cpp nnoremap <leader>rb  :CclsBase<Cr>
+        au Filetype c,cpp nnoremap <leader>rhb :CclsBaseHierarchy<Cr>
+        au Filetype c,cpp nnoremap <leader>rd  :CclsDerived<Cr>
+        au Filetype c,cpp nnoremap <leader>rhd :CclsDerivedHierarchy<Cr>
+        au Filetype c,cpp nnoremap <leader>rc  :CclsCallers<Cr>
+        au Filetype c,cpp nnoremap <leader>rhc :CclsCallHierarchy<Cr>
+        au Filetype c,cpp nnoremap <leader>re  :CclsCallees<Cr>
+        au Filetype c,cpp nnoremap <leader>rhe :CclsCalleeHierarchy<Cr>
+        au Filetype c,cpp xnoremap <leader>rv  :CclsVars<Cr>
+        au Filetype c,cpp nnoremap <leader>rmm :CclsMembers<Cr>
+        au Filetype c,cpp nnoremap <leader>rhm :CclsMemberHierarchy<Cr>
+        au Filetype c,cpp nnoremap <leader>rmf :CclsMemberFunctions<Cr>
+        au Filetype c,cpp nnoremap <leader>rhf :CclsMemberFunctionHierarchy<Cr>
+        au Filetype c,cpp nnoremap <leader>rmt :CclsMemberTypes<Cr>
+        au Filetype c,cpp nnoremap <leader>rht :CclsMemberTypeHierarchy<Cr>
     endif
 endif
 " --------------------------

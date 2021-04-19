@@ -1,1 +1,1 @@
-nnoremap <M-y>k :help <C-r><C-w>
+nnoremap <leader>rk :help <C-r><C-w>

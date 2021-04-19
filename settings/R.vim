@@ -53,11 +53,11 @@ if Installed("Nvim-R")
                 \ }
     au FileType r nnoremap <silent> <M-T> :call sidebar#toggle('robjb')<CR>
     au FileType r nnoremap <M-A>  :ToggleEnvLib<Cr>
-    au FileType r nnoremap <M-d>  :call SendFunctionToR('echo', "down")<CR>
+    au FileType r nnoremap <M-y>  :call SendFunctionToR('echo', "down")<CR>
     au FileType r nnoremap <M-e>  :call SendLineToR("down")<CR>
     au FileType r xnoremap <M-e>  :call SendLineToR("down")<CR>
-    au FileType r nnoremap <M-y>s :call RClearConsole()<Cr>
-    au FileType r nnoremap <M-y>S :call RClearAll()<Cr>
+    au FileType r nnoremap <leader>rs :call RClearConsole()<Cr>
+    au FileType r nnoremap <leader>rS :call RClearAll()<Cr>
     " start nvimr
     au FileType r nnoremap <leader>R :call StartR('R')<Cr>
     au FileType r nnoremap ,R        :call StartR('custom')<Cr>

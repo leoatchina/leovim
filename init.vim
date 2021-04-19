@@ -1781,14 +1781,13 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     nnoremap <M-l> :WhichKey '<lt>M-l>'<Cr>
     nnoremap <M-m> :WhichKey '<lt>M-m>'<Cr>
     nnoremap <M-r> :WhichKey '<lt>M-r>'<Cr>
-    nnoremap <M-y> :WhichKey '<lt>M-y>'<Cr>
     " search
-    if get(g:, 'grep_tool', '') != ''
+    if get(g:, 'grep_tool', '') =~ 'leaderf' || get(g:, 'grep_tool', '') =~ 'coc' || get(g:, 'grep_tool', '') =~ 'ctrlsf'
         nnoremap <M-f> :WhichKey '<lt>M-f>'<Cr>
         xnoremap <M-f> :WhichKeyVisual '<lt>M-f>'<Cr>
     endif
     if Installed('vimspector')
-        nnoremap <M-u> :WhichKey '<lt>M-u>'<Cr>
+        nnoremap <M-b> :WhichKey '<lt>M-b>'<Cr>
     endif
 endif
 " --------------------------
