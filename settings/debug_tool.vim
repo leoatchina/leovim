@@ -1,24 +1,26 @@
 if Installed('vimspector')
     let g:debug_tool = "vimspector"
     let g:vimspector_enable_mappings = 'HUMAN'
-    nmap <M-b> <Plug>VimspectorContinue
-    nmap <M-B> <Plug>VimspectorRunToCursor
-    nmap <silent> ,b <Plug>VimspectorToggleBreakpoint
-    nmap <silent> ,B :call vimspector#ListBreakpoints()<Cr>
-    nmap <silent> ,d :call vimspector#ClearLineBreakpoint(expand('%:p'), line('.'))<Cr>
-    nmap <silent> ,D :call vimspector#ClearBreakpoints()<Cr>
+    "  breakpoint
+    nmap <silent> ,b     <Plug>VimspectorToggleBreakpoint
+    nmap <silent> ,B     :call vimspector#ListBreakpoints()<Cr>
+    nmap <silent> <M-b>  :call vimspector#ClearLineBreakpoint(expand('%:p'), line('.'))<Cr>
+    nmap <silent> <M-B>  :call vimspector#ClearBreakpoints()<Cr>
+    nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
+    nmap <silent> <M-u>f <Plug>VimspectorAddFunctionBreakpoint
+    " ==================== run
+    nmap <silent> ,d <Plug>VimspectorContinue
+    nmap <silent> ,D <Plug>VimspectorRunToCursor
     nmap <silent> ,r :call vimspector#Restart()<Cr>
     nmap <silent> ,o <Plug>VimspectorStepOver
     nmap <silent> ,n <Plug>VimspectorStepInto
     nmap <silent> ,u <Plug>VimspectorStepOut
-    nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
-    nmap <silent> <M-u>f <Plug>VimspectorAddFunctionBreakpoint
-    nmap <silent> <M-u>. :VimspectorUpdate<Cr>
     nnoremap <M-u>e :VimspectorEval
     nnoremap <M-u>w :VimspectorWatch
     " ========== jump to windows in vimspector
     nnoremap <M-u>o :call GoToVimspectorWindow('output')<Cr>
-    nnoremap <M-u>s :call GoToVimspectorWindow('stderr')<Cr>
+    nnoremap <M-u>d :call GoToVimspectorWindow('stderr')<Cr>
+    nnoremap <M-u>s :call GoToVimspectorWindow('server')<Cr>
     nnoremap <M-u>c :call GoToVimspectorWindow('Console')<Cr>
     nnoremap <M-u>t :call GoToVimspectorWindow('Telemetry')<Cr>
     nnoremap <M-u>v :call GoToVimspectorWindow('Vimspector')<Cr>
@@ -27,7 +29,6 @@ if Installed('vimspector')
     nnoremap ,3 :call GoToVimspectorWindow('stacktrace')<Cr>
     nnoremap ,4 :call GoToVimspectorWindow('code')<Cr>
     nnoremap ,5 :call GoToVimspectorWindow('terminal')<Cr>
-    nnoremap ,6 :call GoToVimspectorWindow('server')<Cr>
     " ========== others
     nnoremap <M-u>; :Vimspector
     nnoremap <M-u>, :call vimspector#
@@ -35,6 +36,7 @@ if Installed('vimspector')
     nnoremap <M-u>q :call vimspector#Stop()<Cr>
     nnoremap <M-u>r :call vimspector#Reset()<Cr>
     nnoremap <M-u>l :call vimspector#Launch()<Cr>
+    nnoremap <M-u>u :VimspectorUpdate<Cr>
     function! GoToVimspectorWindow(name) abort
         let windowNr = 0
         let name = a:name
@@ -59,9 +61,9 @@ if Installed('vimspector')
     endfunction
 endif
 if Installed("vim-projectionist")
-    nnoremap <leader>ma :A<Space>
     nnoremap <leader>me :A<Cr>
-    nnoremap <leader>mx :AS<Space>
+    nnoremap <leader>ma :A<Space>
+    nnoremap <leader>ms :AS<Space>
     nnoremap <leader>mv :AV<Space>
     nnoremap <leader>mt :AT<Space>
     nnoremap <leader>md :AD<Space>

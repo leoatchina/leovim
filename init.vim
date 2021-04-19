@@ -785,15 +785,12 @@ endif
 " --------------------------
 " Alt_to_meta
 " --------------------------
-let s:keys_insert_map  = ['e', 'y', '-', 'u', 'd']
 let s:punctuation_list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
 function! MetaCode(key)
-    if index(s:keys_insert_map, a:key) < 0
-        exec "imap <M-".a:key."> <Nop>"
-    endif
     if !has('nvim') && g:gui_running == 0 || CYGWIN()
         exec "set <M-".a:key.">=\e".a:key
     endif
+    exec "imap <M-".a:key."> <Nop>"
 endfunction
 for i in range(26)
     " 97 ascii of a
@@ -907,11 +904,8 @@ nnoremap qb        :bd!<Cr>
 " ------------------------
 inoremap <C-j> <ESC>
 inoremap <M-q> <ESC>
-inoremap <M-w> <ESC>
 xnoremap <M-q> <ESC>
-xnoremap <M-w> <ESC>
 cnoremap <M-q> <ESC>
-cnoremap <M-w> <ESC>
 " ------------------------
 " save
 " ------------------------
@@ -1465,8 +1459,6 @@ inoremap <silent><M-K> <ESC>:TmuxNavigateUp<cr>
 if get(g:, 'has_terminal', 0) > 0
     tnoremap <expr> <C-R> '<C-\><C-n>"'.nr2char(getchar()).'pi'
     tnoremap <M-q> <C-\><C-n>:q!<CR>
-    tnoremap <M-w> <C-\><C-n>
-    tnoremap <M-W> <C-\><C-n>:qall!<Cr>
     if has('nvim')
         if WINDOWS()
             nnoremap qm :tabe term://cmd<cr>i

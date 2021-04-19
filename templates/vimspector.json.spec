@@ -29,17 +29,6 @@
         "MIMode": "gdb"
       }
     },
-    "rust:launch": {
-      "adapter": "CodeLLDB",
-      "configuration": {
-        "name": "rust lldb",
-        "type":    "lldb",
-        "request": "launch",
-        "stopOnEntry": true,
-        "MIMode": "gdb",
-        "program": "${workspaceRoot}/target/debug/${fileBasenameNoExtension}"
-      }
-    },
     "python: Launch": {
       "adapter": "debugpy",
       "configuration": {
@@ -50,6 +39,17 @@
         "console": "externalTerminal",
         "debugOptions": [],
         "program": "${workspaceRoot}/${mainPyfile}"
+      }
+    },
+    "rust:launch": {
+      "adapter": "CodeLLDB",
+      "configuration": {
+        "name": "rust lldb",
+        "type":    "lldb",
+        "request": "launch",
+        "stopOnEntry": true,
+        "MIMode": "gdb",
+        "program": "${workspaceRoot}/target/debug/${fileWorkspaceFolder}"
       }
     }
   }
