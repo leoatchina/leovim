@@ -643,8 +643,8 @@ if Installed('vim-quickui')
     nnoremap <leader>em :call quickui#tools#display_messages()<Cr>
     nnoremap <silent>z] :call quickui#preview#scroll(1)<Cr>
     nnoremap <silent>z[ :call quickui#preview#scroll(-1)<Cr>
-    nnoremap <silent><M-d> :call quickui#preview#scroll(3)<Cr>
-    nnoremap <silent><M-u> :call quickui#preview#scroll(-3)<Cr>
+    nnoremap <silent>g] :call quickui#preview#scroll(5)<Cr>
+    nnoremap <silent>g[ :call quickui#preview#scroll(-5)<Cr>
     " preview in popup
     function! s:PreviewFileW(filename) abort
         let filename = a:filename
