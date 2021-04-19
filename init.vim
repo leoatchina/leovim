@@ -307,8 +307,8 @@ endif
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easy-align
 endif
-xmap ,a <Plug>(EasyAlign)
-nmap ,a <Plug>(EasyAlign)
+xmap <M-a> <Plug>(EasyAlign)
+nmap <M-a> <Plug>(EasyAlign)
 let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
 " ------------------------

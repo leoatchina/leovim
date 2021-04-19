@@ -276,7 +276,7 @@ if Installed("fzf.vim") && Installed("fzf")
             endif
         endfunction
         command! -bang -nargs=* FZFJumps call s:FZFJumps()
-        nnoremap <M-a> :FZFJumps<cr>
+        nnoremap <M-y> :FZFJumps<cr>
     endif
 endif
 if get(g:, 'fuzzy_finder', '') == 'leaderf'
