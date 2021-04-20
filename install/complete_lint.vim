@@ -37,7 +37,7 @@ if !HasPlug('no-complete')
             echoe "Cannot install YouCompleteMe, smart select a complete_engine."
             let s:smart_engine_select = 1
         endif
-    elseif HasPlug('coc') && executable('node') && (executable('npm') || executable('yarn'))
+    elseif HasPlug('coc') && executable('node') && executable('npm')
         if v:version >= 802 || has('nvim')
             let g:complete_engine = 'coc'
         else
@@ -167,11 +167,7 @@ if get(g:, 'complete_engine', '') =~ "YCM"
         endif
     endif
 elseif get(g:, 'complete_engine', '') == 'coc'
-    if executable('yarn')
-        MyPlug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-    else
-        MyPlug 'neoclide/coc.nvim', {'branch': 'release'}
-    endif
+    MyPlug 'neoclide/coc.nvim', {'branch': 'release'}
     MyPlug 'antoinemadec/coc-fzf', {'branch': 'release'}
     let g:coc_global_extensions = [
             \ 'coc-json',
