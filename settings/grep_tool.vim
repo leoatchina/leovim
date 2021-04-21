@@ -50,9 +50,9 @@ else
     xnoremap f<tab> :<C-u>F <C-r>=GetVisualSelection()<Cr>
     nnoremap t<tab> :Farf<Cr>
     xnoremap t<tab> :<C-u>Farf<Cr>
-    nnoremap ,F :<C-u>Farundo<Cr>
+    nnoremap q<tab> :<C-u>Farundo<Cr>
     au FileType far nnoremap <leader>F :Fardo<Cr>
-    au Filetype far nnoremap \F :Refar<Space>
+    au Filetype far nnoremap ,F        :Refar<Space>
 endif
 if executable('rg')
     if !MACVIM() && Installed('LeaderF')
