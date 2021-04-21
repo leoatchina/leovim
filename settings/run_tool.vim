@@ -113,7 +113,7 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
     nnoremap qr :AsyncRun
     nnoremap qa :AsyncRun!
     if get(g:, 'has_terminal', 0) == 0 || !exists('g:plugs')
-        nnoremap <silent> q<Tab> :AsyncStop!<Cr>:ToggleQuickfix<CR>
+        nnoremap <silent> qt :AsyncStop!<Cr>:ToggleQuickfix<CR>
     endif
     if executable('git')
         if WINDOWS()
