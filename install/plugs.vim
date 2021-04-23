@@ -222,11 +222,9 @@ if v:version >= 704 || has('nvim')
     MyPlug 'haya14busa/vim-textobj-function-syntax', {'for':['c', 'cpp', 'vim', 'java']}
     " 提供对各种 block 的匹配
     MyPlug 'rhysd/vim-textobj-anyblock'
-    if HasPlug('javascript')
-        MyPlug 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
-    endif
     if HasPlug('web')
         MyPlug 'kentaro/vim-textobj-function-php', {'for': 'php'}
+        MyPlug 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
     endif
     if HasPlug('perl')
         MyPlug 'thinca/vim-textobj-function-perl', {'for': 'perl'}

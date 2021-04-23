@@ -131,7 +131,7 @@ if get(g:, 'complete_engine', '') =~ "YCM"
         if HasPlug('rust')
             let b:ycm_install = b:ycm_install . " --rust-completer"
         endif
-        if executable('node') && HasPlug('javascript')
+        if executable('node') && HasPlug('web')
             let b:ycm_install = b:ycm_install . " --ts-completer"
         endif
         if executable('go') && HasPlug('go')
@@ -196,10 +196,6 @@ elseif get(g:, 'complete_engine', '') == 'coc'
             \ 'coc-yaml',
             \ 'coc-phpls',
             \ 'coc-emmet'
-            \ ]
-    endif
-    if HasPlug('javascript') || HasPlug('typescript')
-        let g:coc_global_extensions += [
             \ 'coc-tsserver',
             \ 'coc-angular',
             \ 'coc-vetur'
@@ -214,13 +210,14 @@ elseif get(g:, 'complete_engine', '') == 'coc'
     if HasPlug('go')
         let g:coc_global_extensions += ['coc-go']
     endif
-    if get(g:, 'ai_engine', '') == 'tabnine'
-        let g:coc_global_extensions += ['coc-tabnine']
-    endif
     if HasPlug('latex')
         let g:coc_global_extensions += ['coc-vimtex']
     endif
+    if get(g:, 'ai_engine', '') == 'tabnine'
+        let g:coc_global_extensions += ['coc-tabnine']
+    endif
 elseif get(g:, 'complete_engine', '') == "vim-lsp"
+    MyPlug 'mattn/vim-lsp-settings'
     MyPlug 'prabirshrestha/vim-lsp'
     MyPlug 'prabirshrestha/asyncomplete.vim'
     MyPlug 'prabirshrestha/asyncomplete-lsp.vim'
@@ -249,8 +246,4 @@ elseif get(g:, 'complete_engine', '') == "vim-lsp"
         let g:echodoc_enable_at_startup = 1
         set cmdheight=2
     endif
-endif
-" TODO, nvim-lsp also use vim-lsp-settings to install lsp engine
-if index(['vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
-    MyPlug 'mattn/vim-lsp-settings'
 endif

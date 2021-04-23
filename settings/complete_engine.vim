@@ -391,9 +391,16 @@ elseif Installed('vim-lsp')
         inoremap <buffer> <expr><C-d> lsp#scroll(+3)
         inoremap <buffer> <expr><C-u> lsp#scroll(-3)
     endif
+    " --------------------------
+    " vim-lsp-settings
+    " --------------------------
+    if Installed('vim-lsp-settings')
+        let g:lsp_settings_servers_dir         = $INSTALL_PATH . '/vim-lsp-settings/servers'
+        let g:lsp_settings_global_settings_dir = $INSTALL_PATH . '/vim-lsp-settings/global_config'
+        let g:lsp_settings_enable_suggestions  = 1
+    endif
 elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'
-    let lint_tool = ''
 else
     let g:complete_engine = ''
 endif
@@ -549,14 +556,6 @@ if get(g:, 'complete_engine', '') != ''
 endif
 if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
     set rtp+=$ADDINS_PATH/vim-dict
-endif
-" --------------------------
-" vim-lsp-settings
-" --------------------------
-if Installed('vim-lsp-settings')
-    let g:lsp_settings_servers_dir         = $INSTALL_PATH . '/vim-lsp-settings/servers'
-    let g:lsp_settings_global_settings_dir = $INSTALL_PATH . '/vim-lsp-settings/global_config'
-    let g:lsp_settings_enable_suggestions  = 1
 endif
 if get(g:, 'complete_engine', '') != ''
     inoremap <silent><expr> <Up>       pumvisible()? "\<C-p>":                  "\<Up>"
