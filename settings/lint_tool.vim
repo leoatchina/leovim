@@ -32,84 +32,60 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
                 \ "--max-line-length=160",
                 \ "--ignore=" . s:flake8_ignore,
                 \ ])
-elseif get(g:, 'lint_tool', '') != ''
+elseif Installed('ale')
+    if get(g:, 'complete_engine', '') == 'coc' && Installed('coc.nvim')
+        call coc#config('diagnostic.enable', v:false)
+        call coc#config('diagnostic.displayByAle', v:true)
+    endif
     function! s:showLint() abort
         if get(g:, 'fuzzy_finder', '') == 'leaderf' || !WINDOWS() && get(g:, 'fuzzy_finder', '') == 'fzf'
-            if get(g:, 'lint_tool', '') == 'vim-lsp'
-                silent LspDocumentDiagnostic
-                if len(getloclist(0)) > 0
-                    lclose
-                endif
-            else
-                silent ALELint
-            endif
+            silent ALELint
             if get(g:, 'fuzzy_finder', '') == 'leaderf'
                 LeaderfLocList
             else
                 FZFLocList
             endif
         else
-            if get(g:, 'lint_tool', '') == 'vim-lsp'
-                LspDocumentDiagnostic
-            else
-                ALELint
-            endif
+            ALELint
         endif
     endfunction
     command! -bang -nargs=* ShowLint call s:showLint()
     nnoremap <silent> <leader>d :ShowLint<Cr>
-    if get(g:, 'complete_engine', '') == 'coc' && Installed('coc.nvim')
-        call coc#config('diagnostic.enable', v:false)
-    endif
-    if get(g:, 'lint_tool', '') == 'vim-lsp' && Installed('vim-lsp')
-        let g:lsp_diagnostics_echo_cursor = 1
-        let g:lsp_highlights_enabled      = 1
-        let g:lsp_virtual_text_enabled    = 0
-        let g:lsp_textprop_enabled        = 0
-        nnoremap <silent> <M-k>p :LspPreviousError<Cr>
-        nnoremap <silent> <M-k>n :LspNextError<Cr>
-        nnoremap <silent> <M-k>, :LspPreviousDiagnostic<Cr>
-        nnoremap <silent> <M-k>; :LspNextDiagnostic<Cr>
-    elseif Installed('ale')
-        nmap <M-k>c :ALE<Tab>
-        nmap <M-k>p <Plug>(ale_previous_error)
-        nmap <M-k>n <Plug>(ale_next_error)
-        let g:ale_disable_lsp          = 0
-        let g:ale_completion_enabled   = 0
-        let g:ale_virtualtext_cursor   = 0
-        " lint time
-        let g:ale_lint_on_enter           = 1
-        let g:ale_lint_on_filetype_change = 1
-        let g:ale_lint_on_insert_leave    = 1
-        let g:ale_lint_on_text_changed    = 'always'
-        " signs
-        let g:ale_sign_column_always   = 0
-        let g:ale_set_signs            = 1
-        let g:ale_set_highlights       = 0
-        let g:ale_sign_error           = 'x'
-        let g:ale_sign_warning         = '!'
-        let g:ale_sign_info            = '>'
-        " message format
-        let g:ale_echo_msg_error_str   = 'E'
-        let g:ale_echo_msg_warning_str = 'W'
-        let g:ale_echo_msg_format      = '[%linter%] %s [%code%]'
-        let g:ale_fix_on_save          = 0
-        let g:ale_set_loclist          = 1
-        let g:ale_set_quickfix         = 0
-        let g:ale_statusline_format    = ['E:%d', 'W:%d', '']
-        " linters
-        let g:ale_linters = {
-                    \ 'python': ['flake8'],
-                    \ 'rust': ['cargo'],
-                    \ 'vue': ['vls'],
-                    \ 'zsh': ['shell']
-                    \ }
-        let g:ale_python_flake8_options = "--max-line-length=160 --ignore=" . s:flake8_ignore
-        " 特定后缀指定lint方式
-        let g:ale_pattern_options_enabled        = 1
-        let g:ale_warn_about_trailing_whiteSpace = 0
-        if get(g:, 'complete_engine', '') == 'coc' && Installed('coc.nvim')
-            call coc#config('diagnostic.displayByAle', v:true)
-        endif
-    endif
+    nmap <M-k>c :ALE<Tab>
+    nmap <M-k>p <Plug>(ale_previous_error)
+    nmap <M-k>n <Plug>(ale_next_error)
+    let g:ale_disable_lsp          = 0
+    let g:ale_completion_enabled   = 0
+    let g:ale_virtualtext_cursor   = 0
+    " lint time
+    let g:ale_lint_on_enter           = 1
+    let g:ale_lint_on_filetype_change = 1
+    let g:ale_lint_on_insert_leave    = 1
+    let g:ale_lint_on_text_changed    = 'always'
+    " signs
+    let g:ale_sign_column_always   = 0
+    let g:ale_set_signs            = 1
+    let g:ale_set_highlights       = 0
+    let g:ale_sign_error           = 'x'
+    let g:ale_sign_warning         = '!'
+    let g:ale_sign_info            = '>'
+    " message format
+    let g:ale_echo_msg_error_str   = 'E'
+    let g:ale_echo_msg_warning_str = 'W'
+    let g:ale_echo_msg_format      = '[%linter%] %s [%code%]'
+    let g:ale_fix_on_save          = 0
+    let g:ale_set_loclist          = 1
+    let g:ale_set_quickfix         = 0
+    let g:ale_statusline_format    = ['E:%d', 'W:%d', '']
+    " linters
+    let g:ale_linters = {
+                \ 'python': ['flake8'],
+                \ 'rust': ['cargo'],
+                \ 'vue': ['vls'],
+                \ 'zsh': ['shell']
+                \ }
+    let g:ale_python_flake8_options = "--max-line-length=160 --ignore=" . s:flake8_ignore
+    " 特定后缀指定lint方式
+    let g:ale_pattern_options_enabled        = 1
+    let g:ale_warn_about_trailing_whiteSpace = 0
 endif

@@ -342,6 +342,7 @@ elseif Installed('vim-lsp')
     " --------------------------
     nnoremap <M-l>; :Lsp
     nnoremap <M-l>, :LspInstallServer<Space>
+    let g:lsp_diagnostics_enabled    = 0
     let g:lsp_insert_text_enabled    = 1
     let g:lsp_text_edit_enabled      = 0
     let g:lsp_signature_help_enabled = 0
