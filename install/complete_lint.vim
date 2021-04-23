@@ -68,8 +68,7 @@ endif
 " ------------------------------
 if index(['YCM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
     let g:lsp_diagnostics_enabled = 0
-    if get(g:, 'complete_engine', '') == "vim-lsp" && get(g:, 'lint_tool', '') != 'ale'
-        let g:lint_tool = 'vim-lsp'
+    if get(g:, 'complete_engine', '') == "vim-lsp" && get(g:, 'lint_tool', '') == 'vim-lsp'
         let g:lsp_diagnostics_enabled = 1
         nnoremap <silent> <M-k>d :<C-u>LspDocumentDiagnostic<Cr>
     elseif get(g:, 'complete_engine', '') == 'coc' && get(g:, 'lint_tool', '') != 'ale'
