@@ -33,3 +33,15 @@ if executable('git') && Installed('fzf.vim')
         nnoremap <M-g>f :FzfGFiles?<CR>
     endif
 endif
+if Installed('vim-signify')
+    let g:signify_disable_by_default = 1
+    nnoremap <M-g>d :SignifyDiff<Cr>
+    nnoremap <M-g>i :Signify
+    nnoremap <M-g>o :SignifyToggle<Cr>
+    nmap <M-g>n <plug>(signify-next-hunk)
+    nmap <M-g>p <plug>(signify-prev-hunk)
+    omap ic <plug>(signify-motion-inner-pending)
+    xmap ic <plug>(signify-motion-inner-visual)
+    omap ac <plug>(signify-motion-outer-pending)
+    xmap ac <plug>(signify-motion-outer-visual)
+endif

@@ -1,3 +1,14 @@
+" conflict-marker
+if Installed('conflict-marker.vim')
+    let g:conflict_marker_enable_mappings = 0
+    nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
+    nnoremap <leader>co :ConflictMarkerOurselves<Cr>
+    nnoremap <leader>ce :ConflictMarkerNone<Cr>
+    nnoremap <leader>cb :ConflictMarkerBoth<Cr>
+    nnoremap <leader>cn :ConflictMarkerNextHunk<Cr>
+    nnoremap <leader>cp :ConflictMarkerPrevHunk<Cr>
+endif
+" sidebar
 if Installed('vim-sidebar-manager')
     let g:sidebars = {}
     " =====================

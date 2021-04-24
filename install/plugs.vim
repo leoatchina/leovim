@@ -161,19 +161,7 @@ endif
 " ------------------------------
 if has('nvim') || has('patch-8.0.902')
     MyPlug 'mhinz/vim-signify'
-else
-    MyPlug 'mhinz/vim-signify', {'tag': 'legacy', 'dir': '$INSTALL_PATH/vim-signify-legacy'}
 endif
-nnoremap <M-g>d :SignifyDiff<Cr>
-nnoremap <M-g>i :Signify
-nnoremap <M-g>o :SignifyToggle<Cr>
-nmap <M-g>n <plug>(signify-next-hunk)
-nmap <M-g>p <plug>(signify-prev-hunk)
-omap ic <plug>(signify-motion-inner-pending)
-xmap ic <plug>(signify-motion-inner-visual)
-omap ac <plug>(signify-motion-outer-pending)
-xmap ac <plug>(signify-motion-outer-visual)
-let g:signify_disable_by_default = 1
 " ------------------------------
 " tmux
 " ------------------------------
@@ -201,13 +189,6 @@ endif
 if has('signs')
     MyPlug 'kshenoy/vim-signature'
     MyPlug 'rhysd/conflict-marker.vim'
-    let g:conflict_marker_enable_mappings = 0
-    nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
-    nnoremap <leader>co :ConflictMarkerOurselves<Cr>
-    nnoremap <leader>ce :ConflictMarkerNone<Cr>
-    nnoremap <leader>cb :ConflictMarkerBoth<Cr>
-    nnoremap <leader>cn :ConflictMarkerNextHunk<Cr>
-    nnoremap <leader>cp :ConflictMarkerPrevHunk<Cr>
     if executable('go') && !WINDOWS()
         MyPlug 'RRethy/vim-hexokinase', {'for': ['css', 'html', 'less', 'scss', 'sass', 'stylus'], 'do': 'make hexokinase'}
         let g:Hexokinase_highlighters  = ['backgroundfull']
