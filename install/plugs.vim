@@ -164,9 +164,15 @@ if has('nvim') || has('patch-8.0.902')
 else
     MyPlug 'mhinz/vim-signify', {'tag': 'legacy', 'dir': '$INSTALL_PATH/vim-signify-legacy'}
 endif
-nnoremap <M-m>; :SignifyDiff<Cr>
-nnoremap <M-m>, :Signify
-nnoremap <M-m>o :SignifyToggle<Cr>
+nnoremap <M-g>d :SignifyDiff<Cr>
+nnoremap <M-g>i :Signify
+nnoremap <M-g>o :SignifyToggle<Cr>
+nmap <M-g>n <plug>(signify-next-hunk)
+nmap <M-g>p <plug>(signify-prev-hunk)
+omap ic <plug>(signify-motion-inner-pending)
+xmap ic <plug>(signify-motion-inner-visual)
+omap ac <plug>(signify-motion-outer-pending)
+xmap ac <plug>(signify-motion-outer-visual)
 let g:signify_disable_by_default = 1
 " ------------------------------
 " tmux
