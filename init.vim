@@ -570,7 +570,7 @@ nmap gj <Plug>(easymotion-w)
 nmap gk <Plug>(easymotion-b)
 nmap s<Cr> <Plug>(easymotion-s2)
 " within line jump
-map gl <Plug>(easymotion-bd-jk)
+nmap gt <Plug>(easymotion-bd-jk)
 " ------------------------
 " clever-f
 " ------------------------
@@ -925,6 +925,7 @@ inoremap <M-k> <Up>
 set tabpagemax=10
 set showtabline=2
 nnoremap <silent> gh :tabprevious<CR>
+nnoremap <silent> gl :tabnext<CR>
 nnoremap <silent> ,l :tabm +1<CR>
 nnoremap <silent> ,h :tabm -1<CR>
 nnoremap <silent> ,1 :tabm 0<CR>
