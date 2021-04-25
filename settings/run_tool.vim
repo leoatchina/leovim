@@ -29,7 +29,7 @@ nnoremap <silent> q<space> :CloseQuickfix<Cr>
 " repl tool
 " --------------------------
 if g:has_terminal > 0
-    au FileType python,sh,perl,javascript,lua inoremap <M-=> #<Space>%%
+    au FileType python,sh,perl,javascript,lua inoremap <M-e> #<Space>%%
     if has('nvim') && get(g:, 'terminal_plus', '') =~ 'floaterm'
         au FileType python,sh,perl,javascript,lua xmap <M-e> :FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua nmap <M-e> :FloatermSend<Cr>j
@@ -84,7 +84,7 @@ if g:has_terminal > 0
                 nnoremap <leader>rc :<C-u>REPLPDBC<Cr>
                 nnoremap <leader>rn :<C-u>REPLPDBN<Cr>
                 nnoremap <leader>rs :<C-u>REPLPDBS<Cr>
-                imap <M-g> import ipdb; ipdb.set_trace()
+                imap <M-y> import ipdb; ipdb.set_trace()
             endf
         endif
     endif
