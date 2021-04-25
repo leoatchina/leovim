@@ -151,23 +151,19 @@ endif
 " ------------------------------
 " git
 " ------------------------------
-let git_ver     = matchstr(system('git --version'), '\zs\d\{1,\}.\d\{1,\}.\d\{1,\}\ze')
-let git_version = str2float(substitute(git_ver, "\\.", "", ""))
-if git_version >= 18.5
-    MyPlug 'tpope/vim-fugitive'
+if executable('git')
+    let git_ver     = matchstr(system('git --version'), '\zs\d\{1,\}.\d\{1,\}.\d\{1,\}\ze')
+    let git_version = str2float(substitute(git_ver, "\\.", "", ""))
+    if git_version >= 18.5
+        MyPlug 'tpope/vim-fugitive'
+    endif
 endif
 " ------------------------------
 " signify
 " ------------------------------
 if has('nvim') || has('patch-8.0.902')
     MyPlug 'mhinz/vim-signify'
-else
-    MyPlug 'mhinz/vim-signify', {'tag': 'legacy', 'dir': '$INSTALL_PATH/vim-signify-legacy'}
 endif
-nnoremap <M-m>; :SignifyDiff<Cr>
-nnoremap <M-m>, :Signify
-nnoremap <M-m>o :SignifyToggle<Cr>
-let g:signify_disable_by_default = 1
 " ------------------------------
 " tmux
 " ------------------------------
@@ -195,13 +191,6 @@ endif
 if has('signs')
     MyPlug 'kshenoy/vim-signature'
     MyPlug 'rhysd/conflict-marker.vim'
-    let g:conflict_marker_enable_mappings = 0
-    nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
-    nnoremap <leader>co :ConflictMarkerOurselves<Cr>
-    nnoremap <leader>ce :ConflictMarkerNone<Cr>
-    nnoremap <leader>cb :ConflictMarkerBoth<Cr>
-    nnoremap <leader>cn :ConflictMarkerNextHunk<Cr>
-    nnoremap <leader>cp :ConflictMarkerPrevHunk<Cr>
     if executable('go') && !WINDOWS()
         MyPlug 'RRethy/vim-hexokinase', {'for': ['css', 'html', 'less', 'scss', 'sass', 'stylus'], 'do': 'make hexokinase'}
         let g:Hexokinase_highlighters  = ['backgroundfull']
@@ -222,11 +211,9 @@ if v:version >= 704 || has('nvim')
     MyPlug 'haya14busa/vim-textobj-function-syntax', {'for':['c', 'cpp', 'vim', 'java']}
     " 提供对各种 block 的匹配
     MyPlug 'rhysd/vim-textobj-anyblock'
-    if HasPlug('javascript')
-        MyPlug 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
-    endif
     if HasPlug('web')
         MyPlug 'kentaro/vim-textobj-function-php', {'for': 'php'}
+        MyPlug 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
     endif
     if HasPlug('perl')
         MyPlug 'thinca/vim-textobj-function-perl', {'for': 'perl'}

@@ -54,29 +54,22 @@ endif
 " --------------------------
 " web
 " --------------------------
-if HasPlug('web') && g:complete_engine != 'coc'
-    MyPlug 'hail2u/vim-css3-syntax', {'for': ['css', 'css3']}
-    MyPlug 'mattn/emmet-vim', {'for': 'php'}
-    let g:user_emmet_mode           = 'a'
-    let g:user_emmet_leader_key     = '<C-y>'
-    let g:user_emmet_install_global = 0
-    autocmd FileType html,php,css,vue,haml EmmetInstall
-endif
-" --------------------------
-" javascript
-" --------------------------
-if HasPlug('javascript')
+if HasPlug('web')
+    if g:complete_engine != 'coc'
+        MyPlug 'hail2u/vim-css3-syntax', {'for': ['css', 'css3']}
+        MyPlug 'mattn/emmet-vim', {'for': 'php'}
+        MyPlug 'alvan/vim-closetag', {'for': 'html'}
+        let g:user_emmet_mode           = 'a'
+        let g:user_emmet_leader_key     = '<C-y>'
+        let g:user_emmet_install_global = 0
+        autocmd FileType html,php,css,vue,haml EmmetInstall
+    endif
     MyPlug 'posva/vim-vue', {'for': ['javascript', 'typescript']}
     MyPlug 'pangloss/vim-javascript', {'for': ['javascript', 'typescript']}
+    MyPlug 'HerringtonDarkholme/yats.vim', {'for': 'typescript'}
     let g:javascript_plugin_jsdoc = 1
     let g:javascript_plugin_ngdoc = 1
     let g:javascript_plugin_flow  = 1
-endif
-" --------------------------
-" typescript
-" --------------------------
-if HasPlug('typescript')
-    MyPlug 'HerringtonDarkholme/yats.vim', {'for': 'typescript'}
 endif
 " --------------------------
 " perl
