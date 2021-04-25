@@ -1587,8 +1587,6 @@ if has('statusline')
     set laststatus=2
     if get(g:, 'lint_tool', '') == 'ale'
         MyPlug 'maximbaz/lightline-ale'
-    elseif get(g:, 'lint_tool', '') == 'vim-lsp'
-        MyPlug 'halkn/lightline-lsp'
     endif
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/lightline.vim
@@ -1599,55 +1597,16 @@ if filereadable(expand("~/.config/.vimrc.plug")) | source $HOME/.config/.vimrc.p
 " --------------------------
 " zfvim
 " --------------------------
-if get(g:, 'input_method', '') == 'zfvim'
+if HasPlug('wubi') || HasPlug('pinyin')
     MyPlug 'ZSaberLv0/ZFVimIM'
     MyPlug 'ZSaberLv0/ZFVimJob'
-    if HasPlug('wubi')
-        MyPlug 'ZSaberLv0/ZFVimIM_wubi_base'
-    endif
     MyPlug 'ZSaberLv0/ZFVimIM_pinyin'
     MyPlug 'ZSaberLv0/ZFVimIM_openapi'
-elseif (HasPlug('wubi') || HasPlug('pinyin')) && exists('#CmdlineEnter')
-" --------------------------
-" ywvim
-" --------------------------
-    if !exists('g:leovim_loaded')
-        let g:input_method = 'ywvim'
-        set rtp+=$ADDINS_PATH/ywvim
-    endif
-    let g:ywvim_py               = {'helpim':'wb', 'gb':0}
-    let g:ywvim_zhpunc           = 2
-    let g:ywvim_listmax          = 8
-    let g:ywvim_esc_autoff       = 1
-    let g:ywvim_autoinput        = 2
-    let g:ywvim_circlecandidates = 1
-    let g:ywvim_helpim_on        = 0
-    let g:ywvim_matchexact       = 0
-    let g:ywvim_chinesecode      = 1
-    let g:ywvim_gb               = 0
-    let g:ywvim_lockb            = 1
-    let g:ywvim_intelligent_punc = 1
-    let g:ywvim_preconv          = 'g2b'
-    let g:ywvim_conv             = ''
-    let g:ywvim_intelligent_punc = 1
     if HasPlug('wubi')
-        let g:ywvim_ims=[
-                    \ ['wb', '五', 'wubi.ywvim'],
-                    \ ['py', '拼', 'pinyin.ywvim'],
-                    \ ]
+        let g:input_method = 'zfvim_wubi'
+        MyPlug 'ZSaberLv0/ZFVimIM_wubi_base'
     else
-        let g:ywvim_ims=[
-                    \ ['py', '拼', 'pinyin.ywvim'],
-                    \ ['wb', '五', 'wubi.ywvim'],
-                    \ ]
-    endif
-    if v:version >= 802 && !has('nvim')
-        let g:ywvim_popupwin               = 1
-        let g:ywvim_popupwin_follow_cursor = 1
-        let g:ywvim_popupwin_horizontal    = 1
-        let g:ywvim_popupwin_force_cmdline = 1
-    else
-        let g:ywvim_popupwin = 0
+        let g:input_method = 'zfvim_pinyin'
     endif
 endif
 " --------------------------

@@ -113,20 +113,6 @@ elseif get(g:, 'lint_tool', '') == 'ale' && Installed('lightline-ale')
     call add(g:lightline.active.right, [
                 \ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'
                 \ ])
-elseif get(g:, 'lint_tool', '') == 'vim-lsp' && Installed('lightline-lsp')
-    let g:lightline.component_expand =  {
-                \ 'linter_errors': 'lightline_lsp#errors',
-                \ 'linter_warnings': 'lightline_lsp#warnings',
-                \ 'linter_ok': 'lightline_lsp#ok'
-                \ }
-    let g:lightline.component_type = {
-                \ 'linter_errors': 'error',
-                \ 'linter_warnings': 'warning',
-                \ 'linter_ok': 'left'
-                \ }
-    call add(g:lightline.active.right, [
-                \ 'linter_errors', 'linter_warnings', 'linter_ok'
-                \ ])
 endif
 if get(g:, 'ai_engine', '') =~ 'kite'
     function KiteStatus()
