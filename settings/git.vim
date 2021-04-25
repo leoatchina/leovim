@@ -38,8 +38,8 @@ if Installed('vim-signify')
     nnoremap <M-g>d :SignifyDiff<Cr>
     nnoremap <M-g>i :Signify
     nnoremap <M-g>o :SignifyToggle<Cr>
-    nmap <M-g>n <plug>(signify-next-hunk)
-    nmap <M-g>p <plug>(signify-prev-hunk)
+    nmap ]c <plug>(signify-next-hunk)
+    nmap [c <plug>(signify-prev-hunk)
     omap ic <plug>(signify-motion-inner-pending)
     xmap ic <plug>(signify-motion-inner-visual)
     omap ac <plug>(signify-motion-outer-pending)
