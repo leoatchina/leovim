@@ -44,4 +44,6 @@ if Installed('vim-signify')
     xmap ic <plug>(signify-motion-inner-visual)
     omap ac <plug>(signify-motion-outer-pending)
     xmap ac <plug>(signify-motion-outer-visual)
+    nmap <leader>vc vic
+    nmap ,vc        vac
 endif
