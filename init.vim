@@ -1601,7 +1601,6 @@ if filereadable(expand("~/.config/.vimrc.plug")) | source $HOME/.config/.vimrc.p
 if HasPlug('wubi') || HasPlug('pinyin')
     MyPlug 'ZSaberLv0/ZFVimIM'
     MyPlug 'ZSaberLv0/ZFVimJob'
-    MyPlug 'ZSaberLv0/ZFVimIM_pinyin'
     MyPlug 'ZSaberLv0/ZFVimIM_openapi'
     if HasPlug('wubi')
         let g:input_method = 'zfvim_wubi'
@@ -1609,6 +1608,7 @@ if HasPlug('wubi') || HasPlug('pinyin')
     else
         let g:input_method = 'zfvim_pinyin'
     endif
+    MyPlug 'ZSaberLv0/ZFVimIM_pinyin'
 endif
 " --------------------------
 " end of vim-plug
