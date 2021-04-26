@@ -85,6 +85,7 @@ setup_plug() {
 variable_set "$HOME"
 mkdir -p "$HOME/.cache/tags"
 mkdir -p "$HOME/.cache/session"
+mkdir -p "$HOME/.config/nvim"
 update_vim_plug='0'
 ret='0'
 if [ -d $HOME/.vimrc.local ];then
