@@ -152,6 +152,7 @@ if Installed('YouCompleteMe')
     nnoremap M      :YcmCompleter GoToDefinition<Cr>
     nnoremap L      :vs<Cr>:YcmCompleter GoToDefinition<Cr>
     nnoremap <M-l>; :YcmCompleter<Space>
+    nnoremap <M-l>. :YcmCompleter Get<Tab>
     nnoremap <M-l>k :YcmCompleter GetDoc<CR>
     nnoremap <M-l>y :YcmCompleter GetType<Cr>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>
