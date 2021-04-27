@@ -821,10 +821,6 @@ onoremap <C-f> $
 onoremap <C-b> ^
 inoremap <C-f> <ESC>A
 inoremap <C-b> <ESC>I
-inoremap <C-d> <Nop>
-inoremap <C-u> <Nop>
-inoremap <M-d> <C-d>
-inoremap <M-u> <C-u>
 " search replace
 nnoremap <silent> c<Cr> *Ncgn
 " ------------------------
