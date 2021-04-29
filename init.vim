@@ -512,6 +512,12 @@ if v:version >= 704 || has('nvim')
     nmap ,vb vaB
 endif
 nmap g0 viio<C-[>
+nmap <leader>vi vii
+nmap ,vi vai
+nmap <leader>va via
+nmap ,va vaa
+nmap <leader>vf vif
+nmap ,vf vaf
 " --------------------------
 " vim-visual-multi
 " --------------------------
