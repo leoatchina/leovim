@@ -1715,6 +1715,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     set ttimeout
     set timeoutlen=300
     set updatetime=200
+    let g:which_key_group_dicts = ''
     if has('patch-8.1.1615') || has('nvim')
         let g:which_key_use_floating_win = 1
     else
