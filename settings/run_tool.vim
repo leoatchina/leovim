@@ -29,7 +29,8 @@ nnoremap <silent> q<space> :CloseQuickfix<Cr>
 " repl tool
 " --------------------------
 if g:has_terminal > 0
-    au FileType python,sh,perl,javascript,lua inoremap <M-e> #<Space>%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    au FileType python,sh,perl,javascript,lua inoremap <M-e> #<Space>%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%
+    au FileType python,sh,perl,javascript,lua inoremap <M-y> #<Space>################ #################
     if has('nvim') && get(g:, 'terminal_plus', '') =~ 'floaterm'
         au FileType python,sh,perl,javascript,lua xmap <M-e> :FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua nmap <M-e> :FloatermSend<Cr>j
@@ -68,7 +69,6 @@ if g:has_terminal > 0
             nnoremap <leader>rr :REPL
         endfunction
         " ipdb settings
-        au FileType python,sh,perl,javascript,lua inoremap <M-y> #<Space>########################################
         if get(g:, 'ipdb_import', 0) > 0
             au Filetype python call s:set_ipdb_map()
             function! s:set_ipdb_map() abort
