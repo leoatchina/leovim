@@ -56,19 +56,10 @@ if g:has_terminal > 0
                 \ 'numpy':      'import numpy as np',
                 \ 'matplotlib': 'from matplotlib import pyplot as plt'
                 \ }
-        let g:repl_program = {
-                \ "default": "bash",
-                \ "python": "ipython",
-                \ "vim": "vim -e",
-                \ "lua": "lua"
-                \ }
-        let g:repl_exit_commands = {
-                \ "default": "exit",
-                \ "python": "quit()",
-                \ "bash": "exit",
-                \ "zsh": "exit",
-                \ }
-        let g:repl_auto_sends = ['class ', 'def ', 'for ', 'if ', 'while ']
+        if !exists('g:repl_program')
+            let g:repl_program = {}
+        endif
+        let g:repl_program.python = ['ipython', 'ptpython', 'python']
         " map
         au Filetype python,sh,perl,javascript,lua call s:set_repl_map()
         function! s:set_repl_map() abort
