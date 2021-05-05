@@ -91,7 +91,7 @@ elseif get(g:, 'fuzzy_finder', '') == 'leaderf'
         call SetScheme('OceanicNext', 'hybrid')
     endif
 else
-    call SetScheme('ayu', 'desert')
+    call SetScheme('ayu', 'atom-dark-256')
 endif
 " settings for scheme
 try
@@ -125,5 +125,5 @@ try
         let g:oceanic_next_terminal_bold = get(g:, 'oceanic_next_terminal_bold', 0)
     endif
 catch
-    colorscheme atom-dark-256
+    colorscheme desert
 endtry
