@@ -312,18 +312,6 @@ nmap <M-a> <Plug>(EasyAlign)
 let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
 " ------------------------
-" windows jump
-" ------------------------
-nnoremap <M-w><M-w> <C-w><C-w>
-nnoremap <M-w><M-h> <C-w><C-h>
-nnoremap <M-w><M-j> <C-w><C-j>
-nnoremap <M-w><M-k> <C-w><C-k>
-nnoremap <M-w><M-l> <C-w><C-l>
-nnoremap <M-w>h <C-w>H
-nnoremap <M-w>j <C-w>J
-nnoremap <M-w>k <C-w>K
-nnoremap <M-w>l <C-w>L
-" ------------------------
 " winresizer
 " ------------------------
 if !exists('g:leovim_loaded')
