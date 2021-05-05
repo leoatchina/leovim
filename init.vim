@@ -871,14 +871,14 @@ endfunction
 " ------------------------
 " quit
 " ------------------------
+nnoremap q          <Nop>
 nnoremap <leader>q :q!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
+nnoremap <M-W>     :tabclose<Cr>
+nnoremap <M-w>     :bd!<Cr>
 nnoremap ,q        :qall!<Cr>
-nnoremap q          <Nop>
-nnoremap qq         <C-w>z
-xnoremap qq         <C-w>z
-nnoremap qc        :tabclose<Cr>
-nnoremap qb        :bd!<Cr>
+nnoremap qq        <C-w>z
+xnoremap qq        <C-w>z
 " ------------------------
 " esc
 " ------------------------
@@ -889,11 +889,10 @@ cnoremap <M-q> <ESC>
 " ------------------------
 " save
 " ------------------------
-nnoremap <M-W> :xall<Cr>
 nnoremap <C-s> :update!<CR>
 nnoremap <M-s> :w!<CR>
 nnoremap <M-S> :wa!<CR>
-inoremap <C-s> <ESC>:update!<Cr>li
+inoremap <C-s> <ESC>:update!<Cr>
 inoremap <M-s> <ESC>:w!<Cr>li
 inoremap <M-S> <ESC>:wa!<Cr>li
 " ------------------------
@@ -1448,6 +1447,7 @@ inoremap <silent><M-K> <ESC>:TmuxNavigateUp<cr>
 if get(g:, 'has_terminal', 0) > 0
     tnoremap <expr> <C-R> '<C-\><C-n>"'.nr2char(getchar()).'pi'
     tnoremap <M-q> <C-\><C-n>:q!<CR>
+    tnoremap <M-w> <C-\><C-n>:q!<CR>
     if has('nvim')
         if WINDOWS()
             nnoremap qm :tabe term://cmd<cr>i
