@@ -59,7 +59,11 @@ if g:has_terminal > 0
         if !exists('g:repl_program')
             let g:repl_program = {}
         endif
-        let g:repl_program.python = ['ptpython', 'ipython', 'bpython', 'python']
+        if LINUX() || MACOS()
+            let g:repl_program.python = ['ptpython', 'ipython', 'python']
+        elseif WINDOWS()
+            let g:repl_program.python = ['ipython', 'python']
+        endif
         " map
         au Filetype python,sh,perl,javascript,lua call s:set_repl_map()
         function! s:set_repl_map() abort
