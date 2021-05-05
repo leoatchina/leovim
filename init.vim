@@ -312,6 +312,13 @@ nmap <M-a> <Plug>(EasyAlign)
 let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
 " ------------------------
+" choosewin
+" ------------------------
+if !exists('g:leovim_loaded')
+    set rtp+=$ADDINS_PATH/vim-choosewin
+endif
+nmap <M-w> <Plug>(choosewin)
+" ------------------------
 " winresizer
 " ------------------------
 if !exists('g:leovim_loaded')
@@ -874,8 +881,7 @@ endfunction
 nnoremap q          <Nop>
 nnoremap <leader>q :q!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
-nnoremap <M-W>     :tabclose<Cr>
-nnoremap <M-w>     :bd!<Cr>
+nnoremap <M-W>     :bd!<Cr>
 nnoremap ,q        :qall!<Cr>
 nnoremap qq        <C-w>z
 xnoremap qq        <C-w>z
@@ -1447,7 +1453,6 @@ inoremap <silent><M-K> <ESC>:TmuxNavigateUp<cr>
 if get(g:, 'has_terminal', 0) > 0
     tnoremap <expr> <C-R> '<C-\><C-n>"'.nr2char(getchar()).'pi'
     tnoremap <M-q> <C-\><C-n>:q!<CR>
-    tnoremap <M-w> <C-\><C-n>:q!<CR>
     if has('nvim')
         if WINDOWS()
             nnoremap qm :tabe term://cmd<cr>i

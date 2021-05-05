@@ -69,6 +69,9 @@ rm -rf vim-grepper
 git clone --depth 1  https://github.com/mhinz/vim-grepper.git
 rm -rf vim-grepper/pictures
 
+# vim-choosewin
+rm -rf vim-choosewin
+git clone --depth 1 https://github.com/t9md/vim-choosewin.git
 
 # delete files and dirs
 find . -type f | grep \.gitignore$ | xargs rm -f
