@@ -76,7 +76,7 @@ elseif get(g:, 'complete_engine', '') == 'coc'
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         call SetScheme('sonokai', 'sublime')
     else
-        call SetScheme('ayu', 'deus')
+        call SetScheme('tokyonight', 'codedark')
     endif
 elseif get(g:, 'fuzzy_finder', '') == 'leaderf'
     if get(g:, 'complete_engine', '') =~ 'YCM'
@@ -86,12 +86,12 @@ elseif get(g:, 'fuzzy_finder', '') == 'leaderf'
             call SetScheme('gruvbox-material', 'gruvbox')
         endif
     elseif get(g:, 'complete_engine', '') == 'vim-lsp'
-        call SetScheme('OceanicNext', 'hybrid')
+        call SetScheme('edge', 'one')
     else
-        call SetScheme('tokyonight', 'codedark')
+        call SetScheme('OceanicNext', 'hybrid')
     endif
 else
-    call SetScheme('edge', 'one')
+    call SetScheme('ayu', 'deus')
 endif
 " settings for scheme
 try
