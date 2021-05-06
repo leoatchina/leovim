@@ -79,7 +79,7 @@ function! GoToDefinitionOrTagOrSearch(type)
         split
     elseif a:type == 't'
         split
-        Execute("silent! normal \<C-w>T")
+        execute("silent! normal \<C-w>T")
     endif
     let res = 0
     if get(g:, 'complete_engine', '') =~ 'YCM'
