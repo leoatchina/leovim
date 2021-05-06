@@ -28,9 +28,9 @@ nnoremap <silent> q<space> :CloseQuickfix<Cr>
 " --------------------------
 " repl tool
 " --------------------------
+au FileType python,sh,perl,javascript,lua imap <M-e> # %% ############## ##############<C-o>F<space>
+au FileType python,sh,perl,javascript,lua imap <M-y> # ################################<C-o>F<space>
 if g:has_terminal > 0
-    au FileType python,sh,perl,javascript,lua imap <M-e> #<Space>%%############## ##############<C-o>F<space>
-    au FileType python,sh,perl,javascript,lua imap <M-y> #<Space>################ ##############<C-o>F<space>
     if has('nvim') && get(g:, 'terminal_plus', '') =~ 'floaterm'
         au FileType python,sh,perl,javascript,lua xmap <M-e> :FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua nmap <M-e> :FloatermSend<Cr>j
@@ -74,6 +74,7 @@ if g:has_terminal > 0
         endfunction
         " ipdb settings
         if get(g:, 'ipdb_import', 0) > 0
+            au Filetype python imap <M-d> import ipdb; ipdb.set_trace()
             au Filetype python call s:set_ipdb_map()
             function! s:set_ipdb_map() abort
                 nnoremap <leader>rl :<C-u>REPLDebugStopAtCurrentLine<Cr>
@@ -81,7 +82,6 @@ if g:has_terminal > 0
                 nnoremap <leader>rc :<C-u>REPLPDBC<Cr>
                 nnoremap <leader>rn :<C-u>REPLPDBN<Cr>
                 nnoremap <leader>rs :<C-u>REPLPDBS<Cr>
-                imap <M-y> import ipdb; ipdb.set_trace()
             endf
         endif
     endif
