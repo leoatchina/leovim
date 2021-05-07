@@ -640,11 +640,6 @@ try
 catch
     " +c get rid of annoying completion notifications
 endtry
-try
-    set quickfixtextfunc=text
-catch
-    "
-endtry
 " -----------------------------------
 " switchbuf
 " -----------------------------------
