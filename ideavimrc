@@ -16,7 +16,7 @@ set multiple-cursors
 
 
 let mapleader = " "
-let maplocalleader = "\"
+let maplocalleader = "\\"
 
 " Use Q for formatting the current paragraph (or visual selection)
 vmap Q gq
@@ -88,10 +88,10 @@ nmap <leader>yr :action Git.ResolveConflicts<cr>
 nmap T :action ActivateTerminalToolWindow<cr>
 
 " External GVim
-nmap <leader>v :action Tool_External Tools_gvim<cr>
+nmap go :action Tool_External Tools_gvim<cr>
 
 " External Sublime Text
-nmap <leader>V :action Tool_External Tools_vscode<cr>
+nmap gs :action Tool_External Tools_vscode<cr>
 
 
 " Won't work in visual mode (with vmap) for some reason.
