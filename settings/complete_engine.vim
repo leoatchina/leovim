@@ -404,6 +404,7 @@ elseif Installed('vim-lsp')
         let g:lsp_settings_servers_dir         = $INSTALL_PATH . '/vim-lsp-settings/servers'
         let g:lsp_settings_global_settings_dir = $INSTALL_PATH . '/vim-lsp-settings/global_config'
         let g:lsp_settings_enable_suggestions  = 1
+        let g:lsp_log_file                     = $INSTALL_PATH . '/lsp.log'
     endif
 elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'

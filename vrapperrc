@@ -1,0 +1,21 @@
+set autoindent
+set ignorecase
+set smartcase
+
+
+nnoremap <C-b> ^
+xnoremap <C-f> $
+xnoremap <C-b> ^
+onoremap <C-f> $
+onoremap <C-b> ^
+inoremap <C-f> <ESC>A
+inoremap <C-b> <ESC>I
+nnoremap <Cr> %
+nnoremap <silent> c<Cr> *Ncgn
+
+nnoremap <silent> gh :tabprevious<CR>
+nnoremap <silent> gl :tabnext<CR>
+nnoremap <silent> \l :tabm +1<CR>
+nnoremap <silent> \h :tabm -1<CR>
+nnoremap <silent> \1 :tabm 0<CR>
+nnoremap <silent> \0 :tabm<CR>
