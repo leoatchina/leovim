@@ -575,7 +575,7 @@ nmap gj <Plug>(easymotion-w)
 nmap gk <Plug>(easymotion-b)
 nmap s<Cr> <Plug>(easymotion-s2)
 " within line jump
-nmap gt <Plug>(easymotion-bd-jk)
+nmap g<tab> <Plug>(easymotion-bd-jk)
 " ------------------------
 " clever-f
 " ------------------------
