@@ -22,8 +22,6 @@ let maplocalleader = "\"
 vmap Q gq
 nmap Q gqap
 
-
-
 " Closing tabs
 nmap <leader>q :action CloseContent<cr>
 nmap <leader>Q :action ReopenClosedTab<cr>
@@ -53,7 +51,7 @@ nmap gT :action GotoTest<cr>
 nmap <leader>h :action Back<cr>
 nmap <leader>l :action Forward<cr>
 nmap <leader>L :action RecentLocations<cr>
-nmap <leader>; :action FileStructurePopup<cr>
+nmap <leader>p :action FileStructurePopup<cr>
 nmap <leader>u :action FindUsages<cr>
 nmap <leader>s :action ActivateStructureToolWindow<cr>
 nmap <leader>d :action ShowErrorDescription<cr>

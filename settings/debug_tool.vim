@@ -60,13 +60,13 @@ if Installed('vimspector')
     endfunction
 endif
 if Installed("vim-projectionist")
-    nnoremap <leader>me :A<Cr>
-    nnoremap <leader>ma :A<Space>
-    nnoremap <leader>ms :AS<Space>
-    nnoremap <leader>mv :AV<Space>
-    nnoremap <leader>mt :AT<Space>
-    nnoremap <leader>md :AD<Space>
-    nnoremap <leader>mc :Pcd<Space>
-    nnoremap <leader>ml :Plcd<Space>
-    nnoremap <leader>mp :ProjectDo<Space>
+    nnoremap <leader>oe :A<Cr>
+    nnoremap <leader>oa :A<Space>
+    nnoremap <leader>os :AS<Space>
+    nnoremap <leader>ov :AV<Space>
+    nnoremap <leader>ot :AT<Space>
+    nnoremap <leader>od :AD<Space>
+    nnoremap <leader>oc :Pcd<Space>
+    nnoremap <leader>ol :Plcd<Space>
+    nnoremap <leader>op :ProjectDo<Space>
 endif
