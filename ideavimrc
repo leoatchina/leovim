@@ -22,6 +22,10 @@ let maplocalleader = "\"
 vmap Q gq
 nmap Q gqap
 
+" home end
+nmap L $
+nmap H ^
+
 " Closing tabs
 nmap <leader>q :action CloseContent<cr>
 nmap <leader>Q :action ReopenClosedTab<cr>
@@ -50,24 +54,22 @@ nmap gi :action GotoImplementation<cr>
 nmap gT :action GotoTest<cr>
 nmap <leader>h :action Back<cr>
 nmap <leader>l :action Forward<cr>
-nmap <leader>L :action RecentLocations<cr>
 nmap <leader>p :action FileStructurePopup<cr>
 nmap <leader>u :action FindUsages<cr>
-nmap <leader>s :action ActivateStructureToolWindow<cr>
+nmap <leader>a :action ActivateStructureToolWindow<cr>
 nmap <leader>d :action ShowErrorDescription<cr>
 nmap <leader>i :action SelectIn<cr>
 nmap <leader>f :action RecentFiles<cr>
 nmap <leader>b :action ShowBookmarks<cr>
 
 " nmap <leader>a :action Switcher<cr>
-nmap <leader>a :action RecentChangedFiles<cr>
 
 " Errors
 nmap <leader>j :action GotoNextError<cr>
 nmap <leader>k :action GotoPreviousError<cr>
 
 " Refactorings
-vmap T :action Refactorings.QuickListPopupAction<cr>
+vmap M :action Refactorings.QuickListPopupAction<cr>
 nmap <leader>rr :action RenameElement<cr>
 nmap <leader>rg :action Generate<cr>
 nmap <leader>ri :action OptimizeImports<cr>
@@ -83,7 +85,7 @@ nmap <leader>yd :action Compare.LastVersion<cr>
 nmap <leader>yr :action Git.ResolveConflicts<cr>
 
 " Terminal
-nmap <a--> :action ActivateTerminalToolWindow<cr>
+nmap T :action ActivateTerminalToolWindow<cr>
 
 " External GVim
 nmap <leader>v :action Tool_External Tools_gvim<cr>
@@ -162,4 +164,4 @@ nmap \p :action Tool_External Tools_Black<cr>
 " :cursive.testing.actions/remove-test-markers
 " :cursive.testing.actions/rerun-last-test
 " :cursive.testing.actions/run-ns-tests
-" :cursive.testing.actions/run-single-test
+" :cursive.testing.ctions/run-single-test
