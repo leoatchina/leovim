@@ -252,9 +252,9 @@ if WINDOWS()
         nnoremap <silent> <M-+> :call SetAlpha(5)<Cr>
         nnoremap <silent> <M-_> :call SetAlpha(-5)<Cr>
     endif
-else
+elseif !CYGWIN()
     if $PATH !~ 'addins'
-        let $PATH = $ADDINS_PATH . "/bin;" . $PATH
+        let $PATH = $ADDINS_PATH . "/bin:" . $PATH
     endif
     " --------------------------
     " terminal comparability

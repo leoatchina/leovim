@@ -28,9 +28,9 @@ nnoremap <silent> q<space> :CloseQuickfix<Cr>
 " --------------------------
 " repl tool
 " --------------------------
-au FileType python,sh,perl,javascript,lua imap <M-e> # %% ############## ##############<C-o>F<space>
-au FileType python,sh,perl,javascript,lua imap <M-y> # ################################<C-o>F<space>
-if g:has_terminal > 0
+au FileType python,sh,perl,javascript,lua imap <M-e> # %% ##############  ##############<C-o>F<space>
+au FileType python,sh,perl,javascript,lua imap <M-y> # #################  ##############<C-o>F<space>
+if g:has_terminal > 0 && executable('python')
     if has('nvim') && get(g:, 'terminal_plus', '') =~ 'floaterm'
         au FileType python,sh,perl,javascript,lua xmap <M-e> :FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua nmap <M-e> :FloatermSend<Cr>j
@@ -59,11 +59,17 @@ if g:has_terminal > 0
         if !exists('g:repl_program')
             let g:repl_program = {}
         endif
-        if LINUX() || MACOS()
-            let g:repl_program.python = ['ptpython', 'ipython', 'python']
-        elseif WINDOWS()
-            let g:repl_program.python = ['ipython', 'python']
+        let g:repl_program.python = []
+        if executable('ipython')
+            let g:repl_program.python += ['ipython']
         endif
+        if (LINUX() || MACOS()) && executable('ptpython')
+            let g:repl_program.python += ['ptpython']
+        endif
+        if executable('python3')
+            let g:repl_program.python += ['python3']
+        endif
+        let g:repl_program.python += ['python']
         " map
         au Filetype python,sh,perl,javascript,lua call s:set_repl_map()
         function! s:set_repl_map() abort
