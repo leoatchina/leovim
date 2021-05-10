@@ -28,14 +28,15 @@ nnoremap <silent> q<space> :CloseQuickfix<Cr>
 " --------------------------
 " repl tool
 " --------------------------
-au FileType python,sh,perl,javascript,lua imap <M-e> # %% ##############  ##############<C-o>F<space>
-au FileType python,sh,perl,javascript,lua imap <M-y> # #################  ##############<C-o>F<space>
+au FileType python,sh,perl,javascript,lua imap <M-y> # %% ##############  ##############<C-o>F<space>
 if g:has_terminal > 0 && executable('python')
     if has('nvim') && get(g:, 'terminal_plus', '') =~ 'floaterm'
         au FileType python,sh,perl,javascript,lua xmap <M-e> :FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua nmap <M-e> :FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua xmap <M-d> :FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua nmap <M-d> vaB:FloatermSend<Cr>j:call search('# %%', 'eW')<Cr>j
+        au FileType python,sh,perl,javascript,lua imap <M-e> <Esc>:FloatermSend<Cr>j
+        au FileType python,sh,perl,javascript,lua imap <M-d> <Esc>vaB:FloatermSend<Cr>j:call search('# %%', 'eW')<Cr>j
         au FileType python nnoremap <leader>R :FloatermNew ipython --no-autoindent<Cr>
     " vim-repl only for vim8+
     elseif v:version >= 800 && !has('nvim')
@@ -75,12 +76,14 @@ if g:has_terminal > 0 && executable('python')
         function! s:set_repl_map() abort
             nmap <M-d> vaB<M-e>
             xmap <M-d> <M-e>
+            imap <M-e> <ESC><M-e>
+            imap <M-d> <ESC><M-d>
             nnoremap <leader>R :<C-u>REPLToggle<Cr>
             nnoremap <leader>rr :REPL
         endfunction
         " ipdb settings
         if get(g:, 'ipdb_import', 0) > 0
-            au Filetype python imap <M-d> import ipdb; ipdb.set_trace()
+            au Filetype python imap <M-u> import ipdb; ipdb.set_trace()
             au Filetype python call s:set_ipdb_map()
             function! s:set_ipdb_map() abort
                 nnoremap <leader>rl :<C-u>REPLDebugStopAtCurrentLine<Cr>
