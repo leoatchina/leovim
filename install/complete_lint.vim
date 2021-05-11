@@ -196,7 +196,7 @@ elseif get(g:, 'complete_engine', '') == 'coc'
             \ 'coc-css',
             \ 'coc-yaml',
             \ 'coc-phpls',
-            \ 'coc-emmet'
+            \ 'coc-emmet',
             \ 'coc-tsserver',
             \ 'coc-angular',
             \ 'coc-vetur'
