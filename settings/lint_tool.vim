@@ -16,6 +16,7 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
     endif
     nmap <silent> <M-k>n <Plug>(coc-diagnostic-next-error)
     nmap <silent> <M-k>p <Plug>(coc-diagnostic-prev-error)
+    nmap <silent> <M-k>o :call CocAction('diagnosticToggle')<Cr>
     highlight def CocUnderLine cterm=NONE gui=NONE
     highlight def link CocErrorHighlight   CocUnderLine
     highlight def link CocWarningHighlight NONE
@@ -52,6 +53,7 @@ elseif Installed('ale')
     command! -bang -nargs=* ShowLint call s:showLint()
     nnoremap <silent> <leader>d :ShowLint<Cr>
     nmap <M-k>c :ALE<Tab>
+    nmap <M-k>o :ALEToggle<Cr>
     nmap <M-k>p <Plug>(ale_previous_error)
     nmap <M-k>n <Plug>(ale_next_error)
     let g:ale_disable_lsp          = 0

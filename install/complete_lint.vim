@@ -72,6 +72,7 @@ if index(['YCM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) 
         nnoremap <M-k>d :<C-u>CocDiagnostics<Cr>
     elseif has('nvim') || v:version >= 800
         let g:lint_tool = 'ale'
+        nnoremap <M-k>d :ALELint<Cr>
         MyPlug 'dense-analysis/ale'
     else
         let g:lint_tool = ''
