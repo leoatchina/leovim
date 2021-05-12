@@ -5,6 +5,7 @@ if Installed('vimspector')
     nmap <silent> ,b     <Plug>VimspectorToggleBreakpoint
     nmap <silent> ,B     :call vimspector#ListBreakpoints()<Cr>
     nmap <silent> <M-B>  :call vimspector#ClearBreakpoints()<Cr>
+    nmap <silent> <F7>   <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>f <Plug>VimspectorAddFunctionBreakpoint
     "  run

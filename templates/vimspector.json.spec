@@ -32,12 +32,12 @@
     "python: Launch": {
       "adapter": "debugpy",
       "configuration": {
-        "name": "python ",
+        "name": "python",
         "type": "python",
+        "python": "python",
         "request": "launch",
         "stopOnEntry": true,
         "console": "externalTerminal",
-        "debugOptions": [],
         "program": "${workspaceRoot}/${mainPyfile}"
       }
     },
@@ -45,7 +45,7 @@
       "adapter": "CodeLLDB",
       "configuration": {
         "name": "rust lldb",
-        "type":    "lldb",
+        "type": "lldb",
         "request": "launch",
         "stopOnEntry": true,
         "MIMode": "gdb",
