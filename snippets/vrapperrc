@@ -1,8 +1,22 @@
+" http://vrapper.sourceforge.net/documentation/?topic=optional_plugins
+
 set autoindent
 set ignorecase
 set smartcase
+set hlsearch
+set incsearch
+set number
+set acd
+set nospell
+set softtabstop=4
+set tabstop=4
+set expandtab
+set clipboard=autoselectplus
 
+xmap >> >gv
+xmap << <gv
 
+nnoremap <C-F> $
 nnoremap <C-b> ^
 xnoremap <C-f> $
 xnoremap <C-b> ^
@@ -19,3 +33,35 @@ nnoremap <silent> <leader>l :tabm +1<CR>
 nnoremap <silent> <leader>h :tabm -1<CR>
 nnoremap <silent> <leader>1 :tabm 0<CR>
 nnoremap <silent> <leader>0 :tabm<CR>
+
+" 
+noremap \f :format<Cr> 
+noremap \w <Plug>(eclipse-motion:org.eclipse.ui.edit.text.goto.wordNext)
+noremap \b <Plug>(eclipse-motion:org.eclipse.ui.edit.text.goto.wordPrevious)
+noremap \e <Plug>(eclipse-textobj:org.eclipse.jdt.ui.edit.text.java.select.enclosing)
+noremap \l <Plug>(eclipse-textobj:org.eclipse.jdt.ui.edit.text.java.select.last)
+
+" sneak
+nmap s <Plug>(sneak_s)
+nmap S <Plug>(sneak_S)
+omap z <Plug>(sneak_s)
+omap Z <Plug>(sneak_S)
+vmap z <Plug>(sneak_s)
+vmap Z <Plug>(sneak_S)
+
+nmap ; <Plug>(sneak-next)
+nmap , <Plug>(sneak-prev)
+vmap ; <Plug>(sneak-next)
+vmap , <Plug>(sneak-prev)
+
+nmap f <Plug>(sneak_f)
+nmap F <Plug>(sneak_F)
+nmap t <Plug>(sneak_t)
+nmap T <Plug>(sneak_T)
+vmap f <Plug>(sneak_f)
+vmap F <Plug>(sneak_F)
+vmap t <Plug>(sneak_t)
+vmap T <Plug>(sneak_T)
+
+" vrapper settings
+set gvimpath=gvim
