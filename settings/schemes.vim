@@ -59,8 +59,6 @@ elseif HasPlug('equinusocio_material')
     call SetScheme('equinusocio_material')
 elseif HasPlug('tokyonight')
     call SetScheme('tokyonight')
-elseif HasPlug('oceanic_material')
-    call SetScheme('oceanic_material')
 " --------------------------
 " schmes auto selected
 " --------------------------
@@ -81,7 +79,7 @@ elseif get(g:, 'complete_engine', '') == 'coc'
 elseif get(g:, 'fuzzy_finder', '') == 'leaderf'
     if get(g:, 'complete_engine', '') =~ 'YCM'
         if get(g:, 'complete_engine', '') =~ 'legacy'
-            call SetScheme('oceanic_material', 'deus')
+            call SetScheme('gruvbox-material', 'deus')
         else
             call SetScheme('gruvbox-material', 'gruvbox')
         endif
@@ -98,22 +96,22 @@ try
     if get(g:, 'colors_name', '') == 'edge'
         let g:edge_style                  = get(g:, 'edge_style', 'aura')
         let g:edge_enable_italic          = 0
-        let g:edge_disable_italic_comment = 0
+        let g:edge_disable_italic_comment = 1
     elseif get(g:, 'colors_name', '') == 'sonokai'
         let g:sonokai_style                  = get(g:, 'sonokai_style', 'andromeda')
         let g:sonokai_enable_italic          = 0
-        let g:sonokai_disable_italic_comment = 0
+        let g:sonokai_disable_italic_comment = 1
     elseif get(g:, 'colors_name', '') == 'gruvbox-material'
-        let g:gruvbox_material_background             = get(g:, 'gruvbox_material_background', 'medium')
-        let g:gruvbox_material_palette                = get(g:, 'gruvbox_material_palette', 'mix')
+        if get(g:, 'complete_engine', '') == 'YCM'
+            let g:gruvbox_material_background = get(g:, 'gruvbox_material_background', 'medium')
+            let g:gruvbox_material_palette    = get(g:, 'gruvbox_material_palette', 'mix')
+        else
+            let g:gruvbox_material_background = get(g:, 'gruvbox_material_background', 'hard')
+            let g:gruvbox_material_palette    = get(g:, 'gruvbox_material_palette', 'original')
+        endif
         let g:gruvbox_material_visual                 = 'reverse'
         let g:gruvbox_material_enable_italic          = 0
-        let g:gruvbox_material_disable_italic_comment = 0
-    elseif get(g:, 'colors_name', '') == 'oceanic_material'
-        let g:oceanic_material_background      = get(g:, 'oceanic_material_background', 'deep')
-        let g:oceanic_material_allow_italic    = 0
-        let g:oceanic_material_allow_undercurl = 0
-        let g:oceanic_material_allow_reverse   = 1
+        let g:gruvbox_material_disable_italic_comment = 1
     elseif get(g:, 'colors_name', '') == 'tokyonight'
         let g:tokyonight_style = get(g:, 'tokyonight', 'night')
         let g:tokyonight_enable_italic = 0

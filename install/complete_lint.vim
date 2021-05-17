@@ -66,7 +66,7 @@ endif
 " ------------------------------
 " lint tool
 " ------------------------------
-if index(['YCM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if index(['YCM', 'YCM-legacy', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
     if get(g:, 'complete_engine', '') == 'coc' && get(g:, 'lint_tool', '') != 'ale'
         let g:lint_tool = 'coc'
         nnoremap <M-k>d :<C-u>CocDiagnostics<Cr>

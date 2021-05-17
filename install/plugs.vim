@@ -133,7 +133,6 @@ if get(g:, 'has_truecolor', 0) > 0 && HasPlug('truecolor')
     MyPlug 'wadackel/vim-dogrun'
     MyPlug 'mhartington/oceanic-next'
     MyPlug 'ghifarit53/tokyonight-vim'
-    MyPlug 'hardcoreplayers/oceanic-material'
     MyPlug 'embark-theme/vim', {'as': 'embark', 'dir': '~/.leovim.plug/embark'}
 endif
 " ------------------------------

@@ -140,7 +140,7 @@ function! UpdateLightline() abort
             let g:lightline.colorscheme = 'gruvboxdark'
         elseif g:colors_name == 'tokyonight'
             let g:lightline.colorscheme = 'tokyonight'
-        elseif g:colors_name == 'oceanic_material' || g:colors_name == 'deus'
+        elseif g:colors_name == 'deus'
             let g:lightline.colorscheme = 'deus'
         elseif g:colors_name == 'gruvbox-material'
             let g:lightline.colorscheme = 'gruvbox_material'
