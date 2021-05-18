@@ -1137,7 +1137,7 @@ nnoremap <silent> m<Space> :call Delmarks()<cr>
 nnoremap <leader>b :ls<CR>
 nnoremap <leader>R :registers<Cr>
 nnoremap <M-m>n :set nonu! nonu?<CR>
-nnoremap <M-m>u :set invrelativenumber<CR>
+nnoremap <M-m>i :set invrelativenumber<CR>
 nnoremap <M-m>f :set nofoldenable! nofoldenable?<CR>
 nnoremap <M-m>w :set nowrap! nowrap?<CR>
 nnoremap <M-m>h :set nohlsearch? nohlsearch!<CR>
