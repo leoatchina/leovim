@@ -299,7 +299,7 @@ if g:has_truecolor == 1
         let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
         let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     endif
-    nnoremap <M-m>g :set notermguicolors! notermguicolors?<CR>
+    nnoremap <leader>mg :set notermguicolors! notermguicolors?<CR>
 endif
 " ------------------------
 " easy-align
@@ -1136,14 +1136,14 @@ nnoremap <silent> m<Space> :call Delmarks()<cr>
 " ------------------------
 nnoremap <leader>b :ls<CR>
 nnoremap <leader>R :registers<Cr>
-nnoremap <M-m>n :set nonu! nonu?<CR>
-nnoremap <M-m>i :set invrelativenumber<CR>
-nnoremap <M-m>f :set nofoldenable! nofoldenable?<CR>
-nnoremap <M-m>w :set nowrap! nowrap?<CR>
-nnoremap <M-m>h :set nohlsearch? nohlsearch!<CR>
-nnoremap <M-m>s :colorscheme<Space>
-nnoremap <M-m>t :setfiletype<Space>
-nnoremap <M-m>c :command<Cr>
+nnoremap <leader>mn :set nonu! nonu?<CR>
+nnoremap <leader>mi :set invrelativenumber<CR>
+nnoremap <leader>mf :set nofoldenable! nofoldenable?<CR>
+nnoremap <leader>mw :set nowrap! nowrap?<CR>
+nnoremap <leader>mh :set nohlsearch? nohlsearch!<CR>
+nnoremap <leader>ms :colorscheme<Space>
+nnoremap <leader>mt :setfiletype<Space>
+nnoremap <leader>mc :command<Cr>
 " ------------------------
 " pastemode toggle
 " ------------------------
@@ -1733,8 +1733,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     nnoremap <M-j> :WhichKey '<lt>M-j>'<Cr>
     nnoremap <M-k> :WhichKey '<lt>M-k>'<Cr>
     nnoremap <M-l> :WhichKey '<lt>M-l>'<Cr>
-    nnoremap <M-m> :WhichKey '<lt>M-m>'<Cr>
-    nnoremap <M-M> :WhichKey '<lt>M-m>'<Cr>
+
     nnoremap <M-r> :WhichKey '<lt>M-r>'<Cr>
     " search
     if get(g:, 'grep_tool', '') =~ 'leaderf' || get(g:, 'grep_tool', '') =~ 'coc' || get(g:, 'grep_tool', '') =~ 'ctrlsf'
@@ -1818,8 +1817,8 @@ function! Version()
     echo string(params_dict)
 endfunction
 command! Version call Version()
-nnoremap <M-m>v :Version<Cr>
-nnoremap <M-m>V :version<Cr>
+nnoremap <leader>mv :Version<Cr>
+nnoremap <leader>mV :version<Cr>
 " --------------------------
 " more config
 " --------------------------
