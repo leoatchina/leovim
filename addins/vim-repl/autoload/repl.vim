@@ -201,6 +201,10 @@ function! repl#REPLClose()
             call term_sendkeys(repl#GetConsoleName(), "\<C-W>\<C-C>")
             call repl#Sends(['quit()'], ['ipdb>', 'pdb>'])
         else
+            call repl#REPLGoToWindowForBufferName(repl#GetConsoleName())
+            if mode() ==# 'n'
+                execute "normal! i"
+            endif
             exe "call term_sendkeys('" . repl#GetConsoleName() . ''', "\<C-W>\<C-C>")'
             exe "call term_wait('" . repl#GetConsoleName() . ''', 50)'
             if repl#REPLIsVisible()
@@ -562,7 +566,7 @@ function! repl#IsCodeFinish(code)
 python3 << EOF
 import vim
 import sys
-sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
+# sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
 import replpython
 code = vim.eval("a:code")
 if isinstance(code, list):
@@ -575,7 +579,7 @@ EOF
 python << EOF
 import vim
 import sys
-sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
+# sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
 import replpython
 code = vim.eval("a:code")
 if isinstance(code, list):
@@ -605,7 +609,7 @@ function! repl#ToREPLPythonCode(lines, pythonprogram)
 python3 << EOF
 import vim
 import sys
-sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
+# sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
 import formatpythoncode
 codes = vim.eval("a:lines")
 pythonprogram = vim.eval("a:pythonprogram")
@@ -618,7 +622,7 @@ EOF
 python << EOF
 import vim
 import sys
-sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
+# sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
 import formatpythoncode
 codes = vim.eval("a:lines")
 pythonprogram = vim.eval("a:pythonprogram")
@@ -790,6 +794,12 @@ function! repl#SendSession() abort
         call repl#REPLUnhide()
     endif
     call cursor(0, col("$"))
+    let g:repl_code_block_begin = get(g:repl_code_block_fences, &ft, '# %%')
+    if exists("g:repl_code_block_fences_end") && has_key(g:repl_code_block_fences_end, &ft)
+        let g:repl_code_block_end = g:repl_code_block_fences_end[&ft]
+    else
+        let g:repl_code_block_end = g:repl_code_block_begin
+    endif
     let l:begin_line_number = search('^' . g:repl_code_block_begin, 'bnW')
     if l:begin_line_number == 0
         let l:begin_line_number = 1
@@ -867,7 +877,7 @@ function! repl#GetTerminalLastOutput(...) abort
         if has('python3')
 python3 << EOF
 import vim
-sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
+# sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
 from replpython import GetLastOutput
 terminal_content = vim.eval("l:terminal_content")
 last_out = GetLastOutput(terminal_content, "ipython")
@@ -882,7 +892,7 @@ EOF
         elseif has('python')
 python << EOF
 import vim
-sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
+# sys.path.append(vim.eval("g:REPLVIM_PATH") + "autoload/")
 from replpython import GetLastOutput
 terminal_content = vim.eval("l:terminal_content")
 last_out = GetLastOutput(terminal_content, "ipython")
@@ -923,22 +933,31 @@ function! repl#REPLDebug() abort
 python3 << EOF
 import sys
 print(sys.version)
+print(sys.path)
 EOF
     elseif has('python')
 python << EOF
 import sys
 print sys.version
+print sys.path
 EOF
     endif
     echo 'REPL program:'
     echo g:repl_program
     for l:file in keys(g:repl_program)
         let l:pros = g:repl_program[l:file]
-        for l:pro in l:pros
+        if type(l:pros) == 3
+            for l:pro in l:pros
+                if !executable(split(l:pro, ' ')[0])
+                    echo split(l:pro, ' ')[0] . ' for ' . l:file . ' is not executable.'
+                endif
+            endfor
+        elseif type(l:pros) == 1
+            let l:pro = l:pros
             if !executable(split(l:pro, ' ')[0])
                 echo split(l:pro, ' ')[0] . ' for ' . l:file . ' is not executable.'
             endif
-        endfor
+        endif
     endfor
     unlet! t:REPL_OPEN_TERMINAL
     try
