@@ -1135,6 +1135,7 @@ nnoremap <silent> m<Space> :call Delmarks()<cr>
 " basic toggle and show
 " ------------------------
 nnoremap <leader>b :ls<CR>
+nnoremap <leader>R :registers<Cr>
 nnoremap <M-m>n :set nonu! nonu?<CR>
 nnoremap <M-m>u :set invrelativenumber<CR>
 nnoremap <M-m>f :set nofoldenable! nofoldenable?<CR>
@@ -1143,7 +1144,6 @@ nnoremap <M-m>h :set nohlsearch? nohlsearch!<CR>
 nnoremap <M-m>s :colorscheme<Space>
 nnoremap <M-m>t :setfiletype<Space>
 nnoremap <M-m>c :command<Cr>
-nnoremap <M-m>r :registers<Cr>
 " ------------------------
 " pastemode toggle
 " ------------------------
@@ -1418,7 +1418,7 @@ let g:cycle_default_groups = [
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/indentLine/after
 endif
-nnoremap <M-m>i :IndentLinesToggle<Cr>
+nnoremap <M-k>i :IndentLinesToggle<Cr>
 let g:indentLine_color_dark      = 1 " (default: 2)
 let g:indentLine_color_tty_light = 7 " (default: 4)
 let g:indentLine_enabled         = 0

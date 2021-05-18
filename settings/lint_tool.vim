@@ -5,12 +5,10 @@ if get(g:, 'complete_engine', '') == 'YCM'
     nnoremap <M-k>d :YcmDiags<Cr>
 endif
 if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
-    if WINDOWS()
-        if get(g:, 'fuzzy_finder', '') == 'leaderf'
-            nnoremap <silent> <leader>d :silent CocDiagnostics<CR>:lclose<Cr>:Leaderf loclist<Cr>
-        else
-            nnoremap <silent> <leader>d :CocDiagnostics<CR>
-        endif
+    if get(g:, 'fuzzy_finder', '') == 'leaderf'
+        nnoremap <silent> <leader>d :silent CocDiagnostics<CR>:lclose<Cr>:Leaderf loclist<Cr>
+    elseif WINDOWS()
+        nnoremap <silent> <leader>d :CocDiagnostics<CR>
     else
         nnoremap <silent> <leader>d :CocFzfList diagnostics<CR>
     endif
