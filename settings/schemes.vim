@@ -53,6 +53,8 @@ elseif HasPlug('oceanicnext')
     call SetScheme('OceanicNext')
 elseif HasPlug('sonokai')
     call SetScheme('sonokai')
+elseif HasPlug('everforest')
+    call SetScheme('everforest')
 elseif HasPlug('gruvbox_material')
     call SetScheme('gruvbox-material')
 elseif HasPlug('equinusocio_material')
@@ -79,7 +81,7 @@ elseif get(g:, 'complete_engine', '') == 'coc'
 elseif get(g:, 'fuzzy_finder', '') == 'leaderf'
     if get(g:, 'complete_engine', '') =~ 'YCM'
         if get(g:, 'complete_engine', '') =~ 'legacy'
-            call SetScheme('gruvbox-material', 'deus')
+            call SetScheme('everforest', 'deus')
         else
             call SetScheme('gruvbox-material', 'gruvbox')
         endif
@@ -101,19 +103,18 @@ try
         let g:sonokai_style                  = get(g:, 'sonokai_style', 'andromeda')
         let g:sonokai_enable_italic          = 0
         let g:sonokai_disable_italic_comment = 1
+    elseif get(g:, 'colors_name', '') == 'everforest'
+        let g:everforest_background             = get(g:, 'everforest_background', 'hard')
+        let g:everforest_enable_italic          = 0
+        let g:everforest_disable_italic_comment = 1
     elseif get(g:, 'colors_name', '') == 'gruvbox-material'
-        if get(g:, 'complete_engine', '') == 'YCM'
-            let g:gruvbox_material_background = get(g:, 'gruvbox_material_background', 'medium')
-            let g:gruvbox_material_palette    = get(g:, 'gruvbox_material_palette', 'mix')
-        else
-            let g:gruvbox_material_background = get(g:, 'gruvbox_material_background', 'hard')
-            let g:gruvbox_material_palette    = get(g:, 'gruvbox_material_palette', 'original')
-        endif
+        let g:gruvbox_material_background = get(g:, 'gruvbox_material_background', 'medium')
+        let g:gruvbox_material_palette    = get(g:, 'gruvbox_material_palette', 'mix')
         let g:gruvbox_material_visual                 = 'reverse'
         let g:gruvbox_material_enable_italic          = 0
         let g:gruvbox_material_disable_italic_comment = 1
     elseif get(g:, 'colors_name', '') == 'tokyonight'
-        let g:tokyonight_style = get(g:, 'tokyonight', 'night')
+        let g:tokyonight_style         = get(g:, 'tokyonight', 'night')
         let g:tokyonight_enable_italic = 0
     elseif get(g:, 'colors_name', '') == 'embark'
         let g:embark_terminal_italics = 0

@@ -127,6 +127,7 @@ if get(g:, 'has_truecolor', 0) > 0 && HasPlug('truecolor')
     " sainnhe's themes
     MyPlug 'sainnhe/edge'
     MyPlug 'sainnhe/sonokai'
+    MyPlug 'sainnhe/everforest'
     MyPlug 'sainnhe/gruvbox-material'
     " others
     MyPlug 'ayu-theme/ayu-vim'

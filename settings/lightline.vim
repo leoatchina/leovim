@@ -144,6 +144,8 @@ function! UpdateLightline() abort
             let g:lightline.colorscheme = 'deus'
         elseif g:colors_name == 'gruvbox-material'
             let g:lightline.colorscheme = 'gruvbox_material'
+        elseif g:colors_name == 'everforest'
+            let g:lightline.colorscheme = 'everforest'
         elseif g:colors_name == 'ayu'
             let g:lightline.colorscheme = 'ayu'
         elseif g:colors_name == 'edge'
