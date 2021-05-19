@@ -38,13 +38,12 @@ elseif Installed('ale')
         call coc#config('diagnostic.displayByAle', v:true)
     endif
     function! s:showLint() abort
-        if get(g:, 'fuzzy_finder', '') == 'leaderf' || !WINDOWS() && get(g:, 'fuzzy_finder', '') == 'fzf'
+        if get(g:, 'fuzzy_finder', '') == 'leaderf'
             silent ALELint
-            if get(g:, 'fuzzy_finder', '') == 'leaderf'
-                LeaderfLocList
-            else
-                FZFLocList
-            endif
+            LeaderfLocList
+        elseif !WINDOWS() && get(g:, 'fuzzy_finder', '') == 'fzf'
+            silent ALELint
+            FZFLocList
         else
             ALELint
         endif
