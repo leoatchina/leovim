@@ -1733,7 +1733,6 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     nnoremap <M-j> :WhichKey '<lt>M-j>'<Cr>
     nnoremap <M-k> :WhichKey '<lt>M-k>'<Cr>
     nnoremap <M-l> :WhichKey '<lt>M-l>'<Cr>
-
     nnoremap <M-r> :WhichKey '<lt>M-r>'<Cr>
     " search
     if get(g:, 'grep_tool', '') =~ 'leaderf' || get(g:, 'grep_tool', '') =~ 'coc' || get(g:, 'grep_tool', '') =~ 'ctrlsf'
