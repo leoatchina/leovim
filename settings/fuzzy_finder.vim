@@ -11,9 +11,9 @@ if Installed("fzf.vim") && Installed("fzf")
     endif
     if get(g:, 'terminal_plus', '') =~ 'floaterm'
         if get(g:, 'fuzzy_finder', '') == 'leaderf'
-            nnoremap <M-h>f :Leaderf floaterm<Cr>
+            nnoremap <M-h>o :Leaderf floaterm<Cr>
         elseif Installed('fzf-floaterm')
-            nnoremap <M-h>f :Floaterms<Cr>
+            nnoremap <M-h>o :Floaterms<Cr>
         endif
     endif
     if has('nvim') || has('patch-8.2.191')
@@ -331,7 +331,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap t<cr>  :Leaderf tag<Cr>
     nnoremap f<Cr>  :Leaderf function<Cr>
     nnoremap F<Cr>  :Leaderf function --all<Cr>
-    nnoremap <M-h>, :Leaderf searchHistory<Cr>
+    nnoremap <M-h>/ :Leaderf searchHistory<Cr>
     nnoremap <M-h>; :Leaderf<Space>
     nnoremap <M-h>. :Leaderf --recall<Cr>
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
@@ -343,7 +343,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap <leader>mt :Leaderf filetype<Cr>
     nnoremap <leader>mc :Leaderf command<Cr>
     " help tags
-    nnoremap <M-h>h :Leaderf help<Cr>
+    nnoremap <M-h>, :Leaderf help<Cr>
     " search cword
     nnoremap \| :Leaderf line --no-sort --cword<Cr>
     xnoremap \| <ESC>:Leaderf line --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
@@ -442,7 +442,7 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap qf :CloseQuickfix<Cr>:FZFQuickFix<CR>
     nnoremap ql :CloseQuickfix<Cr>:FZFLocList<CR>
     nnoremap t<cr>  :FZFTags<CR>
-    nnoremap <M-h>, :FZFHistory/<CR>
+    nnoremap <M-h>/ :FZFHistory/<CR>
     nnoremap <M-h>c :FZFHistory:<CR>
     nnoremap <M-h>m :FZFMru<CR>
     nnoremap <M-k>l :FZFBLines<CR>
@@ -450,7 +450,7 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap <M-k>b :FzfBTags<CR>
     " helptags
     if executable('perl')
-        nnoremap <M-h>h :FzfHelptags<CR>
+        nnoremap <M-h>, :FzfHelptags<CR>
     endif
     " fzf-funky
     if Installed('fzf-funky')
@@ -592,7 +592,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         nnoremap <silent> <leader>p :registers<Cr>
         nnoremap <silent> <leader>b :CtrlPBuffer<CR>
         nnoremap <silent> <leader>u :CtrlPUndo<CR>
-        nnoremap <silent> <M-h>,    :CtrlPCmdline<CR>
+        nnoremap <silent> <M-h>/    :CtrlPCmdline<CR>
         nnoremap <silent> <M-h>m    :CtrlPMRU<CR>
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>t    :CtrlPBufTagAll<CR>

@@ -1418,7 +1418,7 @@ let g:cycle_default_groups = [
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/indentLine/after
 endif
-nnoremap <M-k>i :IndentLinesToggle<Cr>
+nnoremap <M-h>i :IndentLinesToggle<Cr>
 let g:indentLine_color_dark      = 1 " (default: 2)
 let g:indentLine_color_tty_light = 7 " (default: 4)
 let g:indentLine_enabled         = 0
@@ -1533,7 +1533,7 @@ if get(g:, 'has_terminal', 0) > 0
         else
             let g:floaterm_position = 'right'
         endif
-        nnoremap <M-h>o   :Floaterm
+        nnoremap <M-h>f   :Floaterm
         nnoremap <M-h>n   :FloatermNew<Space>
         nnoremap <silent> <M-=> :FloatermToggle<CR>
         tnoremap <silent> <M-=> <C-\><C-n>:FloatermToggle<CR>
