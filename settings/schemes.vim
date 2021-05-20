@@ -57,8 +57,6 @@ elseif HasPlug('everforest')
     call SetScheme('everforest')
 elseif HasPlug('gruvbox_material')
     call SetScheme('gruvbox-material')
-elseif HasPlug('equinusocio_material')
-    call SetScheme('equinusocio_material')
 elseif HasPlug('tokyonight')
     call SetScheme('tokyonight')
 " --------------------------
