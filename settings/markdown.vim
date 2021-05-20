@@ -15,6 +15,6 @@ if get(g:, 'markdown_tool', '') =~ 'markdown'
     endif
 endif
 if Installed("preview-markdown.vim")
-    au FileType markdown nmap <leader>M :PreviewMarkdown<cr>
+    au FileType markdown nmap <M-w> :PreviewMarkdown<cr>
     let g:preview_markdown_vertical = 1
 endif

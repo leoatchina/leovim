@@ -299,7 +299,7 @@ if g:has_truecolor == 1
         let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
         let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     endif
-    nnoremap <leader>mg :set notermguicolors! notermguicolors?<CR>
+    nnoremap <M-w>g :set notermguicolors! notermguicolors?<CR>
 endif
 " ------------------------
 " easy-align
@@ -317,7 +317,8 @@ let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String']
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-choosewin
 endif
-nmap <M-w> <Plug>(choosewin)
+nmap <M-W>      <Plug>(choosewin)
+nmap <M-w><M-w> <Plug>(choosewin)
 " ------------------------
 " winresizer
 " ------------------------
@@ -879,12 +880,12 @@ endfunction
 " quit
 " ------------------------
 nnoremap q          <Nop>
-nnoremap <leader>q :q!<Cr>
-nnoremap <M-q>     :confirm q<Cr>
-nnoremap <M-W>     :bd!<Cr>
-nnoremap ,q        :qall!<Cr>
 nnoremap qq        <C-w>z
 xnoremap qq        <C-w>z
+nnoremap qb        :bd!<Cr>
+nnoremap ,q        :qall!<Cr>
+nnoremap <M-q>     :confirm q<Cr>
+nnoremap <leader>q :q!<Cr>
 " ------------------------
 " esc
 " ------------------------
@@ -1136,14 +1137,14 @@ nnoremap <silent> m<Space> :call Delmarks()<cr>
 " ------------------------
 nnoremap <leader>b :ls<CR>
 nnoremap <leader>R :registers<Cr>
-nnoremap <leader>mn :set nonu! nonu?<CR>
-nnoremap <leader>mi :set invrelativenumber<CR>
-nnoremap <leader>mf :set nofoldenable! nofoldenable?<CR>
-nnoremap <leader>mw :set nowrap! nowrap?<CR>
-nnoremap <leader>mh :set nohlsearch? nohlsearch!<CR>
-nnoremap <leader>ms :colorscheme<Space>
-nnoremap <leader>mt :setfiletype<Space>
-nnoremap <leader>mc :command<Cr>
+nnoremap <M-w>n :set nonu! nonu?<CR>
+nnoremap <M-w>i :set invrelativenumber<CR>
+nnoremap <M-w>f :set nofoldenable! nofoldenable?<CR>
+nnoremap <M-w>w :set nowrap! nowrap?<CR>
+nnoremap <M-w>h :set nohlsearch? nohlsearch!<CR>
+nnoremap <M-w>s :colorscheme<Space>
+nnoremap <M-w>t :setfiletype<Space>
+nnoremap <M-w>c :command<Cr>
 " ------------------------
 " pastemode toggle
 " ------------------------
@@ -1734,6 +1735,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     nnoremap <M-k> :WhichKey '<lt>M-k>'<Cr>
     nnoremap <M-l> :WhichKey '<lt>M-l>'<Cr>
     nnoremap <M-r> :WhichKey '<lt>M-r>'<Cr>
+    nnoremap <M-w> :WhichKey '<lt>M-w>'<Cr>
     " search
     if get(g:, 'grep_tool', '') =~ 'leaderf' || get(g:, 'grep_tool', '') =~ 'coc' || get(g:, 'grep_tool', '') =~ 'ctrlsf'
         nnoremap <M-f> :WhichKey '<lt>M-f>'<Cr>
@@ -1816,8 +1818,8 @@ function! Version()
     echo string(params_dict)
 endfunction
 command! Version call Version()
-nnoremap <leader>mv :Version<Cr>
-nnoremap <leader>mV :version<Cr>
+nnoremap <M-w>v :Version<Cr>
+nnoremap <M-w>V :version<Cr>
 " --------------------------
 " more config
 " --------------------------

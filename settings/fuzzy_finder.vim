@@ -339,9 +339,9 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap <M-k>b :Leaderf bufTag<cr>
     nnoremap <M-k>t :Leaderf bufTag --all<cr>
     " replace origin command
-    nnoremap <leader>ms :Leaderf colorscheme<Cr>
-    nnoremap <leader>mt :Leaderf filetype<Cr>
-    nnoremap <leader>mc :Leaderf command<Cr>
+    nnoremap <M-w>s :Leaderf colorscheme<Cr>
+    nnoremap <M-w>t :Leaderf filetype<Cr>
+    nnoremap <M-w>c :Leaderf command<Cr>
     " help tags
     nnoremap <M-h>, :Leaderf help<Cr>
     " search cword
@@ -424,9 +424,9 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
 elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap <leader>b :FzfBuffers<CR>
     " replace origin command
-    nnoremap <leader>ms :FzfColors<CR>
-    nnoremap <leader>mt :FzfFiletypes<CR>
-    nnoremap <leader>mc :FzfCommands<CR>
+    nnoremap <M-w>s :FzfColors<CR>
+    nnoremap <M-w>t :FzfFiletypes<CR>
+    nnoremap <M-w>c :FzfCommands<CR>
     if WINDOWS()
         nnoremap m<Cr>     :FzfMarks<CR>
         nnoremap <leader>w :FzfWindows<CR>
