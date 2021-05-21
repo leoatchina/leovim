@@ -169,8 +169,6 @@ nnoremap \<Cr> :source ~/.leovim.conf/init.vim<Cr>
 " ------------------------
 nnoremap <leader>ec :tabe ~/.leovim.conf/init.vim<CR>
 nnoremap <leader>el :tabe ~/.vimrc.local<CR>
-nnoremap <leader>ep :tabe ~/.config/.vimrc.plug<Cr>
-nnoremap <leader>er :tabe ~/.config/.vimrc<Cr>
 " --------------------------
 " HasPlug define
 " --------------------------
@@ -1594,7 +1592,6 @@ if has('statusline')
     endif
     source $SETTINGS_PATH/lightline.vim
 endif
-if filereadable(expand("~/.config/.vimrc.plug")) | source $HOME/.config/.vimrc.plug | endif
 " --------------------------
 " zfvim
 " --------------------------
@@ -1610,6 +1607,11 @@ if HasPlug('wubi') || HasPlug('pinyin')
     endif
     MyPlug 'ZSaberLv0/ZFVimIM_pinyin'
 endif
+" --------------------------
+" test vimrc
+" --------------------------
+nnoremap <leader>er :tabe ~/.config/.vimrc<Cr>
+if filereadable(expand("~/.config/.vimrc")) | source $HOME/.config/.vimrc | endif
 " --------------------------
 " end of vim-plug
 " --------------------------
@@ -1879,16 +1881,21 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 				echo "Not a valid file path"
 		endif
 endfunc
-command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
-command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
-" Open the current file in idea
-nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea %s:%d", expand("%:p"), line("."))<cr><cr>
-" Open the current file in webstorm
-nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
-" Open a file link under cursor in idea
-nnoremap <leader>Fi :OpenFileLinkInIdea<cr>
-" Open a file link under cursor in vscode
-nnoremap <leader>Fv :OpenFileLinkInVscode<cr>
+if executable('idea')
+    command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
+    nnoremap <leader>Fi :OpenFileLinkInIdea<cr>
+    nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
+endif
+if executable('pycharm')
+    command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
+    nnoremap <leader>Fp :OpenFileLinkInPycharm<cr>
+    nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
+endif
+if executable('code')
+    command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
+    nnoremap <leader>Fv :OpenFileLinkInVscode<cr>
+    nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
+endif
 " --------------------------
 " set loaded
 " --------------------------
