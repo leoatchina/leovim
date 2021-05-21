@@ -170,7 +170,7 @@ nnoremap \<Cr> :source ~/.leovim.conf/init.vim<Cr>
 nnoremap <leader>ei :tabe ~/.leovim.conf/init.vim<CR>
 nnoremap <leader>el :tabe ~/.vimrc.local<CR>
 nnoremap <leader>ep :tabe ~/.config/.vimrc.plug<Cr>
-nnoremap <leader>ev :tabe ~/.config/.vimrc<Cr>
+nnoremap <leader>er :tabe ~/.config/.vimrc<Cr>
 " --------------------------
 " HasPlug define
 " --------------------------
