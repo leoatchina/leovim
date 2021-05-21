@@ -16,14 +16,12 @@ set clipboard=autoselectplus
 xmap >> >gv
 xmap << <gv
 
-nnoremap <C-F> $
-nnoremap <C-b> ^
-xnoremap <C-f> $
-xnoremap <C-b> ^
-onoremap <C-f> $
-onoremap <C-b> ^
-inoremap <C-f> <ESC>A
-inoremap <C-b> <ESC>I
+nnoremap L $
+nnoremap H ^
+xnoremap L $
+xnoremap H ^
+onoremap L $
+onoremap H ^
 nnoremap <Cr> %
 nnoremap <silent> c<Cr> *Ncgn
 
@@ -33,6 +31,9 @@ nnoremap <silent> <leader>l :tabm +1<CR>
 nnoremap <silent> <leader>h :tabm -1<CR>
 nnoremap <silent> <leader>1 :tabm 0<CR>
 nnoremap <silent> <leader>0 :tabm<CR>
+nnoremap <silent> <leader>f :files<Cr>
+nnoremap <silent> <leader>R :registers<Cr>
+nnoremap m<Cr>              :marks<Cr>
 
 " 
 noremap \f :format<Cr> 
