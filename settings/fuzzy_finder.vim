@@ -68,7 +68,7 @@ if Installed("fzf.vim") && Installed("fzf")
         imap <c-x><c-l> <plug>(fzf-complete-line)
     endif
     if LINUX() || MACOS()
-        imap <M-m> <c-x><c-l>
+        imap <M-w> <c-x><c-l>
         imap <M-f> <c-x><c-f>
     endif
     " ----------------------
