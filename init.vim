@@ -167,7 +167,7 @@ nnoremap \<Cr> :source ~/.leovim.conf/init.vim<Cr>
 " ------------------------
 " open config file
 " ------------------------
-nnoremap <leader>ei :tabe ~/.leovim.conf/init.vim<CR>
+nnoremap <leader>ec :tabe ~/.leovim.conf/init.vim<CR>
 nnoremap <leader>el :tabe ~/.vimrc.local<CR>
 nnoremap <leader>ep :tabe ~/.config/.vimrc.plug<Cr>
 nnoremap <leader>er :tabe ~/.config/.vimrc<Cr>
@@ -1840,6 +1840,55 @@ if HasPlug('inweb') && !WINDOWS() && g:gui_running == 0
     nmap <M-{> <C-p>
     xmap <M-}> <C-p>
 endif
+" --------------------------
+" IDE integration
+" --------------------------
+func! s:getBookmarkUnderCursor(text, pos)
+		"Find the start location
+		let p = a:pos
+		while p >= 0 && a:text[p] =~ '\f'
+				let p = p - 1
+		endwhile
+		let p = p + 1
+		"Match file name and position
+		let l:m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', p)
+		if len(l:m) > 0
+				return [l:m[1], l:m[2], l:m[3]]
+		endif
+		return []
+endfunc
+func! s:OpenFileLinkInIde(text, pos, ide)
+		let l:location = s:getBookmarkUnderCursor(a:text, a:pos)
+		if l:location[0] != ''
+				if l:location[1] != ''
+						if l:location[2] != ''
+								let l:command = a:ide . " --column " . str2nr(l:location[2]) . " " . l:location[0] . ":" . str2nr(l:location[1])
+								echo l:command
+								exec "AsyncRun -silent " . l:command
+						else
+								let l:command = a:ide . " " . l:location[0] . ":" . str2nr(l:location[1])
+								echo l:command
+								exec "AsyncRun -silent " . l:command
+						endif
+				else
+						let l:command = a:ide . " " . l:location[0]
+						echo l:command
+						exec "AsyncRun -silent " . l:command
+				endif
+		else
+				echo "Not a valid file path"
+		endif
+endfunc
+command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
+command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
+" Open the current file in idea
+nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea %s:%d", expand("%:p"), line("."))<cr><cr>
+" Open the current file in webstorm
+nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
+" Open a file link under cursor in idea
+nnoremap <leader>Fi :OpenFileLinkInIdea<cr>
+" Open a file link under cursor in vscode
+nnoremap <leader>Fv :OpenFileLinkInVscode<cr>
 " --------------------------
 " set loaded
 " --------------------------
