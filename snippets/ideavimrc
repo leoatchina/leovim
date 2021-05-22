@@ -1,47 +1,47 @@
 set ignorecase
+set ignorecase
 set smartcase
 set scrolloff=3 " 3 lines above/below cursor when scrolling
-
-" Emulated Plugins
-set surround
-
 " Copy to system clipboard as well
 set clipboard+=unnamed
-
 " Use Idea to join lines smartly
 set ideajoin
-
-" Multiple cursors support
-set multiple-cursors
-
-
 let mapleader = " "
 let maplocalleader = "\\"
+function! WINDOWS() abort
+    return has('win32') || has('win64')
+endfunction
+if WINDOWS()
+    nmap <space><cr> :source ~/_ideavimrc<Cr>
+else
+    nmap <space><Cr> :source ~/.ideavimrc<Cr>
+endif
 
-" Use Q for formatting the current paragraph (or visual selection)
-vmap Q gq
-nmap Q gqap
+nmap q <Nop>
+vmap q <Nop>
+nmap Q q
+vmap Q q
 
 " home end
 nmap L $
 nmap H ^
 
+"
+nmap <Cr> %
+vmap <Cr> %
+
 " Closing tabs
-nmap <leader>q :action CloseContent<cr>
-nmap <leader>Q :action ReopenClosedTab<cr>
+nmap <space>q :action CloseContent<cr>
+nmap <space>w :action CloseContent<cr>
+nmap <space>o :action ReopenClosedTab<cr>
 
 " To navigate between split panes
-nmap \n :action NextSplitter<cr>
-nmap \p :action PrevSplitter<cr>
+nmap <A-]> :action NextSplitter<cr>
+nmap <A-[> :action PrevSplitter<cr>
 
 " Splits manipulation
-nmap \s :action SplitHorizontally<cr>
-nmap \v :action SplitVertically<cr>
-nmap \c :action Unsplit<cr>
-nmap \C :action UnsplitAll<cr>
-nmap \d :action OpenEditorInOppositeTabGroup<cr>
-nmap \f :action VimFilePrevious<cr>
-nmap \w :action JumpToLastWindow<cr>
+nmap <space>X :action SplitHorizontally<cr>
+nmap <space>V :action SplitVertically<cr>
 
 " Navigation
 nmap gd :action GotoDefinition<cr>
@@ -85,14 +85,7 @@ nmap <leader>yd :action Compare.LastVersion<cr>
 nmap <leader>yr :action Git.ResolveConflicts<cr>
 
 " Terminal
-nmap T :action ActivateTerminalToolWindow<cr>
-
-" External GVim
-nmap go :action Tool_External Tools_gvim<cr>
-
-" External Sublime Text
-nmap gs :action Tool_External Tools_vscode<cr>
-
+nmap <A--> :action ActivateTerminalToolWindow<cr>
 
 " Won't work in visual mode (with vmap) for some reason.
 " Use default map of <c-/> for that.
@@ -165,3 +158,170 @@ nmap \p :action Tool_External Tools_Black<cr>
 " :cursive.testing.actions/rerun-last-test
 " :cursive.testing.actions/run-ns-tests
 " :cursive.testing.ctions/run-single-test
+set smartcase
+set scrolloff=3 " 3 lines above/below cursor when scrolling
+
+" Emulated Plugins
+set surround
+
+" Copy to system clipboard as well
+set clipboard+=unnamed
+
+" Use Idea to join lines smartly
+set ideajoin
+
+" Multiple cursors support
+set multiple-cursors
+
+let mapleader = " "
+let maplocalleader = "\\"
+
+nmap q <Nop>
+vmap q <Nop>
+nmap Q q
+vmap Q q
+
+" home end
+nmap L $
+nmap H ^
+
+" Closing tabs
+nmap <space>q :action CloseContent<cr>
+nmap <space>Q :action CloseContent<cr>
+nmap <space>o :action ReopenClosedTab<cr>
+
+" To navigate between split panes
+nmap <A-]> :action NextSplitter<cr>
+nmap <A-[> :action PrevSplitter<cr>
+
+" Splits manipulation
+nmap <space>X :action SplitHorizontally<cr>
+nmap <space>V :action SplitVertically<cr>
+
+" Navigation
+nmap gd :action GotoDefinition<cr>
+nmap gt :action GotoTypeDefinition<cr>
+nmap gy :action GotoDeclaration<cr>
+nmap gf :action GotoFile<cr>
+nmap gc :action GotoClass<cr>
+nmap gs :action GotoSymbol<cr>
+nmap gi :action GotoImplementation<cr>
+nmap gT :action GotoTest<cr>
+nmap <leader>h :action Back<cr>
+nmap <leader>l :action Forward<cr>
+nmap <leader>p :action FileStructurePopup<cr>
+nmap <leader>u :action FindUsages<cr>
+nmap <leader>a :action ActivateStructureToolWindow<cr>
+nmap <leader>d :action ShowErrorDescription<cr>
+nmap <leader>i :action SelectIn<cr>
+nmap <leader>f :action RecentFiles<cr>
+nmap <leader>b :action ShowBookmarks<cr>
+
+" nmap <leader>a :action Switcher<cr>
+
+" Errors
+nmap <leader>j :action GotoNextError<cr>
+nmap <leader>k :action GotoPreviousError<cr>
+
+" Refactorings
+vmap M :action Refactorings.QuickListPopupAction<cr>
+nmap <leader>rr :action RenameElement<cr>
+nmap <leader>rg :action Generate<cr>
+nmap <leader>ri :action OptimizeImports<cr>
+" Inspection
+nmap <leader>rc :action InspectCode<cr>
+
+" VCS operations
+nmap <leader>yy :action Vcs.Show.Local.Changes<cr>
+nmap <leader>yp :action Vcs.QuickListPopupAction<cr>
+nmap <leader>ya :action Annotate<cr>
+nmap <leader>yl :action Vcs.Show.Log<cr>
+nmap <leader>yd :action Compare.LastVersion<cr>
+nmap <leader>yr :action Git.ResolveConflicts<cr>
+
+" Terminal
+nmap <A--> :action ActivateTerminalToolWindow<cr>
+
+" Won't work in visual mode (with vmap) for some reason.
+" Use default map of <c-/> for that.
+nmap <leader>cc :action CommentByLineComment<cr>
+
+" unimpaired mappings - from https://github.com/saaguero/ideavimrc/blob/master/.ideavimrc
+nnoremap [o :action PreviousOccurence<cr>
+nnoremap ]o :action NextOccurence<cr>
+nnoremap [m :action MethodUp<cr>
+nnoremap ]m :action MethodDown<cr>
+nnoremap [c :action VcsShowPrevChangeMarker<cr>
+nnoremap ]c :action VcsShowNextChangeMarker<cr>
+
+" Tabs
+nnoremap gh :action PreviousTab<cr>
+nnoremap gl :action NextTab<cr>
+
+" Search
+nmap <leader>/ :action Find<cr>
+nmap <leader>\ :action FindInPath<cr>
+
+" Moving lines
+nmap [e :action MoveLineUp<cr>
+nmap ]e :action MoveLineDown<cr>
+" Moving statements
+nmap [s :action MoveStatementUp<cr>
+nmap ]s :action MoveStatementDown<cr>
+
+" Building, Running and Debugging
+nmap \c :action CompileDirty<cr>
+nmap \r :action Run<cr>
+nmap \R :action RunAnything<cr>
+nmap \b :action Debug<cr>
+nmap \C :action RunClass<cr>
+nmap \d :action DebugClass<cr>
+nmap \t :action RerunTests<cr>
+nmap \T :action RerunFailedTests<cr>
+
+" Clojure specific mappings for Cursive
+nmap \\c :action :cursive.repl.actions/clear-repl<cr>
+nmap \\l :action :cursive.repl.actions/load-file<cr>
+nmap \\o :action :cursive.repl.actions/jump-to-output<cr>
+nmap \\r :action :cursive.repl.actions/jump-to-repl<cr>
+nmap \\t :action :cursive.testing.actions/run-ns-tests<cr>
+nmap \\T :action :cursive.testing.actions/rerun-last-test<cr>
+nmap \\C :action :cursive.testing.actions/remove-test-markers<cr>
+
+
+" :cursive.repl.actions/clojure-repl-commands-group
+" :cursive.repl.actions/clojure-repl-group
+" :cursive.repl.actions/interrupt
+" :cursive.repl.actions/jump-to-output
+" :cursive.repl.actions/jump-to-repl                 <C-\>
+" :cursive.repl.actions/load-file                    <A-S-L>
+" :cursive.repl.actions/macroexpansion               <C-S-\>
+" :cursive.repl.actions/next-history-item            <C-Down>
+" :cursive.repl.actions/prev-history-item            <C-Up>
+" :cursive.repl.actions/print-exception
+" :cursive.repl.actions/run-last-sexp
+" :cursive.repl.actions/run-top-sexp                 <A-S-P>
+" :cursive.repl.actions/search-history               <A-C-E>
+" :cursive.repl.actions/switch-namespace             <A-S-R>
+" :cursive.repl.actions/sync-files                   <A-S-M>
+" :cursive.repl.commands/add-new
+" :cursive.repl.commands/edit
+" :cursive.testing.actions/remove-test-markers
+" :cursive.testing.actions/rerun-last-test
+" :cursive.testing.actions/run-ns-tests
+" :cursive.testing.ctions/run-single-test
+
+" =========================================
+" Emulated Plugins
+" =========================================
+set surround
+" Multiple cursors support
+set multiple-cursors
+nmap <C-n> <Plug>NextWholeOccurrence
+xmap <C-n> <Plug>NextWholeOccurrence
+nmap g<C-n> <Plug>NextOccurrence
+xmap g<C-n> <Plug>NextOccurrence
+nmap <C-k> <Plug>SkipOccurrence
+xmap <C-k> <Plug>SkipOccurrence
+nmap <C-p> <Plug>RemoveOccurrence
+xmap <C-p> <Plug>RemoveOccurrence
