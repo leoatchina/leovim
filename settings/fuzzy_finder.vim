@@ -57,7 +57,7 @@ if Installed("fzf.vim") && Installed("fzf")
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
     imap <c-x><c-f> <plug>(fzf-complete-path)
-    if executable('rg')
+    if executable('rg') && !WINDOWS
         imap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
                     \ 'prefix': '^.*$',
                     \ 'source': 'rg -n ^ --color always',
@@ -67,10 +67,11 @@ if Installed("fzf.vim") && Installed("fzf")
     else
         imap <c-x><c-l> <plug>(fzf-complete-line)
     endif
+
     if LINUX() || MACOS()
         imap <M-w> <c-x><c-l>
-        imap <M-f> <c-x><c-f>
     endif
+    imap <M-f> <c-x><c-f>
     " ----------------------
     " short cuts for fzf
     " ----------------------

@@ -20,7 +20,7 @@ if Installed('ultisnips')
     let g:UltiSnipsJumpBackwardTrigger      = "<C-b>"
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         inoremap <c-x><c-j> <c-\><c-o>:Leaderf snippet<cr>
-        inoremap <M-m> <c-\><c-o>:Leaderf snippet<cr>
+        inoremap <M-s> <c-\><c-o>:Leaderf snippet<cr>
     endif
     " Ulti 的代码片段的文件夹
     let g:UltiSnipsSnippetsDir        = $HOME.'/.leovim.plug/ultisnips'

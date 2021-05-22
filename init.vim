@@ -167,7 +167,7 @@ nnoremap \<Cr> :source ~/.leovim.conf/init.vim<Cr>
 " ------------------------
 " open config file
 " ------------------------
-nnoremap <leader>ec :tabe ~/.leovim.conf/init.vim<CR>
+nnoremap <leader>eo :tabe ~/.leovim.conf/init.vim<CR>
 nnoremap <leader>el :tabe ~/.vimrc.local<CR>
 " --------------------------
 " HasPlug define
@@ -315,8 +315,7 @@ let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String']
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-choosewin
 endif
-nmap <M-W>      <Plug>(choosewin)
-nmap <M-w><M-w> <Plug>(choosewin)
+nmap <M-W> <Plug>(choosewin)
 " ------------------------
 " winresizer
 " ------------------------
@@ -895,11 +894,9 @@ cnoremap <M-q> <ESC>
 " save
 " ------------------------
 nnoremap <C-s> :update!<CR>
+inoremap <C-s> <ESC>:update!<Cr>
 nnoremap <M-s> :w!<CR>
 nnoremap <M-S> :wa!<CR>
-inoremap <C-s> <ESC>:update!<Cr>
-inoremap <M-s> <ESC>:w!<Cr>li
-inoremap <M-S> <ESC>:wa!<Cr>li
 " ------------------------
 " page manage
 " ------------------------
@@ -1846,13 +1843,13 @@ endif
 " IDE integration
 " --------------------------
 func! s:getBookmarkUnderCursor(text, pos)
-		"Find the start location
+		" Find the start location
 		let p = a:pos
 		while p >= 0 && a:text[p] =~ '\f'
 				let p = p - 1
 		endwhile
 		let p = p + 1
-		"Match file name and position
+		" Match file name and position
 		let l:m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', p)
 		if len(l:m) > 0
 				return [l:m[1], l:m[2], l:m[3]]
@@ -1861,14 +1858,22 @@ func! s:getBookmarkUnderCursor(text, pos)
 endfunc
 func! s:OpenFileLinkInIde(text, pos, ide)
 		let l:location = s:getBookmarkUnderCursor(a:text, a:pos)
+    if a:ide == 'code'
+        let a:ide = 'code --goto'
+    endif
+    " location 0: file, 1: line, 2: column
 		if l:location[0] != ''
 				if l:location[1] != ''
 						if l:location[2] != ''
-								let l:command = a:ide . " --column " . str2nr(l:location[2]) . " " . l:location[0] . ":" . str2nr(l:location[1])
+                if a:ide =~ 'code'
+                    let l:command = a:ide . " " . l:location[0] . ":" . str2nr(l:location[1]) . ":" . str2nr(l:location[2])
+                else
+                    let l:command = a:ide . " --column " . str2nr(l:location[2]) . " " . l:location[0] . ":" . str2nr(l:location[1])
+                endif
 								echo l:command
 								exec "AsyncRun -silent " . l:command
 						else
-								let l:command = a:ide . " " . l:location[0] . ":" . str2nr(l:location[1])
+                let l:command = a:ide . " " . l:location[0] . ":" . str2nr(l:location[1])
 								echo l:command
 								exec "AsyncRun -silent " . l:command
 						endif
@@ -1883,17 +1888,17 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 endfunc
 if executable('idea')
     command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
-    nnoremap <leader>Fi :OpenFileLinkInIdea<cr>
+    nnoremap <M-g>fi :OpenFileLinkInIdea<cr>
     nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('pycharm')
     command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
-    nnoremap <leader>Fp :OpenFileLinkInPycharm<cr>
+    nnoremap <M-g>fp :OpenFileLinkInPycharm<cr>
     nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('code')
     command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
-    nnoremap <leader>Fv :OpenFileLinkInVscode<cr>
+    nnoremap <M-g>fv :OpenFileLinkInVscode<cr>
     nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
 endif
 " --------------------------
