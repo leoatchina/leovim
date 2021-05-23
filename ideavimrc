@@ -39,6 +39,15 @@ nmap <space>V :action SplitVertically<cr>
 " Tabs
 nnoremap gh :action PreviousTab<cr>
 nnoremap gl :action NextTab<cr>
+nnoremap <Tab>h <C-w>h
+nnoremap <Tab>j <C-w>j
+nnoremap <Tab>k <C-w>k
+nnoremap <Tab>l <C-w>l
+nnoremap <Tab>H <C-w>H
+nnoremap <Tab>J <C-w>J
+nnoremap <Tab>K <C-w>K
+nnoremap <Tab>L <C-w>L
+nnoremap <Tab><Tab> <C-w>w
 
 " Navigation
 nmap <A-/> :action FileStructurePopup<cr>
@@ -60,8 +69,6 @@ nmap <space>sb :action ShowBookmarks<cr>
 " Errors
 nmap <space>n :action GotoNextError<cr>
 nmap <space>p :action GotoPreviousError<cr>
-
-
 " VCS operations
 nmap <space>yy :action Vcs.Show.Local.Changes<cr>
 nmap <space>yp :action Vcs.QuickListPopupAction<cr>
@@ -69,14 +76,11 @@ nmap <space>ya :action Annotate<cr>
 nmap <space>yl :action Vcs.Show.Log<cr>
 nmap <space>yd :action Compare.LastVersion<cr>
 nmap <space>yr :action Git.ResolveConflicts<cr>
-
 " Terminal
 nmap <A--> :action ActivateTerminalToolWindow<cr>
-
 " Won't work in visual mode (with vmap) for some reason.
 " Use default map of <c-/> for that.
 nmap <space>cc :action CommentByLineComment<cr>
-
 " unimpaired mappings - from https://github.com/saaguero/ideavimrc/blob/master/.ideavimrc
 nnoremap [o :action PreviousOccurence<cr>
 nnoremap ]o :action NextOccurence<cr>
@@ -212,5 +216,3 @@ omap s<tab> <Plug>(easymotion-bd-jk)
 set which-key
 set notimeout
 set timeoutlen=500
-
-

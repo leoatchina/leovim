@@ -19,12 +19,8 @@ IF "%APP_PATH%" == "%HOME%\.leovim.conf" (
 echo
 
 REM delete files
-call del "%HOME%\.leovim.clean"
 call del "%HOME%\.vimrc"
 call del "%HOME%\AppData\local\nvim\init.vim"
-
-REM mklink clean script
-call mklink "%HOME%\.leovim.clean" "%APP_PATH%\clean.cmd"
 
 REM cp vimrc
 echo if filereadable(expand("~/.vimrc.test")) > "%HOME%\.vimrc"
@@ -34,6 +30,14 @@ echo    source ~/.leovim.conf/init.vim >> "%HOME%\.vimrc"
 echo endif >> "%HOME%\.vimrc"
 call copy "%HOME%\.vimrc" "%HOME%\AppData\local\nvim\init.vim"
 call copy "%HOME%\.vimrc" "%HOME%\.gvimrc"
+
+REM mklink
+call del "%HOME%\_ideavimrc"
+call del "%HOME%\.leovim.clean"
+
+call mklink "%HOME%\.leovim.clean" "%APP_PATH%\clean.cmd"
+call mklink "%HOME%\_ideavimrc" "%APP_PATH%\ideavimrc"
+
 
 REM mkdir for install
 IF NOT EXIST "%HOME%\.vim" (
