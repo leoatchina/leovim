@@ -569,11 +569,11 @@ map  ,, <Plug>(easymotion-prev)
 map  ,j <Plug>(easymotion-bd-w)
 map  ,k <Plug>(easymotion-sn)
 omap ,k <Plug>(easymotion-tn)
-nmap gj <Plug>(easymotion-w)
-nmap gk <Plug>(easymotion-b)
+nmap sj <Plug>(easymotion-w)
+nmap sk <Plug>(easymotion-b)
 nmap s<Cr> <Plug>(easymotion-s2)
 " within line jump
-nmap g<tab> <Plug>(easymotion-bd-jk)
+nmap s<tab> <Plug>(easymotion-bd-jk)
 " ------------------------
 " clever-f
 " ------------------------

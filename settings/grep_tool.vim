@@ -28,12 +28,12 @@ if Installed('ctrlsf.vim')
                 \ "normal" : 0,
                 \ "compact": 0
                 \ }
-    nmap q<tab> :CtrlSFToggle<Cr>
     xmap f<tab> :<C-U>CtrlSF <C-R>=GetVisualSelection()<CR>
     nmap f<tab> :CtrlSF<Space>
-    nmap s<tab> :CtrlSFUpdate<Cr>
+    nmap F<tab> :CtrlSFUpdate<Cr>
     xmap t<tab> <Plug>CtrlSFVwordPath
     nmap t<tab> <Plug>CtrlSFCwordPath
+    nmap q<tab> :CtrlSFToggle<Cr>
     xmap <M-f>; <Plug>CtrlSFVwordExec
     nmap <M-f>; <Plug>CtrlSFCwordExec
     nmap <M-f>/ <Plug>CtrlSFPwordPath
@@ -44,8 +44,8 @@ else
         set rtp+=$ADDINS_PATH/far.vim
     endif
     let g:far#enable_undo=1
-    nnoremap s<tab> :Farr<Cr>
-    xnoremap s<tab> :<C-u>Farr<Cr>
+    nnoremap F<tab> :Farr<Cr>
+    xnoremap F<tab> :<C-u>Farr<Cr>
     nnoremap f<tab> :F <C-r><C-w>
     xnoremap f<tab> :<C-u>F <C-r>=GetVisualSelection()<Cr>
     nnoremap t<tab> :Farf<Cr>
