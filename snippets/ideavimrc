@@ -2,13 +2,13 @@ set ignorecase
 set ignorecase
 set smartcase
 set scrolloff=3
-
 " Copy to system clipboard as well
 set clipboard+=unnamed
 set argtextobj
 set highlightedyank
 set ideajoin
 set exchange
+
 " 缩进
 nmap <A-.> >>
 xmap <A-.> >gv
@@ -16,17 +16,9 @@ xmap >>    >gv
 nmap <A-,> <<
 xmap <A-,> <gv
 xmap <<    <gv
-nmap q <Nop>
-vmap q <Nop>
-nmap Q q
-vmap Q q
 " action forword back
-nnoremap <Tab>h :action Back<cr>
-nnoremap <Tab>l :action Forward<cr>
 nnoremap <BS>   :action Back<CR>
 nnoremap <C-BS> :action Forward<CR>
-nnoremap <C-o>  :action Back<CR>
-nnoremap <C-]>  :action Forward<CR>
 " home end
 nmap L $
 nmap H ^
@@ -39,10 +31,6 @@ nmap <space>o :action ReopenClosedTab<cr>
 " To navigate between split panes
 nmap <A-]> :action NextSplitter<cr>
 nmap <A-[> :action PrevSplitter<cr>
-nnoremap <A-H> <C-W>h
-nnoremap <A-J> <C-W>j
-nnoremap <A-K> <C-W>k
-nnoremap <A-L> <C-W>l
 
 " Splits manipulation
 nmap <space>X :action SplitHorizontally<cr>
@@ -54,6 +42,7 @@ nnoremap gl :action NextTab<cr>
 
 " Navigation
 nmap <A-/> :action FileStructurePopup<cr>
+nmap <A-;> :action StructureViewPopupMenu<cr>
 nmap gd :action GotoDefinition<cr>
 nmap gt :action GotoTypeDefinition<cr>
 nmap gy :action GotoDeclaration<cr>
@@ -62,12 +51,11 @@ nmap gc :action GotoClass<cr>
 nmap gs :action GotoSymbol<cr>
 nmap gi :action GotoImplementation<cr>
 nmap gT :action GotoTest<cr>
-nmap <space>u :action FindUsages<cr>
-nmap <space>a :action ActivateStructureToolWindow<cr>
-nmap <space>d :action ShowErrorDescription<cr>
-nmap <space>i :action SelectIn<cr>
-nmap <space>f :action RecentFiles<cr>
-nmap <space>b :action ShowBookmarks<cr>
+nmap gu :action FindUsages<cr>
+nmap <space>in :action SelectIn<cr>
+nmap <space>ri :action RecentFiles<cr>
+nmap <space>sd :action ShowErrorDescription<cr>
+nmap <space>sb :action ShowBookmarks<cr>
 
 " Errors
 nmap <space>n :action GotoNextError<cr>
@@ -97,10 +85,9 @@ nnoremap ]m :action MethodDown<cr>
 nnoremap [c :action VcsShowPrevChangeMarker<cr>
 nnoremap ]c :action VcsShowNextChangeMarker<cr>
 
-
 " Search
 nmap <space>/ :action Find<cr>
-nmap <space>\ :action FindInPath<cr>
+nmap <space>; :action FindInPath<cr>
 
 " Moving lines
 nmap [e :action MoveLineUp<cr>
@@ -110,27 +97,24 @@ nmap [s :action MoveStatementUp<cr>
 nmap ]s :action MoveStatementDown<cr>
 
 " Building, Running and Debugging
-nmap \c :action CompileDirty<cr>
-nmap \r :action Run<cr>
-nmap \R :action RunAnything<cr>
-nmap \b :action Debug<cr>
-nmap \C :action RunClass<cr>
-nmap \d :action DebugClass<cr>
-nmap \t :action RerunTests<cr>
-nmap \T :action RerunFailedTests<cr>
+nmap <space>c :action CompileDirty<cr>
+nmap <space>r :action Run<cr>
+nmap <space>R :action RunAnything<cr>
+nmap <space>b :action Debug<cr>
+nmap <space>C :action RunClass<cr>
+nmap <space>d :action DebugClass<cr>
+nmap <space>t :action RerunTests<cr>
+nmap <space>T :action RerunFailedTests<cr>
 
 " Clojure specific mappings for Cursive
-nmap \\c :action :cursive.repl.actions/clear-repl<cr>
-nmap \\l :action :cursive.repl.actions/load-file<cr>
-nmap \\o :action :cursive.repl.actions/jump-to-output<cr>
-nmap \\r :action :cursive.repl.actions/jump-to-repl<cr>
-nmap \\t :action :cursive.testing.actions/run-ns-tests<cr>
-nmap \\T :action :cursive.testing.actions/rerun-last-test<cr>
-nmap \\C :action :cursive.testing.actions/remove-test-markers<cr>
+nmap \c :action :cursive.repl.actions/clear-repl<cr>
+nmap \l :action :cursive.repl.actions/load-file<cr>
+nmap \o :action :cursive.repl.actions/jump-to-output<cr>
+nmap \r :action :cursive.repl.actions/jump-to-repl<cr>
+nmap \t :action :cursive.testing.actions/run-ns-tests<cr>
+nmap \T :action :cursive.testing.actions/rerun-last-test<cr>
+nmap \C :action :cursive.testing.actions/remove-test-markers<cr>
 
-" Python specific mappings
-" Format code with Black fomatter
-nmap \p :action Tool_External Tools_Black<cr>
 
 " :cursive.repl.actions/clojure-repl-commands-group
 " :cursive.repl.actions/clojure-repl-group
@@ -223,6 +207,6 @@ omap ss <Plug>(easymotion-s)
 nmap s<Cr> <Plug>(easymotion-s2)
 vmap s<Cr> <Plug>(easymotion-s2)
 omap s<Cr> <Plug>(easymotion-s2)
-nmap s<tab> V<Plug>(easymotion-bd-jk)
-vmap s<tab> V<Plug>(easymotion-bd-jk)
-omap s<tab> V<Plug>(easymotion-bd-jk)
+nmap s<tab> <Plug>(easymotion-bd-jk)
+vmap s<tab> <Plug>(easymotion-bd-jk)
+omap s<tab> <Plug>(easymotion-bd-jk)
