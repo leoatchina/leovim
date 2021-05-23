@@ -44,6 +44,7 @@ nnoremap gh :action PreviousTab<cr>
 nnoremap gl :action NextTab<cr>
 
 " Navigation
+nmap <A-/> :action FileStructurePopup<cr>
 nmap gd :action GotoDefinition<cr>
 nmap gt :action GotoTypeDefinition<cr>
 nmap gy :action GotoDeclaration<cr>
@@ -54,15 +55,12 @@ nmap gi :action GotoImplementation<cr>
 nmap gT :action GotoTest<cr>
 nmap <space>h :action Back<cr>
 nmap <space>l :action Forward<cr>
-nmap <space>p :action FileStructurePopup<cr>
 nmap <space>u :action FindUsages<cr>
 nmap <space>a :action ActivateStructureToolWindow<cr>
 nmap <space>d :action ShowErrorDescription<cr>
 nmap <space>i :action SelectIn<cr>
 nmap <space>f :action RecentFiles<cr>
 nmap <space>b :action ShowBookmarks<cr>
-
-" nmap <space>a :action Switcher<cr>
 
 " Errors
 nmap <space>n :action GotoNextError<cr>

@@ -569,11 +569,11 @@ map  ,, <Plug>(easymotion-prev)
 map  ,j <Plug>(easymotion-bd-w)
 map  ,k <Plug>(easymotion-sn)
 omap ,k <Plug>(easymotion-tn)
-nmap gj <Plug>(easymotion-w)
-nmap gk <Plug>(easymotion-b)
+nmap sj <Plug>(easymotion-w)
+nmap sk <Plug>(easymotion-b)
 nmap s<Cr> <Plug>(easymotion-s2)
 " within line jump
-nmap g<tab> <Plug>(easymotion-bd-jk)
+nmap s<tab> <Plug>(easymotion-bd-jk)
 " ------------------------
 " clever-f
 " ------------------------
@@ -919,6 +919,10 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
+nnoremap <silent> gj j
+nnoremap <silent> gk k
+nnoremap <silent> j gj
+nnoremap <silent> k gk
 nnoremap <silent> gh :tabprevious<CR>
 nnoremap <silent> gl :tabnext<CR>
 nnoremap <silent> ,l :tabm +1<CR>
