@@ -6,17 +6,14 @@ set scrolloff=3 " 3 lines above/below cursor when scrolling
 set clipboard+=unnamed
 " Use Idea to join lines smartly
 set ideajoin
-let mapleader = " "
-let maplocalleader = "\\"
-function! WINDOWS() abort
-    return has('win32') || has('win64')
-endfunction
-if WINDOWS()
-    nmap <space><cr> :source ~/_ideavimrc<Cr>
-else
-    nmap <space><Cr> :source ~/.ideavimrc<Cr>
-endif
 
+" 缩进
+nmap <A-.> >>
+xmap <A-.> >gv
+xmap >>    >gv
+nmap <A-,> <<
+xmap <A-,> <gv
+xmap <<    <gv
 nmap q <Nop>
 vmap q <Nop>
 nmap Q q
@@ -32,7 +29,6 @@ vmap <Cr> %
 
 " Closing tabs
 nmap <space>q :action CloseContent<cr>
-nmap <space>w :action CloseContent<cr>
 nmap <space>o :action ReopenClosedTab<cr>
 
 " To navigate between split panes
@@ -43,6 +39,10 @@ nmap <A-[> :action PrevSplitter<cr>
 nmap <space>X :action SplitHorizontally<cr>
 nmap <space>V :action SplitVertically<cr>
 
+" Tabs
+nnoremap gh :action PreviousTab<cr>
+nnoremap gl :action NextTab<cr>
+
 " Navigation
 nmap gd :action GotoDefinition<cr>
 nmap gt :action GotoTypeDefinition<cr>
@@ -52,44 +52,44 @@ nmap gc :action GotoClass<cr>
 nmap gs :action GotoSymbol<cr>
 nmap gi :action GotoImplementation<cr>
 nmap gT :action GotoTest<cr>
-nmap <leader>h :action Back<cr>
-nmap <leader>l :action Forward<cr>
-nmap <leader>p :action FileStructurePopup<cr>
-nmap <leader>u :action FindUsages<cr>
-nmap <leader>a :action ActivateStructureToolWindow<cr>
-nmap <leader>d :action ShowErrorDescription<cr>
-nmap <leader>i :action SelectIn<cr>
-nmap <leader>f :action RecentFiles<cr>
-nmap <leader>b :action ShowBookmarks<cr>
+nmap <space>h :action Back<cr>
+nmap <space>l :action Forward<cr>
+nmap <space>p :action FileStructurePopup<cr>
+nmap <space>u :action FindUsages<cr>
+nmap <space>a :action ActivateStructureToolWindow<cr>
+nmap <space>d :action ShowErrorDescription<cr>
+nmap <space>i :action SelectIn<cr>
+nmap <space>f :action RecentFiles<cr>
+nmap <space>b :action ShowBookmarks<cr>
 
-" nmap <leader>a :action Switcher<cr>
+" nmap <space>a :action Switcher<cr>
 
 " Errors
-nmap <leader>j :action GotoNextError<cr>
-nmap <leader>k :action GotoPreviousError<cr>
+nmap <space>n :action GotoNextError<cr>
+nmap <space>p :action GotoPreviousError<cr>
 
 " Refactorings
 vmap M :action Refactorings.QuickListPopupAction<cr>
-nmap <leader>rr :action RenameElement<cr>
-nmap <leader>rg :action Generate<cr>
-nmap <leader>ri :action OptimizeImports<cr>
+nmap <space>rr :action RenameElement<cr>
+nmap <space>rg :action Generate<cr>
+nmap <space>ri :action OptimizeImports<cr>
 " Inspection
-nmap <leader>rc :action InspectCode<cr>
+nmap <space>rc :action InspectCode<cr>
 
 " VCS operations
-nmap <leader>yy :action Vcs.Show.Local.Changes<cr>
-nmap <leader>yp :action Vcs.QuickListPopupAction<cr>
-nmap <leader>ya :action Annotate<cr>
-nmap <leader>yl :action Vcs.Show.Log<cr>
-nmap <leader>yd :action Compare.LastVersion<cr>
-nmap <leader>yr :action Git.ResolveConflicts<cr>
+nmap <space>yy :action Vcs.Show.Local.Changes<cr>
+nmap <space>yp :action Vcs.QuickListPopupAction<cr>
+nmap <space>ya :action Annotate<cr>
+nmap <space>yl :action Vcs.Show.Log<cr>
+nmap <space>yd :action Compare.LastVersion<cr>
+nmap <space>yr :action Git.ResolveConflicts<cr>
 
 " Terminal
 nmap <A--> :action ActivateTerminalToolWindow<cr>
 
 " Won't work in visual mode (with vmap) for some reason.
 " Use default map of <c-/> for that.
-nmap <leader>cc :action CommentByLineComment<cr>
+nmap <space>cc :action CommentByLineComment<cr>
 
 " unimpaired mappings - from https://github.com/saaguero/ideavimrc/blob/master/.ideavimrc
 nnoremap [o :action PreviousOccurence<cr>
@@ -99,13 +99,10 @@ nnoremap ]m :action MethodDown<cr>
 nnoremap [c :action VcsShowPrevChangeMarker<cr>
 nnoremap ]c :action VcsShowNextChangeMarker<cr>
 
-" Tabs
-nnoremap gh :action PreviousTab<cr>
-nnoremap gl :action NextTab<cr>
 
 " Search
-nmap <leader>/ :action Find<cr>
-nmap <leader>\ :action FindInPath<cr>
+nmap <space>/ :action Find<cr>
+nmap <space>\ :action FindInPath<cr>
 
 " Moving lines
 nmap [e :action MoveLineUp<cr>
@@ -173,8 +170,8 @@ set ideajoin
 " Multiple cursors support
 set multiple-cursors
 
-let mapleader = " "
-let maplocalleader = "\\"
+let mapspace = " "
+let maplocalspace = "\\"
 
 nmap q <Nop>
 vmap q <Nop>
@@ -207,44 +204,44 @@ nmap gc :action GotoClass<cr>
 nmap gs :action GotoSymbol<cr>
 nmap gi :action GotoImplementation<cr>
 nmap gT :action GotoTest<cr>
-nmap <leader>h :action Back<cr>
-nmap <leader>l :action Forward<cr>
-nmap <leader>p :action FileStructurePopup<cr>
-nmap <leader>u :action FindUsages<cr>
-nmap <leader>a :action ActivateStructureToolWindow<cr>
-nmap <leader>d :action ShowErrorDescription<cr>
-nmap <leader>i :action SelectIn<cr>
-nmap <leader>f :action RecentFiles<cr>
-nmap <leader>b :action ShowBookmarks<cr>
+nmap <space>h :action Back<cr>
+nmap <space>l :action Forward<cr>
+nmap <space>p :action FileStructurePopup<cr>
+nmap <space>u :action FindUsages<cr>
+nmap <space>a :action ActivateStructureToolWindow<cr>
+nmap <space>d :action ShowErrorDescription<cr>
+nmap <space>i :action SelectIn<cr>
+nmap <space>f :action RecentFiles<cr>
+nmap <space>b :action ShowBookmarks<cr>
 
-" nmap <leader>a :action Switcher<cr>
+" nmap <space>a :action Switcher<cr>
 
 " Errors
-nmap <leader>j :action GotoNextError<cr>
-nmap <leader>k :action GotoPreviousError<cr>
+nmap <space>j :action GotoNextError<cr>
+nmap <space>k :action GotoPreviousError<cr>
 
 " Refactorings
 vmap M :action Refactorings.QuickListPopupAction<cr>
-nmap <leader>rr :action RenameElement<cr>
-nmap <leader>rg :action Generate<cr>
-nmap <leader>ri :action OptimizeImports<cr>
+nmap <space>rr :action RenameElement<cr>
+nmap <space>rg :action Generate<cr>
+nmap <space>ri :action OptimizeImports<cr>
 " Inspection
-nmap <leader>rc :action InspectCode<cr>
+nmap <space>rc :action InspectCode<cr>
 
 " VCS operations
-nmap <leader>yy :action Vcs.Show.Local.Changes<cr>
-nmap <leader>yp :action Vcs.QuickListPopupAction<cr>
-nmap <leader>ya :action Annotate<cr>
-nmap <leader>yl :action Vcs.Show.Log<cr>
-nmap <leader>yd :action Compare.LastVersion<cr>
-nmap <leader>yr :action Git.ResolveConflicts<cr>
+nmap <space>yy :action Vcs.Show.Local.Changes<cr>
+nmap <space>yp :action Vcs.QuickListPopupAction<cr>
+nmap <space>ya :action Annotate<cr>
+nmap <space>yl :action Vcs.Show.Log<cr>
+nmap <space>yd :action Compare.LastVersion<cr>
+nmap <space>yr :action Git.ResolveConflicts<cr>
 
 " Terminal
 nmap <A--> :action ActivateTerminalToolWindow<cr>
 
 " Won't work in visual mode (with vmap) for some reason.
 " Use default map of <c-/> for that.
-nmap <leader>cc :action CommentByLineComment<cr>
+nmap <space>cc :action CommentByLineComment<cr>
 
 " unimpaired mappings - from https://github.com/saaguero/ideavimrc/blob/master/.ideavimrc
 nnoremap [o :action PreviousOccurence<cr>
@@ -259,8 +256,8 @@ nnoremap gh :action PreviousTab<cr>
 nnoremap gl :action NextTab<cr>
 
 " Search
-nmap <leader>/ :action Find<cr>
-nmap <leader>\ :action FindInPath<cr>
+nmap <space>/ :action Find<cr>
+nmap <space>\ :action FindInPath<cr>
 
 " Moving lines
 nmap [e :action MoveLineUp<cr>

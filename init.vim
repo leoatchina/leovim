@@ -1110,14 +1110,15 @@ imap <M-a>   <Del>
 nmap <M-.>   >>
 xmap <M-.>   >gv
 xmap <Tab>   >gv
+xmap >>      >gv
 nmap <M-,>   <<
 xmap <M-,>   <gv
+xmap <<      <gv
 xmap <S-Tab> <gv
-nnoremap gV `[v`]
 " ------------------------
 " marks
 " ------------------------
-nnoremap m<Cr>  :marks<Cr>
+nnoremap m<Cr> :marks<Cr>
 function! Delmarks()
     let l:m = join(filter(
                 \ map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)'),
