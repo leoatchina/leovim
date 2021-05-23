@@ -138,8 +138,6 @@ nmap \C :action :cursive.testing.actions/remove-test-markers<cr>
 " :cursive.testing.actions/run-ns-tests
 " :cursive.testing.ctions/run-single-test
 
-
-
 " =========================================
 " Emulated Plugins
 " =========================================
@@ -210,3 +208,9 @@ omap s<Cr> <Plug>(easymotion-s2)
 nmap s<tab> <Plug>(easymotion-bd-jk)
 vmap s<tab> <Plug>(easymotion-bd-jk)
 omap s<tab> <Plug>(easymotion-bd-jk)
+" which-key
+set which-key
+set notimeout
+set timeoutlen=500
+
+
