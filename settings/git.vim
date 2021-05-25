@@ -45,6 +45,8 @@ if Installed('vim-signify')
     nmap <leader>vc vic
     nmap ,vc        vac
 endif
-if get(g:, 'terminal_plus', '') =~ 'floaterm' && executable('lazygit')
-    nnoremap <M-g>l :FloatermNew! --height=0.8 --width=0.8 --position=center lazygit<Cr>
+if get(g:, 'terminal_plus', '') =~ 'floaterm'
+    if executable('lazygit')
+        nnoremap <M-g>l :FloatermNew! --height=0.8 --width=0.8 --position=center lazygit<Cr>
+    endif
 endif
