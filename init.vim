@@ -185,6 +185,102 @@ endfunction
 function! Installed(dir)
     return isdirectory(expand("$INSTALL_PATH/".a:dir)) && &rtp =~ a:dir
 endfunction
+" ------------------------
+" terminal
+" ------------------------
+if get(g:, 'has_terminal', 0) > 0
+    tnoremap <expr> <C-R> '<C-\><C-n>"'.nr2char(getchar()).'pi'
+    tnoremap <M-q> <C-\><C-n>:q!<CR>
+    if has('nvim')
+        if WINDOWS()
+            nnoremap qm :tabe term://cmd<cr>i
+        else
+            nnoremap qm :tabe term://bash<cr>i
+        endif
+    else
+        if WINDOWS()
+            nnoremap qm :tab terminal<Cr>cmd<Cr>
+        else
+            nnoremap qm :tab terminal<Cr>bash<Cr>
+        endif
+    endif
+    if g:has_terminal == 2
+        tnoremap <C-w><C-w> <C-_><C-w>
+        tnoremap <silent><M-H> <C-_>:TmuxNavigateLeft<cr>
+        tnoremap <silent><M-L> <C-_>:TmuxNavigateRight<cr>
+        tnoremap <silent><M-J> <C-_>:TmuxNavigateDown<cr>
+        tnoremap <silent><M-K> <C-_>:TmuxNavigateUp<cr>
+    else
+        tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
+        tnoremap <silent><M-H> <C-\><C-n>:TmuxNavigateLeft<cr>
+        tnoremap <silent><M-L> <C-\><C-n>:TmuxNavigateRight<cr>
+        tnoremap <silent><M-J> <C-\><C-n>:TmuxNavigateDown<cr>
+        tnoremap <silent><M-K> <C-\><C-n>:TmuxNavigateUp<cr>
+    endif
+    " --------------------------
+    " terminal-help
+    " --------------------------
+    if has('nvim') || g:has_terminal == 2
+        if !exists('g:leovim_loaded')
+            set rtp+=$ADDINS_PATH/vim-terminal-help
+        endif
+        let g:terminal_plus = 'help'
+        if get(g:, 'terminal_shell', '') == ''
+            if WINDOWS()
+                let g:terminal_shell = 'cmd'
+            else
+                let g:terminal_shell = 'bash'
+            endif
+        endif
+        let g:terminal_key             = '<M-->'
+        let g:terminal_auto_insert     = 1
+        let g:terminal_skip_key_init   = 1
+        let g:terminal_default_mapping = 0
+        let g:terminal_kill            = 'term'
+        if has('nvim')
+            if has('clipboard')
+                tnoremap <M-v> <C-\><C-n>"*pa
+            else
+                tnoremap <M-v> <C-\><C-n>"0pa
+            endif
+        else
+            if has('clipboard')
+                tnoremap <M-v> <C-_>"*
+            else
+                tnoremap <M-v> <C-_>"0
+            endif
+        endif
+    endif
+    " --------------------------
+    " floaterm
+    " --------------------------
+    if (has('nvim') || v:version >= 802 && !has('nvim')) && !HasPlug('inweb')
+        autocmd User Startified setlocal buflisted
+        if !exists('g:leovim_loaded')
+            set rtp+=$ADDINS_PATH/vim-floaterm
+        endif
+        if get(g:, 'terminal_plus', '') == ''
+            let g:terminal_plus = 'floaterm'
+        else
+            let g:terminal_plus .= '-floaterm'
+        endif
+        if has('nvim') || has('patch-8.1.1615')
+            let g:floaterm_position = 'topright'
+            let g:floaterm_width    = 0.5
+            let g:floaterm_height   = 0.65
+        else
+            let g:floaterm_position = 'right'
+        endif
+        nnoremap <M-h>f   :Floaterm
+        nnoremap <M-h>n   :FloatermNew<Space>
+        nnoremap <silent> <M-=> :FloatermToggle<CR>
+        tnoremap <silent> <M-=> <C-\><C-n>:FloatermToggle<CR>
+        let g:floaterm_keymap_new    = '<Nop>'
+        let g:floaterm_keymap_prev   = '<M-{>'
+        let g:floaterm_keymap_next   = '<M-}>'
+        let g:floaterm_open_command  = 'drop'
+    endif
+endif
 " --------------------------
 " GetVisualSelection
 " --------------------------
@@ -1448,102 +1544,6 @@ inoremap <silent><M-H> <ESC>:TmuxNavigateLeft<cr>
 inoremap <silent><M-L> <ESC>:TmuxNavigateRight<cr>
 inoremap <silent><M-J> <ESC>:TmuxNavigateDown<cr>
 inoremap <silent><M-K> <ESC>:TmuxNavigateUp<cr>
-" ------------------------
-" terminal
-" ------------------------
-if get(g:, 'has_terminal', 0) > 0
-    tnoremap <expr> <C-R> '<C-\><C-n>"'.nr2char(getchar()).'pi'
-    tnoremap <M-q> <C-\><C-n>:q!<CR>
-    if has('nvim')
-        if WINDOWS()
-            nnoremap qm :tabe term://cmd<cr>i
-        else
-            nnoremap qm :tabe term://bash<cr>i
-        endif
-    else
-        if WINDOWS()
-            nnoremap qm :tab terminal<Cr>cmd<Cr>
-        else
-            nnoremap qm :tab terminal<Cr>bash<Cr>
-        endif
-    endif
-    if g:has_terminal == 2
-        tnoremap <C-w><C-w> <C-_><C-w>
-        tnoremap <silent><M-H> <C-_>:TmuxNavigateLeft<cr>
-        tnoremap <silent><M-L> <C-_>:TmuxNavigateRight<cr>
-        tnoremap <silent><M-J> <C-_>:TmuxNavigateDown<cr>
-        tnoremap <silent><M-K> <C-_>:TmuxNavigateUp<cr>
-    else
-        tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
-        tnoremap <silent><M-H> <C-\><C-n>:TmuxNavigateLeft<cr>
-        tnoremap <silent><M-L> <C-\><C-n>:TmuxNavigateRight<cr>
-        tnoremap <silent><M-J> <C-\><C-n>:TmuxNavigateDown<cr>
-        tnoremap <silent><M-K> <C-\><C-n>:TmuxNavigateUp<cr>
-    endif
-    " --------------------------
-    " terminal-help
-    " --------------------------
-    if has('nvim') || g:has_terminal == 2
-        if !exists('g:leovim_loaded')
-            set rtp+=$ADDINS_PATH/vim-terminal-help
-        endif
-        let g:terminal_plus = 'help'
-        if get(g:, 'terminal_shell', '') == ''
-            if WINDOWS()
-                let g:terminal_shell = 'cmd'
-            else
-                let g:terminal_shell = 'bash'
-            endif
-        endif
-        let g:terminal_key             = '<M-->'
-        let g:terminal_auto_insert     = 1
-        let g:terminal_skip_key_init   = 1
-        let g:terminal_default_mapping = 0
-        let g:terminal_kill            = 'term'
-        if has('nvim')
-            if has('clipboard')
-                tnoremap <M-v> <C-\><C-n>"*pa
-            else
-                tnoremap <M-v> <C-\><C-n>"0pa
-            endif
-        else
-            if has('clipboard')
-                tnoremap <M-v> <C-_>"*
-            else
-                tnoremap <M-v> <C-_>"0
-            endif
-        endif
-    endif
-    " --------------------------
-    " floaterm
-    " --------------------------
-    if (has('nvim') || v:version >= 802 && !has('nvim')) && !HasPlug('inweb')
-        autocmd User Startified setlocal buflisted
-        if !exists('g:leovim_loaded')
-            set rtp+=$ADDINS_PATH/vim-floaterm
-        endif
-        if get(g:, 'terminal_plus', '') == ''
-            let g:terminal_plus = 'floaterm'
-        else
-            let g:terminal_plus .= '-floaterm'
-        endif
-        if has('nvim') || has('patch-8.1.1615')
-            let g:floaterm_position = 'topright'
-            let g:floaterm_width    = 0.5
-            let g:floaterm_height   = 0.65
-        else
-            let g:floaterm_position = 'right'
-        endif
-        nnoremap <M-h>f   :Floaterm
-        nnoremap <M-h>n   :FloatermNew<Space>
-        nnoremap <silent> <M-=> :FloatermToggle<CR>
-        tnoremap <silent> <M-=> <C-\><C-n>:FloatermToggle<CR>
-        let g:floaterm_keymap_new    = '<Nop>'
-        let g:floaterm_keymap_prev   = '<M-{>'
-        let g:floaterm_keymap_next   = '<M-}>'
-        let g:floaterm_open_command  = 'drop'
-    endif
-endif
 " --------------------------
 " vim-plug
 " --------------------------
@@ -1667,11 +1667,12 @@ if executable('git')
     command! MyPlugUpdate  PlugClean! | PlugUpdate --sync
     nnoremap ,U        :MyPlugInstall<Cr>
     nnoremap <leader>U :MyPlugUpdate<Cr>
+    " git.vim
+    source $SETTINGS_PATH/git.vim
 endif
 " --------------------------
 " common addvanced settings
 " --------------------------
-source $SETTINGS_PATH/git.vim
 source $SETTINGS_PATH/fuzzy_finder.vim
 source $SETTINGS_PATH/tree_browser.vim
 source $SETTINGS_PATH/grep_tool.vim
