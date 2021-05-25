@@ -259,7 +259,7 @@ if get(g:, 'has_terminal', 0) > 0
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/vim-floaterm
         endif
-        nnoremap <M-g>t :FloatermNew! --height=0.8 --width=0.8 --position=center<Cr>
+        nnoremap <M-h>t :FloatermNew! --height=0.8 --width=0.8 --position=center<Cr>
         if get(g:, 'terminal_plus', '') == ''
             let g:terminal_plus = 'floaterm'
         else
