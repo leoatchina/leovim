@@ -209,10 +209,10 @@ if Installed("fzf.vim") && Installed("fzf")
     xnoremap <silent> <leader>i :<C-u>FZFRegisterBeforeV<Cr>
     xnoremap <silent> <leader>p :<C-u>FZFRegisterAfterV<Cr>
     " --------------------
-    " FZFJumps
+    " Jumps
     " --------------------
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
-        nnoremap <M-y> :Leaderf jumps<cr>
+        nnoremap <M-y> :Leaderf jumps --fullScreen<cr>
     elseif g:has_execute_func > 0
         function! s:jumpListFormat(val) abort
             let l:file_name = bufname('%')

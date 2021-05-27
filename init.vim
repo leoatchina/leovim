@@ -1201,10 +1201,12 @@ xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
-imap <M-x>   <BS>
-imap <M-a>   <Del>
-xmap >>      >gv
-xmap <<      <gv
+imap     <M-x> <BS>
+imap     <M-a> <Del>
+xnoremap >     >gv
+xnoremap <     <gv
+nnoremap >     >>
+nnoremap <     <<
 " ------------------------
 " marks
 " ------------------------
