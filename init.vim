@@ -1203,10 +1203,8 @@ xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
 imap     <M-x> <BS>
 imap     <M-a> <Del>
-xnoremap >     >gv
-xnoremap <     <gv
-nnoremap >     >>
-nnoremap <     <<
+xnoremap >>    >gv
+xnoremap <<    <gv
 " ------------------------
 " marks
 " ------------------------
@@ -1741,6 +1739,9 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     if Installed('vimspector')
         nnoremap <M-b> :WhichKey '<lt>M-b>'<Cr>
         nnoremap <M-u> :WhichKey '<lt>M-u>'<Cr>
+    endif
+    if Installed("vim-table-mode")
+        nnoremap = :WhichKey '='<Cr>
     endif
 endif
 " --------------------------

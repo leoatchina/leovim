@@ -126,7 +126,7 @@ if HasPlug('writing')
     " table-mode
     " ------------------------------
     MyPlug 'dhruvasagar/vim-table-mode'
-    let g:table_mode_map_prefix = ',w'
+    let g:table_mode_map_prefix = '='
     nnoremap g= :Tableize<Space>
     xnoremap g= :Tableize<Space>
     function! s:isAtStartOfLine(mapping)
