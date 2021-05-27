@@ -491,6 +491,7 @@ try
         endif
     endfunction
     nnoremap <silent>+ :call SmartCtrlJ()<Cr>
+    nnoremap <silent>_ :call SmartCtrlJ()<Cr>
 catch
     let g:has_winnr = 0
     nnoremap <tab>j :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
@@ -498,6 +499,7 @@ catch
     nnoremap <tab>h :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
     nnoremap <tab>l :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
     nnoremap +      :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap _      :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
 endtry
 " ------------------------
 " textobj

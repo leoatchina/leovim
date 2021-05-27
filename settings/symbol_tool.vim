@@ -5,7 +5,8 @@ let g:plugs_symbol = []
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-preview
 endif
-au FileType qf nnoremap <silent><buffer> qq    :PreviewClose<cr>
+au FileType qf nnoremap <silent><buffer> q     :PreviewClose<cr>
+au FileType qf nnoremap <silent><buffer> Q     :PreviewClose<cr>
 au FileType qf nnoremap <silent><buffer> <C-m> :PreviewQuickfix<cr>
 au FileType qf nnoremap <silent><buffer> <C-i> :PreviewQuickfix<cr>
 " preview file and openit
@@ -132,9 +133,9 @@ if executable('ctags')
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
         au FileType qf noremap <silent><buffer> <tab> :call quickui#tools#preview_quickfix()<cr>
-        nnoremap - :<C-u>call quickui#tools#preview_tag('')<Cr>
+        nnoremap <tab><tab> :<C-u>call quickui#tools#preview_tag('')<Cr>
     else
-        nnoremap <silent> - :PreviewSignature!<Cr>
+        nnoremap <silent> <tab><tab> :PreviewSignature!<Cr>
     endif
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')
