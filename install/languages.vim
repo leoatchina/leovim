@@ -148,7 +148,7 @@ if HasPlug('writing')
     " pangu
     " ------------------------------
     MyPlug 'hotoo/pangu.vim'
-    nnoremap <leader>P :Pangu<Cr>
+    nnoremap <tab>p :Pangu<Cr>
 endif
 " --------------------------
 " latex

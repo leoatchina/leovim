@@ -193,15 +193,15 @@ if get(g:, 'has_terminal', 0) > 0
     tnoremap <M-q> <C-\><C-n>:q!<CR>
     if has('nvim')
         if WINDOWS()
-            nnoremap <tab>t :tabe term://cmd<cr>i
+            nnoremap <tab>m :tabe term://cmd<cr>i
         else
-            nnoremap <tab>t :tabe term://bash<cr>i
+            nnoremap <tab>m :tabe term://bash<cr>i
         endif
     else
         if WINDOWS()
-            nnoremap <tab>t :tab terminal<Cr>cmd<Cr>
+            nnoremap <tab>m :tab terminal<Cr>cmd<Cr>
         else
-            nnoremap <tab>t :tab terminal<Cr>bash<Cr>
+            nnoremap <tab>m :tab terminal<Cr>bash<Cr>
         endif
     endif
     if g:has_terminal == 2
@@ -973,6 +973,7 @@ endfunction
 nnoremap Q        <C-w>z
 xnoremap Q        <C-w>z
 nnoremap <tab>b    :bd!<Cr>
+nnoremap <tab>t    :tabclose<Cr>
 nnoremap ,q        :qall!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
 nnoremap <leader>q :q!<Cr>
