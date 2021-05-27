@@ -479,17 +479,25 @@ try
             endif
         endif
     endfunc
-    nnoremap <silent> _     :call SmartVerticalResize('l', 'r')<Cr>
-    nnoremap <silent> +     :call SmartVerticalResize('r', 'r')<Cr>
-    nnoremap <silent> <C-h> :call SmartVerticalResize('l', 'l')<Cr>
-    nnoremap <silent> <C-l> :call SmartVerticalResize('r', 'l')<Cr>
+    nnoremap <silent> <tab>j :call SmartVerticalResize('l', 'r')<Cr>
+    nnoremap <silent> <tab>k :call SmartVerticalResize('r', 'r')<Cr>
+    nnoremap <silent> <tab>h :call SmartVerticalResize('l', 'l')<Cr>
+    nnoremap <silent> <tab>l :call SmartVerticalResize('r', 'l')<Cr>
+		function! SmartCtrlJ() abort
+        if s:has_down()
+            call feedkeys("\<C-w>\<C-j>")
+        elseif s:has_up()
+            call feedkeys("\<C-w>\<C-k>")
+        endif
+    endfunction
+    nnoremap <silent>+ :call SmartCtrlJ()<Cr>
 catch
     let g:has_winnr = 0
-    nnoremap _     :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap +     :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <C-h> :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <C-l> :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <C-j> :echo "winnr('hjkl') is not allowed in this vim, can not do smart jump!"<Cr>
+    nnoremap <tab>j :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <tab>k :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <tab>h :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <tab>l :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap +      :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
 endtry
 " ------------------------
 " textobj
@@ -1204,10 +1212,10 @@ xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
-imap     <M-x> <BS>
-imap     <M-a> <Del>
-xnoremap >>    >gv
-xnoremap <<    <gv
+imap <M-x> <BS>
+imap <M-a> <Del>
+xmap >>    >gv
+xmap <<    <gv
 " ------------------------
 " marks
 " ------------------------

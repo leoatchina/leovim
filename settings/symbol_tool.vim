@@ -132,9 +132,9 @@ if executable('ctags')
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
         au FileType qf noremap <silent><buffer> <tab> :call quickui#tools#preview_quickfix()<cr>
-        nnoremap <tab><tab> :<C-u>call quickui#tools#preview_tag('')<Cr>
+        nnoremap - :<C-u>call quickui#tools#preview_tag('')<Cr>
     else
-        nnoremap <silent> <tab><tab> :PreviewSignature!<Cr>
+        nnoremap <silent> - :PreviewSignature!<Cr>
     endif
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')
@@ -165,6 +165,8 @@ if executable('ctags')
         endif
         nnoremap <leader>gu :GutentagsUpdate<CR>
     endif
+else
+    nnoremap - <Nop>
 endif
 " --------------------------
 " gtags

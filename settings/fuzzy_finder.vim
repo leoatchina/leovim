@@ -328,7 +328,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     endif
     nnoremap s<space>  :Leaderf searchHistory<Cr>
     nnoremap <Tab>f :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
-    nnoremap <Tab>l :CloseQuickfix<Cr>:Leaderf loclist<Cr>
+    nnoremap <Tab>F :CloseQuickfix<Cr>:Leaderf loclist<Cr>
     nnoremap t<Cr>  :Leaderf tag<Cr>
     nnoremap f<Cr>  :Leaderf function<Cr>
     nnoremap q<Cr>  :Leaderf function --all<Cr>
@@ -443,7 +443,7 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap t<cr>    :FZFTags<CR>
     nnoremap <Tab>f   :CloseQuickfix<Cr>:FZFQuickFix<CR>
-    nnoremap <Tab>l   :CloseQuickfix<Cr>:FZFLocList<CR>
+    nnoremap <Tab>F   :CloseQuickfix<Cr>:FZFLocList<CR>
     nnoremap s<space> :FZFHistory/<CR>
     nnoremap <M-h>c   :FZFHistory:<CR>
     nnoremap <M-h>m   :FZFMru<CR>
