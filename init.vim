@@ -982,8 +982,10 @@ endfunction
 " ------------------------
 " quit
 " ------------------------
-nnoremap Q        <C-w>z
-xnoremap Q        <C-w>z
+nnoremap Q         <C-w>z
+xnoremap Q         <C-w>z
+nnoremap qq        <C-w>z
+xnoremap qq        <C-w>z
 nnoremap <tab>b    :bd!<Cr>
 nnoremap <tab>t    :tabclose<Cr>
 nnoremap ,q        :qall!<Cr>
