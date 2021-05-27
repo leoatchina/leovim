@@ -211,7 +211,9 @@ if Installed("fzf.vim") && Installed("fzf")
     " --------------------
     " FZFJumps
     " --------------------
-    if g:has_execute_func > 0
+    if get(g:, 'fuzzy_finder', '') == 'leaderf'
+        nnoremap <M-y> :Leaderf jumps<cr>
+    elseif g:has_execute_func > 0
         function! s:jumpListFormat(val) abort
             let l:file_name = bufname('%')
             let l:file_name = empty(l:file_name) ? 'Unknown file name' : l:file_name
@@ -324,13 +326,15 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if Installed('LeaderF-marks')
         nnoremap m<Cr> :Leaderf marks<Cr>
     endif
-    nnoremap q<space>  :Leaderf searchHistory<Cr>
+    nnoremap s<space>  :Leaderf searchHistory<Cr>
     nnoremap <Tab>f :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
     nnoremap <Tab>l :CloseQuickfix<Cr>:Leaderf loclist<Cr>
     nnoremap t<Cr>  :Leaderf tag<Cr>
     nnoremap f<Cr>  :Leaderf function<Cr>
     nnoremap q<Cr>  :Leaderf function --all<Cr>
-    nnoremap <M-h>; :Leaderf<Space>
+    nnoremap <M-h>p :Leaderf<Space>
+    nnoremap <M-h>; :Leaderf --next<Cr>
+    nnoremap <M-h>, :Leaderf --previous<Cr>
     nnoremap <M-h>. :Leaderf --recall<Cr>
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
     nnoremap <M-h>m :Leaderf mru<Cr>
@@ -341,7 +345,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap <M-w>t :Leaderf filetype<Cr>
     nnoremap <M-w>c :Leaderf command<Cr>
     " help tags
-    nnoremap <M-h>, :Leaderf help<Cr>
+    nnoremap q<Space> :Leaderf help<Cr>
     " search cword
     nnoremap \| :Leaderf line --no-sort --cword<Cr>
     xnoremap \| <ESC>:Leaderf line --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
@@ -437,10 +441,10 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     xnoremap \| <ESC>:FZFBLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :FzfLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
+    nnoremap t<cr>    :FZFTags<CR>
     nnoremap <Tab>f   :CloseQuickfix<Cr>:FZFQuickFix<CR>
     nnoremap <Tab>l   :CloseQuickfix<Cr>:FZFLocList<CR>
-    nnoremap t<cr>    :FZFTags<CR>
-    nnoremap q<space> :FZFHistory/<CR>
+    nnoremap s<space> :FZFHistory/<CR>
     nnoremap <M-h>c   :FZFHistory:<CR>
     nnoremap <M-h>m   :FZFMru<CR>
     nnoremap <M-k>l   :FZFBLines<CR>
@@ -448,7 +452,7 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap <M-k>b   :FzfBTags<CR>
     " helptags
     if executable('perl')
-        nnoremap <M-h>, :FzfHelptags<CR>
+        nnoremap q<Space> :FzfHelptags<CR>
     endif
     " fzf-funky
     if Installed('fzf-funky')
@@ -459,7 +463,7 @@ if Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
     nnoremap <C-p>  :CocFzfList<CR>
-    nnoremap <M-h>; :CocList<Space>
+    nnoremap <M-h>p :CocList<Space>
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-h>l :CocFzfList location<Cr>
     nnoremap <M-k>o :CocFzfList outline<CR>
@@ -555,7 +559,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap <M-h>;         :CtrlP<tab>
+    nnoremap <M-h>p         :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
         nnoremap <silent> <leader>i :CtrlPYankring<Cr>
