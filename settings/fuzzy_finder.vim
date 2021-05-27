@@ -466,34 +466,11 @@ if Installed('coc.nvim')
     nnoremap <M-l>c :CocFzfList commands<Cr>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
-    " codeaction and others
-    xmap ,c; <Plug>(coc-codeaction-selected)
-    nmap ,c; <Plug>(coc-codeaction)
-    nmap ,c, <Plug>(coc-codelens)
-    nmap ,ca :CocFzfList actions<Cr>
-    nmap ,cl <Plug>(coc-codeaction-line)
-    xmap ,cf <Plug>(coc-format-selected)
-    nmap ,cf <Plug>(coc-format)
-    nmap ,cn <Plug>(coc-rename)
-    nmap ,cc <Plug>(coc-fix-current)
-    nmap ,cs <Plug>(coc-range-select)
-    " multi cursors
-    nmap ,cp <Plug>(coc-cursors-position)
-    nmap ,co <Plug>(coc-cursors-operator)
-    " Fix autofix problem of current line
-    nmap ,cq <Plug>(coc-fix-current)
-    " more
-    nmap ,ch <Plug>(coc-float-hide)
-    nmap ,cj <Plug>(coc-float-jump)
     " Create mappings for function text object, requires document symbols feature of languageserver.
     xmap if <Plug>(coc-funcobj-i)
     xmap af <Plug>(coc-funcobj-a)
     omap if <Plug>(coc-funcobj-i)
     omap af <Plug>(coc-funcobj-a)
-    " Do default action for next item.
-    nnoremap <silent> ,cn :CocNext<CR>
-    " Do default action for previous item.
-    nnoremap <silent> ,cp :CocPrev<CR>
     " coc git
     " navigate chunks of current buffer
     nmap [g <Plug>(coc-git-prevchunk)

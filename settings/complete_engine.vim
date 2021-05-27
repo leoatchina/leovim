@@ -273,6 +273,28 @@ elseif Installed('coc.nvim')
         nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
         nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
     endif
+    " codeaction and others
+    nmap ,ca :CocFzfList actions<Cr>
+    xmap ,c; <Plug>(coc-codeaction-selected)
+    nmap ,c; <Plug>(coc-codeaction)
+    nmap ,c, <Plug>(coc-codelens)
+    nmap ,cl <Plug>(coc-codeaction-line)
+    xmap ,cf <Plug>(coc-format-selected)
+    nmap ,cf <Plug>(coc-format)
+    nmap ,cr <Plug>(coc-rename)
+    nmap ,cs <Plug>(coc-range-select)
+    " multi cursors
+    nmap ,cc <Plug>(coc-cursors-position)
+    nmap ,co <Plug>(coc-cursors-operator)
+    " Fix autofix problem of current line
+    nmap ,cx <Plug>(coc-fix-current)
+    " more
+    nmap ,ch <Plug>(coc-float-hide)
+    nmap ,cj <Plug>(coc-float-jump)
+    " Do default action for next item.
+    nmap <silent> ,cn :CocNext<CR>
+    " Do default action for previous item.
+    nmap <silent> ,cp :CocPrev<CR>
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
