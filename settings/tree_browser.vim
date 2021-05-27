@@ -22,8 +22,8 @@ if Installed('fern.vim')
     augroup END
     nnoremap <silent> <leader>N :Fern . -drawer -reveal=%<Cr>
     nnoremap <silent> <leader>O :Fern . -reveal=%<Cr>
-    nnoremap qn :Fern -drawer -stay -toggle<Space>
-    nnoremap qo :Fern<Space>
+    nnoremap <tab>n :Fern -drawer -stay -toggle<Space>
+    nnoremap <tab>o :Fern<Space>
 else
     " --------------------------
     " netrw with vim-vinegar

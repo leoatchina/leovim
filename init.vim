@@ -193,15 +193,15 @@ if get(g:, 'has_terminal', 0) > 0
     tnoremap <M-q> <C-\><C-n>:q!<CR>
     if has('nvim')
         if WINDOWS()
-            nnoremap qm :tabe term://cmd<cr>i
+            nnoremap <tab>t :tabe term://cmd<cr>i
         else
-            nnoremap qm :tabe term://bash<cr>i
+            nnoremap <tab>t :tabe term://bash<cr>i
         endif
     else
         if WINDOWS()
-            nnoremap qm :tab terminal<Cr>cmd<Cr>
+            nnoremap <tab>t :tab terminal<Cr>cmd<Cr>
         else
-            nnoremap qm :tab terminal<Cr>bash<Cr>
+            nnoremap <tab>t :tab terminal<Cr>bash<Cr>
         endif
     endif
     if g:has_terminal == 2
@@ -450,15 +450,6 @@ try
             return 'l'
         endif
     endfunction
-    " 如果下面有窗口，跳之；如果已经是最下面且上面有窗口，跳之
-    function! SmartCtrlJ() abort
-        if s:has_down()
-            call feedkeys("\<C-w>\<C-j>")
-        elseif s:has_up()
-            call feedkeys("\<C-w>\<C-k>")
-        endif
-    endfunction
-    nnoremap <silent><C-j> :call SmartCtrlJ()<Cr>
     " smartverticalresize, c-h/c-l left line, _+ right line
     let g:adjust_size = get(g:, 'adjust_size', 4)
     function! SmartVerticalResize(direction, ...) abort
@@ -950,7 +941,10 @@ map <C-z> <Nop>
 " some enhanced shortcuts
 " ------------------------
 nnoremap <leader>ex Q
-nnoremap Q     q
+nnoremap <C-g> <Tab>
+xnoremap <C-g> <Tab>
+nnoremap <Tab> <Nop>
+xnoremap <Tab> <Nop>
 nnoremap <C-q> q
 nnoremap <C-m> %
 xnoremap <C-m> %
@@ -976,10 +970,9 @@ endfunction
 " ------------------------
 " quit
 " ------------------------
-nnoremap q          <Nop>
-nnoremap qq        <C-w>z
-xnoremap qq        <C-w>z
-nnoremap qb        :bd!<Cr>
+nnoremap Q        <C-w>z
+xnoremap Q        <C-w>z
+nnoremap <tab>b    :bd!<Cr>
 nnoremap ,q        :qall!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
 nnoremap <leader>q :q!<Cr>
@@ -1019,7 +1012,6 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
-nnoremap <silent> gl gd
 nnoremap <silent> gj j
 nnoremap <silent> gk k
 nnoremap <silent> j gj
@@ -1719,16 +1711,16 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
         let g:which_key_use_floating_win = 0
     end
     " basic keys
-    nnoremap <Space> :WhichKey ' '<Cr>
-    nnoremap ,       :WhichKey ','<Cr>
-    nnoremap \       :WhichKey '\'<Cr>
-    nnoremap q       :WhichKey 'q'<Cr>
-    nnoremap [       :WhichKey '['<Cr>
-    nnoremap ]       :WhichKey ']'<Cr>
+    nnoremap <Space> :WhichKey       ' '<Cr>
+    nnoremap <Tab>   :WhichKey       '<lt>Tab>'<Cr>
+    nnoremap ,       :WhichKey       ','<Cr>
+    nnoremap \       :WhichKey       '\'<Cr>
+    nnoremap [       :WhichKey       '['<Cr>
+    nnoremap ]       :WhichKey       ']'<Cr>
     xnoremap <Space> :WhichKeyVisual ' '<Cr>
     xnoremap ,       :WhichKeyVisual ','<Cr>
     xnoremap \       :WhichKeyVisual '\'<Cr>
-    xnoremap q       :WhichKeyVisual 'q'<Cr>
+    xnoremap <Tab>   :WhichKeyVisual '<lt>Tab>'<Cr>
     xnoremap [       :WhichKeyVisual '['<Cr>
     xnoremap ]       :WhichKeyVisual ']'<Cr>
     " M- keys

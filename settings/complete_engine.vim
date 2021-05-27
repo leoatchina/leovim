@@ -101,9 +101,9 @@ function! GoToDefinitionOrTagOrSearch(type)
         endif
     endif
 endfunction
-nnoremap <silent> <M-.>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
+nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
 nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
-nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("v")<Cr>
+nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
 nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
 " --------------------------
 " complete_engine
@@ -151,7 +151,7 @@ if Installed('YouCompleteMe')
     " hover
     let g:ycm_auto_hover = ''
     nmap     <M-,>  <Plug>(YCMHover)
-    nnoremap gd     :YcmCompleter GoToDefinition<Cr>
+    nnoremap <M-.>  :YcmCompleter GoToDefinition<Cr>
     nnoremap <M-l>; :YcmCompleter<Space>
     nnoremap <M-l>. :YcmCompleter Get<Tab>
     nnoremap <M-l>k :YcmCompleter GetDoc<CR>
@@ -228,7 +228,7 @@ elseif Installed('coc.nvim')
     call coc#config('rust-analyzer.inlayHints.enable', v:false)
     " as lsp engine
     nmap <M-,> :call <SID>show_documentation()<CR>
-    nmap gd    <Plug><coc-definition>
+    nmap <M-.>  <Plug><coc-definition>
     " basic plug
     nmap <M-j>w :CocFzfList symbols<CR>
     nmap <M-j>s :CocAction('documentSymbols')<Cr>
@@ -380,7 +380,7 @@ elseif Installed('vim-lsp')
     nnoremap <M-l>s :LspSignatureHelp<Cr>
     nnoremap <M-l>c :LspDocument<Tab>
     " jump to
-    nnoremap gd     :LspDefinition<Cr>
+    nnoremap <M-.>  :LspDefinition<Cr>
     nnoremap <M-j>d :LspDeclaration<CR>
     nnoremap <M-j>t :LspTypeDefinition<CR>
     nnoremap <M-j>e :LspImplementation<CR>

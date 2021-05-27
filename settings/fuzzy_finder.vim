@@ -324,12 +324,12 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if Installed('LeaderF-marks')
         nnoremap m<Cr> :Leaderf marks<Cr>
     endif
-    nnoremap qf :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
-    nnoremap ql :CloseQuickfix<Cr>:Leaderf loclist<Cr>
-    nnoremap t<cr>  :Leaderf tag<Cr>
+    nnoremap q<space>  :Leaderf searchHistory<Cr>
+    nnoremap <Tab>f :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
+    nnoremap <Tab>l :CloseQuickfix<Cr>:Leaderf loclist<Cr>
+    nnoremap t<Cr>  :Leaderf tag<Cr>
     nnoremap f<Cr>  :Leaderf function<Cr>
-    nnoremap F<Cr>  :Leaderf function --all<Cr>
-    nnoremap <M-h>/ :Leaderf searchHistory<Cr>
+    nnoremap q<Cr>  :Leaderf function --all<Cr>
     nnoremap <M-h>; :Leaderf<Space>
     nnoremap <M-h>. :Leaderf --recall<Cr>
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
@@ -437,15 +437,15 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     xnoremap \| <ESC>:FZFBLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :FzfLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap qf :CloseQuickfix<Cr>:FZFQuickFix<CR>
-    nnoremap ql :CloseQuickfix<Cr>:FZFLocList<CR>
-    nnoremap t<cr>  :FZFTags<CR>
-    nnoremap <M-h>/ :FZFHistory/<CR>
-    nnoremap <M-h>c :FZFHistory:<CR>
-    nnoremap <M-h>m :FZFMru<CR>
-    nnoremap <M-k>l :FZFBLines<CR>
-    nnoremap <M-k>m :FzfLines<CR>
-    nnoremap <M-k>b :FzfBTags<CR>
+    nnoremap <Tab>f   :CloseQuickfix<Cr>:FZFQuickFix<CR>
+    nnoremap <Tab>l   :CloseQuickfix<Cr>:FZFLocList<CR>
+    nnoremap t<cr>    :FZFTags<CR>
+    nnoremap q<space> :FZFHistory/<CR>
+    nnoremap <M-h>c   :FZFHistory:<CR>
+    nnoremap <M-h>m   :FZFMru<CR>
+    nnoremap <M-k>l   :FZFBLines<CR>
+    nnoremap <M-k>m   :FzfLines<CR>
+    nnoremap <M-k>b   :FzfBTags<CR>
     " helptags
     if executable('perl')
         nnoremap <M-h>, :FzfHelptags<CR>
@@ -572,7 +572,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>t    :CtrlPBufTagAll<CR>
         nnoremap <silent> <M-k>l    :CtrlPLine<Cr>
-        nnoremap <silent> qf :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
+        nnoremap <silent> <Tab>f :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
         if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
             nnoremap <silent> <M-k>t :CtrlPTag<CR>
         else

@@ -119,8 +119,8 @@ if Installed('vim-sidebar-manager')
                 \ 'open': 'OpenQuickfix',
                 \ 'close': 'ToggleQuickfix'
                 \ }
-    nnoremap <silent> q<C-m> :<C-u>call sidebar#toggle('quickfix')<CR>
-    nnoremap <silent> qt     :<C-u>AsyncStop!<CR>:call sidebar#toggle('quickfix')<CR>
+    nnoremap <silent> <tab><C-m> :<C-u>call sidebar#toggle('quickfix')<CR>
+    nnoremap <silent> <tab>q     :<C-u>AsyncStop!<CR>:call sidebar#toggle('quickfix')<CR>
     if g:has_terminal == 1
         tnoremap <silent> <M-/> <C-\><C-n>:call sidebar#toggle('quickfix')<CR>
     elseif g:has_terminal == 2

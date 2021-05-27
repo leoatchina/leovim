@@ -22,9 +22,9 @@ command! CloseQuickfix  call s:OpenCloseQuickfix(0)
 command! ToggleQuickfix call s:OpenCloseQuickfix(1)
 command! OpenQuickfix   call s:OpenCloseQuickfix(2)
 if get(g:, 'has_terminal', 0) == 0 || !exists('g:plugs')
-    nnoremap <silent> q<C-m> :ToggleQuickfix<CR>
+    nnoremap <silent> <tab><C-m> :ToggleQuickfix<CR>
 endif
-nnoremap <silent> q<space> :CloseQuickfix<Cr>
+nnoremap <silent> <tab><space> :CloseQuickfix<Cr>
 " --------------------------
 " repl tool
 " --------------------------
@@ -116,12 +116,12 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
         set rtp+=$ADDINS_PATH/asyncrun.vim
         set rtp+=$ADDINS_PATH/asyncrun.extra
     endif
-    nnoremap qs :AsyncStop<CR>
-    nnoremap qu :AsyncStop!<CR>
-    nnoremap qr :AsyncRun
-    nnoremap qa :AsyncRun!
+    nnoremap <Tab>s :AsyncStop<CR>
+    nnoremap <Tab>u :AsyncStop!<CR>
+    nnoremap <Tab>r :AsyncRun
+    nnoremap <Tab>a :AsyncRun!
     if get(g:, 'has_terminal', 0) == 0 || !exists('g:plugs')
-        nnoremap <silent> qt :AsyncStop!<Cr>:ToggleQuickfix<CR>
+        nnoremap <silent> <Tab>q :AsyncStop!<Cr>:ToggleQuickfix<CR>
     endif
     if executable('git')
         if WINDOWS()
