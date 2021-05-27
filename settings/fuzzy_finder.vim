@@ -58,16 +58,16 @@ if Installed("fzf.vim") && Installed("fzf")
     omap m<tab> <plug>(fzf-maps-o)
     imap <c-x><c-f> <plug>(fzf-complete-path)
     if executable('rg') && !WINDOWS()
-        imap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+        imap <expr> <c-x><c-j> fzf#vim#complete(fzf#wrap({
                     \ 'prefix': '^.*$',
                     \ 'source': 'rg -n ^ --color always',
                     \ 'options': '--ansi --delimiter : --nth 3..',
                     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}
                     \ ))
     else
-        imap <c-x><c-l> <plug>(fzf-complete-line)
+        imap <c-x><c-j> <plug>(fzf-complete-line)
     endif
-    imap <M-w> <c-x><c-l>
+    imap <M-w> <c-x><c-j>
     imap <M-f> <c-x><c-f>
     " ----------------------
     " short cuts for fzf

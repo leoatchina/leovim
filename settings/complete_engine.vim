@@ -14,12 +14,12 @@ if Installed('ultisnips')
     " remap Ultisnips for compatibility
     let g:UltiSnipsNoPythonWarning          = 1
     let g:UltiSnipsRemoveSelectModeMappings = 0
-    let g:UltiSnipsExpandTrigger            = "<C-k>"
+    let g:UltiSnipsExpandTrigger            = "<Nop>"
     let g:UltiSnipsJumpForwardTrigger       = "<C-f>"
     let g:UltiSnipsListSnippets             = "<C-l>"
     let g:UltiSnipsJumpBackwardTrigger      = "<C-b>"
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
-        inoremap <c-x><c-j> <c-\><c-o>:Leaderf snippet<cr>
+        inoremap <c-x><c-l> <c-\><c-o>:Leaderf snippet<cr>
         inoremap <M-s> <c-\><c-o>:Leaderf snippet<cr>
     endif
     " Ulti 的代码片段的文件夹
