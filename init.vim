@@ -652,10 +652,6 @@ nmap ,vm vam
 " ------------------------
 " easymotion
 " ------------------------
-nnoremap S <Nop>
-nnoremap M <Nop>
-nnoremap H <Nop>
-nnoremap L <Nop>
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easymotion
 endif
@@ -668,6 +664,7 @@ map  ,k <Plug>(easymotion-sn)
 omap ,k <Plug>(easymotion-tn)
 nmap sw <Plug>(easymotion-w)
 nmap sb <Plug>(easymotion-b)
+nmap S  <Plug>(easymotion-t2)
 nmap s<Cr> <Plug>(easymotion-s2)
 " within line jump
 nmap s<tab> <Plug>(easymotion-bd-jk)
@@ -914,12 +911,18 @@ cnoremap <C-e> <End>
 inoremap <C-a> <Esc>I
 inoremap <expr><C-e> pumvisible()? "\<ESC>a":"\<ESC>A"
 nnoremap <C-f> $
-nnoremap <C-b> ^
 xnoremap <C-f> $
-xnoremap <C-b> ^
 onoremap <C-f> $
-onoremap <C-b> ^
+nnoremap L     $
+xnoremap L     $
+onoremap L     $
 inoremap <C-f> <ESC>A
+nnoremap <C-b> ^
+xnoremap <C-b> ^
+onoremap <C-b> ^
+nnoremap H     ^
+xnoremap H     ^
+onoremap H     ^
 inoremap <C-b> <ESC>I
 " search replace
 nnoremap <silent> c<Cr> *Ncgn
@@ -1016,12 +1019,12 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
+nnoremap <silent> gl gd
 nnoremap <silent> gj j
 nnoremap <silent> gk k
 nnoremap <silent> j gj
 nnoremap <silent> k gk
 nnoremap <silent> gh :tabprevious<CR>
-nnoremap <silent> gl :tabnext<CR>
 nnoremap <silent> ,l :tabm +1<CR>
 nnoremap <silent> ,h :tabm -1<CR>
 nnoremap <silent> ,1 :tabm 0<CR>
@@ -1208,14 +1211,8 @@ xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
 imap <M-x>   <BS>
 imap <M-a>   <Del>
-nmap <M-.>   >>
-xmap <M-.>   >gv
-xmap <Tab>   >gv
 xmap >>      >gv
-nmap <M-,>   <<
-xmap <M-,>   <gv
 xmap <<      <gv
-xmap <S-Tab> <gv
 " ------------------------
 " marks
 " ------------------------
