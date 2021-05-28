@@ -101,9 +101,9 @@ function! GoToDefinitionOrTagOrSearch(type)
         endif
     endif
 endfunction
+nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
 nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
 nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
-nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
 nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
 " --------------------------
 " complete_engine
