@@ -1031,6 +1031,7 @@ nnoremap <silent> ,l     :tabm +1<CR>
 nnoremap <silent> ,h     :tabm -1<CR>
 nnoremap <silent> <Tab>1 :tabm 0<CR>
 nnoremap <silent> <Tab>0 :tabm<CR>
+nnoremap ,M              :tabm<Space>
 nnoremap <silent><M-1> :tabn1<CR>
 nnoremap <silent><M-2> :tabn2<CR>
 nnoremap <silent><M-3> :tabn3<CR>
