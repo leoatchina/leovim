@@ -43,7 +43,7 @@ if Installed('vim-sidebar-manager')
             if execute(":map <leader>t") =~ 'Nop'
                 nnoremap <silent> <leader>t :call sidebar#toggle('vista')<CR>
             else
-                nnoremap <silent> <leader>T :call sidebar#toggle('vista')<CR>
+                nnoremap <silent> ,t :call sidebar#toggle('vista')<CR>
             endif
         endif
     endif
@@ -149,7 +149,7 @@ if Installed('vim-sidebar-manager')
 else
     " symbol_tool
     if g:symbol_tool =~ 'vista'
-        nnoremap <leader>T :Vista!!<Cr>
+        nnoremap ,t :Vista!!<Cr>
         let g:vista_sidebar_position = 'vertical topleft'
         if get(g:, 'ctags_version', '') =~ 'json'
             nnoremap <silent> <leader>t :Vista ctags<CR>
