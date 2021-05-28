@@ -10,7 +10,7 @@ au FileType qf nnoremap <silent><buffer> Q     :PreviewClose<cr>
 au FileType qf nnoremap <silent><buffer> <C-m> :PreviewQuickfix<cr>
 au FileType qf nnoremap <silent><buffer> <C-i> :PreviewQuickfix<cr>
 " preview file and openit
-nnoremap ,<Tab>      :PreviewFile<Space>
+nnoremap ,<Cr>       :PreviewFile<Space>
 nnoremap <silent> ,E :PreviewGoto edit<Cr><C-w>z
 nnoremap <silent> ,V :PreviewGoto vsplit<Cr><C-w>z
 nnoremap <silent> ,X :PreviewGoto split<Cr><C-w>z

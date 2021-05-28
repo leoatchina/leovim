@@ -161,10 +161,6 @@ endif
 let g:mapleader      = ' '
 let g:maplocalleader = '\'
 " ------------------------
-" reload config
-" ------------------------
-nnoremap \<Cr> :source ~/.leovim.conf/init.vim<Cr>
-" ------------------------
 " open config file
 " ------------------------
 nnoremap <leader>eo :tabe ~/.leovim.conf/init.vim<CR>
@@ -505,9 +501,12 @@ nnoremap <Tab>H <C-w>H
 nnoremap <Tab>J <C-w>J
 nnoremap <Tab>K <C-w>K
 nnoremap <Tab>L <C-w>L
-nnoremap <Tab>t  <C-w>T
+nnoremap <Tab>t <C-w>T
 nnoremap <Tab>v :vsplit<Space>
 nnoremap <Tab>x :split<Space>
+" open window in tab
+nnoremap <leader><Tab> :tabe<Space>
+nnoremap <leader><Cr>  :e!<Cr>
 " ------------------------
 " textobj
 " ------------------------
@@ -1017,11 +1016,6 @@ nnoremap <M-S> :wa!<CR>
 " ------------------------
 " page manage
 " ------------------------
-" open window in tab
-nnoremap <leader><Tab> :tabe<Space>
-" 设置分割页面
-nnoremap <leader><Cr> :e!<Cr>
-nnoremap ,<Cr>        :tabe<Cr>
 " remap for cusor move insert mode
 inoremap <M-l> <Right>
 inoremap <M-h> <Left>
@@ -1902,19 +1896,23 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 endfunc
 if executable('idea')
     command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
-    nnoremap <M-g>fi :OpenFileLinkInIdea<cr>
-    nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap \<C-m>i :OpenFileLinkInIdea<cr>
+    nnoremap \<Tab>i :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('pycharm')
     command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
-    nnoremap <M-g>fp :OpenFileLinkInPycharm<cr>
-    nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap \<C-m>p :OpenFileLinkInPycharm<cr>
+    nnoremap \<Tab>p :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('code')
     command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
-    nnoremap <M-g>fv :OpenFileLinkInVscode<cr>
-    nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
+    nnoremap \<C-m>v :OpenFileLinkInVscode<cr>
+    nnoremap \<Tab>v :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
 endif
+" ------------------------
+" reload config shortcut
+" ------------------------
+nnoremap \<Space> :source ~/.leovim.conf/init.vim<Cr>
 " --------------------------
 " set loaded
 " --------------------------

@@ -631,6 +631,6 @@ if Installed('vim-quickui')
         call quickui#preview#open(filename, fopts)
     endfunction
     command! -nargs=1 -complete=file PreviewFileW call s:PreviewFileW(<f-args>)
-    nnoremap \<Tab> :PreviewFileW<Space>
+    nnoremap ,<Tab> :PreviewFileW<Space>
     au FileType python nnoremap K :call quickui#tools#python_help("")<Cr>
 endif
