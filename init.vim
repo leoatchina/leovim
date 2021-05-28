@@ -1896,18 +1896,18 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 endfunc
 if executable('idea')
     command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
-    nnoremap \<C-m>i :OpenFileLinkInIdea<cr>
-    nnoremap \<Tab>i :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap ,eI :OpenFileLinkInIdea<cr>
+    nnoremap ,ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('pycharm')
     command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
-    nnoremap \<C-m>p :OpenFileLinkInPycharm<cr>
-    nnoremap \<Tab>p :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap ,eP :OpenFileLinkInPycharm<cr>
+    nnoremap ,ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('code')
     command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
-    nnoremap \<C-m>v :OpenFileLinkInVscode<cr>
-    nnoremap \<Tab>v :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
+    nnoremap ,eV :OpenFileLinkInVscode<cr>
+    nnoremap ,ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
 endif
 " ------------------------
 " reload config shortcut
