@@ -193,15 +193,15 @@ if get(g:, 'has_terminal', 0) > 0
     tnoremap <M-q> <C-\><C-n>:q!<CR>
     if has('nvim')
         if WINDOWS()
-            nnoremap <tab>m :tabe term://cmd<cr>i
+            nnoremap <Tab>m :tabe term://cmd<cr>i
         else
-            nnoremap <tab>m :tabe term://bash<cr>i
+            nnoremap <Tab>m :tabe term://bash<cr>i
         endif
     else
         if WINDOWS()
-            nnoremap <tab>m :tab terminal<Cr>cmd<Cr>
+            nnoremap <Tab>m :tab terminal<Cr>cmd<Cr>
         else
-            nnoremap <tab>m :tab terminal<Cr>bash<Cr>
+            nnoremap <Tab>m :tab terminal<Cr>bash<Cr>
         endif
     endif
     if g:has_terminal == 2
@@ -479,10 +479,10 @@ try
             endif
         endif
     endfunc
-    nnoremap <silent> <tab>j :call SmartVerticalResize('l', 'r')<Cr>
-    nnoremap <silent> <tab>k :call SmartVerticalResize('r', 'r')<Cr>
-    nnoremap <silent> <tab>h :call SmartVerticalResize('l', 'l')<Cr>
-    nnoremap <silent> <tab>l :call SmartVerticalResize('r', 'l')<Cr>
+    nnoremap <silent> <Tab>j :call SmartVerticalResize('l', 'r')<Cr>
+    nnoremap <silent> <Tab>k :call SmartVerticalResize('r', 'r')<Cr>
+    nnoremap <silent> <Tab>h :call SmartVerticalResize('l', 'l')<Cr>
+    nnoremap <silent> <Tab>l :call SmartVerticalResize('r', 'l')<Cr>
 		function! SmartCtrlJ() abort
         if s:has_down()
             call feedkeys("\<C-w>\<C-j>")
@@ -494,13 +494,20 @@ try
     nnoremap <silent>_ :call SmartCtrlJ()<Cr>
 catch
     let g:has_winnr = 0
-    nnoremap <tab>j :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <tab>k :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <tab>h :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <tab>l :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <Tab>j :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <Tab>k :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <Tab>h :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <Tab>l :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
     nnoremap +      :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
     nnoremap _      :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
 endtry
+nnoremap <Tab>H <C-w>H
+nnoremap <Tab>J <C-w>J
+nnoremap <Tab>K <C-w>K
+nnoremap <Tab>L <C-w>L
+nnoremap <Tab>t  <C-w>T
+nnoremap <Tab>v :vsplit<Space>
+nnoremap <Tab>x :split<Space>
 " ------------------------
 " textobj
 " ------------------------
@@ -656,6 +663,10 @@ nmap ,vm vam
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easymotion
 endif
+nnoremap <silent> gj j
+nnoremap <silent> gk k
+nnoremap <silent> j gj
+nnoremap <silent> k gk
 let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;23456789'
 map  ,. <Plug>(easymotion-repeat)
 map  ,; <Plug>(easymotion-next)
@@ -665,12 +676,10 @@ map  ,k <Plug>(easymotion-sn)
 omap ,k <Plug>(easymotion-tn)
 nmap sj <Plug>(easymotion-w)
 nmap sk <Plug>(easymotion-b)
-nmap sw <Plug>(easymotion-j)
-nmap sb <Plug>(easymotion-k)
-nmap S  <Plug>(easymotion-t2)
-nmap s<Cr> <Plug>(easymotion-s2)
+nmap s<Cr>  <Plug>(easymotion-t2)
+nmap S      <Plug>(easymotion-s2)
 " within line jump
-nmap s<tab> <Plug>(easymotion-bd-jk)
+nmap s<Tab> <Plug>(easymotion-bd-jk)
 " ------------------------
 " clever-f
 " ------------------------
@@ -713,7 +722,7 @@ set smartcase
 set ignorecase
 set showmatch
 set expandtab
-set wildcharm=<tab>
+set wildcharm=<Tab>
 set shiftwidth=4
 set softtabstop=4
 set backspace=indent,eol,start
@@ -986,8 +995,8 @@ nnoremap Q         <C-w>z
 xnoremap Q         <C-w>z
 nnoremap qq        <C-w>z
 xnoremap qq        <C-w>z
-nnoremap <tab>b    :bd!<Cr>
-nnoremap <tab>t    :tabclose<Cr>
+nnoremap <Tab>b    :bd!<Cr>
+nnoremap <Tab>c    :tabclose<Cr>
 nnoremap ,q        :qall!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
 nnoremap <leader>q :q!<Cr>
@@ -1011,10 +1020,6 @@ nnoremap <M-S> :wa!<CR>
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
 " 设置分割页面
-nnoremap ,T           :tab split<CR>
-nnoremap ,t           <C-w>T
-nnoremap <leader>V    :vsplit<Space>
-nnoremap <leader>X    :split<Space>
 nnoremap <leader><Cr> :e!<Cr>
 nnoremap ,<Cr>        :tabe<Cr>
 " remap for cusor move insert mode
@@ -1027,16 +1032,11 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
-nnoremap <silent> gj j
-nnoremap <silent> gk k
-nnoremap <silent> j gj
-nnoremap <silent> k gk
-nnoremap <silent> gh :tabprevious<CR>
-nnoremap <silent> ,l :tabm +1<CR>
-nnoremap <silent> ,h :tabm -1<CR>
-nnoremap <silent> ,1 :tabm 0<CR>
-nnoremap <silent> ,0 :tabm<CR>
-nnoremap ,m :tabm<Space>
+nnoremap <silent> gh     :tabprevious<CR>
+nnoremap <silent> ,l     :tabm +1<CR>
+nnoremap <silent> ,h     :tabm -1<CR>
+nnoremap <silent> <Tab>1 :tabm 0<CR>
+nnoremap <silent> <Tab>0 :tabm<CR>
 nnoremap <silent><M-1> :tabn1<CR>
 nnoremap <silent><M-2> :tabn2<CR>
 nnoremap <silent><M-3> :tabn3<CR>
