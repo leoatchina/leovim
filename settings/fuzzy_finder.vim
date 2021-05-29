@@ -620,8 +620,12 @@ endif
 if Installed('vim-quickui')
     let g:quickui_border_style = 2
     nnoremap <leader>em :call quickui#tools#display_messages()<Cr>
-    nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? quickui#preview#scroll(3)  : "\<C-j>"
-    nmap <silent><expr> <C-k> quickui#preview#visible() > 0 ? quickui#preview#scroll(-3) : "\<C-k>"
+    if !has('nvim')
+        nnoremap <F13> :call quickui#preview#scroll(3)<Cr>
+        nnoremap <F14> :call quickui#preview#scroll(-3)<Cr>
+        nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? "\<F13>" : "\<C-j>"
+        nmap <silent><expr> <C-k> quickui#preview#visible() > 0 ? "\<F14>" : "\<C-k>"
+    endif
     " preview in popup
     function! s:PreviewFileW(filename) abort
         let filename = a:filename
