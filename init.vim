@@ -999,6 +999,7 @@ nnoremap <Tab>c    :tabclose<Cr>
 nnoremap ,q        :qall!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
 nnoremap <leader>q :q!<Cr>
+nnoremap <leader>Q :wq<Cr>
 " ------------------------
 " esc
 " ------------------------
