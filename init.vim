@@ -1003,7 +1003,6 @@ nnoremap <leader>Q :wq<Cr>
 " ------------------------
 " esc
 " ------------------------
-inoremap <C-j> <ESC>
 inoremap <M-q> <ESC>
 xnoremap <M-q> <ESC>
 cnoremap <M-q> <ESC>
