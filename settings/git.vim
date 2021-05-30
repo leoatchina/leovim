@@ -31,20 +31,6 @@ if Installed('fzf.vim')
         nnoremap <M-g>f :FzfGFiles?<CR>
     endif
 endif
-if Installed('vim-signify')
-    let g:signify_disable_by_default = 1
-    nnoremap \<Cr>    :SignifyDiff<Cr>
-    nnoremap \<Tab>   :SignifyToggle<Cr>
-    nnoremap \<Space> :Signify
-    nmap ]c <plug>(signify-next-hunk)
-    nmap [c <plug>(signify-prev-hunk)
-    omap ic <plug>(signify-motion-inner-pending)
-    xmap ic <plug>(signify-motion-inner-visual)
-    omap ac <plug>(signify-motion-outer-pending)
-    xmap ac <plug>(signify-motion-outer-visual)
-    nmap <leader>vc vic
-    nmap ,vc        vac
-endif
 if get(g:, 'terminal_plus', '') =~ 'floaterm'
     if executable('lazygit')
         nnoremap <M-g>l :FloatermNew! --height=0.8 --width=0.8 --position=center lazygit<Cr>

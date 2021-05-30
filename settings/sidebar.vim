@@ -159,7 +159,22 @@ else
         nnoremap <leader>t :TagbarToggle<Cr>
     endif
 endif
-" AUTOClose is initied in init.vim
+" signify
+if Installed('vim-signify')
+    let g:signify_disable_by_default = 1
+    nnoremap \<Cr>    :SignifyDiff<Cr>
+    nnoremap \<Tab>   :SignifyToggle<Cr>
+    nnoremap \<Space> :Signify
+    nmap ]c <plug>(signify-next-hunk)
+    nmap [c <plug>(signify-prev-hunk)
+    omap ic <plug>(signify-motion-inner-pending)
+    xmap ic <plug>(signify-motion-inner-visual)
+    omap ac <plug>(signify-motion-outer-pending)
+    xmap ac <plug>(signify-motion-outer-visual)
+    nmap <leader>vc vic
+    nmap ,vc        vac
+endif
+" AUTOClose is initialled in init.vim
 aug AUTOClose
     au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "vista" |q|endif
     au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "coc-explorer"|q|endif
