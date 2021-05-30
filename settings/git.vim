@@ -33,9 +33,9 @@ if Installed('fzf.vim')
 endif
 if Installed('vim-signify')
     let g:signify_disable_by_default = 1
-    nnoremap <M-g>d :SignifyDiff<Cr>
-    nnoremap <M-g>i :Signify
-    nnoremap <M-g>o :SignifyToggle<Cr>
+    nnoremap \<Cr>    :SignifyDiff<Cr>
+    nnoremap \<Tab>   :SignifyToggle<Cr>
+    nnoremap \<Space> :Signify
     nmap ]c <plug>(signify-next-hunk)
     nmap [c <plug>(signify-prev-hunk)
     omap ic <plug>(signify-motion-inner-pending)

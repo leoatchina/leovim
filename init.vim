@@ -1913,7 +1913,7 @@ endif
 " ------------------------
 " reload config shortcut
 " ------------------------
-nnoremap \<Space> :source ~/.leovim.conf/init.vim<Cr>
+nnoremap <Leader>S :source ~/.leovim.conf/init.vim<Cr>
 " --------------------------
 " set loaded
 " --------------------------
