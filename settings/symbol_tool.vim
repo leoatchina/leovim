@@ -5,11 +5,12 @@ let g:plugs_symbol = []
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-preview
 endif
-au FileType qf nnoremap <silent><buffer> qq    :PreviewClose<cr>
+au FileType qf nnoremap <silent><buffer> q     :PreviewClose<cr>
+au FileType qf nnoremap <silent><buffer> Q     :PreviewClose<cr>
 au FileType qf nnoremap <silent><buffer> <C-m> :PreviewQuickfix<cr>
 au FileType qf nnoremap <silent><buffer> <C-i> :PreviewQuickfix<cr>
 " preview file and openit
-nnoremap ,<Tab> :PreviewFile<Space>
+nnoremap ,<Cr>       :PreviewFile<Space>
 nnoremap <silent> ,E :PreviewGoto edit<Cr><C-w>z
 nnoremap <silent> ,V :PreviewGoto vsplit<Cr><C-w>z
 nnoremap <silent> ,X :PreviewGoto split<Cr><C-w>z
@@ -131,10 +132,11 @@ if executable('ctags')
     nnoremap <silent> <M-'> :ToggleQuickfix<Cr>:PreviewList<Cr>
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
-        au FileType qf noremap <silent><buffer> <C-k> :call quickui#tools#preview_quickfix()<cr>
-        nnoremap <C-k> :<C-u>call quickui#tools#preview_tag('')<Cr>
+        au FileType qf noremap <silent><buffer> <tab> :call quickui#tools#preview_quickfix()<cr>
+        au FileType qf noremap <silent><buffer> p     :call quickui#tools#preview_quickfix()<cr>
+        nnoremap <tab><tab> :<C-u>call quickui#tools#preview_tag('')<Cr>
     else
-        nnoremap <silent> <C-k> :PreviewSignature!<Cr>
+        nnoremap <silent> <tab><tab> :PreviewSignature!<Cr>
     endif
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')
@@ -165,6 +167,8 @@ if executable('ctags')
         endif
         nnoremap <leader>gu :GutentagsUpdate<CR>
     endif
+else
+    nnoremap - <Nop>
 endif
 " --------------------------
 " gtags

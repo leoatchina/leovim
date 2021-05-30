@@ -58,16 +58,16 @@ if Installed("fzf.vim") && Installed("fzf")
     omap m<tab> <plug>(fzf-maps-o)
     imap <c-x><c-f> <plug>(fzf-complete-path)
     if executable('rg') && !WINDOWS()
-        imap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+        imap <expr> <c-x><c-j> fzf#vim#complete(fzf#wrap({
                     \ 'prefix': '^.*$',
                     \ 'source': 'rg -n ^ --color always',
                     \ 'options': '--ansi --delimiter : --nth 3..',
                     \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}
                     \ ))
     else
-        imap <c-x><c-l> <plug>(fzf-complete-line)
+        imap <c-x><c-j> <plug>(fzf-complete-line)
     endif
-    imap <M-w> <c-x><c-l>
+    imap <M-w> <c-x><c-j>
     imap <M-f> <c-x><c-f>
     " ----------------------
     " short cuts for fzf
@@ -209,9 +209,11 @@ if Installed("fzf.vim") && Installed("fzf")
     xnoremap <silent> <leader>i :<C-u>FZFRegisterBeforeV<Cr>
     xnoremap <silent> <leader>p :<C-u>FZFRegisterAfterV<Cr>
     " --------------------
-    " FZFJumps
+    " Jumps
     " --------------------
-    if g:has_execute_func > 0
+    if get(g:, 'fuzzy_finder', '') == 'leaderf'
+        nnoremap <M-y> :Leaderf jumps --fullScreen<cr>
+    elseif g:has_execute_func > 0
         function! s:jumpListFormat(val) abort
             let l:file_name = bufname('%')
             let l:file_name = empty(l:file_name) ? 'Unknown file name' : l:file_name
@@ -324,13 +326,15 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if Installed('LeaderF-marks')
         nnoremap m<Cr> :Leaderf marks<Cr>
     endif
-    nnoremap qf :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
-    nnoremap ql :CloseQuickfix<Cr>:Leaderf loclist<Cr>
-    nnoremap t<cr>  :Leaderf tag<Cr>
+    nnoremap s<space>  :Leaderf searchHistory<Cr>
+    nnoremap <Tab>f  :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
+    nnoremap <S-Tab> :CloseQuickfix<Cr>:Leaderf loclist<Cr>
+    nnoremap t<Cr>  :Leaderf tag<Cr>
     nnoremap f<Cr>  :Leaderf function<Cr>
-    nnoremap F<Cr>  :Leaderf function --all<Cr>
-    nnoremap <M-h>/ :Leaderf searchHistory<Cr>
-    nnoremap <M-h>; :Leaderf<Space>
+    nnoremap q<Cr>  :Leaderf function --all<Cr>
+    nnoremap <M-h>p :Leaderf<Space>
+    nnoremap <M-h>; :Leaderf --next<Cr>
+    nnoremap <M-h>, :Leaderf --previous<Cr>
     nnoremap <M-h>. :Leaderf --recall<Cr>
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
     nnoremap <M-h>m :Leaderf mru<Cr>
@@ -341,7 +345,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap <M-w>t :Leaderf filetype<Cr>
     nnoremap <M-w>c :Leaderf command<Cr>
     " help tags
-    nnoremap <M-h>, :Leaderf help<Cr>
+    nnoremap q<Space> :Leaderf help<Cr>
     " search cword
     nnoremap \| :Leaderf line --no-sort --cword<Cr>
     xnoremap \| <ESC>:Leaderf line --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
@@ -437,18 +441,18 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     xnoremap \| <ESC>:FZFBLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :FzfLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap qf :CloseQuickfix<Cr>:FZFQuickFix<CR>
-    nnoremap ql :CloseQuickfix<Cr>:FZFLocList<CR>
-    nnoremap t<cr>  :FZFTags<CR>
-    nnoremap <M-h>/ :FZFHistory/<CR>
-    nnoremap <M-h>c :FZFHistory:<CR>
-    nnoremap <M-h>m :FZFMru<CR>
-    nnoremap <M-k>l :FZFBLines<CR>
-    nnoremap <M-k>m :FzfLines<CR>
-    nnoremap <M-k>b :FzfBTags<CR>
+    nnoremap t<cr>    :FZFTags<CR>
+    nnoremap <Tab>f   :CloseQuickfix<Cr>:FZFQuickFix<CR>
+    nnoremap <S-tab>  :CloseQuickfix<Cr>:FZFLocList<CR>
+    nnoremap s<space> :FZFHistory/<CR>
+    nnoremap <M-h>c   :FZFHistory:<CR>
+    nnoremap <M-h>m   :FZFMru<CR>
+    nnoremap <M-k>l   :FZFBLines<CR>
+    nnoremap <M-k>m   :FzfLines<CR>
+    nnoremap <M-k>b   :FzfBTags<CR>
     " helptags
     if executable('perl')
-        nnoremap <M-h>, :FzfHelptags<CR>
+        nnoremap q<Space> :FzfHelptags<CR>
     endif
     " fzf-funky
     if Installed('fzf-funky')
@@ -459,41 +463,20 @@ if Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
     nnoremap <C-p>  :CocFzfList<CR>
-    nnoremap <M-h>; :CocList<Space>
     nnoremap <M-h>. :CocFzfListResume<CR>
-    nnoremap <M-h>l :CocFzfList location<Cr>
-    nnoremap <M-k>o :CocFzfList outline<CR>
-    nnoremap <M-l>c :CocFzfList commands<Cr>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
-    " codeaction and others
-    xmap ,c; <Plug>(coc-codeaction-selected)
-    nmap ,c; <Plug>(coc-codeaction)
-    nmap ,c, <Plug>(coc-codelens)
-    nmap ,ca :CocFzfList actions<Cr>
-    nmap ,cl <Plug>(coc-codeaction-line)
-    xmap ,cf <Plug>(coc-format-selected)
-    nmap ,cf <Plug>(coc-format)
-    nmap ,cn <Plug>(coc-rename)
-    nmap ,cc <Plug>(coc-fix-current)
-    nmap ,cs <Plug>(coc-range-select)
-    " multi cursors
-    nmap ,cp <Plug>(coc-cursors-position)
-    nmap ,co <Plug>(coc-cursors-operator)
-    " Fix autofix problem of current line
-    nmap ,cq <Plug>(coc-fix-current)
-    " more
-    nmap ,ch <Plug>(coc-float-hide)
-    nmap ,cj <Plug>(coc-float-jump)
+    nnoremap <M-h>p :CocFzfList<Space>
+    nnoremap <M-h>P :CocList<Space>
+    nnoremap <M-h>l :CocFzfList location<Cr>
+    nnoremap <Tab>y :CocFzfList yank<Cr>
+    nnoremap <M-k>o :CocFzfList outline<CR>
+    nnoremap <M-l>c :CocFzfList commands<Cr>
     " Create mappings for function text object, requires document symbols feature of languageserver.
     xmap if <Plug>(coc-funcobj-i)
     xmap af <Plug>(coc-funcobj-a)
     omap if <Plug>(coc-funcobj-i)
     omap af <Plug>(coc-funcobj-a)
-    " Do default action for next item.
-    nnoremap <silent> ,cn :CocNext<CR>
-    " Do default action for previous item.
-    nnoremap <silent> ,cp :CocPrev<CR>
     " coc git
     " navigate chunks of current buffer
     nmap [g <Plug>(coc-git-prevchunk)
@@ -511,7 +494,7 @@ if Installed('coc.nvim')
             \ "<tab>":   "toggleSelection",
             \ "<bs>":    "gotoParent",
             \ "<cr>":    "open",
-            \ "n":       "rename",
+            \ "r":       "rename",
             \ "t":       "open:tab",
             \ "v":       "open:vsplit",
             \ "x":       "open:split",
@@ -533,7 +516,7 @@ if Installed('coc.nvim')
             \ "A":       "addDirectory",
             \ "<F1>":    "help",
             \ "H":       "toggleHidden",
-            \ "r":       "refresh",
+            \ "<F5>":    "refresh",
             \ "q":       "quit",
             \ "X":       "systemExecute",
             \ "f":       "search",
@@ -578,7 +561,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap <M-h>;         :CtrlP<tab>
+    nnoremap <M-h>p         :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
         nnoremap <silent> <leader>i :CtrlPYankring<Cr>
@@ -595,7 +578,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>t    :CtrlPBufTagAll<CR>
         nnoremap <silent> <M-k>l    :CtrlPLine<Cr>
-        nnoremap <silent> qf :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
+        nnoremap <silent> <Tab>f    :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
         if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
             nnoremap <silent> <M-k>t :CtrlPTag<CR>
         else
@@ -639,10 +622,12 @@ endif
 if Installed('vim-quickui')
     let g:quickui_border_style = 2
     nnoremap <leader>em :call quickui#tools#display_messages()<Cr>
-    nnoremap <silent>z] :call quickui#preview#scroll(1)<Cr>
-    nnoremap <silent>z[ :call quickui#preview#scroll(-1)<Cr>
-    nnoremap <silent>g] :call quickui#preview#scroll(5)<Cr>
-    nnoremap <silent>g[ :call quickui#preview#scroll(-5)<Cr>
+    if !has('nvim')
+        nnoremap <F13> :call quickui#preview#scroll(3)<Cr>
+        nnoremap <F14> :call quickui#preview#scroll(-3)<Cr>
+        nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? "\<F13>" : "\<C-j>"
+        nmap <silent><expr> <C-k> quickui#preview#visible() > 0 ? "\<F14>" : "\<C-k>"
+    endif
     " preview in popup
     function! s:PreviewFileW(filename) abort
         let filename = a:filename
@@ -650,6 +635,6 @@ if Installed('vim-quickui')
         call quickui#preview#open(filename, fopts)
     endfunction
     command! -nargs=1 -complete=file PreviewFileW call s:PreviewFileW(<f-args>)
-    nnoremap \<Tab> :PreviewFileW<Space>
+    nnoremap ,<Tab> :PreviewFileW<Space>
     au FileType python nnoremap K :call quickui#tools#python_help("")<Cr>
 endif

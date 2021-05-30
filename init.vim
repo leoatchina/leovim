@@ -161,10 +161,6 @@ endif
 let g:mapleader      = ' '
 let g:maplocalleader = '\'
 " ------------------------
-" reload config
-" ------------------------
-nnoremap \<Cr> :source ~/.leovim.conf/init.vim<Cr>
-" ------------------------
 " open config file
 " ------------------------
 nnoremap <leader>eo :tabe ~/.leovim.conf/init.vim<CR>
@@ -193,15 +189,15 @@ if get(g:, 'has_terminal', 0) > 0
     tnoremap <M-q> <C-\><C-n>:q!<CR>
     if has('nvim')
         if WINDOWS()
-            nnoremap qm :tabe term://cmd<cr>i
+            nnoremap <Tab>m :tabe term://cmd<cr>i
         else
-            nnoremap qm :tabe term://bash<cr>i
+            nnoremap <Tab>m :tabe term://bash<cr>i
         endif
     else
         if WINDOWS()
-            nnoremap qm :tab terminal<Cr>cmd<Cr>
+            nnoremap <Tab>m :tab terminal<Cr>cmd<Cr>
         else
-            nnoremap qm :tab terminal<Cr>bash<Cr>
+            nnoremap <Tab>m :tab terminal<Cr>bash<Cr>
         endif
     endif
     if g:has_terminal == 2
@@ -450,15 +446,6 @@ try
             return 'l'
         endif
     endfunction
-    " 如果下面有窗口，跳之；如果已经是最下面且上面有窗口，跳之
-    function! SmartCtrlJ() abort
-        if s:has_down()
-            call feedkeys("\<C-w>\<C-j>")
-        elseif s:has_up()
-            call feedkeys("\<C-w>\<C-k>")
-        endif
-    endfunction
-    nnoremap <silent><C-j> :call SmartCtrlJ()<Cr>
     " smartverticalresize, c-h/c-l left line, _+ right line
     let g:adjust_size = get(g:, 'adjust_size', 4)
     function! SmartVerticalResize(direction, ...) abort
@@ -488,18 +475,38 @@ try
             endif
         endif
     endfunc
-    nnoremap <silent> _     :call SmartVerticalResize('l', 'r')<Cr>
-    nnoremap <silent> +     :call SmartVerticalResize('r', 'r')<Cr>
-    nnoremap <silent> <C-h> :call SmartVerticalResize('l', 'l')<Cr>
-    nnoremap <silent> <C-l> :call SmartVerticalResize('r', 'l')<Cr>
+    nnoremap <silent> <Tab>j :call SmartVerticalResize('l', 'r')<Cr>
+    nnoremap <silent> <Tab>k :call SmartVerticalResize('r', 'r')<Cr>
+    nnoremap <silent> <Tab>h :call SmartVerticalResize('l', 'l')<Cr>
+    nnoremap <silent> <Tab>l :call SmartVerticalResize('r', 'l')<Cr>
+		function! SmartCtrlJ() abort
+        if s:has_down()
+            call feedkeys("\<C-w>\<C-j>")
+        elseif s:has_up()
+            call feedkeys("\<C-w>\<C-k>")
+        endif
+    endfunction
+    nnoremap <silent>+ :call SmartCtrlJ()<Cr>
+    nnoremap <silent>_ :call SmartCtrlJ()<Cr>
 catch
     let g:has_winnr = 0
-    nnoremap _     :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap +     :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <C-h> :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <C-l> :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
-    nnoremap <C-j> :echo "winnr('hjkl') is not allowed in this vim, can not do smart jump!"<Cr>
+    nnoremap <Tab>j :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <Tab>k :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <Tab>h :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap <Tab>l :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap +      :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
+    nnoremap _      :echo "winnr('hjkl') is not allowed in this vim, can not adjust panel size!"<Cr>
 endtry
+nnoremap <Tab>H <C-w>H
+nnoremap <Tab>J <C-w>J
+nnoremap <Tab>K <C-w>K
+nnoremap <Tab>L <C-w>L
+nnoremap <Tab>t <C-w>T
+nnoremap <Tab>v :vsplit<Space>
+nnoremap <Tab>x :split<Space>
+" open window in tab
+nnoremap <leader><Tab> :tabe<Space>
+nnoremap <leader><Cr>  :e!<Cr>
 " ------------------------
 " textobj
 " ------------------------
@@ -652,13 +659,13 @@ nmap ,vm vam
 " ------------------------
 " easymotion
 " ------------------------
-nnoremap S <Nop>
-nnoremap M <Nop>
-nnoremap H <Nop>
-nnoremap L <Nop>
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easymotion
 endif
+nnoremap <silent> gj j
+nnoremap <silent> gk k
+nnoremap <silent> j gj
+nnoremap <silent> k gk
 let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;23456789'
 map  ,. <Plug>(easymotion-repeat)
 map  ,; <Plug>(easymotion-next)
@@ -666,11 +673,12 @@ map  ,, <Plug>(easymotion-prev)
 map  ,j <Plug>(easymotion-bd-w)
 map  ,k <Plug>(easymotion-sn)
 omap ,k <Plug>(easymotion-tn)
-nmap sw <Plug>(easymotion-w)
-nmap sb <Plug>(easymotion-b)
-nmap s<Cr> <Plug>(easymotion-s2)
+nmap sj <Plug>(easymotion-w)
+nmap sk <Plug>(easymotion-b)
+nmap s<Cr>  <Plug>(easymotion-t2)
+nmap S      <Plug>(easymotion-s2)
 " within line jump
-nmap s<tab> <Plug>(easymotion-bd-jk)
+nmap s<Tab> <Plug>(easymotion-bd-jk)
 " ------------------------
 " clever-f
 " ------------------------
@@ -713,7 +721,7 @@ set smartcase
 set ignorecase
 set showmatch
 set expandtab
-set wildcharm=<tab>
+set wildcharm=<Tab>
 set shiftwidth=4
 set softtabstop=4
 set backspace=indent,eol,start
@@ -914,12 +922,18 @@ cnoremap <C-e> <End>
 inoremap <C-a> <Esc>I
 inoremap <expr><C-e> pumvisible()? "\<ESC>a":"\<ESC>A"
 nnoremap <C-f> $
-nnoremap <C-b> ^
 xnoremap <C-f> $
-xnoremap <C-b> ^
 onoremap <C-f> $
-onoremap <C-b> ^
+nnoremap L     $
+xnoremap L     $
+onoremap L     $
 inoremap <C-f> <ESC>A
+nnoremap <C-b> ^
+xnoremap <C-b> ^
+onoremap <C-b> ^
+nnoremap H     ^
+xnoremap H     ^
+onoremap H     ^
 inoremap <C-b> <ESC>I
 " search replace
 nnoremap <silent> c<Cr> *Ncgn
@@ -947,7 +961,10 @@ map <C-z> <Nop>
 " some enhanced shortcuts
 " ------------------------
 nnoremap <leader>ex Q
-nnoremap Q     q
+nnoremap <C-g> <Tab>
+xnoremap <C-g> <Tab>
+nnoremap <Tab> <Nop>
+xnoremap <Tab> <Nop>
 nnoremap <C-q> q
 nnoremap <C-m> %
 xnoremap <C-m> %
@@ -973,17 +990,19 @@ endfunction
 " ------------------------
 " quit
 " ------------------------
-nnoremap q          <Nop>
+nnoremap Q         <C-w>z
+xnoremap Q         <C-w>z
 nnoremap qq        <C-w>z
 xnoremap qq        <C-w>z
-nnoremap qb        :bd!<Cr>
+nnoremap <Tab>b    :bd!<Cr>
+nnoremap <Tab>c    :tabclose<Cr>
 nnoremap ,q        :qall!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
 nnoremap <leader>q :q!<Cr>
+nnoremap <leader>Q :wq<Cr>
 " ------------------------
 " esc
 " ------------------------
-inoremap <C-j> <ESC>
 inoremap <M-q> <ESC>
 xnoremap <M-q> <ESC>
 cnoremap <M-q> <ESC>
@@ -997,15 +1016,6 @@ nnoremap <M-S> :wa!<CR>
 " ------------------------
 " page manage
 " ------------------------
-" open window in tab
-nnoremap <leader><Tab> :tabe<Space>
-" 设置分割页面
-nnoremap ,T           :tab split<CR>
-nnoremap ,t           <C-w>T
-nnoremap <leader>V    :vsplit<Space>
-nnoremap <leader>X    :split<Space>
-nnoremap <leader><Cr> :e!<Cr>
-nnoremap ,<Cr>        :tabe<Cr>
 " remap for cusor move insert mode
 inoremap <M-l> <Right>
 inoremap <M-h> <Left>
@@ -1016,17 +1026,12 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
-nnoremap <silent> gj j
-nnoremap <silent> gk k
-nnoremap <silent> j gj
-nnoremap <silent> k gk
-nnoremap <silent> gh :tabprevious<CR>
-nnoremap <silent> gl :tabnext<CR>
-nnoremap <silent> ,l :tabm +1<CR>
-nnoremap <silent> ,h :tabm -1<CR>
-nnoremap <silent> ,1 :tabm 0<CR>
-nnoremap <silent> ,0 :tabm<CR>
-nnoremap ,m :tabm<Space>
+nnoremap <silent> gh     :tabprevious<CR>
+nnoremap <silent> ,l     :tabm +1<CR>
+nnoremap <silent> ,h     :tabm -1<CR>
+nnoremap <silent> <Tab>1 :tabm 0<CR>
+nnoremap <silent> <Tab>0 :tabm<CR>
+nnoremap <Tab>M          :tabm<Space>
 nnoremap <silent><M-1> :tabn1<CR>
 nnoremap <silent><M-2> :tabn2<CR>
 nnoremap <silent><M-3> :tabn3<CR>
@@ -1206,16 +1211,10 @@ xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
-imap <M-x>   <BS>
-imap <M-a>   <Del>
-nmap <M-.>   >>
-xmap <M-.>   >gv
-xmap <Tab>   >gv
-xmap >>      >gv
-nmap <M-,>   <<
-xmap <M-,>   <gv
-xmap <<      <gv
-xmap <S-Tab> <gv
+imap <M-x> <BS>
+imap <M-a> <Del>
+xmap >>    >gv
+xmap <<    <gv
 " ------------------------
 " marks
 " ------------------------
@@ -1722,16 +1721,16 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
         let g:which_key_use_floating_win = 0
     end
     " basic keys
-    nnoremap <Space> :WhichKey ' '<Cr>
-    nnoremap ,       :WhichKey ','<Cr>
-    nnoremap \       :WhichKey '\'<Cr>
-    nnoremap q       :WhichKey 'q'<Cr>
-    nnoremap [       :WhichKey '['<Cr>
-    nnoremap ]       :WhichKey ']'<Cr>
+    nnoremap <Space> :WhichKey       ' '<Cr>
+    nnoremap <Tab>   :WhichKey       '<lt>Tab>'<Cr>
+    nnoremap ,       :WhichKey       ','<Cr>
+    nnoremap \       :WhichKey       '\'<Cr>
+    nnoremap [       :WhichKey       '['<Cr>
+    nnoremap ]       :WhichKey       ']'<Cr>
     xnoremap <Space> :WhichKeyVisual ' '<Cr>
     xnoremap ,       :WhichKeyVisual ','<Cr>
     xnoremap \       :WhichKeyVisual '\'<Cr>
-    xnoremap q       :WhichKeyVisual 'q'<Cr>
+    xnoremap <Tab>   :WhichKeyVisual '<lt>Tab>'<Cr>
     xnoremap [       :WhichKeyVisual '['<Cr>
     xnoremap ]       :WhichKeyVisual ']'<Cr>
     " M- keys
@@ -1750,6 +1749,9 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     if Installed('vimspector')
         nnoremap <M-b> :WhichKey '<lt>M-b>'<Cr>
         nnoremap <M-u> :WhichKey '<lt>M-u>'<Cr>
+    endif
+    if Installed("vim-table-mode")
+        nnoremap = :WhichKey '='<Cr>
     endif
 endif
 " --------------------------
@@ -1895,19 +1897,23 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 endfunc
 if executable('idea')
     command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
-    nnoremap <M-g>fi :OpenFileLinkInIdea<cr>
+    nnoremap <leader>eI :OpenFileLinkInIdea<cr>
     nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('pycharm')
     command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
-    nnoremap <M-g>fp :OpenFileLinkInPycharm<cr>
+    nnoremap <leader>eP :OpenFileLinkInPycharm<cr>
     nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('code')
     command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
-    nnoremap <M-g>fv :OpenFileLinkInVscode<cr>
+    nnoremap <leader>eV :OpenFileLinkInVscode<cr>
     nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
 endif
+" ------------------------
+" reload config shortcut
+" ------------------------
+nnoremap \<Space> :source ~/.leovim.conf/init.vim<Cr>
 " --------------------------
 " set loaded
 " --------------------------

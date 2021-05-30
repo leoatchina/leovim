@@ -14,12 +14,12 @@ if Installed('ultisnips')
     " remap Ultisnips for compatibility
     let g:UltiSnipsNoPythonWarning          = 1
     let g:UltiSnipsRemoveSelectModeMappings = 0
-    let g:UltiSnipsExpandTrigger            = "<C-k>"
-    let g:UltiSnipsJumpForwardTrigger       = "<C-f>"
     let g:UltiSnipsListSnippets             = "<C-l>"
+    let g:UltiSnipsExpandTrigger            = "<C-g>"
+    let g:UltiSnipsJumpForwardTrigger       = "<C-f>"
     let g:UltiSnipsJumpBackwardTrigger      = "<C-b>"
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
-        inoremap <c-x><c-j> <c-\><c-o>:Leaderf snippet<cr>
+        inoremap <c-x><c-l> <c-\><c-o>:Leaderf snippet<cr>
         inoremap <M-s> <c-\><c-o>:Leaderf snippet<cr>
     endif
     " Ulti 的代码片段的文件夹
@@ -101,9 +101,10 @@ function! GoToDefinitionOrTagOrSearch(type)
         endif
     endif
 endfunction
-nnoremap <silent> <C-g> :call GoToDefinitionOrTagOrSearch("n")<Cr>
-nnoremap <silent> g<cr> :call GoToDefinitionOrTagOrSearch("v")<Cr>
-nnoremap <silent> gt    :call GoToDefinitionOrTagOrSearch("t")<Cr>
+nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
+nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
+nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
+nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
 " --------------------------
 " complete_engine
 " --------------------------
@@ -149,9 +150,8 @@ if Installed('YouCompleteMe')
     endif
     " hover
     let g:ycm_auto_hover = ''
-    nmap     H       <Plug>(YCMHover)
-    nnoremap M      :YcmCompleter GoToDefinition<Cr>
-    nnoremap L      :vs<Cr>:YcmCompleter GoToDefinition<Cr>
+    nmap     <M-,>  <Plug>(YCMHover)
+    nnoremap <M-.>  :YcmCompleter GoToDefinition<Cr>
     nnoremap <M-l>; :YcmCompleter<Space>
     nnoremap <M-l>. :YcmCompleter Get<Tab>
     nnoremap <M-l>k :YcmCompleter GetDoc<CR>
@@ -227,9 +227,8 @@ elseif Installed('coc.nvim')
     call coc#config('coc.preferences.enableFloatHighlight', v:true)
     call coc#config('rust-analyzer.inlayHints.enable', v:false)
     " as lsp engine
-    nmap H :call <SID>show_documentation()<CR>
-    nmap M <Plug><coc-definition>
-    nmap L :vs<Cr>:execute "normal \<Plug><coc-definition>"<Cr>
+    nmap <M-,> :call <SID>show_documentation()<CR>
+    nmap <M-.>  <Plug><coc-definition>
     " basic plug
     nmap <M-j>w :CocFzfList symbols<CR>
     nmap <M-j>s :CocAction('documentSymbols')<Cr>
@@ -266,13 +265,35 @@ elseif Installed('coc.nvim')
         endif
     endfunction
     if has('nvim-0.4.0') || has('patch-8.2.0750')
-        inoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-d>"
-        inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-d>"
-        xnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-        xnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
-        nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-        nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
+        inoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-j>"
+        inoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-j>"
+        xnoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-j>"
+        xnoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-k>"
+        nnoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-j>"
+        nnoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-k>"
     endif
+    " codeaction and others
+    nmap ,ca :CocFzfList actions<Cr>
+    xmap ,c; <Plug>(coc-codeaction-selected)
+    nmap ,c; <Plug>(coc-codeaction)
+    nmap ,c, <Plug>(coc-codelens)
+    nmap ,cl <Plug>(coc-codeaction-line)
+    xmap ,cf <Plug>(coc-format-selected)
+    nmap ,cf <Plug>(coc-format)
+    nmap ,cr <Plug>(coc-rename)
+    nmap ,cs <Plug>(coc-range-select)
+    " multi cursors
+    nmap ,cc <Plug>(coc-cursors-position)
+    nmap ,co <Plug>(coc-cursors-operator)
+    " Fix autofix problem of current line
+    nmap ,cx <Plug>(coc-fix-current)
+    " more
+    nmap ,ch <Plug>(coc-float-hide)
+    nmap ,cj <Plug>(coc-float-jump)
+    " Do default action for next item.
+    nmap <silent> ,cn :CocNext<CR>
+    " Do default action for previous item.
+    nmap <silent> ,cp :CocPrev<CR>
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
@@ -359,8 +380,7 @@ elseif Installed('vim-lsp')
     nnoremap <M-l>s :LspSignatureHelp<Cr>
     nnoremap <M-l>c :LspDocument<Tab>
     " jump to
-    nnoremap M      :LspDefinition<Cr>
-    nnoremap L      :vs<Cr>:LspDefinition<Cr>
+    nnoremap <M-.>  :LspDefinition<Cr>
     nnoremap <M-j>d :LspDeclaration<CR>
     nnoremap <M-j>t :LspTypeDefinition<CR>
     nnoremap <M-j>e :LspImplementation<CR>
@@ -373,7 +393,7 @@ elseif Installed('vim-lsp')
     nnoremap ,c, :LspCodeLens<CR>
     if has('patch-8.1.1517') || has('nvim')
         autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
-        nnoremap H      :LspHover<CR>
+        nnoremap <M-,>  :LspHover<CR>
         nnoremap <M-j>h :LspPeekDefinition<Cr>
         nnoremap <M-j>e :LspPeekDeclaration<CR>
         nnoremap <M-j>y :LspPeekTypeDefinition<CR>
@@ -394,8 +414,8 @@ elseif Installed('vim-lsp')
                     \ })
     endif
     if has('nvim-0.4.0') || has('patch-8.1.1615')
-        inoremap <buffer> <expr><C-d> lsp#scroll(+3)
-        inoremap <buffer> <expr><C-u> lsp#scroll(-3)
+        inoremap <buffer> <expr><C-j> lsp#scroll(+3)
+        inoremap <buffer> <expr><C-k> lsp#scroll(-3)
     endif
     " --------------------------
     " vim-lsp-settings

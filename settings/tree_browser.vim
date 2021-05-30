@@ -14,7 +14,7 @@ if Installed('fern.vim')
         nmap <buffer> V <Plug>(fern-action-open:edit/vsplit)
         nmap <buffer> X <Plug>(fern-action-open:edit/split)
         nmap <buffer> T <Plug>(fern-action-open:edit/tabedit)
-        nmap <buffer> n <Plug>(fern-action-rename)
+        nmap <buffer> r <Plug>(fern-action-rename)
     endfunction
     augroup init_fern
         autocmd! *
@@ -22,13 +22,17 @@ if Installed('fern.vim')
     augroup END
     nnoremap <silent> <leader>N :Fern . -drawer -reveal=%<Cr>
     nnoremap <silent> <leader>O :Fern . -reveal=%<Cr>
-    nnoremap qn :Fern -drawer -stay -toggle<Space>
-    nnoremap qo :Fern<Space>
+    nnoremap <tab>n :Fern -drawer -stay -toggle<Space>
+    nnoremap <tab>o :Fern<Space>
 else
     " --------------------------
     " netrw with vim-vinegar
     " --------------------------
-    let g:tree_browser = 'netrw'
+    let g:tree_browser       = 'netrw'
+    let g:netrw_banner       = 0
+    let g:netrw_liststyle    = 3
+    let g:netrw_browse_split = 4
+    let g:netrw_winsize      = 16
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/vim-vinegar
     endif
@@ -67,7 +71,3 @@ else
         nnoremap <leader>n :ToggleNetrw<CR>
     endif
 endif
-let g:netrw_banner       = 0
-let g:netrw_liststyle    = 3
-let g:netrw_browse_split = 4
-let g:netrw_winsize      = 16
