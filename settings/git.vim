@@ -1,5 +1,5 @@
 if Installed('vim-fugitive')
-    nnoremap <M-g>s :Gstatus<Cr>
+    nnoremap <M-g>s :Git<Cr>
     nnoremap <M-g>; :Git blame<Cr>
     nnoremap <M-g>, :Git<Space>
     nnoremap <M-g>. :G
