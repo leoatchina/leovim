@@ -463,13 +463,15 @@ if Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
     nnoremap <C-p>  :CocFzfList<CR>
-    nnoremap <M-h>p :CocList<Space>
     nnoremap <M-h>. :CocFzfListResume<CR>
-    nnoremap <M-h>l :CocFzfList location<Cr>
-    nnoremap <M-k>o :CocFzfList outline<CR>
-    nnoremap <M-l>c :CocFzfList commands<Cr>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
+    nnoremap <M-h>p :CocFzfList<Space>
+    nnoremap <M-h>P :CocList<Space>
+    nnoremap <M-h>l :CocFzfList location<Cr>
+    nnoremap <Tab>y :CocFzfList yank<Cr>
+    nnoremap <M-k>o :CocFzfList outline<CR>
+    nnoremap <M-l>c :CocFzfList commands<Cr>
     " Create mappings for function text object, requires document symbols feature of languageserver.
     xmap if <Plug>(coc-funcobj-i)
     xmap af <Plug>(coc-funcobj-a)
