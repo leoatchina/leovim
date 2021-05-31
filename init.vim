@@ -1256,7 +1256,6 @@ for i in range(26)
     exec 'xnoremap <leader>yy' . l_char . ' "'. l_char . 'y'
     exec 'xnoremap <leader>yy' . u_char . ' "'. u_char . 'y'
 endfor
-
 "Yank a line without leading whitespaces and line break
 nnoremap <leader>yu mp_yg_`p
 "Copy a line without leading whitespaces and line break to clipboard
