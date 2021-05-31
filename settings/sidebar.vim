@@ -177,7 +177,7 @@ endif
 " dirdiff
 if Installed('ZFVimDirDiff')
     nnorema>d :ZFDirDiff<Space>
-    nnoremap <buffer> <M-M> :ZFDirDiffMark<Cr>
+    nnoremap <M-M> :ZFDirDiffMark<Cr>
 endif
 " AUTOClose is initialled in init.vim
 aug AUTOClose
