@@ -657,6 +657,8 @@ nmap <leader>vn vin
 nmap ,vn van
 nmap <leader>vm vim
 nmap ,vm vam
+nmap <leader>vy viy
+nmap ,vy vay
 " ------------------------
 " easymotion
 " ------------------------
@@ -1247,7 +1249,7 @@ nmap <M-o> :set nopaste! nopaste?<CR>
 for i in range(26)
     let l_char = nr2char(char2nr('a') + i)
     let u_char = nr2char(char2nr('A') + i)
-    exec 'nnoremap ,vy' . l_char . ' viw"'. l_char . 'y'
+    exec 'nnoremap ,w' . l_char . ' viw"'. l_char . 'y'
     exec 'nnoremap <leader>yy' . l_char . ' "'. l_char . 'yy'
     exec 'nnoremap <leader>yy' . u_char . ' "'. u_char . 'yy'
     exec 'xnoremap <leader>yy' . l_char . ' "'. l_char . 'y'
