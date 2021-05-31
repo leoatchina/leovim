@@ -463,13 +463,15 @@ if Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
     nnoremap <C-p>  :CocFzfList<CR>
-    nnoremap <M-h>p :CocList<Space>
     nnoremap <M-h>. :CocFzfListResume<CR>
-    nnoremap <M-h>l :CocFzfList location<Cr>
-    nnoremap <M-k>o :CocFzfList outline<CR>
-    nnoremap <M-l>c :CocFzfList commands<Cr>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
+    nnoremap <M-h>p :CocFzfList<Space>
+    nnoremap <M-h>P :CocList<Space>
+    nnoremap <M-h>l :CocFzfList location<Cr>
+    nnoremap <Tab>y :CocFzfList yank<Cr>
+    nnoremap <M-k>o :CocFzfList outline<CR>
+    nnoremap <M-l>c :CocFzfList commands<Cr>
     " Create mappings for function text object, requires document symbols feature of languageserver.
     xmap if <Plug>(coc-funcobj-i)
     xmap af <Plug>(coc-funcobj-a)
@@ -492,7 +494,7 @@ if Installed('coc.nvim')
             \ "<tab>":   "toggleSelection",
             \ "<bs>":    "gotoParent",
             \ "<cr>":    "open",
-            \ "n":       "rename",
+            \ "r":       "rename",
             \ "t":       "open:tab",
             \ "v":       "open:vsplit",
             \ "x":       "open:split",
@@ -514,7 +516,7 @@ if Installed('coc.nvim')
             \ "A":       "addDirectory",
             \ "<F1>":    "help",
             \ "H":       "toggleHidden",
-            \ "r":       "refresh",
+            \ "<F5>":    "refresh",
             \ "q":       "quit",
             \ "X":       "systemExecute",
             \ "f":       "search",
@@ -620,10 +622,12 @@ endif
 if Installed('vim-quickui')
     let g:quickui_border_style = 2
     nnoremap <leader>em :call quickui#tools#display_messages()<Cr>
-    nnoremap <silent>z] :call quickui#preview#scroll(1)<Cr>
-    nnoremap <silent>z[ :call quickui#preview#scroll(-1)<Cr>
-    nnoremap <silent>g] :call quickui#preview#scroll(5)<Cr>
-    nnoremap <silent>g[ :call quickui#preview#scroll(-5)<Cr>
+    if !has('nvim')
+        nnoremap <F13> :call quickui#preview#scroll(3)<Cr>
+        nnoremap <F14> :call quickui#preview#scroll(-3)<Cr>
+        nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? "\<F13>" : "\<C-j>"
+        nmap <silent><expr> <C-k> quickui#preview#visible() > 0 ? "\<F14>" : "\<C-k>"
+    endif
     " preview in popup
     function! s:PreviewFileW(filename) abort
         let filename = a:filename

@@ -1,5 +1,5 @@
 if Installed('vim-fugitive')
-    nnoremap <M-g>s :Gstatus<Cr>
+    nnoremap <M-g>s :Git<Cr>
     nnoremap <M-g>; :Git blame<Cr>
     nnoremap <M-g>, :Git<Space>
     nnoremap <M-g>. :G
@@ -30,20 +30,6 @@ if Installed('fzf.vim')
         nnoremap <M-g>c :FzfCommits<Cr>
         nnoremap <M-g>f :FzfGFiles?<CR>
     endif
-endif
-if Installed('vim-signify')
-    let g:signify_disable_by_default = 1
-    nnoremap <M-g>d :SignifyDiff<Cr>
-    nnoremap <M-g>i :Signify
-    nnoremap <M-g>o :SignifyToggle<Cr>
-    nmap ]c <plug>(signify-next-hunk)
-    nmap [c <plug>(signify-prev-hunk)
-    omap ic <plug>(signify-motion-inner-pending)
-    xmap ic <plug>(signify-motion-inner-visual)
-    omap ac <plug>(signify-motion-outer-pending)
-    xmap ac <plug>(signify-motion-outer-visual)
-    nmap <leader>vc vic
-    nmap ,vc        vac
 endif
 if get(g:, 'terminal_plus', '') =~ 'floaterm'
     if executable('lazygit')

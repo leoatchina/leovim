@@ -999,10 +999,10 @@ nnoremap <Tab>c    :tabclose<Cr>
 nnoremap ,q        :qall!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
 nnoremap <leader>q :q!<Cr>
+nnoremap <leader>Q :wq<Cr>
 " ------------------------
 " esc
 " ------------------------
-inoremap <C-j> <ESC>
 inoremap <M-q> <ESC>
 xnoremap <M-q> <ESC>
 cnoremap <M-q> <ESC>
@@ -1031,6 +1031,7 @@ nnoremap <silent> ,l     :tabm +1<CR>
 nnoremap <silent> ,h     :tabm -1<CR>
 nnoremap <silent> <Tab>1 :tabm 0<CR>
 nnoremap <silent> <Tab>0 :tabm<CR>
+nnoremap <Tab>M          :tabm<Space>
 nnoremap <silent><M-1> :tabn1<CR>
 nnoremap <silent><M-2> :tabn2<CR>
 nnoremap <silent><M-3> :tabn3<CR>
@@ -1912,7 +1913,7 @@ endif
 " ------------------------
 " reload config shortcut
 " ------------------------
-nnoremap \<Space> :source ~/.leovim.conf/init.vim<Cr>
+nnoremap <Leader>S :source ~/.leovim.conf/init.vim<Cr>
 " --------------------------
 " set loaded
 " --------------------------

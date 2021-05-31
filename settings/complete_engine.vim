@@ -14,9 +14,9 @@ if Installed('ultisnips')
     " remap Ultisnips for compatibility
     let g:UltiSnipsNoPythonWarning          = 1
     let g:UltiSnipsRemoveSelectModeMappings = 0
-    let g:UltiSnipsExpandTrigger            = "<Nop>"
-    let g:UltiSnipsJumpForwardTrigger       = "<C-f>"
     let g:UltiSnipsListSnippets             = "<C-l>"
+    let g:UltiSnipsExpandTrigger            = "<C-g>"
+    let g:UltiSnipsJumpForwardTrigger       = "<C-f>"
     let g:UltiSnipsJumpBackwardTrigger      = "<C-b>"
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         inoremap <c-x><c-l> <c-\><c-o>:Leaderf snippet<cr>
@@ -265,12 +265,12 @@ elseif Installed('coc.nvim')
         endif
     endfunction
     if has('nvim-0.4.0') || has('patch-8.2.0750')
-        inoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-d>"
-        inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-d>"
-        xnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-        xnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
-        nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-d>"
-        nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
+        inoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-j>"
+        inoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-j>"
+        xnoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-j>"
+        xnoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-k>"
+        nnoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-j>"
+        nnoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-k>"
     endif
     " codeaction and others
     nmap ,ca :CocFzfList actions<Cr>
@@ -414,8 +414,8 @@ elseif Installed('vim-lsp')
                     \ })
     endif
     if has('nvim-0.4.0') || has('patch-8.1.1615')
-        inoremap <buffer> <expr><C-d> lsp#scroll(+3)
-        inoremap <buffer> <expr><C-u> lsp#scroll(-3)
+        inoremap <buffer> <expr><C-j> lsp#scroll(+3)
+        inoremap <buffer> <expr><C-k> lsp#scroll(-3)
     endif
     " --------------------------
     " vim-lsp-settings
