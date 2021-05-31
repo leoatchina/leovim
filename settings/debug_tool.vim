@@ -3,8 +3,8 @@ if Installed('vimspector')
     let g:vimspector_enable_mappings = 'HUMAN'
     "  breakpoint
     nmap <silent> ,b     <Plug>VimspectorToggleBreakpoint
-    nmap <silent> ,B     :call vimspector#ClearBreakpoints()<Cr>
-    nmap <silent> <M-B>  :call vimspector#ListBreakpoints()<Cr>
+    nmap <silent> ,B     :call vimspector#ListBreakpoints()<Cr>
+    nmap <silent> ,C     :call vimspector#ClearBreakpoints()<Cr>
     nmap <silent> <F7>   <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>f <Plug>VimspectorAddFunctionBreakpoint
@@ -27,17 +27,16 @@ if Installed('vimspector')
     nnoremap <M-m>3 :call GoToVimspectorWindow('stacktrace')<Cr>
     nnoremap <M-m>4 :call GoToVimspectorWindow('code')<Cr>
     nnoremap <M-m>5 :call GoToVimspectorWindow('terminal')<Cr>
-    nnoremap <M-M>  :call vimspector#ListBreakpoints()<Cr>
     "  others
     nnoremap <M-u>; :Vimspector
     nnoremap <M-u>, :call vimspector#
     nnoremap <M-u>p :call vimspector#Pause()<Cr>
     nnoremap <M-u>q :call vimspector#Stop()<Cr>
     nnoremap <M-u>r :call vimspector#Reset()<Cr>
-    nnoremap <M-u>l :call vimspector#Launch()<Cr>
     nnoremap <M-u>u :VimspectorUpdate<Cr>
     nnoremap <M-u>e :VimspectorEval
     nnoremap <M-u>w :VimspectorWatch
+    nnoremap <M-u>l :call vimspector#Launch()<Cr>
     function! GoToVimspectorWindow(name) abort
         let windowNr = 0
         let name = a:name

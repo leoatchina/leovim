@@ -1738,7 +1738,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
         xnoremap <M-f> :WhichKeyVisual '<lt>M-f>'<Cr>
     endif
     if Installed('vimspector')
-        nnoremap <M-b> :WhichKey '<lt>M-b>'<Cr>
+        nnoremap <M-m> :WhichKey '<lt>M-m>'<Cr>
         nnoremap <M-u> :WhichKey '<lt>M-u>'<Cr>
     endif
     if Installed("vim-table-mode")
