@@ -622,6 +622,7 @@ nmap ,vl val
 " --------------------------
 " vim-visual-multi
 " --------------------------
+nnoremap <silent> c<Cr> *Ncgn
 if !exists('g:leovim_loaded') && (has('nvim') || v:version >=800)
     set rtp+=$ADDINS_PATH/vim-visual-multi
 endif
@@ -923,12 +924,10 @@ onoremap L $
 nnoremap H ^
 xnoremap H ^
 onoremap H ^
-inoremap <expr><C-e> pumvisible()? "\<ESC>a":"\<ESC>A"
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 inoremap <C-a> <Esc>I
-" search replace
-nnoremap <silent> c<Cr> *Ncgn
+inoremap <expr><C-e> pumvisible()? "\<ESC>a":"\<ESC>A"
 " ------------------------
 " nop remap
 " ------------------------
