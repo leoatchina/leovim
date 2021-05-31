@@ -165,6 +165,11 @@ if has('nvim') || has('patch-8.0.902')
     MyPlug 'mhinz/vim-signify'
 endif
 " ------------------------------
+" dirdiff
+" ------------------------------
+MyPlug 'ZSaberLv0/ZFVimDirDiff'
+MyPlug 'ZSaberLv0/ZFVimIgnore'
+" ------------------------------
 " tmux
 " ------------------------------
 if executable('tmux') && g:gui_running == 0 && (has('nvim') || has('patch-8.0.1394'))

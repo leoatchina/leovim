@@ -174,6 +174,11 @@ if Installed('vim-signify')
     nmap <leader>vc vic
     nmap ,vc        vac
 endif
+" dirdiff
+if Installed('ZFVimDirDiff')
+    nnorema>d :ZFDirDiff<Space>
+    nnoremap <buffer> <M-M> :ZFDirDiffMark<Cr>
+endif
 " AUTOClose is initialled in init.vim
 aug AUTOClose
     au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "vista" |q|endif
