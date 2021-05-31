@@ -75,7 +75,7 @@ if Installed("fzf.vim") && Installed("fzf")
     nnoremap z; :Fzf<tab><tab>
     nnoremap z, :FZF<tab>
     " locate file
-    nnoremap <M-f>l :FZFLocate<Space>
+    nnoremap <M-f>0 :FZFLocate<Space>
     if Installed('vim-yoink')
         let g:yoinkMaxItems = 100
         nmap <leader>yc :ClearYanks<Cr>
