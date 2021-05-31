@@ -39,6 +39,8 @@ if g:has_terminal > 0 && executable('python')
         au FileType python,sh,perl,javascript,lua imap <M-d> <Esc>vaB:FloatermSend<Cr>j:call search('# %%', 'eW')<Cr>j
         if executable('ipython')
             au FileType python nnoremap <leader>rr :FloatermNew ipython --no-autoindent<Cr>
+        else
+            au FileType python nnoremap <leader>rr :FloatermNew python<Cr>
         endif
     " vim-repl only for vim8+
     elseif v:version >= 800 && !has('nvim')
