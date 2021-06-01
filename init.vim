@@ -1225,7 +1225,7 @@ nnoremap <silent> m<Space> :call Delmarks()<cr>
 " basic toggle and show
 " ------------------------
 nnoremap <leader>b :ls<CR>
-nnoremap <leader>R :registers<Cr>
+nnoremap <M-w>r :registers<Cr>
 nnoremap <M-w>n :set nonu! nonu?<CR>
 nnoremap <M-w>i :set invrelativenumber<CR>
 nnoremap <M-w>f :set nofoldenable! nofoldenable?<CR>
