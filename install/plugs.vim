@@ -279,6 +279,7 @@ if v:version >= 801 || has('nvim')
     MyPlug 'lambdalisue/fern-hijack.vim'
     MyPlug 'lambdalisue/fern-git-status.vim'
     MyPlug 'lambdalisue/fern-mapping-git.vim'
+    MyPlug 'yuki-yano/fern-preview.vim'
     if !WINDOWS()
         MyPlug 'LumaKernel/fern-mapping-fzf.vim'
     endif
