@@ -1678,9 +1678,6 @@ source $SETTINGS_PATH/symbol_tool.vim
 source $SETTINGS_PATH/debug_tool.vim
 " sidebar
 source $SETTINGS_PATH/sidebar.vim
-" language support
-source $SETTINGS_PATH/R.vim
-source $SETTINGS_PATH/markdown.vim
 " scheme
 source $SETTINGS_PATH/schemes.vim
 " searchindex

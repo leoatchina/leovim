@@ -52,37 +52,37 @@ if Installed("Nvim-R")
                 \ 'close': 'ToggleObjBrw'
                 \ }
 
-    au FileType r nnoremap <silent> <M-T> :call sidebar#toggle('robjb')<CR>
-    au FileType r nnoremap <M-A>  :ToggleEnvLib<Cr>
-    au FileType r nnoremap <M-d>  :call SendFunctionToR('echo', "down")<CR>
-    au FileType r nnoremap <M-e>  :call SendLineToR("down")<CR>
-    au FileType r xnoremap <M-e>  :call SendLineToR("down")<CR>
-    au FileType r nnoremap <leader>rs :call RClearConsole()<Cr>
-    au FileType r nnoremap <leader>rS :call RClearAll()<Cr>
+    nnoremap <silent> <M-T> :call sidebar#toggle('robjb')<CR>
+    nnoremap <M-A>  :ToggleEnvLib<Cr>
+    nnoremap <M-d>  :call SendFunctionToR('echo', "down")<CR>
+    nnoremap <M-e>  :call SendLineToR("down")<CR>
+    xnoremap <M-e>  :call SendLineToR("down")<CR>
+    nnoremap <leader>rs :call RClearConsole()<Cr>
+    nnoremap <leader>rS :call RClearAll()<Cr>
     " start nvimr
-    au FileType r nnoremap <leader>R :call StartR('R')<Cr>
-    au FileType r nnoremap ,R        :call StartR('custom')<Cr>
-    au FileType r nnoremap <leader>S :RStop<Cr>
+    nnoremap <leader>R :call StartR('R')<Cr>
+    nnoremap ,R        :call StartR('custom')<Cr>
+    nnoremap <leader>S :RStop<Cr>
     " run r script
     if get(g:, 'terminal_plus', '') =~ 'floaterm'
-        au FileType r nnoremap <M-R> :AsyncRun! -mode=term -pos=floaterm Rscript %
+        nnoremap <M-R> :AsyncRun! -mode=term -pos=floaterm Rscript %
     elseif g:has_terminal > 0
-        au FileType r nnoremap <M-R> :AsyncRun! -mode=term -pos=tab -focus=1 Rscript %
+        nnoremap <M-R> :AsyncRun! -mode=term -pos=tab -focus=1 Rscript %
     else
-        au FileType r nnoremap <M-R> :AsyncRun! Rscript %
+        nnoremap <M-R> :AsyncRun! Rscript %
     endif
     if g:has_terminal > 0
-        au FileType r nnoremap <leader>rt :AsyncRun! -mode=term -pos=tab -focus=1 Rscript %
+        nnoremap <leader>rt :AsyncRun! -mode=term -pos=tab -focus=1 Rscript %
     endif
     if get(g:, 'terminal_plus', '') =~ 'floaterm'
-        au FileType r nnoremap <leader>rf :AsyncRun! -mode=term -pos=floaterm Rscript %
+        nnoremap <leader>rf :AsyncRun! -mode=term -pos=floaterm Rscript %
     endif
-    au FileType r nnoremap <leader>rr :AsyncRun! Rscript %
-    au FileType r nnoremap <leader>rb :call SendAboveLinesToR()<CR>
-    au FileType r nnoremap <leader>re VG:call SendLineToR('down')<CR>
-    au FileType r nnoremap <leader>ri :call SendLineToRAndInsertOutput()<CR>0
-    au FileType r nnoremap <leader>rt :call RAction('viewobj')<CR>
-    au FileType r nnoremap <leader>rc :call MovePosRCodeComment('normal')<CR>
+    nnoremap <leader>rr :AsyncRun! Rscript %
+    nnoremap <leader>rb :call SendAboveLinesToR()<CR>
+    nnoremap <leader>re VG:call SendLineToR('down')<CR>
+    nnoremap <leader>ri :call SendLineToRAndInsertOutput()<CR>0
+    nnoremap <leader>rt :call RAction('viewobj')<CR>
+    nnoremap <leader>rc :call MovePosRCodeComment('normal')<CR>
     if $TMUX != '' && get(g:, '', '') == ''
         let R_in_buffer     = 0
         let R_externam_term = 'tilix -a session-add-down -e'
