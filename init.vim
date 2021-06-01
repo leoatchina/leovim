@@ -1267,8 +1267,10 @@ nnoremap <leader>yf :let @*=expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
 "Copy bookmark position reference
 nnoremap <leader>yb :let @*=expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark  copied=-'<cr>'
 " cd git project root
-command! CDR cd %:h | cd `git rev-parse --show-toplevel`
-nnoremap <leader>cr :CDR<CR>
+if executable('git')
+    command! CDR cd %:h | cd `git rev-parse --show-toplevel`
+    nnoremap <leader>cr :CDR<CR>
+endif
 " cd module root
 command! CDM cd %:h | exec 'cd' fnameescape(fnamemodify(findfile("pom.xml", escape(expand('%:p:h'), ' ') . ";"), ':h'))
 nnoremap <leader>cm :CDM<CR>
