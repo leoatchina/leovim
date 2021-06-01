@@ -657,6 +657,8 @@ nmap <leader>vn vin
 nmap ,vn van
 nmap <leader>vm vim
 nmap ,vm vam
+nmap <leader>vy viy
+nmap ,vy vay
 " ------------------------
 " easymotion
 " ------------------------
@@ -1247,13 +1249,13 @@ nmap <M-o> :set nopaste! nopaste?<CR>
 for i in range(26)
     let l_char = nr2char(char2nr('a') + i)
     let u_char = nr2char(char2nr('A') + i)
-    exec 'nnoremap ,vy' . l_char . ' viw"'. l_char . 'y'
+    exec 'nnoremap <leader>Y' . l_char . ' viw"'. l_char . 'y'
+    exec 'nnoremap <leader>Y' . u_char . ' viw"'. u_char . 'y'
     exec 'nnoremap <leader>yy' . l_char . ' "'. l_char . 'yy'
     exec 'nnoremap <leader>yy' . u_char . ' "'. u_char . 'yy'
     exec 'xnoremap <leader>yy' . l_char . ' "'. l_char . 'y'
     exec 'xnoremap <leader>yy' . u_char . ' "'. u_char . 'y'
 endfor
-
 "Yank a line without leading whitespaces and line break
 nnoremap <leader>yu mp_yg_`p
 "Copy a line without leading whitespaces and line break to clipboard
@@ -1265,8 +1267,10 @@ nnoremap <leader>yf :let @*=expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
 "Copy bookmark position reference
 nnoremap <leader>yb :let @*=expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark  copied=-'<cr>'
 " cd git project root
-command! CDR cd %:h | cd `git rev-parse --show-toplevel`
-nnoremap <leader>cr :CDR<CR>
+if executable('git')
+    command! CDR cd %:h | cd `git rev-parse --show-toplevel`
+    nnoremap <leader>cr :CDR<CR>
+endif
 " cd module root
 command! CDM cd %:h | exec 'cd' fnameescape(fnamemodify(findfile("pom.xml", escape(expand('%:p:h'), ' ') . ";"), ':h'))
 nnoremap <leader>cm :CDM<CR>
@@ -1738,7 +1742,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
         xnoremap <M-f> :WhichKeyVisual '<lt>M-f>'<Cr>
     endif
     if Installed('vimspector')
-        nnoremap <M-b> :WhichKey '<lt>M-b>'<Cr>
+        nnoremap <M-m> :WhichKey '<lt>M-m>'<Cr>
         nnoremap <M-u> :WhichKey '<lt>M-u>'<Cr>
     endif
     if Installed("vim-table-mode")

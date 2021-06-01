@@ -1,1 +1,1 @@
-nnoremap <buffer> <M-M> :<C-u>ZFDirDiffMark <C-r><C-l><CR>
+nnoremap <buffer> <M-M> :ZFDirDiffMark<Cr>
