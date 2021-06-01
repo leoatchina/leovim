@@ -37,8 +37,6 @@ if Installed("fzf.vim") && Installed("fzf")
     let g:fzf_buffers_jump = 1
     " [[B]Commits] Customize the options used by 'git log':
     let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
-    " [Tags] Command to generate tags fil
-    let g:fzf_tags_command = 'ctags -R'
     " [Commands] --expect expression for directly executing the command
     let g:fzf_commands_expect = 'alt-enter'
     function! s:build_quickfix_list(lines)
@@ -281,13 +279,6 @@ if Installed("fzf.vim") && Installed("fzf")
 endif
 if get(g:, 'fuzzy_finder', '') == 'leaderf'
     au FileType leaderf set nonu
-    if executable('ctags')
-        if WINDOWS()
-            let g:Lf_Ctags = "ctags"
-        else
-            let g:Lf_Ctags = "ctags 2>/dev/null"
-        endif
-    endif
     let g:Lf_DefaultMode       = 'Fuzzy'
     let g:Lf_ReverseOrder      = 0
     let g:Lf_NoChdir           = 1
@@ -335,8 +326,6 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap <M-h>. :Leaderf --recall<Cr>
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
     nnoremap <M-h>m :Leaderf mru<Cr>
-    nnoremap <M-k>b :Leaderf bufTag<cr>
-    nnoremap <M-k>t :Leaderf bufTag --all<cr>
     " replace origin command
     nnoremap <M-w>s :Leaderf colorscheme<Cr>
     nnoremap <M-w>t :Leaderf filetype<Cr>
@@ -445,7 +434,6 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap <M-h>m   :FZFMru<CR>
     nnoremap <M-k>l   :FZFBLines<CR>
     nnoremap <M-k>m   :FzfLines<CR>
-    nnoremap <M-k>b   :FzfBTags<CR>
     " helptags
     if executable('perl')
         nnoremap q<Space> :FzfHelptags<CR>

@@ -234,11 +234,22 @@ else
     let g:symbol_tool = ''
 endif
 if Installed("LeaderF")
-    nnoremap t<Cr> :Leaderf tag<Cr>
-    nnoremap f<Cr> :Leaderf function --fullScreen<Cr>
-    nnoremap q<Cr> :Leaderf function --fullScreen --all<Cr>
+    if executable('ctags')
+        if WINDOWS()
+            let g:Lf_Ctags = "ctags"
+        else
+            let g:Lf_Ctags = "ctags 2>/dev/null"
+        endif
+    endif
+    nnoremap t<Cr>  :Leaderf tag<Cr>
+    nnoremap f<Cr>  :Leaderf function --fullScreen<Cr>
+    nnoremap q<Cr>  :Leaderf function --fullScreen --all<Cr>
+    nnoremap <M-k>b :Leaderf bufTag<cr>
+    nnoremap <M-k>t :Leaderf bufTag --all<cr>
 elseif Installed('fzf.vim')
-    nnoremap t<cr> :FZFTags<CR>
+    let g:fzf_tags_command = 'ctags -R'
+    nnoremap t<cr>  :FZFTags<CR>
+    nnoremap <M-k>b :FzfBTags<CR>
     if Installed('fzf-funky')
         nnoremap f<Cr> :FzfFunky<Cr>
     endif
