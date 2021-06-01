@@ -233,3 +233,13 @@ if len(g:plugs_symbol) > 0
 else
     let g:symbol_tool = ''
 endif
+if Installed("LeaderF")
+    nnoremap t<Cr> :Leaderf tag<Cr>
+    nnoremap f<Cr> :Leaderf function --fullScreen<Cr>
+    nnoremap q<Cr> :Leaderf function --fullScreen --all<Cr>
+elseif Installed('fzf.vim')
+    nnoremap t<cr> :FZFTags<CR>
+    if Installed('fzf-funky')
+        nnoremap f<Cr> :FzfFunky<Cr>
+    endif
+endif

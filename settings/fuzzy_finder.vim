@@ -329,9 +329,6 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap s<space>  :Leaderf searchHistory<Cr>
     nnoremap <Tab>f  :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
     nnoremap <S-Tab> :CloseQuickfix<Cr>:Leaderf loclist<Cr>
-    nnoremap t<Cr>  :Leaderf tag<Cr>
-    nnoremap f<Cr>  :Leaderf function<Cr>
-    nnoremap q<Cr>  :Leaderf function --all<Cr>
     nnoremap <M-h>p :Leaderf<Space>
     nnoremap <M-h>; :Leaderf --next<Cr>
     nnoremap <M-h>, :Leaderf --previous<Cr>
@@ -441,7 +438,6 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     xnoremap \| <ESC>:FZFBLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :FzfLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap t<cr>    :FZFTags<CR>
     nnoremap <Tab>f   :CloseQuickfix<Cr>:FZFQuickFix<CR>
     nnoremap <S-tab>  :CloseQuickfix<Cr>:FZFLocList<CR>
     nnoremap s<space> :FZFHistory/<CR>
@@ -453,10 +449,6 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     " helptags
     if executable('perl')
         nnoremap q<Space> :FzfHelptags<CR>
-    endif
-    " fzf-funky
-    if Installed('fzf-funky')
-        nnoremap f<Cr> :FzfFunky<Cr>
     endif
 endif
 if Installed('coc.nvim')
