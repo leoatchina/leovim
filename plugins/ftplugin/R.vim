@@ -57,12 +57,12 @@ if Installed("Nvim-R")
     nnoremap <M-d>  :call SendFunctionToR('echo', "down")<CR>
     nnoremap <M-e>  :call SendLineToR("down")<CR>
     xnoremap <M-e>  :call SendLineToR("down")<CR>
-    nnoremap <leader>rs :call RClearConsole()<Cr>
-    nnoremap <leader>rS :call RClearAll()<Cr>
+    nnoremap <leader>rc :call RClearConsole()<Cr>
+    nnoremap <leader>rC :call RClearAll()<Cr>
     " start nvimr
-    nnoremap <leader>R :call StartR('R')<Cr>
-    nnoremap ,R        :call StartR('custom')<Cr>
-    nnoremap <leader>S :RStop<Cr>
+    nnoremap <leader>rr :call StartR('R')<Cr>
+    nnoremap <leader>rs :call StartR('custom')<Cr>
+    nnoremap <leader>S  :RStop<Cr>
     " run r script
     if get(g:, 'terminal_plus', '') =~ 'floaterm'
         nnoremap <M-R> :AsyncRun! -mode=term -pos=floaterm Rscript %
@@ -82,7 +82,6 @@ if Installed("Nvim-R")
     nnoremap <leader>re VG:call SendLineToR('down')<CR>
     nnoremap <leader>ri :call SendLineToRAndInsertOutput()<CR>0
     nnoremap <leader>rt :call RAction('viewobj')<CR>
-    nnoremap <leader>rc :call MovePosRCodeComment('normal')<CR>
     if $TMUX != '' && get(g:, '', '') == ''
         let R_in_buffer     = 0
         let R_externam_term = 'tilix -a session-add-down -e'
