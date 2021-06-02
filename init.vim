@@ -1666,7 +1666,7 @@ if executable('git')
     source $SETTINGS_PATH/git.vim
 endif
 " --------------------------
-" common addvanced settings
+" addvanced settings
 " --------------------------
 source $SETTINGS_PATH/fuzzy_finder.vim
 source $SETTINGS_PATH/tree_browser.vim
@@ -1676,11 +1676,8 @@ source $SETTINGS_PATH/run_tool.vim
 source $SETTINGS_PATH/lint_tool.vim
 source $SETTINGS_PATH/symbol_tool.vim
 source $SETTINGS_PATH/debug_tool.vim
-" compare
 source $SETTINGS_PATH/compare.vim
-" sidebar
 source $SETTINGS_PATH/sidebar.vim
-" scheme
 source $SETTINGS_PATH/schemes.vim
 " searchindex
 try
