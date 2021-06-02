@@ -4,8 +4,8 @@
 if v:version < 703 && !has('nvim')
     echoe 'If vim, to use leovim config vim 7.3 is at least required.'
     finish
-elseif !has('nvim-0.4.4') && has('nvim')
-    echoe 'If neovim, to use leovim config neovim 0.4.4 is at least required.'
+elseif !has('nvim-0.4.3') && has('nvim')
+    echoe 'If neovim, to use leovim config neovim 0.4.3 is at least required.'
     finish
 else
     " set rtp
