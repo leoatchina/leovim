@@ -164,7 +164,7 @@ if Installed('vim-signify')
     let g:signify_disable_by_default = 1
     nnoremap \<Cr>    :SignifyDiff<Cr>
     nnoremap \<Tab>   :SignifyToggle<Cr>
-    nnoremap \<Space> :Signify
+    nnoremap \<Space> :Signify<Tab>
     nmap ]c <plug>(signify-next-hunk)
     nmap [c <plug>(signify-prev-hunk)
     omap ic <plug>(signify-motion-inner-pending)
