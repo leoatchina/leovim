@@ -445,7 +445,7 @@ if Installed('coc.nvim')
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
-    if Iinstalled('LeaderF')
+    if Installed('LeaderF')
         nnoremap <M-h>p :CocFzfList<Space>
         nnoremap <M-h>P :CocList<Space>
     else
