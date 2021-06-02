@@ -11,7 +11,9 @@ nmap <silent> <buffer> r <Plug>(fern-action-rename)
 nmap <silent> <buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
 nmap <silent> <buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
 " preview
-nmap <silent> <buffer> p <Plug>(fern-action-preview:auto:toggle)
+nmap <silent> <buffer> <expr>     <Plug>(fern-quit-or-close-preview) fern_preview#smart_preview("\<Plug>(fern-action-preview:close)", ":q\<CR>")
+nmap <silent> <buffer> q          <Plug>(fern-quit-or-close-preview)
+nmap <silent> <buffer> p          <Plug>(fern-action-preview:auto:toggle)
 nmap <silent> <buffer> <Tab>      <Plug>(fern-action-preview:toggle)
 nmap <silent> <buffer> <Tab><Tab> <Plug>(fern-action-preview:toggle)
 " dirdiff

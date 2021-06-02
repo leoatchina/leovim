@@ -242,8 +242,8 @@ if Installed("LeaderF")
         endif
     endif
     nnoremap t<Cr>  :Leaderf tag<Cr>
-    nnoremap f<Cr>  :Leaderf function --fullScreen<Cr>
-    nnoremap q<Cr>  :Leaderf function --fullScreen --all<Cr>
+    nnoremap f<Cr>  :Leaderf function<Cr>
+    nnoremap q<Cr>  :Leaderf function --all<Cr>
     nnoremap <M-k>b :Leaderf bufTag<cr>
     nnoremap <M-k>t :Leaderf bufTag --all<cr>
 elseif Installed('fzf.vim')
