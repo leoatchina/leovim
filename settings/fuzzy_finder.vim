@@ -320,7 +320,6 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap s<space>  :Leaderf searchHistory<Cr>
     nnoremap <Tab>f  :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
     nnoremap <S-Tab> :CloseQuickfix<Cr>:Leaderf loclist<Cr>
-    nnoremap <M-h>p :Leaderf<Space>
     nnoremap <M-h>; :Leaderf --next<Cr>
     nnoremap <M-h>, :Leaderf --previous<Cr>
     nnoremap <M-h>. :Leaderf --recall<Cr>
@@ -446,8 +445,13 @@ if Installed('coc.nvim')
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
-    nnoremap <M-h>p :CocFzfList<Space>
-    nnoremap <M-h>P :CocList<Space>
+    if Iinstalled('LeaderF')
+        nnoremap <M-h>p :CocFzfList<Space>
+        nnoremap <M-h>P :CocList<Space>
+    else
+        nnoremap <M-F>  :CocFzfList<Space>
+        nnoremap <M-h>p :CocList<Space>
+    endif
     nnoremap <M-h>l :CocFzfList location<Cr>
     nnoremap <Tab>y :CocFzfList yank<Cr>
     nnoremap <M-k>o :CocFzfList outline<CR>
@@ -541,7 +545,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap <M-h>p         :CtrlP<tab>
+    nnoremap <M-F>          :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
         nnoremap <silent> <leader>i :CtrlPYankring<Cr>
