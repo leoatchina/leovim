@@ -1676,6 +1676,8 @@ source $SETTINGS_PATH/run_tool.vim
 source $SETTINGS_PATH/lint_tool.vim
 source $SETTINGS_PATH/symbol_tool.vim
 source $SETTINGS_PATH/debug_tool.vim
+" compare
+source $SETTINGS_PATH/compare.vim
 " sidebar
 source $SETTINGS_PATH/sidebar.vim
 " scheme
