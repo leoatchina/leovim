@@ -925,6 +925,7 @@ cnoremap <C-e> <End>
 inoremap <C-a> <Esc>I
 inoremap <expr><C-e> pumvisible()? "\<ESC>a":"\<ESC>A"
 inoremap <C-f> <ESC>A
+inoremap <M-f> <ESC>A
 nnoremap <C-f> $
 xnoremap <C-f> $
 onoremap <C-f> $
@@ -932,6 +933,7 @@ nnoremap L     $
 xnoremap L     $
 onoremap L     $
 inoremap <C-b> <ESC>I
+inoremap <M-F> <ESC>I
 nnoremap <C-b> ^
 xnoremap <C-b> ^
 onoremap <C-b> ^
