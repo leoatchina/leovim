@@ -13,13 +13,13 @@ if Installed('vim-fugitive')
 elseif &rtp =~ 'asyncrun' && WINDOWS()
     nnoremap <M-G>  :AsyncRun -mode=external git status<Space>
     nnoremap <M-g>, :AsyncRun -mode=external git<Space>
-    nnoremap <M-g>m :AsyncRun -mode=external git commit -a -m<Space>"
+    nnoremap <M-g>m :AsyncRun -mode=external git commit -a -m<Space>
     nnoremap <M-g>u :AsyncRun -mode=external git push<Cr>
     nnoremap <M-g>U :AsyncRun -mode=external git push<Space>
 elseif &rtp =~ 'asyncrun' && g:has_terminal > 0
     nnoremap <M-G>  :AsyncRun -mode=term -focus=1 git status<Cr>
     nnoremap <M-g>, :AsyncRun -mode=term -focus=1 git<Space>
-    nnoremap <M-g>m :AsyncRun -mode=term -focus=1 git commit -a -m<Space>"
+    nnoremap <M-g>m :AsyncRun -mode=term -focus=1 git commit -a -m<Space>
     nnoremap <M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
     nnoremap <M-g>U :AsyncRun -mode=term -focus=1 git push<Space>
 else
