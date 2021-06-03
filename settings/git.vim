@@ -1,5 +1,5 @@
 if Installed('vim-fugitive')
-    nnoremap <M-g>s :Git<Cr>
+    nnoremap <M-G>  :Git<Cr>
     nnoremap <M-g>; :Git blame<Cr>
     nnoremap <M-g>, :Git<Space>
     nnoremap <M-g>. :G
@@ -9,20 +9,25 @@ if Installed('vim-fugitive')
     " compare with history version
     let g:fugitive_summary_format = "%as-[%an]: %s"
     nnoremap <M-g>h :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<cr>
-    nnoremap <M-g>c 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
+    nnoremap <M-g>d 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
+elseif &rtp =~ 'asyncrun' && WINDOWS()
+    nnoremap <M-G>  :AsyncRun -mode=external git status<Space>
+    nnoremap <M-g>, :AsyncRun -mode=external git<Space>
+    nnoremap <M-g>m :AsyncRun -mode=external git commit -a -m<Space>"
+    nnoremap <M-g>u :AsyncRun -mode=external git push<Cr>
+    nnoremap <M-g>U :AsyncRun -mode=external git push<Space>
 elseif &rtp =~ 'asyncrun' && g:has_terminal > 0
-    nnoremap <M-g>s :AsyncRun -mode=term -focus=1 git status<Cr>
+    nnoremap <M-G>  :AsyncRun -mode=term -focus=1 git status<Cr>
     nnoremap <M-g>, :AsyncRun -mode=term -focus=1 git<Space>
     nnoremap <M-g>m :AsyncRun -mode=term -focus=1 git commit -a -m<Space>"
     nnoremap <M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
     nnoremap <M-g>U :AsyncRun -mode=term -focus=1 git push<Space>
 else
-    nnoremap <M-g>s :!git status<Cr>
+    nnoremap <M-G>  :!git status<Cr>
     nnoremap <M-g>, :!git<Space>
     nnoremap <M-g>m :!git commit -a -m<Space>"
     nnoremap <M-g>u :!git push<Cr>
     nnoremap <M-g>U :!git push<Space>
-    nnoremap <M-G>  :!git<Space>
 endif
 if Installed('fzf.vim')
     if Installed('coc.nvim') && WINDOWS()

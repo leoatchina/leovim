@@ -125,15 +125,6 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
     if get(g:, 'has_terminal', 0) == 0 || !exists('g:plugs')
         nnoremap <silent> <Tab>q :AsyncStop!<Cr>:ToggleQuickfix<CR>
     endif
-    if executable('git')
-        if WINDOWS()
-            nnoremap <M-G> :AsyncRun -mode=external git<Space>
-        elseif g:has_terminal > 0
-            nnoremap <M-G> :AsyncRun -mode=term -focus=1 git<Space>
-        else
-            nnoremap <M-G> :AsyncRun! -focus=1 git<Space>
-        endif
-    endif
     let $PYTHONUNBUFFERED=1
     let g:asyncrun_rootmarks = ['.root', '.git', '.svn', '.hg']
     au BufEnter * if (winnr("$") == 1 && exists("AsyncRun!")) | q | endif
