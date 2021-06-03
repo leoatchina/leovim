@@ -16,7 +16,7 @@ elseif &rtp =~ 'asyncrun' && WINDOWS()
     nnoremap <M-g>m :AsyncRun -mode=external git commit -a -m<Space>
     nnoremap <M-g>u :AsyncRun -mode=external git push<Cr>
     nnoremap <M-g>U :AsyncRun -mode=external git push<Space>
-elseif &rtp =~ 'asyncrun' && g:has_terminal > 0
+elseif &rtp =~ 'asyncrun' && get(g:, "has_terminal", 0) > 0
     nnoremap <M-G>  :AsyncRun -mode=term -focus=1 git status<Cr>
     nnoremap <M-g>, :AsyncRun -mode=term -focus=1 git<Space>
     nnoremap <M-g>m :AsyncRun -mode=term -focus=1 git commit -a -m<Space>
