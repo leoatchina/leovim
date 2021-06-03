@@ -930,6 +930,8 @@ cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 inoremap <C-a> <Esc>I
 inoremap <expr><C-e> pumvisible()? "\<ESC>a":"\<ESC>A"
+inoremap <M-f> <ESC>A
+inoremap <M-g> <ESC>I
 " ------------------------
 " nop remap
 " ------------------------
@@ -1005,7 +1007,9 @@ cnoremap <M-q> <ESC>
 nnoremap <C-s> :update!<CR>
 inoremap <C-s> <ESC>:update!<Cr>
 nnoremap <M-s> :w!<CR>
+inoremap <M-s> <ESC>:w!<CR>
 nnoremap <M-S> :wa!<CR>
+inoremap <M-S> <ESC>:wa!<CR>
 " ------------------------
 " page manage
 " ------------------------

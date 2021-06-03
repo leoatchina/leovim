@@ -20,7 +20,6 @@ if Installed('ultisnips')
     let g:UltiSnipsJumpBackwardTrigger      = "<C-b>"
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         inoremap <c-x><c-l> <c-\><c-o>:Leaderf snippet<cr>
-        inoremap <M-s> <c-\><c-o>:Leaderf snippet<cr>
     endif
     " Ulti 的代码片段的文件夹
     let g:UltiSnipsSnippetsDir        = $HOME.'/.leovim.plug/ultisnips'
@@ -34,6 +33,19 @@ elseif Installed('neosnippet')
     smap <C-f> <Plug>(neosnippet_jump_or_expand)
 else
     let g:complete_sinippet = ''
+endif
+if Installed('fzf') && Installed('fzf.vim')
+    if executable('rg') && !WINDOWS()
+        imap <expr> <c-x><c-j> fzf#vim#complete(fzf#wrap({
+                    \ 'prefix': '^.*$',
+                    \ 'source': 'rg -n ^ --color always',
+                    \ 'options': '--ansi --delimiter : --nth 3..',
+                    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}
+                    \ ))
+    else
+        imap <c-x><c-j> <plug>(fzf-complete-line)
+    endif
+    imap <c-x><c-f> <plug>(fzf-complete-path)
 endif
 " --------------------------
 " Snippet Tab
