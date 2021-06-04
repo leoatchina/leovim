@@ -4,8 +4,8 @@
 if v:version < 703 && !has('nvim')
     echoe 'If vim, to use leovim config vim 7.3 is at least required.'
     finish
-elseif !has('nvim-0.4.4') && has('nvim')
-    echoe 'If neovim, to use leovim config neovim 0.4.4 is at least required.'
+elseif !has('nvim-0.4.3') && has('nvim')
+    echoe 'If neovim, to use leovim config neovim 0.4.3 is at least required.'
     finish
 else
     " set rtp
@@ -622,6 +622,7 @@ nmap ,vl val
 " --------------------------
 " vim-visual-multi
 " --------------------------
+nnoremap <silent> c<Cr> *Ncgn
 if !exists('g:leovim_loaded') && (has('nvim') || v:version >=800)
     set rtp+=$ADDINS_PATH/vim-visual-multi
 endif
@@ -656,6 +657,8 @@ nmap <leader>vn vin
 nmap ,vn van
 nmap <leader>vm vim
 nmap ,vm vam
+nmap <leader>vy viy
+nmap ,vy vay
 " ------------------------
 " easymotion
 " ------------------------
@@ -921,22 +924,22 @@ cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 inoremap <C-a> <Esc>I
 inoremap <expr><C-e> pumvisible()? "\<ESC>a":"\<ESC>A"
+inoremap <C-f> <ESC>A
+inoremap <M-f> <ESC>A
 nnoremap <C-f> $
 xnoremap <C-f> $
 onoremap <C-f> $
 nnoremap L     $
 xnoremap L     $
 onoremap L     $
-inoremap <C-f> <ESC>A
+inoremap <C-b> <ESC>I
+inoremap <M-F> <ESC>I
 nnoremap <C-b> ^
 xnoremap <C-b> ^
 onoremap <C-b> ^
 nnoremap H     ^
 xnoremap H     ^
 onoremap H     ^
-inoremap <C-b> <ESC>I
-" search replace
-nnoremap <silent> c<Cr> *Ncgn
 " ------------------------
 " nop remap
 " ------------------------
@@ -1012,7 +1015,9 @@ cnoremap <M-q> <ESC>
 nnoremap <C-s> :update!<CR>
 inoremap <C-s> <ESC>:update!<Cr>
 nnoremap <M-s> :w!<CR>
+inoremap <M-s> <ESC>:w!<CR>
 nnoremap <M-S> :wa!<CR>
+inoremap <M-S> <ESC>:wa!<CR>
 " ------------------------
 " page manage
 " ------------------------
@@ -1232,7 +1237,7 @@ nnoremap <silent> m<Space> :call Delmarks()<cr>
 " basic toggle and show
 " ------------------------
 nnoremap <leader>b :ls<CR>
-nnoremap <leader>R :registers<Cr>
+nnoremap <M-w>r :registers<Cr>
 nnoremap <M-w>n :set nonu! nonu?<CR>
 nnoremap <M-w>i :set invrelativenumber<CR>
 nnoremap <M-w>f :set nofoldenable! nofoldenable?<CR>
@@ -1256,13 +1261,13 @@ nmap <M-o> :set nopaste! nopaste?<CR>
 for i in range(26)
     let l_char = nr2char(char2nr('a') + i)
     let u_char = nr2char(char2nr('A') + i)
-    exec 'nnoremap ,vy' . l_char . ' viw"'. l_char . 'y'
+    exec 'nnoremap <leader>Y' . l_char . ' viw"'. l_char . 'y'
+    exec 'nnoremap <leader>Y' . u_char . ' viw"'. u_char . 'y'
     exec 'nnoremap <leader>yy' . l_char . ' "'. l_char . 'yy'
     exec 'nnoremap <leader>yy' . u_char . ' "'. u_char . 'yy'
     exec 'xnoremap <leader>yy' . l_char . ' "'. l_char . 'y'
     exec 'xnoremap <leader>yy' . u_char . ' "'. u_char . 'y'
 endfor
-
 "Yank a line without leading whitespaces and line break
 nnoremap <leader>yu mp_yg_`p
 "Copy a line without leading whitespaces and line break to clipboard
@@ -1274,8 +1279,10 @@ nnoremap <leader>yf :let @*=expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
 "Copy bookmark position reference
 nnoremap <leader>yb :let @*=expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark  copied=-'<cr>'
 " cd git project root
-command! CDR cd %:h | cd `git rev-parse --show-toplevel`
-nnoremap <leader>cr :CDR<CR>
+if executable('git')
+    command! CDR cd %:h | cd `git rev-parse --show-toplevel`
+    nnoremap <leader>cr :CDR<CR>
+endif
 " cd module root
 command! CDM cd %:h | exec 'cd' fnameescape(fnamemodify(findfile("pom.xml", escape(expand('%:p:h'), ' ') . ";"), ':h'))
 nnoremap <leader>cm :CDM<CR>
@@ -1671,7 +1678,7 @@ if executable('git')
     source $SETTINGS_PATH/git.vim
 endif
 " --------------------------
-" common addvanced settings
+" addvanced settings
 " --------------------------
 source $SETTINGS_PATH/fuzzy_finder.vim
 source $SETTINGS_PATH/tree_browser.vim
@@ -1681,12 +1688,8 @@ source $SETTINGS_PATH/run_tool.vim
 source $SETTINGS_PATH/lint_tool.vim
 source $SETTINGS_PATH/symbol_tool.vim
 source $SETTINGS_PATH/debug_tool.vim
-" sidebar
+source $SETTINGS_PATH/compare.vim
 source $SETTINGS_PATH/sidebar.vim
-" language support
-source $SETTINGS_PATH/R.vim
-source $SETTINGS_PATH/markdown.vim
-" scheme
 source $SETTINGS_PATH/schemes.vim
 " searchindex
 try
@@ -1747,7 +1750,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
         xnoremap <M-f> :WhichKeyVisual '<lt>M-f>'<Cr>
     endif
     if Installed('vimspector')
-        nnoremap <M-b> :WhichKey '<lt>M-b>'<Cr>
+        nnoremap <M-m> :WhichKey '<lt>M-m>'<Cr>
         nnoremap <M-u> :WhichKey '<lt>M-u>'<Cr>
     endif
     if Installed("vim-table-mode")
@@ -1897,23 +1900,23 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 endfunc
 if executable('idea')
     command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
-    nnoremap <leader>eI :OpenFileLinkInIdea<cr>
-    nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap ,eI :OpenFileLinkInIdea<cr>
+    nnoremap ,ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('pycharm')
     command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
-    nnoremap <leader>eP :OpenFileLinkInPycharm<cr>
-    nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap ,eP :OpenFileLinkInPycharm<cr>
+    nnoremap ,ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('code')
     command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
-    nnoremap <leader>eV :OpenFileLinkInVscode<cr>
-    nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
+    nnoremap ,eV :OpenFileLinkInVscode<cr>
+    nnoremap ,ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
 endif
 " ------------------------
 " reload config shortcut
 " ------------------------
-nnoremap \<Space> :source ~/.leovim.conf/init.vim<Cr>
+nnoremap ,<space> :source ~/.leovim.conf/init.vim<Cr>
 " --------------------------
 " set loaded
 " --------------------------

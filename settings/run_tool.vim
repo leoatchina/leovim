@@ -28,7 +28,7 @@ nnoremap <silent> <tab><space> :CloseQuickfix<Cr>
 " --------------------------
 " repl tool
 " --------------------------
-au FileType python,sh,perl,javascript,lua imap <M-y> # %% ##############  ##############<C-o>F<space>
+au FileType python,sh,perl,javascript,lua imap <M-y> #<Space>%%
 if g:has_terminal > 0 && executable('python')
     if has('nvim') && get(g:, 'terminal_plus', '') =~ 'floaterm'
         au FileType python,sh,perl,javascript,lua xmap <M-e> :FloatermSend<Cr>j
@@ -39,6 +39,8 @@ if g:has_terminal > 0 && executable('python')
         au FileType python,sh,perl,javascript,lua imap <M-d> <Esc>vaB:FloatermSend<Cr>j:call search('# %%', 'eW')<Cr>j
         if executable('ipython')
             au FileType python nnoremap <leader>rr :FloatermNew ipython --no-autoindent<Cr>
+        else
+            au FileType python nnoremap <leader>rr :FloatermNew python<Cr>
         endif
     " vim-repl only for vim8+
     elseif v:version >= 800 && !has('nvim')
@@ -122,15 +124,6 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
     nnoremap <Tab>a :AsyncRun!
     if get(g:, 'has_terminal', 0) == 0 || !exists('g:plugs')
         nnoremap <silent> <Tab>q :AsyncStop!<Cr>:ToggleQuickfix<CR>
-    endif
-    if executable('git')
-        if WINDOWS()
-            nnoremap <M-G> :AsyncRun -mode=external git<Space>
-        elseif g:has_terminal > 0
-            nnoremap <M-G> :AsyncRun -mode=term -focus=1 git<Space>
-        else
-            nnoremap <M-G> :AsyncRun! -focus=1 git<Space>
-        endif
     endif
     let $PYTHONUNBUFFERED=1
     let g:asyncrun_rootmarks = ['.root', '.git', '.svn', '.hg']

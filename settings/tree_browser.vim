@@ -4,22 +4,6 @@
 if Installed('fern.vim')
     let g:tree_browser = 'fern'
     let g:fern#renderer#default#leaf_symbol = ' '
-    function! s:init_fern() abort
-        " Use 'select' instead of 'edit' for default 'open' action
-        set nonu
-        nmap <buffer> <Plug>(fern-action-open) <Plug>(fern-action-open:select)
-        nmap <buffer> v <Plug>(fern-action-open:vsplit)
-        nmap <buffer> x <Plug>(fern-action-open:split)
-        nmap <buffer> t <Plug>(fern-action-open:tabedit)
-        nmap <buffer> V <Plug>(fern-action-open:edit/vsplit)
-        nmap <buffer> X <Plug>(fern-action-open:edit/split)
-        nmap <buffer> T <Plug>(fern-action-open:edit/tabedit)
-        nmap <buffer> r <Plug>(fern-action-rename)
-    endfunction
-    augroup init_fern
-        autocmd! *
-        autocmd FileType fern call s:init_fern()
-    augroup END
     nnoremap <silent> <leader>N :Fern . -drawer -reveal=%<Cr>
     nnoremap <silent> <leader>O :Fern . -reveal=%<Cr>
     nnoremap <tab>n :Fern -drawer -stay -toggle<Space>
@@ -65,8 +49,6 @@ else
         endif
     endfunction
     command! ToggleNetrw call ToggleNetrw()
-    au FileType netrw nmap <buffer> <C-l> <Nop>
-    au FileType netrw nmap <buffer> <M-r> <Plug>NetrwFresh
     if !Installed('sidebar.vim')
         nnoremap <leader>n :ToggleNetrw<CR>
     endif

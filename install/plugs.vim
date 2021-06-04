@@ -165,6 +165,11 @@ if has('nvim') || has('patch-8.0.902')
     MyPlug 'mhinz/vim-signify'
 endif
 " ------------------------------
+" dirdiff
+" ------------------------------
+MyPlug 'ZSaberLv0/ZFVimDirDiff'
+MyPlug 'ZSaberLv0/ZFVimIgnore'
+" ------------------------------
 " tmux
 " ------------------------------
 if executable('tmux') && g:gui_running == 0 && (has('nvim') || has('patch-8.0.1394'))
@@ -274,6 +279,7 @@ if v:version >= 801 || has('nvim')
     MyPlug 'lambdalisue/fern-hijack.vim'
     MyPlug 'lambdalisue/fern-git-status.vim'
     MyPlug 'lambdalisue/fern-mapping-git.vim'
+    MyPlug 'yuki-yano/fern-preview.vim'
     if !WINDOWS()
         MyPlug 'LumaKernel/fern-mapping-fzf.vim'
     endif

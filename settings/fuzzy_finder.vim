@@ -37,8 +37,6 @@ if Installed("fzf.vim") && Installed("fzf")
     let g:fzf_buffers_jump = 1
     " [[B]Commits] Customize the options used by 'git log':
     let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
-    " [Tags] Command to generate tags fil
-    let g:fzf_tags_command = 'ctags -R'
     " [Commands] --expect expression for directly executing the command
     let g:fzf_commands_expect = 'alt-enter'
     function! s:build_quickfix_list(lines)
@@ -56,26 +54,13 @@ if Installed("fzf.vim") && Installed("fzf")
     nmap m<tab> <plug>(fzf-maps-n)
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
-    imap <c-x><c-f> <plug>(fzf-complete-path)
-    if executable('rg') && !WINDOWS()
-        imap <expr> <c-x><c-j> fzf#vim#complete(fzf#wrap({
-                    \ 'prefix': '^.*$',
-                    \ 'source': 'rg -n ^ --color always',
-                    \ 'options': '--ansi --delimiter : --nth 3..',
-                    \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}
-                    \ ))
-    else
-        imap <c-x><c-j> <plug>(fzf-complete-line)
-    endif
-    imap <M-w> <c-x><c-j>
-    imap <M-f> <c-x><c-f>
     " ----------------------
     " short cuts for fzf
     " ----------------------
     nnoremap z; :Fzf<tab><tab>
     nnoremap z, :FZF<tab>
     " locate file
-    nnoremap <M-f>l :FZFLocate<Space>
+    nnoremap <M-f>0 :FZFLocate<Space>
     if Installed('vim-yoink')
         let g:yoinkMaxItems = 100
         nmap <leader>yc :ClearYanks<Cr>
@@ -281,13 +266,6 @@ if Installed("fzf.vim") && Installed("fzf")
 endif
 if get(g:, 'fuzzy_finder', '') == 'leaderf'
     au FileType leaderf set nonu
-    if executable('ctags')
-        if WINDOWS()
-            let g:Lf_Ctags = "ctags"
-        else
-            let g:Lf_Ctags = "ctags 2>/dev/null"
-        endif
-    endif
     let g:Lf_DefaultMode       = 'Fuzzy'
     let g:Lf_ReverseOrder      = 0
     let g:Lf_NoChdir           = 1
@@ -329,17 +307,11 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap s<space>  :Leaderf searchHistory<Cr>
     nnoremap <Tab>f  :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
     nnoremap <S-Tab> :CloseQuickfix<Cr>:Leaderf loclist<Cr>
-    nnoremap t<Cr>  :Leaderf tag<Cr>
-    nnoremap f<Cr>  :Leaderf function<Cr>
-    nnoremap q<Cr>  :Leaderf function --all<Cr>
-    nnoremap <M-h>p :Leaderf<Space>
     nnoremap <M-h>; :Leaderf --next<Cr>
     nnoremap <M-h>, :Leaderf --previous<Cr>
     nnoremap <M-h>. :Leaderf --recall<Cr>
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
     nnoremap <M-h>m :Leaderf mru<Cr>
-    nnoremap <M-k>b :Leaderf bufTag<cr>
-    nnoremap <M-k>t :Leaderf bufTag --all<cr>
     " replace origin command
     nnoremap <M-w>s :Leaderf colorscheme<Cr>
     nnoremap <M-w>t :Leaderf filetype<Cr>
@@ -441,7 +413,6 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     xnoremap \| <ESC>:FZFBLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :FzfLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap t<cr>    :FZFTags<CR>
     nnoremap <Tab>f   :CloseQuickfix<Cr>:FZFQuickFix<CR>
     nnoremap <S-tab>  :CloseQuickfix<Cr>:FZFLocList<CR>
     nnoremap s<space> :FZFHistory/<CR>
@@ -449,14 +420,9 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap <M-h>m   :FZFMru<CR>
     nnoremap <M-k>l   :FZFBLines<CR>
     nnoremap <M-k>m   :FzfLines<CR>
-    nnoremap <M-k>b   :FzfBTags<CR>
     " helptags
     if executable('perl')
         nnoremap q<Space> :FzfHelptags<CR>
-    endif
-    " fzf-funky
-    if Installed('fzf-funky')
-        nnoremap f<Cr> :FzfFunky<Cr>
     endif
 endif
 if Installed('coc.nvim')
@@ -466,8 +432,13 @@ if Installed('coc.nvim')
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
-    nnoremap <M-h>p :CocFzfList<Space>
-    nnoremap <M-h>P :CocList<Space>
+    if Installed('LeaderF')
+        nnoremap <M-h>p :CocFzfList<Space>
+        nnoremap <M-h>P :CocList<Space>
+    else
+        nnoremap <M-F>  :CocFzfList<Space>
+        nnoremap <M-h>p :CocList<Space>
+    endif
     nnoremap <M-h>l :CocFzfList location<Cr>
     nnoremap <Tab>y :CocFzfList yank<Cr>
     nnoremap <M-k>o :CocFzfList outline<CR>
@@ -561,7 +532,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap <M-h>p         :CtrlP<tab>
+    nnoremap <M-F>          :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
         nnoremap <silent> <leader>i :CtrlPYankring<Cr>
@@ -638,3 +609,61 @@ if Installed('vim-quickui')
     nnoremap ,<Tab> :PreviewFileW<Space>
     au FileType python nnoremap K :call quickui#tools#python_help("")<Cr>
 endif
+
+" ########## Diff Option ##########{{{
+try
+    set diffopt+=context:20
+    set diffopt+=internal,algorithm:patience
+    let g:diff_algorithms = [
+                \ "myers",
+                \ "minimal",
+                \ "patience",
+                \ "histogram",
+                \ ]
+    let g:diff_algorithm = "patience"
+
+    func! DiffSwitchAlgorithm()
+        let l:total_diff_algos = len(g:diff_algorithms)
+        let l:i = 0
+        while l:i < l:total_diff_algos && g:diff_algorithms[l:i] !=# g:diff_algorithm
+            let l:i += 1
+        endwhile
+        if l:i < l:total_diff_algos
+            let g:diff_algorithm = g:diff_algorithms[(l:i + 1) % l:total_diff_algos]
+        else
+            let g:diff_algorithm = "patience"
+        endif
+        for l:algo in g:diff_algorithms
+            exec "set diffopt-=algorithm:" . l:algo
+        endfor
+        exec "set diffopt+=algorithm:" . g:diff_algorithm
+        echo "Diff algorithm switched to " . g:diff_algorithm
+        windo diffupdate
+    endfunc
+
+    func! DiffUpdateContext(contextLines)
+        let l:opt = substitute(&diffopt, '\v(^\|,)context:\d+', '', 'g') . ",context:" . a:contextLines
+        exec "set diffopt=" . l:opt
+        windo diffupdate
+    endfunc
+
+    func! DiffToggleWhiteSpace()
+        if stridx(&diffopt, "iwhite") >= 0
+            set diffopt-=iwhite
+            echo "Not ignoring whitespaces in diff"
+        else
+            set diffopt+=iwhite
+            echo "Whitespaces ignored in diff"
+        endif
+        windo diffupdate
+    endfunc
+
+    command! DiffSwitchAlgorithm call DiffSwitchAlgorithm()
+    command! DiffToggleWhiteSpace call DiffToggleWhiteSpace()
+    command! -nargs=1 DiffUpdateContext call DiffUpdateContext(<f-args>)
+    nnoremap <M-h>ds :DiffSwitchAlgorithm<Cr>
+    nnoremap <M-h>dt :DiffToggleWhiteSpace<Cr>
+    nnoremap <M-h>du :DiffUpdateContext<Space>
+catch
+    " pass
+endtry

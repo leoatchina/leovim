@@ -1,13 +1,3 @@
-" conflict-marker
-if Installed('conflict-marker.vim')
-    let g:conflict_marker_enable_mappings = 0
-    nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
-    nnoremap <leader>co :ConflictMarkerOurselves<Cr>
-    nnoremap <leader>ce :ConflictMarkerNone<Cr>
-    nnoremap <leader>cb :ConflictMarkerBoth<Cr>
-    nnoremap <leader>cn :ConflictMarkerNextHunk<Cr>
-    nnoremap <leader>cp :ConflictMarkerPrevHunk<Cr>
-endif
 " sidebar
 if Installed('vim-sidebar-manager')
     let g:sidebars = {}
@@ -159,7 +149,7 @@ else
         nnoremap <leader>t :TagbarToggle<Cr>
     endif
 endif
-" AUTOClose is initied in init.vim
+" AUTOClose is initialled in init.vim
 aug AUTOClose
     au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "vista" |q|endif
     au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "coc-explorer"|q|endif
