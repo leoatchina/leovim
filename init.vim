@@ -608,7 +608,7 @@ if v:version >= 704 || has('nvim')
     nmap <leader>vb viB
     nmap ,vb vaB
 endif
-nmap g0 viio<C-[>^
+nmap gb viio<C-[>^
 nmap <leader>vi vii
 nmap ,vi vai
 nmap <leader>va via
