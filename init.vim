@@ -608,7 +608,7 @@ if v:version >= 704 || has('nvim')
     nmap <leader>vb viB
     nmap ,vb vaB
 endif
-nmap g0 viio<C-[>^
+nmap gb viio<C-[>^
 nmap <leader>vi vii
 nmap ,vi vai
 nmap <leader>va via
@@ -1736,6 +1736,8 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     xnoremap <Tab>   :WhichKeyVisual '<lt>Tab>'<Cr>
     xnoremap [       :WhichKeyVisual '['<Cr>
     xnoremap ]       :WhichKeyVisual ']'<Cr>
+    " g
+    nnoremap g1 :WhichKey 'g'<Cr>
     " M- keys
     nnoremap <M-g> :WhichKey '<lt>M-g>'<Cr>
     nnoremap <M-h> :WhichKey '<lt>M-h>'<Cr>
