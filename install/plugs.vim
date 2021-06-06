@@ -274,7 +274,7 @@ endif
 " ------------------------------
 " tree_browser
 " ------------------------------
-if v:version >= 801 || has('nvim')
+if v:version >= 801 || has('nvim') || get(g:, 'complete_engine', '') == 'coc' && get(g:, 'tree_browser', '') != 'coc'
     MyPlug 'lambdalisue/fern.vim'
     MyPlug 'lambdalisue/fern-hijack.vim'
     MyPlug 'lambdalisue/fern-git-status.vim'

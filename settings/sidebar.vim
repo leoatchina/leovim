@@ -41,15 +41,6 @@ if Installed('vim-sidebar-manager')
     " tree_browser
     " =====================
     if get(g:, 'tree_browser', '') == 'coc'
-        function! CocBrowser(type) abort
-            if a:type == 1
-                exec("CocCommand explorer --no-toggle --width 30")
-            else
-                exec("CocCommand explorer --toggle")
-            endif
-        endfunction
-        command! CocBrowserOpen  call CocBrowser(1)
-        command! CocBrowserClose call CocBrowser(0)
         let g:sidebars.tree_browser = {
                     \ 'position': 'left',
                     \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ "coc\-explorer"},
