@@ -285,22 +285,6 @@ if v:version >= 801 || has('nvim')
     endif
 endif
 " ------------------------------
-" undotool
-" ------------------------------
-if has("persistent_undo") && g:has_lambda > 0
-    if g:python_version >= 2.4
-        let g:mundo_width = 60
-        let g:mundo_preview_height = 20
-        let g:mundo_right = 1
-        MyPlug 'simnalamburt/vim-mundo'
-    else
-        let g:undotree_SetFocusWhenToggle = 1
-        let g:undotree_CustomUndotreeCmd = 'vertical 60 new'
-        let g:undotree_CustomDiffpanelCmd = 'belowright 15 new'
-        MyPlug 'mbbill/undotree'
-    endif
-endif
-" ------------------------------
 " projectionist
 " ------------------------------
 MyPlug 'tpope/vim-projectionist'
@@ -365,4 +349,20 @@ if HasPlug('writing')
     nnoremap <tab>p :Pangu<tab>
 else
     nnoremap = <Nop>
+endif
+" ------------------------------
+" undotool
+" ------------------------------
+if has("persistent_undo") && g:has_lambda > 0 && (HasPlug('undotool') || HasPlug('undo_tool'))
+    if g:python_version >= 2.4
+        let g:mundo_width = 60
+        let g:mundo_preview_height = 20
+        let g:mundo_right = 1
+        MyPlug 'simnalamburt/vim-mundo'
+    else
+        let g:undotree_SetFocusWhenToggle = 1
+        let g:undotree_CustomUndotreeCmd = 'vertical 60 new'
+        let g:undotree_CustomDiffpanelCmd = 'belowright 15 new'
+        MyPlug 'mbbill/undotree'
+    endif
 endif
