@@ -219,8 +219,8 @@ if get(g:, 'has_terminal', 0) > 0
     if has('nvim') || g:has_terminal == 2
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/vim-terminal-help
+            let g:terminal_plus = 'help'
         endif
-        let g:terminal_plus = 'help'
         if get(g:, 'terminal_shell', '') == ''
             if WINDOWS()
                 let g:terminal_shell = 'cmd'
@@ -254,6 +254,10 @@ if get(g:, 'has_terminal', 0) > 0
         autocmd User Startified setlocal buflisted
         if !exists('g:leovim_loaded')
             set rtp+=$ADDINS_PATH/vim-floaterm
+            let g:floaterm_keymap_new   = '<Nop>'
+            let g:floaterm_keymap_prev  = '<M-{>'
+            let g:floaterm_keymap_next  = '<M-}>'
+            let g:floaterm_open_command = 'drop'
         endif
         nnoremap <M-h>t :FloatermNew! --height=0.8 --width=0.8 --position=center<Cr>
         if get(g:, 'terminal_plus', '') == ''
@@ -272,10 +276,6 @@ if get(g:, 'has_terminal', 0) > 0
         nnoremap <M-h>n   :FloatermNew<Space>
         nnoremap <silent> <M-=> :FloatermToggle<CR>
         tnoremap <silent> <M-=> <C-\><C-n>:FloatermToggle<CR>
-        let g:floaterm_keymap_new    = '<Nop>'
-        let g:floaterm_keymap_prev   = '<M-{>'
-        let g:floaterm_keymap_next   = '<M-}>'
-        let g:floaterm_open_command  = 'drop'
     endif
 endif
 " --------------------------
@@ -417,11 +417,11 @@ nmap <M-W> <Plug>(choosewin)
 " ------------------------
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/winresizer
+    let g:winresizer_enable        = 1
+    let g:winresizer_gui_enable    = 1
+    let g:winresizer_start_key     = "-"
+    let g:winresizer_gui_start_key = "-"
 endif
-let g:winresizer_enable        = 1
-let g:winresizer_gui_enable    = 1
-let g:winresizer_start_key     = "-"
-let g:winresizer_gui_start_key = "-"
 try
     let g:has_winnr = winnr('h') || 1
     " 判断方向上有没有窗口
@@ -507,9 +507,6 @@ nnoremap <Tab>L <C-w>L
 nnoremap <Tab>t <C-w>T
 nnoremap <Tab>v :vsplit<Space>
 nnoremap <Tab>x :split<Space>
-" open window in tab
-nnoremap <leader><Tab> :tabe<Space>
-nnoremap <leader><Cr>  :e!<Cr>
 " ------------------------
 " textobj
 " ------------------------
@@ -628,8 +625,8 @@ nmap ,vl val
 nnoremap <silent> c<Cr> *Ncgn
 if !exists('g:leovim_loaded') && (has('nvim') || v:version >=800)
     set rtp+=$ADDINS_PATH/vim-visual-multi
+    let g:VM_custom_remaps = {'<c-j>': '<ESC>', '<c-k>': 'q', '<c-h>': 'Q'}
 endif
-let g:VM_custom_remaps = {'<c-j>': '<ESC>', '<c-k>': 'q', '<c-h>': 'Q'}
 " --------------------------
 " surround
 " --------------------------
@@ -667,12 +664,12 @@ nmap ,vy vay
 " ------------------------
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easymotion
+    let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;23456789'
 endif
 nnoremap <silent> gj j
 nnoremap <silent> gk k
 nnoremap <silent> j gj
 nnoremap <silent> k gk
-let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;23456789'
 map  ,. <Plug>(easymotion-repeat)
 map  ,; <Plug>(easymotion-next)
 map  ,, <Plug>(easymotion-prev)
@@ -690,8 +687,8 @@ nmap s<Tab> <Plug>(easymotion-bd-jk)
 " ------------------------
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/clever-f.vim
+    let g:clever_f_smart_case = 1
 endif
-let g:clever_f_smart_case = 1
 nmap ;     <Plug>(clever-f-repeat-forward)
 nmap <M-z> <Plug>(clever-f-repeat-back)
 xmap ;     <Plug>(clever-f-repeat-forward)
@@ -1060,6 +1057,9 @@ inoremap <silent><M-7> <ESC>:tabn7<CR>
 inoremap <silent><M-8> <ESC>:tabn8<CR>
 inoremap <silent><M-9> <ESC>:tabn9<CR>
 inoremap <silent><M-0> <ESC>:tablast<CR>
+" open window in tab
+nnoremap <leader><Tab> :tabe<Space>
+nnoremap <leader><Cr>  :e!<Cr>
 " make tabline in terminal mode
 function! Vim_NeatTabLine()
     let s = ''
@@ -1466,10 +1466,10 @@ inoremap <silent><M-Z> <ESC>l:call Tools_PreviousCursor(5)<Cr>
 " --------------------------
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-cycle
+    let g:cycle_no_mappings   = 1
+    let g:cycle_max_conflict  = 1
+    let g:cycle_phased_search = 1
 endif
-let g:cycle_no_mappings   = 1
-let g:cycle_max_conflict  = 1
-let g:cycle_phased_search = 1
 nmap <silent> <leader>a <Plug>CycleNext
 xmap <silent> <leader>a <Plug>CycleNext
 nmap <silent> <leader>x <Plug>CyclePrev
@@ -1524,16 +1524,16 @@ let g:cycle_default_groups = [
 " --------------------------
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/indentLine/after
+    let g:indentLine_color_dark      = 1 " (default: 2)
+    let g:indentLine_color_tty_light = 7 " (default: 4)
+    let g:indentLine_enabled         = 0
+    let g:indentLine_color_term      = 239
+    let g:indentLine_bgcolor_term    = 202
+    let g:indentLine_color_gui       = '#A4E57E'
+    let g:indentLine_bgcolor_gui     = '#FF5F00'
+    let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 endif
 nnoremap <M-h>i :IndentLinesToggle<Cr>
-let g:indentLine_color_dark      = 1 " (default: 2)
-let g:indentLine_color_tty_light = 7 " (default: 4)
-let g:indentLine_enabled         = 0
-let g:indentLine_color_term      = 239
-let g:indentLine_bgcolor_term    = 202
-let g:indentLine_color_gui       = '#A4E57E'
-let g:indentLine_bgcolor_gui     = '#FF5F00'
-let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 " --------------------------
 " TMUX config
 " --------------------------
@@ -1544,8 +1544,8 @@ elseif &ttimeoutlen > 60 || &ttimeoutlen <= 0
 endif
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-tmux-navigator
+    let g:tmux_navigator_no_mappings = 1
 endif
-let g:tmux_navigator_no_mappings = 1
 nnoremap <silent><M-H> :TmuxNavigateLeft<cr>
 nnoremap <silent><M-L> :TmuxNavigateRight<cr>
 nnoremap <silent><M-J> :TmuxNavigateDown<cr>
@@ -1559,8 +1559,8 @@ inoremap <silent><M-K> <ESC>:TmuxNavigateUp<cr>
 " --------------------------
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-plug
+    let g:plug_threads = 8
 endif
-let g:plug_threads = 8
 " --------------------------
 " begin of vim-plug
 " --------------------------
