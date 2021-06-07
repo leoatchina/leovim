@@ -990,7 +990,7 @@ endfunction
 xnoremap <silent> * :<C-u>call EscapedSearch()<CR>/<C-R>=@/<CR><CR>N
 xnoremap <silent> # :<C-u>call EscapedSearch()<CR>?<C-R>=@/<CR><CR>N
 xnoremap g; y:<C-u>%s/<C-R>"/
-xnoremap g0 y/<C-R>"
+xnoremap g/ y/<C-R>"
 " ------------------------
 " quit
 " ------------------------
