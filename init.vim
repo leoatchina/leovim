@@ -397,11 +397,14 @@ endif
 " ------------------------
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easy-align
+    let g:easy_align_delimiters = {}
+    let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
 endif
 xmap <M-a> <Plug>(EasyAlign)
 nmap <M-a> <Plug>(EasyAlign)
-let g:easy_align_delimiters = {}
-let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
+xmap g= <M-a>*=
+xmap g, <M-a>*,
+xmap g<space> <M-a>*<space>
 " ------------------------
 " choosewin
 " ------------------------
