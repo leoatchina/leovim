@@ -262,6 +262,7 @@ endif
 " ------------------------------
 if v:version >= 800 || has('nvim')
     MyPlug 'tmsvg/pear-tree'
+    let g:pear_tree_repeatable_expand = 0
 endif
 " ------------------------------
 " grep_tool
