@@ -147,8 +147,8 @@ if Installed('vim-easycomplete')
     nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
-    imap <silent><expr> <C-n> pumvisible()? "\<Down>" : "\<c-n>"
-    imap <silent><expr> <C-p> pumvisible()? "\<Up>"   : "\<c-p>"
+    inoremap <silent><expr> <C-n> pumvisible()? "\<Down>" : "\<c-n>"
+    inoremap <silent><expr> <C-p> pumvisible()? "\<Up>"   : "\<c-p>"
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
