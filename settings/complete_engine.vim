@@ -147,6 +147,8 @@ if Installed('vim-easycomplete')
     nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
+    imap <silent><expr> <C-n> pumvisible()? "\<Down>" : "\<c-n>"
+    imap <silent><expr> <C-p> pumvisible()? "\<Up>"   : "\<c-p>"
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
@@ -454,7 +456,7 @@ endif
 """"""""""""""""""""
 " APC settings
 """"""""""""""""""""
-if get(g:, 'complete_engine', '') != ''
+if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'ECM'
     if get(g:, 'complete_engine', '') == 'apc'
         let g:apc_enable_ft = get(g:, 'apc_enable_ft', {'*':1})
     else
@@ -609,9 +611,9 @@ if get(g:, 'complete_engine', '') != ''
     inoremap <silent><expr> <Down>     pumvisible()? "\<C-n>":                  "\<Down>"
     inoremap <silent><expr> <PageUp>   pumvisible()? "\<PageUp>\<C-p>\<C-n>":   "\<PageUp>"
     inoremap <silent><expr> <PageDown> pumvisible()? "\<PageDown>\<C-n>\<C-p>": "\<PageDown>"
-    if get(g:, 'complete_engine', '') =~ "YCM" || get(g:, 'complete_engine', '') == "vim-lsp"
-        imap <expr><Cr> pumvisible()? "\<C-[>a":"\<CR>"
-    else
+    if get(g:, 'complete_engine', '') == "coc" || get(g:, 'complete_engine', '') == "apc"
         imap <expr><Cr> pumvisible()? "\<C-e>" :"\<CR>"
+    else
+        imap <expr><Cr> pumvisible()? "\<C-[>a":"\<CR>"
     endif
 endif
