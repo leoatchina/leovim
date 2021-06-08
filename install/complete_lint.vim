@@ -18,7 +18,7 @@ if HasPlug('no-complete')
 elseif HasPlug('apc')
     let g:complete_engine = "apc"
 elseif HasPlug('ECM')
-    if has('nvim') || v:version >= 802
+    if !WINDOWS() && (has('nvim') || v:version >= 802)
         let g:complete_engine = "ECM"
     else
         echoe "Cannot install ECM/easycomplete, smart select a complete_engine."
@@ -63,7 +63,7 @@ else
     let s:smart_engine_select = 1
 endif
 if get(s:, 'smart_engine_select', 0) == 1
-    if has('nvim') || v:version >= 802
+    if !WINDOWS() && (has('nvim') || v:version >= 802)
         let g:complete_engine = "ECM"
     elseif has('nvim') || v:version >= 800
         let g:complete_engine = "vim-lsp"

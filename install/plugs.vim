@@ -131,9 +131,9 @@ if get(g:, 'has_truecolor', 0)
     MyPlug 'sainnhe/gruvbox-material'
     " others
     MyPlug 'ayu-theme/ayu-vim'
-    MyPlug 'wadackel/vim-dogrun'
     MyPlug 'mhartington/oceanic-next'
     MyPlug 'ghifarit53/tokyonight-vim'
+    MyPlug 'bluz71/vim-nightfly-guicolors'
     MyPlug 'embark-theme/vim', {'as': 'embark', 'dir': '~/.leovim.plug/embark'}
 endif
 " ------------------------------

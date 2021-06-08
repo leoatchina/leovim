@@ -158,8 +158,8 @@ function! UpdateLightline() abort
             let g:lightline.colorscheme = 'sonokai'
         elseif g:colors_name == 'OceanicNext'
             let g:lightline.colorscheme = 'oceanicnext'
-        elseif g:colors_name == 'dogrun'
-            let g:lightline.colorscheme = 'dogrun'
+        elseif g:colors_name == 'nightfly'
+            let g:lightline.colorscheme = 'nightfly'
         elseif g:colors_name == 'hybrid'
             let g:lightline.colorscheme = 'nord'
         else
