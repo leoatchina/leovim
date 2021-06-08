@@ -63,9 +63,7 @@ else
     let s:smart_engine_select = 1
 endif
 if get(s:, 'smart_engine_select', 0) == 1
-    if !WINDOWS() && (has('nvim') || v:version >= 802)
-        let g:complete_engine = "ECM"
-    elseif has('nvim') || v:version >= 800
+    if has('nvim') || v:version >= 800
         let g:complete_engine = "vim-lsp"
     else
         let g:complete_engine = "apc"

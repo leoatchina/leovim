@@ -54,7 +54,8 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
+" if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
+if get(g:, 'complete_engine', '') != 'ECM'
     function! Snippet_Tab() abort
         if pumvisible()
             if get(g:, "complete_snippet", '') == 'ultisnips'
@@ -141,14 +142,13 @@ let g:ycm_filetype_blacklist = {
     \ 'json':         1,
     \ 'log':          1,
     \ }
-if Installed('vim-easycomplete')
+if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
     let g:easycomplete_tab_trigger = "<tab>"
-    let g:easycomplete_scheme      = "sharp"
     nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
-    inoremap <silent><expr> <C-n> pumvisible()? "\<Down>" : "\<c-n>"
-    inoremap <silent><expr> <C-p> pumvisible()? "\<Up>"   : "\<c-p>"
+    imap <silent><expr> <C-n> get(g:, "easycomplete_popup_win", 0) > 0 ? "\<Nop>" : "\<c-n>"
+    imap <silent><expr> <C-p> get(g:, "easycomplete_popup_win", 0) > 0 ? "\<Nop>" : "\<c-p>"
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
@@ -456,7 +456,7 @@ endif
 """"""""""""""""""""
 " APC settings
 """"""""""""""""""""
-if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'ECM'
+if get(g:, 'complete_engine', '') != ''
     if get(g:, 'complete_engine', '') == 'apc'
         let g:apc_enable_ft = get(g:, 'apc_enable_ft', {'*':1})
     else
