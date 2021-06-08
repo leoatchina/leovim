@@ -392,8 +392,8 @@ if !exists('g:leovim_loaded')
 endif
 xmap <M-a> <Plug>(EasyAlign)
 nmap <M-a> <Plug>(EasyAlign)
-xmap g= <M-a>*=
-xmap g, <M-a>*,
+xmap ga       <M-a>*=
+xmap g,       <M-a>*,
 xmap g<space> <M-a>*<space>
 " ------------------------
 " choosewin
