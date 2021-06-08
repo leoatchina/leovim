@@ -155,6 +155,9 @@ elseif has('nvim')
 else
     let g:gui_running = 0
 endif
+function! UNIX() abort
+    return (LINUX() || MACOS) && g:gui_running == 0
+endfunction
 " --------------------------
 " leader key
 " --------------------------
@@ -199,19 +202,6 @@ if get(g:, 'has_terminal', 0) > 0
         else
             nnoremap <Tab>m :tab terminal<Cr>bash<Cr>
         endif
-    endif
-    if g:has_terminal == 2
-        tnoremap <C-w><C-w> <C-_><C-w>
-        tnoremap <silent><M-H> <C-_>:TmuxNavigateLeft<cr>
-        tnoremap <silent><M-L> <C-_>:TmuxNavigateRight<cr>
-        tnoremap <silent><M-J> <C-_>:TmuxNavigateDown<cr>
-        tnoremap <silent><M-K> <C-_>:TmuxNavigateUp<cr>
-    else
-        tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
-        tnoremap <silent><M-H> <C-\><C-n>:TmuxNavigateLeft<cr>
-        tnoremap <silent><M-L> <C-\><C-n>:TmuxNavigateRight<cr>
-        tnoremap <silent><M-J> <C-\><C-n>:TmuxNavigateDown<cr>
-        tnoremap <silent><M-K> <C-\><C-n>:TmuxNavigateUp<cr>
     endif
     " --------------------------
     " terminal-help
@@ -343,7 +333,7 @@ if WINDOWS()
         nnoremap <silent> <M-+> :call SetAlpha(5)<Cr>
         nnoremap <silent> <M-_> :call SetAlpha(-5)<Cr>
     endif
-elseif !CYGWIN()
+elseif UNIX()
     if $PATH !~ 'addins'
         let $PATH = $ADDINS_PATH . "/bin:" . $PATH
     endif
@@ -1347,7 +1337,7 @@ au VimEnter,BufNewFile,BufRead *.pandoc set filetype=pandoc
 au VimEnter,BufNewFile,BufRead *.coffee set filetype=coffee
 au VimEnter,BufNewFile,BufRead *.conf.template set filetype=nginx
 au VimEnter,BufNewFile,BufRead *.vimrc*,*.vim set filetype=vim
-au VimEnter,BufNewFile,BufRead *.tmux.conf,*.tmux.conf.* set filetype=tmux
+au VimEnter,BufNewFile,BufRead *.tmux.conf set filetype=tmux
 au VimEnter,BufNewFile,BufRead *.ts,*.vue set filetype=typescript
 au VimEnter,BufNewFile,BufRead *.R,*.Rnw,*.Rd set filetype=r
 au VimEnter,BufNewFile,BufRead *.md,*.markdown,*readme*,*.Rmd set filetype=markdown
@@ -1547,6 +1537,7 @@ if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-tmux-navigator
     let g:tmux_navigator_no_mappings = 1
 endif
+" NOTE, no need of installed tmux
 nnoremap <silent><M-H> :TmuxNavigateLeft<cr>
 nnoremap <silent><M-L> :TmuxNavigateRight<cr>
 nnoremap <silent><M-J> :TmuxNavigateDown<cr>
@@ -1555,6 +1546,19 @@ inoremap <silent><M-H> <ESC>:TmuxNavigateLeft<cr>
 inoremap <silent><M-L> <ESC>:TmuxNavigateRight<cr>
 inoremap <silent><M-J> <ESC>:TmuxNavigateDown<cr>
 inoremap <silent><M-K> <ESC>:TmuxNavigateUp<cr>
+if g:has_terminal == 2
+    tnoremap <C-w><C-w> <C-_><C-w>
+    tnoremap <silent><M-H> <C-_>:TmuxNavigateLeft<cr>
+    tnoremap <silent><M-L> <C-_>:TmuxNavigateRight<cr>
+    tnoremap <silent><M-J> <C-_>:TmuxNavigateDown<cr>
+    tnoremap <silent><M-K> <C-_>:TmuxNavigateUp<cr>
+elseif g:has_terminal == 1
+    tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
+    tnoremap <silent><M-H> <C-\><C-n>:TmuxNavigateLeft<cr>
+    tnoremap <silent><M-L> <C-\><C-n>:TmuxNavigateRight<cr>
+    tnoremap <silent><M-J> <C-\><C-n>:TmuxNavigateDown<cr>
+    tnoremap <silent><M-K> <C-\><C-n>:TmuxNavigateUp<cr>
+endif
 " --------------------------
 " vim-plug
 " --------------------------
