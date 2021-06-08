@@ -24,6 +24,13 @@ elseif HasPlug('ECM')
         echoe "Cannot install ECM/easycomplete, smart select a complete_engine."
         let s:smart_engine_select = 1
     endif
+elseif HasPlug('vim-lsp')
+    if has('nvim') || v:version >= 800
+        let g:complete_engine = "vim-lsp"
+    else
+        echoe "Cannot install vim-lsp, smart select a complete_engine."
+        let s:smart_engine_select = 1
+    endif
 elseif HasPlug('YCM')
     if (has('nvim-0.4.4') || v:version >= 800) && g:python_version > 3.5
         if WINDOWS() && isdirectory(get(g:, 'ycm_install_path'), '')
@@ -52,21 +59,14 @@ elseif HasPlug('coc') && executable('node') && executable('npm')
         echoe "Cannot install coc, smart select a complete_engine."
         let s:smart_engine_select = 1
     endif
-elseif HasPlug('vim-lsp')
-    if has('nvim') || v:version >= 800
-        let g:complete_engine = "vim-lsp"
-    else
-        echoe "Cannot install vim-lsp, smart select a complete_engine."
-        let s:smart_engine_select = 1
-    endif
 else
     let s:smart_engine_select = 1
 endif
 if get(s:, 'smart_engine_select', 0) == 1
     if has('nvim') || v:version >= 802
         let g:complete_engine = "ECM"
-    " elseif has('nvim') || v:version >= 800
-    "     let g:complete_engine = "vim-lsp"
+    elseif has('nvim') || v:version >= 800
+        let g:complete_engine = "vim-lsp"
     else
         let g:complete_engine = "apc"
     endif
