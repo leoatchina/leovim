@@ -65,11 +65,9 @@ elseif HasPlug('tokyonight')
 elseif get(g:, 'complete_engine', '') == ''
     colorscheme space-vim-dark
 elseif get(g:, 'complete_engine', '') == 'apc'
-    if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        call SetScheme('dogrun', 'dracula')
-    else
-        call SetScheme('embark', 'dracula')
-    endif
+    call SetScheme('dogrun', 'dracula')
+elseif get(g:, 'complete_engine', '') == 'ECM'
+    call SetScheme('embark', 'dracula')
 elseif get(g:, 'complete_engine', '') == 'coc'
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         call SetScheme('sonokai', 'sublime')

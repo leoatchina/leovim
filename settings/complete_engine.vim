@@ -54,69 +54,75 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-function! Snippet_Tab() abort
-    if pumvisible()
-        if get(g:, "complete_snippet", '') == 'ultisnips'
-            call UltiSnips#ExpandSnippet()
-        elseif get(g:, "complete_snippet", '') == 'neosnippet' && neosnippet#expandable()
-            return neosnippet#mappings#expand_impl()
-        endif
-        if get(g:,'ulti_expand_res', 0) > 0
-            return "\<Right>"
-        elseif empty(get(v:, 'completed_item', {}))
-            return "\<C-n>"
+if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
+    function! Snippet_Tab() abort
+        if pumvisible()
+            if get(g:, "complete_snippet", '') == 'ultisnips'
+                call UltiSnips#ExpandSnippet()
+            elseif get(g:, "complete_snippet", '') == 'neosnippet' && neosnippet#expandable()
+                return neosnippet#mappings#expand_impl()
+            endif
+            if get(g:,'ulti_expand_res', 0) > 0
+                return "\<Right>"
+            elseif empty(get(v:, 'completed_item', {}))
+                return "\<C-n>"
+            else
+                return "\<C-y>"
+            endif
         else
-            return "\<C-y>"
+            if s:check_back_space()
+                return "\<Tab>"
+            elseif get(g:, 'complete_engine', '') == 'coc'
+                return coc#refresh()
+            elseif get(g:, 'complete_engine', '') == 'vim-lsp'
+                return asyncomplete#force_refresh()
+            else
+                return "\<C-n>"
+            endif
         endif
-    else
-        if s:check_back_space()
-            return "\<Tab>"
-        elseif get(g:, 'complete_engine', '') == 'coc'
-            return coc#refresh()
-        elseif get(g:, 'complete_engine', '') == 'vim-lsp'
-            return asyncomplete#force_refresh()
-        else
-            return "\<C-n>"
-        endif
-    endif
-endfunction
-au BufEnter * exec "inoremap <silent> <Tab> <C-R>=Snippet_Tab()<cr>"
+    endfunction
+    au BufEnter * exec "inoremap <silent> <Tab> <C-R>=Snippet_Tab()<cr>"
+endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
 " --------------------------
-function! GoToDefinitionOrTagOrSearch(type)
-    if a:type == 'v'
-        vsplit
-    elseif a:type == 's'
-        split
-    elseif a:type == 't'
-        split
-        execute("silent! normal \<C-w>T")
-    endif
-    let res = 0
-    if get(g:, 'complete_engine', '') =~ 'YCM'
-        let ret = execute("silent! YcmCompleter GoToDefinition")
-        if ret !~ 'error'
-            let res = 1
+if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+    function! GoToDefinitionOrTagOrSearch(type)
+        if a:type == 'v'
+            vsplit
+        elseif a:type == 's'
+            split
+        elseif a:type == 't'
+            split
+            execute("silent! normal \<C-w>T")
         endif
-    elseif get(g:, 'complete_engine', '') == 'coc' && CocAction('jumpDefinition')
-        let res = 1
-    endif
-    if res == 0
-        if executable('ctags')
-            let ret = execute("silent! tag ".expand("<cword>"))
-            if ret =~ "E433" || ret =~ "E426"
+        let s:before = trim(split(execute('jumps'), '\n')[-2])
+        if get(g:, 'complete_engine', '') =~ 'YCM'
+            execute("silent! YcmCompleter GoToDefinition")
+        elseif get(g:, 'complete_engine', '') == 'coc'
+            CocAction('jumpDefinition')
+        elseif get(g:, 'complete_engine', '') == 'ECM'
+            execute("silent! EasyCompleteGotoDefinition")
+        elseif get(g:, 'complete_engine', '' ) == 'vim-lsp'
+            execute("silent! LspDefinition")
+        endif
+        let s:after = trim(split(execute('jumps'), '\n')[-2])
+        if s:before != s:after
+            if executable('ctags')
+                let ret = execute("silent! tag ".expand("<cword>"))
+                if ret =~ "E433" || ret =~ "E426"
+                    call searchdecl(expand('<cword>'))
+                endif
+            else
                 call searchdecl(expand('<cword>'))
             endif
-        else
-            call searchdecl(expand('<cword>'))
         endif
-    endif
-endfunction
-nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
-nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
-nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
-nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
+    endfunction
+    nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
+    nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
+    nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
+    nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
+endif
 " --------------------------
 " complete_engine
 " --------------------------
@@ -135,13 +141,15 @@ let g:ycm_filetype_blacklist = {
     \ 'json':         1,
     \ 'log':          1,
     \ }
-if Installed('YouCompleteMe')
-    let g:ycm_python_binary_path = g:python3_host_prog
-    if WINDOWS()
-        let g:ycm_global_ycm_extra_conf = $YCM_WINDIR . "\\.ycm_extra_conf.py"
-    else
-        let g:ycm_global_ycm_extra_conf = $INATLL_PATH . "/YouCompleteMe/.ycm_extra_conf.py"
-    endif
+if Installed('vim-easycomplete')
+    let g:easycomplete_tab_trigger = "<tab>"
+    let g:easycomplete_scheme      = "sharp"
+    nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
+    nnoremap <M-l>; :EasyComplete<Tab>
+    nnoremap <M-l>, :EasyCompleteInstallServer<Space>
+elseif get(g:, 'complete_engine', '') =~ 'YCM'
+    let g:ycm_python_binary_path    = g:python3_host_prog
+    let g:ycm_global_ycm_extra_conf = g:ycm_install_path . "/.ycm_extra_conf.py"
     let g:ycm_add_preview_to_completeopt                = 0
     let g:ycm_autoclose_preview_window_after_completion = 1
     let g:ycm_autoclose_preview_window_after_insertion  = 1

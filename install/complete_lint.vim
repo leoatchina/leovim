@@ -17,9 +17,16 @@ if HasPlug('no-complete')
     " pass
 elseif HasPlug('apc')
     let g:complete_engine = "apc"
+elseif HasPlug('ECM')
+    if has('nvim') || v:version >= 802
+        let g:complete_engine = "ECM"
+    else
+        echoe "Cannot install ECM/easycomplete, smart select a complete_engine."
+        let s:smart_engine_select = 1
+    endif
 elseif HasPlug('YCM')
     if (has('nvim-0.4.4') || v:version >= 800) && g:python_version > 3.5
-        if WINDOWS() && exists("$YCM_WINDIR") && isdirectory($YCM_WINDIR)
+        if WINDOWS() && isdirectory(get(g:, 'ycm_install_path'), '')
             let g:complete_engine = "YCM"
         elseif executable('cmake') && executable('gcc')
             let s:msg = system('gcc --version')
@@ -31,11 +38,11 @@ elseif HasPlug('YCM')
                 let g:complete_engine = "YCM-legacy"
             endif
         else
-            echoe "Cannot install YouCompleteMe, check gcc and cmake version, smart select a complete_engine."
+            echoe "Cannot install YCM/YouCompleteMe, check gcc and cmake version, smart select a complete_engine."
             let s:smart_engine_select = 1
         endif
     else
-        echoe "Cannot install YouCompleteMe, smart select a complete_engine."
+        echoe "Cannot install YCM/YouCompleteMe, smart select a complete_engine."
         let s:smart_engine_select = 1
     endif
 elseif HasPlug('coc') && executable('node') && executable('npm')
@@ -56,8 +63,10 @@ else
     let s:smart_engine_select = 1
 endif
 if get(s:, 'smart_engine_select', 0) == 1
-    if has('nvim') || v:version >= 800
-        let g:complete_engine = "vim-lsp"
+    if has('nvim') || v:version >= 802
+        let g:complete_engine = "ECM"
+    " elseif has('nvim') || v:version >= 800
+    "     let g:complete_engine = "vim-lsp"
     else
         let g:complete_engine = "apc"
     endif
@@ -66,7 +75,7 @@ endif
 " ------------------------------
 " lint tool
 " ------------------------------
-if index(['YCM', 'YCM-legacy', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
     if get(g:, 'complete_engine', '') == 'coc' && get(g:, 'lint_tool', '') != 'ale'
         let g:lint_tool = 'coc'
         nnoremap <M-k>d :<C-u>CocDiagnostics<Cr>
@@ -121,9 +130,11 @@ endif
 " ------------------------------
 " complete_engine
 " ------------------------------
-if get(g:, 'complete_engine', '') =~ "YCM"
+if get(g:, 'complete_engine', '') == "ECM"
+    MyPlug 'jayli/vim-easycomplete'
+elseif get(g:, 'complete_engine', '') =~ "YCM"
     if WINDOWS()
-        set rtp+=$YCM_WINDIR
+        set rtp+=g:ycm_install_path
     else
         let b:ycm_install = " ./install.py"
         if HasPlug('c')
@@ -138,14 +149,15 @@ if get(g:, 'complete_engine', '') =~ "YCM"
         if executable('go') && HasPlug('go')
             let b:ycm_install = b:ycm_install . " --go-completer"
         endif
+        let g:ycm_install_path = get(g:, 'ycm_install_path', $INSTALL_PATH . '/YouCompleteMe')
         if g:complete_engine =~ 'legacy'
             if g:python_version > 3.6
-                MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'branch': 'legacy-vim'}
+                MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'branch': 'legacy-vim', 'dir': g:ycm_install_path}
             elseif g:python_version > 3.5
-                MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'commit':'9f77732bde3'}
+                MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'commit':'9f77732bde3', 'dir': g:ycm_install_path}
             endif
         else
-            MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install}
+            MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'dir': g:ycm_install_path}
         endif
         " ycm_lsp
         let b:ycm_lsp_install = ' ./install.py'
