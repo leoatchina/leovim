@@ -146,8 +146,6 @@ if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
     nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
-    imap <silent><expr> <C-j> pumvisible() ? "\<down>" : "\<c-j>"
-    imap <silent><expr> <C-k> pumvisible() ? "\<up>"   : "\<c-k>"
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
@@ -606,8 +604,10 @@ if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
     set rtp+=$ADDINS_PATH/vim-dict
 endif
 if get(g:, 'complete_engine', '') != ''
-    inoremap <silent><expr> <PageUp>   pumvisible()? "\<PageUp>\<C-p>\<C-n>":   "\<PageUp>"
-    inoremap <silent><expr> <PageDown> pumvisible()? "\<PageDown>\<C-n>\<C-p>": "\<PageDown>"
+    imap <silent><expr> <C-j>      pumvisible() ? "\<down>"                 : "\<c-j>"
+    imap <silent><expr> <C-k>      pumvisible() ? "\<up>"                   : "\<c-k>"
+    imap <silent><expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<PageUp>"
+    imap <silent><expr> <PageDown> pumvisible() ? "\<PageDown>\<C-n>\<C-p>" : "\<PageDown>"
     if get(g:, 'complete_engine', '') == "coc" || get(g:, 'complete_engine', '') == "apc"
         imap <expr><Cr> pumvisible()? "\<C-e>" :"\<CR>"
     else
