@@ -54,7 +54,7 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-if (get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet') && get(g:, 'complete_engine', '') != 'ECM'
+if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
     function! Snippet_Tab() abort
         if pumvisible()
             if get(g:, "complete_snippet", '') == 'ultisnips'
@@ -65,7 +65,7 @@ if (get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine',
             if get(g:,'ulti_expand_res', 0) > 0
                 return "\<Right>"
             elseif empty(get(v:, 'completed_item', {}))
-                return "\<Down>"
+                return "\<C-n>"
             else
                 return "\<C-y>"
             endif
@@ -77,11 +77,11 @@ if (get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine',
             elseif get(g:, 'complete_engine', '') == 'vim-lsp'
                 return asyncomplete#force_refresh()
             else
-                return "\<Down>"
+                return "\<C-n>"
             endif
         endif
     endfunction
-    au BufEnter * exec "inoremap <silent> <Tab> <C-R>=Snippet_Tab()<cr>"
+    au BufEnter * exec "imap <silent> <Tab> <C-R>=Snippet_Tab()<cr>"
 endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
@@ -142,7 +142,7 @@ let g:ycm_filetype_blacklist = {
     \ 'log':          1,
     \ }
 if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
-    let g:easycomplete_tab_trigger = "<tab>"
+    let g:easycomplete_tab_trigger = "<c-n>"
     nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
