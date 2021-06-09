@@ -54,8 +54,8 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-" if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
 if get(g:, 'complete_engine', '') != 'ECM'
+" if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
     function! Snippet_Tab() abort
         if pumvisible()
             if get(g:, "complete_snippet", '') == 'ultisnips'
@@ -147,8 +147,8 @@ if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
     nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
-    imap <silent><expr> <C-n> get(g:, "easycomplete_popup_win", 0) > 0 ? "\<Nop>" : "\<c-n>"
-    imap <silent><expr> <C-p> get(g:, "easycomplete_popup_win", 0) > 0 ? "\<Nop>" : "\<c-p>"
+    imap <silent><expr> <C-n> pumvisible() ? "\<down>" : "\<c-n>"
+    imap <silent><expr> <C-p> pumvisible() ? "\<up>"   : "\<c-p>"
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
