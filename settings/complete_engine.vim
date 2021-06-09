@@ -54,7 +54,6 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-" if get(g:, 'complete_engine', '') != 'ECM'
 if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
     function! Snippet_Tab() abort
         if pumvisible()
@@ -66,7 +65,7 @@ if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', 
             if get(g:,'ulti_expand_res', 0) > 0
                 return "\<Right>"
             elseif empty(get(v:, 'completed_item', {}))
-                return "\<C-n>"
+                return "\<Down>"
             else
                 return "\<C-y>"
             endif
@@ -78,7 +77,7 @@ if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', 
             elseif get(g:, 'complete_engine', '') == 'vim-lsp'
                 return asyncomplete#force_refresh()
             else
-                return "\<C-n>"
+                return "\<Down>"
             endif
         endif
     endfunction
@@ -147,8 +146,8 @@ if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
     nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
-    imap <silent><expr> <C-n> pumvisible() ? "\<down>" : "\<c-n>"
-    imap <silent><expr> <C-p> pumvisible() ? "\<up>"   : "\<c-p>"
+    imap <silent><expr> <C-j> pumvisible() ? "\<down>" : "\<c-j>"
+    imap <silent><expr> <C-k> pumvisible() ? "\<up>"   : "\<c-k>"
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
@@ -456,7 +455,7 @@ endif
 """"""""""""""""""""
 " APC settings
 """"""""""""""""""""
-if get(g:, 'complete_engine', '') != ''
+if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'ECM'
     if get(g:, 'complete_engine', '') == 'apc'
         let g:apc_enable_ft = get(g:, 'apc_enable_ft', {'*':1})
     else
@@ -607,8 +606,6 @@ if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
     set rtp+=$ADDINS_PATH/vim-dict
 endif
 if get(g:, 'complete_engine', '') != ''
-    inoremap <silent><expr> <Up>       pumvisible()? "\<C-p>":                  "\<Up>"
-    inoremap <silent><expr> <Down>     pumvisible()? "\<C-n>":                  "\<Down>"
     inoremap <silent><expr> <PageUp>   pumvisible()? "\<PageUp>\<C-p>\<C-n>":   "\<PageUp>"
     inoremap <silent><expr> <PageDown> pumvisible()? "\<PageDown>\<C-n>\<C-p>": "\<PageDown>"
     if get(g:, 'complete_engine', '') == "coc" || get(g:, 'complete_engine', '') == "apc"
