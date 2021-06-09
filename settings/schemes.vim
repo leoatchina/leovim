@@ -115,8 +115,9 @@ try
     elseif get(g:, 'colors_name', '') == 'embark'
         let g:embark_terminal_italics = 0
     elseif get(g:, 'colors_name', '') == 'nightfly'
-        let g:nightflyItalics    = 0
-        let g:nightflyUndercurls = 0
+        let g:nightflyItalics             = 0
+        let g:nightflyUndercurls          = 0
+        let g:nightflyUnderlineMatchParen = 1
     elseif get(g:, 'colors_name', '') == 'ayu'
         let g:ayucolor = get(g:, 'ayucolor', 'mirage')
     elseif get(g:, 'colors_name', '') == 'OceanicNext'
