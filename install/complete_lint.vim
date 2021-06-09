@@ -5,7 +5,7 @@ try
     set completeopt=menu,menuone,noselect,noinsert
 catch
     try
-        set completeopt=menu,menuone,noselect
+        set completeopt=menuone,noselect
     catch
         call AddPlug('no-complete')
     endtry
@@ -62,8 +62,11 @@ elseif HasPlug('coc') && executable('node') && executable('npm')
 else
     let s:smart_engine_select = 1
 endif
+" ECM as default complete_engine
 if get(s:, 'smart_engine_select', 0) == 1
-    if has('nvim') || v:version >= 800
+    if has('nvim') || v:version >= 802
+        let g:complete_engine = "ECM"
+    elseif has('nvim') || v:version >= 800
         let g:complete_engine = "vim-lsp"
     else
         let g:complete_engine = "apc"
@@ -130,6 +133,36 @@ endif
 " ------------------------------
 if get(g:, 'complete_engine', '') == "ECM"
     MyPlug 'jayli/vim-easycomplete'
+elseif get(g:, 'complete_engine', '') == "vim-lsp"
+    MyPlug 'mattn/vim-lsp-settings'
+    MyPlug 'prabirshrestha/vim-lsp'
+    MyPlug 'prabirshrestha/asyncomplete.vim'
+    MyPlug 'prabirshrestha/asyncomplete-lsp.vim'
+    MyPlug 'prabirshrestha/asyncomplete-file.vim'
+    MyPlug 'prabirshrestha/asyncomplete-buffer.vim'
+    if executable('tmux')
+        MyPlug 'wellle/tmux-complete.vim'
+    endif
+    if executable('ctags')
+        MyPlug 'prabirshrestha/asyncomplete-tags.vim'
+    endif
+    if get(g:, 'ai_engine', '') == 'tabine'
+        if WINDOWS()
+            MyPlug 'kitagry/asyncomplete-tabnine.vim', {'do': 'powershell.exe .\install.ps1'}
+        else
+            MyPlug 'kitagry/asyncomplete-tabnine.vim', {'do': './install.sh'}
+        endif
+    endif
+    if g:complete_snippet == 'ultisnips'
+        MyPlug 'prabirshrestha/asyncomplete-ultisnips.vim'
+    else
+        MyPlug 'prabirshrestha/asyncomplete-neosnippet.vim'
+    endif
+    if !has('patch-8.1.1517') && !has('nvim')
+        MyPlug 'Shougo/echodoc.vim'
+        let g:echodoc_enable_at_startup = 1
+        set cmdheight=2
+    endif
 elseif get(g:, 'complete_engine', '') =~ "YCM"
     if WINDOWS()
         set rtp+=g:ycm_install_path
@@ -226,35 +259,5 @@ elseif get(g:, 'complete_engine', '') == 'coc'
     endif
     if get(g:, 'ai_engine', '') == 'tabnine'
         let g:coc_global_extensions += ['coc-tabnine']
-    endif
-elseif get(g:, 'complete_engine', '') == "vim-lsp"
-    MyPlug 'mattn/vim-lsp-settings'
-    MyPlug 'prabirshrestha/vim-lsp'
-    MyPlug 'prabirshrestha/asyncomplete.vim'
-    MyPlug 'prabirshrestha/asyncomplete-lsp.vim'
-    MyPlug 'prabirshrestha/asyncomplete-file.vim'
-    MyPlug 'prabirshrestha/asyncomplete-buffer.vim'
-    if executable('tmux')
-        MyPlug 'wellle/tmux-complete.vim'
-    endif
-    if executable('ctags')
-        MyPlug 'prabirshrestha/asyncomplete-tags.vim'
-    endif
-    if get(g:, 'ai_engine', '') == 'tabine'
-        if WINDOWS()
-            MyPlug 'kitagry/asyncomplete-tabnine.vim', {'do': 'powershell.exe .\install.ps1'}
-        else
-            MyPlug 'kitagry/asyncomplete-tabnine.vim', {'do': './install.sh'}
-        endif
-    endif
-    if g:complete_snippet == 'ultisnips'
-        MyPlug 'prabirshrestha/asyncomplete-ultisnips.vim'
-    else
-        MyPlug 'prabirshrestha/asyncomplete-neosnippet.vim'
-    endif
-    if !has('patch-8.1.1517') && !has('nvim')
-        MyPlug 'Shougo/echodoc.vim'
-        let g:echodoc_enable_at_startup = 1
-        set cmdheight=2
     endif
 endif

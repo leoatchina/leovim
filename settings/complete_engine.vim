@@ -1,5 +1,5 @@
 " --------------------------
-" complete
+" complete settings
 " --------------------------
 syntax on
 syntax enable
@@ -54,7 +54,7 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
+if get(g:, 'complete_snippet', '') != ''
     function! Snippet_Tab() abort
         if pumvisible()
             if get(g:, "complete_snippet", '') == 'ultisnips'
@@ -64,8 +64,10 @@ if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', 
             endif
             if get(g:,'ulti_expand_res', 0) > 0
                 return "\<Right>"
+            elseif get(g:, 'complete_engine', '') == 'ECM'
+                return "\<C-y>"
             elseif empty(get(v:, 'completed_item', {}))
-                return "\<C-n>"
+                return "\<Down>"
             else
                 return "\<C-y>"
             endif
@@ -77,51 +79,11 @@ if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', 
             elseif get(g:, 'complete_engine', '') == 'vim-lsp'
                 return asyncomplete#force_refresh()
             else
-                return "\<C-n>"
+                return "\<Down>"
             endif
         endif
     endfunction
     au BufEnter * exec "imap <silent> <Tab> <C-R>=Snippet_Tab()<cr>"
-endif
-" --------------------------
-" GoToDefinitionOrTagOrSearch
-" --------------------------
-if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
-    function! GoToDefinitionOrTagOrSearch(type)
-        if a:type == 'v'
-            vsplit
-        elseif a:type == 's'
-            split
-        elseif a:type == 't'
-            split
-            execute("silent! normal \<C-w>T")
-        endif
-        let s:before = trim(split(execute('jumps'), '\n')[-2])
-        if get(g:, 'complete_engine', '') =~ 'YCM'
-            execute("silent! YcmCompleter GoToDefinition")
-        elseif get(g:, 'complete_engine', '') == 'coc'
-            CocAction('jumpDefinition')
-        elseif get(g:, 'complete_engine', '') == 'ECM'
-            execute("silent! EasyCompleteGotoDefinition")
-        elseif get(g:, 'complete_engine', '' ) == 'vim-lsp'
-            execute("silent! LspDefinition")
-        endif
-        let s:after = trim(split(execute('jumps'), '\n')[-2])
-        if s:before != s:after
-            if executable('ctags')
-                let ret = execute("silent! tag ".expand("<cword>"))
-                if ret =~ "E433" || ret =~ "E426"
-                    call searchdecl(expand('<cword>'))
-                endif
-            else
-                call searchdecl(expand('<cword>'))
-            endif
-        endif
-    endfunction
-    nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
-    nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
-    nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
-    nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
 endif
 " --------------------------
 " complete_engine
@@ -613,4 +575,44 @@ if get(g:, 'complete_engine', '') != ''
     else
         imap <expr><Cr> pumvisible()? "\<C-[>a":"\<CR>"
     endif
+endif
+" --------------------------
+" GoToDefinitionOrTagOrSearch
+" --------------------------
+if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+    function! GoToDefinitionOrTagOrSearch(type)
+        if a:type == 'v'
+            vsplit
+        elseif a:type == 's'
+            split
+        elseif a:type == 't'
+            split
+            execute("silent! normal \<C-w>T")
+        endif
+        let s:before = trim(split(execute('jumps'), '\n')[-2])
+        if get(g:, 'complete_engine', '') =~ 'YCM'
+            execute("silent! YcmCompleter GoToDefinition")
+        elseif get(g:, 'complete_engine', '') == 'coc'
+            CocAction('jumpDefinition')
+        elseif get(g:, 'complete_engine', '') == 'ECM'
+            execute("silent! EasyCompleteGotoDefinition")
+        elseif get(g:, 'complete_engine', '' ) == 'vim-lsp'
+            execute("silent! LspDefinition")
+        endif
+        let s:after = trim(split(execute('jumps'), '\n')[-2])
+        if s:before != s:after
+            if executable('ctags')
+                let ret = execute("silent! tag ".expand("<cword>"))
+                if ret =~ "E433" || ret =~ "E426"
+                    call searchdecl(expand('<cword>'))
+                endif
+            else
+                call searchdecl(expand('<cword>'))
+            endif
+        endif
+    endfunction
+    nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
+    nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
+    nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
+    nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
 endif
