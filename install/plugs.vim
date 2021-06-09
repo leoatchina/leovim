@@ -131,9 +131,9 @@ if get(g:, 'has_truecolor', 0)
     MyPlug 'sainnhe/gruvbox-material'
     " others
     MyPlug 'ayu-theme/ayu-vim'
-    MyPlug 'wadackel/vim-dogrun'
     MyPlug 'mhartington/oceanic-next'
     MyPlug 'ghifarit53/tokyonight-vim'
+    MyPlug 'bluz71/vim-nightfly-guicolors'
     MyPlug 'embark-theme/vim', {'as': 'embark', 'dir': '~/.leovim.plug/embark'}
 endif
 " ------------------------------
@@ -262,6 +262,7 @@ endif
 " ------------------------------
 if v:version >= 800 || has('nvim')
     MyPlug 'tmsvg/pear-tree'
+    let g:pear_tree_repeatable_expand = 0
 endif
 " ------------------------------
 " grep_tool
@@ -274,7 +275,7 @@ endif
 " ------------------------------
 " tree_browser
 " ------------------------------
-if v:version >= 801 || has('nvim')
+if v:version >= 801 || has('nvim') || get(g:, 'complete_engine', '') == 'coc' && get(g:, 'tree_browser', '') != 'coc'
     MyPlug 'lambdalisue/fern.vim'
     MyPlug 'lambdalisue/fern-hijack.vim'
     MyPlug 'lambdalisue/fern-git-status.vim'
@@ -282,22 +283,6 @@ if v:version >= 801 || has('nvim')
     MyPlug 'yuki-yano/fern-preview.vim'
     if !WINDOWS()
         MyPlug 'LumaKernel/fern-mapping-fzf.vim'
-    endif
-endif
-" ------------------------------
-" undotool
-" ------------------------------
-if has("persistent_undo") && g:has_lambda > 0
-    if g:python_version >= 2.4
-        let g:mundo_width = 60
-        let g:mundo_preview_height = 20
-        let g:mundo_right = 1
-        MyPlug 'simnalamburt/vim-mundo'
-    else
-        let g:undotree_SetFocusWhenToggle = 1
-        let g:undotree_CustomUndotreeCmd = 'vertical 60 new'
-        let g:undotree_CustomDiffpanelCmd = 'belowright 15 new'
-        MyPlug 'mbbill/undotree'
     endif
 endif
 " ------------------------------
@@ -365,4 +350,20 @@ if HasPlug('writing')
     nnoremap <tab>p :Pangu<tab>
 else
     nnoremap = <Nop>
+endif
+" ------------------------------
+" undotool
+" ------------------------------
+if has("persistent_undo") && g:has_lambda > 0 && (HasPlug('undotool') || HasPlug('undo_tool'))
+    if g:python_version >= 2.4
+        let g:mundo_width = 60
+        let g:mundo_preview_height = 20
+        let g:mundo_right = 1
+        MyPlug 'simnalamburt/vim-mundo'
+    else
+        let g:undotree_SetFocusWhenToggle = 1
+        let g:undotree_CustomUndotreeCmd = 'vertical 60 new'
+        let g:undotree_CustomDiffpanelCmd = 'belowright 15 new'
+        MyPlug 'mbbill/undotree'
+    endif
 endif

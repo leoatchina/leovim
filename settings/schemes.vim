@@ -45,8 +45,8 @@ elseif HasPlug('ayu')
     call SetScheme('ayu')
 elseif HasPlug('edge')
     call SetScheme('edge')
-elseif HasPlug('dogrun')
-    call SetScheme('dogrun')
+elseif HasPlug('nightfly')
+    call SetScheme('nightfly')
 elseif HasPlug('embark')
     call SetScheme('embark')
 elseif HasPlug('oceanicnext') || HasPlug('oceanic')
@@ -65,11 +65,9 @@ elseif HasPlug('tokyonight')
 elseif get(g:, 'complete_engine', '') == ''
     colorscheme space-vim-dark
 elseif get(g:, 'complete_engine', '') == 'apc'
-    if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        call SetScheme('dogrun', 'dracula')
-    else
-        call SetScheme('embark', 'dracula')
-    endif
+    call SetScheme('nightfly', 'dracula')
+elseif get(g:, 'complete_engine', '') == 'ECM'
+    call SetScheme('embark', 'dracula')
 elseif get(g:, 'complete_engine', '') == 'coc'
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         call SetScheme('sonokai', 'sublime')
@@ -116,6 +114,9 @@ try
         let g:tokyonight_enable_italic = 0
     elseif get(g:, 'colors_name', '') == 'embark'
         let g:embark_terminal_italics = 0
+    elseif get(g:, 'colors_name', '') == 'nightfly'
+        let g:nightflyItalics    = 0
+        let g:nightflyUndercurls = 0
     elseif get(g:, 'colors_name', '') == 'ayu'
         let g:ayucolor = get(g:, 'ayucolor', 'mirage')
     elseif get(g:, 'colors_name', '') == 'OceanicNext'

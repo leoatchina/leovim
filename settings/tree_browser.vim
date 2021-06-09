@@ -1,7 +1,17 @@
 " --------------------
 " tree_browser
 " --------------------
-if Installed('fern.vim')
+if get(g:, 'tree_browser', '') == 'coc'
+    function! CocBrowser(type) abort
+        if a:type == 1
+            exec("CocCommand explorer --no-toggle --width 30")
+        else
+            exec("CocCommand explorer --toggle")
+        endif
+    endfunction
+    command! CocBrowserOpen  call CocBrowser(1)
+    command! CocBrowserClose call CocBrowser(0)
+elseif Installed('fern.vim')
     let g:tree_browser = 'fern'
     let g:fern#renderer#default#leaf_symbol = ' '
     nnoremap <silent> <leader>N :Fern . -drawer -reveal=%<Cr>

@@ -41,15 +41,6 @@ if Installed('vim-sidebar-manager')
     " tree_browser
     " =====================
     if get(g:, 'tree_browser', '') == 'coc'
-        function! CocBrowser(type) abort
-            if a:type == 1
-                exec("CocCommand explorer --no-toggle --width 30")
-            else
-                exec("CocCommand explorer --toggle")
-            endif
-        endfunction
-        command! CocBrowserOpen  call CocBrowser(1)
-        command! CocBrowserClose call CocBrowser(0)
         let g:sidebars.tree_browser = {
                     \ 'position': 'left',
                     \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ "coc\-explorer"},
@@ -74,27 +65,6 @@ if Installed('vim-sidebar-manager')
                     \ }
     endif
     nnoremap <silent> <leader>n :call sidebar#toggle('tree_browser')<CR>
-    " ====================="
-    " right side undo
-    " ====================="
-    if &rtp =~ 'mundo'
-        let g:sidebars.undo_tool = {
-                    \ 'position': 'right',
-                    \ 'check_win': {nr -> bufname(winbufnr(nr)) =~ '_Mundo_'},
-                    \ 'open': 'MundoShow',
-                    \ 'close': 'MundoHide'
-                    \ }
-    elseif &rtp =~ 'undotree'
-        let g:sidebars.undo_tool = {
-                    \ 'position': 'right',
-                    \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ 'undotree'},
-                    \ 'open': 'UndotreeShow',
-                    \ 'close': 'UndotreeHide'
-                    \ }
-    endif
-    if has_key(g:sidebars, 'undo_tool')
-    	nnoremap <silent> <leader>u :call sidebar#toggle('undo_tool')<CR>
-    endif
     " =====================
     " downside
     " =====================
@@ -136,6 +106,27 @@ if Installed('vim-sidebar-manager')
         endif
     endif
     let g:startify_session_before_save = ['call sidebar#close_all()']
+    " ====================="
+    " right side undo
+    " ====================="
+    if &rtp =~ 'mundo'
+        let g:sidebars.undo_tool = {
+                    \ 'position': 'right',
+                    \ 'check_win': {nr -> bufname(winbufnr(nr)) =~ '_Mundo_'},
+                    \ 'open': 'MundoShow',
+                    \ 'close': 'MundoHide'
+                    \ }
+    elseif &rtp =~ 'undotree'
+        let g:sidebars.undo_tool = {
+                    \ 'position': 'right',
+                    \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ 'undotree'},
+                    \ 'open': 'UndotreeShow',
+                    \ 'close': 'UndotreeHide'
+                    \ }
+    endif
+    if has_key(g:sidebars, 'undo_tool')
+    	  nnoremap <silent> <leader>u :call sidebar#toggle('undo_tool')<CR>
+    endif
 else
     " symbol_tool
     if g:symbol_tool =~ 'vista'

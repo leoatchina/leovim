@@ -54,69 +54,76 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-function! Snippet_Tab() abort
-    if pumvisible()
-        if get(g:, "complete_snippet", '') == 'ultisnips'
-            call UltiSnips#ExpandSnippet()
-        elseif get(g:, "complete_snippet", '') == 'neosnippet' && neosnippet#expandable()
-            return neosnippet#mappings#expand_impl()
-        endif
-        if get(g:,'ulti_expand_res', 0) > 0
-            return "\<Right>"
-        elseif empty(get(v:, 'completed_item', {}))
-            return "\<C-n>"
+if get(g:, 'complete_engine', '') != 'ECM'
+" if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
+    function! Snippet_Tab() abort
+        if pumvisible()
+            if get(g:, "complete_snippet", '') == 'ultisnips'
+                call UltiSnips#ExpandSnippet()
+            elseif get(g:, "complete_snippet", '') == 'neosnippet' && neosnippet#expandable()
+                return neosnippet#mappings#expand_impl()
+            endif
+            if get(g:,'ulti_expand_res', 0) > 0
+                return "\<Right>"
+            elseif empty(get(v:, 'completed_item', {}))
+                return "\<C-n>"
+            else
+                return "\<C-y>"
+            endif
         else
-            return "\<C-y>"
+            if s:check_back_space()
+                return "\<Tab>"
+            elseif get(g:, 'complete_engine', '') == 'coc'
+                return coc#refresh()
+            elseif get(g:, 'complete_engine', '') == 'vim-lsp'
+                return asyncomplete#force_refresh()
+            else
+                return "\<C-n>"
+            endif
         endif
-    else
-        if s:check_back_space()
-            return "\<Tab>"
-        elseif get(g:, 'complete_engine', '') == 'coc'
-            return coc#refresh()
-        elseif get(g:, 'complete_engine', '') == 'vim-lsp'
-            return asyncomplete#force_refresh()
-        else
-            return "\<C-n>"
-        endif
-    endif
-endfunction
-au BufEnter * exec "inoremap <silent> <Tab> <C-R>=Snippet_Tab()<cr>"
+    endfunction
+    au BufEnter * exec "inoremap <silent> <Tab> <C-R>=Snippet_Tab()<cr>"
+endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
 " --------------------------
-function! GoToDefinitionOrTagOrSearch(type)
-    if a:type == 'v'
-        vsplit
-    elseif a:type == 's'
-        split
-    elseif a:type == 't'
-        split
-        execute("silent! normal \<C-w>T")
-    endif
-    let res = 0
-    if get(g:, 'complete_engine', '') =~ 'YCM'
-        let ret = execute("silent! YcmCompleter GoToDefinition")
-        if ret !~ 'error'
-            let res = 1
+if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+    function! GoToDefinitionOrTagOrSearch(type)
+        if a:type == 'v'
+            vsplit
+        elseif a:type == 's'
+            split
+        elseif a:type == 't'
+            split
+            execute("silent! normal \<C-w>T")
         endif
-    elseif get(g:, 'complete_engine', '') == 'coc' && CocAction('jumpDefinition')
-        let res = 1
-    endif
-    if res == 0
-        if executable('ctags')
-            let ret = execute("silent! tag ".expand("<cword>"))
-            if ret =~ "E433" || ret =~ "E426"
+        let s:before = trim(split(execute('jumps'), '\n')[-2])
+        if get(g:, 'complete_engine', '') =~ 'YCM'
+            execute("silent! YcmCompleter GoToDefinition")
+        elseif get(g:, 'complete_engine', '') == 'coc'
+            CocAction('jumpDefinition')
+        elseif get(g:, 'complete_engine', '') == 'ECM'
+            execute("silent! EasyCompleteGotoDefinition")
+        elseif get(g:, 'complete_engine', '' ) == 'vim-lsp'
+            execute("silent! LspDefinition")
+        endif
+        let s:after = trim(split(execute('jumps'), '\n')[-2])
+        if s:before != s:after
+            if executable('ctags')
+                let ret = execute("silent! tag ".expand("<cword>"))
+                if ret =~ "E433" || ret =~ "E426"
+                    call searchdecl(expand('<cword>'))
+                endif
+            else
                 call searchdecl(expand('<cword>'))
             endif
-        else
-            call searchdecl(expand('<cword>'))
         endif
-    endif
-endfunction
-nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
-nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
-nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
-nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
+    endfunction
+    nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
+    nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
+    nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
+    nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
+endif
 " --------------------------
 " complete_engine
 " --------------------------
@@ -135,13 +142,148 @@ let g:ycm_filetype_blacklist = {
     \ 'json':         1,
     \ 'log':          1,
     \ }
-if Installed('YouCompleteMe')
-    let g:ycm_python_binary_path = g:python3_host_prog
-    if WINDOWS()
-        let g:ycm_global_ycm_extra_conf = $YCM_WINDIR . "\\.ycm_extra_conf.py"
-    else
-        let g:ycm_global_ycm_extra_conf = $INATLL_PATH . "/YouCompleteMe/.ycm_extra_conf.py"
+if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
+    let g:easycomplete_tab_trigger = "<tab>"
+    nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
+    nnoremap <M-l>; :EasyComplete<Tab>
+    nnoremap <M-l>, :EasyCompleteInstallServer<Space>
+    imap <silent><expr> <C-n> pumvisible() ? "\<down>" : "\<c-n>"
+    imap <silent><expr> <C-p> pumvisible() ? "\<up>"   : "\<c-p>"
+elseif Installed('vim-lsp')
+    function! s:my_asyncomplete_preprocessor(options, matches) abort
+        let l:visited = {}
+        let l:items = []
+        for [l:source_name, l:matches] in items(a:matches)
+            for l:item in l:matches['items']
+                if stridx(l:item['word'], a:options['base']) == 0
+                    if !has_key(l:visited, l:item['word'])
+                        call add(l:items, l:item)
+                        let l:visited[l:item['word']] = 1
+                    endif
+                endif
+            endfor
+        endfor
+        call asyncomplete#preprocess_complete(a:options, l:items)
+    endfunction
+    let g:asyncomplete_preprocessor = [function('s:my_asyncomplete_preprocessor')]
+    let g:asyncomplete_auto_popup = 1
+    au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+                \ 'name': 'buffer',
+                \ 'whitelist': ['*'],
+                \ 'priority': 16,
+                \ 'completor': function('asyncomplete#sources#buffer#completor'),
+                \ }))
+    au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+                \ 'name': 'file',
+                \ 'whitelist': ['*'],
+                \ 'priority': 8,
+                \ 'completor': function('asyncomplete#sources#file#completor')
+                \ }))
+    if Installed('asyncomplete-tags.vim') && executable('ctags')
+        au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#tags#get_source_options({
+                    \ 'name': 'tags',
+                    \ 'whitelist': ['*'],
+                    \ 'priority': 4,
+                    \ 'completor': function('asyncomplete#sources#tags#completor'),
+                    \ 'config': {'max_file_size': 50000000},
+                    \ }))
     endif
+    if Installed("asyncomplete-ultisnips.vim") && get(g:, 'complete_engine', '') == 'ultisnips'
+        au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+                    \ 'name': 'ultisnips',
+                    \ 'whitelist': ['*'],
+                    \ 'priority': 32,
+                    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+                    \ }))
+    elseif Installed("asyncomplete-neosnippet.vim") && get(g:, 'complete_engine', '') == 'neosnippet'
+        au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+                    \ 'name': 'neosnippet',
+                    \ 'whitelist': ['*'],
+                    \ 'priority': 32,
+                    \ 'completor': function('asyncomplete#sources#neosnippet#completor')
+                    \ }))
+    endif
+    if get(g:, 'ai_engine', '') == 'tabnine'
+        call asyncomplete#register_source(asyncomplete#sources#tabnine#get_source_options({
+            \ 'name': 'tabnine',
+            \ 'allowlist': ['*'],
+            \ 'completor': function('asyncomplete#sources#tabnine#completor'),
+            \ 'config': {
+            \   'line_limit': 1000,
+            \   'max_num_result': 20,
+            \  },
+            \ }))
+    endif
+    " --------------------------
+    " vim-lsp
+    " --------------------------
+    nnoremap <M-l>; :Lsp
+    nnoremap <M-l>, :LspInstallServer<Space>
+    let g:lsp_diagnostics_enabled    = 0
+    let g:lsp_insert_text_enabled    = 1
+    let g:lsp_text_edit_enabled      = 0
+    let g:lsp_signature_help_enabled = 0
+    let g:lsp_preview_doubletap      = [function('lsp#ui#vim#output#closepreview')]
+    " with vsplit
+    nnoremap <M-l>d :vs<Cr>:LspDeclaration<CR>
+    nnoremap <M-l>t :vs<Cr>:LspTypeDefinition<CR>
+    nnoremap <M-l>r :vs<Cr>:LspReferences<CR>
+    nnoremap <M-l>e :vs<Cr>:LspImplementation<CR>
+    nnoremap <M-l>i :LspCallHierarchyIncoming<Cr>
+    nnoremap <M-l>o :LspCallHierarchyOutgoing<Cr>
+    nnoremap <M-l>h :LspTypeHierarchy<Cr>
+    nnoremap <M-l>s :LspSignatureHelp<Cr>
+    nnoremap <M-l>c :LspDocument<Tab>
+    " jump to
+    nnoremap <M-.>  :LspDefinition<Cr>
+    nnoremap <M-j>d :LspDeclaration<CR>
+    nnoremap <M-j>t :LspTypeDefinition<CR>
+    nnoremap <M-j>e :LspImplementation<CR>
+    nnoremap <M-j>r :LspReferences<CR>
+    nnoremap <M-j>w :LspWorkspaceSymbol<Cr>
+    nnoremap <M-j>f :LspDocumentSymbol<Cr>
+    " codeaction
+    nnoremap ,cr :LspRename<CR>
+    nnoremap ,c; :LspCodeAction<CR>
+    nnoremap ,c, :LspCodeLens<CR>
+    if has('patch-8.1.1517') || has('nvim')
+        autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
+        nnoremap <M-,>  :LspHover<CR>
+        nnoremap <M-j>h :LspPeekDefinition<Cr>
+        nnoremap <M-j>e :LspPeekDeclaration<CR>
+        nnoremap <M-j>y :LspPeekTypeDefinition<CR>
+        nnoremap <M-j>m :LspPeekImplementation<CR>
+        let g:lsp_preview_float      = 1
+        let g:lsp_preview_keep_focus = 0
+    else
+        let g:lsp_preview_float      = 0
+        let g:lsp_preview_keep_focus = 1
+    endif
+    if executable('ccls') && HasPlug('c')
+        au User lsp_setup call lsp#register_server({
+                    \ 'name': 'ccls',
+                    \ 'cmd': {server_info->['ccls --init={"cache": {"directory": '. $HOME . '/.cache/ccls-cache}}']},
+                    \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+                    \ 'initialization_options': {},
+                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+                    \ })
+    endif
+    if has('nvim-0.4.0') || has('patch-8.1.1615')
+        inoremap <buffer> <expr><C-j> lsp#scroll(+3)
+        inoremap <buffer> <expr><C-k> lsp#scroll(-3)
+    endif
+    " --------------------------
+    " vim-lsp-settings
+    " --------------------------
+    if Installed('vim-lsp-settings')
+        let g:lsp_settings_servers_dir         = $INSTALL_PATH . '/vim-lsp-settings/servers'
+        let g:lsp_settings_global_settings_dir = $INSTALL_PATH . '/vim-lsp-settings/global_config'
+        let g:lsp_settings_enable_suggestions  = 1
+        let g:lsp_log_file                     = $INSTALL_PATH . '/lsp.log'
+    endif
+elseif get(g:, 'complete_engine', '') =~ 'YCM'
+    let g:ycm_python_binary_path    = g:python3_host_prog
+    let g:ycm_global_ycm_extra_conf = g:ycm_install_path . "/.ycm_extra_conf.py"
     let g:ycm_add_preview_to_completeopt                = 0
     let g:ycm_autoclose_preview_window_after_completion = 1
     let g:ycm_autoclose_preview_window_after_insertion  = 1
@@ -306,138 +448,6 @@ elseif Installed('coc.nvim')
     nmap <silent> ,cn :CocNext<CR>
     " Do default action for previous item.
     nmap <silent> ,cp :CocPrev<CR>
-elseif Installed('vim-lsp')
-    function! s:my_asyncomplete_preprocessor(options, matches) abort
-        let l:visited = {}
-        let l:items = []
-        for [l:source_name, l:matches] in items(a:matches)
-            for l:item in l:matches['items']
-                if stridx(l:item['word'], a:options['base']) == 0
-                    if !has_key(l:visited, l:item['word'])
-                        call add(l:items, l:item)
-                        let l:visited[l:item['word']] = 1
-                    endif
-                endif
-            endfor
-        endfor
-        call asyncomplete#preprocess_complete(a:options, l:items)
-    endfunction
-    let g:asyncomplete_preprocessor = [function('s:my_asyncomplete_preprocessor')]
-    let g:asyncomplete_auto_popup = 1
-    au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-                \ 'name': 'buffer',
-                \ 'whitelist': ['*'],
-                \ 'priority': 16,
-                \ 'completor': function('asyncomplete#sources#buffer#completor'),
-                \ }))
-    au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-                \ 'name': 'file',
-                \ 'whitelist': ['*'],
-                \ 'priority': 8,
-                \ 'completor': function('asyncomplete#sources#file#completor')
-                \ }))
-    if Installed('asyncomplete-tags.vim') && executable('ctags')
-        au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#tags#get_source_options({
-                    \ 'name': 'tags',
-                    \ 'whitelist': ['*'],
-                    \ 'priority': 4,
-                    \ 'completor': function('asyncomplete#sources#tags#completor'),
-                    \ 'config': {'max_file_size': 50000000},
-                    \ }))
-    endif
-    if Installed("asyncomplete-ultisnips.vim") && get(g:, 'complete_engine', '') == 'ultisnips'
-        au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-                    \ 'name': 'ultisnips',
-                    \ 'whitelist': ['*'],
-                    \ 'priority': 32,
-                    \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-                    \ }))
-    elseif Installed("asyncomplete-neosnippet.vim") && get(g:, 'complete_engine', '') == 'neosnippet'
-        au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-                    \ 'name': 'neosnippet',
-                    \ 'whitelist': ['*'],
-                    \ 'priority': 32,
-                    \ 'completor': function('asyncomplete#sources#neosnippet#completor')
-                    \ }))
-    endif
-    if get(g:, 'ai_engine', '') == 'tabnine'
-        call asyncomplete#register_source(asyncomplete#sources#tabnine#get_source_options({
-            \ 'name': 'tabnine',
-            \ 'allowlist': ['*'],
-            \ 'completor': function('asyncomplete#sources#tabnine#completor'),
-            \ 'config': {
-            \   'line_limit': 1000,
-            \   'max_num_result': 20,
-            \  },
-            \ }))
-    endif
-    " --------------------------
-    " vim-lsp
-    " --------------------------
-    nnoremap <M-l>; :Lsp
-    nnoremap <M-l>, :LspInstallServer<Space>
-    let g:lsp_diagnostics_enabled    = 0
-    let g:lsp_insert_text_enabled    = 1
-    let g:lsp_text_edit_enabled      = 0
-    let g:lsp_signature_help_enabled = 0
-    let g:lsp_preview_doubletap      = [function('lsp#ui#vim#output#closepreview')]
-    " with vsplit
-    nnoremap <M-l>d :vs<Cr>:LspDeclaration<CR>
-    nnoremap <M-l>t :vs<Cr>:LspTypeDefinition<CR>
-    nnoremap <M-l>r :vs<Cr>:LspReferences<CR>
-    nnoremap <M-l>e :vs<Cr>:LspImplementation<CR>
-    nnoremap <M-l>i :LspCallHierarchyIncoming<Cr>
-    nnoremap <M-l>o :LspCallHierarchyOutgoing<Cr>
-    nnoremap <M-l>h :LspTypeHierarchy<Cr>
-    nnoremap <M-l>s :LspSignatureHelp<Cr>
-    nnoremap <M-l>c :LspDocument<Tab>
-    " jump to
-    nnoremap <M-.>  :LspDefinition<Cr>
-    nnoremap <M-j>d :LspDeclaration<CR>
-    nnoremap <M-j>t :LspTypeDefinition<CR>
-    nnoremap <M-j>e :LspImplementation<CR>
-    nnoremap <M-j>r :LspReferences<CR>
-    nnoremap <M-j>w :LspWorkspaceSymbol<Cr>
-    nnoremap <M-j>f :LspDocumentSymbol<Cr>
-    " codeaction
-    nnoremap ,cr :LspRename<CR>
-    nnoremap ,c; :LspCodeAction<CR>
-    nnoremap ,c, :LspCodeLens<CR>
-    if has('patch-8.1.1517') || has('nvim')
-        autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
-        nnoremap <M-,>  :LspHover<CR>
-        nnoremap <M-j>h :LspPeekDefinition<Cr>
-        nnoremap <M-j>e :LspPeekDeclaration<CR>
-        nnoremap <M-j>y :LspPeekTypeDefinition<CR>
-        nnoremap <M-j>m :LspPeekImplementation<CR>
-        let g:lsp_preview_float      = 1
-        let g:lsp_preview_keep_focus = 0
-    else
-        let g:lsp_preview_float      = 0
-        let g:lsp_preview_keep_focus = 1
-    endif
-    if executable('ccls') && HasPlug('c')
-        au User lsp_setup call lsp#register_server({
-                    \ 'name': 'ccls',
-                    \ 'cmd': {server_info->['ccls --init={"cache": {"directory": '. $HOME . '/.cache/ccls-cache}}']},
-                    \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-                    \ 'initialization_options': {},
-                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-                    \ })
-    endif
-    if has('nvim-0.4.0') || has('patch-8.1.1615')
-        inoremap <buffer> <expr><C-j> lsp#scroll(+3)
-        inoremap <buffer> <expr><C-k> lsp#scroll(-3)
-    endif
-    " --------------------------
-    " vim-lsp-settings
-    " --------------------------
-    if Installed('vim-lsp-settings')
-        let g:lsp_settings_servers_dir         = $INSTALL_PATH . '/vim-lsp-settings/servers'
-        let g:lsp_settings_global_settings_dir = $INSTALL_PATH . '/vim-lsp-settings/global_config'
-        let g:lsp_settings_enable_suggestions  = 1
-        let g:lsp_log_file                     = $INSTALL_PATH . '/lsp.log'
-    endif
 elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'
 else
@@ -601,9 +611,9 @@ if get(g:, 'complete_engine', '') != ''
     inoremap <silent><expr> <Down>     pumvisible()? "\<C-n>":                  "\<Down>"
     inoremap <silent><expr> <PageUp>   pumvisible()? "\<PageUp>\<C-p>\<C-n>":   "\<PageUp>"
     inoremap <silent><expr> <PageDown> pumvisible()? "\<PageDown>\<C-n>\<C-p>": "\<PageDown>"
-    if get(g:, 'complete_engine', '') =~ "YCM" || get(g:, 'complete_engine', '') == "vim-lsp"
-        imap <expr><Cr> pumvisible()? "\<C-[>a":"\<CR>"
-    else
+    if get(g:, 'complete_engine', '') == "coc" || get(g:, 'complete_engine', '') == "apc"
         imap <expr><Cr> pumvisible()? "\<C-e>" :"\<CR>"
+    else
+        imap <expr><Cr> pumvisible()? "\<C-[>a":"\<CR>"
     endif
 endif
