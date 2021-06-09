@@ -148,6 +148,8 @@ if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
     imap <silent><expr> <C-j> pumvisible() ? "\<down>" : "\<c-j>"
     imap <silent><expr> <C-k> pumvisible() ? "\<up>"   : "\<c-k>"
+    imap <silent><expr> <C-n> pumvisible() ? "\<Tab>"  : "\<c-n>"
+    imap <silent><expr> <C-p> pumvisible() ? "\<up>"   : "\<c-p>"
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
