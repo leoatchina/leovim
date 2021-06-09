@@ -54,7 +54,7 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-if get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet'
+if (get(g:, 'complete_snippet', '') == 'ultisnips' || get(g:, 'complete_engine', '') == 'neosnippet') && get(g:, 'complete_engine', '') != 'ECM'
     function! Snippet_Tab() abort
         if pumvisible()
             if get(g:, "complete_snippet", '') == 'ultisnips'
@@ -148,8 +148,6 @@ if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
     imap <silent><expr> <C-j> pumvisible() ? "\<down>" : "\<c-j>"
     imap <silent><expr> <C-k> pumvisible() ? "\<up>"   : "\<c-k>"
-    imap <silent><expr> <C-n> pumvisible() ? "\<Tab>"  : "\<c-n>"
-    imap <silent><expr> <C-p> pumvisible() ? "\<up>"   : "\<c-p>"
 elseif Installed('vim-lsp')
     function! s:my_asyncomplete_preprocessor(options, matches) abort
         let l:visited = {}
@@ -270,8 +268,8 @@ elseif Installed('vim-lsp')
                     \ })
     endif
     if has('nvim-0.4.0') || has('patch-8.1.1615')
-        inoremap <buffer> <expr><C-j> lsp#scroll(+3)
-        inoremap <buffer> <expr><C-k> lsp#scroll(-3)
+        inoremap <buffer> <expr><C-n> lsp#scroll(+3)
+        inoremap <buffer> <expr><C-p> lsp#scroll(-3)
     endif
     " --------------------------
     " vim-lsp-settings
@@ -288,8 +286,8 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     let g:ycm_add_preview_to_completeopt                = 0
     let g:ycm_autoclose_preview_window_after_completion = 1
     let g:ycm_autoclose_preview_window_after_insertion  = 1
-    let g:ycm_key_list_select_completion                = ['<C-n>', '<Down>']
-    let g:ycm_key_list_previous_completion              = ['<C-p>', '<Up>']
+    let g:ycm_key_list_select_completion                = ['<C-j>', '<Down>']
+    let g:ycm_key_list_previous_completion              = ['<C-k>', '<Up>']
     let g:ycm_confirm_extra_conf                        = 1 " 加载.ycm_extra_conf.py 提示
     let g:ycm_min_num_of_chars_for_completion           = 2 " 从第 2 个键入字符就开始罗列匹配项
     let g:ycm_seed_identifiers_with_syntax              = 1 " 语法关键字补全
@@ -399,7 +397,7 @@ elseif Installed('coc.nvim')
     nmap <M-l>r :vs<Cr>:execute "normal \<Plug>(coc-references)"<Cr>
     nmap <M-l>e :vs<Cr>:execute "normal \<Plug>(coc-implementation)"<Cr>
     nmap <M-l>m :CocList marketplace<Cr>
-    let g:coc_snippet_next = "<C-n>"
+    let g:coc_snippet_next = "<C-j>"
     let g:coc_snippet_prev = "<C-p>"
     augroup cocgroup
         autocmd!
@@ -420,12 +418,12 @@ elseif Installed('coc.nvim')
         endif
     endfunction
     if has('nvim-0.4.0') || has('patch-8.2.0750')
-        inoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-j>"
-        inoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-j>"
-        xnoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-j>"
-        xnoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-k>"
-        nnoremap <silent><nowait><expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-j>"
-        nnoremap <silent><nowait><expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-k>"
+        inoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
+        inoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
+        xnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        xnoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
+        nnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        nnoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
     endif
     " codeaction and others
     nmap ,ca :CocFzfList actions<Cr>
