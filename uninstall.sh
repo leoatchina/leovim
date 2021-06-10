@@ -10,10 +10,10 @@ die() {
 
 rm $HOME/.leovim.conf
 rm $HOME/.vimrc
+rm $HOME/.ideavimrc
 rm $HOME/.config/nvim/init.vim
 rm $HOME/.leovim.clean
 rm $HOME/.leovim.update
-
 
 rm -rf $HOME/.vim
 rm -rf $HOME/.leovim.plug

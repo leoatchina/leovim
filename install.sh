@@ -110,6 +110,7 @@ fi
 
 echo
 create_symlinks "$APP_PATH/clean.sh"  "$HOME/.leovim.clean"
+create_symlinks "$APP_PATH/ideavimrc" "$HOME/.ideavimrc"
 create_symlinks "$APP_PATH/update.sh" "$HOME/.leovim.update"
 
 echo
