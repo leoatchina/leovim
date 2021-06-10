@@ -227,9 +227,9 @@ elseif Installed('vim-lsp')
                     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
                     \ })
     endif
-    if has('nvim-0.4.0') || has('patch-8.1.1615')
-        inoremap <buffer> <expr><C-n> lsp#scroll(+3)
-        inoremap <buffer> <expr><C-p> lsp#scroll(-3)
+    if has('nvim') || has('patch-8.1.1615')
+        inoremap <silent><buffer><expr> <C-n> pumvisible() ? lsp#scroll(+3) : "\<C-n>"
+        inoremap <silent><buffer><expr> <C-p> pumvisible() ? lsp#scroll(-3) : "\<C-p>"
     endif
     " --------------------------
     " vim-lsp-settings
@@ -377,7 +377,7 @@ elseif Installed('coc.nvim')
             call CocAction('doHover')
         endif
     endfunction
-    if has('nvim-0.4.0') || has('patch-8.2.0750')
+    if has('nvim') || has('patch-8.2.0750')
         inoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
         inoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
         xnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"

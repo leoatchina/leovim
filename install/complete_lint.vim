@@ -32,7 +32,7 @@ elseif HasPlug('vim-lsp')
         let s:smart_engine_select = 1
     endif
 elseif HasPlug('YCM')
-    if (has('nvim-0.4.4') || v:version >= 800) && g:python_version > 3.5
+    if (has('nvim') || v:version >= 800) && g:python_version > 3.5
         if WINDOWS() && isdirectory(get(g:, 'ycm_install_path'), '')
             let g:complete_engine = "YCM"
         elseif executable('cmake') && executable('gcc')
