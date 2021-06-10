@@ -35,8 +35,8 @@ REM mklink
 call del "%HOME%\_ideavimrc"
 call del "%HOME%\.leovim.clean"
 
+call mklink "%HOME%\_ideavimrc"    "%APP_PATH%\ideavimrc"
 call mklink "%HOME%\.leovim.clean" "%APP_PATH%\clean.cmd"
-call mklink "%HOME%\_ideavimrc" "%APP_PATH%\ideavimrc"
 
 
 REM mkdir for install
