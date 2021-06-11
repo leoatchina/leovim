@@ -671,6 +671,7 @@ nmap sj <Plug>(easymotion-w)
 nmap sk <Plug>(easymotion-b)
 nmap sw <Plug>(easymotion-wl)
 nmap sb <Plug>(easymotion-bl)
+nmap sl <Plug>(easymotion-lineanywhere)
 nmap s<Cr>  <Plug>(easymotion-t2)
 nmap S      <Plug>(easymotion-s2)
 " within line jump
