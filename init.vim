@@ -1882,26 +1882,28 @@ endfunc
 func! s:OpenFileLinkInIde(text, pos, ide)
 		let l:location = s:getBookmarkUnderCursor(a:text, a:pos)
     if a:ide == 'code'
-        let a:ide = 'code --goto'
+        let ide = 'code --goto'
+    else
+        let ide = a:ide
     endif
     " location 0: file, 1: line, 2: column
 		if l:location[0] != ''
 				if l:location[1] != ''
 						if l:location[2] != ''
-                if a:ide =~ 'code'
-                    let l:command = a:ide . " " . l:location[0] . ":" . str2nr(l:location[1]) . ":" . str2nr(l:location[2])
+                if ide =~ 'code'
+                    let l:command = ide . " " . l:location[0] . ":" . str2nr(l:location[1]) . ":" . str2nr(l:location[2])
                 else
-                    let l:command = a:ide . " --column " . str2nr(l:location[2]) . " " . l:location[0] . ":" . str2nr(l:location[1])
+                    let l:command = ide . " --column " . str2nr(l:location[2]) . " " . l:location[0] . ":" . str2nr(l:location[1])
                 endif
 								echo l:command
 								exec "AsyncRun -silent " . l:command
 						else
-                let l:command = a:ide . " " . l:location[0] . ":" . str2nr(l:location[1])
+                let l:command = ide . " " . l:location[0] . ":" . str2nr(l:location[1])
 								echo l:command
 								exec "AsyncRun -silent " . l:command
 						endif
 				else
-						let l:command = a:ide . " " . l:location[0]
+						let l:command = ide . " " . l:location[0]
 						echo l:command
 						exec "AsyncRun -silent " . l:command
 				endif
@@ -1911,18 +1913,18 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 endfunc
 if executable('idea')
     command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
-    nnoremap ,eI :OpenFileLinkInIdea<cr>
-    nnoremap ,ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap <leader>eI :OpenFileLinkInIdea<cr>
+    nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('pycharm')
     command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
-    nnoremap ,eP :OpenFileLinkInPycharm<cr>
-    nnoremap ,ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap <leader>eP :OpenFileLinkInPycharm<cr>
+    nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('code')
     command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
-    nnoremap ,eV :OpenFileLinkInVscode<cr>
-    nnoremap ,ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
+    nnoremap <leader>eV :OpenFileLinkInVscode<cr>
+    nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
 endif
 " ------------------------
 " reload config shortcut
