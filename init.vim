@@ -297,6 +297,7 @@ function! StripTrailingWhiteSpace()
 endfunction
 command! StripTrailingWhiteSpace call StripTrailingWhiteSpace()
 nnoremap <leader>es :StripTrailingWhiteSpace<Cr>
+nnoremap <leader>eu :set ff=unix<Cr>:%s/\r//g<Cr>
 augroup TrailSpace
     autocmd FileType vim,c,cpp,java,go,php,javascript,typescript,python,rust,twig,xml,yml,perl,sql,r,conf
         \ autocmd! BufWritePre <buffer> :call StripTrailingWhiteSpace()
@@ -392,8 +393,8 @@ if !exists('g:leovim_loaded')
 endif
 xmap <M-a> <Plug>(EasyAlign)
 nmap <M-a> <Plug>(EasyAlign)
-xmap ga       <M-a>*=
 xmap g,       <M-a>*,
+xmap g<tab>   <M-a>*=
 xmap g<space> <M-a>*<space>
 " ------------------------
 " choosewin
