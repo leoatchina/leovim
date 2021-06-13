@@ -566,9 +566,11 @@ endif
 if get(g:, 'complete_engine', '') != ''
     imap <silent><expr> <C-j>      pumvisible() ? "\<down>"                 : "\<c-j>"
     imap <silent><expr> <C-k>      pumvisible() ? "\<up>"                   : "\<c-k>"
+    imap <silent><expr> <S-Tab>    pumvisible() ? "\<up>"                   : "\<S-tab>"
     imap <silent><expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<PageUp>"
     imap <silent><expr> <PageDown> pumvisible() ? "\<PageDown>\<C-n>\<C-p>" : "\<PageDown>"
-    imap <expr><Cr> pumvisible()? "\<C-y>" :"\<CR>"
+    " cr to finish completion
+    imap <silent><expr> <Cr>       pumvisible() ? "\<C-y>"                  :"\<CR>"
 endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
