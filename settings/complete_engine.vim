@@ -577,8 +577,9 @@ endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
 " --------------------------
-if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if g:complete_advance
     function! GoToDefinitionOrTagOrSearch(type)
+        let l:before = trim(split(execute('jumps'), '\n')[-2])
         if a:type == 'v'
             vsplit
         elseif a:type == 's'
@@ -587,7 +588,6 @@ if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'co
             split
             execute("silent! normal \<C-w>T")
         endif
-        let s:before = trim(split(execute('jumps'), '\n')[-2])
         if get(g:, 'complete_engine', '') =~ 'YCM'
             execute("silent! YcmCompleter GoToDefinition")
         elseif get(g:, 'complete_engine', '') == 'coc'
@@ -597,8 +597,8 @@ if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'co
         elseif get(g:, 'complete_engine', '' ) == 'vim-lsp'
             execute("silent! LspDefinition")
         endif
-        let s:after = trim(split(execute('jumps'), '\n')[-2])
-        if s:before != s:after
+        let l:after = trim(split(execute('jumps'), '\n')[-2])
+        if l:before != l:after
             if executable('ctags')
                 let ret = execute("silent! tag ".expand("<cword>"))
                 if ret =~ "E433" || ret =~ "E426"

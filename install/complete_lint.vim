@@ -64,7 +64,7 @@ else
 endif
 " ECM as default complete_engine
 if get(s:, 'smart_engine_select', 0) == 1
-    if (has('nvim') || v:version >= 803) && !WINDOWS()
+    if (has('nvim') || v:version >= 802) && !WINDOWS()
         let g:complete_engine = "ECM"
     elseif has('nvim') || v:version >= 800
         let g:complete_engine = "vim-lsp"
@@ -76,7 +76,8 @@ endif
 " ------------------------------
 " lint tool
 " ------------------------------
-if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+let g:complete_advance = index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if g:complete_advance
     if get(g:, 'complete_engine', '') == 'coc' && get(g:, 'lint_tool', '') != 'ale'
         let g:lint_tool = 'coc'
         nnoremap <M-k>d :<C-u>CocDiagnostics<Cr>
