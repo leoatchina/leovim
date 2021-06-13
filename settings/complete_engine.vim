@@ -568,11 +568,7 @@ if get(g:, 'complete_engine', '') != ''
     imap <silent><expr> <C-k>      pumvisible() ? "\<up>"                   : "\<c-k>"
     imap <silent><expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<PageUp>"
     imap <silent><expr> <PageDown> pumvisible() ? "\<PageDown>\<C-n>\<C-p>" : "\<PageDown>"
-    if get(g:, 'complete_engine', '') == "coc" || get(g:, 'complete_engine', '') == "apc"
-        imap <expr><Cr> pumvisible()? "\<C-e>" :"\<CR>"
-    else
-        imap <expr><Cr> pumvisible()? "\<C-[>a":"\<CR>"
-    endif
+    imap <expr><Cr> pumvisible()? "\<C-y>" :"\<CR>"
 endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
