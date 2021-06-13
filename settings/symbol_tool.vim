@@ -90,7 +90,7 @@ if Installed('vista.vim')
     else
         let g:vista_fzf_preview = ['up:30%']
     endif
-    if get(g:, 'ctags_version', '') =~ 'Universal'
+    if get(g:, 'ctags_version', '') =~ 'json'
         let g:vista_default_executive = 'ctags'
         nnoremap <M-/> :Vista finder!<Cr>
     endif

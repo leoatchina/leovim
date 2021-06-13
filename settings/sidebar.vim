@@ -27,7 +27,7 @@ if Installed('vim-sidebar-manager')
             let g:sidebars.vista = {
                         \ 'position': 'left',
                         \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ 'vista'},
-                        \ 'open': 'Vista',
+                        \ 'open': 'Vista ' . substitute(g:complete_engine, "-", "_", ""),
                         \ 'close': 'Vista!'
                         \ }
             if execute(":map <leader>t") =~ 'Nop'
