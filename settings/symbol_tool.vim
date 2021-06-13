@@ -94,26 +94,13 @@ if Installed('vista.vim')
         let g:vista_default_executive = 'ctags'
         nnoremap <M-/> :Vista finder!<Cr>
     endif
-    if get(g:, 'complete_engine', '') == 'coc'
+    if get(g:, 'complete_advance', 0) == 2
+        let s:lsp = substitute(g:complete_engine, "-", "_", "")
         if get(g:, 'vista_default_executive', '') == 'ctags'
-            nnoremap <M-?> :Vista finder coc<Cr>
+            execute("nnoremap <M-?> :Vista finder " . s:lsp . "<Cr>")
         else
-            let g:vista_default_executive = 'coc'
-            nnoremap <M-/> :Vista finder coc<Cr>
-        endif
-    elseif get(g:, 'complete_engine', '') == 'vim-lsp'
-        if get(g:, 'vista_default_executive', '') == 'ctags'
-            nnoremap <M-?> :Vista finder vim_lsp<Cr>
-        else
-            let g:vista_default_executive = 'vim_lsp'
-            nnoremap <M-/> :Vista finder vim_lsp<Cr>
-        endif
-    elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
-        if get(g:, 'vista_default_executive', '') == 'ctags'
-            nnoremap <M-?> :Vista finder nvim_lsp<Cr>
-        else
-            let g:vista_default_executive = 'nvim_lsp'
-            nnoremap <M-/> :Vista finder nvim_lsp<Cr>
+            let g:vista_default_executive = l:lsp
+            execute("nnoremap <M-/> :Vista finder " . s:lsp . "<Cr>")
         endif
     else
         nmap <M-?> <M-/>

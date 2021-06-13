@@ -575,7 +575,7 @@ endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
 " --------------------------
-if g:complete_advance
+if g:complete_engine_type
     function! GoToDefinitionOrTagOrSearch(type)
         let l:before = trim(split(execute('jumps'), '\n')[-2])
         if a:type == 'v'
