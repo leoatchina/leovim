@@ -18,7 +18,7 @@ if Installed('vim-sidebar-manager')
             let g:sidebars.vista_ctags = {
                         \ 'position': 'left',
                         \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ 'vista'},
-                        \ 'open': 'Vista ctags',
+                        \ 'open': 'Vista',
                         \ 'close': 'Vista!'
                         \ }
             nnoremap <silent> <leader>t :call sidebar#toggle('vista_ctags')<CR>
