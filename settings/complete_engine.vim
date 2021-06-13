@@ -261,10 +261,12 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
         set completepopup=align:menu,border:off,highlight:WildMenu
     endif
     " hover
-    let g:ycm_auto_hover = ''
-    nmap     <C-j>  <Plug>(YCMHover)
+    if !has('nvim')
+        let g:ycm_auto_hover = ''
+        nmap     <C-j>  <Plug>(YCMHover)
+    endif
+    nnoremap <M-'>  :YcmCompleter Get<Tab>
     nnoremap <M-l>; :YcmCompleter<Space>
-    nnoremap <M-l>. :YcmCompleter Get<Tab>
     nnoremap <M-l>k :YcmCompleter GetDoc<CR>
     nnoremap <M-l>y :YcmCompleter GetType<Cr>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>

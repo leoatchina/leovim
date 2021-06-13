@@ -156,7 +156,7 @@ else
     let g:gui_running = 0
 endif
 function! UNIX() abort
-    return (LINUX() || MACOS) && g:gui_running == 0
+    return (LINUX() || MACOS()) && g:gui_running == 0
 endfunction
 " --------------------------
 " leader key
@@ -1221,6 +1221,8 @@ nmap <M-.> >>
 nmap <M-,> <<
 xmap <M-.> >gv
 xmap <M-,> <gv
+xmap >> >gv
+xmap << <gv
 " ------------------------
 " marks
 " ------------------------
