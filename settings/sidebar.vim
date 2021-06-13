@@ -23,7 +23,7 @@ if Installed('vim-sidebar-manager')
                         \ }
             nnoremap <silent> <leader>t :call sidebar#toggle('vista_ctags')<CR>
         endif
-        if get(g:, 'complete_engine', '') == 'coc' || get(g:, 'complete_engine', '') == 'vim-lsp'
+        if get(g:, 'complete_engine', '') == 'coc' || get(g:, 'complete_engine', '') == 'vim-lsp' || get(g:, 'complete_engine', '') == 'nvim-lsp'
             let g:sidebars.vista = {
                         \ 'position': 'left',
                         \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ 'vista'},
