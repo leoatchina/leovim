@@ -193,7 +193,6 @@ elseif Installed('vim-lsp')
     nnoremap <M-l>s :LspSignatureHelp<Cr>
     nnoremap <M-l>c :LspDocument<Tab>
     " jump to
-    nnoremap <M-.>  :LspDefinition<Cr>
     nnoremap <M-j>d :LspDeclaration<CR>
     nnoremap <M-j>t :LspTypeDefinition<CR>
     nnoremap <M-j>e :LspImplementation<CR>
