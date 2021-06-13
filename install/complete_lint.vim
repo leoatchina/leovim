@@ -33,7 +33,7 @@ elseif HasPlug('vim-lsp')
     endif
 elseif HasPlug('YCM')
     if (has('nvim') || v:version >= 800) && g:python_version > 3.5
-        if WINDOWS() && isdirectory(get(g:, 'ycm_install_path'), '')
+        if WINDOWS() && isdirectory(get(g:, 'ycm_install_path', ''))
             let g:complete_engine = "YCM"
         elseif executable('cmake') && executable('gcc')
             let s:msg = system('gcc --version')
@@ -64,7 +64,7 @@ else
 endif
 " ECM as default complete_engine
 if get(s:, 'smart_engine_select', 0) == 1
-    if has('nvim') || v:version >= 802
+    if (has('nvim') || v:version >= 803) && !WINDOWS()
         let g:complete_engine = "ECM"
     elseif has('nvim') || v:version >= 800
         let g:complete_engine = "vim-lsp"

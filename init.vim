@@ -156,7 +156,7 @@ else
     let g:gui_running = 0
 endif
 function! UNIX() abort
-    return (LINUX() || MACOS) && g:gui_running == 0
+    return (LINUX() || MACOS()) && g:gui_running == 0
 endfunction
 " --------------------------
 " leader key
@@ -297,6 +297,7 @@ function! StripTrailingWhiteSpace()
 endfunction
 command! StripTrailingWhiteSpace call StripTrailingWhiteSpace()
 nnoremap <leader>es :StripTrailingWhiteSpace<Cr>
+nnoremap <leader>eu :set ff=unix<Cr>:%s/\r//g<Cr>
 augroup TrailSpace
     autocmd FileType vim,c,cpp,java,go,php,javascript,typescript,python,rust,twig,xml,yml,perl,sql,r,conf
         \ autocmd! BufWritePre <buffer> :call StripTrailingWhiteSpace()
@@ -392,8 +393,8 @@ if !exists('g:leovim_loaded')
 endif
 xmap <M-a> <Plug>(EasyAlign)
 nmap <M-a> <Plug>(EasyAlign)
-xmap ga       <M-a>*=
 xmap g,       <M-a>*,
+xmap g<tab>   <M-a>*=
 xmap g<space> <M-a>*<space>
 " ------------------------
 " choosewin
@@ -668,6 +669,9 @@ map  ,k <Plug>(easymotion-sn)
 omap ,k <Plug>(easymotion-tn)
 nmap sj <Plug>(easymotion-w)
 nmap sk <Plug>(easymotion-b)
+nmap sw <Plug>(easymotion-wl)
+nmap sb <Plug>(easymotion-bl)
+nmap sl <Plug>(easymotion-lineanywhere)
 nmap s<Cr>  <Plug>(easymotion-t2)
 nmap S      <Plug>(easymotion-s2)
 " within line jump
@@ -1213,8 +1217,12 @@ xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
 imap <M-x> <BS>
 imap <M-a> <Del>
-xmap >>    >gv
-xmap <<    <gv
+nmap <M-.> >>
+nmap <M-,> <<
+xmap <M-.> >gv
+xmap <M-,> <gv
+xmap >> >gv
+xmap << <gv
 " ------------------------
 " marks
 " ------------------------
@@ -1882,26 +1890,28 @@ endfunc
 func! s:OpenFileLinkInIde(text, pos, ide)
 		let l:location = s:getBookmarkUnderCursor(a:text, a:pos)
     if a:ide == 'code'
-        let a:ide = 'code --goto'
+        let ide = 'code --goto'
+    else
+        let ide = a:ide
     endif
     " location 0: file, 1: line, 2: column
 		if l:location[0] != ''
 				if l:location[1] != ''
 						if l:location[2] != ''
-                if a:ide =~ 'code'
-                    let l:command = a:ide . " " . l:location[0] . ":" . str2nr(l:location[1]) . ":" . str2nr(l:location[2])
+                if ide =~ 'code'
+                    let l:command = ide . " " . l:location[0] . ":" . str2nr(l:location[1]) . ":" . str2nr(l:location[2])
                 else
-                    let l:command = a:ide . " --column " . str2nr(l:location[2]) . " " . l:location[0] . ":" . str2nr(l:location[1])
+                    let l:command = ide . " --column " . str2nr(l:location[2]) . " " . l:location[0] . ":" . str2nr(l:location[1])
                 endif
 								echo l:command
 								exec "AsyncRun -silent " . l:command
 						else
-                let l:command = a:ide . " " . l:location[0] . ":" . str2nr(l:location[1])
+                let l:command = ide . " " . l:location[0] . ":" . str2nr(l:location[1])
 								echo l:command
 								exec "AsyncRun -silent " . l:command
 						endif
 				else
-						let l:command = a:ide . " " . l:location[0]
+						let l:command = ide . " " . l:location[0]
 						echo l:command
 						exec "AsyncRun -silent " . l:command
 				endif
@@ -1911,18 +1921,18 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 endfunc
 if executable('idea')
     command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
-    nnoremap ,eI :OpenFileLinkInIdea<cr>
-    nnoremap ,ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap <leader>eI :OpenFileLinkInIdea<cr>
+    nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('pycharm')
     command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
-    nnoremap ,eP :OpenFileLinkInPycharm<cr>
-    nnoremap ,ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap <leader>eP :OpenFileLinkInPycharm<cr>
+    nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('code')
     command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
-    nnoremap ,eV :OpenFileLinkInVscode<cr>
-    nnoremap ,ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
+    nnoremap <leader>eV :OpenFileLinkInVscode<cr>
+    nnoremap <leader>ev :<c-r>=printf("AsyncRun -silent code --goto %s:%d", expand("%:p"), line("."))<cr><cr>
 endif
 " ------------------------
 " reload config shortcut

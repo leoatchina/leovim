@@ -105,7 +105,6 @@ let g:ycm_filetype_blacklist = {
     \ }
 if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
     let g:easycomplete_tab_trigger = "<c-n>"
-    nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
 elseif Installed('vim-lsp')
@@ -207,7 +206,7 @@ elseif Installed('vim-lsp')
     nnoremap ,c, :LspCodeLens<CR>
     if has('patch-8.1.1517') || has('nvim')
         autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
-        nnoremap <M-,>  :LspHover<CR>
+        nnoremap <C-j>  :LspHover<CR>
         nnoremap <M-j>h :LspPeekDefinition<Cr>
         nnoremap <M-j>e :LspPeekDeclaration<CR>
         nnoremap <M-j>y :LspPeekTypeDefinition<CR>
@@ -262,11 +261,12 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
         set completepopup=align:menu,border:off,highlight:WildMenu
     endif
     " hover
-    let g:ycm_auto_hover = ''
-    nmap     <M-,>  <Plug>(YCMHover)
-    nnoremap <M-.>  :YcmCompleter GoToDefinition<Cr>
+    if !has('nvim')
+        let g:ycm_auto_hover = ''
+        nmap     <C-j>  <Plug>(YCMHover)
+    endif
+    nnoremap <M-'>  :YcmCompleter Get<Tab>
     nnoremap <M-l>; :YcmCompleter<Space>
-    nnoremap <M-l>. :YcmCompleter Get<Tab>
     nnoremap <M-l>k :YcmCompleter GetDoc<CR>
     nnoremap <M-l>y :YcmCompleter GetType<Cr>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>
@@ -340,8 +340,7 @@ elseif Installed('coc.nvim')
     call coc#config('coc.preferences.enableFloatHighlight', v:true)
     call coc#config('rust-analyzer.inlayHints.enable', v:false)
     " as lsp engine
-    nmap <M-,> :call <SID>show_documentation()<CR>
-    nmap <M-.>  <Plug><coc-definition>
+    nmap <C-j> :call <SID>show_documentation()<CR>
     " basic plug
     nmap <M-j>w :CocFzfList symbols<CR>
     nmap <M-j>s :CocAction('documentSymbols')<Cr>
@@ -611,8 +610,8 @@ if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'co
             endif
         endif
     endfunction
-    nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
-    nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
+    nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("n")<Cr>
+    nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("v")<Cr>
     nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
     nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
 endif
