@@ -1217,8 +1217,10 @@ xnoremap <M-V> <C-c>`.``gvp``P
 " 缩进等
 imap <M-x> <BS>
 imap <M-a> <Del>
-xmap >>    >gv
-xmap <<    <gv
+nmap <M-.> >>
+nmap <M-,> <<
+xmap <M-.> >gv
+xmap <M-,> <gv
 " ------------------------
 " marks
 " ------------------------
