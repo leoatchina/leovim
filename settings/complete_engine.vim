@@ -64,12 +64,8 @@ if get(g:, 'complete_snippet', '') != ''
             endif
             if get(g:,'ulti_expand_res', 0) > 0
                 return "\<Right>"
-            elseif get(g:, 'complete_engine', '') == 'ECM'
-                return "\<C-y>"
-            elseif empty(get(v:, 'completed_item', {}))
-                return "\<Down>"
             else
-                return "\<C-y>"
+                return "\<Down>"
             endif
         else
             if s:check_back_space()
@@ -376,12 +372,12 @@ elseif Installed('coc.nvim')
         endif
     endfunction
     if has('nvim') || has('patch-8.2.0750')
-        imap <silent><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
-        imap <silent><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
-        xmap <silent><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-        xmap <silent><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
-        nmap <silent><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-        nmap <silent><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : execute(":CocFzfList")
+        imap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
+        imap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
+        xmap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        xmap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
+        nmap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        nmap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : coc_fzf#lists#fzf_run("")
     else
         nmap <C-p> :CocFzfList<Cr>
     endif
