@@ -146,9 +146,9 @@ if executable('ctags')
         " modules
         let g:gutentags_modules = ['ctags']
         " 配置 ctags 的参数
-        let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--c-kinds=+px', '--c++-kinds=+px']
+        let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--c-kinds=+px', '--c++-kinds=+pxI']
         if g:ctags_version =~ "Universal"
-            let g:gutentags_ctags_extra_args += ['--extras=+q', '--output-format=e-ctags']
+            let g:gutentags_ctags_extra_args += ['--extras=+q']
         endif
         nnoremap <leader>gu :GutentagsUpdate<CR>
     endif
