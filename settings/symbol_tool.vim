@@ -126,7 +126,7 @@ if executable('ctags')
     endif
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')
-        " 将自动生成的 tags 文件全部放入 leaderf 目录中，避免污染工程目录
+        " 将自动生成的 tags 文件全部放入 leaderf gtags目录中，避免污染工程目录
         let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory.'/.LfCache/gtags')
         if isdirectory(g:gutentags_cache_dir)
             silent! call mkdir(g:gutentags_cache_dir, 'p')
@@ -164,6 +164,15 @@ if Installed('gutentags_plus')
     let g:gutentags_plus_switch              = 1
     let g:gutentags_plus_nomap               = 1
     let g:gutentags_auto_add_gtags_cscope    = 1
+    " s: Find this symbol
+    " g: Find this definition
+    " d: Find functions called by this function
+    " c: Find functions calling this function
+    " t: Find this text string
+    " e: Find this egrep pattern
+    " f: Find this file
+    " i: Find files #including this file
+    " a: Find places where this symbol is assigned a value
     nnoremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
     nnoremap <silent> <leader>gg :GscopeFind g <C-R><C-W><cr>
     nnoremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
