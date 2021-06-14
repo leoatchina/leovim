@@ -29,10 +29,10 @@ if Installed('tagbar')
                 \ 's:selectors',
                 \ 'i:identities'
                 \ ]}
-    if get(g:, 'has_lambda', 0) == 0
-        let g:tagbar_position = 'rightbelow vertical'
-    else
+    if get(g:, 'has_lambda', 0) > 0
         let g:tagbar_position = 'leftabove vertical'
+    else
+        let g:tagbar_position = 'rightbelow vertical'
     endif
     if executable('tstags')
         if get(g:, "ctags_version", '') =~ "Universal"
@@ -98,8 +98,9 @@ if Installed('vista.vim')
         execute("nnoremap <M-/> :Vista finder " . g:vista_lsp_command . "<Cr>")
         if get(g:, 'vista_default_executive', '') != 'ctags'
             let g:vista_default_executive = g:vista_lsp_command
+            execute("nnoremap <M-?> :Vista finder " . g:vista_lsp_command . "<Cr>")
         endif
-    else
+    elseif get(g:, 'vista_default_executive', '') == 'ctags'
         nnoremap <M-/> :Vista finder!<Cr>
     endif
 endif
@@ -116,7 +117,7 @@ if executable('ctags')
     endif
     " vim-preview
     let g:preview#preview_position = "rightbottom"
-    let g:preview#preview_size = get(g:, 'preview_rows', 8)
+    let g:preview#preview_size     = get(g:, 'preview_rows', 8)
     nnoremap <silent> <M-:> <C-w>}
     nnoremap <silent> <M-;> :PreviewTag<Cr>
     nnoremap <silent> <C-l> :ToggleQuickfix<Cr>:PreviewList<Cr>
@@ -156,8 +157,6 @@ if executable('ctags')
         endif
         nnoremap <leader>gu :GutentagsUpdate<CR>
     endif
-else
-    nnoremap - <Nop>
 endif
 " --------------------------
 " gtags
