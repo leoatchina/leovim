@@ -87,7 +87,7 @@ if executable('ctags')
         call AddPlugSymbol('tagbar')
     endif
 endif
-if index(['coc', 'vim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if g:complete_engine_type == 2
     call AddPlugSymbol('vista')
 endif
 " ------------------------------

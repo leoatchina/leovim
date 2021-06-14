@@ -78,6 +78,7 @@ endif
 " ------------------------------
 if index(['coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
     let g:complete_engine_type = 2
+    let g:vista_lsp_command = substitute(g:complete_engine, "-", "_", "")
 elseif index(['YCM', 'YCM-legacy', 'ECM'], get(g:, 'complete_engine', '')) >= 0
     let g:complete_engine_type = 1
 else
