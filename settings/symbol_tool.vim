@@ -108,7 +108,6 @@ endif
 " ctags
 " --------------------------
 if executable('ctags')
-    " Make tags placed in .git/tags file available in all levels of a repository
     let &tags = './.tags;,.tags'
     " vim-preview
     let g:preview#preview_position = "rightbottom"
@@ -116,6 +115,7 @@ if executable('ctags')
     nnoremap <silent> <M-:> <C-w>}
     nnoremap <silent> <M-;> :PreviewTag<Cr>
     nnoremap <silent> <C-l> :ToggleQuickfix<Cr>:PreviewList<Cr>
+    " vim-quickui
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
         au FileType qf noremap <silent><buffer> <M-.> :call quickui#tools#preview_quickfix()<cr>
