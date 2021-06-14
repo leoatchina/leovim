@@ -183,15 +183,15 @@ elseif Installed('vim-lsp')
     nnoremap <M-l>t :vs<Cr>:LspTypeDefinition<CR>
     nnoremap <M-l>r :vs<Cr>:LspReferences<CR>
     nnoremap <M-l>i :vs<Cr>:LspImplementation<CR>
-    nnoremap <M-j>i :LspCallHierarchyIncoming<Cr>
-    nnoremap <M-j>o :LspCallHierarchyOutgoing<Cr>
+    " no vsplict
     nnoremap <M-j>h :LspTypeHierarchy<tab>
     nnoremap <M-j>s :LspSignatureHelp<Cr>
-    " jump to
     nnoremap <M-j>o :LspDocument<Tab>
     nnoremap <M-j>r :LspReferences<CR>
     nnoremap <M-j>w :LspWorkspaceSymbol<Cr>
     nnoremap <M-j>f :LspDocumentSymbol<Cr>
+    nnoremap <M-j>I :LspCallHierarchyIncoming<Cr>
+    nnoremap <M-j>O :LspCallHierarchyOutgoing<Cr>
     " codeaction
     nnoremap ,cr :LspRename<CR>
     nnoremap ,c; :LspCodeAction<CR>
@@ -270,14 +270,14 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     nnoremap <M-l>t :vs<Cr>:YcmCompleter GoToType<CR>
     nnoremap <M-l>r :vs<Cr>:YcmCompleter GoToReferences<CR>
     nnoremap <M-l>i :vs<Cr>:YcmCompleter GoToImplementation<CR>
-    nnoremap <M-l>I :vs<Cr>:YcmCompleter GotoInclude<Space>
+    nnoremap <M-l>n :vs<Cr>:YcmCompleter GotoInclude<Space>
     " Goto
     nnoremap <M-j>g :YcmCompleter GoTo<CR>
     nnoremap <M-j>d :YcmCompleter GoToDeclaration<CR>
     nnoremap <M-j>t :YcmCompleter GoToType<CR>
     nnoremap <M-j>r :YcmCompleter GoToReferences<CR>
     nnoremap <M-j>i :YcmCompleter GoToImplementation<CR>
-    nnoremap <M-j>I :YcmCompleter GotoInclude<Space>
+    nnoremap <M-j>n :YcmCompleter GotoInclude<Space>
     nnoremap <M-j>f :YcmCompleter GoToSymbol <C-r><C-w>
     xnoremap <M-j>f :YcmCompleter GoToSymbol <C-R>=GetVisualSelection()<CR>
     nnoremap ,cf :YcmCompleter Format<CR>
