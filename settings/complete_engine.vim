@@ -182,16 +182,13 @@ elseif Installed('vim-lsp')
     nnoremap <M-l>d :vs<Cr>:LspDeclaration<CR>
     nnoremap <M-l>t :vs<Cr>:LspTypeDefinition<CR>
     nnoremap <M-l>r :vs<Cr>:LspReferences<CR>
-    nnoremap <M-l>e :vs<Cr>:LspImplementation<CR>
-    nnoremap <M-l>i :LspCallHierarchyIncoming<Cr>
-    nnoremap <M-l>o :LspCallHierarchyOutgoing<Cr>
-    nnoremap <M-l>h :LspTypeHierarchy<Cr>
-    nnoremap <M-l>s :LspSignatureHelp<Cr>
-    nnoremap <M-l>c :LspDocument<Tab>
+    nnoremap <M-l>i :vs<Cr>:LspImplementation<CR>
+    nnoremap <M-j>i :LspCallHierarchyIncoming<Cr>
+    nnoremap <M-j>o :LspCallHierarchyOutgoing<Cr>
+    nnoremap <M-j>h :LspTypeHierarchy<tab>
+    nnoremap <M-j>s :LspSignatureHelp<Cr>
     " jump to
-    nnoremap <M-j>d :LspDeclaration<CR>
-    nnoremap <M-j>t :LspTypeDefinition<CR>
-    nnoremap <M-j>e :LspImplementation<CR>
+    nnoremap <M-j>o :LspDocument<Tab>
     nnoremap <M-j>r :LspReferences<CR>
     nnoremap <M-j>w :LspWorkspaceSymbol<Cr>
     nnoremap <M-j>f :LspDocumentSymbol<Cr>
@@ -202,13 +199,16 @@ elseif Installed('vim-lsp')
     if has('patch-8.1.1517') || has('nvim')
         autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
         nnoremap <C-j>  :LspHover<CR>
-        nnoremap <M-j>h :LspPeekDefinition<Cr>
-        nnoremap <M-j>e :LspPeekDeclaration<CR>
-        nnoremap <M-j>y :LspPeekTypeDefinition<CR>
-        nnoremap <M-j>m :LspPeekImplementation<CR>
+        nnoremap <M-j>, :LspPeekDefinition<Cr>
+        nnoremap <M-j>d :spPeekDeclaration<CR>
+        nnoremap <M-j>t :LspPeekTypeDefinition<CR>
+        nnoremap <M-j>i :LspPeekImplementation<CR>
         let g:lsp_preview_float      = 1
         let g:lsp_preview_keep_focus = 0
     else
+        nnoremap <M-j>d :LspDeclaration<CR>
+        nnoremap <M-j>t :LspTypeDefinition<CR>
+        nnoremap <M-j>i :LspImplementation<CR>
         let g:lsp_preview_float      = 0
         let g:lsp_preview_keep_focus = 1
     endif
@@ -258,26 +258,25 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     " hover
     if !has('nvim')
         let g:ycm_auto_hover = ''
-        nmap     <C-j>  <Plug>(YCMHover)
+        nnoremap <C-j> :YcmCompleter GetHover<Cr>
     endif
     nnoremap <M-'>  :YcmCompleter Get<Tab>
     nnoremap <M-l>; :YcmCompleter<Space>
-    nnoremap <M-l>k :YcmCompleter GetDoc<CR>
-    nnoremap <M-l>y :YcmCompleter GetType<Cr>
+    nnoremap <M-l>, :YcmCompleter GetType<CR>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>
     " with vsplit
     nnoremap <M-l>g :vs<Cr>:YcmCompleter GoTo<CR>
     nnoremap <M-l>d :vs<Cr>:YcmCompleter GoToDeclaration<CR>
     nnoremap <M-l>t :vs<Cr>:YcmCompleter GoToType<CR>
     nnoremap <M-l>r :vs<Cr>:YcmCompleter GoToReferences<CR>
-    nnoremap <M-l>e :vs<Cr>:YcmCompleter GoToImplementation<CR>
-    nnoremap <M-l>n :vs<Cr>:YcmCompleter GotoInclude<Space>
+    nnoremap <M-l>i :vs<Cr>:YcmCompleter GoToImplementation<CR>
+    nnoremap <M-l>I :vs<Cr>:YcmCompleter GotoInclude<Space>
     " Goto
     nnoremap <M-j>g :YcmCompleter GoTo<CR>
     nnoremap <M-j>d :YcmCompleter GoToDeclaration<CR>
     nnoremap <M-j>t :YcmCompleter GoToType<CR>
     nnoremap <M-j>r :YcmCompleter GoToReferences<CR>
-    nnoremap <M-j>e :YcmCompleter GoToImplementation<CR>
+    nnoremap <M-j>i :YcmCompleter GoToImplementation<CR>
     nnoremap <M-j>I :YcmCompleter GotoInclude<Space>
     nnoremap <M-j>f :YcmCompleter GoToSymbol <C-r><C-w>
     xnoremap <M-j>f :YcmCompleter GoToSymbol <C-R>=GetVisualSelection()<CR>
@@ -343,13 +342,13 @@ elseif Installed('coc.nvim')
     nmap <M-j>d <Plug>(coc-declaration)
     nmap <M-j>t <Plug>(coc-type-definition)
     nmap <M-j>r <Plug>(coc-references)
-    nmap <M-j>e <Plug>(coc-implementation)
+    nmap <M-j>i <Plug>(coc-implementation)
     nmap <M-j>R <Plug>(coc-refactor)
     " with vsplit
     nmap <M-l>d :vs<Cr>:execute "normal \<Plug>(coc-declaration)"<Cr>
     nmap <M-l>t :vs<Cr>:execute "normal \<Plug>(coc-type-definition)"<Cr>
     nmap <M-l>r :vs<Cr>:execute "normal \<Plug>(coc-references)"<Cr>
-    nmap <M-l>e :vs<Cr>:execute "normal \<Plug>(coc-implementation)"<Cr>
+    nmap <M-l>i :vs<Cr>:execute "normal \<Plug>(coc-implementation)"<Cr>
     nmap <M-l>m :CocList marketplace<Cr>
     let g:coc_snippet_next = "<C-j>"
     let g:coc_snippet_prev = "<C-k>"
