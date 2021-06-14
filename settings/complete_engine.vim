@@ -15,7 +15,7 @@ if Installed('ultisnips')
     let g:UltiSnipsNoPythonWarning          = 1
     let g:UltiSnipsRemoveSelectModeMappings = 0
     let g:UltiSnipsListSnippets             = "<C-l>"
-    let g:UltiSnipsExpandTrigger            = "<C-g>"
+    let g:UltiSnipsExpandTrigger            = "<Nop>"
     let g:UltiSnipsJumpForwardTrigger       = "<C-f>"
     let g:UltiSnipsJumpBackwardTrigger      = "<C-b>"
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
@@ -453,9 +453,9 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
     " autocmd for CursorMovedI
     function! s:feed_popup()
         let enable = get(b:, 'apc_enable', 0)
-        let lastx = get(b:, 'apc_lastx', -1)
-        let lasty = get(b:, 'apc_lasty', -1)
-        let tick = get(b:, 'apc_tick', -1)
+        let lastx  = get(b:, 'apc_lastx', -1)
+        let lasty  = get(b:, 'apc_lasty', -1)
+        let tick   = get(b:, 'apc_tick', -1)
         if &bt != '' || enable == 0 || &paste
             return -1
         endif
@@ -468,7 +468,7 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
             endif
             let b:apc_lastx = x
             let b:apc_lasty = y
-            let b:apc_tick = b:changedtick
+            let b:apc_tick  = b:changedtick
             return 0
         elseif lastx == x && lasty == y
             return -2
@@ -482,7 +482,7 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
             silent! call feedkeys("\<c-n>", 'n')
             let b:apc_lastx = x
             let b:apc_lasty = y
-            let b:apc_tick = b:changedtick
+            let b:apc_tick  = b:changedtick
         endif
         return 0
     endfunc
@@ -490,7 +490,7 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
     function! s:complete_done()
         let b:apc_lastx = col('.') - 1
         let b:apc_lasty = line('.') - 1
-        let b:apc_tick = b:changedtick
+        let b:apc_tick  = b:changedtick
     endfunc
     " enable apc
     function! s:apc_enable()
