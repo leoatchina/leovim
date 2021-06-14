@@ -118,11 +118,11 @@ if executable('ctags')
     nnoremap <silent> <C-l> :ToggleQuickfix<Cr>:PreviewList<Cr>
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
-        au FileType qf noremap <silent><buffer> <C-k> :call quickui#tools#preview_quickfix()<cr>
+        au FileType qf noremap <silent><buffer> <M-.> :call quickui#tools#preview_quickfix()<cr>
         au FileType qf noremap <silent><buffer> <Tab> :call quickui#tools#preview_quickfix()<cr>
-        nnoremap <C-k> :<C-u>call quickui#tools#preview_tag('')<Cr>
+        nnoremap <M-.> :<C-u>call quickui#tools#preview_tag('')<Cr>
     else
-        nnoremap <silent> <C-k> :PreviewSignature!<Cr>
+        nnoremap <silent> <M-.> :PreviewSignature!<Cr>
     endif
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')

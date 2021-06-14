@@ -198,7 +198,7 @@ elseif Installed('vim-lsp')
     nnoremap ,c, :LspCodeLens<CR>
     if has('patch-8.1.1517') || has('nvim')
         autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
-        nnoremap <C-j>  :LspHover<CR>
+        nnoremap <M-,>  :LspHover<CR>
         nnoremap <M-j>, :LspPeekDefinition<Cr>
         nnoremap <M-j>d :spPeekDeclaration<CR>
         nnoremap <M-j>t :LspPeekTypeDefinition<CR>
@@ -258,7 +258,7 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     " hover
     if !has('nvim')
         let g:ycm_auto_hover = ''
-        nnoremap <C-j> :YcmCompleter GetHover<Cr>
+        nnoremap <M-,> :YcmCompleter GetHover<Cr>
     endif
     nnoremap <M-'>  :YcmCompleter Get<Tab>
     nnoremap <M-l>; :YcmCompleter<Space>
@@ -334,7 +334,7 @@ elseif Installed('coc.nvim')
     call coc#config('coc.preferences.enableFloatHighlight', v:true)
     call coc#config('rust-analyzer.inlayHints.enable', v:false)
     " as lsp engine
-    nmap <C-j> :call <SID>show_documentation()<CR>
+    nmap <M-,> :call <SID>show_documentation()<CR>
     " basic plug
     nmap <M-j>w :CocFzfList symbols<CR>
     nmap <M-j>s :CocAction('documentSymbols')<Cr>
