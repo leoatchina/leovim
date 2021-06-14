@@ -14,7 +14,7 @@ if Installed('vim-sidebar-manager')
         nnoremap <silent> <leader>t :call sidebar#toggle('tagbar')<CR>
     endif
     if g:symbol_tool =~ 'vista'
-        if get(g:, 'ctags_version', '') =~ 'json'
+        if get(g:, 'vista_default_executive', '') =~ 'ctags'
             let g:sidebars.vista_ctags = {
                         \ 'position': 'left',
                         \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ 'vista'},
@@ -23,17 +23,17 @@ if Installed('vim-sidebar-manager')
                         \ }
             nnoremap <silent> <leader>t :call sidebar#toggle('vista_ctags')<CR>
         endif
-        if get(g:, 'complete_engine', '') == 'coc' || get(g:, 'complete_engine', '') == 'vim-lsp' || get(g:, 'complete_engine', '') == 'nvim-lsp'
-            let g:sidebars.vista = {
+        if g:complete_engine_type == 2
+            let g:sidebars.vista_lsp = {
                         \ 'position': 'left',
                         \ 'check_win': {nr -> getwinvar(nr, '&filetype') =~ 'vista'},
-                        \ 'open': 'Vista ' . substitute(g:complete_engine, "-", "_", ""),
+                        \ 'open': 'Vista ' . g:vista_lsp_command,
                         \ 'close': 'Vista!'
                         \ }
             if execute(":map <leader>t") =~ 'Nop'
-                nnoremap <silent> <leader>t :call sidebar#toggle('vista')<CR>
+                nnoremap <silent> <leader>t :call sidebar#toggle('vista_lsp')<CR>
             else
-                nnoremap <silent> ,t :call sidebar#toggle('vista')<CR>
+                nnoremap <silent> ,t :call sidebar#toggle('vista_lsp')<CR>
             endif
         endif
     endif
