@@ -430,6 +430,16 @@ endif
 if Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
+    if has('nvim') || has('patch-8.2.0750')
+        imap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
+        imap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
+        xmap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        xmap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
+        nmap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        nmap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : coc_fzf#lists#fzf_run("")
+    else
+        nmap <C-p> :CocFzfList<Cr>
+    endif
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
