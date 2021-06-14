@@ -27,9 +27,9 @@ if Installed('ultisnips')
     " Ulti python version
     let g:UltiSnipsUsePythonVersion = 3
 elseif Installed('neosnippet')
-    let g:neosnippet#enable_conceal_markers = 1
+    let g:neosnippet#enable_conceal_markers   = 1
     let g:neosnippet#enable_completed_snippet = 1
-    let g:neosnippet#snippets_directory=$VIM_PLUG.'/vim-snippets/snippets'
+    let g:neosnippet#snippets_directory       = $HOME.'/.leovim.plug/vim-snippets/snippets'
     smap <C-f> <Plug>(neosnippet_jump_or_expand)
 else
     let g:complete_sinippet = ''
@@ -226,8 +226,8 @@ elseif Installed('vim-lsp')
                     \ })
     endif
     if has('nvim') || has('patch-8.1.1615')
-        inoremap <silent><buffer><expr> <C-n> pumvisible() ? lsp#scroll(+3) : "\<C-n>"
-        inoremap <silent><buffer><expr> <C-p> pumvisible() ? lsp#scroll(-3) : "\<C-p>"
+        imap <silent><buffer><expr> <C-n> pumvisible() ? lsp#scroll(+3) : "\<C-n>"
+        imap <silent><buffer><expr> <C-p> pumvisible() ? lsp#scroll(-3) : "\<C-p>"
     endif
     " --------------------------
     " vim-lsp-settings
@@ -356,7 +356,7 @@ elseif Installed('coc.nvim')
     nmap <M-l>e :vs<Cr>:execute "normal \<Plug>(coc-implementation)"<Cr>
     nmap <M-l>m :CocList marketplace<Cr>
     let g:coc_snippet_next = "<C-j>"
-    let g:coc_snippet_prev = "<C-p>"
+    let g:coc_snippet_prev = "<C-k>"
     augroup cocgroup
         autocmd!
         " Setup formatexpr specified filetype(s).
@@ -376,12 +376,14 @@ elseif Installed('coc.nvim')
         endif
     endfunction
     if has('nvim') || has('patch-8.2.0750')
-        inoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
-        inoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
-        xnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-        xnoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
-        nnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-        nnoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
+        imap <silent><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
+        imap <silent><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
+        xmap <silent><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        xmap <silent><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
+        nmap <silent><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        nmap <silent><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : execute(":CocFzfList")
+    else
+        nmap <C-p> :CocFzfList<Cr>
     endif
     " codeaction and others
     nmap ,ca :CocFzfList actions<Cr>

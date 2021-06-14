@@ -295,7 +295,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     let g:Lf_CommandMap = {'<C-]>': ['<C-V>'], '<C-V>': ['<M-v>', '<C-y>'], '<C-j>':['<Down>', '<C-j>'], '<C-k>':['<Up>', '<C-k>'], '<F5>': ['<C-e>']}
     " show fuzzy functions
     if !Installed('coc.nvim')
-        nnoremap <silent><C-p> :Leaderf self<Cr>
+        nmap <silent><C-p> :Leaderf self<Cr>
     endif
     nnoremap <M-F> :Leaderf<Tab>
     " main selector
@@ -428,7 +428,6 @@ endif
 if Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
-    nnoremap <C-p>  :CocFzfList<CR>
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
