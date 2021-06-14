@@ -264,6 +264,8 @@ if Installed("fzf.vim") && Installed("fzf")
         nnoremap <M-y> :FZFJumps<cr>
     endif
 endif
+" leaderf
+let g:Lf_CacheDirectory   = expand("~/.cache/leaderf")
 if get(g:, 'fuzzy_finder', '') == 'leaderf'
     au FileType leaderf set nonu
     let g:Lf_DefaultMode       = 'Fuzzy'
