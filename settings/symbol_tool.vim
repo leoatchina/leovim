@@ -109,12 +109,7 @@ endif
 " --------------------------
 if executable('ctags')
     " Make tags placed in .git/tags file available in all levels of a repository
-    let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-    if gitroot != ''
-        let &tags = gitroot . '/.git/tags;./.tags;,.tags'
-    else
-        let &tags = './.tags;,.tags'
-    endif
+    let &tags = './.tags;,.tags'
     " vim-preview
     let g:preview#preview_position = "rightbottom"
     let g:preview#preview_size     = get(g:, 'preview_rows', 8)
