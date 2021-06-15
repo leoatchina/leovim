@@ -1753,8 +1753,8 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     xnoremap [       :WhichKeyVisual "["<Cr>
     xnoremap ]       :WhichKeyVisual "]"<Cr>
     " g
-    nnoremap g= :WhichKey "g"<Cr>
-    nnoremap s= :WhichKey "s"<Cr>
+    nnoremap g; :WhichKey "g"<Cr>
+    nnoremap s; :WhichKey "s"<Cr>
     " M- keys
     nnoremap <M-g> :WhichKey "<lt>M-g>"<Cr>
     nnoremap <M-h> :WhichKey "<lt>M-h>"<Cr>
