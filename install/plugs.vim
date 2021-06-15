@@ -169,6 +169,8 @@ endif
 " ------------------------------
 " MyPlug 'ZSaberLv0/ZFVimDirDiff'
 " MyPlug 'ZSaberLv0/ZFVimIgnore'
+" nnoremap <M-k>d :ZFDirDiff<Space>
+" nnoremap <M-M>  :ZFDirDiffMark<Cr>
 " ------------------------------
 " tmux
 " ------------------------------

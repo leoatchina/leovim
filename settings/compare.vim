@@ -23,8 +23,3 @@ if Installed('vim-signify')
     nmap <leader>vc vic
     nmap ,vc        vac
 endif
-" dirdiff
-" if Installed('ZFVimDirDiff')
-"     nnoremap <M-k>d :ZFDirDiff<Space>
-"     nnoremap <M-M>  :ZFDirDiffMark<Cr>
-" endif
