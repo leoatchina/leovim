@@ -148,10 +148,7 @@ if executable('ctags')
         " 配置 ctags 的参数
         let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--c-kinds=+px', '--c++-kinds=+pxI']
         if g:ctags_version =~ "Universal"
-            let g:gutentags_ctags_extra_args += ['--extras=+q']
-            if WINDOWS()
-                let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
-            endif
+            let g:gutentags_ctags_extra_args += ['--extras=+q', '--output-format=e-ctags']
         endif
         nnoremap <leader>gu :GutentagsUpdate<CR>
     endif
