@@ -1740,28 +1740,31 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
         let g:which_key_use_floating_win = 0
     end
     " basic keys
-    nnoremap <Space> :WhichKey       ' '<Cr>
-    nnoremap <Tab>   :WhichKey       '<lt>Tab>'<Cr>
-    nnoremap ,       :WhichKey       ','<Cr>
+    nnoremap <Space> :WhichKey       " "<Cr>
+    nnoremap <Tab>   :WhichKey       "<lt>Tab>"<Cr>
+    nnoremap ,       :WhichKey       ","<Cr>
     nnoremap \       :WhichKey       '\'<Cr>
-    nnoremap [       :WhichKey       '['<Cr>
-    nnoremap ]       :WhichKey       ']'<Cr>
-    xnoremap <Space> :WhichKeyVisual ' '<Cr>
-    xnoremap ,       :WhichKeyVisual ','<Cr>
-    xnoremap \       :WhichKeyVisual '\'<Cr>
-    xnoremap <Tab>   :WhichKeyVisual '<lt>Tab>'<Cr>
-    xnoremap [       :WhichKeyVisual '['<Cr>
-    xnoremap ]       :WhichKeyVisual ']'<Cr>
+    nnoremap [       :WhichKey       "["<Cr>
+    nnoremap ]       :WhichKey       "]"<Cr>
+    xnoremap <Space> :WhichKeyVisual " "<Cr>
+    xnoremap ,       :WhichKeyVisual ","<Cr>
+    xnoremap \       :WhichKeyVisual "\"<Cr>
+    xnoremap <Tab>   :WhichKeyVisual "<lt>Tab>"<Cr>
+    xnoremap [       :WhichKeyVisual "["<Cr>
+    xnoremap ]       :WhichKeyVisual "]"<Cr>
     " g
-    nnoremap g1 :WhichKey 'g'<Cr>
+    nnoremap g= :WhichKey "g"<Cr>
+    nnoremap s= :WhichKey "s"<Cr>
     " M- keys
-    nnoremap <M-g> :WhichKey '<lt>M-g>'<Cr>
-    nnoremap <M-h> :WhichKey '<lt>M-h>'<Cr>
-    nnoremap <M-j> :WhichKey '<lt>M-j>'<Cr>
-    nnoremap <M-k> :WhichKey '<lt>M-k>'<Cr>
-    nnoremap <M-l> :WhichKey '<lt>M-l>'<Cr>
-    nnoremap <M-r> :WhichKey '<lt>M-r>'<Cr>
-    nnoremap <M-w> :WhichKey '<lt>M-w>'<Cr>
+    nnoremap <M-g> :WhichKey "<lt>M-g>"<Cr>
+    nnoremap <M-h> :WhichKey "<lt>M-h>"<Cr>
+    nnoremap <M-j> :WhichKey "<lt>M-j>"<Cr>
+    nnoremap <M-k> :WhichKey "<lt>M-k>"<Cr>
+    nnoremap <M-l> :WhichKey "<lt>M-l>"<Cr>
+    nnoremap <M-r> :WhichKey "<lt>M-r>"<Cr>
+    nnoremap <M-w> :WhichKey "<lt>M-w>"<Cr>
+    nnoremap <M-w> :WhichKey "<lt>M-w>"<Cr>
+    nnoremap <M-'> :WhichKey "<lt>M-'>"<Cr>
     " search
     if get(g:, 'grep_tool', '') =~ 'leaderf' || get(g:, 'grep_tool', '') =~ 'coc' || get(g:, 'grep_tool', '') =~ 'ctrlsf'
         nnoremap <M-f> :WhichKey '<lt>M-f>'<Cr>

@@ -74,9 +74,9 @@ try
     command! DiffSwitchAlgorithm call DiffSwitchAlgorithm()
     command! DiffToggleWhiteSpace call DiffToggleWhiteSpace()
     command! -nargs=1 DiffUpdateContext call DiffUpdateContext(<f-args>)
-    nnoremap <M-h>ds :DiffSwitchAlgorithm<Cr>
-    nnoremap <M-h>dt :DiffToggleWhiteSpace<Cr>
-    nnoremap <M-h>du :DiffUpdateContext<Space>
+    nnoremap <M-'>s :DiffSwitchAlgorithm<Cr>
+    nnoremap <M-'>t :DiffToggleWhiteSpace<Cr>
+    nnoremap <M-'>u :DiffUpdateContext<Space>
 catch
     " pass
 endtry

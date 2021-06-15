@@ -260,8 +260,7 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
         let g:ycm_auto_hover = ''
         nnoremap <M-,> :YcmCompleter GetHover<Cr>
     endif
-    nnoremap <M-'>  :YcmCompleter Get<Tab>
-    nnoremap <M-l>; :YcmCompleter<Space>
+    nnoremap <M-l>; :YcmCompleter<Space><Tab>
     nnoremap <M-l>, :YcmCompleter GetType<CR>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>
     " with vsplit
