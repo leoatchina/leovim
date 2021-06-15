@@ -167,8 +167,8 @@ endif
 " ------------------------------
 " dirdiff
 " ------------------------------
-MyPlug 'ZSaberLv0/ZFVimDirDiff'
-MyPlug 'ZSaberLv0/ZFVimIgnore'
+" MyPlug 'ZSaberLv0/ZFVimDirDiff'
+" MyPlug 'ZSaberLv0/ZFVimIgnore'
 " ------------------------------
 " tmux
 " ------------------------------
