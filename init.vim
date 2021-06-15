@@ -1009,7 +1009,6 @@ cnoremap <M-q> <ESC>
 " ------------------------
 nnoremap <C-q> gq
 xnoremap <C-q> gq
-inoremap <C-q> gq
 nnoremap <C-s> :update!<CR>
 inoremap <C-s> <ESC>:update!<Cr>
 nnoremap <M-s> :w!<CR>
