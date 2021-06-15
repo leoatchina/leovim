@@ -165,13 +165,6 @@ if has('nvim') || has('patch-8.0.902')
     MyPlug 'mhinz/vim-signify'
 endif
 " ------------------------------
-" dirdiff
-" ------------------------------
-" MyPlug 'ZSaberLv0/ZFVimDirDiff'
-" MyPlug 'ZSaberLv0/ZFVimIgnore'
-" nnoremap <M-k>d :ZFDirDiff<Space>
-" nnoremap <M-M>  :ZFDirDiffMark<Cr>
-" ------------------------------
 " tmux
 " ------------------------------
 if executable('tmux') && g:gui_running == 0 && (has('nvim') || has('patch-8.0.1394'))
@@ -369,3 +362,10 @@ if has("persistent_undo") && g:has_lambda > 0 && (HasPlug('undotool') || HasPlug
         MyPlug 'mbbill/undotree'
     endif
 endif
+" ------------------------------
+" dirdiff
+" ------------------------------
+" MyPlug 'ZSaberLv0/ZFVimDirDiff'
+" MyPlug 'ZSaberLv0/ZFVimIgnore'
+" nnoremap <M-k>d :ZFDirDiff<Space>
+" nnoremap <M-M>  :ZFDirDiffMark<Cr>
