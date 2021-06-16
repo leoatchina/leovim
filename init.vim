@@ -1922,15 +1922,15 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 				echo "Not a valid file path"
 		endif
 endfunc
-if executable('idea')
-    command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea")
+if executable('ideax64')
+    command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea64")
     nnoremap <leader>eI :OpenFileLinkInIdea<cr>
-    nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea64 --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
-if executable('pycharm')
-    command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm")
+if executable('pycharm64')
+    command! OpenFileLinkInPycharm call s:OpenFileLinkInIde(getline("."), col("."), "pycharm64")
     nnoremap <leader>eP :OpenFileLinkInPycharm<cr>
-    nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm --line %d %s", line("."), expand("%:p"))<cr><cr>
+    nnoremap <leader>ep :<c-r>=printf("AsyncRun -silent pycharm64 --line %d %s", line("."), expand("%:p"))<cr><cr>
 endif
 if executable('code')
     command! OpenFileLinkInVscode call s:OpenFileLinkInIde(getline("."), col("."), "code")
