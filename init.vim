@@ -1922,7 +1922,7 @@ func! s:OpenFileLinkInIde(text, pos, ide)
 				echo "Not a valid file path"
 		endif
 endfunc
-if executable('ideax64')
+if executable('idea64')
     command! OpenFileLinkInIdea call s:OpenFileLinkInIde(getline("."), col("."), "idea64")
     nnoremap <leader>eI :OpenFileLinkInIdea<cr>
     nnoremap <leader>ei :<c-r>=printf("AsyncRun -silent idea64 --line %d %s", line("."), expand("%:p"))<cr><cr>
