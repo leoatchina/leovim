@@ -1,17 +1,17 @@
+if get(g:, 'gui_running', 0) == 1
+    " let &guifont="Consolas:h10"
+    " let &guifont="Cascadia Code:h12"
+endif
 if WINDOWS()
-    " set guifont=Consolas:h10
-    " set guifont=Cascadia_Code:h12
     " let g:python3_host_prog='C:\\Python37\\python.exe'
     " let &pythonthreedll='C:\\Python37\\python37.dll'
     " let &pythonthreehome='C:\\Python37'
 else
     " let g:python3_host_prog=$HOME.'/miniconda3/bin/python3'
     if MACOS()
-        " set guifont=Consolas:h10
-        " set guifont=Cascadia\ Code:h12
+
     else
-        " set guifont=Consolas\ h10
-        " set guifont=Cascadia\ Code\ h12
+
     endif
 endif
 
