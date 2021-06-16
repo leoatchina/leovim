@@ -23,7 +23,12 @@ if Installed('vim-signify')
     nmap <leader>vc vic
     nmap ,vc        vac
 endif
-" ########## Diff Option ##########{{{
+" ZFVimDirDiff
+if Installed('ZFVimDirDiff')
+    nnoremap <M-'>d :ZFDirDiff<Space>
+    nnoremap <M-M>  :ZFDirDiffMark<Cr>
+endif
+" ########## Diff Option ##########
 try
     set diffopt+=context:20
     set diffopt+=internal,algorithm:patience
