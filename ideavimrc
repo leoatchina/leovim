@@ -47,7 +47,10 @@ nnoremap <Tab>H <C-w>H
 nnoremap <Tab>J <C-w>J
 nnoremap <Tab>K <C-w>K
 nnoremap <Tab>L <C-w>L
-nnoremap <Tab><Tab> <C-w>w
+nnoremap <Tab><Tab> <Tab>
+nnoremap <C-g> <Tab>
+xnoremap <C-g> <Tab>
+
 
 " Navigation
 nmap <A-/> :action FileStructurePopup<cr>

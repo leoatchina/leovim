@@ -498,6 +498,9 @@ nnoremap <Tab>L <C-w>L
 nnoremap <Tab>t <C-w>T
 nnoremap <Tab>v :vsplit<Space>
 nnoremap <Tab>x :split<Space>
+nnoremap <Tab><Tab> <Tab>
+nnoremap <C-g> <Tab>
+xnoremap <C-g> <Tab>
 " ------------------------
 " textobj
 " ------------------------
@@ -953,8 +956,6 @@ map <C-z> <Nop>
 " some enhanced shortcuts
 " ------------------------
 nnoremap <leader>ex Q
-nnoremap <C-g> <Tab>
-xnoremap <C-g> <Tab>
 nnoremap <Tab> <Nop>
 xnoremap <Tab> <Nop>
 nnoremap <C-q> q
