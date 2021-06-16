@@ -657,10 +657,6 @@ if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easymotion
     let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;23456789'
 endif
-nnoremap <silent> gj j
-nnoremap <silent> gk k
-nnoremap <silent> j gj
-nnoremap <silent> k gk
 map  ,. <Plug>(easymotion-repeat)
 map  ,; <Plug>(easymotion-next)
 map  ,, <Plug>(easymotion-prev)
@@ -672,9 +668,8 @@ nmap sk <Plug>(easymotion-b)
 nmap sw <Plug>(easymotion-wl)
 nmap sb <Plug>(easymotion-bl)
 nmap sl <Plug>(easymotion-lineanywhere)
-nmap s<Cr>  <Plug>(easymotion-t2)
-nmap S      <Plug>(easymotion-s2)
-" within line jump
+nmap s<Cr>  <Plug>(easymotion-s2)
+nmap S      <Plug>(easymotion-t2)
 nmap s<Tab> <Plug>(easymotion-bd-jk)
 " ------------------------
 " clever-f
@@ -1214,11 +1209,17 @@ xnoremap -  gq
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 xnoremap <M-V> <C-c>`.``gvp``P
+" ------------------------
 " 缩进等
+" ------------------------
 imap <M-x> <BS>
 imap <M-a> <Del>
 xmap >>    >gv
 xmap <<    <gv
+nnoremap <silent> gj j
+nnoremap <silent> gk k
+nnoremap <silent> j gj
+nnoremap <silent> k gk
 " ------------------------
 " marks
 " ------------------------
