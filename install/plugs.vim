@@ -87,7 +87,7 @@ if executable('ctags')
         call AddPlugSymbol('tagbar')
     endif
 endif
-if index(['coc', 'vim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if g:complete_engine_type == 2
     call AddPlugSymbol('vista')
 endif
 " ------------------------------
@@ -164,11 +164,6 @@ endif
 if has('nvim') || has('patch-8.0.902')
     MyPlug 'mhinz/vim-signify'
 endif
-" ------------------------------
-" dirdiff
-" ------------------------------
-MyPlug 'ZSaberLv0/ZFVimDirDiff'
-MyPlug 'ZSaberLv0/ZFVimIgnore'
 " ------------------------------
 " tmux
 " ------------------------------
@@ -367,3 +362,10 @@ if has("persistent_undo") && g:has_lambda > 0 && (HasPlug('undotool') || HasPlug
         MyPlug 'mbbill/undotree'
     endif
 endif
+" ------------------------------
+" dirdiff
+" ------------------------------
+" MyPlug 'ZSaberLv0/ZFVimDirDiff'
+" MyPlug 'ZSaberLv0/ZFVimIgnore'
+" nnoremap <M-k>d :ZFDirDiff<Space>
+" nnoremap <M-M>  :ZFDirDiffMark<Cr>

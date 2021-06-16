@@ -156,7 +156,7 @@ else
     let g:gui_running = 0
 endif
 function! UNIX() abort
-    return (LINUX() || MACOS) && g:gui_running == 0
+    return (LINUX() || MACOS()) && g:gui_running == 0
 endfunction
 " --------------------------
 " leader key
@@ -249,7 +249,7 @@ if get(g:, 'has_terminal', 0) > 0
             let g:floaterm_keymap_next  = '<M-}>'
             let g:floaterm_open_command = 'drop'
         endif
-        nnoremap <M-h>t :FloatermNew! --height=0.8 --width=0.8 --position=center<Cr>
+        nnoremap <M-h>t :FloatermNew --height=0.8 --width=0.8 --position=center<Cr>
         if get(g:, 'terminal_plus', '') == ''
             let g:terminal_plus = 'floaterm'
         else
@@ -1002,6 +1002,8 @@ cnoremap <M-q> <ESC>
 " ------------------------
 " save
 " ------------------------
+nnoremap <C-q> gq
+xnoremap <C-q> gq
 nnoremap <C-s> :update!<CR>
 inoremap <C-s> <ESC>:update!<Cr>
 nnoremap <M-s> :w!<CR>
@@ -1702,7 +1704,7 @@ source $SETTINGS_PATH/run_tool.vim
 source $SETTINGS_PATH/lint_tool.vim
 source $SETTINGS_PATH/symbol_tool.vim
 source $SETTINGS_PATH/debug_tool.vim
-source $SETTINGS_PATH/compare.vim
+source $SETTINGS_PATH/differ.vim
 source $SETTINGS_PATH/sidebar.vim
 source $SETTINGS_PATH/schemes.vim
 " searchindex
@@ -1738,28 +1740,31 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
         let g:which_key_use_floating_win = 0
     end
     " basic keys
-    nnoremap <Space> :WhichKey       ' '<Cr>
-    nnoremap <Tab>   :WhichKey       '<lt>Tab>'<Cr>
-    nnoremap ,       :WhichKey       ','<Cr>
+    nnoremap <Space> :WhichKey       " "<Cr>
+    nnoremap <Tab>   :WhichKey       "<lt>Tab>"<Cr>
+    nnoremap ,       :WhichKey       ","<Cr>
     nnoremap \       :WhichKey       '\'<Cr>
-    nnoremap [       :WhichKey       '['<Cr>
-    nnoremap ]       :WhichKey       ']'<Cr>
-    xnoremap <Space> :WhichKeyVisual ' '<Cr>
-    xnoremap ,       :WhichKeyVisual ','<Cr>
-    xnoremap \       :WhichKeyVisual '\'<Cr>
-    xnoremap <Tab>   :WhichKeyVisual '<lt>Tab>'<Cr>
-    xnoremap [       :WhichKeyVisual '['<Cr>
-    xnoremap ]       :WhichKeyVisual ']'<Cr>
+    nnoremap [       :WhichKey       "["<Cr>
+    nnoremap ]       :WhichKey       "]"<Cr>
+    xnoremap <Space> :WhichKeyVisual " "<Cr>
+    xnoremap ,       :WhichKeyVisual ","<Cr>
+    xnoremap \       :WhichKeyVisual "\"<Cr>
+    xnoremap <Tab>   :WhichKeyVisual "<lt>Tab>"<Cr>
+    xnoremap [       :WhichKeyVisual "["<Cr>
+    xnoremap ]       :WhichKeyVisual "]"<Cr>
     " g
-    nnoremap g1 :WhichKey 'g'<Cr>
+    nnoremap g; :WhichKey "g"<Cr>
+    nnoremap s; :WhichKey "s"<Cr>
     " M- keys
-    nnoremap <M-g> :WhichKey '<lt>M-g>'<Cr>
-    nnoremap <M-h> :WhichKey '<lt>M-h>'<Cr>
-    nnoremap <M-j> :WhichKey '<lt>M-j>'<Cr>
-    nnoremap <M-k> :WhichKey '<lt>M-k>'<Cr>
-    nnoremap <M-l> :WhichKey '<lt>M-l>'<Cr>
-    nnoremap <M-r> :WhichKey '<lt>M-r>'<Cr>
-    nnoremap <M-w> :WhichKey '<lt>M-w>'<Cr>
+    nnoremap <M-g> :WhichKey "<lt>M-g>"<Cr>
+    nnoremap <M-h> :WhichKey "<lt>M-h>"<Cr>
+    nnoremap <M-j> :WhichKey "<lt>M-j>"<Cr>
+    nnoremap <M-k> :WhichKey "<lt>M-k>"<Cr>
+    nnoremap <M-l> :WhichKey "<lt>M-l>"<Cr>
+    nnoremap <M-r> :WhichKey "<lt>M-r>"<Cr>
+    nnoremap <M-w> :WhichKey "<lt>M-w>"<Cr>
+    nnoremap <M-w> :WhichKey "<lt>M-w>"<Cr>
+    nnoremap <M-'> :WhichKey "<lt>M-'>"<Cr>
     " search
     if get(g:, 'grep_tool', '') =~ 'leaderf' || get(g:, 'grep_tool', '') =~ 'coc' || get(g:, 'grep_tool', '') =~ 'ctrlsf'
         nnoremap <M-f> :WhichKey '<lt>M-f>'<Cr>

@@ -29,10 +29,10 @@ if Installed('tagbar')
                 \ 's:selectors',
                 \ 'i:identities'
                 \ ]}
-    if get(g:, 'has_lambda', 0) == 0
-        let g:tagbar_position = 'rightbelow vertical'
-    else
+    if get(g:, 'has_lambda', 0) > 0
         let g:tagbar_position = 'leftabove vertical'
+    else
+        let g:tagbar_position = 'rightbelow vertical'
     endif
     if executable('tstags')
         if get(g:, "ctags_version", '') =~ "Universal"
@@ -90,57 +90,43 @@ if Installed('vista.vim')
     else
         let g:vista_fzf_preview = ['up:30%']
     endif
-    if get(g:, 'complete_engine', '') == 'coc'
-        let g:vista_default_executive = 'coc'
-        nnoremap <M-/> :Vista finder coc<Cr>
-    elseif get(g:, 'complete_engine', '') == 'vim-lsp'
-        let g:vista_default_executive = 'vim_lsp'
-        nnoremap <M-/> :Vista finder vim_lsp<Cr>
-    elseif get(g:, 'complete_engine', '') == 'nvim-lsp'
-        let g:vista_default_executive = 'nvim_lsp'
-        nnoremap <M-/> :Vista finder nvim_lsp<Cr>
-    else
-        nnoremap <M-/> <Nop>
-    endif
     if get(g:, 'ctags_version', '') =~ 'json'
-        let g:vista_default_executiveista = 'ctags'
-        if execute(":map <M-/>") =~ 'Nop'
-            nnoremap <M-/> :Vista finder ctags<Cr>
-        else
-            nnoremap <M-?> :Vista finder ctags<Cr>
+        let g:vista_default_executive = 'ctags'
+        nnoremap <M-?> :Vista finder!<Cr>
+    endif
+    if get(g:, 'vista_lsp_command', '') != ''
+        execute("nnoremap <M-/> :Vista finder " . g:vista_lsp_command . "<Cr>")
+        if get(g:, 'vista_default_executive', '') != 'ctags'
+            let g:vista_default_executive = g:vista_lsp_command
+            execute("nnoremap <M-?> :Vista finder " . g:vista_lsp_command . "<Cr>")
         endif
-    else
-        nnoremap <M-?> <Nop>
+    elseif get(g:, 'vista_default_executive', '') == 'ctags'
+        nnoremap <M-/> :Vista finder!<Cr>
     endif
 endif
 " --------------------------
 " ctags
 " --------------------------
 if executable('ctags')
-    " Make tags placed in .git/tags file available in all levels of a repository
-    let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-    if gitroot != ''
-        let &tags = gitroot . '/.git/tags;./.tags;,.tags'
-    else
-        let &tags = './.tags;,.tags'
-    endif
+    let &tags = './.tags;,.tags'
     " vim-preview
     let g:preview#preview_position = "rightbottom"
-    let g:preview#preview_size = get(g:, 'preview_rows', 8)
+    let g:preview#preview_size     = get(g:, 'preview_rows', 8)
     nnoremap <silent> <M-:> <C-w>}
     nnoremap <silent> <M-;> :PreviewTag<Cr>
-    nnoremap <silent> <M-'> :ToggleQuickfix<Cr>:PreviewList<Cr>
+    nnoremap <silent> <C-l> :ToggleQuickfix<Cr>:PreviewList<Cr>
+    " vim-quickui
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
+        au FileType qf noremap <silent><buffer> <M-.> :call quickui#tools#preview_quickfix()<cr>
         au FileType qf noremap <silent><buffer> <Tab> :call quickui#tools#preview_quickfix()<cr>
-        nnoremap <Tab><Tab> :<C-u>call quickui#tools#preview_tag('')<Cr>
+        nnoremap <M-.> :<C-u>call quickui#tools#preview_tag('')<Cr>
     else
-        nnoremap <silent> <Tab><Tab> :PreviewSignature!<Cr>
+        nnoremap <silent> <M-.> :PreviewSignature!<Cr>
     endif
     if Installed('vim-gutentags')
         call AddPlugSymbol('gutentags')
-        " 将自动生成的 tags 文件全部放入 leaderf 目录中，避免污染工程目录
-        let g:Lf_CacheDirectory   = expand("~/.cache/leaderf")
+        " 将自动生成的 tags 文件全部放入 leaderf gtags目录中，避免污染工程目录
         let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory.'/.LfCache/gtags')
         if isdirectory(g:gutentags_cache_dir)
             silent! call mkdir(g:gutentags_cache_dir, 'p')
@@ -160,14 +146,15 @@ if executable('ctags')
         " modules
         let g:gutentags_modules = ['ctags']
         " 配置 ctags 的参数
-        let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--c-kinds=+px', '--c++-kinds=+px']
+        let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--c-kinds=+px', '--c++-kinds=+pxI']
         if g:ctags_version =~ "Universal"
-            let g:gutentags_ctags_extra_args += ['--extras=+q', '--output-format=e-ctags']
+            let g:gutentags_ctags_extra_args += ['--extras=+q']
+            if WINDOWS()
+                let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+            endif
         endif
         nnoremap <leader>gu :GutentagsUpdate<CR>
     endif
-else
-    nnoremap - <Nop>
 endif
 " --------------------------
 " gtags
@@ -180,6 +167,15 @@ if Installed('gutentags_plus')
     let g:gutentags_plus_switch              = 1
     let g:gutentags_plus_nomap               = 1
     let g:gutentags_auto_add_gtags_cscope    = 1
+    " s: Find this symbol
+    " g: Find this definition
+    " d: Find functions called by this function
+    " c: Find functions calling this function
+    " t: Find this text string
+    " e: Find this egrep pattern
+    " f: Find this file
+    " i: Find files #including this file
+    " a: Find places where this symbol is assigned a value
     nnoremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
     nnoremap <silent> <leader>gg :GscopeFind g <C-R><C-W><cr>
     nnoremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>

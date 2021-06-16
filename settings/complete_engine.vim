@@ -15,7 +15,7 @@ if Installed('ultisnips')
     let g:UltiSnipsNoPythonWarning          = 1
     let g:UltiSnipsRemoveSelectModeMappings = 0
     let g:UltiSnipsListSnippets             = "<C-l>"
-    let g:UltiSnipsExpandTrigger            = "<C-g>"
+    let g:UltiSnipsExpandTrigger            = "<Nop>"
     let g:UltiSnipsJumpForwardTrigger       = "<C-f>"
     let g:UltiSnipsJumpBackwardTrigger      = "<C-b>"
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
@@ -27,9 +27,9 @@ if Installed('ultisnips')
     " Ulti python version
     let g:UltiSnipsUsePythonVersion = 3
 elseif Installed('neosnippet')
-    let g:neosnippet#enable_conceal_markers = 1
+    let g:neosnippet#enable_conceal_markers   = 1
     let g:neosnippet#enable_completed_snippet = 1
-    let g:neosnippet#snippets_directory=$VIM_PLUG.'/vim-snippets/snippets'
+    let g:neosnippet#snippets_directory       = $HOME.'/.leovim.plug/vim-snippets/snippets'
     smap <C-f> <Plug>(neosnippet_jump_or_expand)
 else
     let g:complete_sinippet = ''
@@ -64,12 +64,8 @@ if get(g:, 'complete_snippet', '') != ''
             endif
             if get(g:,'ulti_expand_res', 0) > 0
                 return "\<Right>"
-            elseif get(g:, 'complete_engine', '') == 'ECM'
-                return "\<C-y>"
-            elseif empty(get(v:, 'completed_item', {}))
-                return "\<Down>"
             else
-                return "\<C-y>"
+                return "\<Down>"
             endif
         else
             if s:check_back_space()
@@ -105,7 +101,6 @@ let g:ycm_filetype_blacklist = {
     \ }
 if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
     let g:easycomplete_tab_trigger = "<c-n>"
-    nnoremap <M-.>  :EasyCompleteGotoDefinition<Cr>
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
 elseif Installed('vim-lsp')
@@ -187,20 +182,16 @@ elseif Installed('vim-lsp')
     nnoremap <M-l>d :vs<Cr>:LspDeclaration<CR>
     nnoremap <M-l>t :vs<Cr>:LspTypeDefinition<CR>
     nnoremap <M-l>r :vs<Cr>:LspReferences<CR>
-    nnoremap <M-l>e :vs<Cr>:LspImplementation<CR>
-    nnoremap <M-l>i :LspCallHierarchyIncoming<Cr>
-    nnoremap <M-l>o :LspCallHierarchyOutgoing<Cr>
-    nnoremap <M-l>h :LspTypeHierarchy<Cr>
-    nnoremap <M-l>s :LspSignatureHelp<Cr>
-    nnoremap <M-l>c :LspDocument<Tab>
-    " jump to
-    nnoremap <M-.>  :LspDefinition<Cr>
-    nnoremap <M-j>d :LspDeclaration<CR>
-    nnoremap <M-j>t :LspTypeDefinition<CR>
-    nnoremap <M-j>e :LspImplementation<CR>
+    nnoremap <M-l>i :vs<Cr>:LspImplementation<CR>
+    " no vsplict
+    nnoremap <M-j>h :LspTypeHierarchy<tab>
+    nnoremap <M-j>s :LspSignatureHelp<Cr>
+    nnoremap <M-j>o :LspDocument<Tab>
     nnoremap <M-j>r :LspReferences<CR>
     nnoremap <M-j>w :LspWorkspaceSymbol<Cr>
     nnoremap <M-j>f :LspDocumentSymbol<Cr>
+    nnoremap <M-j>I :LspCallHierarchyIncoming<Cr>
+    nnoremap <M-j>O :LspCallHierarchyOutgoing<Cr>
     " codeaction
     nnoremap ,cr :LspRename<CR>
     nnoremap ,c; :LspCodeAction<CR>
@@ -208,13 +199,16 @@ elseif Installed('vim-lsp')
     if has('patch-8.1.1517') || has('nvim')
         autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
         nnoremap <M-,>  :LspHover<CR>
-        nnoremap <M-j>h :LspPeekDefinition<Cr>
-        nnoremap <M-j>e :LspPeekDeclaration<CR>
-        nnoremap <M-j>y :LspPeekTypeDefinition<CR>
-        nnoremap <M-j>m :LspPeekImplementation<CR>
+        nnoremap <M-j>, :LspPeekDefinition<Cr>
+        nnoremap <M-j>d :spPeekDeclaration<CR>
+        nnoremap <M-j>t :LspPeekTypeDefinition<CR>
+        nnoremap <M-j>i :LspPeekImplementation<CR>
         let g:lsp_preview_float      = 1
         let g:lsp_preview_keep_focus = 0
     else
+        nnoremap <M-j>d :LspDeclaration<CR>
+        nnoremap <M-j>t :LspTypeDefinition<CR>
+        nnoremap <M-j>i :LspImplementation<CR>
         let g:lsp_preview_float      = 0
         let g:lsp_preview_keep_focus = 1
     endif
@@ -228,8 +222,8 @@ elseif Installed('vim-lsp')
                     \ })
     endif
     if has('nvim') || has('patch-8.1.1615')
-        inoremap <silent><buffer><expr> <C-n> pumvisible() ? lsp#scroll(+3) : "\<C-n>"
-        inoremap <silent><buffer><expr> <C-p> pumvisible() ? lsp#scroll(-3) : "\<C-p>"
+        imap <silent><buffer><expr> <C-n> pumvisible() ? lsp#scroll(+3) : "\<C-n>"
+        imap <silent><buffer><expr> <C-p> pumvisible() ? lsp#scroll(-3) : "\<C-p>"
     endif
     " --------------------------
     " vim-lsp-settings
@@ -262,28 +256,27 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
         set completepopup=align:menu,border:off,highlight:WildMenu
     endif
     " hover
-    let g:ycm_auto_hover = ''
-    nmap     <M-,>  <Plug>(YCMHover)
-    nnoremap <M-.>  :YcmCompleter GoToDefinition<Cr>
-    nnoremap <M-l>; :YcmCompleter<Space>
-    nnoremap <M-l>. :YcmCompleter Get<Tab>
-    nnoremap <M-l>k :YcmCompleter GetDoc<CR>
-    nnoremap <M-l>y :YcmCompleter GetType<Cr>
+    if !has('nvim')
+        let g:ycm_auto_hover = ''
+        nnoremap <M-,> :YcmCompleter GetHover<Cr>
+    endif
+    nnoremap <M-l>; :YcmCompleter<Space><Tab>
+    nnoremap <M-l>, :YcmCompleter GetType<CR>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>
     " with vsplit
     nnoremap <M-l>g :vs<Cr>:YcmCompleter GoTo<CR>
     nnoremap <M-l>d :vs<Cr>:YcmCompleter GoToDeclaration<CR>
     nnoremap <M-l>t :vs<Cr>:YcmCompleter GoToType<CR>
     nnoremap <M-l>r :vs<Cr>:YcmCompleter GoToReferences<CR>
-    nnoremap <M-l>e :vs<Cr>:YcmCompleter GoToImplementation<CR>
+    nnoremap <M-l>i :vs<Cr>:YcmCompleter GoToImplementation<CR>
     nnoremap <M-l>n :vs<Cr>:YcmCompleter GotoInclude<Space>
     " Goto
     nnoremap <M-j>g :YcmCompleter GoTo<CR>
     nnoremap <M-j>d :YcmCompleter GoToDeclaration<CR>
     nnoremap <M-j>t :YcmCompleter GoToType<CR>
     nnoremap <M-j>r :YcmCompleter GoToReferences<CR>
-    nnoremap <M-j>e :YcmCompleter GoToImplementation<CR>
-    nnoremap <M-j>I :YcmCompleter GotoInclude<Space>
+    nnoremap <M-j>i :YcmCompleter GoToImplementation<CR>
+    nnoremap <M-j>n :YcmCompleter GotoInclude<Space>
     nnoremap <M-j>f :YcmCompleter GoToSymbol <C-r><C-w>
     xnoremap <M-j>f :YcmCompleter GoToSymbol <C-R>=GetVisualSelection()<CR>
     nnoremap ,cf :YcmCompleter Format<CR>
@@ -341,7 +334,6 @@ elseif Installed('coc.nvim')
     call coc#config('rust-analyzer.inlayHints.enable', v:false)
     " as lsp engine
     nmap <M-,> :call <SID>show_documentation()<CR>
-    nmap <M-.>  <Plug><coc-definition>
     " basic plug
     nmap <M-j>w :CocFzfList symbols<CR>
     nmap <M-j>s :CocAction('documentSymbols')<Cr>
@@ -349,16 +341,16 @@ elseif Installed('coc.nvim')
     nmap <M-j>d <Plug>(coc-declaration)
     nmap <M-j>t <Plug>(coc-type-definition)
     nmap <M-j>r <Plug>(coc-references)
-    nmap <M-j>e <Plug>(coc-implementation)
+    nmap <M-j>i <Plug>(coc-implementation)
     nmap <M-j>R <Plug>(coc-refactor)
     " with vsplit
     nmap <M-l>d :vs<Cr>:execute "normal \<Plug>(coc-declaration)"<Cr>
     nmap <M-l>t :vs<Cr>:execute "normal \<Plug>(coc-type-definition)"<Cr>
     nmap <M-l>r :vs<Cr>:execute "normal \<Plug>(coc-references)"<Cr>
-    nmap <M-l>e :vs<Cr>:execute "normal \<Plug>(coc-implementation)"<Cr>
+    nmap <M-l>i :vs<Cr>:execute "normal \<Plug>(coc-implementation)"<Cr>
     nmap <M-l>m :CocList marketplace<Cr>
     let g:coc_snippet_next = "<C-j>"
-    let g:coc_snippet_prev = "<C-p>"
+    let g:coc_snippet_prev = "<C-k>"
     augroup cocgroup
         autocmd!
         " Setup formatexpr specified filetype(s).
@@ -377,14 +369,6 @@ elseif Installed('coc.nvim')
             call CocAction('doHover')
         endif
     endfunction
-    if has('nvim') || has('patch-8.2.0750')
-        inoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
-        inoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
-        xnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-        xnoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
-        nnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-        nnoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
-    endif
     " codeaction and others
     nmap ,ca :CocFzfList actions<Cr>
     xmap ,c; <Plug>(coc-codeaction-selected)
@@ -453,9 +437,9 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
     " autocmd for CursorMovedI
     function! s:feed_popup()
         let enable = get(b:, 'apc_enable', 0)
-        let lastx = get(b:, 'apc_lastx', -1)
-        let lasty = get(b:, 'apc_lasty', -1)
-        let tick = get(b:, 'apc_tick', -1)
+        let lastx  = get(b:, 'apc_lastx', -1)
+        let lasty  = get(b:, 'apc_lasty', -1)
+        let tick   = get(b:, 'apc_tick', -1)
         if &bt != '' || enable == 0 || &paste
             return -1
         endif
@@ -468,7 +452,7 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
             endif
             let b:apc_lastx = x
             let b:apc_lasty = y
-            let b:apc_tick = b:changedtick
+            let b:apc_tick  = b:changedtick
             return 0
         elseif lastx == x && lasty == y
             return -2
@@ -482,7 +466,7 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
             silent! call feedkeys("\<c-n>", 'n')
             let b:apc_lastx = x
             let b:apc_lasty = y
-            let b:apc_tick = b:changedtick
+            let b:apc_tick  = b:changedtick
         endif
         return 0
     endfunc
@@ -490,7 +474,7 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
     function! s:complete_done()
         let b:apc_lastx = col('.') - 1
         let b:apc_lasty = line('.') - 1
-        let b:apc_tick = b:changedtick
+        let b:apc_tick  = b:changedtick
     endfunc
     " enable apc
     function! s:apc_enable()
@@ -568,18 +552,16 @@ endif
 if get(g:, 'complete_engine', '') != ''
     imap <silent><expr> <C-j>      pumvisible() ? "\<down>"                 : "\<c-j>"
     imap <silent><expr> <C-k>      pumvisible() ? "\<up>"                   : "\<c-k>"
+    imap <silent><expr> <S-Tab>    pumvisible() ? "\<up>"                   : "\<S-tab>"
     imap <silent><expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<PageUp>"
     imap <silent><expr> <PageDown> pumvisible() ? "\<PageDown>\<C-n>\<C-p>" : "\<PageDown>"
-    if get(g:, 'complete_engine', '') == "coc" || get(g:, 'complete_engine', '') == "apc"
-        imap <expr><Cr> pumvisible()? "\<C-e>" :"\<CR>"
-    else
-        imap <expr><Cr> pumvisible()? "\<C-[>a":"\<CR>"
-    endif
+    " cr to finish completion
+    imap <silent><expr> <Cr>       pumvisible() ? "\<C-y>"                  :"\<CR>"
 endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
 " --------------------------
-if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if g:complete_engine_type
     function! GoToDefinitionOrTagOrSearch(type)
         if a:type == 'v'
             vsplit
@@ -589,18 +571,36 @@ if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'co
             split
             execute("silent! normal \<C-w>T")
         endif
-        let s:before = trim(split(execute('jumps'), '\n')[-2])
         if get(g:, 'complete_engine', '') =~ 'YCM'
-            execute("silent! YcmCompleter GoToDefinition")
+            let l:ret = execute("silent! YcmCompleter GoToDefinition")
+            let l:ret = execute("silent! YcmCompleter GoToDefinition")
+            if l:ret !~ 'error'
+                let res = 1
+            else
+                let res = 0
+            endif
         elseif get(g:, 'complete_engine', '') == 'coc'
-            CocAction('jumpDefinition')
+            let l:res = CocAction('jumpDefinition')
         elseif get(g:, 'complete_engine', '') == 'ECM'
+            let l:before = trim(split(execute('jumps'), '\n')[-2])
             execute("silent! EasyCompleteGotoDefinition")
+            let l:after = trim(split(execute('jumps'), '\n')[-2])
+            if l:before != l:after
+                let l:res = 1
+            else
+                let l:res = 0
+            endif
         elseif get(g:, 'complete_engine', '' ) == 'vim-lsp'
+            let l:before = trim(split(execute('jumps'), '\n')[-2])
             execute("silent! LspDefinition")
+            let l:after = trim(split(execute('jumps'), '\n')[-2])
+            if l:before != l:after
+                let l:res = 1
+            else
+                let l:res = 0
+            endif
         endif
-        let s:after = trim(split(execute('jumps'), '\n')[-2])
-        if s:before != s:after
+        if l:res == 0
             if executable('ctags')
                 let ret = execute("silent! tag ".expand("<cword>"))
                 if ret =~ "E433" || ret =~ "E426"
@@ -611,8 +611,8 @@ if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'co
             endif
         endif
     endfunction
-    nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("v")<Cr>
-    nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("n")<Cr>
+    nnoremap <silent> gl       :call GoToDefinitionOrTagOrSearch("n")<Cr>
+    nnoremap <silent> g<cr>    :call GoToDefinitionOrTagOrSearch("v")<Cr>
     nnoremap <silent> g<tab>   :call GoToDefinitionOrTagOrSearch("t")<Cr>
     nnoremap <silent> g<space> :call GoToDefinitionOrTagOrSearch("s")<Cr>
 endif

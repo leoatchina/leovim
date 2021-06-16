@@ -264,6 +264,8 @@ if Installed("fzf.vim") && Installed("fzf")
         nnoremap <M-y> :FZFJumps<cr>
     endif
 endif
+" leaderf
+let g:Lf_CacheDirectory   = expand("~/.cache/leaderf")
 if get(g:, 'fuzzy_finder', '') == 'leaderf'
     au FileType leaderf set nonu
     let g:Lf_DefaultMode       = 'Fuzzy'
@@ -295,7 +297,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     let g:Lf_CommandMap = {'<C-]>': ['<C-V>'], '<C-V>': ['<M-v>', '<C-y>'], '<C-j>':['<Down>', '<C-j>'], '<C-k>':['<Up>', '<C-k>'], '<F5>': ['<C-e>']}
     " show fuzzy functions
     if !Installed('coc.nvim')
-        nnoremap <silent><C-p> :Leaderf self<Cr>
+        nmap <silent><C-p> :Leaderf self<Cr>
     endif
     nnoremap <M-F> :Leaderf<Tab>
     " main selector
@@ -428,7 +430,16 @@ endif
 if Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
-    nnoremap <C-p>  :CocFzfList<CR>
+    if has('nvim') || has('patch-8.2.0750')
+        imap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
+        imap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
+        xmap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        xmap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
+        nmap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
+        nmap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : coc_fzf#lists#fzf_run("")
+    else
+        nmap <C-p> :CocFzfList<Cr>
+    endif
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
@@ -596,7 +607,7 @@ if Installed('vim-quickui')
     if !has('nvim')
         nnoremap <F13> :call quickui#preview#scroll(3)<Cr>
         nnoremap <F14> :call quickui#preview#scroll(-3)<Cr>
-        nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? "\<F13>" : "\<C-j>"
+        nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? "\<F13>" : "\%"
         nmap <silent><expr> <C-k> quickui#preview#visible() > 0 ? "\<F14>" : "\<C-k>"
     endif
     " preview in popup
@@ -608,62 +619,6 @@ if Installed('vim-quickui')
     command! -nargs=1 -complete=file PreviewFileW call s:PreviewFileW(<f-args>)
     nnoremap ,<Tab> :PreviewFileW<Space>
     au FileType python nnoremap K :call quickui#tools#python_help("")<Cr>
+else
+    nmap <C-j> %
 endif
-
-" ########## Diff Option ##########{{{
-try
-    set diffopt+=context:20
-    set diffopt+=internal,algorithm:patience
-    let g:diff_algorithms = [
-                \ "myers",
-                \ "minimal",
-                \ "patience",
-                \ "histogram",
-                \ ]
-    let g:diff_algorithm = "patience"
-
-    func! DiffSwitchAlgorithm()
-        let l:total_diff_algos = len(g:diff_algorithms)
-        let l:i = 0
-        while l:i < l:total_diff_algos && g:diff_algorithms[l:i] !=# g:diff_algorithm
-            let l:i += 1
-        endwhile
-        if l:i < l:total_diff_algos
-            let g:diff_algorithm = g:diff_algorithms[(l:i + 1) % l:total_diff_algos]
-        else
-            let g:diff_algorithm = "patience"
-        endif
-        for l:algo in g:diff_algorithms
-            exec "set diffopt-=algorithm:" . l:algo
-        endfor
-        exec "set diffopt+=algorithm:" . g:diff_algorithm
-        echo "Diff algorithm switched to " . g:diff_algorithm
-        windo diffupdate
-    endfunc
-
-    func! DiffUpdateContext(contextLines)
-        let l:opt = substitute(&diffopt, '\v(^\|,)context:\d+', '', 'g') . ",context:" . a:contextLines
-        exec "set diffopt=" . l:opt
-        windo diffupdate
-    endfunc
-
-    func! DiffToggleWhiteSpace()
-        if stridx(&diffopt, "iwhite") >= 0
-            set diffopt-=iwhite
-            echo "Not ignoring whitespaces in diff"
-        else
-            set diffopt+=iwhite
-            echo "Whitespaces ignored in diff"
-        endif
-        windo diffupdate
-    endfunc
-
-    command! DiffSwitchAlgorithm call DiffSwitchAlgorithm()
-    command! DiffToggleWhiteSpace call DiffToggleWhiteSpace()
-    command! -nargs=1 DiffUpdateContext call DiffUpdateContext(<f-args>)
-    nnoremap <M-h>ds :DiffSwitchAlgorithm<Cr>
-    nnoremap <M-h>dt :DiffToggleWhiteSpace<Cr>
-    nnoremap <M-h>du :DiffUpdateContext<Space>
-catch
-    " pass
-endtry

@@ -64,7 +64,7 @@ else
 endif
 " ECM as default complete_engine
 if get(s:, 'smart_engine_select', 0) == 1
-    if (has('nvim') || v:version >= 803) && !WINDOWS()
+    if (has('nvim') || v:version >= 802) && !WINDOWS()
         let g:complete_engine = "ECM"
     elseif has('nvim') || v:version >= 800
         let g:complete_engine = "vim-lsp"
@@ -74,9 +74,20 @@ if get(s:, 'smart_engine_select', 0) == 1
     unlet s:smart_engine_select
 endif
 " ------------------------------
+" complete_engine_type
+" ------------------------------
+if index(['coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+    let g:complete_engine_type = 2
+    let g:vista_lsp_command = substitute(g:complete_engine, "-", "_", "")
+elseif index(['YCM', 'YCM-legacy', 'ECM'], get(g:, 'complete_engine', '')) >= 0
+    let g:complete_engine_type = 1
+else
+    let g:complete_engine_type = 0
+endif
+" ------------------------------
 " lint tool
 " ------------------------------
-if index(['YCM', 'YCM-legacy', 'ECM', 'coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if g:complete_engine_type > 0
     if get(g:, 'complete_engine', '') == 'coc' && get(g:, 'lint_tool', '') != 'ale'
         let g:lint_tool = 'coc'
         nnoremap <M-k>d :<C-u>CocDiagnostics<Cr>
@@ -93,7 +104,7 @@ endif
 " ------------------------------
 " ai_engine
 " ------------------------------
-if index(['coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if g:complete_engine_type == 2
     if HasPlug('ai')
         try
             " using try to check if kite_engine loaded
@@ -115,7 +126,7 @@ endif
 " ------------------------------
 " complete_snippet
 " ------------------------------
-if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != "apc"
+if g:complete_engine_type > 0
     if g:python_version > 3 && !CYGWIN()
         let g:complete_snippet = "ultisnips"
         MyPlug 'SirVer/ultisnips'
