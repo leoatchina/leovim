@@ -658,6 +658,7 @@ nmap ,vy vay
 " ------------------------
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easymotion
+    set rtp+=$ADDINS_PATH/vim-easymotion-chs
     let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;23456789'
 endif
 map  ,. <Plug>(easymotion-repeat)

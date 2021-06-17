@@ -10,6 +10,10 @@ mv ../plug.vim vim-plug/autoload
 rm -rf vim-easymotion
 git clone --depth 1 https://github.com/easymotion/vim-easymotion.git
 
+# easymotion-chs
+rm -rf vim-easymotions
+git clone --depth 1 https://github.com/ZSaberLv0/vim-easymotion-chs.git
+
 # clever-f
 rm -rf clever-f.vim
 git clone --depth 1 https://github.com/rhysd/clever-f.vim.git
@@ -17,6 +21,11 @@ git clone --depth 1 https://github.com/rhysd/clever-f.vim.git
 # far.vim
 rm -rf far.vim
 git clone --depth 1 https://github.com/brooth/far.vim.git
+
+# vim-grepper
+rm -rf vim-grepper
+git clone --depth 1  https://github.com/mhinz/vim-grepper.git
+rm -rf vim-grepper/pictures
 
 # vim-visual-multi
 rm -rf vim-visual-multi
@@ -63,11 +72,6 @@ git clone --depth 1 https://github.com/voldikss/vim-floaterm.git
 # vim-dict
 rm -rf vim-dict
 git clone --depth 1 https://github.com/skywind3000/vim-dict.git
-
-# vim-grepper
-rm -rf vim-grepper
-git clone --depth 1  https://github.com/mhinz/vim-grepper.git
-rm -rf vim-grepper/pictures
 
 # vim-choosewin
 rm -rf vim-choosewin
