@@ -332,6 +332,10 @@ elseif Installed('coc.nvim')
     call coc#config('coc.preferences.hoverTarget', "float")
     call coc#config('coc.preferences.enableFloatHighlight', v:true)
     call coc#config('rust-analyzer.inlayHints.enable', v:false)
+    if has('nvim') || has('patch-8.2.0750')
+        imap <silent><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
+        imap <silent><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
+    endif
     " as lsp engine
     nmap <M-,> :call <SID>show_documentation()<CR>
     " basic plug

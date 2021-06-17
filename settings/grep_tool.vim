@@ -15,7 +15,7 @@ elseif WINDOWS()
 else
     nnoremap <leader>s :GrepperGrep<Space>
 endif
-nnoremap ,s :Grepper<Tab>
+nnoremap s<Cr> :Grepper<Tab>
 let g:grepper = {'next_tool': '<leader>s'}
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)

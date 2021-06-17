@@ -431,15 +431,12 @@ if Installed('coc.nvim')
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
     if has('nvim') || has('patch-8.2.0750')
-        imap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
-        imap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
-        xmap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-        xmap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
-        nmap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-        nmap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : coc_fzf#lists#fzf_run("")
-    else
-        nmap <C-p> :CocFzfList<Cr>
+        xmap <silent><expr> zj coc#float#has_scroll() ? coc#float#scroll(1) : "\zj"
+        xmap <silent><expr> zk coc#float#has_scroll() ? coc#float#scroll(0) : "\zk"
+        nmap <silent><expr> zj coc#float#has_scroll() ? coc#float#scroll(1) : "\zj"
+        nmap <silent><expr> zk coc#float#has_scroll() ? coc#float#scroll(0) : "\zk"
     endif
+    nnoremap <C-p>  :CocFzfList<Cr>
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
@@ -607,12 +604,8 @@ if Installed('vim-quickui')
     if !has('nvim')
         nnoremap <F13> :call quickui#preview#scroll(3)<Cr>
         nnoremap <F14> :call quickui#preview#scroll(-3)<Cr>
-        nnoremap <F15> :call quickui#preview#scroll(1)<Cr>
-        nnoremap <F16> :call quickui#preview#scroll(-1)<Cr>
         nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? "\<F13>" : "\%"
         nmap <silent><expr> <C-k> quickui#preview#visible() > 0 ? "\<F14>" : "\<C-k>"
-        nmap <silent><expr> zj    quickui#preview#visible() > 0 ? "\<F15>" : "\zj"
-        nmap <silent><expr> zk    quickui#preview#visible() > 0 ? "\<F16>" : "\zk"
     endif
     " preview in popup
     function! s:PreviewFileW(filename) abort
