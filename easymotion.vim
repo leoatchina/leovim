@@ -1,6 +1,6 @@
-" S should work in normal mode
-nmap S  <Plug>(easymotion-s)
-" nxo mode map
+nmap s<Cr> <Plug>(easymotion-s)
+xmap s<Cr> <Plug>(easymotion-s)
+omap s<Cr> <Plug>(easymotion-s)
 nmap s. <Plug>(easymotion-repeat)
 xmap s. <Plug>(easymotion-repeat)
 omap s. <Plug>(easymotion-repeat)

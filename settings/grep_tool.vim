@@ -15,10 +15,8 @@ elseif WINDOWS()
 else
     nnoremap <leader>s :GrepperGrep<Space>
 endif
-nnoremap s<Cr> :Grepper<Tab>
 let g:grepper = {'next_tool': '<leader>s'}
-nmap gs <plug>(GrepperOperator)
-xmap gs <plug>(GrepperOperator)
+nmap S <plug>(GrepperOperator)
 if Installed('ctrlsf.vim')
     let g:grep_tool .= "-ctrlsf"
     let g:ctrlsf_position='right'
