@@ -668,12 +668,13 @@ map  ,k <Plug>(easymotion-sn)
 omap ,k <Plug>(easymotion-tn)
 nmap sj <Plug>(easymotion-w)
 nmap sk <Plug>(easymotion-b)
-nmap sw <Plug>(easymotion-wl)
-nmap sb <Plug>(easymotion-bl)
+nmap sw <Plug>(easymotion-W)
+nmap sb <Plug>(easymotion-B)
 nmap sl <Plug>(easymotion-lineanywhere)
-nmap s<Cr>  <Plug>(easymotion-s2)
-nmap S      <Plug>(easymotion-t2)
-nmap s<Tab> <Plug>(easymotion-bd-jk)
+nmap ss <Plug>(easymotion-s2)
+nmap st <Plug>(easymotion-t2)
+nmap S  <Plug>(easymotion-s)
+nmap s<Cr> <Plug>(easymotion-bd-jk)
 " ------------------------
 " clever-f
 " ------------------------

@@ -30,7 +30,7 @@ if Installed('ctrlsf.vim')
                 \ }
     xmap f<tab> :<C-U>CtrlSF <C-R>=GetVisualSelection()<CR>
     nmap f<tab> :CtrlSF<Space>
-    nmap F<tab> :CtrlSFUpdate<Cr>
+    nmap s<tab> :CtrlSFUpdate<Cr>
     xmap t<tab> <Plug>CtrlSFVwordPath
     nmap t<tab> <Plug>CtrlSFCwordPath
     nmap q<tab> :CtrlSFToggle<Cr>
