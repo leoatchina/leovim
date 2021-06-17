@@ -172,3 +172,5 @@ source ~/.leovim.conf/easymotion.vim
 set which-key
 set notimeout
 set timeoutlen=500
+" set input switch
+set keep-english-in-normal-and-restore-in-insert
