@@ -607,8 +607,12 @@ if Installed('vim-quickui')
     if !has('nvim')
         nnoremap <F13> :call quickui#preview#scroll(3)<Cr>
         nnoremap <F14> :call quickui#preview#scroll(-3)<Cr>
+        nnoremap <F15> :call quickui#preview#scroll(1)<Cr>
+        nnoremap <F16> :call quickui#preview#scroll(-1)<Cr>
         nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? "\<F13>" : "\%"
         nmap <silent><expr> <C-k> quickui#preview#visible() > 0 ? "\<F14>" : "\<C-k>"
+        nmap <silent><expr> zj    quickui#preview#visible() > 0 ? "\<F15>" : "\zj"
+        nmap <silent><expr> zk    quickui#preview#visible() > 0 ? "\<F16>" : "\zk"
     endif
     " preview in popup
     function! s:PreviewFileW(filename) abort
