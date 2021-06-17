@@ -185,13 +185,13 @@ elseif Installed('vim-lsp')
     nnoremap <M-l>i :vs<Cr>:LspImplementation<CR>
     " no vsplict
     nnoremap <M-j>h :LspTypeHierarchy<tab>
-    nnoremap <M-j>s :LspSignatureHelp<Cr>
-    nnoremap <M-j>o :LspDocument<Tab>
-    nnoremap <M-j>r :LspReferences<CR>
-    nnoremap <M-j>w :LspWorkspaceSymbol<Cr>
-    nnoremap <M-j>f :LspDocumentSymbol<Cr>
     nnoremap <M-j>I :LspCallHierarchyIncoming<Cr>
     nnoremap <M-j>O :LspCallHierarchyOutgoing<Cr>
+    nnoremap <M-j>/ :LspDocument<Tab>
+    nnoremap <M-j>; :LspSignatureHelp<Cr>
+    nnoremap <M-j>r :LspReferences<CR>
+    nnoremap <M-j>w :LspWorkspaceSymbol<Cr>
+    nnoremap <M-j>s :LspDocumentSymbol<Cr>
     " codeaction
     nnoremap ,cr :LspRename<CR>
     nnoremap ,c; :LspCodeAction<CR>
@@ -263,13 +263,6 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     nnoremap <M-l>; :YcmCompleter<Space><Tab>
     nnoremap <M-l>, :YcmCompleter GetType<CR>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>
-    " with vsplit
-    nnoremap <M-l>g :vs<Cr>:YcmCompleter GoTo<CR>
-    nnoremap <M-l>d :vs<Cr>:YcmCompleter GoToDeclaration<CR>
-    nnoremap <M-l>t :vs<Cr>:YcmCompleter GoToType<CR>
-    nnoremap <M-l>r :vs<Cr>:YcmCompleter GoToReferences<CR>
-    nnoremap <M-l>i :vs<Cr>:YcmCompleter GoToImplementation<CR>
-    nnoremap <M-l>n :vs<Cr>:YcmCompleter GotoInclude<Space>
     " Goto
     nnoremap <M-j>g :YcmCompleter GoTo<CR>
     nnoremap <M-j>d :YcmCompleter GoToDeclaration<CR>
@@ -277,6 +270,14 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     nnoremap <M-j>r :YcmCompleter GoToReferences<CR>
     nnoremap <M-j>i :YcmCompleter GoToImplementation<CR>
     nnoremap <M-j>n :YcmCompleter GotoInclude<Space>
+    " vsplit goto
+    nnoremap <M-l>g :vs<Cr>:YcmCompleter GoTo<CR>
+    nnoremap <M-l>d :vs<Cr>:YcmCompleter GoToDeclaration<CR>
+    nnoremap <M-l>t :vs<Cr>:YcmCompleter GoToType<CR>
+    nnoremap <M-l>r :vs<Cr>:YcmCompleter GoToReferences<CR>
+    nnoremap <M-l>i :vs<Cr>:YcmCompleter GoToImplementation<CR>
+    nnoremap <M-l>n :vs<Cr>:YcmCompleter GotoInclude<Space>
+    " goto symbol
     nnoremap <M-j>f :YcmCompleter GoToSymbol <C-r><C-w>
     xnoremap <M-j>f :YcmCompleter GoToSymbol <C-R>=GetVisualSelection()<CR>
     nnoremap ,cf :YcmCompleter Format<CR>
