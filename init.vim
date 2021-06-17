@@ -661,21 +661,7 @@ if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-easymotion-chs
     let g:EasyMotion_keys = 'asdghklqwertyuiopzxcvbnmfj;23456789'
 endif
-map  ,. <Plug>(easymotion-repeat)
-map  ,; <Plug>(easymotion-next)
-map  ,, <Plug>(easymotion-prev)
-map  ,j <Plug>(easymotion-bd-w)
-map  ,k <Plug>(easymotion-sn)
-omap ,k <Plug>(easymotion-tn)
-nmap sj <Plug>(easymotion-w)
-nmap sk <Plug>(easymotion-b)
-nmap sw <Plug>(easymotion-W)
-nmap sb <Plug>(easymotion-B)
-nmap sl <Plug>(easymotion-lineanywhere)
-nmap ss <Plug>(easymotion-s2)
-nmap st <Plug>(easymotion-t2)
-nmap S  <Plug>(easymotion-s)
-nmap s<Cr> <Plug>(easymotion-bd-jk)
+source $CONFIG_PATH/easymotion.vim
 " ------------------------
 " clever-f
 " ------------------------
@@ -1026,10 +1012,9 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
-nnoremap <silent> gT     <Nop>
 nnoremap <silent> gh     :tabprevious<CR>
-nnoremap <silent> ,l     :tabm +1<CR>
-nnoremap <silent> ,h     :tabm -1<CR>
+nnoremap <silent> <Tab>n :tabm +1<CR>
+nnoremap <silent> <Tab>p :tabm -1<CR>
 nnoremap <silent> <Tab>1 :tabm 0<CR>
 nnoremap <silent> <Tab>0 :tabm<CR>
 nnoremap <Tab>M          :tabm<Space>
@@ -1756,8 +1741,8 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     xnoremap [       :WhichKeyVisual "["<Cr>
     xnoremap ]       :WhichKeyVisual "]"<Cr>
     " g
-    nnoremap g; :WhichKey "g"<Cr>
-    nnoremap s; :WhichKey "s"<Cr>
+    nnoremap g1 :WhichKey "g"<Cr>
+    nnoremap s1 :WhichKey "s"<Cr>
     " M- keys
     nnoremap <M-g> :WhichKey "<lt>M-g>"<Cr>
     nnoremap <M-h> :WhichKey "<lt>M-h>"<Cr>

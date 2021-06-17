@@ -16,8 +16,7 @@ elseif Installed('fern.vim')
     let g:fern#renderer#default#leaf_symbol = ' '
     nnoremap <silent> <leader>N :Fern . -drawer -reveal=%<Cr>
     nnoremap <silent> <leader>O :Fern . -reveal=%<Cr>
-    nnoremap <tab>n :Fern -drawer -stay -toggle<Space>
-    nnoremap <tab>o :Fern<Space>
+    nnoremap <tab>N :Fern<Space>
 else
     " --------------------------
     " netrw with vim-vinegar
