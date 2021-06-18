@@ -64,8 +64,10 @@ if get(g:, 'complete_snippet', '') != ''
             endif
             if get(g:,'ulti_expand_res', 0) > 0
                 return "\<Right>"
+            elseif empty(get(v:, 'completed_item', {}))
+                return "\<C-n>"
             else
-                return "\<Down>"
+                return "\<C-y>"
             endif
         else
             if s:check_back_space()
@@ -75,7 +77,7 @@ if get(g:, 'complete_snippet', '') != ''
             elseif get(g:, 'complete_engine', '') == 'vim-lsp'
                 return asyncomplete#force_refresh()
             else
-                return "\<Down>"
+                return "\<C-n>"
             endif
         endif
     endfunction
@@ -100,7 +102,7 @@ let g:ycm_filetype_blacklist = {
     \ 'log':          1,
     \ }
 if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
-    let g:easycomplete_tab_trigger = "<c-n>"
+    let g:easycomplete_tab_trigger = "<c-g>"
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
 elseif Installed('vim-lsp')
@@ -498,7 +500,6 @@ if get(g:, 'complete_engine', '') != '' && get(g:, 'complete_engine', '') != 'EC
                         \ pumvisible()? "\<c-p>" : "\<s-tab>"
             let b:apc_init_tab = 1
         endif
-        inoremap <silent><buffer><expr> <cr> pumvisible()? "\<c-y>\<cr>" : "\<cr>"
         inoremap <silent><buffer><expr> <bs> <SID>on_backspace()
         let b:apc_init_bs = 1
         let b:apc_init_cr = 1
@@ -560,8 +561,8 @@ if get(g:, 'complete_engine', '') != ''
     imap <silent><expr> <S-Tab>    pumvisible() ? "\<up>"                   : "\<S-tab>"
     imap <silent><expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<PageUp>"
     imap <silent><expr> <PageDown> pumvisible() ? "\<PageDown>\<C-n>\<C-p>" : "\<PageDown>"
-    " cr to finish completion
-    imap <silent><expr> <Cr>       pumvisible() ? "\<C-y>"                  :"\<CR>"
+    "ecr to finish completion
+    imap <silent><expr> <Cr>       pumvisible() ? "\<C-e>"                  :"\<CR>"
 endif
 " --------------------------
 " GoToDefinitionOrTagOrSearch
