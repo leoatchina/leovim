@@ -90,9 +90,7 @@ click uninstall.cmd with administrator right
 - [x] settings plugins to install list in ./install/plugs.vim
 - [x] Copy && Paste using tmux
 - [x] fzf yank
-- [ ] replace `neosnippet` with `vim-snipmate`
-- [ ] leaderf extra
-    - [x] leaderf jumps
-    - [ ] leaderf paste
-    - [ ] leaderf yank
+- [x] leaderf jumps
+- [ ] leaderf paste
+- [ ] leaderf yank
 - [ ] rewrite readme
