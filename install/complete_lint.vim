@@ -33,9 +33,9 @@ elseif HasPlug('vim-lsp')
     endif
 elseif HasPlug('YCM')
     if (has('nvim') || v:version >= 800) && g:python_version > 3.5
-        if WINDOWS() && isdirectory(get(g:, 'ycm_install_path', ''))
+        if WINDOWS() && get(g:, "ycm_install_path", "") != "" && isdirectory(get(g:, "ycm_install_path", ""))
             let g:complete_engine = "YCM"
-        elseif executable('cmake') && executable('gcc')
+        elseif UNIX() && executable('cmake') && executable('gcc')
             let s:msg = system('gcc --version')
             let s:gcc_version = matchstr(s:msg, '\zs\d\{1,\}.\d\{1,\}.\d\{1,\}\ze')
             let s:gcc_version = str2nr(matchstr(s:gcc_version, '\zs\d\{1,\}\ze'))
