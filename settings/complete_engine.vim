@@ -16,8 +16,8 @@ if Installed('ultisnips')
     let g:UltiSnipsRemoveSelectModeMappings = 0
     let g:UltiSnipsListSnippets             = "<C-l>"
     let g:UltiSnipsExpandTrigger            = "<Nop>"
-    let g:UltiSnipsJumpForwardTrigger       = "<C-f>"
-    let g:UltiSnipsJumpBackwardTrigger      = "<C-b>"
+    let g:UltiSnipsJumpForwardTrigger       = "<M-f>"
+    let g:UltiSnipsJumpBackwardTrigger      = "<M-b>"
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         inoremap <c-x><c-l> <c-\><c-o>:Leaderf snippet<cr>
     endif
@@ -30,7 +30,7 @@ elseif Installed('neosnippet')
     let g:neosnippet#enable_conceal_markers   = 1
     let g:neosnippet#enable_completed_snippet = 1
     let g:neosnippet#snippets_directory       = $HOME.'/.leovim.plug/vim-snippets/snippets'
-    smap <C-f> <Plug>(neosnippet_jump_or_expand)
+    smap <M-f> <Plug>(neosnippet_jump_or_expand)
 else
     let g:complete_sinippet = ''
 endif

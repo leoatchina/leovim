@@ -163,6 +163,29 @@ endfunction
 " --------------------------
 let g:mapleader      = ' '
 let g:maplocalleader = '\'
+" --------------------------
+" Alt_to_meta
+" --------------------------
+let s:punctuation_list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
+function! MetaCode(key)
+    if !has('nvim') && g:gui_running == 0 || CYGWIN()
+        exec "set <M-".a:key.">=\e".a:key
+    endif
+    exec "map <M-".a:key."> <Nop>"
+endfunction
+for i in range(26)
+    " 97 ascii of a
+    call MetaCode(nr2char(97 + i))
+    " 65 ascii of A
+    call MetaCode(nr2char(65 + i))
+endfor
+for c in s:punctuation_list
+    call MetaCode(c)
+endfor
+for i in range(10)
+    call MetaCode(nr2char(char2nr('0') + i))
+endfor
+unlet s:punctuation_list
 " ------------------------
 " open config file
 " ------------------------
@@ -874,29 +897,6 @@ elseif g:python_version > 2
     let g:python_exe_path = g:python_host_prog
 endif
 " --------------------------
-" Alt_to_meta
-" --------------------------
-let s:punctuation_list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
-function! MetaCode(key)
-    if !has('nvim') && g:gui_running == 0 || CYGWIN()
-        exec "set <M-".a:key.">=\e".a:key
-    endif
-    exec "imap <M-".a:key."> <Nop>"
-endfunction
-for i in range(26)
-    " 97 ascii of a
-    call MetaCode(nr2char(97 + i))
-    " 65 ascii of A
-    call MetaCode(nr2char(65 + i))
-endfor
-for c in s:punctuation_list
-    call MetaCode(c)
-endfor
-for i in range(10)
-    call MetaCode(nr2char(char2nr('0') + i))
-endfor
-unlet s:punctuation_list
-" --------------------------
 " keymaps
 " --------------------------
 " home end
@@ -905,7 +905,6 @@ cnoremap <C-e> <End>
 inoremap <C-a> <Esc>I
 inoremap <expr><C-e> pumvisible()? "\<ESC>a":"\<ESC>A"
 inoremap <C-f> <ESC>A
-inoremap <M-f> <ESC>A
 nnoremap <C-f> $
 xnoremap <C-f> $
 onoremap <C-f> $
