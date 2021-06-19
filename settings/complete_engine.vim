@@ -224,8 +224,8 @@ elseif Installed('vim-lsp')
                     \ })
     endif
     if has('nvim') || has('patch-8.1.1615')
-        imap <silent><buffer><expr> <C-n> pumvisible() ? lsp#scroll(+3) : "\<C-n>"
-        imap <silent><buffer><expr> <C-p> pumvisible() ? lsp#scroll(-3) : "\<C-p>"
+        imap <silent><buffer><expr> <C-j> pumvisible() ? lsp#scroll(+3) : "\<C-j>"
+        imap <silent><buffer><expr> <C-k> pumvisible() ? lsp#scroll(-3) : "\<C-k>"
     endif
     " --------------------------
     " vim-lsp-settings
@@ -242,8 +242,8 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     let g:ycm_add_preview_to_completeopt                = 0
     let g:ycm_autoclose_preview_window_after_completion = 1
     let g:ycm_autoclose_preview_window_after_insertion  = 1
-    let g:ycm_key_list_select_completion                = ['<C-j>', '<Down>']
-    let g:ycm_key_list_previous_completion              = ['<C-k>', '<Up>']
+    let g:ycm_key_list_select_completion                = ['<C-n>', '<Down>']
+    let g:ycm_key_list_previous_completion              = ['<C-p>', '<Up>']
     let g:ycm_confirm_extra_conf                        = 1 " 加载.ycm_extra_conf.py 提示
     let g:ycm_min_num_of_chars_for_completion           = 2 " 从第 2 个键入字符就开始罗列匹配项
     let g:ycm_seed_identifiers_with_syntax              = 1 " 语法关键字补全
@@ -336,8 +336,8 @@ elseif Installed('coc.nvim')
     call coc#config('coc.preferences.enableFloatHighlight', v:true)
     call coc#config('rust-analyzer.inlayHints.enable', v:false)
     if has('nvim') || has('patch-8.2.0750')
-        imap <silent><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-n>"
-        imap <silent><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-p>"
+        imap <silent><expr> <C-j> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-j>"
+        imap <silent><expr> <C-k> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-k>"
     endif
     " as lsp engine
     nmap <M-,> :call <SID>show_documentation()<CR>
@@ -356,8 +356,8 @@ elseif Installed('coc.nvim')
     nmap <M-l>r :vs<Cr>:execute "normal \<Plug>(coc-references)"<Cr>
     nmap <M-l>i :vs<Cr>:execute "normal \<Plug>(coc-implementation)"<Cr>
     nmap <M-l>m :CocList marketplace<Cr>
-    let g:coc_snippet_next = "<C-j>"
-    let g:coc_snippet_prev = "<C-k>"
+    let g:coc_snippet_next = "<C-n>"
+    let g:coc_snippet_prev = "<C-p>"
     augroup cocgroup
         autocmd!
         " Setup formatexpr specified filetype(s).
@@ -556,9 +556,6 @@ if !exists("g:leovim_loaded") && get(g:, 'complete_engine', '') != ''
     set rtp+=$ADDINS_PATH/vim-dict
 endif
 if get(g:, 'complete_engine', '') != ''
-    imap <silent><expr> <C-j>      pumvisible() ? "\<down>"                 : "\<c-j>"
-    imap <silent><expr> <C-k>      pumvisible() ? "\<up>"                   : "\<c-k>"
-    imap <silent><expr> <S-Tab>    pumvisible() ? "\<up>"                   : "\<S-tab>"
     imap <silent><expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<PageUp>"
     imap <silent><expr> <PageDown> pumvisible() ? "\<PageDown>\<C-n>\<C-p>" : "\<PageDown>"
     "ecr to finish completion
