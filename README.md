@@ -75,8 +75,6 @@ click uninstall.cmd with administrator right
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
 - [x] better lightline schemes
-- [x] m<tab> to show marks list
-- [x] m<Cr> to clear mark current line
 - [x] leaderf popup ratio
 - [x] leaderf grep postion keeped on right if not has `popup` or `floating window`
 - [x] Better register insert
@@ -91,10 +89,10 @@ click uninstall.cmd with administrator right
 - [x] fix coc.nvim vsplitly open definition declaration etc.
 - [x] settings plugins to install list in ./install/plugs.vim
 - [x] Copy && Paste using tmux
-- [x] fzf yank, using ,p
-- [ ] vim-lsp warning colorscheme
+- [x] fzf yank
+- [ ] replace `neosnippet` with `vim-snipmate`
 - [ ] leaderf extra
+    - [x] leaderf jumps
     - [ ] leaderf paste
     - [ ] leaderf yank
-    - [ ] leaderf jumps
 - [ ] rewrite readme
