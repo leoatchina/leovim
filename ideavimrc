@@ -1,3 +1,5 @@
+
+" https://www.cnblogs.com/mougg/p/14165902.html
 set ignorecase
 set ignorecase
 set smartcase
@@ -28,6 +30,7 @@ vmap <Cr> %
 " Closing tabs
 nmap <space>q :action CloseContent<cr>
 nmap <space>o :action ReopenClosedTab<cr>
+
 " To navigate between split panes
 nmap <A-]> :action NextSplitter<cr>
 nmap <A-[> :action PrevSplitter<cr>
@@ -62,11 +65,11 @@ nmap <space>/ :action Find<cr>
 nmap <space>; :action FindInPath<cr>
 
 " Navigation
-nmap gh :action PreviousTab<Cr>
-nmap f<cr>  :action FileStructurePopup<cr>
-nmap f<tab> :action FindUsages<cr>
-nmap g<cr>  :action StructureViewPopupMenu<cr>
-nmap g<tab> :action GotoTest<cr>
+nmap g<cr> <F4>
+nmap g<tab> :action NavBarToolBar<cr>
+nmap <A-/>  :action FileStructurePopup<cr>
+nmap <A-;>  :action StructureViewPopupMenu<cr>
+nmap <A-'>  :action ShowNavBar<cr>
 nmap gl :action GotoDefinition<cr>
 nmap gy :action GotoTypeDefinition<cr>
 nmap gd :action GotoDeclarationOrUsage<cr>
@@ -74,8 +77,9 @@ nmap gf :action GotoFile<cr>
 nmap gc :action GotoClass<cr>
 nmap gs :action GotoSymbol<cr>
 nmap gi :action GotoImplementation<cr>
-nmap gu :action SuperMetho<cr>
-nmap go :action JumpToSource<cr>
+nmap go :action GotoTest<cr>
+nmap gm :action SuperMethod<cr>
+nmap gu :action FindUsages<cr>
 nmap <space>ri :action RecentFiles<cr>
 nmap <space>sb :action ShowBookmarks<cr>
 nmap <space>su :action ShowUsages<cr>
