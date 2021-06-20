@@ -57,9 +57,15 @@ xnoremap <Tab><Tab> <C-i>
 nnoremap <C-g> <C-i>
 xnoremap <C-g> <C-i>
 
+" Search
+nmap <space>/ :action Find<cr>
+nmap <space>; :action FindInPath<cr>
+
 " Navigation
 nmap f<cr>  :action FileStructurePopup<cr>
-nmap f<tab> :action StructureViewPopupMenu<cr>
+nmap f<tab> :action FindUsages<cr>
+nmap g<cr>  :action StructureViewPopupMenu<cr>
+nmap g<tab> :action GotoTest<cr>
 nmap gl :action GotoDefinition<cr>
 nmap gy :action GotoTypeDefinition<cr>
 nmap gd :action GotoDeclaration<cr>
@@ -67,11 +73,10 @@ nmap gf :action GotoFile<cr>
 nmap gc :action GotoClass<cr>
 nmap gs :action GotoSymbol<cr>
 nmap gi :action GotoImplementation<cr>
-nmap gT :action GotoTest<cr>
-nmap gu :action FindUsages<cr>
 nmap <space>in :action SelectIn<cr>
 nmap <space>ri :action RecentFiles<cr>
 nmap <space>sb :action ShowBookmarks<cr>
+nmap <space>su :action ShowUsages<cr>
 
 " Errors
 nmap ge :action ShowErrorDescription<cr>
@@ -97,9 +102,6 @@ nnoremap ]m :action MethodDown<cr>
 nnoremap [c :action VcsShowPrevChangeMarker<cr>
 nnoremap ]c :action VcsShowNextChangeMarker<cr>
 
-" Search
-nmap <space>/ :action Find<cr>
-nmap <space>; :action FindInPath<cr>
 
 " Moving lines
 nmap [e :action MoveLineUp<cr>
