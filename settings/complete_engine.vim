@@ -102,7 +102,8 @@ let g:ycm_filetype_blacklist = {
     \ 'log':          1,
     \ }
 if Installed('vim-easycomplete') && get(g:, 'complete_engine', '') == 'ECM'
-    let g:easycomplete_tab_trigger = "<c-g>"
+    let g:easycomplete_tab_trigger = "<c-j>"
+    imap <silent><expr> <C-k> pumvisible() ? "\<S-tab>" : "\<C-k>"
     nnoremap <M-l>; :EasyComplete<Tab>
     nnoremap <M-l>, :EasyCompleteInstallServer<Space>
 elseif Installed('vim-lsp')
