@@ -73,10 +73,10 @@ nmap gf :action GotoFile<cr>
 nmap gc :action GotoClass<cr>
 nmap gs :action GotoSymbol<cr>
 nmap gi :action GotoImplementation<cr>
-nmap <space>in :action SelectIn<cr>
 nmap <space>ri :action RecentFiles<cr>
 nmap <space>sb :action ShowBookmarks<cr>
 nmap <space>su :action ShowUsages<cr>
+nmap <space>si :action SelectIn<cr>
 
 " Errors
 nmap ge :action ShowErrorDescription<cr>
