@@ -58,8 +58,8 @@ nnoremap <C-g> <C-i>
 xnoremap <C-g> <C-i>
 
 " Navigation
-nmap g<cr>  :action FileStructurePopup<cr>
-nmap g<tab> :action StructureViewPopupMenu<cr>
+nmap f<cr>  :action FileStructurePopup<cr>
+nmap f<tab> :action StructureViewPopupMenu<cr>
 nmap gl :action GotoDefinition<cr>
 nmap gy :action GotoTypeDefinition<cr>
 nmap gd :action GotoDeclaration<cr>
