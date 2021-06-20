@@ -63,11 +63,10 @@ nmap <space>/ :action Find<cr>
 nmap <space>; :action FindInPath<cr>
 
 " Navigation
-nmap g<cr> <F4>
-nmap g<tab> :action NavBarToolBar<cr>
+nmap g<tab> :action ShowNavBar<cr>
+nmap g<cr>  :action NavBarToolBar<cr>
 nmap <A-/>  :action FileStructurePopup<cr>
 nmap <A-;>  :action StructureViewPopupMenu<cr>
-nmap <A-'>  :action ShowNavBar<cr>
 nmap gl :action GotoDefinition<cr>
 nmap gy :action GotoTypeDefinition<cr>
 nmap gd :action GotoDeclarationOrUsage<cr>
