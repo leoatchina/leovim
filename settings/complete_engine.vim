@@ -253,10 +253,6 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     let g:ycm_disable_signature_help                    = 0
     let g:ycm_collect_identifiers_from_tags_files           = 1
     let g:ycm_collect_identifiers_from_comments_and_strings = 1
-    if exists('+completepopup') != 0
-        set completeopt+=popup
-        set completepopup=align:menu,border:off,highlight:WildMenu
-    endif
     " hover
     if !has('nvim')
         let g:ycm_auto_hover = ''

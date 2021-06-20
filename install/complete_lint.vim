@@ -10,6 +10,10 @@ catch
         call AddPlug('no-complete')
     endtry
 endtry
+if exists('+completepopup') != 0
+    set completeopt+=popup
+    set completepopup=align:menu,border:off,highlight:WildMenu
+endif
 " ------------------------------
 " complete engine
 " ------------------------------
