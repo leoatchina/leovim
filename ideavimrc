@@ -1,4 +1,3 @@
-
 " https://www.cnblogs.com/mougg/p/14165902.html
 set ignorecase
 set ignorecase
@@ -10,7 +9,6 @@ set argtextobj
 set highlightedyank
 set ideajoin
 set exchange
-
 " 缩进
 nmap <A-.> >>
 xmap <A-.> >gv
