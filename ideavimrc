@@ -44,7 +44,6 @@ nnoremap <silent> k gk
 
 " Tabs
 nnoremap gh :action PreviousTab<cr>
-nnoremap gt :action NextTab<cr>
 nnoremap <Tab>h <C-w>h
 nnoremap <Tab>j <C-w>j
 nnoremap <Tab>k <C-w>k
@@ -58,13 +57,12 @@ xnoremap <Tab><Tab> <C-i>
 nnoremap <C-g> <C-i>
 xnoremap <C-g> <C-i>
 
-
 " Navigation
-nmap <A-/> :action FileStructurePopup<cr>
-nmap <A-;> :action StructureViewPopupMenu<cr>
-nmap gd :action GotoDefinition<cr>
+nmap g<cr>  :action FileStructurePopup<cr>
+nmap g<tab> :action StructureViewPopupMenu<cr>
+nmap gl :action GotoDefinition<cr>
 nmap gy :action GotoTypeDefinition<cr>
-nmap gl :action GotoDeclaration<cr>
+nmap gd :action GotoDeclaration<cr>
 nmap gf :action GotoFile<cr>
 nmap gc :action GotoClass<cr>
 nmap gs :action GotoSymbol<cr>
@@ -73,12 +71,12 @@ nmap gT :action GotoTest<cr>
 nmap gu :action FindUsages<cr>
 nmap <space>in :action SelectIn<cr>
 nmap <space>ri :action RecentFiles<cr>
-nmap <space>sd :action ShowErrorDescription<cr>
 nmap <space>sb :action ShowBookmarks<cr>
 
 " Errors
-nmap <space>n :action GotoNextError<cr>
-nmap <space>p :action GotoPreviousError<cr>
+nmap ge :action ShowErrorDescription<cr>
+nmap gn :action GotoNextError<cr>
+nmap gp :action GotoPreviousError<cr>
 " VCS operations
 nmap <space>yy :action Vcs.Show.Local.Changes<cr>
 nmap <space>yp :action Vcs.QuickListPopupAction<cr>
