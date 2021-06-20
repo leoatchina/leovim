@@ -182,18 +182,18 @@ elseif get(g:, 'complete_engine', '') =~ "YCM"
     if WINDOWS()
         set rtp+=g:ycm_install_path
     else
-        let b:ycm_install = " ./install.py"
+        let s:ycm_install= " ./install.py"
         if HasPlug('c')
-            let b:ycm_install = b:ycm_install . " --clangd-completer"
+            let s:ycm_install= s:ycm_install. " --clang-completer"
         endif
         if HasPlug('rust')
-            let b:ycm_install = b:ycm_install . " --rust-completer"
+            let s:ycm_install= s:ycm_install. " --rust-completer"
         endif
         if executable('node') && HasPlug('web')
-            let b:ycm_install = b:ycm_install . " --ts-completer"
+            let s:ycm_install= s:ycm_install. " --ts-completer"
         endif
         if executable('go') && HasPlug('go')
-            let b:ycm_install = b:ycm_install . " --go-completer"
+            let s:ycm_install= s:ycm_install. " --go-completer"
         endif
         let g:ycm_install_path = get(g:, 'ycm_install_path', $INSTALL_PATH . '/YouCompleteMe')
         if g:complete_engine =~ 'legacy'
@@ -205,20 +205,20 @@ elseif get(g:, 'complete_engine', '') =~ "YCM"
         else
             MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'dir': g:ycm_install_path}
         endif
-        " ycm_lsp
-        let b:ycm_lsp_install = ' ./install.py'
-        if executable('node')
-            let b:ycm_lsp_install = b:ycm_lsp_install . " --enable-json --enable-vue --enable-viml"
-        endif
-        if executable('julia')
-            let b:ycm_lsp_install = b:ycm_lsp_install . " --enable-julia"
-        endif
-        MyPlug 'ycm-core/lsp-examples', {'do': g:python_exe_path . b:ycm_lsp_install}
-        if !has('patch-8.1.1517') && !has('nvim')
-            MyPlug 'Shougo/echodoc.vim'
-            let g:echodoc_enable_at_startup = 1
-            set cmdheight=2
-        endif
+    endif
+    " ycm_lsp
+    let b:ycm_lsp_install = ' ./install.py'
+    if executable('node')
+        let b:ycm_lsp_install = b:ycm_lsp_install. " --enable-json --enable-vue --enable-viml"
+    endif
+    if executable('julia')
+        let b:ycm_lsp_install = b:ycm_lsp_install. " --enable-julia"
+    endif
+    MyPlug 'ycm-core/lsp-examples', {'do': g:python_exe_path . b:ycm_lsp_install}
+    if !has('patch-8.1.1517') && !has('nvim')
+        MyPlug 'Shougo/echodoc.vim'
+        let g:echodoc_enable_at_startup = 1
+        set cmdheight=2
     endif
 elseif get(g:, 'complete_engine', '') == 'coc'
     MyPlug 'neoclide/coc.nvim', {'branch': 'release'}

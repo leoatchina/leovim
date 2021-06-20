@@ -36,9 +36,15 @@ nmap <A-[> :action PrevSplitter<cr>
 nmap <space>X :action SplitHorizontally<cr>
 nmap <space>V :action SplitVertically<cr>
 
+" move
+nnoremap <silent> gj j
+nnoremap <silent> gk k
+nnoremap <silent> j gj
+nnoremap <silent> k gk
+
 " Tabs
 nnoremap gh :action PreviousTab<cr>
-nnoremap gl :action NextTab<cr>
+nnoremap gt :action NextTab<cr>
 nnoremap <Tab>h <C-w>h
 nnoremap <Tab>j <C-w>j
 nnoremap <Tab>k <C-w>k
@@ -48,6 +54,7 @@ nnoremap <Tab>J <C-w>J
 nnoremap <Tab>K <C-w>K
 nnoremap <Tab>L <C-w>L
 nnoremap <Tab><Tab> <C-i>
+xnoremap <Tab><Tab> <C-i>
 nnoremap <C-g> <C-i>
 xnoremap <C-g> <C-i>
 
@@ -56,8 +63,8 @@ xnoremap <C-g> <C-i>
 nmap <A-/> :action FileStructurePopup<cr>
 nmap <A-;> :action StructureViewPopupMenu<cr>
 nmap gd :action GotoDefinition<cr>
-nmap gt :action GotoTypeDefinition<cr>
-nmap gy :action GotoDeclaration<cr>
+nmap gy :action GotoTypeDefinition<cr>
+nmap gl :action GotoDeclaration<cr>
 nmap gf :action GotoFile<cr>
 nmap gc :action GotoClass<cr>
 nmap gs :action GotoSymbol<cr>
