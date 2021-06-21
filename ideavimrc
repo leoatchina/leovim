@@ -170,14 +170,14 @@ vnoremap <Space>sl :<c-u>action SurroundWithLiveTemplate<CR>
 set multiple-cursors
 nmap <C-n> <Plug>NextWholeOccurrence
 xmap <C-n> <Plug>NextWholeOccurrence
-nmap ]o <Plug>NextOccurrence
-xmap ]o <Plug>NextOccurrence
-nmap [o <Plug>PreviousOccurrence
-xmap [o <Plug>PreviousOccurrence
 nmap <C-k> <Plug>SkipOccurrence
 xmap <C-k> <Plug>SkipOccurrence
 nmap <C-h> <Plug>RemoveOccurrence
 xmap <C-h> <Plug>RemoveOccurrence
+nmap ]o <Plug>NextOccurrence
+xmap ]o <Plug>NextOccurrence
+nmap [o <Plug>PreviousOccurrence
+xmap [o <Plug>PreviousOccurrence
 " easymotion
 set easymotion
 source ~/.leovim.conf/easymotion.vim
