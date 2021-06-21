@@ -1017,26 +1017,26 @@ nnoremap <silent> <Tab>p :tabm -1<CR>
 nnoremap <silent> <Tab>1 :tabm 0<CR>
 nnoremap <silent> <Tab>0 :tabm<CR>
 nnoremap <Tab>M          :tabm<Space>
-nnoremap <silent><M-1> :tabn1<CR>
-nnoremap <silent><M-2> :tabn2<CR>
-nnoremap <silent><M-3> :tabn3<CR>
-nnoremap <silent><M-4> :tabn4<CR>
-nnoremap <silent><M-5> :tabn5<CR>
-nnoremap <silent><M-6> :tabn6<CR>
-nnoremap <silent><M-7> :tabn7<CR>
-nnoremap <silent><M-8> :tabn8<CR>
-nnoremap <silent><M-9> :tabn9<CR>
-nnoremap <silent><M-0> :tablast<CR>
-inoremap <silent><M-1> <ESC>:tabn1<CR>
-inoremap <silent><M-2> <ESC>:tabn2<CR>
-inoremap <silent><M-3> <ESC>:tabn3<CR>
-inoremap <silent><M-4> <ESC>:tabn4<CR>
-inoremap <silent><M-5> <ESC>:tabn5<CR>
-inoremap <silent><M-6> <ESC>:tabn6<CR>
-inoremap <silent><M-7> <ESC>:tabn7<CR>
-inoremap <silent><M-8> <ESC>:tabn8<CR>
-inoremap <silent><M-9> <ESC>:tabn9<CR>
-inoremap <silent><M-0> <ESC>:tablast<CR>
+nnoremap <silent> <M-1> :tabn1<CR>
+nnoremap <silent> <M-2> :tabn2<CR>
+nnoremap <silent> <M-3> :tabn3<CR>
+nnoremap <silent> <M-4> :tabn4<CR>
+nnoremap <silent> <M-5> :tabn5<CR>
+nnoremap <silent> <M-6> :tabn6<CR>
+nnoremap <silent> <M-7> :tabn7<CR>
+nnoremap <silent> <M-8> :tabn8<CR>
+nnoremap <silent> <M-9> :tabn9<CR>
+nnoremap <silent> <M-0> :tablast<CR>
+inoremap <silent> <M-1> <ESC>:tabn1<CR>
+inoremap <silent> <M-2> <ESC>:tabn2<CR>
+inoremap <silent> <M-3> <ESC>:tabn3<CR>
+inoremap <silent> <M-4> <ESC>:tabn4<CR>
+inoremap <silent> <M-5> <ESC>:tabn5<CR>
+inoremap <silent> <M-6> <ESC>:tabn6<CR>
+inoremap <silent> <M-7> <ESC>:tabn7<CR>
+inoremap <silent> <M-8> <ESC>:tabn8<CR>
+inoremap <silent> <M-9> <ESC>:tabn9<CR>
+inoremap <silent> <M-0> <ESC>:tablast<CR>
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
 nnoremap <leader><Cr>  :e!<Cr>

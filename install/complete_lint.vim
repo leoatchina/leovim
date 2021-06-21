@@ -182,18 +182,18 @@ elseif get(g:, 'complete_engine', '') =~ "YCM"
     if WINDOWS()
         set rtp+=g:ycm_install_path
     else
-        let s:ycm_install= " ./install.py"
+        let b:ycm_install = " ./install.py"
         if HasPlug('c')
-            let s:ycm_install= s:ycm_install. " --clang-completer"
+            let b:ycm_install = b:ycm_install . " --clang-completer"
         endif
         if HasPlug('rust')
-            let s:ycm_install= s:ycm_install. " --rust-completer"
+            let b:ycm_install = b:ycm_install . " --rust-completer"
         endif
         if executable('node') && HasPlug('web')
-            let s:ycm_install= s:ycm_install. " --ts-completer"
+            let b:ycm_install = b:ycm_install . " --ts-completer"
         endif
         if executable('go') && HasPlug('go')
-            let s:ycm_install= s:ycm_install. " --go-completer"
+            let b:ycm_install = b:ycm_install . " --go-completer"
         endif
         let g:ycm_install_path = get(g:, 'ycm_install_path', $INSTALL_PATH . '/YouCompleteMe')
         if g:complete_engine =~ 'legacy'
