@@ -207,6 +207,7 @@ endfunction
 function! Installed(dir)
     return isdirectory(expand("$INSTALL_PATH/".a:dir)) && &rtp =~ a:dir
 endfunction
+nnoremap <M-A> ggvG
 " ------------------------
 " terminal
 " ------------------------

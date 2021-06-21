@@ -59,6 +59,8 @@ if Installed("fzf.vim") && Installed("fzf")
     " ----------------------
     nnoremap z; :Fzf<tab><tab>
     nnoremap z, :FZF<tab>
+    nnoremap Z; :CocList<Space>
+    nnoremap Z, :CocFzfList<Space>
     " locate file
     nnoremap <M-f>0 :FZFLocate<Space>
     if Installed('vim-yoink')
@@ -299,7 +301,8 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if !Installed('coc.nvim')
         nmap <silent><C-p> :Leaderf self<Cr>
     endif
-    nnoremap <M-F> :Leaderf<Tab>
+    nnoremap Z<S-CR> :Leaderf<Tab>
+    nnoremap Z<CR>   :Leaderf<Tab>
     " main selector
     nnoremap <leader>w :Leaderf window<Cr>
     nnoremap <leader>b :Leaderf buffer<Cr>
@@ -440,13 +443,6 @@ if Installed('coc.nvim')
     nnoremap <M-h>. :CocFzfListResume<CR>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
-    if Installed('LeaderF')
-        nnoremap <M-h>p :CocFzfList<Space>
-        nnoremap <M-h>P :CocList<Space>
-    else
-        nnoremap <M-F>  :CocFzfList<Space>
-        nnoremap <M-h>p :CocList<Space>
-    endif
     nnoremap <M-h>l :CocFzfList location<Cr>
     nnoremap <Tab>y :CocFzfList yank<Cr>
     nnoremap <M-k>o :CocFzfList outline<CR>
@@ -540,7 +536,8 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap <M-F>          :CtrlP<tab>
+    nnoremap Z<S-CR> :CtrlP<tab>
+    nnoremap Z<CR>   :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
         nnoremap <silent> <leader>i :CtrlPYankring<Cr>

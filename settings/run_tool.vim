@@ -224,7 +224,7 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
         let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
         let g:asyncrun_runner.floaterm = function('s:runner_proc')
         command! AsyncRunFloaterm call <SID>AsyncRunNow(2)
-        nnoremap <M-A> :<C-u>AsyncRunFloaterm<CR>
+        nnoremap <M-F> :<C-u>AsyncRunFloaterm<CR>
     endif
     if !Installed('vim-sidebar-manager')
         nnoremap t<Tab> :AsyncStop!<Cr>:ToggleQuickfix<Cr>
