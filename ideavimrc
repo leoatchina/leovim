@@ -97,7 +97,7 @@ nmap <space>yr :action Git.ResolveConflicts<cr>
 nmap <A--> :action ActivateTerminalToolWindow<cr>
 " Won't work in visual mode (with vmap) for some reason.
 " Use default map of <c-/> for that.
-nmap <space>cc :action CommentByLineComment<cr>
+" nmap <space>cc :action CommentByLineComment<cr>
 " unimpaired mappings - from https://github.com/saaguero/ideavimrc/blob/master/.ideavimrc
 nnoremap [o :action PreviousOccurence<cr>
 nnoremap ]o :action NextOccurence<cr>

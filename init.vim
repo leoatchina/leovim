@@ -61,6 +61,26 @@ if !isdirectory(g:startify_session_dir)
     silent! call mkdir(g:startify_session_dir, "p")
 endif
 " --------------------------
+" check gui_running
+" --------------------------
+if has('gui_running')
+    let g:gui_running = 1
+elseif has('nvim')
+    if has('gui_vimr')
+        let g:gui_running = 1
+    else
+        try
+            call rpcnotify(1, 'Gui', 'Option', 'Tabline', 0)
+            call rpcnotify(1, 'Gui', 'Option', 'Popupmenu', 0)
+            let g:gui_running = 1
+        catch
+            let g:gui_running = 0
+        endtry
+    endif
+else
+    let g:gui_running = 0
+endif
+" --------------------------
 " System Type
 " --------------------------
 function! WINDOWS() abort
@@ -77,6 +97,9 @@ function! MACOS() abort
 endfunction
 function! MACVIM() abort
     return has('gui_running') && MACOS()
+endfunction
+function! UNIX() abort
+    return (LINUX() || MACOS()) && g:gui_running == 0
 endfunction
 " --------------------------
 " terminal and lambda
@@ -136,63 +159,17 @@ function! InitializeDirectories()
 endfunction
 call InitializeDirectories()
 " --------------------------
-" check gui_running
-" --------------------------
-if has('gui_running')
-    let g:gui_running = 1
-elseif has('nvim')
-    if has('gui_vimr')
-        let g:gui_running = 1
-    else
-        try
-            call rpcnotify(1, 'Gui', 'Option', 'Tabline', 0)
-            call rpcnotify(1, 'Gui', 'Option', 'Popupmenu', 0)
-            let g:gui_running = 1
-        catch
-            let g:gui_running = 0
-        endtry
-    endif
-else
-    let g:gui_running = 0
-endif
-function! UNIX() abort
-    return (LINUX() || MACOS()) && g:gui_running == 0
-endfunction
-" --------------------------
 " leader key
 " --------------------------
 let g:mapleader      = ' '
 let g:maplocalleader = '\'
-" --------------------------
-" Alt_to_meta
-" --------------------------
-let s:punctuation_list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
-function! MetaCode(key)
-    if !has('nvim') && g:gui_running == 0 || CYGWIN()
-        exec "set <M-".a:key.">=\e".a:key
-    endif
-    exec "map <M-".a:key."> <Nop>"
-endfunction
-for i in range(26)
-    " 97 ascii of a
-    call MetaCode(nr2char(97 + i))
-    " 65 ascii of A
-    call MetaCode(nr2char(65 + i))
-endfor
-for c in s:punctuation_list
-    call MetaCode(c)
-endfor
-for i in range(10)
-    call MetaCode(nr2char(char2nr('0') + i))
-endfor
-unlet s:punctuation_list
 " ------------------------
 " open config file
 " ------------------------
 nnoremap <leader>eo :tabe ~/.leovim.conf/init.vim<CR>
 nnoremap <leader>el :tabe ~/.vimrc.local<CR>
 " --------------------------
-" HasPlug define
+" plugs_group settings
 " --------------------------
 let g:plugs_group=[]
 if filereadable(expand("~/.vimrc.local")) | source $HOME/.vimrc.local | endif
@@ -391,6 +368,30 @@ elseif UNIX()
         set macmeta
     endif
 endif
+" --------------------------
+" Alt_to_meta
+" --------------------------
+let s:punctuation_list = [',', '.', ';', ':', '/', '?', '-', '_', '{', '}', '=', '+', "'"]
+function! MetaCode(key)
+    if !has('nvim') && g:gui_running == 0 || CYGWIN()
+        exec "set <M-".a:key.">=\e".a:key
+    endif
+    exec "imap <M-".a:key."> <Nop>"
+    exec "smap <M-".a:key."> <Nop>"
+endfunction
+for i in range(26)
+    " 97 ascii of a
+    call MetaCode(nr2char(97 + i))
+    " 65 ascii of A
+    call MetaCode(nr2char(65 + i))
+endfor
+for c in s:punctuation_list
+    call MetaCode(c)
+endfor
+for i in range(10)
+    call MetaCode(nr2char(char2nr('0') + i))
+endfor
+unlet s:punctuation_list
 " ------------------------
 " has_truecolor
 " ------------------------
@@ -1028,26 +1029,26 @@ nnoremap <silent> <Tab>p :tabm -1<CR>
 nnoremap <silent> <Tab>1 :tabm 0<CR>
 nnoremap <silent> <Tab>0 :tabm<CR>
 nnoremap <Tab>M          :tabm<Space>
-nnoremap <silent><M-1> :tabn1<CR>
-nnoremap <silent><M-2> :tabn2<CR>
-nnoremap <silent><M-3> :tabn3<CR>
-nnoremap <silent><M-4> :tabn4<CR>
-nnoremap <silent><M-5> :tabn5<CR>
-nnoremap <silent><M-6> :tabn6<CR>
-nnoremap <silent><M-7> :tabn7<CR>
-nnoremap <silent><M-8> :tabn8<CR>
-nnoremap <silent><M-9> :tabn9<CR>
-nnoremap <silent><M-0> :tablast<CR>
-inoremap <silent><M-1> <ESC>:tabn1<CR>
-inoremap <silent><M-2> <ESC>:tabn2<CR>
-inoremap <silent><M-3> <ESC>:tabn3<CR>
-inoremap <silent><M-4> <ESC>:tabn4<CR>
-inoremap <silent><M-5> <ESC>:tabn5<CR>
-inoremap <silent><M-6> <ESC>:tabn6<CR>
-inoremap <silent><M-7> <ESC>:tabn7<CR>
-inoremap <silent><M-8> <ESC>:tabn8<CR>
-inoremap <silent><M-9> <ESC>:tabn9<CR>
-inoremap <silent><M-0> <ESC>:tablast<CR>
+nnoremap <silent> <M-1> :tabn1<CR>
+nnoremap <silent> <M-2> :tabn2<CR>
+nnoremap <silent> <M-3> :tabn3<CR>
+nnoremap <silent> <M-4> :tabn4<CR>
+nnoremap <silent> <M-5> :tabn5<CR>
+nnoremap <silent> <M-6> :tabn6<CR>
+nnoremap <silent> <M-7> :tabn7<CR>
+nnoremap <silent> <M-8> :tabn8<CR>
+nnoremap <silent> <M-9> :tabn9<CR>
+nnoremap <silent> <M-0> :tablast<CR>
+inoremap <silent> <M-1> <ESC>:tabn1<CR>
+inoremap <silent> <M-2> <ESC>:tabn2<CR>
+inoremap <silent> <M-3> <ESC>:tabn3<CR>
+inoremap <silent> <M-4> <ESC>:tabn4<CR>
+inoremap <silent> <M-5> <ESC>:tabn5<CR>
+inoremap <silent> <M-6> <ESC>:tabn6<CR>
+inoremap <silent> <M-7> <ESC>:tabn7<CR>
+inoremap <silent> <M-8> <ESC>:tabn8<CR>
+inoremap <silent> <M-9> <ESC>:tabn9<CR>
+inoremap <silent> <M-0> <ESC>:tablast<CR>
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
 nnoremap <leader><Cr>  :e!<Cr>
