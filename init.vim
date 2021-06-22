@@ -976,12 +976,22 @@ nnoremap Q         <C-w>z
 xnoremap Q         <C-w>z
 nnoremap qq        <C-w>z
 xnoremap qq        <C-w>z
-nnoremap <Tab>b    :bd!<Cr>
 nnoremap <Tab>c    :tabclose<Cr>
 nnoremap ,q        :qall!<Cr>
 nnoremap <M-q>     :confirm q<Cr>
 nnoremap <leader>q :q!<Cr>
 nnoremap <leader>Q :wq<Cr>
+" close current buffer
+function! Close_current_buf()
+    let buffer_num=len(getbufinfo({'buflisted':1}))
+    if buffer_num>1
+        :bp|bd #
+    else
+        :bd
+    endif
+    return buffer_num
+endfunction
+nmap <silent> <Tab>b :let buf_colosed=Close_current_buf()<CR>
 " ------------------------
 " esc
 " ------------------------

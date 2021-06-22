@@ -133,7 +133,6 @@ nmap \t :action :cursive.testing.actions/run-ns-tests<cr>
 nmap \T :action :cursive.testing.actions/rerun-last-test<cr>
 nmap \C :action :cursive.testing.actions/remove-test-markers<cr>
 
-
 " :cursive.repl.actions/clojure-repl-commands-group
 " :cursive.repl.actions/clojure-repl-group
 " :cursive.repl.actions/interrupt
