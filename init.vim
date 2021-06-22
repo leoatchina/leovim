@@ -638,6 +638,25 @@ nmap <leader>vu viu
 nmap ,vu vau
 nmap <leader>vl vil
 nmap ,vl val
+nmap <leader>vt vi%
+nmap ,vt va%
+" ------------------------
+" matchup
+" ------------------------
+if !exists('g:leovim_loaded')
+    set rtp+=$ADDINS_PATH/vim-matchup
+endif
+function! s:matchup_convenience_maps()
+    xnoremap <sid>(std-I) I
+    xnoremap <sid>(std-A) A
+    xmap <expr> I mode()=='<c-v>'?'<sid>(std-I)':(v:count?'':'1').'i'
+    xmap <expr> A mode()=='<c-v>'?'<sid>(std-A)':(v:count?'':'1').'a'
+    for l:v in ['', 'v', 'V', '<c-v>']
+        execute 'omap <expr>' l:v.'I%' "(v:count?'':'1').'".l:v."i%'"
+        execute 'omap <expr>' l:v.'A%' "(v:count?'':'1').'".l:v."a%'"
+    endfor
+endfunction
+call s:matchup_convenience_maps()
 " --------------------------
 " vim-visual-multi
 " --------------------------
@@ -944,17 +963,17 @@ map <C-z> <Nop>
 " ------------------------
 " some enhanced shortcuts
 " ------------------------
-nnoremap <leader>ex Q
-nnoremap <Tab> <Nop>
-xnoremap <Tab> <Nop>
-nnoremap <C-q> q
-nnoremap <C-m> %
-xnoremap <C-m> %
-nnoremap *     *``
-nnoremap #     #``
-nnoremap !     :!
-xnoremap .     :<C-u>normal .<Cr>
-xnoremap !     y:<C-u>!<C-r>"
+nmap <leader>ex Q
+nmap <Tab> <Nop>
+xmap <Tab> <Nop>
+nmap <C-q> q
+nmap <C-m> %
+xmap <C-m> %
+nmap *     *``
+nmap #     #``
+nmap !     :!
+xmap .     :<C-u>normal .<Cr>
+xmap !     y:<C-u>!<C-r>"
 " ------------------------
 " search visual select range
 " ------------------------

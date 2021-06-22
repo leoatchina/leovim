@@ -77,6 +77,10 @@ git clone --depth 1 https://github.com/skywind3000/vim-dict.git
 rm -rf vim-choosewin
 git clone --depth 1 https://github.com/t9md/vim-choosewin.git
 
+# vim-matchup
+rm -rf vim-matchup
+git clone --depth 1 https://github.com/andymass/vim-matchup.git
+
 # delete files and dirs
 find . -type f | grep \.gitignore$ | xargs rm -f
 find . -type d | grep \.github$    | xargs rm -rf
