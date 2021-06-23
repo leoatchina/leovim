@@ -237,15 +237,15 @@ if Installed("LeaderF")
             let g:Lf_Ctags = "ctags 2>/dev/null"
         endif
     endif
-    nnoremap t<Cr>  :Leaderf tag<Cr>
-    nnoremap f<Cr>  :Leaderf function<Cr>
-    nnoremap q<Cr>  :Leaderf function --all<Cr>
-    nnoremap <M-k>b :Leaderf bufTag<cr>
-    nnoremap <M-k>t :Leaderf bufTag --all<cr>
+    nnoremap t<Cr> :Leaderf bufTag<cr>
+    nnoremap T<Cr> :Leaderf bufTag --all<Cr>
+    nnoremap f<Cr> :Leaderf function<Cr>
+    nnoremap F<Cr> :Leaderf function --all<Cr>
+    nnoremap q<Cr> :Leaderf tag<Cr>
 elseif Installed('fzf.vim')
     let g:fzf_tags_command = 'ctags -R'
-    nnoremap t<cr>  :FZFTags<CR>
-    nnoremap <M-k>b :FzfBTags<CR>
+    nnoremap t<cr> :FzfBTags<CR>
+    nnoremap q<Cr> :FZFTags<CR>
     if Installed('fzf-funky')
         nnoremap f<Cr> :FzfFunky<Cr>
     endif
