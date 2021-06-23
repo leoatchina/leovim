@@ -23,17 +23,9 @@ if HasPlug('c')
     au Filetype c,cpp nnoremap <leader>ri :FormatIf<cr>
     au Filetype c,cpp nnoremap <leader>rg :GenTryCatch<cr>
     au Filetype c,cpp xnoremap <leader>rg :GenTryCatch<cr>
-    if executable('cppman')
-        MyPlug 'skywind3000/vim-cppman', {'for': ['c', 'cpp']}
-        autocmd FileType c,cpp setlocal keywordprg=:Cppman
-        autocmd FileType c,cpp nnoremap <leader>cm :Cppman<Space>
-        autocmd FileType c,cpp nnoremap <leader>cM :Cppman!<Space>
-        autocmd FileType c,cpp nnoremap <leader>rk :Cppman <C-r><C-w>
-        autocmd FileType c,cpp xnoremap <leader>rk :Cppman <C-r>=GetVisualSelection()<Cr>
-    endif
     if executable('ccls')
         MyPlug 'm-pilia/vim-ccls', {'for': ['c', 'cpp']}
-        au Filetype c,cpp nnoremap <leader>rl  :Ccls
+        au Filetype c,cpp nnoremap <leader>rl  :Ccls<Tab>
         au Filetype c,cpp nnoremap <leader>rb  :CclsBase<Cr>
         au Filetype c,cpp nnoremap <leader>rhb :CclsBaseHierarchy<Cr>
         au Filetype c,cpp nnoremap <leader>rd  :CclsDerived<Cr>
@@ -49,6 +41,14 @@ if HasPlug('c')
         au Filetype c,cpp nnoremap <leader>rhf :CclsMemberFunctionHierarchy<Cr>
         au Filetype c,cpp nnoremap <leader>rmt :CclsMemberTypes<Cr>
         au Filetype c,cpp nnoremap <leader>rht :CclsMemberTypeHierarchy<Cr>
+    endif
+    if executable('cppman')
+        MyPlug 'skywind3000/vim-cppman', {'for': ['c', 'cpp']}
+        autocmd FileType c,cpp setlocal keywordprg=:Cppman
+        autocmd FileType c,cpp nnoremap <leader>cm :Cppman<Space>
+        autocmd FileType c,cpp nnoremap <leader>cM :Cppman!<Space>
+        autocmd FileType c,cpp nnoremap <leader>ck :Cppman <C-r><C-w>
+        autocmd FileType c,cpp xnoremap <leader>ck :Cppman <C-r>=GetVisualSelection()<Cr>
     endif
 endif
 " --------------------------
