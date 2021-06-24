@@ -248,4 +248,6 @@ elseif Installed('fzf.vim')
     if Installed('fzf-funky')
         nnoremap f<Cr> :FzfFunky<Cr>
     endif
+else
+    nnoremap <M-t> :CtrlPTag<CR>
 endif
