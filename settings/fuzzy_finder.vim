@@ -200,6 +200,7 @@ if Installed("fzf.vim") && Installed("fzf")
     " --------------------
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         nnoremap ZJ :Leaderf jumps --fullScreen<cr>
+        nnoremap Zj :Leaderf jumps<cr>
     elseif g:has_execute_func > 0
         function! s:jumpListFormat(val) abort
             let l:file_name = bufname('%')
