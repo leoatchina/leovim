@@ -59,8 +59,8 @@ if Installed("fzf.vim") && Installed("fzf")
     " ----------------------
     nnoremap z; :Fzf<tab><tab>
     nnoremap z, :FZF<tab>
-    nnoremap Z; :CocList<Space>
-    nnoremap Z, :CocFzfList<Space>
+    nnoremap ZC :CocList<Space>
+    nnoremap ZL :CocFzfList<Space>
     " locate file
     nnoremap <M-f>0 :FZFLocate<Space>
     if Installed('vim-yoink')
@@ -441,12 +441,11 @@ if Installed('coc.nvim')
     endif
     nnoremap <C-p>  :CocFzfList<Cr>
     nnoremap <M-h>. :CocFzfListResume<CR>
+    nnoremap <M-h>l :CocFzfList location<Cr>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
-    nnoremap <M-h>l :CocFzfList location<Cr>
-    nnoremap <Tab>y :CocFzfList yank<Cr>
-    nnoremap <M-k>o :CocFzfList outline<CR>
     nnoremap <M-l>c :CocFzfList commands<Cr>
+    nnoremap <M-k>o :CocFzfList outline<CR>
     " Create mappings for function text object, requires document symbols feature of languageserver.
     xmap if <Plug>(coc-funcobj-i)
     xmap af <Plug>(coc-funcobj-a)
