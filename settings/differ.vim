@@ -25,7 +25,7 @@ if Installed('vim-signify')
 endif
 " ZFVimDirDiff
 if Installed('ZFVimDirDiff')
-    nnoremap <M-'>d :ZFDirDiff<Space>
+    nnoremap <M-w>d :ZFDirDiff<Space>
     nnoremap <M-M>  :ZFDirDiffMark<Cr>
 endif
 " ########## Diff Option ##########
@@ -79,9 +79,9 @@ try
     command! DiffSwitchAlgorithm call DiffSwitchAlgorithm()
     command! DiffToggleWhiteSpace call DiffToggleWhiteSpace()
     command! -nargs=1 DiffUpdateContext call DiffUpdateContext(<f-args>)
-    nnoremap <M-'>s :DiffSwitchAlgorithm<Cr>
-    nnoremap <M-'>t :DiffToggleWhiteSpace<Cr>
-    nnoremap <M-'>u :DiffUpdateContext<Space>
+    nnoremap <M-w>s :DiffSwitchAlgorithm<Cr>
+    nnoremap <M-w>t :DiffToggleWhiteSpace<Cr>
+    nnoremap <M-w>u :DiffUpdateContext<Space>
 catch
     " pass
 endtry

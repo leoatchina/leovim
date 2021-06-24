@@ -1550,7 +1550,7 @@ if !exists('g:leovim_loaded')
     let g:indentLine_bgcolor_gui     = '#FF5F00'
     let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 endif
-nnoremap <M-h>i :IndentLinesToggle<Cr>
+nnoremap <M-w>i :IndentLinesToggle<Cr>
 " --------------------------
 " TMUX config
 " --------------------------
@@ -1781,7 +1781,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     nnoremap <M-k> :WhichKey "<lt>M-k>"<Cr>
     nnoremap <M-l> :WhichKey "<lt>M-l>"<Cr>
     nnoremap <M-r> :WhichKey "<lt>M-r>"<Cr>
-    nnoremap <M-'> :WhichKey "<lt>M-'>"<Cr>
+    nnoremap <M-w> :WhichKey "<lt>M-w>"<Cr>
     " search
     if get(g:, 'grep_tool', '') =~ 'leaderf' || get(g:, 'grep_tool', '') =~ 'coc' || get(g:, 'grep_tool', '') =~ 'ctrlsf'
         nnoremap <M-f> :WhichKey '<lt>M-f>'<Cr>

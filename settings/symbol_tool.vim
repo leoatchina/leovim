@@ -113,7 +113,7 @@ if executable('ctags')
     let g:preview#preview_size     = get(g:, 'preview_rows', 8)
     nnoremap <silent> <M-:> <C-w>}
     nnoremap <silent> <M-;> :PreviewTag<Cr>
-    nnoremap <silent> <C-l> :ToggleQuickfix<Cr>:PreviewList<Cr>
+    nnoremap <silent> <M-'> :ToggleQuickfix<Cr>:PreviewList<Cr>
     " vim-quickui
     if Installed('vim-quickui')
         call AddPlugSymbol('quickui')
