@@ -55,7 +55,9 @@ if Installed("fzf.vim") && Installed("fzf")
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
     if Installed('coc.nvim')
-        nnoremap ZF :CocFzfList<Space>
+        nnoremap Zp :CocFzfList<Space>
+    else
+        nnoremap Zp :FZF<Tab>
     endif
     nnoremap ZO :FZFLocate<Space>
     if Installed('vim-yoink')
@@ -297,22 +299,21 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if !Installed('coc.nvim')
         nmap <silent><C-p> :Leaderf self<Cr>
     endif
-    nnoremap Z<S-CR> :Leaderf<Tab>
-    nnoremap Z<CR>   :Leaderf<Tab>
+    nnoremap ZP :Leaderf<Tab>
     " main selector
     nnoremap <leader>w :Leaderf window<Cr>
     nnoremap <leader>b :Leaderf buffer<Cr>
     if Installed('LeaderF-marks')
         nnoremap m<Cr> :Leaderf marks<Cr>
     endif
-    nnoremap s<space>  :Leaderf searchHistory<Cr>
-    nnoremap <Tab>f  :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
-    nnoremap <S-Tab> :CloseQuickfix<Cr>:Leaderf loclist<Cr>
-    nnoremap <M-h>; :Leaderf --next<Cr>
-    nnoremap <M-h>, :Leaderf --previous<Cr>
-    nnoremap <M-h>. :Leaderf --recall<Cr>
-    nnoremap <M-h>c :Leaderf cmdHistory<Cr>
-    nnoremap <M-h>m :Leaderf mru<Cr>
+    nnoremap s<space> :Leaderf searchHistory<Cr>
+    nnoremap Z<Cr>    :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
+    nnoremap Z<S-Cr>  :CloseQuickfix<Cr>:Leaderf loclist<Cr>
+    nnoremap <M-h>;   :Leaderf --next<Cr>
+    nnoremap <M-h>,   :Leaderf --previous<Cr>
+    nnoremap <M-h>.   :Leaderf --recall<Cr>
+    nnoremap <M-h>c   :Leaderf cmdHistory<Cr>
+    nnoremap <M-h>m   :Leaderf mru<Cr>
     " replace origin command
     nnoremap <M-k>s :Leaderf colorscheme<Cr>
     nnoremap <M-k>t :Leaderf filetype<Cr>
@@ -325,7 +326,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap g\| :Leaderf line --all --no-sort --cword<Cr>
     xnoremap g\| <ESC>:Leaderf line --all --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
     nnoremap ZL :Leaderf line --no-sort<Cr>
-    nnoremap ZM :Leaderf line --all --no-sort<Cr>
+    nnoremap Zl :Leaderf line --all --no-sort<Cr>
     " leader-filer
     let g:Lf_FilerShowPromptPath = 1
     " normal mode
@@ -414,13 +415,13 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     xnoremap \| <ESC>:FZFBLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :FzfLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap <Tab>f   :CloseQuickfix<Cr>:FZFQuickFix<CR>
-    nnoremap <S-tab>  :CloseQuickfix<Cr>:FZFLocList<CR>
     nnoremap s<space> :FZFHistory/<CR>
     nnoremap <M-h>c   :FZFHistory:<CR>
+    nnoremap Z<Cr>    :CloseQuickfix<Cr>:FZFQuickFix<CR>
+    nnoremap Z<S-Cr>  :CloseQuickfix<Cr>:FZFLocList<CR>
     nnoremap <M-h>m   :FZFMru<CR>
-    nnoremap ZL   :FZFBLines<CR>
-    nnoremap ZM   :FzfLines<CR>
+    nnoremap ZL :FZFBLines<CR>
+    nnoremap Zl :FzfLines<CR>
     " helptags
     if executable('perl')
         nnoremap q<Space> :FzfHelptags<CR>
@@ -531,8 +532,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap Z<S-CR> :CtrlP<tab>
-    nnoremap Z<CR>   :CtrlP<tab>
+    nnoremap Zp :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
         nnoremap <silent> <leader>i :CtrlPYankring<Cr>
@@ -548,8 +548,8 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         nnoremap <silent> <M-h>m    :CtrlPMRU<CR>
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>t    :CtrlPBufTagAll<CR>
-        nnoremap <silent> ZL    :CtrlPLine<Cr>
-        nnoremap <silent> <Tab>f    :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
+        nnoremap <silent> ZL        :CtrlPLine<Cr>
+        nnoremap <silent> Z<Cr>     :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
         if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
             nnoremap <silent> <M-k>t :CtrlPTag<CR>
         else

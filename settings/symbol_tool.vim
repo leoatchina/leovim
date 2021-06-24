@@ -196,10 +196,10 @@ if Installed('gutentags_plus')
         let g:Lf_GtagsAcceptDotfiles = 1
         let g:Lf_GtagsSkipSymlink    = 'a'
         nnoremap q<cr> :<C-u>Leaderf gtags --all<Cr>
-        nnoremap ,g, :<C-u>Leaderf gtags<Space>
+        nnoremap ,g; :<C-u>Leaderf gtags<Space>
         nnoremap ,gr :<C-u>Leaderf gtags --remove<Cr>
-        nnoremap ,gl :<C-u>Leaderf gtags --all-buffers<Cr>
-        nnoremap ,gb :<C-u>Leaderf gtags --current-buffer<Cr>
+        nnoremap ,gT :<C-u>Leaderf gtags --all-buffers<Cr>
+        nnoremap ,gt :<C-u>Leaderf gtags --current-buffer<Cr>
         nnoremap ,gu :<C-u>Leaderf gtags --update<Cr>
         nnoremap ,ga :<C-u>Leaderf gtags --append<CR>
         nnoremap ,gd :<C-U><C-R>=printf("Leaderf gtags -i -d %s ", expand("<cword>"))<CR><CR>
@@ -243,11 +243,17 @@ if Installed("LeaderF")
     nnoremap <M-t> :Leaderf tag<Cr>
 elseif Installed('fzf.vim')
     let g:fzf_tags_command = 'ctags -R'
-    nnoremap t<cr> :FzfBTags<CR>
-    nnoremap <M-t> :FZFTags<CR>
+    if UNIX()
+        nnoremap t<cr> :FZFBTags<CR>
+        nnoremap <M-t> :FZFTags<CR>
+    elseif WINDOWS()
+        nnoremap t<cr> :FzfBTags<CR>
+        nnoremap <M-t> :FzfTags<CR>
+    endif
     if Installed('fzf-funky')
         nnoremap f<Cr> :FzfFunky<Cr>
     endif
 else
     nnoremap <M-t> :CtrlPTag<CR>
+    nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
 endif
