@@ -54,15 +54,8 @@ if Installed("fzf.vim") && Installed("fzf")
     nmap m<tab> <plug>(fzf-maps-n)
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
-    " ----------------------
-    " short cuts for fzf
-    " ----------------------
-    nnoremap z; :Fzf<tab><tab>
-    nnoremap z, :FZF<tab>
-    nnoremap ZC :CocList<Space>
-    nnoremap ZL :CocFzfList<Space>
-    " locate file
-    nnoremap <M-f>0 :FZFLocate<Space>
+    nnoremap ZF :CocFzfList<Space>
+    nnoremap ZL :FZFLocate<Space>
     if Installed('vim-yoink')
         let g:yoinkMaxItems = 100
         nmap <leader>yc :ClearYanks<Cr>
@@ -302,7 +295,8 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if !Installed('coc.nvim')
         nmap <silent><C-p> :Leaderf self<Cr>
     endif
-    nnoremap ZF :Leaderf<Tab>
+    nnoremap Z<S-CR> :Leaderf<Tab>
+    nnoremap Z<CR>   :Leaderf<Tab>
     " main selector
     nnoremap <leader>w :Leaderf window<Cr>
     nnoremap <leader>b :Leaderf buffer<Cr>
