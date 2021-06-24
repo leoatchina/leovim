@@ -301,8 +301,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if !Installed('coc.nvim')
         nmap <silent><C-p> :Leaderf self<Cr>
     endif
-    nnoremap Z<S-CR> :Leaderf<Tab>
-    nnoremap Z<CR>   :Leaderf<Tab>
+    nnoremap ZF :Leaderf<Tab>
     " main selector
     nnoremap <leader>w :Leaderf window<Cr>
     nnoremap <leader>b :Leaderf buffer<Cr>
