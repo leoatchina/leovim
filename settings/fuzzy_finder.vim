@@ -54,8 +54,10 @@ if Installed("fzf.vim") && Installed("fzf")
     nmap m<tab> <plug>(fzf-maps-n)
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
-    nnoremap ZF :CocFzfList<Space>
-    nnoremap ZL :FZFLocate<Space>
+    if Installed('coc.nvim')
+        nnoremap ZF :CocFzfList<Space>
+    endif
+    nnoremap ZO :FZFLocate<Space>
     if Installed('vim-yoink')
         let g:yoinkMaxItems = 100
         nmap <leader>yc :ClearYanks<Cr>
@@ -312,9 +314,9 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap <M-h>c :Leaderf cmdHistory<Cr>
     nnoremap <M-h>m :Leaderf mru<Cr>
     " replace origin command
-    nnoremap <M-w>s :Leaderf colorscheme<Cr>
-    nnoremap <M-w>t :Leaderf filetype<Cr>
-    nnoremap <M-w>c :Leaderf command<Cr>
+    nnoremap <M-k>s :Leaderf colorscheme<Cr>
+    nnoremap <M-k>t :Leaderf filetype<Cr>
+    nnoremap <M-k>c :Leaderf command<Cr>
     " help tags
     nnoremap q<Space> :Leaderf help<Cr>
     " search cword
@@ -322,8 +324,8 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     xnoremap \| <ESC>:Leaderf line --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :Leaderf line --all --no-sort --cword<Cr>
     xnoremap g\| <ESC>:Leaderf line --all --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap <M-k>l :Leaderf line --no-sort<Cr>
-    nnoremap <M-k>m :Leaderf line --all --no-sort<Cr>
+    nnoremap ZL :Leaderf line --no-sort<Cr>
+    nnoremap ZM :Leaderf line --all --no-sort<Cr>
     " leader-filer
     let g:Lf_FilerShowPromptPath = 1
     " normal mode
@@ -397,9 +399,9 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
 elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap <leader>b :FzfBuffers<CR>
     " replace origin command
-    nnoremap <M-w>s :FzfColors<CR>
-    nnoremap <M-w>t :FzfFiletypes<CR>
-    nnoremap <M-w>c :FzfCommands<CR>
+    nnoremap <M-k>s :FzfColors<CR>
+    nnoremap <M-k>t :FzfFiletypes<CR>
+    nnoremap <M-k>c :FzfCommands<CR>
     if WINDOWS()
         nnoremap m<Cr>     :FzfMarks<CR>
         nnoremap <leader>w :FzfWindows<CR>
@@ -417,8 +419,8 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap s<space> :FZFHistory/<CR>
     nnoremap <M-h>c   :FZFHistory:<CR>
     nnoremap <M-h>m   :FZFMru<CR>
-    nnoremap <M-k>l   :FZFBLines<CR>
-    nnoremap <M-k>m   :FzfLines<CR>
+    nnoremap ZL   :FZFBLines<CR>
+    nnoremap ZM   :FzfLines<CR>
     " helptags
     if executable('perl')
         nnoremap q<Space> :FzfHelptags<CR>
@@ -546,7 +548,7 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         nnoremap <silent> <M-h>m    :CtrlPMRU<CR>
         nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
         nnoremap <silent> <M-k>t    :CtrlPBufTagAll<CR>
-        nnoremap <silent> <M-k>l    :CtrlPLine<Cr>
+        nnoremap <silent> ZL    :CtrlPLine<Cr>
         nnoremap <silent> <Tab>f    :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
         if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
             nnoremap <silent> <M-k>t :CtrlPTag<CR>

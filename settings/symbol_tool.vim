@@ -79,7 +79,6 @@ if Installed('vista.vim')
     else
         let g:vista_sidebar_position = 'vertical topright'
     endif
-    nnoremap <M-k>v :Vista<Space>
     let g:vista_sidebar_width        = 35
     let g:vista_echo_cursor          = 0
     let g:vista_stay_on_open         = 0

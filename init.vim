@@ -406,7 +406,7 @@ if g:has_truecolor == 1
         let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
         let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     endif
-    nnoremap <M-w>g :set notermguicolors! notermguicolors?<CR>
+    nnoremap <M-k>g :set notermguicolors! notermguicolors?<CR>
 endif
 " ------------------------
 " easy-align
@@ -1257,15 +1257,15 @@ nnoremap <silent> m<Space> :call Delmarks()<cr>
 " basic toggle and show
 " ------------------------
 nnoremap <leader>b :ls<CR>
-nnoremap <M-w>r :registers<Cr>
-nnoremap <M-w>n :set nonu! nonu?<CR>
-nnoremap <M-w>i :set invrelativenumber<CR>
-nnoremap <M-w>f :set nofoldenable! nofoldenable?<CR>
-nnoremap <M-w>w :set nowrap! nowrap?<CR>
-nnoremap <M-w>h :set nohlsearch? nohlsearch!<CR>
-nnoremap <M-w>s :colorscheme<Space>
-nnoremap <M-w>t :setfiletype<Space>
-nnoremap <M-w>c :command<Cr>
+nnoremap <M-k>r :registers<Cr>
+nnoremap <M-k>n :set nonu! nonu?<CR>
+nnoremap <M-k>i :set invrelativenumber<CR>
+nnoremap <M-k>f :set nofoldenable! nofoldenable?<CR>
+nnoremap <M-k>w :set nowrap! nowrap?<CR>
+nnoremap <M-k>h :set nohlsearch? nohlsearch!<CR>
+nnoremap <M-k>s :colorscheme<Space>
+nnoremap <M-k>t :setfiletype<Space>
+nnoremap <M-k>c :command<Cr>
 " ------------------------
 " pastemode toggle
 " ------------------------
@@ -1773,6 +1773,7 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     " g
     nnoremap g1 :WhichKey "g"<Cr>
     nnoremap s1 :WhichKey "s"<Cr>
+    nnoremap z1 :WhichKey "Z"<Cr>
     " M- keys
     nnoremap <M-g> :WhichKey "<lt>M-g>"<Cr>
     nnoremap <M-h> :WhichKey "<lt>M-h>"<Cr>
@@ -1780,8 +1781,6 @@ if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
     nnoremap <M-k> :WhichKey "<lt>M-k>"<Cr>
     nnoremap <M-l> :WhichKey "<lt>M-l>"<Cr>
     nnoremap <M-r> :WhichKey "<lt>M-r>"<Cr>
-    nnoremap <M-w> :WhichKey "<lt>M-w>"<Cr>
-    nnoremap <M-w> :WhichKey "<lt>M-w>"<Cr>
     nnoremap <M-'> :WhichKey "<lt>M-'>"<Cr>
     " search
     if get(g:, 'grep_tool', '') =~ 'leaderf' || get(g:, 'grep_tool', '') =~ 'coc' || get(g:, 'grep_tool', '') =~ 'ctrlsf'
@@ -1868,8 +1867,8 @@ function! Version()
     echo string(params_dict)
 endfunction
 command! Version call Version()
-nnoremap <M-w>v :Version<Cr>
-nnoremap <M-w>V :version<Cr>
+nnoremap <M-k>v :Version<Cr>
+nnoremap <M-k>V :version<Cr>
 " --------------------------
 " more config
 " --------------------------

@@ -1,9 +1,6 @@
 let s:flake8_ignore = "E501,E302,E251,E231,E226,E221,E127,E126,E123,W291,F405,F403"
-nnoremap <M-k>, :lprev<cr>
-nnoremap <M-k>; :lnext<cr>
-if get(g:, 'complete_engine', '') == 'YCM'
-    nnoremap <M-k>d :YcmDiags<Cr>
-endif
+nnoremap Z; :lnext<cr>
+nnoremap Z, :lprev<cr>
 if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
     if get(g:, 'fuzzy_finder', '') == 'leaderf'
         nnoremap <silent> <leader>d :silent CocDiagnostics<CR>:lclose<Cr>:Leaderf loclist<Cr>

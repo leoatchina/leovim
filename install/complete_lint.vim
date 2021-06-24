@@ -94,10 +94,10 @@ endif
 if g:complete_engine_type > 0
     if get(g:, 'complete_engine', '') == 'coc' && get(g:, 'lint_tool', '') != 'ale'
         let g:lint_tool = 'coc'
-        nnoremap <M-k>d :<C-u>CocDiagnostics<Cr>
+        nnoremap <leader>D :<C-u>CocDiagnostics<Cr>
     elseif has('nvim') || v:version >= 800
         let g:lint_tool = 'ale'
-        nnoremap <M-k>d :ALELint<Cr>
+        nnoremap <leader>D :ALELint<Cr>
         MyPlug 'dense-analysis/ale'
     else
         let g:lint_tool = ''
