@@ -195,7 +195,7 @@ if Installed('gutentags_plus')
         let g:Lf_GtagsSkipUnreadable = 1
         let g:Lf_GtagsAcceptDotfiles = 1
         let g:Lf_GtagsSkipSymlink    = 'a'
-        nnoremap ,g; :<C-u>Leaderf gtags --all<Cr>
+        nnoremap q<cr> :<C-u>Leaderf gtags --all<Cr>
         nnoremap ,g, :<C-u>Leaderf gtags<Space>
         nnoremap ,gr :<C-u>Leaderf gtags --remove<Cr>
         nnoremap ,gl :<C-u>Leaderf gtags --all-buffers<Cr>
@@ -240,11 +240,11 @@ if Installed("LeaderF")
     nnoremap T<Cr> :Leaderf bufTag --all<Cr>
     nnoremap f<Cr> :Leaderf function<Cr>
     nnoremap F<Cr> :Leaderf function --all<Cr>
-    nnoremap q<Cr> :Leaderf tag<Cr>
+    nnoremap <M-t> :Leaderf tag<Cr>
 elseif Installed('fzf.vim')
     let g:fzf_tags_command = 'ctags -R'
     nnoremap t<cr> :FzfBTags<CR>
-    nnoremap q<Cr> :FZFTags<CR>
+    nnoremap <M-t> :FZFTags<CR>
     if Installed('fzf-funky')
         nnoremap f<Cr> :FzfFunky<Cr>
     endif

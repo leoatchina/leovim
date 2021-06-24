@@ -243,17 +243,16 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
         let g:asynctasks_term_focus   = 0
         let g:asynctasks_term_listed  = 0
         " asynctask shortcuts
-        nnoremap <M-r>; :<C-u>AsyncTask
-        nnoremap <M-r>m :<C-u>AsyncTaskMacro<Cr>
-        nnoremap <M-r>e :<C-u>AsyncTaskEdit<Space>
+        nnoremap <M-y>; :<C-u>AsyncTask
+        nnoremap <M-y>m :<C-u>AsyncTaskMacro<Cr>
+        nnoremap <M-y>e :<C-u>AsyncTaskEdit<Space>
         " run shortcuts
-        nnoremap <M-r><M-r> :<C-u>AsyncTask project-run<Cr>
-        nnoremap <M-r>r :<C-u>AsyncTask project-run<Cr>
-        nnoremap <M-r>b :<C-u>AsyncTask project-build<Cr>
-        nnoremap <M-r>d :<C-u>AsyncTask project-debug<Cr>
-        nnoremap <M-r>c :<C-u>AsyncTask project-compile<Cr>
-        nnoremap <M-r>t :<C-u>AsyncTask project-test<Cr>
-        nnoremap <M-r>i :<C-u>AsyncTask project-init<Cr>
+        nnoremap <M-y>r :<C-u>AsyncTask project-run<Cr>
+        nnoremap <M-y>b :<C-u>AsyncTask project-build<Cr>
+        nnoremap <M-y>d :<C-u>AsyncTask project-debug<Cr>
+        nnoremap <M-y>c :<C-u>AsyncTask project-compile<Cr>
+        nnoremap <M-y>t :<C-u>AsyncTask project-test<Cr>
+        nnoremap <M-y>i :<C-u>AsyncTask project-init<Cr>
         let g:asynctasks_template = {}
         let g:asynctasks_template.cargo = [
                     \ '[project-build]',
@@ -300,8 +299,8 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
             echom "asynctasks_profile is " . g:asynctasks_profile
         endfunction
         command! AsyncTaskProfileLoop call AsyncTaskProfileLoop()
-        nnoremap <M-r>, :<C-u>AsyncTaskProfileLoop<CR>
-        nnoremap <M-r>. :<C-u>AsyncTaskProfile<CR>
+        nnoremap <M-y>, :<C-u>AsyncTaskProfileLoop<CR>
+        nnoremap <M-y>. :<C-u>AsyncTaskProfile<CR>
         if g:fuzzy_finder == 'leaderf'
             function! s:lf_task_source(...)
                 let rows = asynctasks#source(&columns * 48 / 100)
@@ -345,7 +344,7 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
                         \     'Lf_hl_funcDirname': '^\S\+\s*\zs<.*>\ze\s*:',
                         \ },
                         \ }
-            nnoremap <M-t> :Leaderf tasks<Cr>
+            nnoremap <M-r> :Leaderf tasks<Cr>
         elseif g:fuzzy_finder == 'fzf' || g:fuzzy_finder == 'coc'
             function! s:fzf_sink(what)
                 let p1 = stridx(a:what, '<')
@@ -374,7 +373,7 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
                 call fzf#run(opts)
             endfunction
             command! -nargs=0 FZFAsyncTask call s:fzf_task()
-            nnoremap <M-t> :FZFAsyncTask<Cr>
+            nnoremap <M-r> :FZFAsyncTask<Cr>
         endif
     endif
 endif
