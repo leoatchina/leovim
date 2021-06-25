@@ -1161,7 +1161,7 @@ if g:gui_running > 0 || WINDOWS()
     call s:Filter_Push("Java", "*.java")
     call s:Filter_Push("Text", "*.txt")
     call s:Filter_Push("Vim Script", "*.vim")
-    function! Open_Browse(where)
+    function! Open_Browse()
         let l:path = expand("%:p:h")
         if l:path == '' | let l:path = getcwd() | endif
         if exists('g:browsefilter') && exists('b:browsefilter')
@@ -1169,16 +1169,9 @@ if g:gui_running > 0 || WINDOWS()
                 let b:browsefilter = g:browsefilter
             endif
         endif
-        if a:where == 0
-            exec 'browse e '.fnameescape(l:path)
-        elseif a:where == 1
-            exec 'browse vnew '.fnameescape(l:path)
-        else
-            exec 'browse tabnew '.fnameescape(l:path)
-        endif
+        exec 'browse tabnew '.fnameescape(l:path)
     endfunc
-    nnoremap <silent><M-\\> :call Open_Browse(2)<Cr>
-    nnoremap <silent><M-\|> :call Open_Browse(1)<Cr>
+    nnoremap <silent><M-`> :call Open_Browse()<Cr>
 endif
 " ------------------------
 " yank && paste
