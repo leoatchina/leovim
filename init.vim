@@ -1165,19 +1165,20 @@ if g:gui_running > 0 || WINDOWS()
         let l:path = expand("%:p:h")
         if l:path == '' | let l:path = getcwd() | endif
         if exists('g:browsefilter') && exists('b:browsefilter')
-          if g:browsefilter != ''
-        let b:browsefilter = g:browsefilter
-          endif
+            if g:browsefilter != ''
+                let b:browsefilter = g:browsefilter
+            endif
         endif
         if a:where == 0
-          exec 'browse e '.fnameescape(l:path)
+            exec 'browse e '.fnameescape(l:path)
         elseif a:where == 1
-          exec 'browse vnew '.fnameescape(l:path)
+            exec 'browse vnew '.fnameescape(l:path)
         else
-          exec 'browse tabnew '.fnameescape(l:path)
+            exec 'browse tabnew '.fnameescape(l:path)
         endif
     endfunc
-    nnoremap <silent><M-i> :call Open_Browse(2)<Cr>
+    nnoremap <silent><M-\\> :call Open_Browse(2)<Cr>
+    nnoremap <silent><M-\|> :call Open_Browse(1)<Cr>
 endif
 " ------------------------
 " yank && paste
