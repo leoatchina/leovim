@@ -159,6 +159,9 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
             endif
             if &filetype ==# 'dosbatch'
                 exec "AsyncRun -raw=1 ".params." ptime %"
+            elseif (&filetype == 'c' || &filetype == 'cpp') && UNIX()
+                silent! call mkdir("$HOME/.cache/build/", "p")
+                exec 'AsyncRun -raw=1 ' . params . ' time gcc `pkg-config --cflags ` -Wall -O2 "$(VIM_FILEPATH)" -o "$HOME/.cache/build/$(VIM_FILENOEXT)" && " time $HOME/.cache/build/$(VIM_FILENOEXT)"'
             elseif &filetype ==# 'python' && get(g:, 'python_exe_path', '') != ''
                 if WINDOWS()
                     exec "AsyncRun -raw=1 ".params." ptime " . g:python_exe_path . " %"

@@ -342,7 +342,7 @@ if HasPlug('writing')
     " pangu
     " ------------------------------
     MyPlug 'hotoo/pangu.vim'
-    nnoremap <Tab>P :Pangu<tab>
+    nnoremap <leader>P :Pangu<tab>
 else
     nnoremap = <Nop>
 endif

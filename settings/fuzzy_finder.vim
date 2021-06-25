@@ -193,9 +193,13 @@ if Installed("fzf.vim") && Installed("fzf")
     nnoremap <silent> <M-b> :FZFRegisterBefore<Cr>
     inoremap <silent> <M-b> <C-o>:FZFRegisterBefore<Cr>
     xnoremap <silent> <M-b> :<C-u>FZFRegisterBeforeV<Cr>
+    nnoremap <silent> ,P :FZFRegisterBefore<Cr>
+    xnoremap <silent> ,P :<C-u>FZFRegisterBeforeV<Cr>
     nnoremap <silent> <M-i> :FZFRegisterInsert<Cr>
     inoremap <silent> <M-i> <C-o>:FZFRegisterInsert<Cr>
     xnoremap <silent> <M-i> :<C-u>FZFRegisterInsertV<Cr>
+    nnoremap <silent> ,p :FZFRegisterInsert<Cr>
+    xnoremap <silent> ,p :<C-u>FZFRegisterInsertV<Cr>
     " --------------------
     " Jumps
     " --------------------
