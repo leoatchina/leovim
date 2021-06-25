@@ -263,9 +263,9 @@ if get(g:, 'has_terminal', 0) > 0
         else
             let g:floaterm_position = 'right'
         endif
-        nnoremap Zf :Floaterm<Tab>
-        nnoremap Zm :FloatermFirst<Cr>
         nnoremap ZM :FloatermNew<Space>
+        nnoremap Zm :Floaterm<Tab>
+        nnoremap Zf :FloatermFirst<Cr>
         nnoremap <silent> <M-=> :FloatermToggle<CR>
         tnoremap <silent> <M-=> <C-\><C-n>:FloatermToggle<CR>
     endif
