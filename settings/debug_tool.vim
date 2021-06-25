@@ -2,8 +2,8 @@ if Installed('vimspector')
     let g:debug_tool = "vimspector"
     let g:vimspector_enable_mappings = 'HUMAN'
     "  breakpoint
-    nmap <silent> ,B     :call vimspector#ListBreakpoints()<Cr>
     nmap <silent> ,C     :call vimspector#ClearBreakpoints()<Cr>
+    nmap <silent> ,B     :call vimspector#ListBreakpoints()<Cr>
     nmap <silent> ,b     <Plug>VimspectorToggleBreakpoint
     nmap <silent> <F7>   <Plug>VimspectorToggleConditionalBreakpoint
     nmap <silent> <M-u>b <Plug>VimspectorToggleConditionalBreakpoint
@@ -12,9 +12,9 @@ if Installed('vimspector')
     nmap <silent> ,r :call vimspector#Restart()<Cr>
     nmap <silent> ,d <Plug>VimspectorContinue
     nmap <silent> ,D <Plug>VimspectorRunToCursor
-    nmap <silent> ,o <Plug>VimspectorStepOver
-    nmap <silent> ,n <Plug>VimspectorStepInto
-    nmap <silent> ,u <Plug>VimspectorStepOut
+    nmap <silent> ,s <Plug>VimspectorStepOver
+    nmap <silent> ,i <Plug>VimspectorStepInto
+    nmap <silent> ,o <Plug>VimspectorStepOut
     "  jump to windows in vimspector
     nnoremap <M-m>o :call GoToVimspectorWindow('output')<Cr>
     nnoremap <M-m>e :call GoToVimspectorWindow('stderr')<Cr>

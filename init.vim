@@ -1381,12 +1381,11 @@ au WinEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
             \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
             \ | lcd %:p:h | endif
 augroup AUTOClose
-    " 离开InsertMode时，关闭补全，非paste模式，还有不往后move cursor
+    " 离开InsertMode时，关闭补全，非paste模式
     au InsertLeave * set nopaste
-    au InsertLeave * if pumvisible() == 0 | pclose | endif
-    au InsertLeave * if !exists('b:visual_multi') | call cursor([getpos('.')[1], getpos('.')[2]+1]) | endif
     " 补全完成后关闭预览窗口
-    au CompleteDone * if pumvisible() == 0|pclose|endif
+    au InsertLeave  * if pumvisible() == 0 | pclose | endif
+    au CompleteDone * if pumvisible() == 0 | pclose | endif
     " 退出侧边等
     au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&buftype")  == "preview"|q|endif
     au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw" |q|endif
@@ -1474,12 +1473,12 @@ nnoremap <silent><M-E> :call Tools_PreviousCursor(2)<cr>
 nnoremap <silent><M-Y> :call Tools_PreviousCursor(3)<Cr>
 nnoremap <silent><M-Q> :call Tools_PreviousCursor(4)<Cr>
 nnoremap <silent><M-Z> :call Tools_PreviousCursor(5)<Cr>
-inoremap <silent><M-U> <ESC>l:call Tools_PreviousCursor(0)<cr>
-inoremap <silent><M-D> <ESC>l:call Tools_PreviousCursor(1)<Cr>
-inoremap <silent><M-E> <ESC>l:call Tools_PreviousCursor(2)<cr>
-inoremap <silent><M-Y> <ESC>l:call Tools_PreviousCursor(3)<Cr>
-inoremap <silent><M-Q> <ESC>l:call Tools_PreviousCursor(4)<Cr>
-inoremap <silent><M-Z> <ESC>l:call Tools_PreviousCursor(5)<Cr>
+inoremap <silent><M-U> <ESC>:call Tools_PreviousCursor(0)<cr>
+inoremap <silent><M-D> <ESC>:call Tools_PreviousCursor(1)<Cr>
+inoremap <silent><M-E> <ESC>:call Tools_PreviousCursor(2)<cr>
+inoremap <silent><M-Y> <ESC>:call Tools_PreviousCursor(3)<Cr>
+inoremap <silent><M-Q> <ESC>:call Tools_PreviousCursor(4)<Cr>
+inoremap <silent><M-Z> <ESC>:call Tools_PreviousCursor(5)<Cr>
 " --------------------------
 " vim-cycle
 " --------------------------
