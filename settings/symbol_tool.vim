@@ -196,19 +196,19 @@ if Installed('gutentags_plus')
         let g:Lf_GtagsAcceptDotfiles = 1
         let g:Lf_GtagsSkipSymlink    = 'a'
         nnoremap q<cr> :<C-u>Leaderf gtags --all<Cr>
+        nnoremap ,g. :<C-u>Leaderf gtags --recall<CR>
         nnoremap ,g; :<C-u>Leaderf gtags<Space>
-        nnoremap ,gr :<C-u>Leaderf gtags --remove<Cr>
-        nnoremap ,gT :<C-u>Leaderf gtags --all-buffers<Cr>
-        nnoremap ,gt :<C-u>Leaderf gtags --current-buffer<Cr>
-        nnoremap ,gu :<C-u>Leaderf gtags --update<Cr>
+        nnoremap ,g, :<C-u>Leaderf gtags --current-buffer<Cr>
+        nnoremap ,gt :<C-u>Leaderf gtags --all-buffers<Cr>
         nnoremap ,ga :<C-u>Leaderf gtags --append<CR>
+        nnoremap ,gr :<C-u>Leaderf gtags --remove<Cr>
+        nnoremap ,gu :<C-u>Leaderf gtags --update<Cr>
         nnoremap ,gd :<C-U><C-R>=printf("Leaderf gtags -i -d %s ", expand("<cword>"))<CR><CR>
         nnoremap ,ge :<C-U><C-R>=printf("Leaderf gtags -i -r %s ", expand("<cword>"))<CR><CR>
         nnoremap ,gs :<C-U><C-R>=printf("Leaderf gtags -i -s %s ", expand("<cword>"))<CR><CR>
         nnoremap ,gg :<C-U><C-R>=printf("Leaderf gtags -i -g %s ", expand("<cword>"))<CR><CR>
         nnoremap ,gn :<C-U>Leaderf gtags --next<CR>
         nnoremap ,gp :<C-U>Leaderf gtags --previous<CR>
-        nnoremap ,g. :<C-u>Leaderf gtags --recall<CR>
         " work with ctags
         if get(g:, 'pygments_import', 0) > 0 && get(g:, 'native_pygments', 1) > 0
             let g:Lf_Gtagslabel = 'native-pygments'

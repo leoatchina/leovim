@@ -63,8 +63,8 @@ if Installed("fzf.vim") && Installed("fzf")
     if Installed('vim-yoink')
         let g:yoinkMaxItems = 100
         nmap <leader>yc :ClearYanks<Cr>
-        nmap p   <plug>(YoinkPaste_p)
-        nmap P   <plug>(YoinkPaste_P)
+        nmap p <plug>(YoinkPaste_p)
+        nmap P <plug>(YoinkPaste_P)
         " --------------------
         " FZFYank
         " --------------------
