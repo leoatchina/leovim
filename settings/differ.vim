@@ -25,8 +25,8 @@ if Installed('vim-signify')
 endif
 " ZFVimDirDiff
 if Installed('ZFVimDirDiff')
-    nnoremap ZD :ZFDirDiff<Space>
-    nnoremap ZM :ZFDirDiffMark<Cr>
+    nnoremap ZD :ZFDirDiffMark<Cr>
+    nnoremap Zd :ZFDirDiff<Space>
 endif
 " ########## Diff Option ##########
 try
