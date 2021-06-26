@@ -94,13 +94,7 @@ if Installed('vista.vim')
         nnoremap <M-?> :Vista finder!<Cr>
     endif
     if get(g:, 'vista_lsp_command', '') != ''
-        execute("nnoremap <M-/> :Vista finder " . g:vista_lsp_command . "<Cr>")
-        if get(g:, 'vista_default_executive', '') != 'ctags'
-            let g:vista_default_executive = g:vista_lsp_command
-            execute("nnoremap <M-?> :Vista finder " . g:vista_lsp_command . "<Cr>")
-        endif
-    elseif get(g:, 'vista_default_executive', '') == 'ctags'
-        nnoremap <M-/> :Vista finder!<Cr>
+        execute("nnoremap q<cr> :Vista finder " . g:vista_lsp_command . "<Cr>")
     endif
 endif
 " --------------------------
@@ -195,7 +189,7 @@ if Installed('gutentags_plus')
         let g:Lf_GtagsSkipUnreadable = 1
         let g:Lf_GtagsAcceptDotfiles = 1
         let g:Lf_GtagsSkipSymlink    = 'a'
-        nnoremap q<cr> :<C-u>Leaderf gtags --all<Cr>
+        nnoremap t<cr> :<C-u>Leaderf gtags --all<Cr>
         nnoremap ,g. :<C-u>Leaderf gtags --recall<CR>
         nnoremap ,g; :<C-u>Leaderf gtags<Space>
         nnoremap ,g, :<C-u>Leaderf gtags --current-buffer<Cr>
@@ -236,18 +230,18 @@ if Installed("LeaderF")
             let g:Lf_Ctags = "ctags 2>/dev/null"
         endif
     endif
-    nnoremap t<Cr> :Leaderf bufTag<cr>
-    nnoremap T<Cr> :Leaderf bufTag --all<Cr>
+    nnoremap <M-/> :Leaderf bufTag<cr>
+    nnoremap <M-?> :Leaderf bufTag --all<Cr>
     nnoremap f<Cr> :Leaderf function<Cr>
     nnoremap F<Cr> :Leaderf function --all<Cr>
     nnoremap <M-t> :Leaderf tag<Cr>
 elseif Installed('fzf.vim')
     let g:fzf_tags_command = 'ctags -R'
     if UNIX()
-        nnoremap t<cr> :FZFBTags<CR>
+        nnoremap <M-/> :FZFBTags<CR>
         nnoremap <M-t> :FZFTags<CR>
     elseif WINDOWS()
-        nnoremap t<cr> :FzfBTags<CR>
+        nnoremap <M-/> :FzfBTags<CR>
         nnoremap <M-t> :FzfTags<CR>
     endif
     if Installed('fzf-funky')
