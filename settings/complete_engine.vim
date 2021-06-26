@@ -6,7 +6,7 @@ syntax enable
 filetype on
 filetype plugin on
 filetype plugin indent on
-set cpt=w,b,.,k
+set cpt=s,d,t,w,b,.,k
 " --------------------------
 " complete_snippet
 " --------------------------
