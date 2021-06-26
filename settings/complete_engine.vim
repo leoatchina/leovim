@@ -261,7 +261,7 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     " echo | clang -v -E -x c
     let g:ycm_global_ycm_extra_conf = g:ycm_install_path . "/third_party/ycmd/.ycm_extra_conf.py"
     let g:ycm_confirm_extra_conf    = 1
-    nnoremap <leader>ey :execute("tabe " . g:ycm_install_path . "/third_party/ycmd/.ycm_extra_conf.py")<Cr>
+    nnoremap <leader>ey :execute("tabe " . g:ycm_global_ycm_extra_conf)<Cr>
     " hover
     if !has('nvim')
         let g:ycm_auto_hover = ''
