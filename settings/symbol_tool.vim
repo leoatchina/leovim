@@ -148,9 +148,34 @@ if executable('ctags')
         endif
         nnoremap <leader>gu :GutentagsUpdate<CR>
     endif
+    if Installed("LeaderF")
+        if WINDOWS()
+            let g:Lf_Ctags = "ctags"
+        else
+            let g:Lf_Ctags = "ctags 2>/dev/null"
+        endif
+        nnoremap <M-/> :Leaderf bufTag<cr>
+        nnoremap <M-?> :Leaderf bufTag --all<Cr>
+        nnoremap <M-t> :Leaderf tag<Cr>
+        nnoremap f<Cr> :Leaderf function<Cr>
+        nnoremap F<Cr> :Leaderf function --all<Cr>
+        nnoremap ZT    :LeaderfTagCword<Cr>
+        nnoremap Zt    :LeaderfTagPattern<Space>
+    elseif Installed('fzf.vim')
+        let g:fzf_tags_command = 'ctags -R'
+        if UNIX()
+            nnoremap <M-/> :FZFBTags<CR>
+            nnoremap <M-t> :FZFTags<CR>
+        elseif WINDOWS()
+            nnoremap <M-/> :FzfBTags<CR>
+            nnoremap <M-t> :FzfTags<CR>
+        endif
+    else
+        nnoremap <M-t> :CtrlPTag<CR>
+    endif
 endif
 " --------------------------
-" gtags
+" gutentags_plus
 " --------------------------
 if Installed('gutentags_plus')
     call AddPlugSymbol('gtags')
@@ -192,8 +217,8 @@ if Installed('gutentags_plus')
         nnoremap t<cr> :<C-u>Leaderf gtags --all<Cr>
         nnoremap T<Cr> :<C-u>Leaderf gtags --all-buffers<Cr>
         nnoremap ,g. :<C-u>Leaderf gtags --recall<CR>
-        nnoremap ,g; :<C-u>Leaderf gtags<Space>
         nnoremap ,g, :<C-u>Leaderf gtags --current-buffer<Cr>
+        nnoremap ,g; :<C-u>Leaderf gtags<Space>
         nnoremap ,ga :<C-u>Leaderf gtags --append<CR>
         nnoremap ,gr :<C-u>Leaderf gtags --remove<Cr>
         nnoremap ,gu :<C-u>Leaderf gtags --update<Cr>
@@ -221,33 +246,4 @@ if len(g:plugs_symbol) > 0
     let g:symbol_tool = join(g:plugs_symbol, '-')
 else
     let g:symbol_tool = ''
-endif
-if Installed("LeaderF")
-    if executable('ctags')
-        if WINDOWS()
-            let g:Lf_Ctags = "ctags"
-        else
-            let g:Lf_Ctags = "ctags 2>/dev/null"
-        endif
-    endif
-    nnoremap <M-/> :Leaderf bufTag<cr>
-    nnoremap <M-?> :Leaderf bufTag --all<Cr>
-    nnoremap f<Cr> :Leaderf function<Cr>
-    nnoremap F<Cr> :Leaderf function --all<Cr>
-    nnoremap <M-t> :Leaderf tag<Cr>
-elseif Installed('fzf.vim')
-    let g:fzf_tags_command = 'ctags -R'
-    if UNIX()
-        nnoremap <M-/> :FZFBTags<CR>
-        nnoremap <M-t> :FZFTags<CR>
-    elseif WINDOWS()
-        nnoremap <M-/> :FzfBTags<CR>
-        nnoremap <M-t> :FzfTags<CR>
-    endif
-    if Installed('fzf-funky')
-        nnoremap f<Cr> :FzfFunky<Cr>
-    endif
-else
-    nnoremap <M-t> :CtrlPTag<CR>
-    nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
 endif

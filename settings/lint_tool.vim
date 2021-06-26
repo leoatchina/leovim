@@ -11,8 +11,8 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
     endif
     nmap <silent> z; <Plug>(coc-diagnostic-next-error)
     nmap <silent> z, <Plug>(coc-diagnostic-prev-error)
-    nmap ZT   :call CocAction('diagnosticToggle')<Cr>
     nmap <F2> :call CocAction('diagnosticToggle')<Cr>
+    nmap <leader>D :call CocAction('diagnosticToggle')<Cr>
     highlight def CocUnderLine cterm=NONE gui=NONE
     highlight def link CocErrorHighlight   CocUnderLine
     highlight def link CocWarningHighlight NONE
@@ -47,26 +47,25 @@ elseif Installed('ale')
     endfunction
     command! -bang -nargs=* ShowLint call s:showLint()
     nnoremap <silent> <leader>d :ShowLint<Cr>
-    nmap ZA   :ALE<Tab>
-    nmap ZT   :ALEToggle<Cr>
-    nmap <F2> :ALEToggle<Cr>
     nmap z;   <Plug>(ale_next_error)
     nmap z,   <Plug>(ale_previous_error)
-    let g:ale_disable_lsp          = 0
-    let g:ale_completion_enabled   = 0
-    let g:ale_virtualtext_cursor   = 0
+    nmap <F2> :ALEToggleBuffer<Cr>
+    nmap <leader>D :ALEToggleBuffer<Cr>
+    let g:ale_disable_lsp        = 0
+    let g:ale_completion_enabled = 0
+    let g:ale_virtualtext_cursor = 0
     " lint time
     let g:ale_lint_on_enter           = 1
     let g:ale_lint_on_filetype_change = 1
     let g:ale_lint_on_insert_leave    = 1
     let g:ale_lint_on_text_changed    = 'always'
     " signs
-    let g:ale_sign_column_always   = 0
-    let g:ale_set_signs            = 1
-    let g:ale_set_highlights       = 0
-    let g:ale_sign_error           = 'x'
-    let g:ale_sign_warning         = '!'
-    let g:ale_sign_info            = '>'
+    let g:ale_sign_column_always = 0
+    let g:ale_set_signs          = 1
+    let g:ale_set_highlights     = 0
+    let g:ale_sign_error         = 'x'
+    let g:ale_sign_warning       = '!'
+    let g:ale_sign_info          = '>'
     " message format
     let g:ale_echo_msg_error_str   = 'E'
     let g:ale_echo_msg_warning_str = 'W'

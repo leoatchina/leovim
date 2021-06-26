@@ -271,6 +271,9 @@ if Installed("fzf.vim") && Installed("fzf")
         command! -bang -nargs=* FZFJumps call s:FZFJumps()
         nnoremap ZJ :FZFJumps<cr>
     endif
+    if Installed('fzf-funky')
+        nnoremap f<Cr> :FzfFunky<Cr>
+    endif
 endif
 " leaderf
 let g:Lf_CacheDirectory   = expand("~/.cache/leaderf")
