@@ -11,7 +11,7 @@ rm -rf vim-easymotion
 git clone --depth 1 https://github.com/easymotion/vim-easymotion.git
 
 # easymotion-chs
-rm -rf vim-easymotions
+rm -rf vim-easymotion-chs
 git clone --depth 1 https://github.com/ZSaberLv0/vim-easymotion-chs.git
 
 # clever-f
