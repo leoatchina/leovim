@@ -49,8 +49,8 @@ elseif Installed('ale')
     nnoremap <silent> <leader>d :ShowLint<Cr>
     nmap z;   <Plug>(ale_next_error)
     nmap z,   <Plug>(ale_previous_error)
-    nmap <F2> :ALEToggleBuffer<Cr>
-    nmap <leader>D :ALEToggleBuffer<Cr>
+    nmap <F2> :ALEToggle<Cr>
+    nmap <leader>D :ALEToggle<Cr>
     let g:ale_disable_lsp        = 0
     let g:ale_completion_enabled = 0
     let g:ale_virtualtext_cursor = 0
