@@ -94,7 +94,7 @@ if Installed('vista.vim')
         nnoremap <M-?> :Vista finder!<Cr>
     endif
     if get(g:, 'vista_lsp_command', '') != ''
-        execute("nnoremap q<cr> :Vista finder " . g:vista_lsp_command . "<Cr>")
+        execute("nnoremap t<cr> :Vista finder " . g:vista_lsp_command . "<Cr>")
     endif
 endif
 " --------------------------
@@ -189,7 +189,7 @@ if Installed('gutentags_plus')
         let g:Lf_GtagsSkipUnreadable = 1
         let g:Lf_GtagsAcceptDotfiles = 1
         let g:Lf_GtagsSkipSymlink    = 'a'
-        nnoremap t<cr> :<C-u>Leaderf gtags --all<Cr>
+        nnoremap q<cr> :<C-u>Leaderf gtags --all<Cr>
         nnoremap ,g. :<C-u>Leaderf gtags --recall<CR>
         nnoremap ,g; :<C-u>Leaderf gtags<Space>
         nnoremap ,g, :<C-u>Leaderf gtags --current-buffer<Cr>
