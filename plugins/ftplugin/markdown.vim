@@ -7,11 +7,11 @@ endif
 if get(g:, 'markdown_tool', '') =~ 'markdown'
     " markdown.preview
     if get(g:, 'markdown_tool', '') =~ 'nvim'
-        au FileType markdown nmap <leader>rr <Plug>MarkdownPreview
-        au FileType markdown nmap <leader>S  <Plug>StopMarkdownPreview
+        au FileType markdown nmap <leader>R <Plug>MarkdownPreview
+        au FileType markdown nmap <leader>S <Plug>StopMarkdownPreview
     elseif get(g:, 'markdown_tool', '') =~ 'vim'
-        au FileType markdown nmap <leader>rr <Plug>MarkdownPreview
-        au FileType markdown nmap <leader>S  <Plug>MarkdownPreviewStop
+        au FileType markdown nmap <leader>R <Plug>MarkdownPreview
+        au FileType markdown nmap <leader>S <Plug>MarkdownPreviewStop
     endif
 endif
 if Installed("preview-markdown.vim")

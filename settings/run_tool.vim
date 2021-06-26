@@ -38,9 +38,9 @@ if g:has_terminal > 0 && executable('python')
         au FileType python,sh,perl,javascript,lua imap <M-e> <Esc>:FloatermSend<Cr>j
         au FileType python,sh,perl,javascript,lua imap <M-d> <Esc>vaB:FloatermSend<Cr>j:call search('# %%', 'eW')<Cr>j
         if executable('ipython')
-            au FileType python nnoremap <leader>rr :FloatermNew ipython --no-autoindent<Cr>
+            au FileType python nnoremap <leader>R :FloatermNew ipython --no-autoindent<Cr>
         else
-            au FileType python nnoremap <leader>rr :FloatermNew python<Cr>
+            au FileType python nnoremap <leader>R :FloatermNew python<Cr>
         endif
     " vim-repl only for vim8+
     elseif v:version >= 800 && !has('nvim')
@@ -82,7 +82,7 @@ if g:has_terminal > 0 && executable('python')
             xmap <M-d> <M-e>
             imap <M-e> <ESC><M-e>
             imap <M-d> <ESC><M-d>
-            nnoremap <leader>rr :<C-u>REPLToggle<Cr>
+            nnoremap <leader>R  :<C-u>REPLToggle<Cr>
             nnoremap <leader>rl :REPL
         endfunction
         " ipdb settings
@@ -90,7 +90,7 @@ if g:has_terminal > 0 && executable('python')
             au Filetype python imap <M-u> import ipdb; ipdb.set_trace()
             au Filetype python call s:set_ipdb_map()
             function! s:set_ipdb_map() abort
-                nnoremap <leader>re :<C-u>REPLDebugStopAtCurrentLine<Cr>
+                nnoremap <leader>rd :<C-u>REPLDebugStopAtCurrentLine<Cr>
                 nnoremap <leader>ru :<C-u>REPLPDBU<Cr>
                 nnoremap <leader>rc :<C-u>REPLPDBC<Cr>
                 nnoremap <leader>rn :<C-u>REPLPDBN<Cr>

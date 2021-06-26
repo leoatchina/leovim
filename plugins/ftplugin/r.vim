@@ -58,7 +58,7 @@ au Filetype r xnoremap <M-e>  :call SendLineToR("down")<CR>
 au Filetype r nnoremap <leader>rc :call RClearConsole()<Cr>
 au Filetype r nnoremap <leader>rC :call RClearAll()<Cr>
 " start nvimr
-au Filetype r nnoremap <leader>rr :call StartR('R')<Cr>
+au Filetype r nnoremap <leader>R  :call StartR('R')<Cr>
 au Filetype r nnoremap <leader>rs :call StartR('custom')<Cr>
 au Filetype r nnoremap <leader>S  :RStop<Cr>
 " run r script
