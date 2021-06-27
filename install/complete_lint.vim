@@ -116,8 +116,8 @@ if g:complete_engine_type == 2
             let g:ai_engine = 'kite'
             let g:kite_supported_languages = ['*']
             let g:kite_tab_complete = 1
-            nmap <silent> <buffer> <leader>K <Plug>(kite-docs)
-            nmap <silent> ZK :KiteGotoDefinition<Cr>
+            nmap <silent> <buffer> ZK <Plug>(kite-docs)
+            nmap <silent> <M-j>k :KiteGotoDefinition<Cr>
         catch
             let g:ai_engine = 'tabnine'
         endtry
