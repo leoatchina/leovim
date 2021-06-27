@@ -336,8 +336,8 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     xnoremap \| <ESC>:Leaderf line --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :Leaderf line --all --no-sort --cword<Cr>
     xnoremap g\| <ESC>:Leaderf line --all --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap <M-f>l :Leaderf line --no-sort<Cr>
-    nnoremap <M-f>m :Leaderf line --all --no-sort<Cr>
+    nnoremap ZL :Leaderf line --no-sort<Cr>
+    nnoremap Zl :Leaderf line --all --no-sort<Cr>
     " leader-filer
     let g:Lf_FilerShowPromptPath = 1
     " normal mode
