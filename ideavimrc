@@ -10,12 +10,8 @@ set highlightedyank
 set ideajoin
 set exchange
 " 缩进
-nmap <A-.> >>
-xmap <A-.> >gv
-xmap >>    >gv
-nmap <A-,> <<
-xmap <A-,> <gv
-xmap <<    <gv
+xmap >> >gv
+xmap << <gv
 " action forword back
 nnoremap <BS>   :action Back<CR>
 nnoremap <C-BS> :action Forward<CR>
