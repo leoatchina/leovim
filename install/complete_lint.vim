@@ -159,7 +159,7 @@ elseif get(g:, 'complete_engine', '') == "vim-lsp"
     if executable('ctags')
         MyPlug 'prabirshrestha/asyncomplete-tags.vim'
     endif
-    if get(g:, 'ai_engine', '') == 'tabine'
+    if get(g:, 'ai_engine', '') == 'tabnine'
         if WINDOWS()
             MyPlug 'kitagry/asyncomplete-tabnine.vim', {'do': 'powershell.exe .\install.ps1'}
         else
