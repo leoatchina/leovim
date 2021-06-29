@@ -93,8 +93,10 @@ if Installed('vista.vim')
         let g:vista_default_executive = 'ctags'
         nnoremap <M-?> :Vista finder!<Cr>
     endif
-    if get(g:, 'vista_lsp_command', '') != ''
-        execute("nnoremap <M-f>v :Vista finder " . g:vista_lsp_command . "<Cr>")
+    if get(g:, 'complete_engine', '') == 'coc'
+        nnoremap <M-'> :CocFzfList outline<Cr>
+    elseif get(g:, 'vista_lsp_command', '') != ''
+        execute("nnoremap <M-'> :Vista finder " . g:vista_lsp_command . "<Cr>")
     endif
 endif
 " --------------------------
@@ -162,8 +164,8 @@ if executable('ctags')
         nnoremap F<Cr> :Leaderf function --all<Cr>
         " tag
         nnoremap ZT :LeaderfTag<Cr>
-        nnoremap <M-t>  :LeaderfTagCword<Cr>
-        nnoremap <M-f>t :LeaderfTagPattern<Space>
+        nnoremap <M-t> :LeaderfTagCword<Cr>
+        nnoremap q<cr> :LeaderfTagPattern<Space>
     elseif Installed('fzf.vim')
         let g:fzf_tags_command = 'ctags -R'
         if UNIX()

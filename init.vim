@@ -1545,7 +1545,7 @@ if !exists('g:leovim_loaded')
     let g:indentLine_bgcolor_gui     = '#FF5F00'
     let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 endif
-nnoremap <M-'> :IndentLinesToggle<Cr>
+nnoremap <M-k>i :IndentLinesToggle<Cr>
 " --------------------------
 " TMUX config
 " --------------------------
