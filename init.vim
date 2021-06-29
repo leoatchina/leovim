@@ -1181,7 +1181,6 @@ if has('clipboard')
     cnoremap <silent><M-v> <C-r><C-o>*
     nnoremap <silent><M-v> "*gP
     xnoremap <silent><M-v> "*gP
-    nnoremap <silent><leader>vy "*yiw
     if has('nvim')
         nnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
         xnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
@@ -1200,18 +1199,17 @@ if has('clipboard')
         nnoremap <silent>Y     "*y$
     endif
 else
-    nnoremap <silent><leader>vy yiw
     inoremap <silent><M-v> <C-r><C-o>z
     cnoremap <silent><M-v> <C-r><C-o>z
-    nnoremap <silent><M-v> "zgP
-    xnoremap <silent><M-v> "zgP
-    nnoremap <silent><M-c> "zy
-    xnoremap <silent><M-c> "zy
-    nnoremap <silent><M-x> "zx
-    xnoremap <silent><M-x> "zx
-    nnoremap <silent><M-X> "zdd
-    nnoremap <silent><M-C> "zyy
-    nnoremap <silent>Y     "zy$
+    nnoremap <silent><M-v> "0gP
+    xnoremap <silent><M-v> "0gP
+    nnoremap <silent><M-c> "0y
+    xnoremap <silent><M-c> "0y
+    nnoremap <silent><M-x> "0x
+    xnoremap <silent><M-x> "0x
+    nnoremap <silent><M-X> "0dd
+    nnoremap <silent><M-C> "0yy
+    nnoremap <silent>Y     "0y$
 endif
 nnoremap ,y :0,-y<Cr>
 nnoremap ,Y vGy
