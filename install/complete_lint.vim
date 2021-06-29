@@ -36,10 +36,8 @@ elseif HasPlug('vim-lsp')
         let s:smart_engine_select = 1
     endif
 elseif HasPlug('YCM')
-    if (has('nvim') || v:version >= 800) && g:python_version > 3.5
-        if WINDOWS() && get(g:, "ycm_install_path", "") != "" && isdirectory(get(g:, "ycm_install_path", ""))
-            let g:complete_engine = "YCM"
-        elseif UNIX() && executable('cmake') && executable('gcc')
+    if (has('nvim') || v:version >= 800) && g:python_version > 3.5 && UNIX()
+        if executable('cmake') && executable('gcc')
             let s:msg = system('gcc --version')
             let s:gcc_version = matchstr(s:msg, '\zs\d\{1,\}.\d\{1,\}.\d\{1,\}\ze')
             let s:gcc_version = str2nr(matchstr(s:gcc_version, '\zs\d\{1,\}\ze'))
@@ -80,11 +78,11 @@ endif
 " ------------------------------
 " complete_engine_type
 " ------------------------------
-if index(['coc', 'vim-lsp', 'nvim-lsp'], get(g:, 'complete_engine', '')) >= 0
+if index(['YCM', 'YCM-legacy', 'ECM'], get(g:, "complete_engine", "")) >= 0
+    let g:complete_engine_type = 1
+elseif index(['coc', 'vim-lsp'], get(g:, 'complete_engine', '')) >= 0
     let g:complete_engine_type = 2
     let g:vista_lsp_command = substitute(g:complete_engine, "-", "_", "")
-elseif index(['YCM', 'YCM-legacy', 'ECM'], get(g:, 'complete_engine', '')) >= 0
-    let g:complete_engine_type = 1
 else
     let g:complete_engine_type = 0
 endif
