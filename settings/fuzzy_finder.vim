@@ -457,10 +457,11 @@ if Installed('coc.nvim')
     endif
     nnoremap <C-p>  :CocFzfList<Cr>
     nnoremap <M-h>. :CocFzfListResume<CR>
-    nnoremap <M-h>l :CocFzfList location<Cr>
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
     nnoremap <M-l>c :CocFzfList commands<Cr>
+    nnoremap <M-h>l :CocFzfList location<Cr>
+    nnoremap <M-h>y :CocFzfList yank<Cr>
     " Create mappings for function text object, requires document symbols feature of languageserver.
     xmap if <Plug>(coc-funcobj-i)
     xmap af <Plug>(coc-funcobj-a)
