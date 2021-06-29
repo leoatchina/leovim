@@ -57,9 +57,14 @@ if Installed("fzf.vim") && Installed("fzf")
     if Installed('coc.nvim')
         nnoremap Zp :CocFzfList<Space>
     else
-        nnoremap Zp :FZF<Tab>
+        nnoremap Zp :Fzf<Tab>
     endif
-    nnoremap ZO :FZFLocate<Space>
+    if !Installed('Leaderf') && !Installed('coc.nvim')
+        nnoremap ZP :Fzf<Tab>
+    endif
+    if !WINDOWS()
+        nnoremap ZO :FZFLocate<Space>
+    endif
     if Installed('vim-yoink')
         let g:yoinkMaxItems = 100
         nmap <leader>yc :ClearYanks<Cr>
@@ -317,14 +322,14 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if Installed('LeaderF-marks')
         nnoremap m<Cr> :Leaderf marks<Cr>
     endif
-    nnoremap s<space> :Leaderf searchHistory<Cr>
     nnoremap Z<Cr>    :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
     nnoremap Z<S-Cr>  :CloseQuickfix<Cr>:Leaderf loclist<Cr>
-    nnoremap <M-h>;   :Leaderf --next<Cr>
-    nnoremap <M-h>,   :Leaderf --previous<Cr>
-    nnoremap <M-h>.   :Leaderf --recall<Cr>
-    nnoremap <M-h>c   :Leaderf cmdHistory<Cr>
-    nnoremap <M-h>m   :Leaderf mru<Cr>
+    nnoremap <M-h>; :Leaderf --next<Cr>
+    nnoremap <M-h>, :Leaderf --previous<Cr>
+    nnoremap <M-h>. :Leaderf --recall<Cr>
+    nnoremap <M-h>/ :Leaderf searchHistory<Cr>
+    nnoremap <M-h>c :Leaderf cmdHistory<Cr>
+    nnoremap <M-h>m :Leaderf mru<Cr>
     " replace origin command
     nnoremap <M-k>s :Leaderf colorscheme<Cr>
     nnoremap <M-k>t :Leaderf filetype<Cr>
@@ -422,15 +427,15 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
         nnoremap m<Cr>     :FZFMarks<CR>
         nnoremap <leader>w :FZFWindows<CR>
     endif
+    nnoremap Z<Cr>   :CloseQuickfix<Cr>:FZFQuickFix<CR>
+    nnoremap Z<S-Cr> :CloseQuickfix<Cr>:FZFLocList<CR>
     nnoremap \| :FZFBLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap \| <ESC>:FZFBLines <C-R>=GetVisualSelection()<CR><CR>
     nnoremap g\| :FzfLines <C-R>=expand('<cword>')<Cr><Cr>
     xnoremap g\| <ESC>:FzfLines <C-R>=GetVisualSelection()<CR><CR>
-    nnoremap s<space> :FZFHistory/<CR>
-    nnoremap <M-h>c   :FZFHistory:<CR>
-    nnoremap Z<Cr>    :CloseQuickfix<Cr>:FZFQuickFix<CR>
-    nnoremap Z<S-Cr>  :CloseQuickfix<Cr>:FZFLocList<CR>
-    nnoremap <M-h>m   :FZFMru<CR>
+    nnoremap <M-h>/ :FZFHistory/<CR>
+    nnoremap <M-h>c :FZFHistory:<CR>
+    nnoremap <M-h>m :FZFMru<CR>
     nnoremap ZL :FZFBLines<CR>
     nnoremap Zl :FzfLines<CR>
     " helptags
@@ -453,7 +458,6 @@ if Installed('coc.nvim')
     nnoremap <M-l>; :Coc
     nnoremap <M-l>, :CocInstall<Space>
     nnoremap <M-l>c :CocFzfList commands<Cr>
-    nnoremap <M-k>o :CocFzfList outline<CR>
     " Create mappings for function text object, requires document symbols feature of languageserver.
     xmap if <Plug>(coc-funcobj-i)
     xmap af <Plug>(coc-funcobj-a)
@@ -543,28 +547,27 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
         command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap Zp :CtrlP<tab>
     nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
-        nnoremap <silent> <leader>i :CtrlPYankring<Cr>
+        nnoremap <silent> <M-i> :CtrlPYankring<Cr>
+        nnoremap <silent> <M-b> :CtrlPYankring<Cr>
     endif
     if !Installed('fzf-funky')
         nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
     endif
     if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        nnoremap <silent> <leader>b :CtrlPBuffer<CR>
-        nnoremap <silent> <leader>u :CtrlPUndo<CR>
-        nnoremap <silent> <M-h>/    :CtrlPCmdline<CR>
-        nnoremap <silent> <M-h>m    :CtrlPMRU<CR>
-        nnoremap <silent> <M-k>b    :CtrlPBufTag<CR>
-        nnoremap <silent> <M-k>t    :CtrlPBufTagAll<CR>
-        nnoremap <silent> ZL        :CtrlPLine<Cr>
-        nnoremap <silent> Z<Cr>     :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
-        if get(g:, 'symbol_tool', '') =~ 'tagbar' || get(g:, 'symbol_tool', '') =~ 'vista'
-            nnoremap <silent> <M-k>t :CtrlPTag<CR>
-        else
-            nnoremap <silent> <leader>t :CtrlPTag<CR>
+        nnoremap ZP :CtrlP<tab>
+        if HasPlug('undo')
+            nnoremap <silent> <leader>u :CtrlPUndo<CR>
         endif
+        nnoremap <silent> <leader>b :CtrlPBuffer<CR>
+        nnoremap <silent> <M-h>c    :CtrlPCmdline<CR>
+        nnoremap <silent> <M-h>m    :CtrlPMRU<CR>
+        nnoremap <silent> <M-/>     :CtrlPBufTag<CR>
+        nnoremap <silent> <M-?>     :CtrlPBufTagAll<CR>
+        noremap  <silent> <M-t>     :CtrlPTag<CR>
+        nnoremap <silent> ZL        :CtrlPLine<Cr>
+        nnoremap <silent> <Tab><Cr> :CloseQuickfix<Cr>:CtrlPQuickfix<Cr>
         let g:ctrlp_working_path_mode = 'ra'
         let g:ctrlp_custom_ignore = {
                     \ 'dir':  '\v[\/]\.(git|hg|svn|root)$',
@@ -586,6 +589,8 @@ if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || 
                     \ },
                     \ 'fallback': s:ctrlp_fallback
                     \ }
+    else
+        nnoremap Zp :CtrlP<tab>
     endif
 endif
 if Installed('LeaderF-filer')
