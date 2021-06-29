@@ -525,7 +525,6 @@ nnoremap <Tab>t <C-w>T
 nnoremap <Tab>v :vsplit<Space>
 nnoremap <Tab>x :split<Space>
 nnoremap <Tab><Tab> <Tab>
-nnoremap <S-tab> <Tab>
 nnoremap <C-g> <Tab>
 xnoremap <C-g> <Tab>
 " ------------------------
@@ -659,6 +658,7 @@ function! s:matchup_convenience_maps()
     endfor
 endfunction
 call s:matchup_convenience_maps()
+nmap <S-tab> g%
 " --------------------------
 " vim-visual-multi
 " --------------------------
