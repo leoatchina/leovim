@@ -57,7 +57,7 @@ if Installed("fzf.vim") && Installed("fzf")
     if Installed('coc.nvim')
         nnoremap Zp :CocFzfList<Space>
     else
-        nnoremap Zp :Fzf<Tab>
+        nnoremap Zp :FZF<Tab>
     endif
     if !Installed('Leaderf') && !Installed('coc.nvim')
         nnoremap ZP :Fzf<Tab>
@@ -444,6 +444,9 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     endif
 endif
 if Installed('coc.nvim')
+    if get(g:, 'fuzzy_finder', '') !~ 'leaderf'
+        let g:fuzzy_finder = 'coc'
+    endif
     let g:coc_data_home   = expand("~/.leovim.plug/coc")
     let g:coc_config_home = expand("~/.leovim.plug/coc-config")
     if has('nvim') || has('patch-8.2.0750')
@@ -533,30 +536,35 @@ if Installed('coc.nvim')
                 \ '<C-k>': 'normal:previous'
                 \ })
 endif
-if get(g:, 'fuzzy_finder', '') == '' || get(g:, 'fuzzy_finder', '') == 'fzf' || get(g:, 'fuzzy_finder', '') == 'ctrlp'
-    if get(g:, 'fuzzy_finder', '') == ''
-        let g:fuzzy_finder = 'ctrlp'
-    endif
+if get(g:, 'fuzzy_finder', '') == ''
+    let g:fuzzy_finder = 'ctrlp'
+endif
+if get(g:, 'fuzzy_finder', '') == 'fzf' || get(g:, 'fuzzy_finder', '') == 'ctrlp'
     let g:ctrlp_map        = '<leader>f'
     let g:ctrlp_extensions = ['menu', 'line', 'tag', 'buftag', 'funky', 'cmdline', 'files', 'yankring', 'buffer', 'quickfix', 'undo']
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/ctrlp.vim
         set rtp+=$ADDINS_PATH/ctrlp-extensions.vim
-        set rtp+=$ADDINS_PATH/ctrlp-funky
         command! CtrlPCmdline  call ctrlp#init(ctrlp#cmdline#id())
         command! CtrlPMenu     call ctrlp#init(ctrlp#menu#id())
         command! CtrlPYankring call ctrlp#init(ctrlp#yankring#id())
     endif
-    nnoremap <silent> <C-p> :CtrlPMenu<CR>
     if !Installed('vim-yoink')
         nnoremap <silent> <M-i> :CtrlPYankring<Cr>
         nnoremap <silent> <M-b> :CtrlPYankring<Cr>
     endif
     if !Installed('fzf-funky')
+        if !exists('g:leovim_loaded')
+            set rtp+=$ADDINS_PATH/ctrlp-funky
+        endif
         nnoremap <silent> f<Cr> :CtrlPFunky<Cr>
     endif
-    if get(g:, 'fuzzy_finder', '') == 'ctrlp'
-        nnoremap ZP :CtrlP<tab>
+    if get(g:, 'fuzzy_finder', '') == 'fzf'
+        nnoremap <silent> <C-p> :FZF<Tab>
+        nnoremap <silent> Zp    :Fzf<Tab>
+        nnoremap <silent> ZP    :CtrlPMenu<CR>
+    elseif get(g:, 'fuzzy_finder', '') == 'ctrlp'
+        nnoremap <silent> <C-p> :CtrlPMenu<CR>
         if HasPlug('undo')
             nnoremap <silent> <leader>u :CtrlPUndo<CR>
         endif
