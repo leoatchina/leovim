@@ -72,10 +72,10 @@ nmap gs :action GotoSymbol<cr>
 nmap gi :action GotoImplementation<cr>
 nmap go :action GotoTest<cr>
 nmap gm :action SuperMethod<cr>
-nmap gu :action FindUsages<cr>
-nmap <space>ri :action RecentFiles<cr>
+nmap <A-,> :action ShowUsages<cr>
+nmap <A-.> :action FindUsages<cr>
+nmap <space>sf :action RecentFiles<cr>
 nmap <space>sb :action ShowBookmarks<cr>
-nmap <space>su :action ShowUsages<cr>
 nmap <space>si :action SelectIn<cr>
 
 " Errors

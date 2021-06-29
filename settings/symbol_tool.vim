@@ -154,13 +154,16 @@ if executable('ctags')
         else
             let g:Lf_Ctags = "ctags 2>/dev/null"
         endif
+        " buftag
         nnoremap <M-/> :Leaderf bufTag<cr>
         nnoremap <M-?> :Leaderf bufTag --all<Cr>
-        nnoremap <M-t> :Leaderf tag<Cr>
+        " function
         nnoremap f<Cr> :Leaderf function<Cr>
         nnoremap F<Cr> :Leaderf function --all<Cr>
-        nnoremap <M-f>t :LeaderfTagCword<Cr>
-        nnoremap <M-f>p :LeaderfTagPattern<Space>
+        " tag
+        nnoremap ZT :LeaderfTag<Cr>
+        nnoremap <M-t>  :LeaderfTagCword<Cr>
+        nnoremap <M-f>t :LeaderfTagPattern<Space>
     elseif Installed('fzf.vim')
         let g:fzf_tags_command = 'ctags -R'
         if UNIX()
