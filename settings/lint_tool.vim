@@ -51,9 +51,12 @@ elseif Installed('ale')
     nmap z,   <Plug>(ale_previous_error)
     nmap <F2> :ALEToggle<Cr>
     nmap <leader>D :ALEToggle<Cr>
-    let g:ale_disable_lsp        = 0
-    let g:ale_completion_enabled = 0
-    let g:ale_virtualtext_cursor = 0
+    " basic settings
+    let g:ale_disable_lsp                    = 1
+    let g:ale_completion_enabled             = 0
+    let g:ale_virtualtext_cursor             = 0
+    let g:ale_pattern_options_enabled        = 1
+    let g:ale_warn_about_trailing_whiteSpace = 0
     " lint time
     let g:ale_lint_on_enter           = 1
     let g:ale_lint_on_filetype_change = 1
@@ -82,7 +85,4 @@ elseif Installed('ale')
                 \ 'zsh': ['shell']
                 \ }
     let g:ale_python_flake8_options = "--max-line-length=160 --ignore=" . s:flake8_ignore
-    " 特定后缀指定lint方式
-    let g:ale_pattern_options_enabled        = 1
-    let g:ale_warn_about_trailing_whiteSpace = 0
 endif
