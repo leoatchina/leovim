@@ -322,8 +322,8 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     if Installed('LeaderF-marks')
         nnoremap m<Cr> :Leaderf marks<Cr>
     endif
-    nnoremap Z<Cr>    :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
-    nnoremap Z<S-Cr>  :CloseQuickfix<Cr>:Leaderf loclist<Cr>
+    nnoremap Z<Cr>   :CloseQuickfix<Cr>:Leaderf quickfix<Cr>
+    nnoremap Z<S-Cr> :CloseQuickfix<Cr>:Leaderf loclist<Cr>
     nnoremap <M-h>; :Leaderf --next<Cr>
     nnoremap <M-h>, :Leaderf --previous<Cr>
     nnoremap <M-h>. :Leaderf --recall<Cr>

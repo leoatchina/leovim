@@ -203,7 +203,7 @@ elseif Installed('vim-lsp')
         autocmd User lsp_float_opened nmap <buffer> <silent> <C-c> <Plug>(lsp-preview-close)
         nnoremap <M-,>  :LspHover<CR>
         nnoremap <M-j>, :LspPeekDefinition<Cr>
-        nnoremap <M-j>d :spPeekDeclaration<CR>
+        nnoremap <M-j>d :LspPeekDeclaration<CR>
         nnoremap <M-j>t :LspPeekTypeDefinition<CR>
         nnoremap <M-j>i :LspPeekImplementation<CR>
         let g:lsp_preview_float      = 1

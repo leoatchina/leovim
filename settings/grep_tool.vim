@@ -84,6 +84,9 @@ if get(g:, 'grep_tool', '') =~ 'leaderf'
     nnoremap <M-f>x :<C-R>=printf("Leaderf! --stayOpen --right rg -L -x %s", expand("<cword>"))<CR>
     xnoremap <M-f>a :<C-U><C-R>=printf("Leaderf! --stayOpen --right rg --append %s ", leaderf#Rg#visual())<CR>
     nnoremap <M-f>a :<C-R>=printf("Leaderf! --stayOpen --right rg --append %s ", expand("<cword>"))<CR>
+    if !Installed('coc.nvim')
+        nnoremap q<cr> :Leaderf rg<space>
+    endif
 elseif g:fuzzy_finder != 'ctrlp'
     if get(g:, "grep_tool", '') =~ 'coc'
         nnoremap <M-f>s :CocSearch -S -L<Space>
