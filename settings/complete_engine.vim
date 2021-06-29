@@ -344,7 +344,7 @@ elseif Installed('coc.nvim')
         imap <silent><expr> <C-j> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-j>"
         imap <silent><expr> <C-k> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-k>"
     endif
-    nmap ZO :CocFzfList outline<CR>
+    nmap q<cr> :CocFzfList outline<CR>
     " as lsp engine
     nmap <M-,> :call <SID>show_documentation()<CR>
     " basic plug

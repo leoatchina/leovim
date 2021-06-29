@@ -525,8 +525,8 @@ nnoremap <Tab>t <C-w>T
 nnoremap <Tab>v :vsplit<Space>
 nnoremap <Tab>x :split<Space>
 nnoremap <Tab><Tab> <Tab>
-nnoremap <C-g> <Tab>
-xnoremap <C-g> <Tab>
+nnoremap <C-t> <Tab>
+xnoremap <C-t> <Tab>
 " ------------------------
 " textobj
 " ------------------------

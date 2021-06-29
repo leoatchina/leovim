@@ -94,7 +94,7 @@ if Installed('vista.vim')
         nnoremap <M-?> :Vista finder!<Cr>
     endif
     if get(g:, 'vista_lsp_command', '') != ''
-        execute("nnoremap q<cr> :Vista finder " . g:vista_lsp_command . "<Cr>")
+        execute("nnoremap <M-f>v :Vista finder " . g:vista_lsp_command . "<Cr>")
     endif
 endif
 " --------------------------
