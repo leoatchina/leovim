@@ -603,7 +603,9 @@ endif
 if Installed('vim-quickui')
     let g:quickui_border_style = 2
     nnoremap <leader>em :call quickui#tools#display_messages()<Cr>
-    if !has('nvim')
+    if has('nvim')
+        nmap <C-j> %
+    else
         nnoremap <F13> :call quickui#preview#scroll(3)<Cr>
         nnoremap <F14> :call quickui#preview#scroll(-3)<Cr>
         nmap <silent><expr> <C-j> quickui#preview#visible() > 0 ? "\<F13>" : "\%"
