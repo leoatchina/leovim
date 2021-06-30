@@ -156,6 +156,7 @@ if executable('git')
     let git_version = str2float(substitute(git_ver, "\\.", "", ""))
     if git_version >= 18.5
         MyPlug 'tpope/vim-fugitive'
+        MyPlug 'junegunn/gv.vim'
     endif
 endif
 " ------------------------------

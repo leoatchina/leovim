@@ -34,7 +34,7 @@ if Installed('fzf.vim')
         nnoremap <M-g>b :CocFzfList bcommits<Cr>
         nnoremap <M-g>c :CocFzfList commits<Cr>
         nnoremap <M-g>f :CocFzfList gfiles<CR>
-    elseif !WINDOWS() && !CYGWIN()
+    else
         nnoremap <M-g>b :FzfBCommits<Cr>
         nnoremap <M-g>c :FzfCommits<Cr>
         nnoremap <M-g>f :FzfGFiles?<CR>
@@ -45,7 +45,9 @@ if get(g:, 'terminal_plus', '') =~ 'floaterm'
         nnoremap <M-g>l :FloatermNew --height=0.8 --width=0.8 --position=center lazygit<Cr>
     endif
 endif
-
+if Installed('gv.vim')
+    nnoremap <M-g>v :GV<Cr>
+endif
 "########## Merge ##########{{{
 let s:mergeSources = {
             \  'L':      1,
@@ -57,7 +59,6 @@ let s:mergeSources = {
             \  'M':      4,
             \  'MERGE':  4,
             \}
-
 function!  git#createMergeTab(...)
     " Map source name to buffer number
     if a:0 > 0
