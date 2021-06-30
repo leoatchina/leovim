@@ -167,17 +167,17 @@ if executable('ctags')
         nnoremap f<Cr> :Leaderf function<Cr>
         nnoremap F<Cr> :Leaderf function --all<Cr>
         " tag
-        nnoremap ZT :LeaderfTag<Cr>
-        nnoremap <M-t> :LeaderfTagCword<Cr>
-        nnoremap q<cr> :LeaderfTagPattern<Space>
+        nnoremap <M-t>  :LeaderfTagCword<Cr>
+        nnoremap <M-f>t :LeaderfTag<Cr>
+        nnoremap q<cr>  :LeaderfTagPattern<Space>
     elseif Installed('fzf.vim')
         let g:fzf_tags_command = 'ctags -R'
         if UNIX()
-            nnoremap <M-/> :FZFBTags<CR>
-            nnoremap <M-t> :FZFTags<CR>
+            nnoremap <M-/>  :FZFBTags<CR>
+            nnoremap <M-f>t :FZFTags<CR>
         elseif WINDOWS()
-            nnoremap <M-/> :FzfBTags<CR>
-            nnoremap <M-t> :FzfTags<CR>
+            nnoremap <M-/>  :FzfBTags<CR>
+            nnoremap <M-f>t :FzfTags<CR>
         endif
         nnoremap <silent> <M-t> :ToggleQuickfix<Cr>:PreviewList<Cr>
     else
