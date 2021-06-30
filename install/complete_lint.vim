@@ -175,32 +175,28 @@ elseif get(g:, 'complete_engine', '') == "vim-lsp"
         set cmdheight=2
     endif
 elseif get(g:, 'complete_engine', '') =~ "YCM"
-    if WINDOWS()
-        set rtp+=g:ycm_install_path
+    let b:ycm_install = " ./install.py"
+    if HasPlug('c')
+        let b:ycm_install = b:ycm_install . " --clangd-completer"
+    endif
+    if HasPlug('rust')
+        let b:ycm_install = b:ycm_install . " --rust-completer"
+    endif
+    if executable('node') && HasPlug('web')
+        let b:ycm_install = b:ycm_install . " --ts-completer"
+    endif
+    if executable('go') && HasPlug('go')
+        let b:ycm_install = b:ycm_install . " --go-completer"
+    endif
+    let g:ycm_install_path = get(g:, 'ycm_install_path', $INSTALL_PATH . '/YouCompleteMe')
+    if g:complete_engine =~ 'legacy'
+        if g:python_version > 3.6
+            MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'branch': 'legacy-vim', 'dir': g:ycm_install_path}
+        elseif g:python_version > 3.5
+            MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'commit':'9f77732bde3', 'dir': g:ycm_install_path}
+        endif
     else
-        let b:ycm_install = " ./install.py"
-        if HasPlug('c')
-            let b:ycm_install = b:ycm_install . " --clang-completer"
-        endif
-        if HasPlug('rust')
-            let b:ycm_install = b:ycm_install . " --rust-completer"
-        endif
-        if executable('node') && HasPlug('web')
-            let b:ycm_install = b:ycm_install . " --ts-completer"
-        endif
-        if executable('go') && HasPlug('go')
-            let b:ycm_install = b:ycm_install . " --go-completer"
-        endif
-        let g:ycm_install_path = get(g:, 'ycm_install_path', $INSTALL_PATH . '/YouCompleteMe')
-        if g:complete_engine =~ 'legacy'
-            if g:python_version > 3.6
-                MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'branch': 'legacy-vim', 'dir': g:ycm_install_path}
-            elseif g:python_version > 3.5
-                MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'commit':'9f77732bde3', 'dir': g:ycm_install_path}
-            endif
-        else
-            MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'dir': g:ycm_install_path}
-        endif
+        MyPlug 'ycm-core/YouCompleteMe', {'do': g:python_exe_path . b:ycm_install, 'dir': g:ycm_install_path}
     endif
     " ycm_lsp
     let b:ycm_lsp_install = ' ./install.py'
