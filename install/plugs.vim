@@ -230,7 +230,7 @@ if has('nvim') || v:version >= 800
     MyPlug 'voldikss/vim-translate-me'
     nmap <silent> gs <Plug>Translate
     xmap <silent> gs <Plug>TranslateV
-    if (has('nvim') || has('patch-8.1.1615'))
+    if has('nvim') || has('patch-8.1.1615')
         "翻译光标下的文本，在窗口中显示
         nmap <silent> zs <Plug>TranslateW
         xmap <silent> zs <Plug>TranslateWV
