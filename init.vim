@@ -428,7 +428,7 @@ xmap g<space> <M-a>*<space>
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-choosewin
 endif
-nmap <C-g> <Plug>(choosewin)
+nmap <M-w> <Plug>(choosewin)
 " ------------------------
 " winresizer
 " ------------------------
