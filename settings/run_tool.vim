@@ -162,6 +162,7 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
             elseif &filetype == 'c' && UNIX()
                 exec 'AsyncRun -raw=1 '.params.' time gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$HOME/.cache/build/c/$(VIM_FILENOEXT)" && time "$HOME/.cache/build/c/$(VIM_FILENOEXT)"'
             elseif &filetype == 'cpp' && UNIX()
+                call system("mkdir -p ~/.cache/build/c")
                 exec 'AsyncRun -raw=1 '.params.' time g++ -Wall -O2 "$(VIM_FILEPATH)" -o "$HOME/.cache/build/c/$(VIM_FILENOEXT)" && time "$HOME/.cache/build/c/$(VIM_FILENOEXT)"'
             elseif &filetype ==# 'python' && get(g:, 'python_exe_path', '') != ''
                 if WINDOWS()
