@@ -176,7 +176,7 @@ elseif get(g:, 'complete_engine', '') == "vim-lsp"
     endif
 elseif get(g:, 'complete_engine', '') =~ "YCM"
     let b:ycm_install = " ./install.py"
-    if HasPlug('c')
+    if HasPlug('c') && !executable('ccls')
         if g:complete_engine =~ 'legacy'
             let b:ycm_install = b:ycm_install . " --clang-completer"
         else

@@ -333,6 +333,17 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
                     \     'cmdline': g:ycm_julia_cmdline
                     \ }]
     endif
+    if executable('ccls') && HasPlug('c')
+        let g:ycm_language_server +=
+                    \[
+                    \   {
+                    \       'name': 'ccls',
+                    \       'cmdline': ['ccls'],
+                    \       'filetypes': ['c', 'cpp', 'objc', 'objcpp'],
+                    \       'project_root_files': ['.ccls-root', 'compile_commands.json']
+                    \   }
+                    \]
+    endif
 elseif Installed('coc.nvim')
     " config as complete_engine
     call coc#config('suggest.floatEnable', v:true)
