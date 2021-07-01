@@ -832,6 +832,9 @@ endfunction
 " GetPyxVersion
 " --------------------------
 function! GetPyxVersion()
+    if CYGWIN()
+        return 0
+    endif
     try
         let l:pyx_version = Execute('py3 print(sys.version)')[1:6]
     catch
@@ -1733,7 +1736,7 @@ endtry
 " --------------------------
 " whichkey
 " --------------------------
-if v:version >= 704 && !CYGWIN() && !HasPlug('no-whichkey')
+if v:version >= 704 && !HasPlug('no-whichkey')
     if !exists('g:leovim_loaded')
         if v:version >= 800 || has('nvim')
             set rtp+=$ADDINS_PATH/vim-which-key

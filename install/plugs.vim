@@ -277,7 +277,7 @@ if v:version >= 801 || has('nvim') || get(g:, 'complete_engine', '') == 'coc' &&
     MyPlug 'lambdalisue/fern-git-status.vim'
     MyPlug 'lambdalisue/fern-mapping-git.vim'
     MyPlug 'yuki-yano/fern-preview.vim'
-    if !WINDOWS()
+    if UNIX()
         MyPlug 'LumaKernel/fern-mapping-fzf.vim'
     endif
 endif
