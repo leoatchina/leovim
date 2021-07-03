@@ -74,6 +74,7 @@ nmap go :action GotoTest<cr>
 nmap gm :action SuperMethod<cr>
 nmap <A-,> :action ShowUsages<cr>
 nmap <A-.> :action FindUsages<cr>
+nmap <A-'> :action ToggleLineBreakpoint<cr>
 nmap <space>sf :action RecentFiles<cr>
 nmap <space>sb :action ShowBookmarks<cr>
 nmap <space>si :action SelectIn<cr>
@@ -101,7 +102,6 @@ nnoremap [m :action MethodUp<cr>
 nnoremap ]m :action MethodDown<cr>
 nnoremap [c :action VcsShowPrevChangeMarker<cr>
 nnoremap ]c :action VcsShowNextChangeMarker<cr>
-
 
 " Moving lines
 nmap [e :action MoveLineUp<cr>
