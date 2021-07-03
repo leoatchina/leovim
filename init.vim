@@ -99,7 +99,7 @@ function! MACVIM() abort
     return has('gui_running') && MACOS()
 endfunction
 function! UNIX() abort
-    return (LINUX() || MACOS()) && g:gui_running == 0
+    return LINUX() || MACOS()
 endfunction
 " --------------------------
 " terminal and lambda

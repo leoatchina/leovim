@@ -54,7 +54,7 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-if get(g:, 'complete_snippet', '') != ''
+if Installed('ultisnips') || Installed('neosnippet')
     function! Snippet_Tab() abort
         if pumvisible()
             if get(g:, "complete_snippet", '') == 'ultisnips'
