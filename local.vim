@@ -1,9 +1,5 @@
 let g:plugs_group = []
 
-if get(g:, 'gui_running', 0) == 1
-    " let &guifont="Consolas:h10"
-    " let &guifont="Cascadia Code:h12"
-endif
 
 if WINDOWS()
     " let g:python3_host_prog='C:\\Python37\\python.exe'
@@ -14,12 +10,14 @@ elseif UNIX()
 endif
 
 " if unix like
-if MACOS()
-
-elseif LINUX()
-
-elseif CYGWIN()
-
+if get(g:, 'gui_running', 0) == 1 && !CYGWIN()
+    if WINDOWS()
+        " let &guifont="Consolas:h10"
+        " let &guifont="Cascadia Code:h12"
+    elseif LINUX()
+        " set guifont=Consolas\ 11
+        " set guifont=Cascadia\ Code\ 11
+    endif
 endif
 
 " gtags settings
