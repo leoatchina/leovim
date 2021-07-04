@@ -134,9 +134,9 @@ if Installed("fzf.vim") && Installed("fzf")
                     \ 'sink': function('s:paste_yank', {'paste': 'p', 'visual': 1}),
                     \ 'options': '--ansi -x --prompt "YankAfter>"'
                     \ }, g:fzf_layout), 0)
-        nnoremap <silent> <M-B> :FZFYankBefore<Cr>
-        inoremap <silent> <M-B> <C-o>:FZFYankBefore<Cr>
-        xnoremap <silent> <M-B> :<C-u>FZFYankBeforeV<Cr>
+        nnoremap <silent> <M-V> :FZFYankBefore<Cr>
+        inoremap <silent> <M-V> <C-o>:FZFYankBefore<Cr>
+        xnoremap <silent> <M-V> :<C-u>FZFYankBeforeV<Cr>
         nnoremap <silent> <M-I> :FZFYankInsert<Cr>
         inoremap <silent> <M-I> <C-o>:FZFYankInsert<Cr>
         xnoremap <silent> <M-I> :<C-u>FZFYankInsertV<Cr>
@@ -195,9 +195,9 @@ if Installed("fzf.vim") && Installed("fzf")
             \ 'sink': function('s:paste_select', {'paste': 'p', 'visual': 1}),
             \ 'options': '--ansi -x --prompt "PasteAfter>"'
             \ }, g:fzf_layout), 0)
-    nnoremap <silent> <M-b> :FZFRegisterBefore<Cr>
-    inoremap <silent> <M-b> <C-o>:FZFRegisterBefore<Cr>
-    xnoremap <silent> <M-b> :<C-u>FZFRegisterBeforeV<Cr>
+    nnoremap <silent> <M-v> :FZFRegisterBefore<Cr>
+    inoremap <silent> <M-v> <C-o>:FZFRegisterBefore<Cr>
+    xnoremap <silent> <M-v> :<C-u>FZFRegisterBeforeV<Cr>
     nnoremap <silent> ,P :FZFRegisterBefore<Cr>
     xnoremap <silent> ,P :<C-u>FZFRegisterBeforeV<Cr>
     nnoremap <silent> <M-i> :FZFRegisterInsert<Cr>
@@ -552,7 +552,7 @@ if get(g:, 'fuzzy_finder', '') == 'fzf' || get(g:, 'fuzzy_finder', '') == 'ctrlp
     endif
     if !Installed('vim-yoink')
         nnoremap <silent> <M-i> :CtrlPYankring<Cr>
-        nnoremap <silent> <M-b> :CtrlPYankring<Cr>
+        nnoremap <silent> <M-v> :CtrlPYankring<Cr>
     endif
     if !Installed('fzf-funky')
         if !exists('g:leovim_loaded')

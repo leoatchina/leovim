@@ -1182,16 +1182,11 @@ endif
 " yank && paste
 " ------------------------
 if has('clipboard')
-    inoremap <silent><M-v> <C-r><C-o>*
-    cnoremap <silent><M-v> <C-r><C-o>*
-    nnoremap <silent><M-v> "*gP
-    xnoremap <silent><M-v> "*gP
     if has('nvim')
         nnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
         xnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
         nnoremap <silent><M-x> "*x:let  @*=trim(@*)<Cr>
         xnoremap <silent><M-x> "*x:let  @*=trim(@*)<Cr>
-        nnoremap <silent><M-X> "*dd:let @*=trim(@*)<Cr>"
         nnoremap <silent><M-C> "*yy:let @*=trim(@*)<Cr>
         nnoremap <silent>Y     "*y$:let @*=trim(@*)<Cr>
     else
@@ -1199,20 +1194,14 @@ if has('clipboard')
         xnoremap <silent><M-c> "*y
         nnoremap <silent><M-x> "*x
         xnoremap <silent><M-x> "*x
-        nnoremap <silent><M-X> "*dd
         nnoremap <silent><M-C> "*yy
         nnoremap <silent>Y     "*y$
     endif
 else
-    inoremap <silent><M-v> <C-r><C-o>z
-    cnoremap <silent><M-v> <C-r><C-o>z
-    nnoremap <silent><M-v> "0gP
-    xnoremap <silent><M-v> "0gP
     nnoremap <silent><M-c> "0y
     xnoremap <silent><M-c> "0y
     nnoremap <silent><M-x> "0x
     xnoremap <silent><M-x> "0x
-    nnoremap <silent><M-X> "0dd
     nnoremap <silent><M-C> "0yy
     nnoremap <silent>Y     "0y$
 endif
@@ -1227,7 +1216,7 @@ nnoremap gy :call YankFromBeginning()<Cr>:echo "Yank from line beginning"<Cr>
 xnoremap -  gq
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
-xnoremap <M-V> <C-c>`.``gvp``P
+xnoremap <M-X> <C-c>`.``gvp``P
 " ------------------------
 " 缩进等
 " ------------------------
