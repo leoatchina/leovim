@@ -86,6 +86,10 @@ variable_set "$HOME"
 mkdir -p "$HOME/.cache/tags"
 mkdir -p "$HOME/.cache/session"
 mkdir -p "$HOME/.config/nvim"
+cp -n $APP_PATH/snippets/bashrc   $HOME/.bashrc
+cp -n $APP_PATH/snippets/inputrc  $HOME/.inputrc
+cp -n $APP_PATH/snippets/configrc $HOME/.configrc
+
 update_vim_plug='0'
 ret='0'
 if [ -d $HOME/.vimrc.local ];then
@@ -141,5 +145,6 @@ else
         vim $HOME/.vimrc.local
     fi
 fi
+
 msg "\nThanks for installing leoatchina's vim config"
 msg "© `date +%Y` https://github.com/leoatchina/leovim"
