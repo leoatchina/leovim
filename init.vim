@@ -138,7 +138,11 @@ function! InitializeDirectories()
         \ 'directory': '.vim/swap',
         \ }
     if has('persistent_undo')
-        let dir_list['undodir'] = '.vim/undo'
+        if has('nvim')
+            let dir_list['undodir'] = '.vim/undo-nvim'
+        else
+            let dir_list['undodir'] = '.vim/undo-vim'
+        endif
     endif
     for [settingname, dirname] in items(dir_list)
         if WINDOWS()
