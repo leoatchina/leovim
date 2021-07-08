@@ -1,6 +1,5 @@
 " https://www.cnblogs.com/mougg/p/14165902.html
 set ignorecase
-set ignorecase
 set smartcase
 set scrolloff=3
 " Copy to system clipboard as well
