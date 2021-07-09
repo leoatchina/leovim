@@ -18,8 +18,12 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-if [[ ! $PATH == */$HOME/.local/bin* ]]; then
-    export PATH=$PATH:$HOME/.local/bin
+if [ ! $PATH == */$HOME/.local/bin* ]; then
+    export PATH=$HOME/.local/bin:$PATH
+fi
+
+if [ ! $PATH == */snap/bin* ] && [ -d /snap/bin ]; then
+    export PATH=/snap/bin:$PATH
 fi
 
 alias proxy127="https_proxy=http://127.0.0.1:7890  http_proxy=http://127.0.0.1:7890  all_proxy=socks5://127.0.0.1:7891 "
