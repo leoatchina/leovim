@@ -160,7 +160,7 @@ if Installed("fzf.vim") && Installed("fzf")
             if cut_head > 0
                 let reg = reg[5:]
             endif
-            let reg = substitute(reg, "\\^J", "\\r", "g")
+            " let reg = substitute(reg, "\\^J", "\\r", "g")
             if reg[1] =~ '*'
                 call insert(lst, reg, 0)
             elseif reg[1] =~ '+'

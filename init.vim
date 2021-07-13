@@ -1181,8 +1181,10 @@ if g:gui_running > 0 || WINDOWS()
     nnoremap <silent><M-\>  <C-w>5+
     nnoremap <silent><M-\|> <C-w>5-
     nnoremap <M-M> :tabm<Space>
+    nnoremap <M-B> :registers<Cr>
 else
     nnoremap <Tab>M :tabm<Space>
+    nnoremap <M-k>r :registers<Cr>
 endif
 " ------------------------
 " yank && paste
@@ -1256,7 +1258,6 @@ nnoremap <silent> m<Space> :call Delmarks()<cr>
 " basic toggle and show
 " ------------------------
 nnoremap <leader>b :ls<CR>
-nnoremap <M-k>r :registers<Cr>
 nnoremap <M-k>n :set nonu! nonu?<CR>
 nnoremap <M-k>i :set invrelativenumber<CR>
 nnoremap <M-k>f :set nofoldenable! nofoldenable?<CR>
