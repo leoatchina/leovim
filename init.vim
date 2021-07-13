@@ -188,7 +188,7 @@ endfunction
 function! Installed(dir)
     return isdirectory(expand("$INSTALL_PATH/".a:dir)) && &rtp =~ a:dir
 endfunction
-nnoremap <M-A> ggvG
+nnoremap <M-k><M-a> ggVG
 " ------------------------
 " terminal
 " ------------------------
@@ -1576,6 +1576,11 @@ elseif g:has_terminal == 1
     tnoremap <silent><M-J> <C-\><C-n>:TmuxNavigateDown<cr>
     tnoremap <silent><M-K> <C-\><C-n>:TmuxNavigateUp<cr>
 endif
+nmap <M-k><M-h> <C-w><C-h>
+nmap <M-k><M-l> <C-w><C-l>
+nmap <M-k><M-j> <C-w><C-j>
+nmap <M-k><M-k> <C-w><C-k>
+nmap <M-k><M-w> <C-w><C-w>
 " --------------------------
 " vim-plug
 " --------------------------
@@ -1895,7 +1900,7 @@ func! s:getBookmarkUnderCursor(text, pos)
 				return [l:m[1], l:m[2], l:m[3]]
 		endif
 		return []
-endfunc
+Vndfunc
 func! s:OpenFileLinkInIde(text, pos, ide)
 		let l:location = s:getBookmarkUnderCursor(a:text, a:pos)
     if a:ide == 'code'
