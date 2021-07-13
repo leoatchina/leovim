@@ -1180,7 +1180,7 @@ if g:gui_running > 0 || WINDOWS()
         endif
         exec 'browse tabnew '.fnameescape(l:path)
     endfunc
-    nnoremap <silent><M-`> :call Open_Browse()<Cr>
+    nnoremap <silent><M-b> :call Open_Browse()<Cr>
 endif
 " ------------------------
 " yank && paste
