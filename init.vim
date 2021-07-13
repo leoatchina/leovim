@@ -1195,6 +1195,7 @@ if has('clipboard')
         xnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
         nnoremap <silent><M-x> "*x:let  @*=trim(@*)<Cr>
         xnoremap <silent><M-x> "*x:let  @*=trim(@*)<Cr>
+        nnoremap <silent><M-X> "*dd:let @*=trim(@*)<Cr>
         nnoremap <silent><M-C> "*yy:let @*=trim(@*)<Cr>
         nnoremap <silent>Y     "*y$:let @*=trim(@*)<Cr>
     else
@@ -1202,6 +1203,7 @@ if has('clipboard')
         xnoremap <silent><M-c> "*y
         nnoremap <silent><M-x> "*x
         xnoremap <silent><M-x> "*x
+        nnoremap <silent><M-X> "*dd
         nnoremap <silent><M-C> "*yy
         nnoremap <silent>Y     "*y$
     endif
