@@ -1900,7 +1900,7 @@ func! s:getBookmarkUnderCursor(text, pos)
 				return [l:m[1], l:m[2], l:m[3]]
 		endif
 		return []
-Vndfunc
+endfunc
 func! s:OpenFileLinkInIde(text, pos, ide)
 		let l:location = s:getBookmarkUnderCursor(a:text, a:pos)
     if a:ide == 'code'
