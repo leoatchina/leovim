@@ -3,17 +3,17 @@ if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-grepper
 endif
 if executable('rg')
-    nnoremap S :GrepperRg<Space>
+    nnoremap S :GrepperRg<Space><C-r><C-w>
 elseif executable('ag')
-    nnoremap S :GrepperAg<Space>
+    nnoremap S :GrepperAg<Space><C-r><C-w>
 elseif executable('git')
-    nnoremap S :GrepperGit<Space>
+    nnoremap S :GrepperGit<Space><C-r><C-w>
 elseif executable('ack')
-    nnoremap S :GrepperAck<Space>
+    nnoremap S :GrepperAck<Space><C-r><C-w>
 elseif WINDOWS()
-    nnoremap S :GrepperFindstr<Space>
+    nnoremap S :GrepperFindstr<Space><C-r><C-w>
 else
-    nnoremap S :GrepperGrep<Space>
+    nnoremap S :GrepperGrep<Space><C-r><C-w>
 endif
 let g:grepper = {'next_tool': 'S'}
 nmap gs <plug>(GrepperOperator)
