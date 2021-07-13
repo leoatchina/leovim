@@ -1362,8 +1362,8 @@ au VimEnter,BufNewFile,BufRead *.md,*.markdown,*readme*,*.Rmd set filetype=markd
 " sepcial setting for different type of files
 au FileType help,man setlocal number
 au FileType python au BufWritePre <buffer> :%retab
-au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 au FileType yaml,yml setlocal shiftwidth=2 softtabstop=2 tabstop=2
+au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " cd file dir
 au WinEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
             \ && bufname("") !~ "Rg"                   " rg

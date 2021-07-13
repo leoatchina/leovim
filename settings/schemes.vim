@@ -92,11 +92,19 @@ endif
 " settings for scheme
 try
     if get(g:, 'colors_name', '') == 'edge'
-        let g:edge_style                  = get(g:, 'edge_style', 'aura')
+        if has('nvim')
+            let g:edge_style = get(g:, 'edge_style', 'aura')
+        else
+            let g:edge_style = get(g:, 'edge_style', 'default')
+        endif
         let g:edge_enable_italic          = 0
         let g:edge_disable_italic_comment = 1
     elseif get(g:, 'colors_name', '') == 'sonokai'
-        let g:sonokai_style                  = get(g:, 'sonokai_style', 'andromeda')
+        if has('nvim')
+            let g:sonokai_style = get(g:, 'sonokai_style', 'andromeda')
+        else
+            let g:sonokai_style = get(g:, 'sonokai_style', 'espresso')
+        endif
         let g:sonokai_enable_italic          = 0
         let g:sonokai_disable_italic_comment = 1
     elseif get(g:, 'colors_name', '') == 'everforest'

@@ -128,6 +128,12 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
     let $PYTHONUNBUFFERED=1
     let g:asyncrun_rootmarks = ['.root', '.git', '.svn', '.hg']
     au BufEnter * if (winnr("$") == 1 && exists("AsyncRun!")) | q | endif
+    if UNIX()
+        call system("mkdir -p ~/.cache/build/c")
+        call system("mkdir -p ~/.cache/build/cpp")
+        let g:gcc_cmd = get(g:, 'gcc_cmd', 'time gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$HOME/.cache/build/c/$(VIM_FILENOEXT)" && time "$HOME/.cache/build/c/$(VIM_FILENOEXT)"')
+        let g:gpp_cmd = get(g:, 'gpp_cmd', 'time g++ -Wall -O2 "$(VIM_FILEPATH)" -o "$HOME/.cache/build/cpp/$(VIM_FILENOEXT)" && time "$HOME/.cache/build/cpp/$(VIM_FILENOEXT)"')
+    endif
     function! s:AsyncRunNow(type)
         w!
         if &filetype != '' && &filetype != 'markdown'
@@ -159,12 +165,6 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
             endif
             if &filetype ==# 'dosbatch'
                 exec "AsyncRun -raw=1 ".params." ptime %"
-            elseif &filetype == 'c' && UNIX()
-                call system("mkdir -p ~/.cache/build/c")
-                exec 'AsyncRun -raw=1 '.params.' time gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$HOME/.cache/build/c/$(VIM_FILENOEXT)" && time "$HOME/.cache/build/c/$(VIM_FILENOEXT)"'
-            elseif &filetype == 'cpp' && UNIX()
-                call system("mkdir -p ~/.cache/build/cpp")
-                exec 'AsyncRun -raw=1 '.params.' time g++ -Wall -O2 "$(VIM_FILEPATH)" -o "$HOME/.cache/build/cpp/$(VIM_FILENOEXT)" && time "$HOME/.cache/build/cpp/$(VIM_FILENOEXT)"'
             elseif &filetype ==# 'python' && get(g:, 'python_exe_path', '') != ''
                 if WINDOWS()
                     exec "AsyncRun -raw=1 ".params." ptime " . g:python_exe_path . " %"
@@ -203,6 +203,10 @@ if has('nvim') || has('timers') && has('channel') && has('job') && has('patch-7.
                 else
                     exec "AsyncRun! ".params." -raw=1 time  node %"
                 endif
+            elseif &filetype == 'c' && UNIX()
+                exec 'AsyncRun -raw=1 '.params.' '. g:gcc_cmd
+            elseif &filetype == 'cpp' && UNIX()
+                exec 'AsyncRun -raw=1 '.params.' '. g:gpp_cmd
             else
                 call feedkeys(":AsyncRun")
             endif
