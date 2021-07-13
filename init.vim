@@ -421,11 +421,11 @@ if !exists('g:leovim_loaded')
     let g:easy_align_delimiters = {}
     let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
 endif
-xmap <M-a> <Plug>(EasyAlign)
-nmap <M-a> <Plug>(EasyAlign)
-xmap g,       <M-a>*,
-xmap g<tab>   <M-a>*=
-xmap g<space> <M-a>*<space>
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+xmap g,       ga*,
+xmap g<tab>   ga*=
+xmap g<space> ga*<space>
 " ------------------------
 " choosewin
 " ------------------------
