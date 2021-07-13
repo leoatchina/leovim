@@ -51,6 +51,7 @@ elseif Installed('ale')
     nmap z,   <Plug>(ale_previous_error)
     nmap <F2> :ALEToggle<Cr>
     nmap <leader>D :ALEToggle<Cr>
+    nmap ,a :ALE<Tab>
     " basic settings
     let g:ale_disable_lsp                    = 1
     let g:ale_completion_enabled             = 0
