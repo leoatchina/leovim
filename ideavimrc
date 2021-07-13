@@ -63,31 +63,32 @@ nmap g<cr>  :action NavBarToolBar<cr>
 nmap <A-/>  :action FileStructurePopup<cr>
 nmap <A-;>  :action StructureViewPopupMenu<cr>
 nnoremap ga :<C-u>action GotoAction<CR>
-nnoremap gl :<C-u>action GotoDefinition<cr>
-nnoremap gy :<C-u>action GotoTypeDefinition<cr>
-nnoremap gd :<C-u>action GotoDeclarationOrUsage<cr>
+nnoremap gy :<C-u>action GotoTypeDeclaration<cr>
+nnoremap gd :<C-u>action GotoDeclaration<cr>
 nnoremap gf :<C-u>action GotoFile<cr>
 nnoremap gc :<C-u>action GotoClass<cr>
 nnoremap gs :<C-u>action GotoSymbol<cr>
 nnoremap gi :<C-u>action GotoImplementation<cr>
 nnoremap gt :<C-u>action GotoTest<cr>
-nnoremap gb :<C-u>action JumpToLastChange<CR>
+nnoremap gl :<C-u>action JumpToLastChange<CR>
 nnoremap gm :<C-u>action SuperMethod<cr>
 nnoremap gp :<C-u>action FindInPath<CR>
 nnoremap gr :<C-u>action RecentFiles<CR>
 nnoremap gh :<C-u>action Back<CR>
 nnoremap gl :<C-u>action Forward<CR>
-nmap <A-,> :action ShowUsages<cr>
-nmap <A-.> :action FindUsages<cr>
-nmap <A-'> :action ToggleLineBreakpoint<cr>
-nmap <space>sf :action RecentFiles<cr>
-nmap <space>sb :action ShowBookmarks<cr>
-nmap <space>si :action SelectIn<cr>
+nnoremap gb :<C-u>action ToggleLineBreakpoint<cr>
+nnoremap <A-,> :<C-u>action ShowUsages<cr>
+nnoremap <A-.> :<C-u>action FindUsages<cr>
+nnoremap <space>sf :<C-u>action RecentFiles<cr>
+nnoremap <space>sb :<C-u>action ShowBookmarks<cr>
+nnoremap <space>si :<C-u>action SelectIn<cr>
 
 " Errors
-nmap ge :action ShowErrorDescription<cr>
-nmap gn :action GotoNextError<cr>
-nmap gp :action GotoPreviousError<cr>
+nnoremap zs :<C-u>action ShowErrorDescription<cr>
+nnoremap zo :<C-u>action AnalyzeStacktraceOnError<Cr>
+nnoremap zg :<C-u>action GoToErrorGroup<Cr>
+nnoremap z; :<C-u>action GotoNextError <CR>
+nnoremap z, :<C-u>action GotoPreviousError<CR>
 " VCS operations
 nmap <space>yy :action Vcs.Show.Local.Changes<cr>
 nmap <space>yp :action Vcs.QuickListPopupAction<cr>
