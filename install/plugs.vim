@@ -229,22 +229,26 @@ endif
 if has('nvim') || v:version >= 800
     " translate
     MyPlug 'voldikss/vim-translate-me'
-    nmap <silent> gs <Plug>Translate
-    xmap <silent> gs <Plug>TranslateV
+    nmap <silent> ZS <Plug>Translate
+    xmap <silent> ZS <Plug>TranslateV
+    nmap <silent> zS <Plug>Translate
+    xmap <silent> zS <Plug>TranslateV
     if has('nvim') || has('patch-8.1.1615')
         "翻译光标下的文本，在窗口中显示
-        nmap <silent> zs <Plug>TranslateW
-        xmap <silent> zs <Plug>TranslateWV
+        nmap <silent> ZW <Plug>TranslateW
+        xmap <silent> ZW <Plug>TranslateWV
+        nmap <silent> zW <Plug>TranslateW
+        xmap <silent> zW <Plug>TranslateWV
     endif
     if HasPlug('document')
         if MACOS()
             MyPlug 'rizzatti/dash.vim'
-            nmap z/ :Dash<Space>
+            nmap zs :Dash<Space>
             nmap zw <Plug>DashGlobalSearch
             nmap zg <Plug>DashSearch
         else
             MyPlug 'KabbAmine/zeavim.vim'
-            nmap z/ :Zeavim
+            nmap zs :Zeavim
             nmap zw <Plug>ZVKeyDocset
             nmap gz <Plug>ZVOperator
             omap gz <Plug>ZVOperator
@@ -265,7 +269,7 @@ endif
 " ------------------------------
 MyPlug 'google/vim-searchindex'
 let g:searchindex_line_limit = 2048
-if (has('nvim') || has('patch-8.0.1039')) && (executable('rg') || executable('ack') || executable('ag') || executable('pt'))
+if has('nvim') || has('patch-8.0.1039')
     MyPlug 'dyng/ctrlsf.vim'
 endif
 " ------------------------------

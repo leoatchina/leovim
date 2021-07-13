@@ -3,20 +3,22 @@ if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-grepper
 endif
 if executable('rg')
-    nnoremap <leader>s :GrepperRg<Space>
+    nnoremap S :GrepperRg<Space>
 elseif executable('ag')
-    nnoremap <leader>s :GrepperAg<Space>
+    nnoremap S :GrepperAg<Space>
 elseif executable('git')
-    nnoremap <leader>s :GrepperGit<Space>
+    nnoremap S :GrepperGit<Space>
 elseif executable('ack')
-    nnoremap <leader>s :GrepperAck<Space>
+    nnoremap S :GrepperAck<Space>
 elseif WINDOWS()
-    nnoremap <leader>s :GrepperFindstr<Space>
+    nnoremap S :GrepperFindstr<Space>
 else
-    nnoremap <leader>s :GrepperGrep<Space>
+    nnoremap S :GrepperGrep<Space>
 endif
-let g:grepper = {'next_tool': '<leader>s'}
-nmap S <plug>(GrepperOperator)
+let g:grepper = {'next_tool': 'S'}
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
+omap gs <plug>(GrepperOperator)
 if Installed('ctrlsf.vim')
     let g:grep_tool .= "-ctrlsf"
     let g:ctrlsf_position='right'
@@ -65,6 +67,7 @@ if get(g:, 'grep_tool', '') =~ 'leaderf'
     else
         let g:Lf_Rg_pos = "bottom"
     endif
+    nnoremap <Leader>s :Leaderf rg<Space>
     nnoremap <leader>. :Leaderf rg --recall<Cr>
     nnoremap <leader>/ :<C-R>=printf("Leaderf --%s rg -L ",   g:Lf_Rg_pos)<CR><CR>
     xnoremap <leader>; :<C-U><C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, leaderf#Rg#visual())<CR><CR>
@@ -137,6 +140,7 @@ elseif g:fuzzy_finder != 'ctrlp'
     nnoremap <leader>. :FZFSearchLast<Cr>
     " FZFSearch
     command! -nargs=1 FZFSearch call s:fzf_flygrep(1, <f-args>)
+    nnoremap <leader>s :FZFSearch<Space>
     nnoremap <leader>; :FZFSearch <C-R><C-W><Cr>
     xnoremap <leader>; :<C-u>FZFSearch <C-R>=GetVisualSelection()<Cr><Cr>
     nnoremap <leader>, :FZFSearch <C-R><C-W>
