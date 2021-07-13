@@ -1058,7 +1058,6 @@ nnoremap <silent> <Tab>n :tabm +1<CR>
 nnoremap <silent> <Tab>p :tabm -1<CR>
 nnoremap <silent> <Tab>1 :tabm 0<CR>
 nnoremap <silent> <Tab>0 :tabm<CR>
-nnoremap <Tab>M          :tabm<Space>
 nnoremap <silent> <M-1> :tabn1<CR>
 nnoremap <silent> <M-2> :tabn2<CR>
 nnoremap <silent> <M-3> :tabn3<CR>
@@ -1153,12 +1152,6 @@ set tabline=%!Vim_NeatTabLine()
 set guitablabel=%{Vim_NeatGuiTabLabel()}
 " map config and open file using system browser when has gui
 if g:gui_running > 0 || WINDOWS()
-    nnoremap <M-n> :tabnext<CR>
-    nnoremap <M-p> :tabprevious<CR>
-    nnoremap <M-N> :tabm +1<CR>
-    nnoremap <M-P> :tabm -1<CR>
-    nnoremap <M-\>  <C-w>5+
-    nnoremap <M-\|> <C-w>5-
     function! s:Filter_Push(desc, wildcard)
         let g:browsefilter .= a:desc . " (" . a:wildcard . ")\t" . a:wildcard . "\n"
     endfunc
@@ -1181,6 +1174,15 @@ if g:gui_running > 0 || WINDOWS()
         exec 'browse tabnew '.fnameescape(l:path)
     endfunc
     nnoremap <silent><M-b> :call Open_Browse()<Cr>
+    nnoremap <silent><M-n> :tabnext<CR>
+    nnoremap <silent><M-p> :tabprevious<CR>
+    nnoremap <silent><M-N> :tabm +1<CR>
+    nnoremap <silent><M-P> :tabm -1<CR>
+    nnoremap <silent><M-\>  <C-w>5+
+    nnoremap <silent><M-\|> <C-w>5-
+    nnoremap <M-M> :tabm<Space>
+else
+    nnoremap <Tab>M :tabm<Space>
 endif
 " ------------------------
 " yank && paste
