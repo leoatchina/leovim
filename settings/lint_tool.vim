@@ -11,8 +11,9 @@ if get(g:, 'lint_tool', '') == 'coc' && Installed('coc.nvim')
     endif
     nmap <silent> z; <Plug>(coc-diagnostic-next-error)
     nmap <silent> z, <Plug>(coc-diagnostic-prev-error)
-    nmap <F2> :call CocAction('diagnosticToggle')<Cr>
     nmap <leader>D :call CocAction('diagnosticToggle')<Cr>
+    nmap <F2>      :call CocAction('diagnosticToggle')<Cr>
+    nmap ,a        :CocCommand workspace.diagnosticRelated<Cr>
     highlight def CocUnderLine cterm=NONE gui=NONE
     highlight def link CocErrorHighlight   CocUnderLine
     highlight def link CocWarningHighlight NONE
@@ -49,9 +50,9 @@ elseif Installed('ale')
     nnoremap <silent> <leader>d :ShowLint<Cr>
     nmap z;   <Plug>(ale_next_error)
     nmap z,   <Plug>(ale_previous_error)
-    nmap <F2> :ALEToggle<Cr>
+    nmap ,a        :ALE<Tab>
+    nmap <F2>      :ALEToggle<Cr>
     nmap <leader>D :ALEToggle<Cr>
-    nmap ,a :ALE<Tab>
     " basic settings
     let g:ale_disable_lsp                    = 1
     let g:ale_completion_enabled             = 0
