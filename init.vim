@@ -1186,6 +1186,10 @@ endif
 " yank && paste
 " ------------------------
 if has('clipboard')
+    inoremap <silent><M-v> <C-r><C-o>*
+    cnoremap <silent><M-v> <C-r><C-o>*
+    nnoremap <silent><M-v> "*gP
+    xnoremap <silent><M-v> "*gP
     if has('nvim')
         nnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
         xnoremap <silent><M-c> "*y:let  @*=trim(@*)<Cr>
@@ -1217,10 +1221,9 @@ function! YankFromBeginning() abort
     call setpos('.', original_cursor_position)
 endfunction
 nnoremap gy :call YankFromBeginning()<Cr>:echo "Yank from line beginning"<Cr>
-xnoremap -  gq
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
-xnoremap <M-X> <C-c>`.``gvp``P
+xnoremap <M-V> <C-c>`.``gvp``P
 " ------------------------
 " 缩进等
 " ------------------------
@@ -1541,7 +1544,7 @@ if !exists('g:leovim_loaded')
     let g:indentLine_bgcolor_gui     = '#FF5F00'
     let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
 endif
-nnoremap <M-k>i :IndentLinesToggle<Cr>
+nnoremap <M-h>i :IndentLinesToggle<Cr>
 " --------------------------
 " TMUX config
 " --------------------------
@@ -1720,6 +1723,7 @@ source $SETTINGS_PATH/symbol_tool.vim
 source $SETTINGS_PATH/debug_tool.vim
 source $SETTINGS_PATH/differ.vim
 source $SETTINGS_PATH/sidebar.vim
+source $SETTINGS_PATH/format.vim
 source $SETTINGS_PATH/schemes.vim
 " searchindex
 try

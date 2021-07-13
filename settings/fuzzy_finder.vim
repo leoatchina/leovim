@@ -114,29 +114,29 @@ if Installed("fzf.vim") && Installed("fzf")
                 endif
             endif
         endfunction
-        command! -range FZFYankPaste call fzf#run(extend({
+        command! -range FZFYankInsert call fzf#run(extend({
                     \ 'source': s:yank_list(),
                     \ 'sink': function('s:paste_yank', {'paste': 'P', 'visual': 0}),
-                    \ 'options': '--ansi -x --prompt "YankPaste>"'
+                    \ 'options': '--ansi -x --prompt "YankInsert>"'
                     \ }, g:fzf_layout), 0)
         command! -range FZFYankAppend call fzf#run(extend({
                     \ 'source': s:yank_list(),
                     \ 'sink': function('s:paste_yank', {'paste': 'p', 'visual': 0}),
                     \ 'options': '--ansi -x --prompt "YankAppend>"'
                     \ }, g:fzf_layout), 0)
-        command! -range FZFYankPasteV call fzf#run(extend({
+        command! -range FZFYankInsertV call fzf#run(extend({
                     \ 'source': s:yank_list(),
                     \ 'sink': function('s:paste_yank', {'paste': 'P', 'visual': 1}),
-                    \ 'options': '--ansi -x --prompt "YankPaste>"'
+                    \ 'options': '--ansi -x --prompt "YankInsert>"'
                     \ }, g:fzf_layout), 0)
         command! -range FZFYankAppendV call fzf#run(extend({
                     \ 'source': s:yank_list(),
                     \ 'sink': function('s:paste_yank', {'paste': 'p', 'visual': 1}),
                     \ 'options': '--ansi -x --prompt "YankAppend>"'
                     \ }, g:fzf_layout), 0)
-        nnoremap <silent> <M-V> :FZFYankPaste<Cr>
-        inoremap <silent> <M-V> <C-o>:FZFYankPaste<Cr>
-        xnoremap <silent> <M-V> :<C-u>FZFYankPasteV<Cr>
+        nnoremap <silent> <M-I> :FZFYankInsert<Cr>
+        inoremap <silent> <M-I> <C-o>:FZFYankInsert<Cr>
+        xnoremap <silent> <M-I> :<C-u>FZFYankInsertV<Cr>
         nnoremap <silent> <M-A> :FZFYankAppend<Cr>
         inoremap <silent> <M-A> <C-o>:FZFYankAppend<Cr>
         xnoremap <silent> <M-A> :<C-u>FZFYankAppendV<Cr>
@@ -161,7 +161,13 @@ if Installed("fzf.vim") && Installed("fzf")
                 let reg = reg[5:]
             endif
             let reg = substitute(reg, "\\^J", "\\r", "g")
-            call add(lst, reg)
+            if reg[1] =~ '*'
+                call insert(lst, reg, 0)
+            elseif reg[1] =~ '+'
+                call insert(lst, reg, 0)
+            else
+                call add(lst, reg)
+            endif
         endfor
         return lst
     endfunction
@@ -175,7 +181,7 @@ if Installed("fzf.vim") && Installed("fzf")
         endif
         call feedkeys(cmd)
     endfunction
-    command! -range FZFRegisterPaste call fzf#run(extend({
+    command! -range FZFRegisterInsert call fzf#run(extend({
             \ 'source': s:fzf_registers(),
             \ 'sink': function('s:paste_select', {'paste': 'P', 'visual': 0}),
             \ 'options': '--ansi -x --prompt "Paste>"'
@@ -185,7 +191,7 @@ if Installed("fzf.vim") && Installed("fzf")
             \ 'sink': function('s:paste_select', {'paste': 'p', 'visual': 0}),
             \ 'options': '--ansi -x --prompt "Append>"'
             \ }, g:fzf_layout), 0)
-    command! -range FZFRegisterPasteV call fzf#run(extend({
+    command! -range FZFRegisterInsertV call fzf#run(extend({
             \ 'source': s:fzf_registers(),
             \ 'sink': function('s:paste_select', {'paste': 'P', 'visual': 1}),
             \ 'options': '--ansi -x --prompt "Paste>"'
@@ -195,11 +201,11 @@ if Installed("fzf.vim") && Installed("fzf")
             \ 'sink': function('s:paste_select', {'paste': 'p', 'visual': 1}),
             \ 'options': '--ansi -x --prompt "Append>"'
             \ }, g:fzf_layout), 0)
-    nnoremap <silent> <M-v> :FZFRegisterPaste<Cr>
-    inoremap <silent> <M-v> <C-o>:FZFRegisterPaste<Cr>
-    xnoremap <silent> <M-v> :<C-u>FZFRegisterPasteV<Cr>
-    nnoremap <silent> ,P :FZFRegisterPaste<Cr>
-    xnoremap <silent> ,P :<C-u>FZFRegisterPasteV<Cr>
+    nnoremap <silent> <M-i> :FZFRegisterInsert<Cr>
+    inoremap <silent> <M-i> <C-o>:FZFRegisterInsert<Cr>
+    xnoremap <silent> <M-i> :<C-u>FZFRegisterInsertV<Cr>
+    nnoremap <silent> ,P :FZFRegisterInsert<Cr>
+    xnoremap <silent> ,P :<C-u>FZFRegisterInsertV<Cr>
     nnoremap <silent> <M-a> :FZFRegisterAppend<Cr>
     inoremap <silent> <M-a> <C-o>:FZFRegisterAppend<Cr>
     xnoremap <silent> <M-a> :<C-u>FZFRegisterAppendV<Cr>

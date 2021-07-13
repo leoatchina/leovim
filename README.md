@@ -91,6 +91,7 @@ click uninstall.cmd with administrator right
 - [x] Copy && Paste using tmux
 - [x] fzf yank
 - [x] leaderf jumps
+- [ ] format config 
 - [ ] leaderf paste
 - [ ] leaderf yank
 - [ ] rewrite readme
