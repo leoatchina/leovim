@@ -98,9 +98,9 @@ if Installed('vista.vim')
     endif
     if get(g:, 'complete_engine', '') == 'coc'
         if has('nvim') || get(g:, 'gui_running', 0) > 0
-            nnoremap <M-">  :CocFzfList outline<Cr>
+            nnoremap <M-"> :CocFzfList outline<Cr>
         else
-            nnoremap <M-l>' :CocFzfList outline<Cr>
+            nnoremap Z" :CocFzfList outline<Cr>
         endif
     endif
 endif
