@@ -89,19 +89,21 @@ if Installed('vista.vim')
     else
         let g:vista_fzf_preview = ['up:30%']
     endif
-    if get(g:, 'ctags_version', '') =~ 'json'
-        let g:vista_default_executive = 'ctags'
-        nnoremap <M-'> :Vista finder!<Cr>
-    endif
     if get(g:, 'complete_engine', '') == 'coc'
         nnoremap ZO :CocFzfList outline<Cr>
     endif
-    if get(g:, 'vista_lsp_command', '') != ''
-        if has('nvim') || get(g:, 'gui_running', 0) > 0
-            execute("nnoremap <M-"> :Vista finder " . g:vista_lsp_command . "<Cr>")
+    if get(g:, 'ctags_version', '') =~ 'json'
+        let g:vista_default_executive = 'ctags'
+        if get(g:, 'vista_lsp_command', '') == ''
+            nnoremap <M-'> :Vista finder ctags<Cr>
+        elseif has('nvim') || get(g:, 'gui_running', 0) > 0
+            nnoremap <M-"> :Vista finder ctags<Cr>
         else
-            execute("nnoremap <M-k><M-v> :Vista finder " . g:vista_lsp_command . "<Cr>")
+            nnoremap <M-k><M-v> :Vista finder ctags<Cr>
         endif
+    endif
+    if get(g:, 'vista_lsp_command', '') != ''
+        execute("nnoremap <M-'> :Vista finder " . g:vista_lsp_command . "<Cr>")
     endif
 endif
 " --------------------------
