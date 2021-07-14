@@ -1589,6 +1589,7 @@ nmap <M-k><M-l> <C-w><C-l>
 nmap <M-k><M-j> <C-w><C-j>
 nmap <M-k><M-k> <C-w><C-k>
 nmap <M-k><M-w> <C-w><C-w>
+nmap <M-k><M-f> <C-w>f
 " --------------------------
 " vim-plug
 " --------------------------
