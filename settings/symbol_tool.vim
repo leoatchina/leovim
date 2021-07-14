@@ -91,7 +91,7 @@ if Installed('vista.vim')
     endif
     if get(g:, 'ctags_version', '') =~ 'json'
         let g:vista_default_executive = 'ctags'
-        nnoremap <M-k><M-t> :Vista finder!<Cr>
+        nnoremap <M-k><M-v> :Vista finder!<Cr>
     endif
     if get(g:, 'vista_lsp_command', '') != ''
         execute("nnoremap <M-'> :Vista finder " . g:vista_lsp_command . "<Cr>")
