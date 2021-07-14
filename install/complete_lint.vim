@@ -231,8 +231,8 @@ elseif get(g:, 'complete_engine', '') == 'coc'
             \ 'coc-snippets',
             \ 'coc-dictionary',
             \ 'coc-explorer',
-            \ 'coc-actions',
             \ ]
+
     if WINDOWS()
         let g:coc_global_extensions += ['coc-powershell']
     else

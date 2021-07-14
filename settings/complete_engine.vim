@@ -401,7 +401,6 @@ elseif Installed('coc.nvim')
     xmap ,cf <Plug>(coc-format-selected)
     nmap ,cf <Plug>(coc-format)
     nmap ,cr <Plug>(coc-rename)
-    nmap ,cs <Plug>(coc-range-select)
     " multi cursors
     nmap ,cc <Plug>(coc-cursors-position)
     nmap ,co <Plug>(coc-cursors-operator)
@@ -414,6 +413,16 @@ elseif Installed('coc.nvim')
     nmap <silent> ,cn :CocNext<CR>
     " Do default action for previous item.
     nmap <silent> ,cp :CocPrev<CR>
+    " Use CTRL-S for selections ranges.
+    " Requires 'textDocument/selectionRange' support of language server.
+    nmap <silent> <C-s> <Plug>(coc-range-select)
+    xmap <silent> <C-s> <Plug>(coc-range-select)
+    " Add `:Format` command to format current buffer.
+    command! -nargs=0 Format :call CocAction('format')
+    " Add `:Fold` command to fold current buffer.
+    command! -nargs=? Fold :call CocAction('fold', <f-args>)
+    " Add `:OR` command for organize imports of the current buffer.
+    command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 elseif !HasPlug('no-complete')
     let g:complete_engine = 'apc'
 else
