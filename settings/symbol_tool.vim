@@ -97,10 +97,9 @@ if Installed('vista.vim')
         execute("nnoremap <M-'> :Vista finder " . g:vista_lsp_command . "<Cr>")
     endif
     if get(g:, 'complete_engine', '') == 'coc'
+        nnoremap ZO :CocFzfList outline<Cr>
         if has('nvim') || get(g:, 'gui_running', 0) > 0
             nnoremap <M-"> :CocFzfList outline<Cr>
-        else
-            nnoremap ZO :CocFzfList outline<Cr>
         endif
     endif
 endif
