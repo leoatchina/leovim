@@ -100,7 +100,7 @@ if Installed('vista.vim')
         if has('nvim') || get(g:, 'gui_running', 0) > 0
             nnoremap <M-"> :CocFzfList outline<Cr>
         else
-            nnoremap Z" :CocFzfList outline<Cr>
+            nnoremap ZO :CocFzfList outline<Cr>
         endif
     endif
 endif

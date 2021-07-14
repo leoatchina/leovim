@@ -63,7 +63,7 @@ if Installed("fzf.vim") && Installed("fzf")
         nnoremap ZP :Fzf<Tab>
     endif
     if !WINDOWS()
-        nnoremap ZO :FZFLocate<Space>
+        nnoremap ,F :FZFLocate<Space>
     endif
     if Installed('vim-yoink')
         let g:yoinkMaxItems = 100
