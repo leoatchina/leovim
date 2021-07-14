@@ -259,14 +259,19 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     " https://blog.csdn.net/SeekAndFindYou/article/details/101173632
     " echo | clang -v -E -x c++
     " echo | clang -v -E -x c
-    let g:ycm_global_ycm_extra_conf = g:ycm_install_path . "/third_party/ycmd/.ycm_extra_conf.py"
-    let g:ycm_confirm_extra_conf    = 1
+    if get(g:, 'ycm_global_ycm_extra_conf', '') == ''
+        let g:ycm_global_ycm_extra_conf = g:ycm_install_path . "/third_party/ycmd/.ycm_extra_conf.py"
+    endif
+    let g:ycm_confirm_extra_conf = 1
     nnoremap <leader>ey :execute("tabe " . g:ycm_global_ycm_extra_conf)<Cr>
-    " hover
-    if !has('nvim')
+    " hover and get doc
+    if !has('nvim') && get(g:, 'ycm_get_hover', 1) > 0
         let g:ycm_auto_hover = ''
         nnoremap <M-,> :YcmCompleter GetHover<Cr>
+    else
+        nnoremap <M-,> :YcmCompleter GetDoc<Cr>
     endif
+    nnoremap <C-s>  :YcmCompleter Get<Tab>
     nnoremap <M-l>; :YcmCompleter<Space><Tab>
     nnoremap <M-l>, :YcmCompleter GetType<CR>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>
