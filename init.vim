@@ -1015,15 +1015,13 @@ function! Close_current_buf()
     endif
     return buffer_num
 endfunction
-nnoremap <silent>,q        :let buf_colosed=Close_current_buf()<CR>
-nnoremap <silent>zq        :tabclose<Cr>
-nnoremap <silent><M-q>     :q!<Cr>
-nnoremap <silent><leader>q :qall!<Cr>
+nnoremap <silent><leader>q :let buf_colosed=Close_current_buf()<CR>
+nnoremap <silent><M-q> :q!<Cr>
+nnoremap <silent>,q    :qall!<Cr>
+nnoremap <silent>zq    :tabclose<Cr>
 " ------------------------
 " save
 " ------------------------
-nnoremap <C-q> gq
-xnoremap <C-q> gq
 nnoremap <M-s> :w!<CR>
 inoremap <M-s> <ESC>:w!<CR>
 nnoremap <M-S> :wa!<CR>
