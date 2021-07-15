@@ -972,7 +972,6 @@ map <C-z> <Nop>
 " ------------------------
 " some enhanced shortcuts
 " ------------------------
-nmap <leader>ex Q
 nmap <Tab> <Nop>
 xmap <Tab> <Nop>
 nmap <C-q> q
@@ -1001,14 +1000,11 @@ xnoremap g/ y/<C-R>"
 " ------------------------
 " quit
 " ------------------------
-nnoremap Q         <C-w>z
-xnoremap Q         <C-w>z
-nnoremap qq        <C-w>z
-xnoremap qq        <C-w>z
-nnoremap zq        :tabclose<Cr>
-nnoremap <M-q>     :confirm q<Cr>
-nnoremap <leader>q :q!<Cr>
-nnoremap <leader>Q :qall!<Cr>
+nnoremap <leader>ex Q
+nnoremap Q  <C-w>z
+xnoremap Q  <C-w>z
+nnoremap qq <C-w>z
+xnoremap qq <C-w>z
 " close current buffer
 function! Close_current_buf()
     let buffer_num=len(getbufinfo({'buflisted':1}))
@@ -1019,7 +1015,10 @@ function! Close_current_buf()
     endif
     return buffer_num
 endfunction
-nmap <silent> ,q :let buf_colosed=Close_current_buf()<CR>
+nnoremap <silent>,q        :let buf_colosed=Close_current_buf()<CR>
+nnoremap <silent>zq        :tabclose<Cr>
+nnoremap <silent><M-q>     :q!<Cr>
+nnoremap <silent><leader>q :qall!<Cr>
 " ------------------------
 " save
 " ------------------------
