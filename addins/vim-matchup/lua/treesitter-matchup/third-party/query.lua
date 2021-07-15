@@ -78,6 +78,12 @@ do
   end
 end
 
+--- This function is meant for an autocommand and not to be used. Only use if file is a query file.
+function M.invalidate_query_file(fname)
+  local fnamemodify = vim.fn.fnamemodify
+  M.invalidate_query_cache(fnamemodify(fname, ':p:h:t'), fnamemodify(fname, ':t:r'))
+end
+
 local function get_byte_offset(buf, row, col)
   local lines = api.nvim_buf_get_lines(buf, row, row + 1, false)
   if #lines < 1 then
@@ -191,10 +197,14 @@ end
 function M.iter_group_results(bufnr, query_group, root, root_lang)
   local buf_lang = parsers.get_buf_lang(bufnr)
 
-  if not buf_lang then return EMPTY_ITER end
+  if not buf_lang then
+    return EMPTY_ITER
+  end
 
   local parser = parsers.get_parser(bufnr, buf_lang)
-  if not parser then return EMPTY_ITER end
+  if not parser then
+    return EMPTY_ITER
+  end
 
   if not root then
     local first_tree = parser:trees()[1]
