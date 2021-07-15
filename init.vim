@@ -1005,11 +1005,10 @@ nnoremap Q         <C-w>z
 xnoremap Q         <C-w>z
 nnoremap qq        <C-w>z
 xnoremap qq        <C-w>z
-nnoremap <Tab>c    :tabclose<Cr>
-nnoremap ,q        :qall!<Cr>
+nnoremap zq        :tabclose<Cr>
 nnoremap <M-q>     :confirm q<Cr>
 nnoremap <leader>q :q!<Cr>
-nnoremap <leader>Q :wq<Cr>
+nnoremap <leader>Q :qall!<Cr>
 " close current buffer
 function! Close_current_buf()
     let buffer_num=len(getbufinfo({'buflisted':1}))
@@ -1020,13 +1019,7 @@ function! Close_current_buf()
     endif
     return buffer_num
 endfunction
-nmap <silent> <Tab>b :let buf_colosed=Close_current_buf()<CR>
-" ------------------------
-" esc
-" ------------------------
-inoremap <M-q> <ESC>
-xnoremap <M-q> <ESC>
-cnoremap <M-q> <ESC>
+nmap <silent> ,q :let buf_colosed=Close_current_buf()<CR>
 " ------------------------
 " save
 " ------------------------
@@ -1039,9 +1032,14 @@ inoremap <M-S> <ESC>:wa!<CR>
 nnoremap <M-W> :wq!<CR>
 inoremap <M-W> <ESC>:wq!<CR>
 " ------------------------
-" page manage
+" esc
+" ------------------------
+inoremap <M-q> <ESC>
+xnoremap <M-q> <ESC>
+cnoremap <M-q> <ESC>
 " ------------------------
 " remap for cusor move insert mode
+" ------------------------
 inoremap <M-l> <Right>
 inoremap <M-h> <Left>
 inoremap <M-j> <Down>
