@@ -292,8 +292,8 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     " goto symbol
     nnoremap <M-j>f :YcmCompleter GoToSymbol <C-r><C-w>
     xnoremap <M-j>f :YcmCompleter GoToSymbol <C-R>=GetVisualSelection()<CR>
-    nnoremap ,cf :YcmCompleter Format<CR>
-    nnoremap ,cx :YcmCompleter FixIt<Cr>
+    nnoremap ZF :YcmCompleter Format<CR>
+    nnoremap ZI :YcmCompleter FixIt<Cr>
     " lsp config
     let g:ycm_language_server = []
     if executable('node')
@@ -403,14 +403,9 @@ elseif Installed('coc.nvim')
     nmap ,c; <Plug>(coc-codeaction)
     nmap ,c, <Plug>(coc-codelens)
     nmap ,cl <Plug>(coc-codeaction-line)
-    xmap ,cf <Plug>(coc-format-selected)
-    nmap ,cf <Plug>(coc-format)
-    nmap ,cr <Plug>(coc-rename)
     " multi cursors
     nmap ,cc <Plug>(coc-cursors-position)
     nmap ,co <Plug>(coc-cursors-operator)
-    " Fix autofix problem of current line
-    nmap ,cx <Plug>(coc-fix-current)
     " more
     nmap ,ch <Plug>(coc-float-hide)
     nmap ,cj <Plug>(coc-float-jump)
@@ -418,6 +413,11 @@ elseif Installed('coc.nvim')
     nmap <silent> ,cn :CocNext<CR>
     " Do default action for previous item.
     nmap <silent> ,cp :CocPrev<CR>
+    " format and fix
+    xmap ZF <Plug>(coc-format-selected)
+    nmap ZF <Plug>(coc-format)
+    nmap ZR <Plug>(coc-rename)
+    nmap ZI <Plug>(coc-fix-current)
     " Use CTRL-S for selections ranges.
     " Requires 'textDocument/selectionRange' support of language server.
     nmap <silent> <C-s> <Plug>(coc-range-select)

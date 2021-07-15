@@ -11,9 +11,9 @@ if Installed("fzf.vim") && Installed("fzf")
     endif
     if get(g:, 'terminal_plus', '') =~ 'floaterm'
         if get(g:, 'fuzzy_finder', '') == 'leaderf'
-            nnoremap ZF :Leaderf floaterm<Cr>
+            nnoremap <M-h>l :Leaderf floaterm<Cr>
         elseif Installed('fzf-floaterm')
-            nnoremap ZF :Floaterms<Cr>
+            nnoremap <M-h>l :Floaterms<Cr>
         endif
     endif
     if has('nvim') || has('patch-8.2.191')

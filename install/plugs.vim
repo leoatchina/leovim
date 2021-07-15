@@ -195,7 +195,7 @@ if has('signs')
     if executable('go') && !WINDOWS()
         MyPlug 'RRethy/vim-hexokinase', {'for': ['css', 'html', 'less', 'scss', 'sass', 'stylus'], 'do': 'make hexokinase'}
         let g:Hexokinase_highlighters  = ['backgroundfull']
-        nnoremap <M-k>o :HexokinaseToggle<Cr>
+        nnoremap <M-h>o :HexokinaseToggle<Cr>
     else
         MyPlug 'gorodinskiy/vim-coloresque', {'for': ['css', 'html', 'less', 'scss', 'sass', 'stylus']}
     endif
