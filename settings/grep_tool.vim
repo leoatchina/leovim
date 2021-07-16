@@ -44,10 +44,10 @@ else
         set rtp+=$ADDINS_PATH/far.vim
     endif
     let g:far#enable_undo=1
-    nnoremap F<tab> :Farr<Cr>
-    xnoremap F<tab> :<C-u>Farr<Cr>
     nnoremap f<tab> :F <C-r><C-w>
     xnoremap f<tab> :<C-u>F <C-r>=GetVisualSelection()<Cr>
+    nnoremap s<tab> :Farr<Cr>
+    xnoremap s<tab> :<C-u>Farr<Cr>
     nnoremap t<tab> :Farf<Cr>
     xnoremap t<tab> :<C-u>Farf<Cr>
     nnoremap q<tab> :<C-u>Farundo<Cr>
