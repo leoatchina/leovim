@@ -341,7 +341,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
     nnoremap <M-k>t :Leaderf filetype<Cr>
     nnoremap <M-k>c :Leaderf command<Cr>
     " help tags
-    nnoremap q<Space> :Leaderf help<Cr>
+    nnoremap gh :Leaderf help<Cr>
     " search cword
     nnoremap \| :Leaderf line --no-sort --cword<Cr>
     xnoremap \| <ESC>:Leaderf line --no-sort --input <C-R>=GetVisualSelection()<CR><CR>
@@ -393,7 +393,7 @@ if get(g:, 'fuzzy_finder', '') == 'leaderf'
                 \ '<Esc>':              'quit',
                 \ '<C-c>':              'quit',
                 \ '<CR>':               'accept',
-                \ '<C-s>':              'accept_horizontal',
+                \ '<C-x>':              'accept_horizontal',
                 \ '<C-v>':              'accept_vertical',
                 \ '<C-t>':              'accept_tab',
                 \ '<C-r>':              'toggle_regex',
@@ -446,7 +446,7 @@ elseif get(g:, 'fuzzy_finder', '') == 'fzf'
     nnoremap Zl :FzfLines<CR>
     " helptags
     if executable('perl')
-        nnoremap q<Space> :FzfHelptags<CR>
+        nnoremap gh :FzfHelptags<CR>
     endif
 endif
 if Installed('coc.nvim')

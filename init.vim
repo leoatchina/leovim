@@ -1047,11 +1047,6 @@ inoremap <M-k> <Up>
 " ------------------------
 set tabpagemax=10
 set showtabline=2
-nnoremap <silent> gh     :tabprevious<CR>
-nnoremap <silent> <Tab>n :tabnext<CR>
-nnoremap <silent> <Tab>p :tabprevious<CR>
-nnoremap <silent> <Tab>N :tabm +1<CR>
-nnoremap <silent> <Tab>P :tabm -1<CR>
 nnoremap <silent> <Tab>1 :tabm 0<CR>
 nnoremap <silent> <Tab>0 :tabm<CR>
 nnoremap <silent> <M-1> :tabn1<CR>
@@ -1169,9 +1164,9 @@ if g:gui_running > 0 || WINDOWS()
         endif
         exec 'browse tabnew '.fnameescape(l:path)
     endfunc
+    nmap <M-n> gt
+    nmap <M-p> gT
     nnoremap <silent><M-b> :call Open_Browse()<Cr>
-    nnoremap <silent><M-n> :tabnext<CR>
-    nnoremap <silent><M-p> :tabprevious<CR>
     nnoremap <silent><M-N> :tabm +1<CR>
     nnoremap <silent><M-P> :tabm -1<CR>
     nnoremap <silent><M-\>  <C-w>5+
@@ -1179,6 +1174,10 @@ if g:gui_running > 0 || WINDOWS()
     nnoremap <M-M> :tabm<Space>
     nnoremap <M-B> :registers<Cr>
 else
+    nnoremap <silent> <Tab>n :tabnext<CR>
+    nnoremap <silent> <Tab>p :tabprevious<CR>
+    nnoremap <silent> <Tab>N :tabm +1<CR>
+    nnoremap <silent> <Tab>P :tabm -1<CR>
     nnoremap <Tab>M :tabm<Space>
     nnoremap <M-k>r :registers<Cr>
 endif
