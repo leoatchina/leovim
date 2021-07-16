@@ -1048,8 +1048,10 @@ inoremap <M-k> <Up>
 set tabpagemax=10
 set showtabline=2
 nnoremap <silent> gh     :tabprevious<CR>
-nnoremap <silent> <Tab>n :tabm +1<CR>
-nnoremap <silent> <Tab>p :tabm -1<CR>
+nnoremap <silent> <Tab>n :tabnext<CR>
+nnoremap <silent> <Tab>p :tabprevious<CR>
+nnoremap <silent> <Tab>N :tabm +1<CR>
+nnoremap <silent> <Tab>P :tabm -1<CR>
 nnoremap <silent> <Tab>1 :tabm 0<CR>
 nnoremap <silent> <Tab>0 :tabm<CR>
 nnoremap <silent> <M-1> :tabn1<CR>

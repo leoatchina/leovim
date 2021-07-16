@@ -58,10 +58,11 @@ nmap <space>/ :action Find<cr>
 nmap <space>; :action FindInPath<cr>
 
 " Navigation
-nmap g<tab> :action ShowNavBar<cr>
-nmap g<cr>  :action NavBarToolBar<cr>
-nmap <A-/>  :action FileStructurePopup<cr>
-nmap <A-;>  :action StructureViewPopupMenu<cr>
+nnoremap <A-/>  :<C-u>action FileStructurePopup<cr>
+nnoremap <A-;>  :<C-u>action StructureViewPopupMenu<cr>
+nnoremap g<cr>  :<C-u>action ShowPopupMenu<Cr>
+nnoremap g<tab> :<C-u>action NavBarToolBar<cr>
+nnoremap gn :<C-u>action ShowNavBar<cr>
 nnoremap ga :<C-u>action GotoAction<CR>
 nnoremap gy :<C-u>action GotoTypeDeclaration<cr>
 nnoremap gd :<C-u>action GotoDeclaration<cr>
@@ -79,7 +80,6 @@ nnoremap gl :<C-u>action Forward<CR>
 nnoremap gb :<C-u>action ToggleLineBreakpoint<cr>
 nnoremap <A-,> :<C-u>action ShowUsages<cr>
 nnoremap <A-.> :<C-u>action FindUsages<cr>
-nnoremap <space>sf :<C-u>action RecentFiles<cr>
 nnoremap <space>sb :<C-u>action ShowBookmarks<cr>
 nnoremap <space>si :<C-u>action SelectIn<cr>
 
