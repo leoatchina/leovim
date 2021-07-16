@@ -194,7 +194,8 @@ elseif Installed('vim-lsp')
     nnoremap <M-j>; :LspSignatureHelp<Cr>
     nnoremap <M-j>r :LspReferences<CR>
     nnoremap <M-j>w :LspWorkspaceSymbol<Cr>
-    nnoremap <M-j>s :LspDocumentSymbol<Cr>
+    nnoremap <M-j>f :LspDocumentSymbol<Cr>
+    nnoremap <M-j>s :LspDocumentSymbolSearch<Cr>
     " codeaction
     nnoremap ,cr :LspRename<CR>
     nnoremap ,c; :LspCodeAction<CR>
@@ -290,8 +291,8 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     nnoremap <M-l>i :vs<Cr>:YcmCompleter GoToImplementation<CR>
     nnoremap <M-l>n :vs<Cr>:YcmCompleter GotoInclude<Space>
     " goto symbol
-    nnoremap <M-j>f :YcmCompleter GoToSymbol <C-r><C-w>
-    xnoremap <M-j>f :YcmCompleter GoToSymbol <C-R>=GetVisualSelection()<CR>
+    nnoremap <M-j>s :YcmCompleter GoToSymbol <C-r><C-w>
+    xnoremap <M-j>s :YcmCompleter GoToSymbol <C-R>=GetVisualSelection()<CR>
     nnoremap ZF :YcmCompleter Format<CR>
     nnoremap ZI :YcmCompleter FixIt<Cr>
     " lsp config
@@ -364,8 +365,8 @@ elseif Installed('coc.nvim')
     nmap <M-,> :call <SID>show_documentation()<CR>
     " basic plug
     nmap <M-j>w :CocFzfList symbols<CR>
-    nmap <M-j>s :CocAction('documentSymbols')<Cr>
-    nmap <M-j>f :CocAction('getCurrentFunctionSymbol')<Cr>
+    nmap <M-j>f :CocAction('documentSymbols')<Cr>
+    nmap <M-j>s :CocAction('getCurrentFunctionSymbol')<Cr>
     nmap <M-j>d <Plug>(coc-declaration)
     nmap <M-j>t <Plug>(coc-type-definition)
     nmap <M-j>r <Plug>(coc-references)
