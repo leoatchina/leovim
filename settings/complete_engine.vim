@@ -272,7 +272,7 @@ elseif get(g:, 'complete_engine', '') =~ 'YCM'
     else
         nnoremap <M-,> :YcmCompleter GetDoc<Cr>
     endif
-    nnoremap q<cr>  :YcmCompleter Get<Tab>
+    nnoremap q<Space> :YcmCompleter Get<Tab>
     nnoremap <M-l>; :YcmCompleter<Space><Tab>
     nnoremap <M-l>, :YcmCompleter GetType<CR>
     nnoremap <M-l>p :YcmCompleter GetParent<CR>
@@ -421,8 +421,8 @@ elseif Installed('coc.nvim')
     nmap ZI <Plug>(coc-fix-current)
     " Use CTRL-S for selections ranges.
     " Requires 'textDocument/selectionRange' support of language server.
-    nmap <silent> q<cr> <Plug>(coc-range-select)
-    xmap <silent> q<cr> <Plug>(coc-range-select)
+    nmap <silent> <C-s> <Plug>(coc-range-select)
+    xmap <silent> <C-s> <Plug>(coc-range-select)
     " Add `:Format` command to format current buffer.
     command! -nargs=0 Format :call CocAction('format')
     " Add `:Fold` command to fold current buffer.

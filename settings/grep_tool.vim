@@ -1,26 +1,5 @@
-let g:grep_tool = 'grepper'
-if !exists('g:leovim_loaded')
-    set rtp+=$ADDINS_PATH/vim-grepper
-endif
-if executable('rg')
-    nnoremap S :GrepperRg<Space><C-r><C-w>
-elseif executable('ag')
-    nnoremap S :GrepperAg<Space><C-r><C-w>
-elseif executable('git')
-    nnoremap S :GrepperGit<Space><C-r><C-w>
-elseif executable('ack')
-    nnoremap S :GrepperAck<Space><C-r><C-w>
-elseif WINDOWS()
-    nnoremap S :GrepperFindstr<Space><C-r><C-w>
-else
-    nnoremap S :GrepperGrep<Space><C-r><C-w>
-endif
-let g:grepper = {'next_tool': 'S'}
-nmap gs <plug>(GrepperOperator)
-xmap gs <plug>(GrepperOperator)
-omap gs <plug>(GrepperOperator)
 if Installed('ctrlsf.vim')
-    let g:grep_tool .= "-ctrlsf"
+    let g:grep_tool = "ctrlsf"
     let g:ctrlsf_position='right'
     let g:ctrlsf_default_root='project'
     let g:ctrlsf_extra_root_markers=['.root', '.git', '.svn', '.hg']
@@ -39,7 +18,7 @@ if Installed('ctrlsf.vim')
     nmap <M-f>/ <Plug>CtrlSFPwordPath
     nmap <M-f>, <Plug>CtrlSFCCwordPath
 else
-    let g:grep_tool .= "-far"
+    let g:grep_tool = "far"
     if !exists('g:leovim_loaded')
         set rtp+=$ADDINS_PATH/far.vim
     endif
@@ -54,6 +33,13 @@ else
     au FileType far nnoremap <leader>F :Fardo<Cr>
     au Filetype far nnoremap \F        :Refar<Space>
 endif
+if !exists('g:leovim_loaded')
+    set rtp+=$ADDINS_PATH/vim-grepper
+endif
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
+omap gs <plug>(GrepperOperator)
+" leaderf or fzf using rg
 if executable('rg')
     if !MACVIM() && Installed('LeaderF')
         let g:grep_tool .= "-leaderf"
@@ -67,13 +53,20 @@ if get(g:, 'grep_tool', '') =~ 'leaderf'
     else
         let g:Lf_Rg_pos = "bottom"
     endif
-    nnoremap <Leader>s :Leaderf rg<Space>
+    " main
+    nnoremap S :<C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, expand("<cword>"))<CR><CR>
+    nnoremap <leader>s :<C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, expand("<cword>"))<CR>
+    xnoremap <leader>s :<C-U><C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, leaderf#Rg#visual())<CR>
+    nnoremap <leader>/ :<C-R>=printf("Leaderf --%s rg -L ", g:Lf_Rg_pos)<CR><CR>
+    xnoremap <leader>/ :<C-U><C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, leaderf#Rg#visual())<CR>
     nnoremap <leader>. :Leaderf rg --recall<Cr>
-    nnoremap <leader>/ :<C-R>=printf("Leaderf --%s rg -L ",   g:Lf_Rg_pos)<CR><CR>
-    xnoremap <leader>; :<C-U><C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, leaderf#Rg#visual())<CR><CR>
-    nnoremap <leader>; :<C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, expand("<cword>"))<CR><CR>
-    xnoremap <leader>, :<C-U><C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, leaderf#Rg#visual())<CR>
-    nnoremap <leader>, :<C-R>=printf("Leaderf --%s rg -L %s", g:Lf_Rg_pos, expand("<cword>"))<CR>
+    xnoremap <leader>. :<C-u>Leaderf rg --recall<Cr>
+    " next prevous
+    nnoremap <leader>; :Leaderf rg --next<Cr>
+    xnoremap <leader>; :<C-U>Leaderf rg --next<Cr>
+    nnoremap <leader>, :Leaderf rg --previous<Cr>
+    xnoremap <leader>, :<C-U>Leaderf rg --previous<Cr>
+    " M-f
     nnoremap <M-f>s :<C-r>=printf("Leaderf! --stayOpen --right rg -L")<CR>
     xnoremap <M-f>c :<C-U><C-R>=printf("Leaderf! --stayOpen --right rg -L --current-buffer %s", leaderf#Rg#visual())<CR>
     nnoremap <M-f>c :<C-R>=printf("Leaderf! --stayOpen --right rg -L --current-buffer %s", expand("<cword>"))<CR>
@@ -134,15 +127,36 @@ elseif g:fuzzy_finder != 'ctrlp'
     endfunction
     " FZFSearchAll
     command! FZFSearchAll call s:fzf_flygrep()
-    nnoremap <leader>/ :FZFSearchAll<Cr>
+    nnoremap <leader>s :FZFSearchAll<Cr>
     " FZFSearchLast
     command! FZFSearchLast call s:fzf_flygrep(0)
     nnoremap <leader>. :FZFSearchLast<Cr>
     " FZFSearch
     command! -nargs=1 FZFSearch call s:fzf_flygrep(1, <f-args>)
-    nnoremap <leader>s :FZFSearch<Space>
-    nnoremap <leader>; :FZFSearch <C-R><C-W><Cr>
-    xnoremap <leader>; :<C-u>FZFSearch <C-R>=GetVisualSelection()<Cr><Cr>
-    nnoremap <leader>, :FZFSearch <C-R><C-W>
-    xnoremap <leader>, :<C-u>FZFSearch <C-R>=GetVisualSelection()<Cr>
+    nnoremap S :FZFSearch <C-R><C-W><Cr>
+    nnoremap <leader>s :FZFSearch <C-R><C-W>
+    xnoremap <leader>s :<C-u>FZFSearch <C-R>=GetVisualSelection()<Cr>
+    nnoremap <leader>/ :FZFSearch
+    xnoremap <leader>/ :<C-u>FZFSearch <C-R>=GetVisualSelection()<Cr>
+else
+    let g:grep_tool .= '-grepper'
+    let g:grepper = {'next_tool': 'S'}
+    if executable('rg')
+        let s:grepper_cmd = "GrepperRg"
+    elseif executable('ag')
+        let s:grepper_cmd = "GrepperAg"
+    elseif executable('git')
+        let s:grepper_cmd = "GrepperGit"
+    elseif executable('ack')
+        let s:grepper_cmd = "GrepperAck"
+    elseif WINDOWS()
+        let s:grepper_cmd = "GrepperFindstr"
+    else
+        let s:grepper_cmd = "GrepperGrep"
+    endif
+    execute("nnoremap S :" . s:grepper_cmd . " <C-R><C-W><Cr>")
+    execute("nnoremap <leader>s :" . s:grepper_cmd . " <C-r><C-w>")
+    execute("xnoremap <leader>s :<C-u>" . s:grepper_cmd . " <C-R>=GetVisualSelection()<Cr>")
+    execute("nnoremap <leader>/ :" . s:grepper_cmd)
+    execute("xnoremap <leader>/ :<C-u>" . s:grepper_cmd . " <C-R>=GetVisualSelection()<Cr>")
 endif
