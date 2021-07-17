@@ -7,16 +7,16 @@ if Installed('ctrlsf.vim')
                 \ "normal" : 0,
                 \ "compact": 0
                 \ }
-    xmap f<tab> :<C-U>CtrlSF <C-R>=GetVisualSelection()<CR>
-    nmap f<tab> :CtrlSF<Space>
-    nmap s<tab> :CtrlSFUpdate<Cr>
-    xmap t<tab> <Plug>CtrlSFVwordPath
+    nnoremap f<tab> :CtrlSF<Space>
+    xnoremap f<tab> :<C-U>CtrlSF <C-R>=GetVisualSelection()<CR>
+    nnoremap s<tab> :CtrlSFUpdate<Cr>
+    xnoremap s<tab> :<C-U>CtrlSFUpdate<Cr>
+    nnoremap q<tab> :CtrlSFToggle<Cr>
+    xnoremap q<tab> :<C-U>CtrlSFToggle<Cr>
     nmap t<tab> <Plug>CtrlSFCwordPath
-    nmap q<tab> :CtrlSFToggle<Cr>
-    xmap <M-f>; <Plug>CtrlSFVwordExec
-    nmap <M-f>; <Plug>CtrlSFCwordExec
+    xmap t<tab> <Plug>CtrlSFVwordPath
     nmap <M-f>/ <Plug>CtrlSFPwordPath
-    nmap <M-f>, <Plug>CtrlSFCCwordPath
+    nmap <M-f>b <Plug>CtrlSFCCwordPath
 else
     let g:grep_tool = "far"
     if !exists('g:leovim_loaded')
@@ -29,9 +29,10 @@ else
     xnoremap s<tab> :<C-u>Farr<Cr>
     nnoremap t<tab> :Farf<Cr>
     xnoremap t<tab> :<C-u>Farf<Cr>
-    nnoremap q<tab> :<C-u>Farundo<Cr>
-    au FileType far nnoremap <leader>F :Fardo<Cr>
-    au Filetype far nnoremap \F        :Refar<Space>
+    " apply the far change
+    au FileType far nnoremap <M-f>; :Fardo<Cr>
+    au Filetype far nnoremap <M-f>. :Refar<Space>
+    nnoremap <M-f>, :<C-u>Farundo<Cr>
 endif
 if !exists('g:leovim_loaded')
     set rtp+=$ADDINS_PATH/vim-grepper
