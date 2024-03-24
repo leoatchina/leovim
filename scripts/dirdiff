@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ "$#" == 2 ];then
+    vim -c "call ZFDirDiff(expand('$1'), expand('$2'))"
+else
+    echo "file1 and file2 must be offered correctly."
+fi

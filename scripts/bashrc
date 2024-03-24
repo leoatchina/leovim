@@ -1,0 +1,74 @@
+#!/bin/bash
+
+export PATH=/usr/local/bin
+if [ -L /bin ];then
+    export PATH=/bin:$PATH
+else
+    export PATH=/usr/bin:$PATH
+fi
+
+if [ -L /sbin ];then
+    export PATH=/sbin:$PATH
+else
+    export PATH=/usr/sbin:$PATH
+fi
+
+[ -z "$PS1" ] && return
+export CLICOLOR=1
+export LSCOLORS=GxFxBxDxCxegedabagaced
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+[ -f /usr/local/etc/bash_completion ] && bash /usr/local/etc/bash_completion
+
+command_exists() {
+    command -v "$@" > /dev/null 2>&1
+}
+
+if command_exists "git" ; then
+    function git_branch {
+        branch="`git branch 2>/dev/null | grep "^\*" | sed -e "s/^\*\ //"`"
+        if [ "${branch}" != "" ];then
+            if [ "${branch}" = "(no branch)" ];then
+                branch="(`git rev-parse --short HEAD`...)"
+            fi
+            if [[ `git status --porcelain` ]] ; then
+                branch=$branch" x"
+            else
+                branch=$branch" o"
+            fi
+            echo " $branch"
+        fi
+    }
+    export PS1="\[\e[31;1m\]\u\[\e[0m\]@\[\e[33;1m\]\h\[\e[0m\]:\[\e[36;1m\]\w\[\e[0m\]\[\e[26;1m\]\$(git_branch)\[\e[0m\]\n\$ "
+else
+    export PS1="\[\e[31;1m\]\u\[\e[0m\]@\[\e[33;1m\]\h\[\e[0m\]:\[\e[36;1m\]\w\[\e[0m\]\n\$ "
+fi
+
+if command_exists "lua" && [ -f ~/z.lua/z.lua ]; then
+    eval "$(lua ~/z.lua/z.lua  --init bash once enhanced)"
+    alias zz='z -c' # 严格匹配当前路径的子路径
+    alias zi='z -i' # 使用交互式选择模式
+    alias zf='z -I' # 使用 fzf 对多个结果进行选择
+    alias zb='z -b' # 快速回到父目录
+elif [ -f ~/.local/bin/z.sh ]; then
+    source ~/.local/bin/z.sh
+fi
+
+[ -f ~/.configrc ] && source ~/.configrc

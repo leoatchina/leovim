@@ -1,0 +1,161 @@
+*fern-mapping-fzf.txt*		fern.vim plugin for fzf
+
+Author : Luma <world@luma.email>
+License: MIT <https://github.com/LumaKernel/fern-mapping-fzf.vim/blob/master/LICENSE>
+
+==============================================================================
+CONTENTS				*fern-mapping-fzf-contents*
+
+DEPENDENCIES			|fern-mapping-fzf-dependencies|
+MAPPINGS			|fern-mapping-fzf-mappings|
+OPTIONS				|fern-mapping-fzf-options|
+
+==============================================================================
+DEPENDENCIES				*fern-mapping-fzf-dependencies*
+
+*fern-mapping-fzf* requires...
+
+- https://github.com/lambdalisue/fern.vim
+- https://github.com/junegunn/fzf
+- For Windows users, `sh` and `find` command compatible with UNIX-like.
+    - You can find them from like Cygwin. (Note that some tools are not working fine.)
+
+==============================================================================
+MAPPINGS 				*fern-mapping-fzf-mappings*
+
+| Mapping | Action         | Description                                  |
+| ------- | -------------- | -------------------------------------------- |
+| ff      | fzf-files      | Fzf for files                                |
+| fd      | fzf-dirs       | Fzf for directories                          |
+| fa      | fzf-both       | Fzf for both files and directories           |
+| frf     | fzf-root-files | Fzf for files from root                      |
+| frd     | fzf-root-dirs  | Fzf for directories from root                |
+| fra     | fzf-root-both  | Fzf for both files and directories from root |
+
+You can customize the mapping like below.
+>
+	let g:fern#mapping#fzf#disable_default_mappings = 1
+	function! s:init_fern_mapping_fzf() abort
+	    nmap <buffer> F <Plug>(fern-action-fzf-files)
+	    nmap <buffer> d <Plug>(fern-action-fzf-dirs)
+	    nmap <buffer> A <Plug>(fern-action-fzf-both)
+	endfunction
+
+	augroup my-fern-mapping-fzf
+	    autocmd! *
+	    autocmd FileType fern call s:init_fern_mapping_fzf()
+	augroup END
+<
+
+==============================================================================
+OPTIONS 				*fern-mapping-fzf-options*
+
+*g:fern#mapping#fzf#disable_default_mappings*
+	Set `1` to disable deafult mapping.
+	Deafult: `0`
+
+*g:Fern_mapping_fzf_file_sink*
+	Set funcref that accepts one {dict} argument.
+	  {dict}.key		: The key used to finish fzf. e.g. `ctrl-v`
+	  {dict}.full_path	: Full path to the file.
+	  {dict}.relative_path	: Relative path from {dict}.root_path to the
+				  file. Useful for |:FernReveal|.
+	  {dict}.is_dir		: |v:false|
+	  {dict}.root_path	: Path original fern executed.
+	  {dict}.fern_helper	: Fern helper dict. |fern-develop-helper|
+	  {dict}.lines		: Lines got from fzf.
+	  {dict}.from_root	: Whether from-root mode is used or not.
+	Be careful you cannot return Promise for now.
+	Default: Respects fzf default behavior. See |g:fzf_action|.
+Example: >
+	" Recipe for :FernReveal
+	function! s:reveal(dict) abort
+	    execute "FernReveal" a:dict.relative_path
+	endfunction
+	let g:Fern_mapping_fzf_file_sink = function('s:reveal')
+	let g:Fern_mapping_fzf_dir_sink = function('s:reveal')
+<
+
+*g:Fern_mapping_fzf_dir_sink*
+	Set funcref that accepts one {dict} argument.
+	  {dict}.key		: The key used to finish fzf. e.g. `ctrl-v`
+	  {dict}.full_path	: Full path to the directory
+	  {dict}.relative_path	: Relative path from {dict}.root_path to the
+				  directory. Useful for |:FernReveal|.
+	  {dict}.is_dir		: |v:true|
+	  {dict}.root_path	: Path original fern executed.
+	  {dict}.fern_helper	: Fern helper dict. |fern-develop-helper|
+	  {dict}.lines		: Lines got from fzf.
+	  {dict}.from_root	: Whether from-root mode is used or not.
+	Be careful you cannot return Promise for now.
+	Default: Respects fzf default behavior. See |g:fzf_action|.
+
+*g:Fern_mapping_fzf_customize_option*
+	Set funcref that accepts one {spec-dict} argument and return dict.
+	This would be passed to |fzf#run|. See |fzf#run| for more information.
+	Default: Do nothing.
+Example: >
+	function! Fern_mapping_fzf_customize_option(spec)
+	    let a:spec.options .= ' --multi'
+	    " Note that fzf#vim#with_preview comes from fzf.vim
+	    if exists('*fzf#vim#with_preview')
+	        return fzf#vim#with_preview(a:spec)
+	    else
+	        return a:spec
+	    endif
+	endfunction
+<
+
+*g:Fern_mapping_fzf_before_all*
+	Set funcref that accepts one {dict} argument. It can return
+	Promise. It will be run before all running sink functions, but after
+	fzf finishing.
+	  {dict}.key		: The key used to finish fzf. e.g. `ctrl-v`
+	  {dict}.root_path	: Path original fern executed.
+	  {dict}.fern_helper	: Fern helper dict. |fern-develop-helper|
+	  {dict}.lines		: Lines got from fzf.
+	  {dict}.from_root	: Whether from-root mode is used or not.
+	Default: Do nothing.
+Example: >
+	function! Fern_mapping_fzf_before_all(dict)
+	    return a:dict.fern_helper.async.update_marks([])
+	endfunction
+<
+
+*g:Fern_mapping_fzf_after_all*
+	Set funcref that accepts one {dict} argument. It can return
+	Promise. It will be run after all running sink functions.
+	  {dict}.key		: The key used to finish fzf. e.g. `ctrl-v`
+	  {dict}.root_path	: Path original fern executed.
+	  {dict}.fern_helper	: Fern helper dict. |fern-develop-helper|
+	  {dict}.lines		: Lines got from fzf.
+	  {dict}.from_root	: Whether from-root mode is used or not.
+	Default: Do nothing.
+Example: >
+	function! s:reveal(dict)
+	    execute "FernReveal -wait" a:dict.relative_path
+	    execute "normal \<Plug>(fern-action-mark:set)"
+	endfunction
+
+	function! Fern_mapping_fzf_after_all(dict)
+	    execute "normal \<Plug>(fern-action-open:vsplit)"
+	endfunction
+
+	let g:Fern_mapping_fzf_file_sink = function('s:reveal')
+	let g:Fern_mapping_fzf_dir_sink = function('s:reveal')
+<
+	NOTE: Disscussions in https://github.com/LumaKernel/fern-mapping-fzf.vim/issues/4
+	also may help.
+
+*g:fern#mapping#fzf#fzf_options*
+	DEPRECATED: Please consider using |g:Fern_mapping_fzf_customize_option| instead.
+	This is extended to options that is going to be passed to |fzf#run|.
+	Default: `{}`
+
+*g:fern#mapping#fzf#skip_check*
+	Set `1` to skip executable existence check if you are convinced no
+	problem about this.
+	Default: `0`
+
+==============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl

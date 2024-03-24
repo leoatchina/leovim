@@ -1,0 +1,14 @@
+au BufRead,BufNewFile .tmux.conf,tmux.conf set filetype=tmux
+au BufRead,BufNewFile .configrc,.bashrc,.zshrc set filetype=sh
+au BufRead,BufNewFile *.vimrc.* set filetype=vim
+au BufRead,BufNewFile *.jl set filetype=julia
+au BufRead,BufNewFile *.idr set filetype=idris
+au BufRead,BufNewFile *.conf set filetype=conf
+au BufRead,BufNewFile *.tex set filetype=latex
+au BufRead,BufNewFile *.pandoc set filetype=pandoc
+au BufRead,BufNewFile *.coffee set filetype=coffee
+au BufRead,BufNewFile *.conf.template set filetype=nginx
+au BufRead,BufNewFile *.ts set filetype=typescript
+au BufRead,BufNewFile *.vue set filetype=vue
+au BufRead,BufNewFile *.rs set filetype=rust
+au BufRead,BufNewFile *.R,*.Rnw,*.Rd set filetype=r

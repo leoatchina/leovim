@@ -1,0 +1,193 @@
+{
+  "colors.enable": true,
+  "coc.preferences": {
+    "useQuickfixForLocations": false,
+    "colorSupport": false,
+    "extensionUpdateCheck": "daily",
+    "messageLevel": "error",
+    "listOfWorkspaceEdit": "location",
+    "hoverTarget": "float",
+    "enableFloatHighlight": true,
+  },
+  "coc.source.file.triggerCharacters": [
+    "/"
+  ],
+  "coc.source.buffer.disableSyntaxes": [],
+  "semanticTokens.enable": true,
+  "semanticTokens.filetypes": ["*"],
+  "inlayHints.enable": true,
+  "list": {
+    "nextKeymap": "<C-j>",
+    "previousKeymap": "<C-k>",
+    "extendedSearchMode": true,
+    "insertMappings": {
+      "<C-n>": "",
+      "<C-p>": "",
+      "<C-j>": "normal:j",
+      "<C-k>": "normal:k"
+    },
+    "normalMappings": {
+      "<C-n>": "",
+      "<C-p>": "",
+      "<C-j>": "normal:next",
+      "<C-k>": "normal:previous"
+    }
+  },
+  "hover.floatConfig": {
+    "border": true,
+    "rounded": true,
+    "highlight": "Normal",
+    "maxWidth": 100,
+    "focusable": false,
+    "winblend": 0
+  },
+  "suggest.enablePreselect": true,
+  "suggest.noselect": true,
+  "suggest.defaultSortMethod": "none",
+  "suggest.snippetIndicator": "",
+  "suggest.languageSourcePriority": 99,
+  "suggest.triggerCompletionWait": 50,
+  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.labelMaxLength": 48,
+  "suggest.floatEnable": true,
+  "suggest.floatConfig": {
+    "winblend": 0
+  },
+  "diagnostic.enable": true,
+  "diagnostic.displayByAle": false,
+  "diagnostic.errorSign": "x",
+  "diagnostic.warningSign": "!",
+  "diagnostic.infoSign": ">",
+  "diagnostic.hintSign": "-",
+  "diagnostic.messageTarget": "float",
+  "diagnostic.signPriority": 5,
+  "diagnostic.enableHighlightLineNumber": false,
+  "diagnostic.locationlistUpdate": false,
+  "diagnostic.virtualText": false,
+  "diagnostic.virtualTextCurrentLineOnly": true,
+  "diagnostic.floatConfig": {
+    "border": true,
+    "rounded": true,
+    "highlight": "Normal",
+    "maxWidth": 100,
+    "focusable": false,
+    "winblend": 0
+  },
+  "signature.target": "float",
+  "signature.floatConfig": {
+    "border": true,
+    "rounded": false,
+    "highlight": "Normal",
+    "maxWidth": 100,
+    "focusable": false,
+    "winblend": 0
+  },
+  "dialog.floatHighlight": "Normal",
+  "dialog.floatBorderHighlight": "Normal",
+  "git.enableGutters": false,
+  "git.realtimeGutters": false,
+  "languageserver": {
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": [
+        "dockerfile"
+      ],
+      "args": [
+        "--stdio"
+      ]
+    }
+  },
+  "tsserver.trace.server": "off",
+  "vimlsp.trace.server": "off",
+  "json.trace.server": "off",
+  "xml.trace.server": "off",
+  "html.trace.server": "off",
+  "css.trace.server": "off",
+  "java.trace.server": "off",
+  "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": true,
+  "lua.colors.enable": true,
+  "java.enabled": true,
+  "java.codeGeneration.useBlocks": true,
+  "java.import.maven.enabled": true,
+  "java.maven.downloadSources": false,
+  "go.trace.server": "off",
+  "go.goplsPath": "gopls",
+  "go.goplsUseDaemon": false,
+  "go.goplsOptions": {
+    "usePlaceholders": true
+  },
+  "rust-analyzer.trace.server": "off",
+  "rust-analyzer.server.path": "rust-analyzer",
+  "eslint.packageManager": "yarn",
+  "eslint.run": "onSave",
+  "yaml.trace.server": "off",
+  "yaml.validate": true,
+  "yaml.format.singleQuote": true,
+  "yaml.completion": true,
+  "snippets.ultisnips.enable": false,
+  "snippets.loadFromExtensions": true,
+  "snippets.enableStatusItem": false,
+  "snippets.snipmate.enable": false,
+  "snippets.shortcut": "SP",
+  "snippets.extends": {
+    "cpp": [
+      "c"
+    ],
+    "typescript": [
+      "javascript"
+    ]
+  },
+  "explorer.icon.enableNerdfont": true,
+  "explorer.keyMappings.global": {
+    "\\": "actionMenu",
+    "<Tab>": "toggleSelection",
+    "<bs>": "gotoParent",
+    "<cr>": "open",
+    "<F2>": "rename",
+    "<C-t>": "open:tab",
+    "<C-]>": "open:vsplit",
+    "<C-x>": "open:split",
+    "<C-h>": "collapse",
+    "<C-l>": "expand",
+    "<space>": "expandOrCollapse",
+    "<C-j>": [
+      "normal:j"
+    ],
+    "<C-k>": [
+      "normal:k"
+    ],
+    "J": [
+      "toggleSelection",
+      "normal:j"
+    ],
+    "K": [
+      "toggleSelection",
+      "normal:k"
+    ],
+    "c": "copyFilepath",
+    "C": "copyFilename",
+    "y": "copyFile",
+    "m": "cutFile",
+    "p": "pasteFile",
+    "d": "delete",
+    "D": "deleteForever",
+    "a": "addFile",
+    "A": "addDirectory",
+    "?": "help",
+    "H": "toggleHidden",
+    "<C-l>": "refresh",
+    "q": "quit",
+    "X": "systemExecute",
+    "f": "search",
+    "F": "searchRecursive",
+    "gl": "expandRecursive",
+    "gh": "collapseRecursive",
+    "gp": "diagnosticPrev",
+    "gn": "diagnosticNext",
+    "gd": "listDrive",
+    ">>": "gitStage",
+    "<<": "gitUnstage"
+  }
+}

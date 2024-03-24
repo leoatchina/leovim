@@ -1,0 +1,82 @@
+autocmd BufRead acwrite set ma
+" -----------------------------------
+" swap exists ignore
+" -----------------------------------
+autocmd SwapExists * let v:swapchoice = 'o'
+" -----------------------------------
+" autoread modified file outside (neo)vim
+" -----------------------------------
+set autoread
+if has('nvim') || !HAS_GUI()
+    autocmd FocusGained * :silent! !
+endif
+" --------------------------
+" goto last visited line
+" --------------------------
+autocmd BufReadPost * silent! normal g`"
+" --------------------------
+" FOLDS
+" --------------------------
+augroup FOLDS
+    autocmd!
+    autocmd FileType tex setl foldlevel=0 foldnestmax=1
+    autocmd BufRead,BufNewFile *.c,*.cpp,*.cc setl foldlevel=0 foldnestmax=1
+augroup END
+" --------------------------
+" auto lcd current dir
+" --------------------------
+augroup AUTOLCD
+    " cd file dir
+    autocmd WinEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
+                \ && bufname("") !~ "Rg"                   " rg
+                \ && bufname("") !~ "outline"              " outline
+                \ && bufname("")[0] != "!"                 " some special buf
+                \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
+                \ | lcd %:p:h | endif
+augroup END
+" --------------------------
+" number
+" --------------------------
+set number
+if !exists('g:vscode')
+    set relativenumber
+    nnoremap <leader>n :set relativenumber \| set number<Cr>
+    nnoremap <leader>N :set norelativenumber \| set nonu! nonu?<Cr>
+    augroup numbertoggle
+        autocmd!
+        autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu | endif
+        autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
+        if exists(':tnoremap')
+            autocmd CmdlineLeave * if &nu && mode() != "i" | set rnu | endif
+            autocmd CmdlineEnter * if &nu | set nornu | endif
+        endif
+        if has('nvim')
+            autocmd TermLeave,TermClose * if &nu && mode() != "i" | set rnu | endif
+            autocmd TermEnter,TermOpen  * if &nu | set nornu | endif
+        endif
+    augroup END
+endif
+" -----------------------------------
+" hightlight todo note
+" -----------------------------------
+augroup SPECIALSTINGS
+    autocmd!
+    autocmd Syntax * call matchadd('Todo', '\v\W\zs' . g:todo_patterns . '(\(.{-}\))?:?', -1)
+    autocmd Syntax * call matchadd('Todo', '\v\W\zs' . g:note_patterns . '(\(.{-}\))?:?', -2)
+augroup END
+" -----------------------------------
+" not automatical add comments when o/O
+" -----------------------------------
+augroup NoAddComment
+    autocmd!
+    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" --------------------------
+" file templates
+" --------------------------
+autocmd BufNewFile .lintr          0r $BOOSTUP_PATH/templates/lintr.spec
+autocmd BufNewFile .Rprofile       0r $BOOSTUP_PATH/templates/Rprofile.spec
+autocmd BufNewFile .gitconfig      0r $BOOSTUP_PATH/templates/gitconfig.spec
+autocmd BufNewFile .gitignore      0r $BOOSTUP_PATH/templates/gitignore.spec
+autocmd BufNewFile .wildignore     0r $BOOSTUP_PATH/templates/wildignore.spec
+autocmd BufNewFile .radian_profile 0r $BOOSTUP_PATH/templates/radian_profile.spec
+augroup END

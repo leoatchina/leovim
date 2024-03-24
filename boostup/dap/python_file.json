@@ -1,0 +1,9 @@
+{
+  "name": "Python Debugger: Current File",
+  "type": "python",
+  "request": "launch",
+  "console": "integratedTerminal",
+  "cwd": "",
+  "python": "~/miniconda3/bin/python",
+  "program": "${file}"
+}

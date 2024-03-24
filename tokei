@@ -1,0 +1,12 @@
+#!/bin/bash
+cmd="$HOME/.leovim.unix/linux/tokei ./ boostup/pack/leo -e boostup/autoload/plug.vim pack fonts .git LICENSE scripts/z.* scripts/ptpython *.md"
+if [ $# == 0 ]; then
+    cd ~/.leovim
+    $cmd
+elif [ $# == 1 ] && [ $1 == '--files' ]; then
+    cd ~/.leovim
+    $cmd --files 
+    $cmd
+else
+    ~/.leovim.unix/linux/tokei $*
+fi
