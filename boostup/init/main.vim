@@ -408,7 +408,7 @@ endif
 if exists('g:vscode')
     source $INIT_PATH/vscode.vim
     finish
-" ============================================ below if (neo)vim only ===============================================
+" ============================================ below is (neo)vim only ===============================================
 else
     let &termencoding=&enc
     if exists(':packadd')
@@ -896,7 +896,7 @@ nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_PATH/basement.vim")<Cr>
 nnoremap <silent><M-h>l :call TabeOpen("$LUA_PATH/lsp.lua")<Cr>
 nnoremap <silent><M-h>m :call TabeOpen("$INIT_PATH/main.vim")<Cr>
 nnoremap <silent><M-h>k :call TabeOpen("$INIT_PATH/keybindings.json")<Cr>
-nnoremap <silent><M-h>V :call TabeOpen("$INIT_PATH/vscode.vim")<Cr>
+nnoremap <silent><M-h>v :call TabeOpen("$INIT_PATH/vscode.vim")<Cr>
 nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_PATH/debug-terminal.vim")<Cr>
 nnoremap <silent><M-h>F :call TabeOpen("$OPTIONAL_PATH/fzf.vim")<Cr>
 nnoremap <silent><M-h>L :call TabeOpen("$OPTIONAL_PATH/leaderf.vim")<Cr>
@@ -907,6 +907,11 @@ elseif InstalledLeaderf()
 else
     nnoremap <silent><M-h>f :call TabeOpen("$CONFIG_PATH/file.vim")<Cr>
 endif
+" --------------------------
+" open other ides config
+" --------------------------
+nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_PATH/msvc/vs.vim")<Cr>
+nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_PATH/jetbrains/idea.vim")<Cr>
 " ------------------------
 " open in vscode
 " ------------------------
@@ -998,11 +1003,6 @@ if executable('code')
     command! OpenFileLinkInVSCode call OpenFileLinkInEditor("code", getline("."), col("."))
     nnoremap <silent><M-j>f :OpenFileLinkInVSCode<cr>
 endif
-" --------------------------
-" open other ides config
-" --------------------------
-nnoremap <M-h>V :tabe ~/.leovim/msvc/vs.vim<Cr>
-nnoremap <M-h>I :tabe ~/.leovim/jetbrains/idea.vim<Cr>
 " --------------------------
 " open or add file
 " --------------------------
