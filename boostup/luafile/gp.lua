@@ -3,7 +3,7 @@ local map = vim.keymap.set
 local modes = { "n", "i", "v", "x" }
 local opts = { noremap = true, silent = true }
 gp.setup({
-  openai_api_key = vim.g.openai_api_key,
+  openai_api_key = {'cat', vim.fn.expand('~/.gp.key')},
   state_dir = vim.fn.expand("$HOME/.leovim.d"):gsub("/$", "") .. "/gp/persisted",
   chat_dir = vim.fn.expand("$HOME/.leovim.d"):gsub("/$", "") .. "/gp/chats",
   chat_shortcut_respond = { modes = modes, shortcut = "<M-i><M-s>" },

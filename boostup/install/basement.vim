@@ -121,7 +121,7 @@ if has('patch-9.0.0185') || has('nvim')
         endif
     endif
 endif
-if has('nvim') && Require('gp') && executable('curl') && executable('grep') && get(g:, 'openai_api_key', '') =~ "^sk"
+if has('nvim') && UNIX() && filereadable(expand("~/.gp.key"))
     PlugAdd 'Robitx/gp.nvim'
 endif
 " ------------------------------
@@ -153,7 +153,6 @@ if g:python_version > 3.08 && (v:version >= 802 && (Require('debug') || Require(
 elseif has('nvim-0.9') && Require('debug')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
-    PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'williamboman/mason.nvim'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
 endif
@@ -227,6 +226,7 @@ endif
 if Planned('nvim-cmp') || Planned('nvim-dap')
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
+    PlugAdd 'nvim-neotest/nvim-nio'
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
