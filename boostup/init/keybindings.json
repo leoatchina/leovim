@@ -602,6 +602,6 @@
   },
   {
     "key": "alt+i",
-    "command": "workbench.action.chat.openInEditor"
+    "command": "aichat.focuschatpaneaction"
   }
 ]
