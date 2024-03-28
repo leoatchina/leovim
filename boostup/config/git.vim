@@ -72,16 +72,16 @@ if Installed('vim-fugitive')
     au FileType git nnoremap <silent><buffer>, <Nop>
     au FileType git nnoremap <silent><buffer>\ <Nop>
     " git diff
-    nnoremap <silent><M-g>v :Gvdiffsplit!<Cr>
-    nnoremap <silent><M-g>s :Gdiffsplit!<Cr>
+    nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
+    nnoremap <silent><M-g>[ :Gdiffsplit!<Cr>
     " gitblame
     nnoremap <silent>,<Tab> :Git blame<Cr>
     " GV
     if Installed('GV.vim')
         nnoremap <silent><M-g>c :GV!<Cr>
-        nnoremap <silent><M-g>l :GV<Cr>
+        nnoremap <silent><M-g>v :GV<Cr>
         nnoremap <silent><M-g>? :GV?<Cr>
-        xnoremap <silent><M-g>l :GV<Cr>
+        xnoremap <silent><M-g>v :GV<Cr>
         xnoremap <silent><M-g>? :GV?<Cr>
         au FileType GV nmap <buffer><nowait><Space> .
         au FileType GV nmap <buffer><nowait><Tab> O
