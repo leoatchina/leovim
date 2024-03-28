@@ -79,14 +79,14 @@
 - [x] jupynium.nvim.
   - [x] local
   - [x] remote url
-- cursor
-- vim-gitgutter
+- [x] ai editor cursor
+- [ ] vim-gitgutter
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
   - [x] multi buffers
   - [x] jump to another window bug
-  - [ ] readme 
+  - [ ] readme
   - [ ] distribute to github
   - [ ] ctrlp intergrated
 - [ ] vim-urm(Usually Recently Manual)

@@ -913,22 +913,27 @@ endif
 nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_PATH/msvc/vs.vim")<Cr>
 nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_PATH/jetbrains/idea.vim")<Cr>
 " ------------------------
-" open in vscode
+" open in vscode/coursor
 " ------------------------
-if exists("g:vscode_keybindings_dir") && isdirectory(Expand(g:vscode_keybindings_dir))
-    let vscode_keybindings_dir = fnameescape(g:vscode_keybindings_dir)
-    let g:vscode_keybindings_dir = substitute(vscode_keybindings_dir, '/', '\', 'g')
+let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_keybindings_dir", "")), '/', '\', 'g')
+let s:cursor_dir = substitute(fnameescape(get(g:, "cursor_keybindings_dir", "")), '/', '\', 'g')
+if !empty(s:vscode_dir) || !empty(s:cursor_dir)
     function s:link_keybindings() abort
-        if WINDOWS()
-            let delete_cmd = printf('!del /Q /S %s\keybindings.json', g:vscode_keybindings_dir)
-            execute(delete_cmd)
-            let template = '!mklink %s %s'
-            let cmd = printf(template, g:vscode_keybindings_dir . '\keybindings.json', $INIT_PATH . '\keybindings.json')
-        else
-            let template = '!ln -sf %s %s'
-            let cmd = printf(template, $INIT_PATH . '/keybindings.json', g:vscode_keybindings_dir)
-        endif
-        execute(cmd)
+        for dir in [s:vscode_dir, s:cursor_dir]
+            if empty(dir)
+                continue
+            endif
+            if WINDOWS()
+                let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
+                execute(delete_cmd)
+                let template = '!mklink %s %s'
+                let cmd = printf(template, dir . '\keybindings.json', $INIT_PATH . '\keybindings.json')
+            else
+                let template = '!ln -sf %s %s'
+                let cmd = printf(template, $INIT_PATH . '/keybindings.json', dir)
+            endif
+            execute(cmd)
+        endfor
     endfunction
     command! LinkKeyBindings call s:link_keybindings()
     nnoremap <M-h>K :LinkKeyBindings<Cr>
