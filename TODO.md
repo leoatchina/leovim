@@ -79,6 +79,8 @@
 - [x] jupynium.nvim.
   - [x] local
   - [x] remote url
+- cursor
+- vim-gitgutter
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky

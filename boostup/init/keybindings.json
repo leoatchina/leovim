@@ -499,26 +499,5 @@
     "key": "ctrl+alt+\\",
     "command": "inlineChat.start",
     "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
-  },
-  // chatgpt
-  {
-    "key": "alt+i",
-    "command": "chatgpt.askGPT"
-  },
-  {
-    "key": "shift+alt+i",
-    "command": "chatgpt.whyBroken"
-  },
-  {
-    "key": "ctrl+alt+i",
-    "command": "chatgpt.explainPls"
-  },
-  {
-    "key": "ctrl+shift+i",
-    "command": "chatgpt.clearList"
-  },
-  {
-    "key": "ctrl+shift+alt+i",
-    "command": "chatgpt.refactor"
   }
 ]
