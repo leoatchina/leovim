@@ -191,12 +191,11 @@ ret='0'
 echo
 if [ "$APP_PATH" == "$HOME/.leovim" ]; then
     info "leovim has been already installed in $HOME/.leovim"
-elif [ ! -L "$HOME/.leovim" ]; then
+else
     info "leovim is going to be linked to $HOME/.leovim"
+    rm -rf $HOME/.leovim
     create_symlinks "$APP_PATH" "$HOME/.leovim"
     success "leovim has been linked to $HOME/.leovim"
-else
-    info "leovim has been already linked to $HOME/.leovim"
 fi
 
 echo
