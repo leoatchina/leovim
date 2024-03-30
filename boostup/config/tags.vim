@@ -35,7 +35,7 @@ if Installed('fzf')
     command! FzfFunkyAll call funky#fzf#show(1)
     nnoremap <silent>f<Cr> :FzfFunky<Cr>
     nnoremap <silent>F<Cr> :FzfFunkyAll<Cr>
-elseif g:symbol_tool =~ 'leaderftags'
+elseif g:symbol_tool =~ 'leaderftags' && InstalledLeaderf()
     nnoremap <silent>f<Cr> :LeaderfFunction<Cr>
     nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
 elseif Installed('vim-quickui') && g:symbol_tool =~ 'tags'
