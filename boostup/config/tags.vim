@@ -324,17 +324,12 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
                 call CocAction(jump_command, v:false)
             else
                 call s:settagstack(winnr, tagname, pos)
-                let coc_command = printf('call CocAction("%s")', jump_command)
                 if open_position == 'goto'
-                    call execute(coc_command)
-                elseif open_position == 'tabe'
-                    let coc_command = 'vsplit | ' . coc_command
-                    call execute(coc_command)
-                    call feedkeys("\<C-w>T", "n")
+                    let coc_command = printf('call CocAction("%s")', jump_command)
                 else
-                    let coc_command = open_position . ' | ' . coc_command
-                    call execute(coc_command)
+                    let coc_command = printf('call CocAction("%s", "%s")', jump_command, open_position)
                 endif
+                call execute(coc_command)
                 call feedkeys("zz", "n")
                 echohl WarningMsg | echom "found by coc " . jump_command | echohl None
             endif
@@ -411,9 +406,9 @@ nnoremap <silent>g/ :call SymbolOrTagOrSearchAll("tags", "list")<Cr>
 " preview
 nnoremap <silent><C-h> :call SymbolOrTagOrSearchAll("preview")<Cr>
 " definition
-nnoremap <silent><C-g>  :call SymbolOrTagOrSearchAll("definition")<Cr>
-nnoremap <silent><C-]>  :call SymbolOrTagOrSearchAll("definition", "vsplit")<Cr>
-nnoremap <silent><M-c>  :call SymbolOrTagOrSearchAll("definition", "list")<Cr>
+nnoremap <silent><C-g> :call SymbolOrTagOrSearchAll("definition")<Cr>
+nnoremap <silent><C-]> :call SymbolOrTagOrSearchAll("definition", "vsplit")<Cr>
+nnoremap <silent><M-c> :call SymbolOrTagOrSearchAll("definition", "list")<Cr>
 nnoremap <silent><C-w>] :call SymbolOrTagOrSearchAll("definition", "tabe")<Cr>
 nnoremap <silent><C-w><C-]> :call SymbolOrTagOrSearchAll("definition", "split")<Cr>
 au FileType help,vimdoc nnoremap <C-]> <C-]>
