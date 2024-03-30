@@ -36,7 +36,7 @@ if Installed('fzf')
     nnoremap <silent>f<Cr> :FzfFunky<Cr>
     nnoremap <silent>F<Cr> :FzfFunkyAll<Cr>
 elseif g:symbol_tool =~ 'leaderftags'
-    nnoremap <silent>a<Cr> :LeaderfFunction<Cr>
+    nnoremap <silent>f<Cr> :LeaderfFunction<Cr>
     nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
 elseif Installed('vim-quickui') && g:symbol_tool =~ 'tags'
     nnoremap <silent>f<Cr> :call quickui#tools#list_function()<Cr>
