@@ -80,7 +80,9 @@
   - [x] local
   - [x] remote url
 - [x] ai editor cursor
-- [ ] vim-gitgutter
+- [ ] vista finder bug
+  - [ ] icon
+  - [ ] open shortcuts(--expect)
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
