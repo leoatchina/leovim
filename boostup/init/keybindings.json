@@ -459,6 +459,11 @@
   },
   // copilot
   {
+    "key": "ctrl+i",
+    "command": "-github.copilot.terminal.suggestCommand",
+    "when": "terminalFocus"
+  },
+  {
     "key": "ctrl+shift+i",
     "command": "-workbench.action.quickchat.toggle",
     "when": "hasChatProvider"
@@ -480,24 +485,6 @@
   {
     "key": "shift+alt+\\",
     "command": "workbench.action.chat.copilot.openInEditor"
-  },
-  {
-    "key": "ctrl+shift+\\",
-    "command": "workbench.panel.chat.view.copilot.focus"
-  },
-  {
-    "key": "ctrl+i",
-    "command": "-github.copilot.terminal.suggestCommand",
-    "when": "terminalFocus"
-  },
-  {
-    "key": "alt+\\",
-    "command": "github.copilot.terminal.suggestCommand"
-  },
-  {
-    "key": "alt+\\",
-    "command": "-editor.action.inlineSuggest.trigger",
-    "when": "config.github.copilot.inlineSuggest.enable && editorTextFocus && !editorHasSelection && !inlineSuggestionsVisible"
   },
   {
     "key": "ctrl+shift+alt+\\",
