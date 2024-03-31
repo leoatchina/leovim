@@ -66,6 +66,9 @@
   - [x] <F6> pause and mv to daptab
   - [x] <F7/F8> mv between breakpoints.
   - [x] optimize open json config.
+- [x] jupynium.nvim.
+  - [x] local
+  - [x] remote url
 - [x] REPLFloaterm updates.
   - [x] use <M-e> as prefix key
   - [x] update repl_floaterm block send command. Updated with Find_Side
@@ -76,25 +79,24 @@
   - [x] g:repl_floaterm_quit for each ft
   - [x] send current word to terminal.
   - [x] mark content, and resend/show marked content if `quickui` installed
-- [x] jupynium.nvim.
-  - [x] local
-  - [x] remote url
+  - [ ] readme
+  - [ ] deploy to github
 - [x] ai editor cursor
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
   - [x] multi buffers
   - [x] jump to another window bug
-  - [ ] readme
-  - [ ] distribute to github
   - [ ] ctrlp intergrated
+  - [ ] readme
+  - [ ] deploy to github
 - [ ] vim-urm(Usually Recently Manual)
     - a plugin which put file in a buf and reopen it.
 - [ ] ====== Below need plenty of works or hard to reproduce ======
-- [ ] vista finder bug
-  - [ ] icons
+- [ ] vista 
+  - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
-- [ ] vista tags enhanced, according to zhihu user `成隽`
+  - [ ] ctags enhanced, according to zhihu user `成隽`
 - [ ] vim-plug
   - [ ] floating or popup window.
   - [ ] use `:packadd` to load plugins
