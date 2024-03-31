@@ -1,8 +1,5 @@
-if !exists('g:vscode')
-    finish
-endif
 " ------------------------
-" open in vim
+" open in (neo)vim
 " ------------------------
 if executable(get(g:, 'vim_path', ''))
     function! s:open_in_vim()

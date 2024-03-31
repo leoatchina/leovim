@@ -408,12 +408,104 @@ endif
 if exists('g:vscode')
     source $INIT_PATH/vscode.vim
     finish
+endif
 " ============================================ below is (neo)vim only ===============================================
-else
-    let &termencoding=&enc
-    if exists(':packadd')
-        set packpath^=$BOOSTUP_PATH
+let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_keybindings_dir", "")), '/', '\', 'g')
+let s:cursor_dir = substitute(fnameescape(get(g:, "cursor_keybindings_dir", "")), '/', '\', 'g')
+if isdirectory(s:vscode_dir) || isdirectory(s:cursor_dir)
+    function! s:link_keybindings() abort
+        for dir in [s:vscode_dir, s:cursor_dir]
+            if !isdirectory(dir)
+                continue
+            endif
+            if WINDOWS()
+                let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
+                execute(delete_cmd)
+                let template = '!mklink %s %s'
+                let cmd = printf(template, dir . '\keybindings.json', $INIT_PATH . '\keybindings.json')
+            else
+                let template = '!ln -sf %s %s'
+                let cmd = printf(template, $INIT_PATH . '/keybindings.json', dir)
+            endif
+            execute(cmd)
+        endfor
+    endfunction
+    command! LinkKeyBindings call s:link_keybindings()
+    nnoremap <M-h>K :LinkKeyBindings<Cr>
+endif
+function! s:get_cursor_pos(text, col)
+    " Find the start location
+    let col = a:col
+    while col >= 0 && a:text[col] =~ '\f'
+        let col = col - 1
+    endwhile
+    let col = col + 1
+    " Match file name and position
+    let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
+    if len(m) > 0
+        return [m[1], m[2], m[3]]
     endif
+    return []
+endfunc
+function! s:open_file_in_editor(editor, text, col)
+    let location = s:get_cursor_pos(a:text, a:col)
+    if a:editor == 'code'
+        let editor = 'code --goto'
+    else
+        let editor = a:editor
+    endif
+    " location 0: file, 1: row, 2: column
+    if location[0] != ''
+        if location[1] != ''
+            if location[2] != ''
+                if editor =~ 'code'
+                    let command = editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
+                else
+                    let command = editor . " --column " . str2nr(location[2]) . " " . location[0] . ":" . str2nr(location[1])
+                endif
+                if Installed('asyncrun.vim')
+                    exec "AsyncRun -silent " . command
+                else
+                    exec "! " . command
+                endif
+            else
+                let command = editor . " " . location[0] . ":" . str2nr(location[1])
+                if Installed('asyncrun.vim')
+                    exec "AsyncRun -silent " . command
+                else
+                    exec "! " . command
+                endif
+            endif
+        else
+            let command = editor . " " . location[0]
+            if Installed('asyncrun.vim')
+                exec "AsyncRun -silent " . command
+            else
+                exec "! " . command
+            endif
+        endif
+    else
+        echo "Not a valid file path"
+    endif
+endfunc
+if executable('code')
+    function! s:open_in_vscode()
+        if Installed('asyncrun.vim')
+            let cmd = printf("AsyncRun code --goto %s:%d", expand("%:p"), line("."))
+        else
+            let cmd = printf("!code --goto %s:%d", expand("%:p"), line("."))
+        endif
+        silent! exec cmd
+    endfunction
+    command! OpenInVSCode call s:open_in_vscode()
+    nnoremap <silent><M-j>o :OpenInVSCode<Cr>
+    " NOTE: open file under line in vscode
+    command! OpenFileLinkInVSCode call s:open_file_in_editor("code", getline("."), col("."))
+    nnoremap <silent><M-j>f :OpenFileLinkInVSCode<cr>
+endif
+let &termencoding=&enc
+if exists(':packadd')
+    set packpath^=$BOOSTUP_PATH
 endif
 " ------------------------------------
 " <M-Key> map to <Nop> if need
@@ -912,102 +1004,6 @@ endif
 " --------------------------
 nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_PATH/msvc/vs.vim")<Cr>
 nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_PATH/jetbrains/idea.vim")<Cr>
-" ------------------------
-" open in vscode/coursor
-" ------------------------
-let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_keybindings_dir", "")), '/', '\', 'g')
-let s:cursor_dir = substitute(fnameescape(get(g:, "cursor_keybindings_dir", "")), '/', '\', 'g')
-if !empty(s:vscode_dir) || !empty(s:cursor_dir)
-    function! s:link_keybindings() abort
-        for dir in [s:vscode_dir, s:cursor_dir]
-            if empty(dir)
-                continue
-            endif
-            if WINDOWS()
-                let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
-                execute(delete_cmd)
-                let template = '!mklink %s %s'
-                let cmd = printf(template, dir . '\keybindings.json', $INIT_PATH . '\keybindings.json')
-            else
-                let template = '!ln -sf %s %s'
-                let cmd = printf(template, $INIT_PATH . '/keybindings.json', dir)
-            endif
-            execute(cmd)
-        endfor
-    endfunction
-    command! LinkKeyBindings call s:link_keybindings()
-    nnoremap <M-h>K :LinkKeyBindings<Cr>
-endif
-function! s:get_cursor_pos(text, col)
-    " Find the start location
-    let col = a:col
-    while col >= 0 && a:text[col] =~ '\f'
-        let col = col - 1
-    endwhile
-    let col = col + 1
-    " Match file name and position
-    let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
-    if len(m) > 0
-        return [m[1], m[2], m[3]]
-    endif
-    return []
-endfunc
-function! OpenFileLinkInEditor(editor, text, col)
-    let location = s:get_cursor_pos(a:text, a:col)
-    if a:editor == 'code'
-        let editor = 'code --goto'
-    else
-        let editor = a:editor
-    endif
-    " location 0: file, 1: row, 2: column
-    if location[0] != ''
-        if location[1] != ''
-            if location[2] != ''
-                if editor =~ 'code'
-                    let command = editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
-                else
-                    let command = editor . " --column " . str2nr(location[2]) . " " . location[0] . ":" . str2nr(location[1])
-                endif
-                if Installed('asyncrun.vim')
-                    exec "AsyncRun -silent " . command
-                else
-                    exec "! " . command
-                endif
-            else
-                let command = editor . " " . location[0] . ":" . str2nr(location[1])
-                if Installed('asyncrun.vim')
-                    exec "AsyncRun -silent " . command
-                else
-                    exec "! " . command
-                endif
-            endif
-        else
-            let command = editor . " " . location[0]
-            if Installed('asyncrun.vim')
-                exec "AsyncRun -silent " . command
-            else
-                exec "! " . command
-            endif
-        endif
-    else
-        echo "Not a valid file path"
-    endif
-endfunc
-if executable('code')
-    function! s:open_in_vscode()
-        if Installed('asyncrun.vim')
-            let cmd = printf("AsyncRun code --goto %s:%d", expand("%:p"), line("."))
-        else
-            let cmd = printf("!code --goto %s:%d", expand("%:p"), line("."))
-        endif
-        silent! exec cmd
-    endfunction
-    command! OpenInVSCode call s:open_in_vscode()
-    nnoremap <silent><M-j>o :OpenInVSCode<Cr>
-    " NOTE: open file under line in vscode
-    command! OpenFileLinkInVSCode call OpenFileLinkInEditor("code", getline("."), col("."))
-    nnoremap <silent><M-j>f :OpenFileLinkInVSCode<cr>
-endif
 " --------------------------
 " open or add file
 " --------------------------
