@@ -80,9 +80,6 @@
   - [x] local
   - [x] remote url
 - [x] ai editor cursor
-- [ ] vista finder bug
-  - [ ] icon
-  - [ ] open shortcuts(--expect)
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
@@ -94,6 +91,9 @@
 - [ ] vim-urm(Usually Recently Manual)
     - a plugin which put file in a buf and reopen it.
 - [ ] ====== Below need plenty of works or hard to reproduce ======
+- [ ] vista finder bug
+  - [ ] icons
+  - [ ] open shortcuts
 - [ ] vista tags enhanced, according to zhihu user `成隽`
 - [ ] vim-plug
   - [ ] floating or popup window.
