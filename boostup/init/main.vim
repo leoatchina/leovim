@@ -918,7 +918,7 @@ nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_PATH/jetbrains/idea.vim")<Cr>
 let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_keybindings_dir", "")), '/', '\', 'g')
 let s:cursor_dir = substitute(fnameescape(get(g:, "cursor_keybindings_dir", "")), '/', '\', 'g')
 if !empty(s:vscode_dir) || !empty(s:cursor_dir)
-    function s:link_keybindings() abort
+    function! s:link_keybindings() abort
         for dir in [s:vscode_dir, s:cursor_dir]
             if empty(dir)
                 continue
