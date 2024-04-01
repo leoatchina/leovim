@@ -66,11 +66,20 @@
   - [x] <F6> pause and mv to daptab
   - [x] <F7/F8> mv between breakpoints.
   - [x] optimize open json config.
+- [x] ai editor cursor config
 - [x] jupynium.nvim.
   - [x] local
   - [x] remote url
 - [ ] vim-urm(Usually Recently Manual)
     - a plugin which put file in a buf and reopen it.
+- [ ] vim-funky
+  - [x] open bug
+  - [x] preview funky
+  - [x] multi buffers
+  - [x] jump to another window bug
+  - [ ] ctrlp intergrated
+  - [ ] readme
+  - [ ] deploy to github
 - [x] REPLFloaterm updates.
   - [x] use <M-e> as prefix key
   - [x] update repl_floaterm block send command. Updated with Find_Side
@@ -81,15 +90,6 @@
   - [x] g:repl_floaterm_quit for each ft
   - [x] send current word to terminal.
   - [x] mark content, and resend/show marked content if `quickui` installed
-  - [ ] readme
-  - [ ] deploy to github
-- [x] ai editor cursor
-- [ ] vim-funky
-  - [x] open bug
-  - [x] preview funky
-  - [x] multi buffers
-  - [x] jump to another window bug
-  - [ ] ctrlp intergrated
   - [ ] readme
   - [ ] deploy to github
 - [ ] ====== Below need plenty of works ======
