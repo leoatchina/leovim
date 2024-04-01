@@ -14,7 +14,7 @@ endif
 " undotree
 if Installed('undotree')
     let g:undotree_WindowLayout = 4
-    nnoremap <leader>u :UndotreeToggle<Cr>
+    nnoremap <silent><M-u> :UndotreeToggle<Cr>
 endif
 " ------------------------------
 " Fzf jumps
