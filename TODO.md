@@ -69,6 +69,8 @@
 - [x] jupynium.nvim.
   - [x] local
   - [x] remote url
+- [ ] vim-urm(Usually Recently Manual)
+    - a plugin which put file in a buf and reopen it.
 - [x] REPLFloaterm updates.
   - [x] use <M-e> as prefix key
   - [x] update repl_floaterm block send command. Updated with Find_Side
@@ -90,9 +92,7 @@
   - [ ] ctrlp intergrated
   - [ ] readme
   - [ ] deploy to github
-- [ ] vim-urm(Usually Recently Manual)
-    - a plugin which put file in a buf and reopen it.
-- [ ] ====== Below need plenty of works or hard to reproduce ======
+- [ ] ====== Below need plenty of works ======
 - [ ] vista 
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
@@ -101,4 +101,7 @@
   - [ ] floating or popup window.
   - [ ] use `:packadd` to load plugins
   - [ ] mix `vim-plug` and `vim-packadd` together
+- [ ] vim-zeal
+  - [ ] open document in (neo)vim
 - [ ] rewrite readme
+- [ ] introduce video
