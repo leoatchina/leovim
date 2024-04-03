@@ -188,6 +188,10 @@ endif
 " ------------------------------
 " load pack in OPT_PATH
 " ------------------------------
+if exists(':packadd') && !exists('g:vscode')
+    set packpath^=$HOME/.leovim.d
+    set packpath^=$BOOSTUP_PATH
+endif
 function! s:plug_add_opt(pack)
     let pack = a:pack
     if exists(':packadd')
@@ -504,9 +508,6 @@ if executable('code')
     nnoremap <silent><M-j>f :OpenFileLinkInVSCode<cr>
 endif
 let &termencoding=&enc
-if exists(':packadd')
-    set packpath^=$BOOSTUP_PATH
-endif
 " ------------------------------------
 " <M-Key> map to <Nop> if need
 " ------------------------------------
