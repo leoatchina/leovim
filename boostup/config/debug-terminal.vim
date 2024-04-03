@@ -481,43 +481,46 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-_> :FloatElementOrFloatermKill<Cr>
     nnoremap <silent><M-=> :ReplFloatermOrFloatermSpecial<Cr>
-elseif v:version >= 801 && !has('nvim') && Require('termdebug')
-    let g:debug_tool = 'termdebug'
-    let g:termdebug_map_K = 1
-    let g:termdebug_use_prompt = 1
-    packadd termdebug
-    " breakpoint
-    nnoremap <M-d><Space> :Break<Space>
-    nnoremap <M-d><M-d> :Until<Cr>
-    nnoremap <M-d><Cr> :Continue<Cr>
-    nnoremap <M-d>c :Clear<Space>
-    nnoremap <M-d>n :Over<Cr>
-    nnoremap <M-d>i :Step<Cr>
-    nnoremap <M-d>o :Finish<Cr>
-    nnoremap <F3> :Stop<Cr>
-    nnoremap <F4> :Until<Cr>
-    nnoremap <F5> :Continue<Cr>
-    nnoremap <F6> :Pause<Cr>
-    nnoremap <F7> :Clear<Space>
-    nnoremap <F8> :Clear<Space>
-    nnoremap <F9> :Break<Space>
-    nnoremap <F10> :Over<Cr>
-    nnoremap <F11> :Step<Cr>
-    nnoremap <F12> :Finish<Cr>
-    " debug
-    nnoremap = :Evaluate <C-r><C-w>
-    " other
-    nnoremap J :TermdebugCommand<Space>
-    nnoremap <M-d><Tab> :Run<Space>
-    nnoremap <M-m>d :Termdebug<Space>
-    nnoremap <M-m>a :Arguments<Space>
-    nnoremap <silent><M-m>w :Winbar<Cr>
-    nnoremap <silent><M-m>p :Program<Cr>
-    nnoremap <silent><M-m>a :Asm<Cr>
-    nnoremap <silent><M-m>s :Source<Cr>
-    nnoremap <silent><M-m>g :Gdb<Cr>
 else
-    nnoremap <silent>J :J<Cr>
+    if v:version >= 801 && !has('nvim') && Require('termdebug')
+        let g:debug_tool = 'termdebug'
+        let g:termdebug_map_K = 1
+        let g:termdebug_use_prompt = 1
+        packadd termdebug
+        " breakpoint
+        nnoremap <M-d><Space> :Break<Space>
+        nnoremap <M-d><M-d> :Until<Cr>
+        nnoremap <M-d><Cr> :Continue<Cr>
+        nnoremap <M-d>c :Clear<Space>
+        nnoremap <M-d>n :Over<Cr>
+        nnoremap <M-d>i :Step<Cr>
+        nnoremap <M-d>o :Finish<Cr>
+        nnoremap <F3> :Stop<Cr>
+        nnoremap <F4> :Until<Cr>
+        nnoremap <F5> :Continue<Cr>
+        nnoremap <F6> :Pause<Cr>
+        nnoremap <F7> :Clear<Space>
+        nnoremap <F8> :Clear<Space>
+        nnoremap <F9> :Break<Space>
+        nnoremap <F10> :Over<Cr>
+        nnoremap <F11> :Step<Cr>
+        nnoremap <F12> :Finish<Cr>
+        " debug
+        nnoremap = :Evaluate <C-r><C-w>
+        " other
+        nnoremap J :TermdebugCommand<Space>
+        nnoremap <M-d><Tab> :Run<Space>
+        nnoremap <M-m>d :Termdebug<Space>
+        nnoremap <M-m>a :Arguments<Space>
+        nnoremap <silent><M-m>w :Winbar<Cr>
+        nnoremap <silent><M-m>p :Program<Cr>
+        nnoremap <silent><M-m>a :Asm<Cr>
+        nnoremap <silent><M-m>s :Source<Cr>
+        nnoremap <silent><M-m>g :Gdb<Cr>
+    else
+        nnoremap <silent>J :J<Cr>
+    endif
+    nnoremap <M-f> :call preview#errmsg('Please install vimspecotr or nvim-dap and nvim-dap-ui.')
 endif
 " -------------------------------------
 " map Floaterm keys
