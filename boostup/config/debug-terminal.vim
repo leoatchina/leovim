@@ -171,12 +171,12 @@ if InstalledFzf()
             endif
             let json = json_encode(json_dict)
             call writefile(split(json, "\n"), json_file)
+            if executable('jq')
+                execute '%!jq'
+                w!
+            endif
         endif
         execute "tabe " . json_file
-        if executable('jq')
-            execute '%!jq'
-            w!
-        endif
         if template_file != ''
             if &columns > &lines * 3
                 execute "vsplit " . template_file
