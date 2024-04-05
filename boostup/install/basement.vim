@@ -80,7 +80,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'L3MON4D3/luasnip'
     " lsp related
     PlugAdd 'neovim/nvim-lspconfig'
-    PlugAdd 'williamboman/mason.nvim'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
     PlugAdd 'mfussenegger/nvim-lint'
     PlugAdd 'DNLHC/glance.nvim'
@@ -153,7 +152,6 @@ if g:python_version > 3.08 && (v:version >= 802 && (Require('debug') || Require(
 elseif has('nvim-0.9') && Require('debug')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
-    PlugAdd 'williamboman/mason.nvim'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
 endif
 " ------------------------------
@@ -224,6 +222,7 @@ endif
 " addtional plugins
 " ----------------------------
 if Planned('nvim-cmp') || Planned('nvim-dap')
+    PlugAdd 'williamboman/mason.nvim'
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
     PlugAdd 'nvim-neotest/nvim-nio'
