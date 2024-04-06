@@ -82,8 +82,13 @@ mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
 # install extended softwares
-if [[ $# -eq 1 ]]; then
+if [ $# -gt 0 ]; then
     mode=$1
+    if [ $# -gt 1 ]; then
+        installplug=$2
+    else
+        installplug="yes"
+    fi 
     # leotmux
     if [[ $mode == 'all' || $mode == 'leotmux' ]]; then
         if [ -d ~/.leotmux ]; then
@@ -146,6 +151,8 @@ if [[ $# -eq 1 ]]; then
             fi
         fi
     fi
+else
+    installplug='yes'
 fi
 
 # my config
@@ -218,11 +225,13 @@ else
 fi
 
 # install plugs
-if program_exists "vim"; then
-    setup_plug "vim"
+if [ $installplug != 'no' ]; then
+    if program_exists "vim"; then
+        setup_plug "vim"
+    fi
+    setup_plug "$HOME/.local/bin/nv.sh"
+    setup_plug "$HOME/.local/bin/nvi.sh" 
 fi
-setup_plug "$HOME/.local/bin/nv.sh"
-setup_plug "$HOME/.local/bin/nvi.sh"
 
 echo
 success "Thanks for installing leoatchina's vim config. ©`date +%Y` https://github.com/leoatchina/leovim"
