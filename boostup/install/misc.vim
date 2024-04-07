@@ -105,6 +105,6 @@ if Require('markdown')
     endif
 endif
 " latex
-if Requir('latex') && executable(get(g:, "vimtex_view_method", ''))
+if Require('latex') && executable(get(g:, "vimtex_view_method", ''))
     PlugAdd 'lervag/vimtex', {'for': 'latex'}
 endif

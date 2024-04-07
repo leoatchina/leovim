@@ -220,17 +220,25 @@ command! -nargs=+ PlugAddOpt call <sid>plug_add_opt(<args>)
 " intergrated packs
 " ------------------------------
 PlugAddOpt 'vim-eunuch'
+" ------------------------------
 " conflict marker
+" ------------------------------
 let g:conflict_marker_enable_mappings = 0
 PlugAddOpt 'conflict-marker.vim'
-nnoremap <leader>cf /\v^[<\|=>]{7}( .*\|$)<CR>
-nnoremap <leader>cF ?\v^[<\|=>]{7}( .*\|$)<CR>
 nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
 nnoremap <leader>co :ConflictMarkerOurselves<Cr>
-nnoremap <leader>cn :ConflictMarkerNone<Cr>
-nnoremap <leader>cb :ConflictMarkerBoth<Cr>
 nnoremap <leader>c; :ConflictMarkerNextHunk<Cr>
 nnoremap <leader>c, :ConflictMarkerPrevHunk<Cr>
+nnoremap <leader>c/ /\v^[<\|=>]{7}( .*\|$)<CR>
+nnoremap <leader>c? ?\v^[<\|=>]{7}( .*\|$)<CR>
+nnoremap <leader>cN :ConflictMarkerNone<Cr>
+nnoremap <leader>cB :ConflictMarkerBoth<Cr>
+" ------------------------------
+" nerdcommenter
+" ------------------------------
+PlugAddOpt 'nerdcommenter'
+nnoremap <silent><leader>c} V}:call nerdcommenter#Comment('x', 'toggle')<CR>
+nnoremap <silent><leader>c{ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " ------------------------
 " quick jump in buffer
 " ------------------------

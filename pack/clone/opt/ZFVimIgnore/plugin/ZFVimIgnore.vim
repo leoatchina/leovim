@@ -286,6 +286,17 @@ function! ZFIgnoreCheck(text, ...)
     endfor
 
     let fileName = fnamemodify(text, ':t')
+    for item in ignoreData['dir']
+        let pattern = ZFIgnorePatternToRegexp(item)
+        if match(fileName, pattern) >= 0
+            return {
+                        \   'type' : 'dir',
+                        \   'rule' : item,
+                        \   'filtered' : fileName,
+                        \   'text' : text,
+                        \ }
+        endif
+    endfor
     for item in ignoreData['file']
         let pattern = ZFIgnorePatternToRegexp(item)
         if match(fileName, pattern) >= 0
