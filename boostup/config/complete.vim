@@ -90,21 +90,21 @@ endif
 if Installed('codeium.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
-    imap <script><silent><nowait><expr><M-/> codeium#Accept()
-    imap <script><silent><nowait><expr><M-.> codeium#Complete()
-    imap <script><silent><nowait><expr><M-?> codeium#Clear()
-    imap <script><silent><nowait><expr><M-;> codeium#CycleCompletions(1)
-    imap <script><silent><nowait><expr><M-,> codeium#CycleCompletions(-1)
+    imap <silent><nowait><script><expr><M-i> codeium#Accept()
+    imap <silent><nowait><script><expr><M-.> codeium#Complete()
+    imap <silent><nowait><script><expr><M-/> codeium#Clear()
+    imap <silent><nowait><script><expr><M-;> codeium#CycleCompletions(1)
+    imap <silent><nowait><script><expr><M-,> codeium#CycleCompletions(-1)
 elseif Installed('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
     let g:copilot_no_tab_map = v:true
-    imap <silent><script><expr><M-/> copilot#Accept("\<CR>")
-    imap <M-.> <Plug>(copilot-suggest)
-    imap <M-?> <Plug>(copilot-dismiss)
-    imap <M-;> <Plug>(copilot-next)
-    imap <M-,> <Plug>(copilot-previous)
-    imap <M-}> <Plug>(copilot-accept-word)
-    imap <M-{> <Plug>(copilot-accept-line)
+    imap <silent><nowait><script><expr><M-i> copilot#Accept("\<CR>")
+    imap <silent><nowait><M-.> <Plug>(copilot-suggest)
+    imap <silent><nowait><M-/> <Plug>(copilot-dismiss)
+    imap <silent><nowait><M-;> <Plug>(copilot-next)
+    imap <silent><nowait><M-,> <Plug>(copilot-previous)
+    imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
+    imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
     if Installed('CopilotChat.nvim')
         luafile $LUA_PATH/copilotchat.lua
         command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
