@@ -57,11 +57,8 @@ endif
 " ------------------------------
 " undo && search hl
 " ------------------------------
-if has('nvim')
-    if UNIX()
-        PlugAdd 'kevinhwang91/nvim-fundo'
-    endif
-    PlugAdd 'kevinhwang91/nvim-bqf'
+if has('nvim') && UNIX()
+    PlugAdd 'kevinhwang91/nvim-fundo'
 endif
 PlugAdd 'mbbill/undotree'
 " ------------------------------
@@ -93,8 +90,7 @@ endif
 " ------------------------------
 " writing
 " ------------------------------
-if Require('writing')
-    " markdown
+if Require('markdown')
     PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
     PlugAdd 'ferrine/md-img-paste.vim', {'for': 'markdown'}
     if get(g:, 'node_version', 0) > 12 && executable('yarn') && (has('nvim') || v:version >= 801)
@@ -107,8 +103,8 @@ if Require('writing')
     if executable('mdr') && (has('nvim') || has('patch-8.1.1401'))
         PlugAdd 'skanehira/preview-markdown.vim', {'for': ['markdown']}
     endif
-    " latex
-    if executable(get(g:, "vimtex_view_method", ''))
-        PlugAdd 'lervag/vimtex', {'for': 'latex'}
-    endif
+endif
+" latex
+if Requir('latex') && executable(get(g:, "vimtex_view_method", ''))
+    PlugAdd 'lervag/vimtex', {'for': 'latex'}
 endif

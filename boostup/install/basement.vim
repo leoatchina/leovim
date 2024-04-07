@@ -178,6 +178,9 @@ if exists('*systemlist') && has('patch-7.4.1304')
     else
         PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': expand('~/.local/fzf')}
     endif
+    if has('nvim')
+        PlugAdd 'kevinhwang91/nvim-bqf'
+    endif
 endif
 if has('nvim') || has('patch-7.4.1126')
     if g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
