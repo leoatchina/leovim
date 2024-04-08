@@ -207,7 +207,7 @@ if Installed('vimspector')
         nnoremap <silent><leader>rl :LoadVimspector<Cr>
         command! OpenVimspector call s:load_json(0)
         nnoremap <silent><leader>ro :OpenVimspector<Cr>
-        nnoremap <leader>rO :tabe ~/.leovim/vimspector/
+        nnoremap <leader>rO :tabe ~/.leovim/boostup/vimspector/
     endif
     " core keymaps
     nmap <M-d>I :VimspectorInstall<Space>
@@ -359,7 +359,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         nnoremap <silent><leader>rl :LoadDap<Cr>
         command! OpenDap call s:load_json(1)
         nnoremap <silent><leader>ro :OpenDap<Cr>
-        nnoremap <leader>rO :tabe ~/.leovim/nvim-dap/
+        nnoremap <leader>rO :tabe ~/.leovim/boostup/dap/
     endif
     " core keymaps
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
