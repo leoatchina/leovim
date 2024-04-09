@@ -1,8 +1,4 @@
 #!/bin/env bash
-# nerdcommenter
-rm -rf nerdcommenter
-git clone --depth 1 https://github.com/preservim/nerdcommenter
-
 # ctrlp
 rm -rf ctrlp.vim 
 git clone --depth 1 https://github.com/ctrlpvim/ctrlp.vim.git

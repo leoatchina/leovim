@@ -90,18 +90,18 @@ endif
 " ------------------------------
 " writing
 " ------------------------------
+if executable('mdr') && (has('nvim') || has('patch-8.1.1401'))
+    PlugAddOpt 'preview-markdown.vim'
+endif
 if Require('markdown')
     PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
     PlugAdd 'ferrine/md-img-paste.vim', {'for': 'markdown'}
-    if get(g:, 'node_version', 0) > 12 && executable('yarn') && (has('nvim') || v:version >= 801)
-        PlugAdd 'iamcco/markdown-preview.nvim', {'for': ['markdown'], 'do': 'cd app & yarn install'}
+    if get(g:, 'node_version', 0) > 12 && (has('nvim') || v:version >= 801)
+        PlugAdd 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
         PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
     elseif g:python_version > 0
         PlugAdd 'iamcco/markdown-preview.vim', {'for': ['markdown']}
         PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
-    endif
-    if executable('mdr') && (has('nvim') || has('patch-8.1.1401'))
-        PlugAdd 'skanehira/preview-markdown.vim', {'for': ['markdown']}
     endif
 endif
 " latex
