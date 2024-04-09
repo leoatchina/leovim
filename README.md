@@ -17,18 +17,18 @@ L::::::::::::::::::::::LE::::::::::::::::::::E   OO:::::::::OO              V:::
 LLLLLLLLLLLLLLLLLLLLLLLLEEEEEEEEEEEEEEEEEEEEEE     OOOOOOOOO                 VVV            IIIIIIIIIIMMMMMMMM               MMMMMMMM
 ```
 
-## NOTES 
-leoatchina's config, this config is a mixure of lots of famous vim/neovim configs, and plus some self defined functions/definitions/settings
+# README 
+This is Leo's (neo)vim config, a mixure of lots of famous vim/neovim plugins, and plus some self defined functions/definitions/settings
 
-## Installation && Upgrade
-### Linux, \*nix, Mac OSX
+# Installation && Upgrade
+## Linux, \*nix, Mac OSX
 ```bash
 git clone https://github.com/leoatchina/leovim.git
 cd leovim
 ./install.sh
 ```
 
-### windows
+## windows
 ```bash
 git clone https://gitee.com/leoatchina/leovim.git
 cd leovim
@@ -36,14 +36,14 @@ click install.cmd as administrator
 open vim/gvim/nvim/nvim-qt/macvim, do `:PlugUpdate`
 ```
 
-## Delete
-### Linux, \*nix, Mac OSX
+# Delete
+## Linux, \*nix, Mac OSX
 ```bash
 cd leovim
 ./uninstall.sh
 ```
 
-### Windows
+## Windows
 ```
 click uninstall.cmd as administrator
 ```
