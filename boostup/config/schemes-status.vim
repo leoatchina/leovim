@@ -198,7 +198,7 @@ endfunction
 " schemes need truecolor
 " --------------------------
 if Installed('catppuccin')
-    luafile $LUA_PATH/catppuccin.lua
+    luafile $LUA_DIR/catppuccin.lua
 endif
 let g:everforest_background = 'hard'
 let g:edge_better_performance = 1

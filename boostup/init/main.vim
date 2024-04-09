@@ -186,18 +186,18 @@ if exists("##ModeChanged")
     au ModeChanged s:* set clipboard=unnamedplus
 endif
 " ------------------------------
-" load pack in OPT_PATH
+" load pack in OPT_DIR
 " ------------------------------
 if exists(':packadd') && !exists('g:vscode')
     set packpath^=$HOME/.leovim.d
-    set packpath^=$BOOSTUP_PATH
+    set packpath^=$BOOSTUP_DIR
 endif
 function! s:plug_add_opt(pack)
     let pack = a:pack
     if exists(':packadd')
         execute "packadd " . pack
     else
-        for opt_path in [$CLONE_OPT_PATH, $FORK_OPT_PATH, $LEO_OPT_PATH]
+        for opt_path in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
             let added = 0
             let dir = expand(opt_path . "/" . pack)
             let after = expand(opt_path . "/" . pack . "/after")
@@ -245,7 +245,7 @@ nnoremap <silent><leader>c{ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim-0.8')
     PlugAddOpt 'flash.nvim'
-    luafile $LUA_PATH/flash.lua
+    luafile $LUA_DIR/flash.lua
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
@@ -257,11 +257,11 @@ else
 endif
 if exists('g:vscode')
     PlugAddOpt 'hop.nvim'
-    luafile $LUA_PATH/hop.lua
+    luafile $LUA_DIR/hop.lua
 else
     PlugAddOpt 'vim-easymotion'
     PlugAddOpt 'vim-easymotion-chs'
-    source $OPTIONAL_PATH/easymotion.vim
+    source $OPTIONAL_DIR/easymotion.vim
 endif
 " --------------------------
 " textobj
@@ -407,9 +407,9 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " after
 " ------------------------
 if WINDOWS()
-    set rtp+=$BOOSTUP_PATH\\after
+    set rtp+=$BOOSTUP_DIR\\after
 else
-    set rtp+=$BOOSTUP_PATH/after
+    set rtp+=$BOOSTUP_DIR/after
 endif
 " ------------------------
 " set optinal
@@ -418,7 +418,7 @@ if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
 if exists('g:vscode')
-    source $INIT_PATH/vscode.vim
+    source $INIT_DIR/vscode.vim
     finish
 endif
 " ============================================ below is (neo)vim only ===============================================
@@ -434,10 +434,10 @@ if isdirectory(s:vscode_dir) || isdirectory(s:cursor_dir)
                 let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
                 execute(delete_cmd)
                 let template = '!mklink %s %s'
-                let cmd = printf(template, dir . '\keybindings.json', $INIT_PATH . '\keybindings.json')
+                let cmd = printf(template, dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
             else
                 let template = '!ln -sf %s %s'
-                let cmd = printf(template, $INIT_PATH . '/keybindings.json', dir)
+                let cmd = printf(template, $INIT_DIR . '/keybindings.json', dir)
             endif
             execute(cmd)
         endfor
@@ -933,13 +933,13 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " ------------------------------
 " install packs
 " ------------------------------
-let $DEP_PATH = Expand("~/.leovim.d")
-let opt_path = Expand("$DEP_PATH/pack/add/opt")
+let $DEP_DIR = Expand("~/.leovim.d")
+let opt_path = Expand("$DEP_DIR/pack/add/opt")
 call plug#begin(opt_path)
-if filereadable(expand("$DEP_PATH/pack.vim"))
+if filereadable(expand("$DEP_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
-for vim in split(glob("$INSTALL_PATH/*.vim"), "\n")
+for vim in split(glob("$INSTALL_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 function! s:plug_update() abort
@@ -975,7 +975,7 @@ endif
 " ------------------------------
 " source config cfg
 " ------------------------------
-for vim in split(glob("$CONFIG_PATH/*.vim"), "\n")
+for vim in split(glob("$CONFIG_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 " -------------------------------
@@ -992,27 +992,27 @@ function! TabeOpen(f) abort
     let f = expand(a:f)
     exec "tabe " . f
 endfunction
-nnoremap <silent><M-h>i :call TabeOpen("$BOOSTUP_PATH/init.vim")<Cr>
-nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_PATH/basement.vim")<Cr>
-nnoremap <silent><M-h>l :call TabeOpen("$LUA_PATH/lsp.lua")<Cr>
-nnoremap <silent><M-h>m :call TabeOpen("$INIT_PATH/main.vim")<Cr>
-nnoremap <silent><M-h>k :call TabeOpen("$INIT_PATH/keybindings.json")<Cr>
-nnoremap <silent><M-h>v :call TabeOpen("$INIT_PATH/vscode.vim")<Cr>
-nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_PATH/debug-terminal.vim")<Cr>
-nnoremap <silent><M-h>F :call TabeOpen("$OPTIONAL_PATH/fzf.vim")<Cr>
-nnoremap <silent><M-h>L :call TabeOpen("$OPTIONAL_PATH/leaderf.vim")<Cr>
+nnoremap <silent><M-h>i :call TabeOpen("$BOOSTUP_DIR/init.vim")<Cr>
+nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
+nnoremap <silent><M-h>l :call TabeOpen("$LUA_DIR/lsp.lua")<Cr>
+nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
+nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
+nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
+nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
+nnoremap <silent><M-h>F :call TabeOpen("$OPTIONAL_DIR/fzf.vim")<Cr>
+nnoremap <silent><M-h>L :call TabeOpen("$OPTIONAL_DIR/leaderf.vim")<Cr>
 if PrefFzf()
-    nnoremap <silent><M-h>f :FzfFiles <C-r>=expand('$CONFIG_PATH')<Cr><Cr>
+    nnoremap <silent><M-h>f :FzfFiles <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
 elseif InstalledLeaderf()
-    nnoremap <silent><M-h>f :LeaderfFile <C-r>=expand('$CONFIG_PATH')<Cr><Cr>
+    nnoremap <silent><M-h>f :LeaderfFile <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
 else
-    nnoremap <silent><M-h>f :call TabeOpen("$CONFIG_PATH/file.vim")<Cr>
+    nnoremap <silent><M-h>f :call TabeOpen("$CONFIG_DIR/file.vim")<Cr>
 endif
 " --------------------------
 " open other ides config
 " --------------------------
-nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_PATH/msvc/vs.vim")<Cr>
-nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_PATH/jetbrains/idea.vim")<Cr>
+nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_DIR/msvc/vs.vim")<Cr>
+nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
 " --------------------------
 " open or add file
 " --------------------------

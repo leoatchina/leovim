@@ -188,7 +188,7 @@ if InstalledFzf()
 endif
 if Installed('vimspector')
     let g:debug_tool = "vimspector"
-    let g:vimspector_base_dir = $DEP_PATH . "/vimspector"
+    let g:vimspector_base_dir = $DEP_DIR . "/vimspector"
     " load template
     if InstalledFzf()
         function! ReadVimspectorTemplate(template_file) abort
@@ -197,7 +197,7 @@ if Installed('vimspector')
         function! s:load_vimspector()
             let options = ['--prompt', 'VimspectorTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('vimspector',{
-                        \ 'source': WINDOWS() ? 'dir /b /a-d ' . $BOOSTUP_PATH . '\\vimspector\\*.json' : 'ls -1 ' . $BOOSTUP_PATH . '/vimspector/*.json',
+                        \ 'source': WINDOWS() ? 'dir /b /a-d ' . $BOOSTUP_DIR . '\\vimspector\\*.json' : 'ls -1 ' . $BOOSTUP_DIR . '/vimspector/*.json',
                         \ 'sink': function('ReadVimspectorTemplate'),
                         \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
                         \ })
@@ -340,7 +340,7 @@ if Installed('vimspector')
     nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
-    luafile $LUA_PATH/dap.lua
+    luafile $LUA_DIR/dap.lua
     " load template
     if InstalledFzf()
         function! ReadDapTemplate(template_file) abort
@@ -349,7 +349,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         function! s:load_dap()
             let options = ['--prompt', 'DapTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('dap',{
-                        \ 'source': WINDOWS() ? 'dir /b /a-d ' . $BOOSTUP_PATH . '\\dap\\*.json' : 'ls -1 ' . $BOOSTUP_PATH . '/dap/*.json',
+                        \ 'source': WINDOWS() ? 'dir /b /a-d ' . $BOOSTUP_DIR . '\\dap\\*.json' : 'ls -1 ' . $BOOSTUP_DIR . '/dap/*.json',
                         \ 'sink': function('ReadDapTemplate'),
                         \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
                         \ })

@@ -132,7 +132,7 @@ endfunction
 " funzzy finder
 " --------------------------------
 if InstalledFzf()
-    source $OPTIONAL_PATH/fzf.vim
+    source $OPTIONAL_DIR/fzf.vim
     nmap m<tab> <plug>(fzf-maps-n)
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
@@ -141,9 +141,9 @@ if InstalledFzf()
 endif
 if InstalledLeaderf()
     nnoremap <leader>F :Leaderf
-    source $OPTIONAL_PATH/leaderf.vim
+    source $OPTIONAL_DIR/leaderf.vim
     if Installed('leaderf-filer')
-        source $OPTIONAL_PATH/leaderf-filer.vim
+        source $OPTIONAL_DIR/leaderf-filer.vim
     endif
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
     nnoremap <silent><leader>; :Leaderf --next<Cr>
@@ -151,7 +151,7 @@ if InstalledLeaderf()
     nnoremap <silent><leader>. :Leaderf --recall<Cr>
 endif
 if !InstalledLeaderf() && !InstalledFzf()
-    source $OPTIONAL_PATH/ctrlp.vim
+    source $OPTIONAL_DIR/ctrlp.vim
     PlugAddOpt 'ctrlp.vim'
 endif
 function InstalledCtrlP()

@@ -73,10 +73,10 @@ augroup NoAddComment
 " --------------------------
 " file templates
 " --------------------------
-autocmd BufNewFile .lintr          0r $BOOSTUP_PATH/templates/lintr.spec
-autocmd BufNewFile .Rprofile       0r $BOOSTUP_PATH/templates/Rprofile.spec
-autocmd BufNewFile .gitconfig      0r $BOOSTUP_PATH/templates/gitconfig.spec
-autocmd BufNewFile .gitignore      0r $BOOSTUP_PATH/templates/gitignore.spec
-autocmd BufNewFile .wildignore     0r $BOOSTUP_PATH/templates/wildignore.spec
-autocmd BufNewFile .radian_profile 0r $BOOSTUP_PATH/templates/radian_profile.spec
+autocmd BufNewFile .lintr          0r $BOOSTUP_DIR/templates/lintr.spec
+autocmd BufNewFile .Rprofile       0r $BOOSTUP_DIR/templates/Rprofile.spec
+autocmd BufNewFile .gitconfig      0r $BOOSTUP_DIR/templates/gitconfig.spec
+autocmd BufNewFile .gitignore      0r $BOOSTUP_DIR/templates/gitignore.spec
+autocmd BufNewFile .wildignore     0r $BOOSTUP_DIR/templates/wildignore.spec
+autocmd BufNewFile .radian_profile 0r $BOOSTUP_DIR/templates/radian_profile.spec
 augroup END

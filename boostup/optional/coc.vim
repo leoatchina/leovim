@@ -7,11 +7,11 @@ autocmd BufAdd * if getfsize(expand('<afile>')) > 1024*1024 |
 " ----------------------------
 " set coc data $PATH
 " ----------------------------
-let g:coc_config_home = expand("$OPTIONAL_PATH")
+let g:coc_config_home = expand("$OPTIONAL_DIR")
 if WINDOWS()
-    let g:coc_data_home = $DEP_PATH . "\\coc"
+    let g:coc_data_home = $DEP_DIR . "\\coc"
 else
-    let g:coc_data_home = $DEP_PATH . "/coc"
+    let g:coc_data_home = $DEP_DIR . "/coc"
 endif
 " ------------------------
 " coc root_patterns
@@ -209,7 +209,7 @@ nmap <leader>vG vag
 " ------------------------
 if has('nvim')
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
-    luafile $LUA_PATH/coc.lua
+    luafile $LUA_DIR/coc.lua
 else
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
 endif

@@ -10,28 +10,27 @@ endif
 " --------------------------
 " set dirs
 " --------------------------
-let $LEOVIM_PATH = expand('~/.leovim')
-let $BOOSTUP_PATH = expand($LEOVIM_PATH . '/boostup')
+let $LEOVIM_DIR = expand('~/.leovim')
+let $BOOSTUP_DIR = expand($LEOVIM_DIR . '/boostup')
 " --------------------------
 " set rtp && pack path
 " --------------------------
-set rtp^=$LEOVIM_PATH/pack
-set rtp^=$BOOSTUP_PATH
+set rtp^=$LEOVIM_DIR/pack
+set rtp^=$BOOSTUP_DIR
 if exists(':packadd')
-    set packpath^=$LEOVIM_PATH
+    set packpath^=$LEOVIM_DIR
 endif
-let $LUA_PATH = expand($BOOSTUP_PATH . '/luafile')
-let $INIT_PATH = expand($BOOSTUP_PATH. '/init')
-let $PLUGIN_PATH = expand($BOOSTUP_PATH . '/plugin')
-let $CONFIG_PATH = expand($BOOSTUP_PATH . '/config')
-let $INSTALL_PATH = expand($BOOSTUP_PATH . '/install')
-let $OPTIONAL_PATH = expand($BOOSTUP_PATH . '/optional')
+let $LUA_DIR = expand($BOOSTUP_DIR . '/luafile')
+let $INIT_DIR = expand($BOOSTUP_DIR. '/init')
+let $CONFIG_DIR = expand($BOOSTUP_DIR . '/config')
+let $INSTALL_DIR = expand($BOOSTUP_DIR . '/install')
+let $OPTIONAL_DIR = expand($BOOSTUP_DIR . '/optional')
 " --------------------------
 " set opt path
 " --------------------------
-let $CLONE_OPT_PATH = expand($LEOVIM_PATH . '/pack/clone/opt')
-let $FORK_OPT_PATH = expand($BOOSTUP_PATH . '/pack/fork/opt')
-let $LEO_OPT_PATH = expand($BOOSTUP_PATH . '/pack/leo/opt')
+let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
+let $FORK_OPT_DIR = expand($BOOSTUP_DIR . '/pack/fork/opt')
+let $LEO_OPT_DIR = expand($BOOSTUP_DIR . '/pack/leo/opt')
 " --------------------------
 " gui_running && OS
 " --------------------------
@@ -100,12 +99,9 @@ if WINDOWS()
         echoe 'vim 8.0 or neovim 0.8 is at least required when uing leovim in windows.'
         finish
     endif
-    let $NVIM_DATA_PATH = expand("~/AppData/Local/nvim-data")
 elseif exists('g:vscode') && !has('nvim-0.9')
     echoe "vscode-neovm required nvim-0.9+!"
     finish
-else
-    let $NVIM_DATA_PATH = expand("~/.local/share/nvim")
 endif
 " --------------------------
 " init directories
@@ -135,7 +131,7 @@ for [settingname, dirname] in items(dir_list)
     exec "set " . settingname . "=" . dir
 endfor
 if has('nvim')
-    luafile $LUA_PATH/utils.lua
+    luafile $LUA_DIR/utils.lua
     set shadafile=$HOME/.vim/shada.main
 endif
 " ------------------------
@@ -185,5 +181,5 @@ function! Installed(...)
     endfor
     return 1
 endfunction
-source $INIT_PATH/main.vim
+source $INIT_DIR/main.vim
 let g:leovim_loaded = 1

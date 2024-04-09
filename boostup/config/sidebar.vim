@@ -52,7 +52,7 @@ endif
 " --------------------------
 if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
     let g:tree_browser = 'fern'
-    source $OPTIONAL_PATH/fern.vim
+    source $OPTIONAL_DIR/fern.vim
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_buf_ft', ["fern"]),

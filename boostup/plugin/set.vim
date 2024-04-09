@@ -102,7 +102,7 @@ for [settingname, dirname] in items(dir_list)
     exec "set " . settingname . "=" . dir
 endfor
 if has('nvim')
-    luafile $LUA_PATH/utils.lua
+    luafile $LUA_DIR/utils.lua
     set shadafile=$HOME/.vim/shada.main
 endif
 let g:leovim_loaded = 1

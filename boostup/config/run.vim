@@ -269,7 +269,7 @@ if has('nvim') || v:version >= 801
     PlugAddOpt 'asynctasks.vim'
     silent! call mkdir(Expand("~/.leovim.d/tasks"), 'p')
     " open template
-    nnoremap <leader>r<Cr>  :tabe $LEOVIM_PATH/boostup/tasks/tasks_example.ini<Cr>
+    nnoremap <leader>r<Cr>  :tabe $LEOVIM_DIR/boostup/tasks/tasks_example.ini<Cr>
     nnoremap <leader>r<Tab> :tabe $HOME/.leovim.d/boostup/tasks/tasks.ini<Cr>
     " asynctask shortcuts
     nnoremap <leader>ra :AsyncTask
