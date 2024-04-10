@@ -14,9 +14,9 @@ endif
 " --------------------------
 " rust
 " --------------------------
-if Require('rust') && v:version >= 800
+if Require('rust') && executable('cargo') && v:version >= 800
     PlugAdd 'rust-lang/rust.vim', {'for': 'rust'}
-    if Planned('cmp-nvim')
+    if Planned('nvim-cmp')
         PlugAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
 endif
