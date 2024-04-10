@@ -19,9 +19,9 @@ if Installed('vim-go')
     nnoremap <buffer><silent><M-M> :GoCommands<Cr>
 endif
 if InstalledCoc()
-    autocmd FileType go nmap gtj :CocCommand go.tags.add json<cr>
-    autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
-    autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
+    nmap <buffer>gtj :CocCommand go.tags.add json<cr>
+    nmap <buffer>gty :CocCommand go.tags.add yaml<cr>
+    nmap <buffer>gtx :CocCommand go.tags.clear<cr>
 endif
 inoremap <buffer>:: :=
 inoremap <buffer>!! !=
