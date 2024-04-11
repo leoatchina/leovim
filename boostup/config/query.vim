@@ -22,7 +22,7 @@ endif
 " map_K
 function! s:k()
     if index(['vim', 'help'], &ft) >= 0
-        if Installed('leaderf')
+        if InstalledLeaderf()
             execute 'LeaderfHelpCword'
         else
             execute 'h '.expand('<cword>')

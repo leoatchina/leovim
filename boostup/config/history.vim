@@ -78,7 +78,7 @@ if PrefFzf()
     nnoremap <silent><M-j><M-j> :FzfJumps<cr>
     nnoremap <silent><M-k>/ :FzfHistory/<Cr>
     nnoremap <silent><M-k>: :FzfHistory:<Cr>
-elseif Installed('leaderf')
+elseif InstalledLeaderf()
     nnoremap <silent><M-j><M-j> :Leaderf jumps<cr>
     nnoremap <silent><M-k>/ :LeaderfHistorySearch<Cr>
     nnoremap <silent><M-k>: :LeaderfHistoryCmd<Cr>
@@ -113,4 +113,4 @@ function! s:recent_project_files()
                 \ }))
 endfunction
 command! FzfProjectMru call s:recent_project_files()
-nnoremap <leader>u :FzfProjectMru<Cr>
+nnoremap <leader>M :FzfProjectMru<Cr>
