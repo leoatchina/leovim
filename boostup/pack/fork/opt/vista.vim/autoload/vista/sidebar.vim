@@ -5,7 +5,8 @@
 " Which filetype the current sidebar should be.
 function! vista#sidebar#WhichFileType() abort
   if g:vista.provider ==# 'coc'
-        \ || (g:vista.provider ==# 'ctags' && g:vista#renderer#ctags ==# 'default')
+        \ || g:vista.provider ==# 'nvim_lsp'
+        \ || g:vista.provider ==# 'ctags' && g:vista#renderer#ctags ==# 'default'
     return 'vista'
   elseif g:vista.provider ==# 'markdown'
     return 'vista_markdown'
