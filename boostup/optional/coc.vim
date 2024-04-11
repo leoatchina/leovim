@@ -195,9 +195,6 @@ xmap <silent><leader>ar <Plug>(coc-codeaction-refactor-selected)
 " ------------------------
 " coc git
 " ------------------------
-nmap [g <Plug>(coc-git-prevchunk)
-nmap ]g <Plug>(coc-git-nextchunk)
-" create text object for git chunks
 omap ig <Plug>(coc-git-chunk-inner)
 xmap ig <Plug>(coc-git-chunk-inner)
 omap ag <Plug>(coc-git-chunk-outer)

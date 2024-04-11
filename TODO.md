@@ -1,4 +1,4 @@
-## TODO:
+# TODO:
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
 - [x] better lightline schemes
@@ -49,7 +49,6 @@
 - [x] coc-fzf toggle preview shortcut.
 - [x] lsp-lens.nvim or symbol-usage.nvim for cmp/nvim-lsp codeaction.
 - [x] symbol-tags-search lsp check update.
-- [x] ~vim-zeef/**vim-select**~, ctrlp.vim intergrated.
 - [x] leaderf TODO/NOTE bug
 - [x] Neoformat, config like REPLFloaterm. using Q
   - [x] nnoremap
@@ -76,9 +75,9 @@
   - [x] multi buffers
   - [x] jump to another window bug
   - [ ] ctrlp intergrated
-  - [ ] readme
+  - [ ] README
   - [ ] deploy to github
-- [x] REPLFloaterm updates.
+- [ ] REPLFloaterm updates.
   - [x] use <M-e> as prefix key
   - [x] update repl_floaterm block send command. Updated with Find_Side
   - [x] send block, but keep cusor position, NOTE:fixed by Find_Side function
@@ -88,9 +87,9 @@
   - [x] g:repl_floaterm_quit for each ft
   - [x] send current word to terminal.
   - [x] mark content, and resend/show marked content if `quickui` installed
-  - [ ] readme
+  - [ ] README
   - [ ] deploy to github
-- [ ] mv self defined functions to utls
+- [ ] mv self defined functions to autoload/utils.vim
 - [ ] add ctrl-e to edit command in FzfCommands
 - [ ] ====== Below need plenty of works ======
 - [ ] vista 
