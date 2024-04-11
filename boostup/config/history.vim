@@ -95,7 +95,7 @@ endfunction
 function! s:recent_project_files()
     let filter_files = filter(map(copy(v:oldfiles), "fnamemodify(v:val, ':p')"), "filereadable(v:val)")
     let root_dir = '^' . GetRootDir()
-    let old_files = []
+    let old_files = filter(map(fzf#vim#_buflisted_sorted(), 'bufname(v:val)'), 'len(v:val)')
     for fl in filter_files
         if substitute(fl, '\', '/', 'g') =~ root_dir
             call add(old_files, fl)
