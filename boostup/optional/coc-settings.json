@@ -1,5 +1,7 @@
 {
   "colors.enable": true,
+  "inlayHints.enable": false,
+  "codeLens.enable": false,
   "coc.preferences": {
     "useQuickfixForLocations": false,
     "colorSupport": false,
@@ -7,15 +9,12 @@
     "messageLevel": "error",
     "listOfWorkspaceEdit": "location",
     "hoverTarget": "float",
-    "enableFloatHighlight": true,
+    "enableFloatHighlight": true
   },
-  "coc.source.file.triggerCharacters": [
-    "/"
-  ],
+  "coc.source.file.triggerCharacters": ["/"],
   "coc.source.buffer.disableSyntaxes": [],
   "semanticTokens.enable": true,
   "semanticTokens.filetypes": ["*"],
-  "inlayHints.enable": true,
   "list": {
     "nextKeymap": "<C-j>",
     "previousKeymap": "<C-k>",
