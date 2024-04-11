@@ -174,8 +174,9 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 hi! link CocCodeLens CocListBgGrey
 if has('nvim') || has('patch-9.0.0252')
     nnoremap <silent><leader>I :CocCommand document.toggleInlayHint<Cr>
+    call coc#config('inlayHints.enable', v:true)
     if has('nvim') || has('patch-9.0.0438')
-        call coc#config('codeLens.separator', "# \\\\")
+        call coc#config('codeLens.enable', v:true)
         nnoremap <silent><leader>C :CocCommand document.toggleCodeLens<Cr>
         xnoremap <silent><leader>C :CocCommand document.toggleCodeLens<Cr>
     endif
