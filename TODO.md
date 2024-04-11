@@ -70,8 +70,6 @@
 - [x] jupynium.nvim.
   - [x] local
   - [x] remote url
-- [ ] vim-urm(Usually Recently Manual)
-    - a plugin which put file in a buf and reopen it.
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
@@ -92,7 +90,9 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [ ] readme
   - [ ] deploy to github
+- [ ] add ctrl-e to edit command in FzfCommands
 - [ ] ====== Below need plenty of works ======
+- [ ] ~vim-urm(Usually Recently Manual)~
 - [ ] vista 
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
