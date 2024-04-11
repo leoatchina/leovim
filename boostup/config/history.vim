@@ -113,4 +113,4 @@ function! s:recent_project_files()
                 \ }))
 endfunction
 command! FzfProjectMru call s:recent_project_files()
-nnoremap <leader>M :FzfProjectMru<Cr>
+nnoremap <leader>u :FzfProjectMru<Cr>
