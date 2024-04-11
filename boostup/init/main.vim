@@ -613,7 +613,7 @@ function! Execute(cmd)
         return output
     endif
 endfunction
-function! GetRootDir()
+function! GetRootDir(...)
     let init_dir = Expand('%:p:h')
     let curr_dir = init_dir
     while 1
@@ -623,7 +623,11 @@ function! GetRootDir()
         for each in g:root_patterns + g:root_files
             let chk_path = curr_dir . '/' . each
             if isdirectory(chk_path) || filereadable(chk_path)
-                return curr_dir
+                if a:0 && a:1 > 0
+                    return substitute(curr_dir, '/', '\', 'g')
+                else
+                    return curr_dir
+                endif
             endif
         endfor
         let curr_dir = fnamemodify(curr_dir, ":h")

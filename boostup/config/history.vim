@@ -97,7 +97,7 @@ function! s:recent_project_files()
     let root_dir = '^' . GetRootDir()
     let old_files = []
     for fl in filter_files
-        if fl =~ root_dir
+        if substitute(fl, '\', '/', 'g') =~ root_dir
             call add(old_files, fl)
         endif
     endfor
