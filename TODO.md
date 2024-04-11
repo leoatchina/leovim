@@ -90,9 +90,9 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [ ] readme
   - [ ] deploy to github
+- [ ] mv self defined functions to utls
 - [ ] add ctrl-e to edit command in FzfCommands
 - [ ] ====== Below need plenty of works ======
-- [ ] ~vim-urm(Usually Recently Manual)~
 - [ ] vista 
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
