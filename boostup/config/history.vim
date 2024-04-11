@@ -93,9 +93,9 @@ function! s:fzf_accept(item) abort
     execute action . ' ' . item[1]
 endfunction
 function! s:recent_project_files()
-    let filter_files = filter(map(copy(v:oldfiles), "fnamemodify(v:val, ':p')"), "filereadable(v:val)")
     let root_dir = '^' . GetRootDir()
-    let old_files = filter(map(fzf#vim#_buflisted_sorted(), 'bufname(v:val)'), 'len(v:val)')
+    let old_files = filter(map(fzf#vim#_buflisted_sorted(), 'bufname(v:val)'), 'filereadable(v:val)')
+    let filter_files = filter(map(copy(v:oldfiles), "fnamemodify(v:val, ':p')"), 'filereadable(v:val)')
     for fl in filter_files
         if substitute(fl, '\', '/', 'g') =~ root_dir
             call add(old_files, fl)
