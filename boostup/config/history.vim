@@ -1,7 +1,7 @@
-if PrefFzf()
-    nnoremap <silent><leader>m :FzfHistory<Cr>
-elseif InstalledLeaderf()
+if InstalledLeaderf()
     nnoremap <silent><leader>m :LeaderfMru<Cr>
+elseif InstalledFzf()
+    nnoremap <silent><leader>m :FzfHistory<Cr>
 else
     nnoremap <silent><leader>m :CtrlPMRU<Cr>
 endif
