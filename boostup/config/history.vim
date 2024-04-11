@@ -83,3 +83,34 @@ elseif Installed('leaderf')
     nnoremap <silent><M-k>/ :LeaderfHistorySearch<Cr>
     nnoremap <silent><M-k>: :LeaderfHistoryCmd<Cr>
 endif
+" ------------------------------
+" current project files
+" ------------------------------
+function! s:fzf_accept(item) abort
+    let item = a:item
+    if len(item) < 2 | return | endif
+    let action = get(g:fzf_action, item[0], 'edit')
+    execute action . ' ' . item[1]
+endfunction
+function! s:recent_project_files()
+    let filter_files = filter(map(copy(v:oldfiles), "fnamemodify(v:val, ':p')"), "filereadable(v:val)")
+    let root_dir = '^' . GetRootDir()
+    let old_files = []
+    for fl in filter_files
+        if fl =~ root_dir
+            call add(old_files, fl)
+        endif
+    endfor
+    let old_files = fzf#vim#_uniq(map(old_files, 'fnamemodify(v:val, ":~:.")'))
+    let options = ['--header-lines', !empty(expand('%')), '--ansi', '--prompt', 'ProjectMru> ']
+    let options += ['--expect', join(keys(get(g:, 'fzf_action', ['ctrl-x', 'ctrl-v', 'ctrl-t'])), ',')]
+    let options += ['--preview-window', get(get(g:, 'fzf_vim'), 'preview_window', ['right,45%'])[0] . ',+{2}-/2']
+    let options = fzf#vim#with_preview({'options': options, 'placeholder': ' {1}'}).options
+    call fzf#run(fzf#wrap('funky', {
+                \ 'source': old_files,
+                \ 'sink*': function('s:fzf_accept'),
+                \ 'options' : options
+                \ }))
+endfunction
+command! FzfProjectMru call s:recent_project_files()
+nnoremap <leader>u :FzfProjectMru<Cr>

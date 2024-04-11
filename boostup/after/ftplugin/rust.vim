@@ -4,5 +4,6 @@ if Installed('rust.vim')
     nnoremap <buffer><silent><M-M> :RustCommands<Cr>
 endif
 inoremap <buffer>!! !=
-inoremap <buffer>>> ->
 inoremap <buffer><< <-
+inoremap <buffer>>> ->
+inoremap <buffer>?? =>
