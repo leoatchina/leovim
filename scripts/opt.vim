@@ -36,7 +36,8 @@ endif
 
 
 " NOTE: visit https://ftp.gnu.org/pub/gnu/global/
-" wget latest gtags version && ./configure --prefix ~/.local/gtags && make && make install
+" wget https://ftp.gnu.org/pub/gnu/global/global-6.6.12.tar.gz && tar xvf global-6.6.12.tar.gz && cd global-6.6.12  && ./configure --prefix ~/.local/gtags && make && make install && cd ..
+
 " if executable('gtags')
     " let $GTAGSCONF=expand($HOME."/.local/gtags/share/gtags/gtags.conf")
 " endif
