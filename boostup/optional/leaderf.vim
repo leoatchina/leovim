@@ -6,7 +6,7 @@ let g:Lf_NoChdir      = 1
 let g:Lf_QuickSelect  = 0
 let g:Lf_PythonVersion = float2nr(g:python_version)
 " gtags
-let g:Lf_GtagsGutentags = 0
+let g:Lf_GtagsGutentags = 1
 let g:Lf_GtagsSkipSymlink = 'a'
 let g:Lf_GtagsAutoGenerate = 0
 let g:Lf_GtagsAcceptDotfiles = 0

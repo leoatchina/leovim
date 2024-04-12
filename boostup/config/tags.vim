@@ -180,6 +180,10 @@ if Installed('gutentags_plus')
     nnoremap <leader>gi <Plug>GscopeFindInclude
     " kill
     nnoremap <silent><leader>gk :GscopeKill<cr>
+    if InstalledLeaderf()
+        let g:Lf_Gtagsconf = $GTAGSCONF
+        let g:Lf_Gtagslabel = 'native-pygments'
+    endif
 elseif has('+cscope')
     set cscopeprg=
 endif
