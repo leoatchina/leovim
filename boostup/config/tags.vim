@@ -183,6 +183,12 @@ if Installed('gutentags_plus')
     if InstalledLeaderf()
         let g:Lf_Gtagsconf = $GTAGSCONF
         let g:Lf_Gtagslabel = 'native-pygments'
+        let g:Lf_GtagsGutentags = 1
+        let g:Lf_GtagsSkipSymlink = 'a'
+        let g:Lf_GtagsAutoGenerate = 0
+        let g:Lf_GtagsAcceptDotfiles = 0
+        let g:Lf_GtagsSkipUnreadable = 1
+        nnoremap <silent><leader>G :Leaderf gtags<Cr>
     endif
 elseif has('+cscope')
     set cscopeprg=
