@@ -1,6 +1,9 @@
 {
   "colors.enable": true,
-  "codeLens.separator": "// #",
+  "codeLens.separator": "#",
+  "[c][cpp][typescript][javascript][rust]": {
+    "codeLens.separator": "//"
+  },
   "coc.preferences": {
     "useQuickfixForLocations": false,
     "colorSupport": false,
