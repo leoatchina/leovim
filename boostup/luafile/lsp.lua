@@ -124,6 +124,8 @@ lsp_zero.on_attach(function(client, bufnr)
   map("n", "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts)
   map("n", "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts)
   -- diagnostic error
+  map('n', '[d', [[<Cmd>lua vim.diagnostic.goto_prev()<CR>]], opts)
+  map('n', ']d', [[<Cmd>lua vim.diagnostic.goto_next()<CR>]], opts)
   map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts)
   map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts)
   -- inlayhints

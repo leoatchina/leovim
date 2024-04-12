@@ -1,19 +1,32 @@
-function! s:please_select_lines()
-    call preview#errmsg('Please select lines to merge!')
+function! s:check_or_selectline(...)
+    if a:0 && a:1 > 0
+        if Installed('ale')
+            ALEDetail
+        elseif InstalledCoc()
+            call CocActionAsync('diagnosticInfo')
+        elseif InstalledNvimLsp()
+            lua vim.diagnostic.open_float()
+        else
+            call preview#errmsg('Please select lines to merge!')
+        endif
+    else
+        call preview#errmsg('Please select lines to merge!')
+    endif
 endfunction
-function! s:j(line1, line2) range abort
+function! s:j(line1, line2, ...) range abort
     let pos = getpos('.')
     if a:line1 != a:line2
         normal! J
     else
-        call s:please_select_lines()
+        call s:check_or_selectline(a:000)
         call setpos('.', pos)
     endif
 endfunction
 command! -range J call s:j(<line1>, <line2>)
+command! -range JCheck call s:j(<line1>, <line2>, 1)
 xnoremap <silent>J :J<Cr>
 if g:has_terminal == 0
-    nnoremap <silent>J :J<Cr>
+    nnoremap <silent>J :JCheck<Cr>
     finish
 endif
 " --------------------------
@@ -325,7 +338,7 @@ if Installed('vimspector')
                 call preview#errmsg("No vimspector opened")
             endif
         else
-            call s:please_select_lines()
+            call s:check_or_selectline(1)
         endif
     endfunction
     command! BalloonEval call s:vimspector_or_floaterm()
@@ -468,7 +481,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
                 call preview#errmsg("No dapui opened")
             endif
         else
-            call s:please_select_lines()
+            call s:check_or_selectline(1)
         endif
     endfunction
     command! DapUIEval call s:dap_or_floaterm()
