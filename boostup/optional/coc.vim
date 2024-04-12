@@ -181,15 +181,16 @@ if has('nvim') || has('patch-9.0.0438')
     nnoremap <leader>C :CocCommand document.toggleCodeLens<Cr>
 endif
 nmap <silent><F2> <Plug>(coc-rename)
-nmap <silent><M-a> <Plug>(coc-codeaction-cursor)
 xmap <silent><leader>X <Plug>(coc-fix-current)
 nmap <silent><leader>X <Plug>(coc-fix-current)
-nmap <silent><leader>aR <Plug>(coc-codeaction-refactor)
-nmap <silent><leader>aS <Plug>(coc-codeaction-source)
+nmap <silent><leader>ae <Plug>(coc-codeaction-refactor)
+nmap <silent><leader>ao <Plug>(coc-codeaction-source)
 nmap <silent><leader>as <Plug>(coc-codeaction-selected)
 xmap <silent><leader>as <Plug>(coc-codeaction-selected)
 nmap <silent><leader>ar <Plug>(coc-codeaction-refactor-selected)
 xmap <silent><leader>ar <Plug>(coc-codeaction-refactor-selected)
+nmap <silent><leader>A <Plug>(coc-codeaction-cursor)
+nmap <silent><M-a> <Plug>(coc-codelens-action)
 " ------------------------
 " coc git
 " ------------------------
