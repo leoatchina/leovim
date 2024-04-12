@@ -153,7 +153,7 @@ if Installed('vim-gutentags')
     nnoremap <leader>g<Tab> :GutentagsUpdate<Cr>
     nnoremap <leader>g<Space> :GutentagsDelTags<Cr>
     command! GutentagsCommands call FzfCallCommands('GutentagsCommands', 'Gutentags')
-    nnoremap <leader>gg :GutentagsCommands<Cr>
+    nnoremap <leader>gc :GutentagsCommands<Cr>
 endif
 " --------------------------
 " gtags
@@ -174,7 +174,7 @@ if Installed('gutentags_plus')
     nnoremap <leader>gt <Plug>GscopeFindText
     nnoremap <leader>ge <Plug>GscopeFindEgrep
     nnoremap <leader>ga <Plug>GscopeFindAssign
-    nnoremap <leader>gc <Plug>GscopeFindCtag
+    nnoremap <leader>gg <Plug>GscopeFindCtag
     " file
     nnoremap <leader>gf <Plug>GscopeFindFile
     nnoremap <leader>gi <Plug>GscopeFindInclude
@@ -182,7 +182,7 @@ if Installed('gutentags_plus')
     nnoremap <silent><leader>gk :GscopeKill<cr>
     if InstalledLeaderf()
         let g:Lf_Gtagsconf = $GTAGSCONF
-        let g:Lf_Gtagslabel = 'native-pygments'
+        let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
         let g:Lf_GtagsGutentags = 1
         let g:Lf_GtagsSkipSymlink = 'a'
         let g:Lf_GtagsAutoGenerate = 0
