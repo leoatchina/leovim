@@ -98,6 +98,7 @@ lsp_zero.on_attach(function(client, bufnr)
     exclude = { 'K', 'gd', 'gi', 'go', 'gr', 'gl', '<F3>', '<F4>' }
   })
   local opts = { noremap = true, silent = true, buffer = bufnr }
+  local opts_nosilent = { noremap = true, silent = false, buffer = bufnr }
   if capabilities.completionProvider then
     vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
   end
@@ -106,8 +107,8 @@ lsp_zero.on_attach(function(client, bufnr)
   end
   -- codeaction
   map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts)
-  map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts)
-  map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts)
+  map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
+  map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
   -- signatureHelp
   map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts)
   -- format
@@ -128,7 +129,7 @@ lsp_zero.on_attach(function(client, bufnr)
   -- inlayhints
   if lsp_inlayhints then
     lsp_inlayhints.on_attach(client, bufnr)
-    map({ "n", "x" }, "<leader>I", require('lsp-inlayhints').toggle, opts)
+    map({ "n", "x" }, "<leader>I", require('lsp-inlayhints').toggle, opts_nosilent)
   end
   -- select range
   local ok, _ = pcall(function()

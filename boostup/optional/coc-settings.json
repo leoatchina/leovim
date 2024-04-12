@@ -1,8 +1,6 @@
 {
   "colors.enable": true,
-  "inlayHints.enable": false,
-  "codeLens.enable": false,
-  "codeLens.separator": "# \\",
+  "codeLens.separator": "// #",
   "coc.preferences": {
     "useQuickfixForLocations": false,
     "colorSupport": false,
