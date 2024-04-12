@@ -75,7 +75,7 @@ let g:highlight_filetypes = get(g:, 'highlight_filetypes', ['python', 'r', 'lua'
 let g:todo_patterns = "(TODO|FIXME|WARN|ERROR|BUG)"
 let g:note_patterns = "(NOTE|XXX|HINT|STEP|ETC|In\\[\\d\*\\])"
 let g:root_patterns = get(g:, 'root_patterns', [".git", ".hg", ".svn", ".root", ".env", ".vscode", '.idea', ".ccls", ".project", ".next"])
-let g:root_files = get(g:, 'root_files', [".task", "tsconfig.js"])
+let g:root_files = get(g:, 'root_files', [".task", "tsconfig.js", "Cargo.toml"])
 " -----------------------------------
 " map
 " -----------------------------------
