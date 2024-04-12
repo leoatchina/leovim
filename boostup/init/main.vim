@@ -436,6 +436,7 @@ if exists('g:vscode')
     finish
 endif
 " ============================================ below is (neo)vim only ===============================================
+let &termencoding=&enc
 let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_keybindings_dir", "")), '/', '\', 'g')
 let s:cursor_dir = substitute(fnameescape(get(g:, "cursor_keybindings_dir", "")), '/', '\', 'g')
 if isdirectory(s:vscode_dir) || isdirectory(s:cursor_dir)
@@ -529,7 +530,6 @@ if executable('code')
     command! OpenFileLinkInVSCode call s:open_file_in_editor("code", getline("."), col("."))
     nnoremap <silent><M-j>f :OpenFileLinkInVSCode<cr>
 endif
-let &termencoding=&enc
 " ------------------------------------
 " <M-Key> map to <Nop> if need
 " ------------------------------------
@@ -837,7 +837,7 @@ elseif WINDOWS() && Require('tags') || UNIX()
     if WINDOWS()
         let $GTAGSCONF = Expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
     endif
-    if executable('gtags') && get(g:, 'ctags_type', '') != '' && exists('GTAGSCONF') && filereadable($GTAGSCONF)
+    if executable('gtags') && get(g:, 'ctags_type', '') != '' && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
         let s:gtags_version = matchstr(system('gtags --version'), '\v\zs\d{1,2}.\d{1,2}.\d{1,2}\ze')
         let g:gtags_version = StringToFloat(s:gtags_version, 2)
         if get(g:, 'pygments_import', 0)
