@@ -57,20 +57,27 @@ function! funky#fzf#funky(funkies)
     redir END
     let lst = split(ilist, "\n")
     let buffers = {}
-    let funkies = []
     for each in lst
         let sp = split(each)[:2]
         let buffers[sp[0]] = sp[2][1:-2]
     endfor
-    for str in a:funkies
-        let bufnr = matchstr(str, ':\zs\d\+\ze:')
+    let candicates = []
+    for each in a:funkies
+        let bufnr = matchstr(each, ':\zs\d\+\ze:')
         if has_key(buffers, bufnr)
             let fname = buffers[bufnr]
-            let lnum = matchstr(str, '\d\+$')
-            let func = split(str, " \t#")[0]
+            let lnum = matchstr(each, '\d\+$')
+            let func = split(each, " \t#")[0]
             let funky = printf("%s:%d:%d#\t%s", fname, lnum, bufnr, func)
-            call add(funkies, funky)
+            call add(candicates, funky)
         endif
+    endfor
+    let longest = max(map(copy(candicates), 'len(split(v:val, "#\t")[0])'))
+    let funkies = []
+    for each in candicates
+        let length = len(split(each, "#\t")[0])
+        let funky = substitute(each, "#\t", "#" . repeat(" ", longest - length) . " ", "")
+        call add(funkies, funky)
     endfor
     return funkies
 endfunction
