@@ -146,7 +146,7 @@ xmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\g%"
 nnoremap <silent>gh :call CocAction('showIncomingCalls')<Cr>
 nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>
 nnoremap <silent>gs :call CocAction('showSubTypes')<Cr>
-nnoremap <silent>gt :call CocAction('showSuperTypes')<Cr>
+nnoremap <silent>gS :call CocAction('showSuperTypes')<Cr>
 " refactor
 nmap <silent><leader>R <Plug>(coc-refactor)
 " --------------------------

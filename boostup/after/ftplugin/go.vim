@@ -23,5 +23,14 @@ if InstalledCoc()
     nmap <buffer>gty :CocCommand go.tags.add yaml<cr>
     nmap <buffer>gtx :CocCommand go.tags.clear<cr>
 endif
+if Installed('vim-floaterm') && executable('go')
+    nnoremap <buffer><M-B> :call SmartRunTerm("go build", "smart")<Cr>
+    nnoremap <buffer><M-R> :call SmartRunTerm("go run", "smart")<Cr>
+    nnoremap <buffer><M-T> :call SmartRunTerm("go build && go run", "tab")<Cr>
+    nnoremap <buffer><M-'> :call SmartRunTerm("go run", "tab")<Cr>
+    if HAS_GUI()
+        nnoremap <buffer><M-"> :call SmartRunTerm("go run", "external")<Cr>
+    endif
+endif
 inoremap <buffer>:: :=
 inoremap <buffer>!! !=

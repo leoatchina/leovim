@@ -109,8 +109,6 @@ function! s:asyncrun(...)
         let run_cmd = s:run_command . params . time . 'perl %'
     elseif &ft ==# 'javascript' && executable('node')
         let run_cmd = s:run_command . params . time . 'node %'
-    elseif &ft ==# 'go' && executable('go')
-        let run_cmd = s:run_command . params . time . 'go run %'
     elseif &ft ==# 'vue' && executable('npm')
         let run_cmd = s:run_command . params . time . 'npm run %'
     elseif &ft ==# 'typescript' && executable('ts-node')
@@ -237,6 +235,19 @@ else
     command! RunQfRight call s:asyncrun('right', 'qf')
     nnoremap <silent><M-R> :RunQfRight<CR>
 endif
+function SmartRunTerm(cmd, pos)
+    if a:pos ==# 'smart'
+        if &columns > &lines * 3
+            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=floaterm_right -width=0.45 " .  a:cmd
+        else
+            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=floaterm_float -width=0.9 -height=0.3 " .  a:cmd
+        endif
+    elseif a:pos ==# "external"
+        execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=external " . a:cmd
+    else
+        execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=" . a:pos . " " . a:cmd
+    endif
+endfunction
 " ----------------
 " asynctasks
 " ----------------

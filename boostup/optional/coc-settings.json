@@ -1,7 +1,7 @@
 {
   "colors.enable": true,
   "codeLens.separator": "#",
-  "[c][cpp][typescript][javascript][rust]": {
+  "[c][cpp][java][rust][typescript][javascript]": {
     "codeLens.separator": "//"
   },
   "coc.preferences": {

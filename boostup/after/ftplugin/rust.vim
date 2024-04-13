@@ -6,6 +6,15 @@ endif
 if InstalledCoc()
     nnoremap <buffer>\<Space> :CocCommand rust-analyzer.
 endif
+if Installed('vim-floaterm') && executable('cargo')
+    nnoremap <buffer><M-B> :call SmartRunTerm("cargo build", "smart")<Cr>
+    nnoremap <buffer><M-R> :call SmartRunTerm("cargo run", "smart")<Cr>
+    nnoremap <buffer><M-T> :call SmartRunTerm("cargo build && cargo run", "tab")<Cr>
+    nnoremap <buffer><M-'> :call SmartRunTerm("cargo run", "tab")<Cr>
+    if HAS_GUI()
+        nnoremap <buffer><M-"> :call SmartRunTerm("cargo run", "external")<Cr>
+    endif
+endif
 inoremap <buffer>!! !=
 inoremap <buffer><< <-
 inoremap <buffer>>> ->
