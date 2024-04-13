@@ -4,14 +4,14 @@
 if Installed('nvim-treesitter', 'hlargs.nvim')
     " parser_install_dir
     if WINDOWS()
-        let parser_install_dir = $DEP_DIR . '\tree-sitter'
+        let parser_install_dir = $DEPLOY_DIR . '\tree-sitter'
         function! s:cleanup_ts() abort
-            exec printf('!del %s\tree-sitter\parser\*.* %s\tree-sitter\parser-info\*.* /a /f /q', $DEP_DIR, $DEP_DIR)
+            exec printf('!del %s\tree-sitter\parser\*.* %s\tree-sitter\parser-info\*.* /a /f /q', $DEPLOY_DIR, $DEPLOY_DIR)
         endfunction
     else
-        let parser_install_dir = $DEP_DIR . '/tree-sitter'
+        let parser_install_dir = $DEPLOY_DIR . '/tree-sitter'
         function! s:cleanup_ts() abort
-            exec printf('!rm -rf %s/tree-sitter/parser/*.* %s/tree-sitter/parser-info/*.*', $DEP_DIR, $DEP_DIR)
+            exec printf('!rm -rf %s/tree-sitter/parser/*.* %s/tree-sitter/parser-info/*.*', $DEPLOY_DIR, $DEPLOY_DIR)
         endfunction
     endif
     silent! call mkdir(parser_install_dir . "/parser", "p")

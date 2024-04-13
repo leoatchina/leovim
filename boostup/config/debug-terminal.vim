@@ -30,7 +30,7 @@ if g:has_terminal == 0
     finish
 endif
 " --------------------------
-" set ctrl-r
+" basic terminal map
 " --------------------------
 tmap <expr><C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
 " tab control
@@ -152,6 +152,7 @@ nnoremap <silent><C-\><C-f> :FloatermList<Cr>
 " ---------------------------------
 " debug
 " ---------------------------------
+
 if InstalledFzf()
     function! s:load_json(dap, ...)
         let dap = a:dap
@@ -201,7 +202,7 @@ if InstalledFzf()
 endif
 if Installed('vimspector')
     let g:debug_tool = "vimspector"
-    let g:vimspector_base_dir = $DEP_DIR . "/vimspector"
+    let g:vimspector_base_dir = $DEPLOY_DIR . "/vimspector"
     " load template
     if InstalledFzf()
         function! ReadVimspectorTemplate(template_file) abort
@@ -271,7 +272,10 @@ if Installed('vimspector')
     nnoremap <silent><M-d>d :call vimspector#DownFrame()<Cr>
     " other commands
     nnoremap <silent><M-d>g :call vimspector#GetConfigurations()<Cr>
+    " --------------------------------------
     " jump/show windows in vimspector
+    " --------------------------------------
+    au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
     function! s:vimspector_opened()
         return bufwinnr('vimspector.Variables') >= 0 && bufwinnr('vimspector.Watches') >= 0 && bufwinnr('vimspector.StackTrace') >= 0
     endfunction
@@ -335,7 +339,7 @@ if Installed('vimspector')
             elseif a:1 ==# 'terminal'
                 FloatermSpecial
             else
-                call preview#errmsg("No vimspector opened")
+                FloatermList
             endif
         else
             call s:check_or_selectline(1)
@@ -359,7 +363,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         function! ReadDapTemplate(template_file) abort
             call s:load_json(1, a:template_file)
         endfunction
-        function! s:load_dap()
+        function! s:load_dap() abort
             let options = ['--prompt', 'DapTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('dap',{
                         \ 'source': WINDOWS() ? 'dir /b /a-d ' . $BOOSTUP_DIR . '\\dap\\*.json' : 'ls -1 ' . $BOOSTUP_DIR . '/dap/*.json',
@@ -419,7 +423,8 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
     nnoremap <silent><M-m>w <cmd>lua require("dapui").float_element('watches')<Cr>
     " jump to windows in dapui
-    function! s:dapui_exists()
+    au BufEnter * if s:dapui_opened() | SignifyDisable | endif
+    function! s:dapui_opened()
         return bufwinnr("DAP Scopes") >= 0 && bufwinnr("DAP Watches") >= 0 && bufwinnr("DAP Stacks") >= 0
     endfunction
     nnoremap <silent><M-:>  <cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
@@ -427,7 +432,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-m>2 <Cmd>call GoToDAPWindows("DAP Watches")<Cr>
     nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
     function! GoToDAPWindows(name) abort
-        if !s:dapui_exists()
+        if !s:dapui_opened()
             return
         endif
         try
@@ -478,7 +483,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
             elseif a:1 == '='
                 FloatermSpecial
             else
-                call preview#errmsg("No dapui opened")
+                FloatermList
             endif
         else
             call s:check_or_selectline(1)
@@ -500,14 +505,16 @@ else
         let g:termdebug_map_K = 1
         let g:termdebug_use_prompt = 1
         packadd termdebug
-        " breakpoint
+        " coremap
         nnoremap <M-d><Space> :Break<Space>
         nnoremap <M-d><M-d> :Until<Cr>
+        nnoremap <M-d><Tab> :Run<Space>
         nnoremap <M-d><Cr> :Continue<Cr>
         nnoremap <M-d>c :Clear<Space>
         nnoremap <M-d>n :Over<Cr>
         nnoremap <M-d>i :Step<Cr>
         nnoremap <M-d>o :Finish<Cr>
+        nnoremap <M-d>a :Arguments<Space>
         nnoremap <F3> :Stop<Cr>
         nnoremap <F4> :Until<Cr>
         nnoremap <F5> :Continue<Cr>
@@ -521,19 +528,16 @@ else
         " debug
         nnoremap = :Evaluate <C-r><C-w>
         " other
-        nnoremap J :TermdebugCommand<Space>
-        nnoremap <M-d><Tab> :Run<Space>
         nnoremap <M-m>d :Termdebug<Space>
-        nnoremap <M-m>a :Arguments<Space>
+        nnoremap <M-m>c :TermdebugCommand<Space>
         nnoremap <silent><M-m>w :Winbar<Cr>
         nnoremap <silent><M-m>p :Program<Cr>
         nnoremap <silent><M-m>a :Asm<Cr>
         nnoremap <silent><M-m>s :Source<Cr>
         nnoremap <silent><M-m>g :Gdb<Cr>
-    else
-        nnoremap <silent>J :J<Cr>
     endif
-    nnoremap <M-f> :call preview#errmsg('Please install vimspecotr or nvim-dap and nvim-dap-ui.')
+    nnoremap <silent>J :J<Cr>
+    nnoremap <silent><M-F> :FloatermList<Cr>
 endif
 " -------------------------------------
 " map Floaterm keys

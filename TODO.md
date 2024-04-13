@@ -91,6 +91,7 @@
   - [ ] deploy to github
 - [ ] mv self defined functions to autoload/utils.vim
 - [ ] add ctrl-e to edit command in FzfCommands
+- [ ] coc-fzf using intergrated preview bin from fzf.vim
 - [ ] ====== Below need plenty of works ======
 - [ ] vista 
   - [ ] icons bug in windows-terminal

@@ -215,10 +215,14 @@ function! funky#extract(bufnr, patterns)
                 endfor
             endif
         endfor
-        let sorted = sort(funkies, function('s:sort_candidates'))
-        let prior = map(sort(mru, function('s:sort_mru')), 'v:val[0]')
-        let results = s:uniq(prior + sorted)
-        return results
+        if get(g:, 'funky_sort_mru', 0)
+            let sorted = sort(funkies, function('s:sort_candidates'))
+            let prior = map(sort(mru, function('s:sort_mru')), 'v:val[0]')
+            let results = s:uniq(prior + sorted)
+            return results
+        else
+            return funkies
+        endif
     finally
         execute winnr . 'wincmd w'
     endtry

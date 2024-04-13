@@ -951,10 +951,10 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " ------------------------------
 " install packs
 " ------------------------------
-let $DEP_DIR = Expand("~/.leovim.d")
-let opt_path = Expand("$DEP_DIR/pack/add/opt")
+let $DEPLOY_DIR = Expand("~/.leovim.d")
+let opt_path = Expand("$DEPLOY_DIR/pack/add/opt")
 call plug#begin(opt_path)
-if filereadable(expand("$DEP_DIR/pack.vim"))
+if filereadable(expand("$DEPLOY_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
 for vim in split(glob("$INSTALL_DIR/*.vim"), "\n")
