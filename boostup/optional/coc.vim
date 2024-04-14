@@ -169,16 +169,20 @@ command! -nargs=? Fold :call CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 " ----------------------------
-" inlayHints/codeLens/codeaction
+" inlayHint/codeLens/codeaction
 " ----------------------------
 if has('nvim') || has('patch-9.0.0252')
-    call coc#config('inlayHints.enable', v:true)
+    call coc#config('inlayHint.enable', v:true)
     nnoremap <leader>I :CocCommand document.toggleInlayHint<Cr>
+else
+    call coc#config('inlayHint.enable', v:false)
 endif
 if has('nvim') || has('patch-9.0.0438')
-    call coc#config('codeLens.enable', v:true)
     hi! link CocCodeLens CocListBgGrey
+    call coc#config('codeLens.enable', v:true)
     nnoremap <leader>C :CocCommand document.toggleCodeLens<Cr>
+else
+    call coc#config('codeLens.enable', v:false)
 endif
 nmap <silent><F2> <Plug>(coc-rename)
 xmap <silent><leader>X <Plug>(coc-fix-current)
