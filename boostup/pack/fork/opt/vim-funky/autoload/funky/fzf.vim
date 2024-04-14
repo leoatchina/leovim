@@ -76,7 +76,7 @@ function! funky#fzf#funky(funkies)
     let funkies = []
     for each in candicates
         let length = len(split(each, "#\t")[0])
-        let funky = substitute(each, "#\t", "#" . repeat(" ", longest - length) . " ", "")
+        let funky = substitute(each, "#\t", "#" . repeat(" ", longest - length) . "\t", "")
         call add(funkies, funky)
     endfor
     return funkies
