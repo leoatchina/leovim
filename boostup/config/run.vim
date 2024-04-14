@@ -240,7 +240,11 @@ function SmartRunTerm(cmd, pos)
         if &columns > &lines * 3
             execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -reuse=1 -mode=term -pos=floaterm_right -width=0.45 " .  a:cmd
         else
-            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -reuse=1 -mode=term -pos=floaterm_float -width=0.9 -height=0.45 " .  a:cmd
+            if has("nvim")
+                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -reuse=1 -mode=term -pos=floaterm_float -width=0.9 -height=0.4 " .  a:cmd
+            else
+                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -reuse=1 -mode=term -pos=bottom -height=0.4 " .  a:cmd
+            endif
         endif
     elseif a:pos ==# "external"
         execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=external " . a:cmd
