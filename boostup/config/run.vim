@@ -261,14 +261,23 @@ if has('nvim') || v:version >= 801
     let g:asynctasks_template = '~/.leovim/boostup/tasks/tasks_template.ini'
     let g:asynctasks_extra_config = [
                 \ '~/.leovim/boostup/tasks/tasks.ini',
-                \ '~/.leovim.d/boostup/tasks/tasks.ini',
+                \ '~/.leovim.d/tasks/tasks.ini',
                 \ ]
     " packadd
     PlugAddOpt 'asynctasks.vim'
-    silent! call mkdir(Expand("~/.leovim.d/tasks"), 'p')
     " open template
-    nnoremap <leader>r<Cr>  :tabe $LEOVIM_DIR/boostup/tasks/tasks_example.ini<Cr>
-    nnoremap <leader>r<Tab> :tabe $HOME/.leovim.d/boostup/tasks/tasks.ini<Cr>
+    function! s:asynctask_common()
+        call mkdir("$HOME/.leovim.d/tasks", "p")
+        tabe ~/.leovim.d/tasks/tasks.ini
+        if &columns > &lines * 3
+            vsplit ~/.leovim/boostup/tasks/tasks_example.ini
+        else
+            split ~/.leovim/boostup/tasks/tasks_example.ini
+        endif
+        wincmd p
+    endfunction
+    command! AsyncTaskCommon call s:asynctask_common()
+    nnoremap <leader>r<Cr> :AsyncTaskCommon<Cr>
     " asynctask shortcuts
     nnoremap <leader>ra :AsyncTask
     nnoremap <leader>rm :AsyncTaskMacro<Cr>
