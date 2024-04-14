@@ -149,12 +149,9 @@ function! s:asyncrun(...)
         endif
     endif
 endfunction
-" basic run map
-if WINDOWS() || executable('gnome-terminal')
-    command! RunExternal call s:asyncrun('external')
-    nnoremap <silent><M-"> :RunExternal<CR>
-endif
-" advanced run map
+" -------------------------
+" run in floterm
+" -------------------------
 if has('nvim') || v:version >= 801
     " run in tabterm
     let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
@@ -226,6 +223,10 @@ else
     nnoremap <silent><M-B> :RunQfBottom<CR>
     command! RunQfRight call s:asyncrun('right', 'qf')
     nnoremap <silent><M-R> :RunQfRight<CR>
+endif
+if WINDOWS() || executable('gnome-terminal')
+    command! RunExternal call s:asyncrun('external')
+    nnoremap <silent><M-"> :RunExternal<CR>
 endif
 " SmartRunTerm is for different filetypes
 function SmartRunTerm(cmd, pos)
