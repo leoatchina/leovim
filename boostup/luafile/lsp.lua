@@ -105,10 +105,6 @@ lsp_zero.on_attach(function(client, bufnr)
   if capabilities.definitionProvider then
     vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
   end
-  -- codeaction
-  map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts)
-  map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
-  map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
   -- signatureHelp
   map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts)
   -- format
@@ -128,6 +124,11 @@ lsp_zero.on_attach(function(client, bufnr)
   map('n', ']d', [[<Cmd>lua vim.diagnostic.goto_next()<CR>]], opts)
   map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts)
   map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts)
+  -- codeaction && codelens
+  map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts)
+  map({ "n", "x" }, "<leader>A", require("lspimport").import, opts)
+  map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
+  map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
   -- inlayhints
   if lsp_inlayhints then
     lsp_inlayhints.on_attach(client, bufnr)

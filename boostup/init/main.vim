@@ -240,7 +240,7 @@ nnoremap <silent><leader>c} V}:call nerdcommenter#Comment('x', 'toggle')<CR>
 nnoremap <silent><leader>c{ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " Create default mappings
 let g:NERDCreateDefaultMappings = 1
-" Add spaces after comment delimiters by default
+" Add space after comment delimiters by default
 let g:NERDSpaceDelims = 1
 " Use compact syntax for prettified multi-line comments
 let g:NERDCompactSexyComs = 1

@@ -91,6 +91,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'VonHeikemen/lsp-zero.nvim'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'aznhe21/actions-preview.nvim'
+    PlugAdd 'stevanmilic/nvim-lspimport'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0
         PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
@@ -259,6 +260,7 @@ function! InstalledNvimLsp() abort
                 \ 'actions-preview.nvim',
                 \ 'lsp-zero.nvim',
                 \ 'symbol-usage.nvim',
+                \ 'nvim-lspimport',
                 \ )
 endfunction
 function! InstalledCmp() abort
