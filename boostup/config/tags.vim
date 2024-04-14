@@ -159,8 +159,10 @@ endif
 " gtags
 " --------------------------
 if Installed('gutentags_plus')
-    if has('+cscope')
+    if has('+cscope') && executable('gtags-cscope')
         set cscopeprg=gtags-cscope
+    elseif has('+cscope')
+        set cscopeprg=
     endif
     let g:gutentags_modules += ['gtags_cscope']
     let g:gutentags_define_advanced_commands = 1
