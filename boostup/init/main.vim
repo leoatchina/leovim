@@ -190,7 +190,6 @@ endif
 " ------------------------------
 if exists(':packadd') && !exists('g:vscode')
     set packpath^=$HOME/.leovim.d
-    set packpath^=$BOOSTUP_DIR
 endif
 function! s:plug_add_opt(pack)
     let pack = a:pack

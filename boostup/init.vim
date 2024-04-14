@@ -29,8 +29,8 @@ let $OPTIONAL_DIR = expand($BOOSTUP_DIR . '/optional')
 " set opt path
 " --------------------------
 let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
-let $FORK_OPT_DIR = expand($BOOSTUP_DIR . '/pack/fork/opt')
-let $LEO_OPT_DIR = expand($BOOSTUP_DIR . '/pack/leo/opt')
+let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
+let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
 " --------------------------
 " gui_running && OS
 " --------------------------
