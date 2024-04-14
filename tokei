@@ -1,7 +1,8 @@
 #!/bin/bash
-cmd="$HOME/.leovim.unix/linux/tokei ./ boostup/pack/leo -e boostup/autoload/plug.vim pack fonts .git LICENSE scripts/z.* scripts/ptpython *.md"
+cmd="$HOME/.leovim.unix/linux/tokei ./ boostup/pack/leo -e boostup/autoload/plug.vim pack fonts .git LICENSE scripts/* *.md *.sh *.cmd tokei"
 if [ $# == 0 ]; then
     cd ~/.leovim
+    echo "add --files to show lines of each file."
     $cmd
 elif [ $# == 1 ] && [ $1 == '--files' ]; then
     cd ~/.leovim
