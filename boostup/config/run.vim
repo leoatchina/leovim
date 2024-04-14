@@ -266,18 +266,30 @@ if has('nvim') || v:version >= 801
     " packadd
     PlugAddOpt 'asynctasks.vim'
     " open template
-    function! s:asynctask_common()
-        call mkdir("$HOME/.leovim.d/tasks", "p")
-        tabe ~/.leovim.d/tasks/tasks.ini
-        if &columns > &lines * 3
-            vsplit ~/.leovim/boostup/tasks/tasks_example.ini
+    function! s:asynctask_common(...)
+        if a:0
+            if a:1 > 0
+                tabe ~/.leovim/boostup/tasks/tasks_template.ini
+            else
+                tabe ~/.leovim/boostup/tasks/tasks.ini
+            endif
         else
-            split ~/.leovim/boostup/tasks/tasks_example.ini
+            call mkdir("$HOME/.leovim.d/tasks", "p")
+            tabe ~/.leovim.d/tasks/tasks.ini
+            if &columns > &lines * 3
+                vsplit ~/.leovim/boostup/tasks/tasks_example.ini
+            else
+                split ~/.leovim/boostup/tasks/tasks_example.ini
+            endif
+            wincmd p
         endif
-        wincmd p
     endfunction
-    command! AsyncTaskCommon call s:asynctask_common()
-    nnoremap <leader>r<Cr> :AsyncTaskCommon<Cr>
+    command! AsyncTaskDeploy call s:asynctask_common()
+    command! AsyncTaskCommon call s:asynctask_common(0)
+    command! AsyncTaskTemplate call s:asynctask_common(1)
+    nnoremap <leader>r<Cr> :AsyncTaskDeploy<Cr>
+    nnoremap <leader>r<Tab> :AsyncTaskTemplate<Cr>
+    nnoremap <leader>r<Space> :AsyncTaskCommon<Cr>
     " asynctask shortcuts
     nnoremap <leader>ra :AsyncTask
     nnoremap <leader>rm :AsyncTaskMacro<Cr>
