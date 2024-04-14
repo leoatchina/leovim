@@ -68,7 +68,7 @@ function FzfCallCommands(prompt, ...)
         let search_prefix = [a:1]
         let ignore_reg = prompt
     endif
-    let results = []
+    let results = ["Ctrl-e To Edit"]
     for search in search_prefix
         let commands = split(Execute("command " . search), '\n')[1:]
         for command in commands
@@ -93,22 +93,34 @@ function FzfCallCommands(prompt, ...)
         endfor
     endfor
     if g:has_popup_floating
-        let height = len(results)
+        let height = len(results) + 4
         let lines = &lines
-        if height > 0.95 * lines
-            let height = float2nr(0.95 * lines)
-        elseif height < 0.35 * &lines
-            let height = float2nr(0.35 * lines)
+        if height > 0.9 * lines
+            let height = float2nr(0.9 * lines)
+        elseif height < 0.4 * lines
+            let height = float2nr(0.4 * lines)
         endif
+        let width = max(map(copy(results), 'len(v:val)')) * 2 - 2
         let l:fzf_layout = {
-                    \ 'window': {'width': 50, 'height': height, 'border': 'rounded'}
+                    \ 'window': {'width': width, 'height': height, 'border': 'rounded'}
                     \ }
     else
         let l:fzf_layout = {'down': '~30%'}
     endif
+    function! s:execute(item) abort
+        let key = a:item[0]
+        let cmd = a:item[1]
+        call histadd(':', cmd)
+        if key == 'ctrl-e'
+            redraw
+            call feedkeys(":\<up>", 'n')
+        else
+            execute cmd
+        endif
+    endfunction
     call fzf#run(extend({
                 \ 'source': results,
-                \ 'sink': function('Execute'),
-                \ 'options': printf('--ansi -x --prompt "%s>"', prompt)
+                \ 'sink*': function('s:execute'),
+                \ 'options': printf('+m --ansi --header-lines=1 --expect=ctrl-e --tiebreak=index --prompt "%s> "', prompt)
                 \ }, l:fzf_layout), 0)
 endfunction

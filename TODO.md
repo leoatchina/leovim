@@ -69,6 +69,8 @@
 - [x] jupynium.nvim.
   - [x] local
   - [x] remote url
+- [x] Add ctrl-e to edit command in FzfCallCommands
+- [ ] fzfx.nvim
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
@@ -89,7 +91,6 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [ ] README
   - [ ] deploy to github
-- [ ] add ctrl-e to edit command in FzfCommands
 - [ ] ====== Below need plenty of works ======
 - [ ] vista 
   - [ ] icons bug in windows-terminal
