@@ -72,8 +72,8 @@ if Installed('nvim-r')
     nnoremap <buffer><M-_> :call RClearAll()<Cr>
     " run
     nnoremap <buffer><M-B> :call StartR('R')<Cr>
-    nnoremap <buffer><M-X> :call RQuit('nosave')<Cr>
-    nnoremap <buffer><Tab>q :call RQuit('save')<Cr>
+    nnoremap <buffer><Tab>q :call RQuit('nosave')<Cr>
+    nnoremap <buffer><Tab>Q :call RQuit('save')<Cr>
 endif
 inoremap <buffer><< <-
 inoremap <buffer>>> ->
