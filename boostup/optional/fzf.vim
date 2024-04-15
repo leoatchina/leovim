@@ -94,11 +94,8 @@ function FzfCallCommands(prompt, ...)
     endfor
     if g:has_popup_floating
         let height = len(results) + 4
-        let lines = &lines
-        if height > 0.9 * lines
-            let height = float2nr(0.9 * lines)
-        elseif height < 0.4 * lines
-            let height = float2nr(0.4 * lines)
+        if height > 0.8 * &lines
+            let height = float2nr(0.8 * &lines)
         endif
         let width = max(map(copy(results), 'len(v:val)')) * 2 - 2
         let l:fzf_layout = {
