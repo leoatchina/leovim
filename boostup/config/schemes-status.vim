@@ -224,8 +224,6 @@ elseif Require('moonfly')
 elseif g:complete_engine == 'coc'
     if has('nvim')
         call SetScheme('nightfox', 'hybrid')
-    elseif HAS_GUI()
-        call SetScheme('everforest', 'deus')
     else
         call SetScheme('gruvbox-material', 'gruvbox')
     endif
