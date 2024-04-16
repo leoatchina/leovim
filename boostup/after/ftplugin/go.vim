@@ -3,7 +3,6 @@ if Installed('vim-go')
     let g:go_doc_balloon = 0
     let g:go_def_mapping_enabled = 0
     let g:go_doc_keywordprg_enabled = !InstalledAdvCompEng()
-    command! GoCommands call FzfCallCommands('GoCommands', 'Go')
     nnoremap <buffer><silent>gl :GoCallees<Cr>
     nnoremap <buffer><silent>gh :GoCallers<Cr>
     nnoremap <buffer><silent><C-g> :GoDef<Cr>

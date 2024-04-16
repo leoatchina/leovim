@@ -115,7 +115,7 @@ function! s:asyncrun(...)
         let run_cmd = s:run_command . params . time . 'ts-node %'
     elseif &ft ==# 'javascript' && executable('node')
         let run_cmd = s:run_command . params . time . 'node %'
-    " c && cpp && rust
+    " c && cpp
     elseif &ft ==# 'c' && get(g:, 'gcc_cmd', '') != ''
         if WINDOWS()
             silent! call mkdir("../target/test", "p")

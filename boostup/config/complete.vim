@@ -143,3 +143,9 @@ augroup END
 if Installed('pear-tree')
     let g:pear_tree_map_special_keys = 0
 endif
+" ------------------------------
+" vim-go
+" ------------------------------
+if Installed('vim-go')
+    command! GoCommands call FzfCallCommands('GoCommands', 'Go')
+endif
