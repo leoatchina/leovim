@@ -24,13 +24,13 @@ endif
 " go
 " --------------------------
 if Require('go') && (has('patch-8.1.2269') || has('nvim')) && executable('go') && exists('$GOPATH')
-    PlugAdd 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
+    PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 endif
 " --------------------------
 " R language
 " --------------------------
 if (Require('R') || Require('bioinfo')) && (has('nvim') || v:version >= 802)
-    PlugAdd 'jalvesaq/Nvim-R', {'for': 'r'}
+    PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
 " ------------------------------
 " web
