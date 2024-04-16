@@ -217,7 +217,7 @@ echo
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
 else
-    cp $APP_PATH/scripts/opt.vim $HOME/.vimrc.opt
+    cp $APP_PATH/boostup/optional/opt.vim $HOME/.vimrc.opt
     success "$HOME/.vimrc.opt copied."
     if program_exists "vim"; then
         vim $HOME/.vimrc.opt

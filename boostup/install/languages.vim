@@ -23,7 +23,7 @@ endif
 " --------------------------
 " go
 " --------------------------
-if Require('go') && (has('patch-8.1.2269') || has('nvim')) && executable('go') && exists('$GOPATH') && exists('$GOROOT')
+if Require('go') && (has('patch-8.1.2269') || has('nvim')) && executable('go') && exists('$GOPATH')
     PlugAdd 'fatih/vim-go', {'for': 'go', 'do': ':GoInstallBinaries'}
 endif
 " --------------------------
