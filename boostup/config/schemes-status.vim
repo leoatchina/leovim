@@ -88,7 +88,7 @@ let g:lightline = {
 "------------------------
 " left part
 "------------------------
-let g:lightline.active.left = [['mode', 'readonly', 'paste' ], ['rootpath'], ['modified', 'filename'], ['buffers']]
+let g:lightline.active.left = [['mode', 'readonly', 'paste' ], ['rootpath'], ['filename', 'modified'], ['buffers']]
 "------------------------
 " right part
 "------------------------
