@@ -25,7 +25,7 @@ PlugAddOpt 'lightline.vim'
 let g:lightline#bufferline#unnamed = ''
 let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = Installed('nvim-web-devicons') || Installed('vim-devicons')
-let g:lightline#bufferline#show_number = !g:lightline#bufferline#enable_devicons
+let g:lightline#bufferline#show_number = g:lightline#bufferline#enable_devicons ? 0 : 2
 function! LightlineBufferlineMaxWidth() abort
     let left = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileName() + Mode())
     return left > 60 ? left - 60 : 0
@@ -75,12 +75,8 @@ let g:lightline = {
                     \ 'filename': 'FileName',
                     \ 'mode': 'Mode',
                     \ },
-                \ 'component_expand': {
-                    \   'buffers': 'lightline#bufferline#buffers'
-                    \ },
-                \ 'component_type': {
-                    \   'buffers': 'tabsel'
-                    \ },
+                \ 'component_expand': {},
+                \ 'component_type': {},
                 \ 'active': {}
             \ }
 "------------------------
@@ -141,6 +137,8 @@ elseif InstalledCoc()
     let g:lightline.component_function.coc_diag = 'CocDiagnostic'
     let g:lightline.active.right += [['coc_diag']]
 endif
+let g:lightline['component_expand']['buffers'] = 'lightline#bufferline#buffers'
+let g:lightline['component_type']['buffers'] = 'tabsel'
 " ------------------------
 " lightline themes
 " ------------------------
