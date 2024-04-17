@@ -158,12 +158,12 @@ nnoremap <silent><C-\><C-f> :FloatermList<Cr>
 if executable('yazi')
     function! s:floaterm_yazi()
         if g:has_popup_floating
-            FloatermNew --title= --titleposition=right --wintype=float --position=center --width=0.9 --height=0.9 yazi
+            FloatermNew --title=yazi --titleposition=right --wintype=float --position=center --width=0.9 --height=0.9 yazi
         else
             if &columns > &lines * 3
-                FloatermNew --title=yazi --wintype=vsplit --position=right --width=0.45 yazi
+                FloatermNew --title=yazi --titleposition=right --wintype=vsplit --position=right --width=0.45 yazi
             else
-                FloatermNew --title=yazi --wintype=split --position=botright --height=0.6 yazi
+                FloatermNew --title=yazi --titleposition=right --wintype=split --position=botright --height=0.6 yazi
             endif
         endif
     endfunction
