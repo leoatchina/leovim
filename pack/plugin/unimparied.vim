@@ -58,10 +58,6 @@ call s:MapFamily('l','l')
 call s:MapFamily('q','c')
 call s:MapFamily('t','t')
 
-if !hasmapto(']b')
-    call s:MapFamily('b','b')
-endif
-
 function! s:entries(path) abort
     let path = substitute(a:path,'[\\/]$','','')
     let files = split(glob(path."/.*"),"\n")

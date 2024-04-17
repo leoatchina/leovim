@@ -25,13 +25,27 @@ PlugAddOpt 'lightline.vim'
 let g:lightline#bufferline#unnamed = ''
 let g:lightline#bufferline#show_number = 2
 let g:lightline#bufferline#unicode_symbols = 1
+let g:lightline#bufferline#enable_devicons = 1
+let g:lightline#bufferline#min_buffer_count = 8
 function! LightlineBufferlineMaxWidth() abort
     let left_len = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileName() + Mode())
     let res = left_len > 50 ? left_len - 50 : 0
     return res
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
+function LightlineBufferlineFilter(buffer)
+    return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# ''
+endfunction
+let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
 PlugAddOpt 'lightline-bufferline'
+nmap ]b <Plug>lightline#bufferline#go_next()
+nmap [b <Plug>lightline#bufferline#go_previous()
+nmap ]B <Plug>lightline#bufferline#go_next_category()
+nmap [B <Plug>lightline#bufferline#go_previous_category()
+nmap <Leader>]b <Plug>lightline#bufferline#move_next()
+nmap <Leader>[b <Plug>lightline#bufferline#move_previous()
+nmap <Leader>[B <Plug>lightline#bufferline#move_first()
+nmap <Leader>]B <Plug>lightline#bufferline#move_last()
 " ------------------------
 " init
 " ------------------------
