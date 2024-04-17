@@ -1,6 +1,6 @@
 #!/bin/env bash
 # ctrlp
-rm -rf ctrlp.vim 
+rm -rf ctrlp.vim
 git clone --depth 1 https://github.com/ctrlpvim/ctrlp.vim.git
 
 # tagbar
@@ -47,8 +47,8 @@ git clone --depth 1 https://github.com/smoka7/hop.nvim.git
 rm -rf vim-matchup
 git clone --depth 1 https://github.com/andymass/vim-matchup.git
 
-# hlslens 
-rm -rf nvim-hlslens 
+# hlslens
+rm -rf nvim-hlslens
 git clone --depth 1 https://github.com/kevinhwang91/nvim-hlslens.git
 
 # vim-eunuch
@@ -76,6 +76,9 @@ git clone --depth 1 https://github.com/roxma/vim-tmux-clipboard.git
 # lightline
 rm -rf lightline.vim
 git clone --depth 1 https://github.com/itchyny/lightline.vim.git
+
+rm -rf lightline-bufferline
+git clone --depth 1 https://github.com/mengelbrecht/lightline-bufferline
 
 # startify
 rm -rf vim-startify

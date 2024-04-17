@@ -22,6 +22,16 @@ function! Mode()
     return m
 endfunction
 PlugAddOpt 'lightline.vim'
+let g:lightline#bufferline#unnamed = ''
+let g:lightline#bufferline#show_number = 2
+let g:lightline#bufferline#unicode_symbols = 1
+function! LightlineBufferlineMaxWidth() abort
+    let left_len = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileName() + Mode())
+    let res = left_len > 50 ? left_len - 50 : 0
+    return res
+endfunction
+let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
+PlugAddOpt 'lightline-bufferline'
 " ------------------------
 " init
 " ------------------------
@@ -53,20 +63,18 @@ let g:lightline = {
                     \ 'filename': 'FileName',
                     \ 'mode': 'Mode',
                     \ },
+                \ 'component_expand': {
+                    \   'buffers': 'lightline#bufferline#buffers'
+                    \ },
+                \ 'component_type': {
+                    \   'buffers': 'tabsel'
+                    \ },
                 \ 'active': {}
             \ }
 "------------------------
 " left part
 "------------------------
-if Installed('vista.vim')
-    function! CurrentSymbol()
-        return get(b:, 'coc_current_function', get(b:, 'vista_nearest_method_or_function', ''))
-    endfunction
-    let g:lightline.component_function.symbol = 'CurrentSymbol'
-    let g:lightline.active.left = [['mode', 'readonly', 'paste' ], ['rootpath'], ['filename', 'symbol', 'modified']]
-else
-    let g:lightline.active.left = [['mode', 'readonly', 'paste' ], ['rootpath'], ['filename', 'modified']]
-endif
+let g:lightline.active.left = [['mode', 'readonly', 'paste' ], ['rootpath'], ['modified', 'filename'], ['buffers']]
 "------------------------
 " right part
 "------------------------
