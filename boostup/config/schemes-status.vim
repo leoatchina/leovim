@@ -23,17 +23,15 @@ function! Mode()
 endfunction
 PlugAddOpt 'lightline.vim'
 let g:lightline#bufferline#unnamed = ''
-let g:lightline#bufferline#show_number = 2
 let g:lightline#bufferline#unicode_symbols = 1
-let g:lightline#bufferline#enable_devicons = 1
-let g:lightline#bufferline#min_buffer_count = 8
+let g:lightline#bufferline#enable_devicons = Installed('nvim-web-devicons') || Installed('vim-devicons')
+let g:lightline#bufferline#show_number = !g:lightline#bufferline#enable_devicons
 function! LightlineBufferlineMaxWidth() abort
-    let left_len = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileName() + Mode())
-    let res = left_len > 50 ? left_len - 50 : 0
-    return res
+    let left = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileName() + Mode())
+    return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
-function LightlineBufferlineFilter(buffer)
+function! LightlineBufferlineFilter(buffer) abort
     return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# ''
 endfunction
 let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
