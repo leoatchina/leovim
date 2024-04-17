@@ -1004,6 +1004,7 @@ nnoremap <M-h>u :set ff=unix<Cr>:%s/\r//g<Cr>
 " ------------------------
 nnoremap <M-h><Cr> :source ~/.leovim/boostup/init.vim<Cr>
 nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
+nnoremap <M-h>O :tabe ~/.leovim/boostup/optional/opt.vim<Cr>
 nnoremap <M-h>p :tabe ~/.leovim/pack
 function! TabeOpen(f) abort
     let f = expand(a:f)
