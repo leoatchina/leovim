@@ -70,9 +70,12 @@ let g:floaterm_open_command = 'drop'
 let g:floaterm_wintype  = 'split'
 let g:floaterm_position = 'belowright'
 let g:floaterm_height = 0.3
+PlugAddOpt 'vim-floaterm'
+" --------------------------
+" new floaterm
+" --------------------------
 command! FloatermCommands call FzfCallCommands('FloatermCommands', 'Floaterm')
 nnoremap <Tab>f :FloatermCommands<Cr>
-PlugAddOpt 'vim-floaterm'
 " --------------------------
 " new floaterm
 " --------------------------
@@ -150,9 +153,26 @@ command! FloatermList call s:floaterm_list()
 tnoremap <silent><C-\><C-f> <C-\><C-n>:FloatermList<Cr>
 nnoremap <silent><C-\><C-f> :FloatermList<Cr>
 " ---------------------------------
+" FloatermYazi
+" ---------------------------------
+if executable('yazi')
+    function! s:floaterm_yazi()
+        if g:has_popup_floating
+            FloatermNew --title= --titleposition=right --wintype=float --position=center --width=0.9 --height=0.9 yazi
+        else
+            if &columns > &lines * 3
+                FloatermNew --title=yazi --wintype=vsplit --position=right --width=0.45 yazi
+            else
+                FloatermNew --title=yazi --wintype=split --position=botright --height=0.6 yazi
+            endif
+        endif
+    endfunction
+    command! FloatermYazi call s:floaterm_yazi()
+    nnoremap <silent><leader>` :FloatermYazi<Cr>
+endif
+" ---------------------------------
 " debug
 " ---------------------------------
-
 if InstalledFzf()
     function! s:load_json(dap, ...)
         let dap = a:dap
