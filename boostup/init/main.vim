@@ -332,6 +332,8 @@ if exists('*search') && exists('*getpos')
     onoremap iK :normal viK<Cr>
     vnoremap aK 0o$
     onoremap aK :normal vaK<Cr>
+    nmap <leader>Vk viK
+    nmap <leader>VK vaK
     " --------------------------
     " sandwich
     " --------------------------
