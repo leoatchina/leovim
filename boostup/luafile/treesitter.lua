@@ -43,7 +43,7 @@ require("nvim-treesitter.configs").setup({
 })
 map("n", "<M-l>t", ":TSUpdate ", { noremap = true, silent = false })
 map("n", "<M-l>I", ":TSInstall ", { noremap = true, silent = false })
-map({ 'n', 'x', 'o' }, 'so', function() require("flash").treesitter() end, { noremap = true, silent = true })
+map({ 'n', 'x', 'o' }, 'sv', function() require("flash").treesitter() end, { noremap = true, silent = true })
 map({ 'x', 'o' }, 'm', function() require("flash").treesitter_search() end, { noremap = true, silent = true })
 -------------------------
 -- treesitter-textobj
