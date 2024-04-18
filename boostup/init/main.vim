@@ -318,10 +318,20 @@ if exists('*search') && exists('*getpos')
     nmap <leader>Va vIa
     nmap <leader>VA vAa
     nmap <leader>Vl vIl
-    nmap <leader>Vl vIl
     nmap <leader>VL vAl
     nmap <leader>Vn vIn
     nmap <leader>VN vAN
+    " line yank enhanced
+    vnoremap ik ^o$h
+    onoremap ik :normal vik<Cr>
+    vnoremap ak ^o$
+    onoremap ak :normal vak<Cr>
+    nmap <leader>vk vik
+    nmap <leader>vK vak
+    vnoremap iK 0o$h
+    onoremap iK :normal viK<Cr>
+    vnoremap aK 0o$
+    onoremap aK :normal vaK<Cr>
     " --------------------------
     " sandwich
     " --------------------------
