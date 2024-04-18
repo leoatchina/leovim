@@ -21,11 +21,11 @@ function! Mode()
     endif
     return m
 endfunction
-PlugAddOpt 'lightline.vim'
 let g:lightline#bufferline#unnamed = ''
+let g:lightline#bufferline#show_number = 0
 let g:lightline#bufferline#unicode_symbols = 1
-let g:lightline#bufferline#enable_devicons = Installed('nvim-web-devicons') || Installed('vim-devicons')
-let g:lightline#bufferline#show_number = g:lightline#bufferline#enable_devicons ? 0 : 2
+let g:lightline#bufferline#enable_devicons = 0
+let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
     let left = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileName() + Mode())
     return left > 60 ? left - 60 : 0
@@ -35,7 +35,6 @@ function! LightlineBufferlineFilter(buffer) abort
     return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# ''
 endfunction
 let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
-PlugAddOpt 'lightline-bufferline'
 nmap ]b <Plug>lightline#bufferline#go_next()
 nmap [b <Plug>lightline#bufferline#go_previous()
 nmap ]B <Plug>lightline#bufferline#go_next_category()
@@ -44,6 +43,8 @@ nmap <Leader>]b <Plug>lightline#bufferline#move_next()
 nmap <Leader>[b <Plug>lightline#bufferline#move_previous()
 nmap <Leader>[B <Plug>lightline#bufferline#move_first()
 nmap <Leader>]B <Plug>lightline#bufferline#move_last()
+PlugAddOpt 'lightline.vim'
+PlugAddOpt 'lightline-bufferline'
 " ------------------------
 " init
 " ------------------------
