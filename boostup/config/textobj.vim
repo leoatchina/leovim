@@ -20,9 +20,9 @@ if Installed('nvim-treesitter', 'hlargs.nvim')
     " map and config
     luafile $LUA_DIR/treesitter.lua
 else
-    nmap so :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
-    xmap so :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
-    omap so :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
+    nmap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
+    xmap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
+    omap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
     nmap <silent>}} ]m
     nmap <silent>{{ [m
     nmap <silent>}] ]M
