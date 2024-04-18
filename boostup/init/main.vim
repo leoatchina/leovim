@@ -1051,14 +1051,13 @@ nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
 nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
 nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
 nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
-nnoremap <silent><M-h>F :call TabeOpen("$OPTIONAL_DIR/fzf.vim")<Cr>
-nnoremap <silent><M-h>L :call TabeOpen("$OPTIONAL_DIR/leaderf.vim")<Cr>
+nnoremap <silent><M-h>f :call TabeOpen("$OPTIONAL_DIR/fzf.vim")<Cr>
 if PrefFzf()
-    nnoremap <silent><M-h>f :FzfFiles <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
+    nnoremap <silent><M-h>e :FzfFiles <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
 elseif InstalledLeaderf()
-    nnoremap <silent><M-h>f :LeaderfFile <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
+    nnoremap <silent><M-h>e :LeaderfFile <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
 else
-    nnoremap <silent><M-h>f :call TabeOpen("$CONFIG_DIR/file.vim")<Cr>
+    nnoremap <silent><M-h>e :call TabeOpen("$CONFIG_DIR/file.vim")<Cr>
 endif
 " --------------------------
 " open other ides config
