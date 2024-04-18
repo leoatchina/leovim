@@ -27,7 +27,7 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
-    let left = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileName() + Mode())
+    let left = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileDir() + Mode())
     return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
@@ -48,9 +48,9 @@ PlugAddOpt 'lightline-bufferline'
 " ------------------------
 " init
 " ------------------------
-function! FileName()
+function! FileDir()
     let root = RootPath()
-    let path = fnameescape(substitute(Expand('%:p'), '\\', '/', 'g'))
+    let path = fnameescape(substitute(Expand('%:p:h'), '\\', '/', 'g'))
     if root == ''
         return path
     else
@@ -58,12 +58,7 @@ function! FileName()
     endif
 endfunction
 function! RootPath()
-    let root = GitRootDir()
-    if root == ''
-        return ''
-    else
-        return root . '/'
-    endif
+    return GitRootDir() == '' ? '' : GitRootDir() . '/'
 endfunction
 let g:lightline = {
                 \ 'component': {
@@ -73,7 +68,7 @@ let g:lightline = {
                     \ 'readonly': 'FileReadonly',
                     \ 'gitbranch': 'GitBranch',
                     \ 'rootpath': 'RootPath',
-                    \ 'filename': 'FileName',
+                    \ 'filedir': 'FileDir',
                     \ 'mode': 'Mode',
                     \ },
                 \ 'component_expand': {},
@@ -83,7 +78,7 @@ let g:lightline = {
 "------------------------
 " left part
 "------------------------
-let g:lightline.active.left = [['mode', 'readonly', 'paste' ], ['rootpath'], ['filename', 'modified'], ['buffers']]
+let g:lightline.active.left = [['mode', 'readonly', 'paste' ], ['rootpath'], ['filedir', 'modified'], ['buffers']]
 "------------------------
 " right part
 "------------------------
@@ -138,7 +133,23 @@ elseif InstalledCoc()
     let g:lightline.component_function.coc_diag = 'CocDiagnostic'
     let g:lightline.active.right += [['coc_diag']]
 endif
-let g:lightline['component_expand']['buffers'] = 'lightline#bufferline#buffers'
+function! Buffers() abort
+    let buffers = lightline#bufferline#buffers()
+    if empty(buffers[0])
+        return buffers
+    else
+        let res = [[]]
+        if empty(buffers[-1])
+            call add(res, buffers[-2])
+            call add(res, buffers[0])
+        else
+            call add(res, buffers[1])
+            call add(res, buffers[0] + buffers[2])
+        endif
+        return res
+    endif
+endfunction
+let g:lightline['component_expand']['buffers'] = 'Buffers'
 let g:lightline['component_type']['buffers'] = 'tabsel'
 " ------------------------
 " lightline themes
