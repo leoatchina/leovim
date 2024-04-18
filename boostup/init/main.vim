@@ -321,19 +321,6 @@ if exists('*search') && exists('*getpos')
     nmap <leader>VL vAl
     nmap <leader>Vn vIn
     nmap <leader>VN vAN
-    " line yank enhanced
-    vnoremap ik ^o$h
-    onoremap ik :normal vik<Cr>
-    vnoremap ak ^o$
-    onoremap ak :normal vak<Cr>
-    nmap <leader>vk vik
-    nmap <leader>vK vak
-    vnoremap iK 0o$h
-    onoremap iK :normal viK<Cr>
-    vnoremap aK 0o$
-    onoremap aK :normal vaK<Cr>
-    nmap <leader>Vk viK
-    nmap <leader>VK vaK
     " --------------------------
     " sandwich
     " --------------------------
@@ -397,6 +384,41 @@ if exists('*search') && exists('*getpos')
                     \ })
     nmap <leader>vv viv
     nmap <leader>vV vav
+    " ------------------------
+    " find line
+    " ------------------------
+    call textobj#user#plugin('line', {
+                \   '-': {
+                \     'select-a-function': 'CurrentLineA',
+                \     'select-a': 'ak',
+                \     'select-i-function': 'CurrentLineI',
+                \     'select-i': 'ik',
+                \   },
+                \ })
+    function! CurrentLineA()
+        normal! ^
+        let head_pos = getpos('.')
+        normal! $
+        let tail_pos = getpos('.')
+        return ['v', head_pos, tail_pos]
+    endfunction
+    function! CurrentLineI()
+        normal! ^
+        let head_pos = getpos('.')
+        normal! g_
+        let tail_pos = getpos('.')
+        let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
+        return
+                    \ non_blank_char_exists_p
+                    \ ? ['v', head_pos, tail_pos]
+                    \ : 0
+    endfunction
+    vnoremap ik ^o$h
+    onoremap ik :normal vik<Cr>
+    vnoremap ak ^o$
+    onoremap ak :normal vak<Cr>
+    nmap <leader>vk vik
+    nmap <leader>vK vak
 endif
 " ----------------------------------
 " hl searchindex && multi replace
