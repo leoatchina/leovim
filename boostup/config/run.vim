@@ -34,10 +34,10 @@ if has('nvim') || has('timers') && has('channel') && has('job')
         endif
     elseif WINDOWS()
         if executable('gcc')
-            let g:gcc_cmd = 'ptime gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ptime ..\target\test\$(VIM_FILENOEXT).exe'
+            let g:gcc_cmd = 'time gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & time ..\target\test\$(VIM_FILENOEXT).exe'
         endif
         if executable('g++')
-            let g:gpp_cmd = 'ptime g++ $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ptime ..\target\test\$(VIM_FILENOEXT).exe'
+            let g:gpp_cmd = 'time g++ $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & time ..\target\test\$(VIM_FILENOEXT).exe'
         endif
     endif
     nnoremap ! :AsyncRun<Space>
@@ -92,29 +92,24 @@ function! s:asyncrun(...)
             let params = ' -cwd=$(VIM_FILEDIR) -mode=bang'
         endif
     endif
-    if WINDOWS()
-        let time = ' ptime '
-    else
-        let time = ' time '
-    endif
     if &ft ==# 'dosbatch' && WINDOWS()
-        let run_cmd = s:run_command . params. ' ptime %'
+        let run_cmd = s:run_command . params. ' time %'
     elseif &ft ==# 'sh' && executable('bash')
         let run_cmd = s:run_command . params . ' time bash %'
     elseif &ft ==# 'python' && executable('python')
-        let run_cmd = s:run_command . params . time . 'python %'
+        let run_cmd = s:run_command . params . ' time python %'
     elseif &ft ==# 'r' && executable('Rscript')
-        let run_cmd = s:run_command . params . time . 'Rscript %'
+        let run_cmd = s:run_command . params . ' time Rscript %'
     elseif &ft ==# 'perl' && executable('perl')
-        let run_cmd = s:run_command . params . time . 'perl %'
+        let run_cmd = s:run_command . params . ' time perl %'
     elseif &ft ==# 'javascript' && executable('node')
-        let run_cmd = s:run_command . params . time . 'node %'
+        let run_cmd = s:run_command . params . ' time node %'
     elseif &ft ==# 'vue' && executable('npm')
-        let run_cmd = s:run_command . params . time . 'npm run %'
+        let run_cmd = s:run_command . params . ' time npm run %'
     elseif &ft ==# 'typescript' && executable('ts-node')
-        let run_cmd = s:run_command . params . time . 'ts-node %'
+        let run_cmd = s:run_command . params . ' time ts-node %'
     elseif &ft ==# 'javascript' && executable('node')
-        let run_cmd = s:run_command . params . time . 'node %'
+        let run_cmd = s:run_command . params . ' time node %'
     " c && cpp
     elseif &ft ==# 'c' && get(g:, 'gcc_cmd', '') != ''
         if WINDOWS()

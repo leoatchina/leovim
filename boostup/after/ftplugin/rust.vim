@@ -7,12 +7,12 @@ if InstalledCoc()
     nnoremap <buffer>\<Space> :CocCommand rust-analyzer.
 endif
 if Installed('vim-floaterm') && executable('cargo')
-    nnoremap <buffer><M-B> :call SmartRunTerm("cargo build", "smart")<Cr>
-    nnoremap <buffer><M-R> :call SmartRunTerm("cargo run", "smart")<Cr>
-    nnoremap <buffer><M-T> :call SmartRunTerm("cargo build && cargo run", "tab")<Cr>
-    nnoremap <buffer><M-'> :call SmartRunTerm("cargo run", "tab")<Cr>
+    nnoremap <buffer><M-B> :call SmartRunTerm("time cargo build", "smart")<Cr>
+    nnoremap <buffer><M-R> :call SmartRunTerm("time cargo run", "smart")<Cr>
+    nnoremap <buffer><M-T> :call SmartRunTerm("time cargo build && cargo run", "tab")<Cr>
+    nnoremap <buffer><M-'> :call SmartRunTerm("time cargo run", "tab")<Cr>
     if WINDOWS() || executable('gnome-terminal') && HAS_GUI()
-        nnoremap <buffer><M-"> :call SmartRunTerm("cargo run", "external")<Cr>
+        nnoremap <buffer><M-"> :call SmartRunTerm("time cargo run", "external")<Cr>
     endif
 endif
 inoremap <buffer>!! !=

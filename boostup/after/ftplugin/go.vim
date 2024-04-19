@@ -24,12 +24,12 @@ if InstalledCoc()
     nmap <buffer>gtx :CocCommand go.tags.clear<cr>
 endif
 if Installed('vim-floaterm') && executable('go')
-    nnoremap <buffer><M-B> :call SmartRunTerm(printf("go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "smart")<Cr>
-    nnoremap <buffer><M-'> :call SmartRunTerm(printf("go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "tab")<Cr>
-    nnoremap <buffer><M-R> :call SmartRunTerm("go run " . GetRootDir(), "smart")<Cr>
-    nnoremap <buffer><M-T> :call SmartRunTerm("go run " . GetRootDir(), "tab")<Cr>
+    nnoremap <buffer><M-B> :call SmartRunTerm(printf("time go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "smart")<Cr>
+    nnoremap <buffer><M-'> :call SmartRunTerm(printf("time go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "tab")<Cr>
+    nnoremap <buffer><M-R> :call SmartRunTerm("time go run " . GetRootDir(), "smart")<Cr>
+    nnoremap <buffer><M-T> :call SmartRunTerm("time go run " . GetRootDir(), "tab")<Cr>
     if WINDOWS() || executable('gnome-terminal') && HAS_GUI()
-        nnoremap <buffer><M-"> :call SmartRunTerm("go run " . GetRootDir(), "external")<Cr>
+        nnoremap <buffer><M-"> :call SmartRunTerm("time go run " . GetRootDir(), "external")<Cr>
     endif
 endif
 inoremap <buffer>:: :=
