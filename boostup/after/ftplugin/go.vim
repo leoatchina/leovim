@@ -9,13 +9,14 @@ if Installed('vim-go')
     nnoremap <buffer><silent><M-?> :GoImpl<Cr>
     nnoremap <buffer><silent><M-.> :GoImplements<Cr>
     nnoremap <buffer><silent><M-/> :GoReferrers<Cr>
-    nnoremap <buffer><silent>,d :GoDeclsDir<Cr>
-    nnoremap <buffer><silent>,c :GoCoverage<Cr>
-    nnoremap <buffer><silent>,a :GoAlternate<Cr>
     if InstalledAdvCompEng()
         nnoremap <buffer><silent>gx :GoDoc<Cr>
     endif
+    nnoremap <buffer><silent><leader>A :GoImports<Cr>
     nnoremap <buffer><silent><M-M> :GoCommands<Cr>
+    nnoremap <buffer><silent>,d :GoDeclsDir<Cr>
+    nnoremap <buffer><silent>,c :GoCoverage<Cr>
+    nnoremap <buffer><silent>,a :GoAlternate<Cr>
 endif
 if InstalledCoc()
     nmap <buffer>gtj :CocCommand go.tags.add json<cr>
