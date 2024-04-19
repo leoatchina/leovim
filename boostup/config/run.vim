@@ -224,7 +224,7 @@ else
     command! RunQfRight call s:asyncrun('right', 'qf')
     nnoremap <silent><M-R> :RunQfRight<CR>
 endif
-if WINDOWS() || executable('gnome-terminal')
+if WINDOWS() || executable('gnome-terminal') && HAS_GUI()
     command! RunExternal call s:asyncrun('external')
     nnoremap <silent><M-"> :RunExternal<CR>
 endif
