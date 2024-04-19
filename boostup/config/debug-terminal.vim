@@ -482,7 +482,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     " special map
     " ---------------------------------------
     function! s:dap_or_floaterm(...)
-        if s:dapui_exists()
+        if s:dapui_opened()
             if a:0 == 0
                 lua require("dapui").eval()<Cr>
             elseif a:1 == 'F'
