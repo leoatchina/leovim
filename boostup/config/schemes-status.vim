@@ -82,7 +82,7 @@ let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
     let left = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileDir() + Mode())
-    return left > 60 ? left - 60 : 0
+    return left > 80 ? left - 80 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
 function! LightlineBufferlineFilter(buffer) abort
