@@ -30,7 +30,7 @@ if has('nvim')
 else
     PlugAdd 'Yggdroot/indentLine'
 endif
-PlugAdd 'dhruvasagar/vim-table-mode'
+PlugAdd 'leoatchina/vim-table-mode'
 " ------------------------------
 " fold
 " ------------------------------

@@ -39,7 +39,7 @@ else
     xnoremap <Space> :WhichKeyVisual ' '<Cr>
     xnoremap , :WhichKeyVisual ','<Cr>
     xnoremap \ :WhichKeyVisual '\'<Cr>
-    " gszcm whichkey
+    " gmzs whichkey
     nnoremap g<Space> :WhichKey 'g'<Cr>
     nnoremap m<Space> :WhichKey 'm'<Cr>
     nnoremap s<Space> :WhichKey 's'<Cr>
@@ -47,11 +47,12 @@ else
     nnoremap z<Space> :WhichKey 'z'<Cr>
     nnoremap Z<Space> :WhichKey 'Z'<Cr>
     " C- keys
+    nnoremap <C-\> :WhichKey "\<C-Bslash\>"<Cr>
     nnoremap <C-f> :WhichKey "\<C-f\>"<Cr>
     xnoremap <C-f> :WhichKeyVisual "\<C-f\>"<Cr>
     " M- keys
-    nnoremap <C-\> :WhichKey "\<C-Bslash\>"<Cr>
     nnoremap <M-g> :WhichKey "\<M-g\>"<Cr>
+    nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
     nnoremap <M-h> :WhichKey "\<M-h\>"<Cr>
     nnoremap <M-j> :WhichKey "\<M-j\>"<Cr>
     nnoremap <M-k> :WhichKey "\<M-k\>"<Cr>
