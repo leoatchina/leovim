@@ -65,6 +65,7 @@ else
     endif
     if Installed("vim-table-mode")
         nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
+        xnoremap <M-t> :WhichKeyVisual "\<M-t\>"<Cr>
     endif
     if g:has_terminal
         nnoremap <M-e> :WhichKey "\<M-e\>"<Cr>
