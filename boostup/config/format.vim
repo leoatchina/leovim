@@ -81,8 +81,8 @@ endif
 " table_mode
 " ----------------------------
 if Installed("vim-table-mode")
-    let g:table_mode_map_prefix      = '<leader>t'
-    let g:table_mode_tableize_d_map  = '<leader>t'
+    let g:table_mode_map_prefix      = '<M-t>'
+    let g:table_mode_tableize_d_map  = '<M-t>'
     let g:table_mode_corner          = '|'
     let g:table_mode_corner_corner   = '+'
     let g:table_mode_header_fillchar = '='

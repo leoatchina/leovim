@@ -52,7 +52,6 @@ else
     xnoremap <C-f> :WhichKeyVisual "\<C-f\>"<Cr>
     " M- keys
     nnoremap <M-g> :WhichKey "\<M-g\>"<Cr>
-    nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
     nnoremap <M-h> :WhichKey "\<M-h\>"<Cr>
     nnoremap <M-j> :WhichKey "\<M-j\>"<Cr>
     nnoremap <M-k> :WhichKey "\<M-k\>"<Cr>
@@ -63,6 +62,9 @@ else
         nnoremap <M-i> :WhichKey "\<M-i\>"<Cr>
         xnoremap <M-i> :WhichKeyVisual "\<M-i\>"<Cr>
         inoremap <M-i> <C-o>:WhichKey "\<M-i\>"<Cr>
+    endif
+    if Installed("vim-table-mode")
+        nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
     endif
     if g:has_terminal
         nnoremap <M-e> :WhichKey "\<M-e\>"<Cr>
