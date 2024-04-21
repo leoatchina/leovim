@@ -176,11 +176,14 @@ nnoremap g_ $
 xnoremap g_ $
 onoremap g_ $
 function! MoveToEndAndAddSemicolon(...) abort
-    call TripTrailingWhiteSpace()
+    execute "normal! :s/\\s\\+$//e\\r"
     normal! g_
-    " check if add ; is needed
-    if index(['c', 'cpp', 'rust', 'java'], &ft) >= 0 && getline('.')[col('.') - 1] != ';'
-        normal! a;
+    if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php'], &ft) >= 0
+        if index([';', '{', '}'], getline('.')[col('.') - 1]) >= 0
+            normal! a
+        else
+            normal! a;
+        endif
     else
         normal! a
     endif
@@ -191,8 +194,8 @@ function! MoveToEndAndAddSemicolon(...) abort
         normal! O
     endif
 endfunction
-inoremap <C-j> <ESC>:call MoveToEndAndAddSemicolon(1)<CR>
-inoremap <C-k> <ESC>:call MoveToEndAndAddSemicolon(0)<CR>
+inoremap <C-j> <C-\><C-n>:call MoveToEndAndAddSemicolon(1)<CR>
+inoremap <C-k> <C-\><C-n>:call MoveToEndAndAddSemicolon(0)<CR>
 " ------------------------
 " yank
 " ------------------------
