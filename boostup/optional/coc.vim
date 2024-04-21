@@ -138,8 +138,8 @@ inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-o>A"
 inoremap <silent><expr> <C-space> coc#refresh()
 inoremap <silent><expr> <C-@> coc#refresh()
 " scroll
-imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<Esc>:call MoveToEndAndAddSemicolon()<CR>"
-imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-k>"
+imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<Esc>:call MoveToEndAndAddSemicolon(1)<CR>"
+imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<Esc>:call MoveToEndAndAddSemicolon(0)<CR>"
 xmap <silent><expr><C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\%"
 xmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\g%"
 " call hierarchy

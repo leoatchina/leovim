@@ -175,7 +175,7 @@ onoremap $ g_
 nnoremap g_ $
 xnoremap g_ $
 onoremap g_ $
-function! MoveToEndAndAddSemicolon() abort
+function! MoveToEndAndAddSemicolon(...) abort
     call TripTrailingWhiteSpace()
     normal! g_
     " check if add ; is needed
@@ -184,9 +184,15 @@ function! MoveToEndAndAddSemicolon() abort
     else
         normal! a
     endif
-    normal! o
+    " o or O
+    if a:0 && a:1 > 0
+        normal! o
+    else
+        normal! O
+    endif
 endfunction
-inoremap <C-v> <ESC>:call MoveToEndAndAddSemicolon()<CR>
+inoremap <C-j> <ESC>:call MoveToEndAndAddSemicolon(1)<CR>
+inoremap <C-k> <ESC>:call MoveToEndAndAddSemicolon(0)<CR>
 " ------------------------
 " yank
 " ------------------------
