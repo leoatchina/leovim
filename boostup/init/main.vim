@@ -175,6 +175,18 @@ onoremap $ g_
 nnoremap g_ $
 xnoremap g_ $
 onoremap g_ $
+function! MoveToEndAndAddSemicolon() abort
+    call TripTrailingWhiteSpace()
+    normal! g_
+    " check if add ; is needed
+    if index(['c', 'cpp', 'rust', 'java'], &ft) >= 0 && getline('.')[col('.') - 1] != ';'
+        normal! a;
+    else
+        normal! a
+    endif
+    normal! o
+endfunction
+inoremap <C-v> <ESC>:call MoveToEndAndAddSemicolon()<CR>
 " ------------------------
 " yank
 " ------------------------

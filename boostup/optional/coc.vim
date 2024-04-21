@@ -137,8 +137,8 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-o>A"
 inoremap <silent><expr> <C-space> coc#refresh()
 inoremap <silent><expr> <C-@> coc#refresh()
-" scroll check. NOTE:  vim-quickui already configed
-imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<C-j>"
+" scroll
+imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<Esc>:call MoveToEndAndAddSemicolon()<CR>"
 imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-k>"
 xmap <silent><expr><C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\%"
 xmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\g%"
