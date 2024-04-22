@@ -88,7 +88,7 @@ if [ $# -gt 0 ]; then
         installplug=$2
     else
         installplug="yes"
-    fi 
+    fi
     # leotmux
     if [[ $mode == 'all' || $mode == 'leotmux' ]]; then
         if [ -d ~/.leotmux ]; then
@@ -129,10 +129,11 @@ if [ $# -gt 0 ]; then
         if [ -L $node_link ]; then
             info "$node_link already linked"
         else
-            node=`wget -qO- https://nodejs.org/dist/latest/ | grep -oP 'href="\K[^"]*linux-x64.tar.xz' | head -n 1`
+            url=`wget -qO- https://nodejs.cn/download/current | grep -oP 'href="\K[^"]*linux-x64.tar.xz' | head -n 1`
             cd ~/.local
             rm -rf node*
-            wget https://nodejs.org/dist/latest/$node
+            wget $url
+            node="${url##*/}"
             tar xvf $node && rm $node && ln -sf ${node%.*.*} node
             success "$node_link linked"
         fi
@@ -230,7 +231,7 @@ if [ $installplug != 'no' ]; then
         setup_plug "vim"
     fi
     setup_plug "$HOME/.local/bin/nv.sh"
-    setup_plug "$HOME/.local/bin/nvi.sh" 
+    setup_plug "$HOME/.local/bin/nvi.sh"
 fi
 
 echo
