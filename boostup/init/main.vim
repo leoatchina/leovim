@@ -166,6 +166,7 @@ if exists('g:vscode')
     imap <C-a> <C-o>ggVG
     nmap <C-a> ggVG
     xmap <C-a> <ESC>ggVG
+    imap <C-x> <Del>
     nmap <C-x> x
     xmap <C-x> x
 else
