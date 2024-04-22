@@ -194,7 +194,7 @@ if InstalledFzf()
         if a:0 == 0
             return
         endif
-        if a:1 == 2
+        if a:1 == 2 && GitBranch() != ''
             let fzf_cmd = 'FzfGGrep'
         elseif executable('rg')
             let fzf_cmd = 'FzfRg'

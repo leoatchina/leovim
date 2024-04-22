@@ -403,10 +403,14 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     endif
     " searchall
     if found_symbol == 0
-        if open_position == 'list' && get(g:, 'searchall', '') != ''
-            execute g:searchall . ' ' . tagname
+        if get(g:, 'searchall', '') != ''
+            if open_position == 'list'
+                execute g:searchall . ' ' . tagname
+            else
+                call preview#errmsg('Not found by neither lsp nor tags, you should press <M-c> to do grep search.')
+            endif
         else
-            call preview#errmsg('Not found by neither lsp nor tags.')
+            call preview#errmsg('Not found by neither lsp nor tags, and could not do grep search.')
         endif
     endif
 endfunction
