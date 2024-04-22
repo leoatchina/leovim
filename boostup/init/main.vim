@@ -162,7 +162,15 @@ cmap <C-a> <Home>
 cmap <C-e> <End>
 imap <expr><C-b> pumvisible()? "\<C-b>":"\<C-o>I"
 imap <expr><C-f> pumvisible()? "\<C-f>":"\<C-o>A"
-imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
+if exists('g:vscode')
+    imap <C-a> <C-o>ggVG
+    nmap <C-a> ggVG
+    xmap <C-a> <ESC>ggVG
+    nmap <C-x> x
+    xmap <C-x> x
+else
+    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
+endif
 nnoremap H ^
 xnoremap H ^
 onoremap H ^
