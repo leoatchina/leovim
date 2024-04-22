@@ -81,11 +81,12 @@ endif
 " table_mode
 " ----------------------------
 if Installed("vim-table-mode")
-    let g:table_mode_map_prefix      = '<leader>t'
-    let g:table_mode_tableize_d_map  = '<leader>t'
+    let g:table_mode_map_prefix      = '<M-t>'
+    let g:table_mode_tableize_d_map  = '<M-T>'
     let g:table_mode_corner          = '|'
     let g:table_mode_corner_corner   = '+'
     let g:table_mode_header_fillchar = '='
+    nmap <M-t><M-t> <Plug>(table-mode-tableize)
     function! s:isAtStartOfLine(mapping)
         let text_before_cursor = getline('.')[0 : col('.')-1]
         let mapping_pattern = '\V' . escape(a:mapping, '\')

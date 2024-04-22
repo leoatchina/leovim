@@ -30,7 +30,6 @@ if has('nvim')
 else
     PlugAdd 'Yggdroot/indentLine'
 endif
-PlugAdd 'dhruvasagar/vim-table-mode'
 " ------------------------------
 " fold
 " ------------------------------
@@ -94,6 +93,7 @@ if executable('mdr') && (has('nvim') || has('patch-8.1.1401'))
     PlugAddOpt 'preview-markdown.vim'
 endif
 if Require('markdown')
+    PlugAdd 'leoatchina/vim-table-mode'
     PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
     PlugAdd 'ferrine/md-img-paste.vim', {'for': 'markdown'}
     if get(g:, 'node_version', 0) > 12 && (has('nvim') || v:version >= 801)

@@ -175,6 +175,27 @@ onoremap $ g_
 nnoremap g_ $
 xnoremap g_ $
 onoremap g_ $
+function! MoveToEndAndAddSemicolon(...) abort
+    execute "normal! :s/\\s\\+$//e\\r"
+    normal! g_
+    if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php'], &ft) >= 0
+        if index([';', '{', '}'], getline('.')[col('.') - 1]) >= 0
+            normal! a
+        else
+            normal! a;
+        endif
+    else
+        normal! a
+    endif
+    " o or O
+    if a:0 && a:1 > 0
+        normal! o
+    else
+        normal! O
+    endif
+endfunction
+inoremap <C-j> <C-\><C-n>:call MoveToEndAndAddSemicolon(1)<CR>
+inoremap <C-k> <C-\><C-n>:call MoveToEndAndAddSemicolon(0)<CR>
 " ------------------------
 " yank
 " ------------------------

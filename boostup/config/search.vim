@@ -152,12 +152,12 @@ command! -nargs=1 GrepAll call s:grep(2, <q-args>)
 nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
 xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
 nnoremap s. :GrepAllLast<Cr>
-nnoremap s; :GrepAll<Space>
+nnoremap s/ :GrepAll<Space>
 " search
 nnoremap s] :Grep <C-r><C-w><Cr>
 xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
 nnoremap s[ :GrepLast<Cr>
-nnoremap s, :Grep<Space>
+nnoremap s? :Grep<Space>
 au FileType qf nnoremap <buffer>r :cdo s/<C-r>=get(t:, 'grepper', '')<Cr>//gc<Left><Left><Left>
 au FileType qf nnoremap <buffer><M-r> :cdo s/<C-r>=get(t:, 'grepper', '')<Cr>//gc<Left><Left><Left>
 au FileType qf nnoremap <buffer><M-S> :cfdo up
