@@ -163,12 +163,12 @@ cmap <C-e> <End>
 imap <expr><C-b> pumvisible()? "\<C-b>":"\<C-o>I"
 imap <expr><C-f> pumvisible()? "\<C-f>":"\<C-o>A"
 if exists('g:vscode')
-    imap <C-a> <C-o>ggVG
-    nmap <C-a> ggVG
+    imap <C-a> <ESC>ggVG
     xmap <C-a> <ESC>ggVG
-    imap <C-x> <Del>
-    nmap <C-x> x
-    xmap <C-x> x
+    nmap <C-a> ggVG
+    imap <C-x> <C-o>"*
+    xmap <C-x> "*x
+    nmap <C-x> "*x
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
 endif
