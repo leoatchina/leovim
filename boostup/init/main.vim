@@ -208,13 +208,9 @@ inoremap <C-k> <C-\><C-n>:call MoveToEndAndAddSemicolon(0)<CR>
 " ------------------------
 " yank
 " ------------------------
-nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
-if exists("##ModeChanged")
-    au ModeChanged *:s set clipboard=
-    au ModeChanged s:* set clipboard=unnamedplus
-endif
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------

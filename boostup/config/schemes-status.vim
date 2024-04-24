@@ -78,8 +78,13 @@ endfunction
 let g:lightline#bufferline#unnamed = ''
 let g:lightline#bufferline#show_number = 0
 let g:lightline#bufferline#unicode_symbols = 1
-let g:lightline#bufferline#enable_devicons = 0
-let g:lightline#bufferline#enable_nerdfont = 1
+if Installed("nvim-web-devicons") || Installed("vim-web-devicons")
+    let g:lightline#bufferline#enable_devicons = 1
+    let g:lightline#bufferline#enable_nerdfont = 0
+else
+    let g:lightline#bufferline#enable_devicons = 0
+    let g:lightline#bufferline#enable_nerdfont = 1
+endif
 function! LightlineBufferlineMaxWidth() abort
     let left = &columns - len(FileReadonly() + GitBranch() + RootDir() + FileDir() + Mode())
     return left > 60 ? left - 60 : 0
@@ -183,7 +188,6 @@ elseif InstalledCoc()
     let g:lightline.component_function.coc_diag = 'CocDiagnostic'
     let g:lightline.active.right += [['coc_diag']]
 endif
-" let g:lightline.active.right += [['filedir'], ['rootdir']]
 function! Buffers()
     let buffers = lightline#bufferline#buffers()
     if empty(buffers[-1])
@@ -196,9 +200,9 @@ function! Buffers()
         endif
     endif
     if RootDir() == ''
-        let res[0] += ['Ⓡ  ' . FileDir()]
+        let res[0] += [' Ⓡ ' . FileDir()]
     else
-        let res[0] += ['Ⓡ  ' . RootDir()]
+        let res[0] += [' Ⓡ ' . RootDir()]
         let res[1] = [FileDir() . ' ' . res[1][0]]
     endif
     return res

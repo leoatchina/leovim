@@ -1,4 +1,7 @@
-let s:alphabet_list = map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
+let s:alphabet_list = [0] + map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
+if has('clipboard')
+    let s:alphabet_list = ["*"] + s:alphabet_list
+endif
 function! fzf#registers#source(...)
     let alpha = a:0 && a:1 > 0
     let alpha_regs = []

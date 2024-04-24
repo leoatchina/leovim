@@ -23,35 +23,23 @@ nnoremap <silent><Leader>Y :call YankFromBeginning()<Cr>
 if has('clipboard')
     if UNIX()
         nnoremap <leader>+ viw"+y
-        xnoremap y "+y
-        nnoremap Y "+y$
     else
         nnoremap <leader>+ viw"*y
-        xnoremap y "*y
-        nnoremap Y "*y$
     endif
     " paste
     cnoremap <M-v> <C-r>*
     inoremap <M-v> <C-r>*
-    " M-x/BS
-    nnoremap <M-x> "*x
-    xnoremap <M-x> "*x
-    nnoremap <Del> "*x
-    xnoremap <Del> "*x
-    nnoremap <M-X> "*X
-    xnoremap <M-X> "*X
-else
-    nnoremap Y y$
-    cnoremap <M-v> <C-r>"
-    inoremap <M-v> <C-r>"
-    " M-x/BS
-    nnoremap <M-x> x
-    xnoremap <M-x> x
-    nnoremap <Del> x
-    xnoremap <Del> x
-    nnoremap <M-X> X
-    xnoremap <M-X> X
 endif
+nnoremap Y y$
+cnoremap <M-v> <C-r>"
+inoremap <M-v> <C-r>"
+" M-x/BS
+nnoremap <M-x> x
+xnoremap <M-x> x
+nnoremap <Del> x
+xnoremap <Del> x
+nnoremap <M-X> X
+xnoremap <M-X> X
 inoremap <M-X> <BS>
 cnoremap <M-X> <BS>
 cnoremap <C-y> <C-r>"
@@ -95,6 +83,10 @@ if InstalledFzf()
     endfor
 else
     nnoremap <silent><M-v> :registers<Cr>
+    if has('clipboard')
+        nnoremap <M-y> "*y:echo "yanked to clipboard"<C>
+        xnoremap <M-y> "*y:echo "yanked to clipboard"<C>
+    endif
 endif
 " ------------------------
 " osc52 yankpost
