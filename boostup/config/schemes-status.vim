@@ -86,7 +86,7 @@ function! LightlineBufferlineMaxWidth() abort
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
 function! LightlineBufferlineFilter(buffer) abort
-    return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# ''
+    return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# '' && getbufvar(a:buffer, '&filetype') !=# 'startify'
 endfunction
 let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
 nmap ]b <Plug>lightline#bufferline#go_next()
