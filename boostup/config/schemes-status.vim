@@ -126,13 +126,11 @@ let g:lightline = {
                     \ 'mode': 'Mode',
                     \ },
                 \ 'component_expand': {},
-                \ 'component_type': {},
+                \ 'component_type': {
+                    \ 'gitbranch': 'info',
+                    \ },
                 \ 'active': {}
             \ }
-"------------------------
-" left part
-"------------------------
-let g:lightline.active.left = [['mode', 'readonly', 'paste' ], ['rootpath'], ['filedir', 'modified'], ['buffers']]
 "------------------------
 " right part
 "------------------------
@@ -187,24 +185,26 @@ elseif InstalledCoc()
     let g:lightline.component_function.coc_diag = 'CocDiagnostic'
     let g:lightline.active.right += [['coc_diag']]
 endif
+let g:lightline.active.right += [['filedir'], ['rootpath']]
 function! Buffers() abort
     let buffers = lightline#bufferline#buffers()
-    if empty(buffers[0])
+    if empty(buffers[-1])
         return buffers
     else
-        let res = [[]]
-        if empty(buffers[-1])
-            call add(res, buffers[-2])
-            call add(res, buffers[0])
+        if empty(buffers[0])
+            let res = [buffers[2], buffers[1], []]
         else
-            call add(res, buffers[1])
-            call add(res, buffers[0] + buffers[2])
+            let res = [buffers[0] + buffers[2], buffers[1], []]
         endif
         return res
     endif
 endfunction
 let g:lightline['component_expand']['buffers'] = 'Buffers'
 let g:lightline['component_type']['buffers'] = 'tabsel'
+"------------------------
+" left part
+"------------------------
+let g:lightline.active.left = [['mode', 'paste'], ['buffers', 'modified']]
 " ------------------------
 " lightline themes
 " ------------------------
