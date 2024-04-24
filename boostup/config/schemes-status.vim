@@ -81,8 +81,8 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
-    let left = &columns - len(FileReadonly()  + GitBranch() + RootPath() + FileDir() + Mode())
-    return left > 80 ? left - 80 : 0
+    let left = &columns - len(FileReadonly() + GitBranch() + RootDir() + FileDir() + Mode())
+    return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
 function! LightlineBufferlineFilter(buffer) abort
@@ -103,7 +103,7 @@ PlugAddOpt 'lightline-bufferline'
 " init
 " ------------------------
 function! FileDir()
-    let root = RootPath()
+    let root = RootDir()
     let path = fnameescape(substitute(Expand('%:p:h'), '\\', '/', 'g'))
     if root == ''
         return path
@@ -111,7 +111,7 @@ function! FileDir()
         return path[len(root):]
     endif
 endfunction
-function! RootPath()
+function! RootDir()
     return GitRootDir() == '' ? '' : GitRootDir() . '/'
 endfunction
 let g:lightline = {
@@ -121,8 +121,6 @@ let g:lightline = {
                 \ 'component_function': {
                     \ 'readonly': 'FileReadonly',
                     \ 'gitbranch': 'GitBranch',
-                    \ 'rootpath': 'RootPath',
-                    \ 'filedir': 'FileDir',
                     \ 'mode': 'Mode',
                     \ },
                 \ 'component_expand': {},
@@ -185,26 +183,32 @@ elseif InstalledCoc()
     let g:lightline.component_function.coc_diag = 'CocDiagnostic'
     let g:lightline.active.right += [['coc_diag']]
 endif
-let g:lightline.active.right += [['filedir'], ['rootpath']]
-function! Buffers() abort
+" let g:lightline.active.right += [['filedir'], ['rootdir']]
+function! Buffers()
     let buffers = lightline#bufferline#buffers()
     if empty(buffers[-1])
-        return buffers
+        let res = copy(buffers)
     else
         if empty(buffers[0])
             let res = [buffers[2], buffers[1], []]
         else
             let res = [buffers[0] + buffers[2], buffers[1], []]
         endif
-        return res
     endif
+    if RootDir() == ''
+        let res[0] += ['Ⓡ  ' . FileDir()]
+    else
+        let res[0] += ['Ⓡ  ' . RootDir()]
+        let res[1] = [FileDir() . ' ' . res[1][0]]
+    endif
+    return res
 endfunction
 let g:lightline['component_expand']['buffers'] = 'Buffers'
 let g:lightline['component_type']['buffers'] = 'tabsel'
 "------------------------
 " left part
 "------------------------
-let g:lightline.active.left = [['mode', 'paste'], ['buffers', 'modified']]
+let g:lightline.active.left = [['mode'], ['buffers', 'paste']]
 " ------------------------
 " lightline themes
 " ------------------------
@@ -246,7 +250,7 @@ endfunction
 augroup UpdateLightline
     autocmd!
     autocmd ColorScheme * call UpdateLightline()
-    autocmd WinEnter,VimEnter * call lightline#update()
+    autocmd WinEnter,VimEnter,BufWritePost * call lightline#update()
     if InstalledCoc()
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
