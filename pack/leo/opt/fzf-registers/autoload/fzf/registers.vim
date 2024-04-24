@@ -1,10 +1,6 @@
-let s:alphabet_list = [0] + map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
-if has('clipboard')
-    let s:alphabet_list = ["*"] + s:alphabet_list
-endif
+let s:alphabet_list = map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
 function! fzf#registers#source(...)
     let alpha = a:0 && a:1 > 0
-    let alpha_regs = []
     if exists('*execute')
         let reg_lst = split(execute('registers'), '\n')
     else
@@ -14,26 +10,38 @@ function! fzf#registers#source(...)
         let reg_lst = split(reg, '\n')
     endif
     let lst = []
+    let lst_header = []
+    let regs_alpha = []
     for reg in reg_lst[1:]
         if reg_lst[0][0] !=# '-'
             let reg = reg[6:]
         endif
-        if alpha && index(s:alphabet_list, reg[0]) < 0
+        if alpha && index(s:alphabet_list, reg[0]) < 0 && index(['"', '+', '*'], reg[0] < 0)
             continue
         endif
-        if reg[0] =~ '+'
-            call insert(lst, reg, 0)
+        if alpha && reg[0] =~ '"'
+            call insert(lst_header, reg, 0)
+        elseif reg[0] =~ '+'
+            if alpha
+                call insert(lst_header, reg, 0)
+            else
+                call insert(lst, reg, 0)
+            endif
         elseif reg[0] =~ '*'
-            call insert(lst, reg, 0)
+            if alpha
+                call insert(lst_header, reg, 0)
+            else
+                call insert(lst, reg, 0)
+            endif
         else
             call add(lst, reg)
             if alpha
-                call add(alpha_regs, reg[0])
+                call add(regs_alpha, reg[0])
             endif
         endif
     endfor
     if alpha
-        return filter(copy(s:alphabet_list), 'index(alpha_regs, v:val) < 0') + lst
+        return lst_header + filter(copy(s:alphabet_list), 'index(regs_alpha, v:val) < 0') + lst
     else
         return lst
     endif
