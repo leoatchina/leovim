@@ -200,9 +200,9 @@ function! Buffers()
         endif
     endif
     if RootDir() == ''
-        let res[0] += [' Ⓡ ' . FileDir()]
+        let res[0] += [' # ' . FileDir()]
     else
-        let res[0] += [' Ⓡ ' . RootDir()]
+        let res[0] += [' # ' . RootDir()]
         let res[1] = [FileDir() . ' ' . res[1][0]]
     endif
     return res
