@@ -110,10 +110,10 @@ lsp_zero.on_attach(function(client, bufnr)
   -- format
   map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts)
   -- fzf-lsp
-  map("n", "gl", [[<Cmd>FzfOutgoingCalls<Cr>]], opts)
-  map("n", "gh", [[<Cmd>FzfIncomingCalls<Cr>]], opts)
   map("n", "<leader>s", [[<Cmd>Vista finder<Cr>]], opts)
-  map("n", "<leader>S", [[<Cmd>FzfWorkspaceSymbols<Cr>]], opts)
+  map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts)
+  map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts)
+  map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts)
   -- list workspace folder && omnifunc
   map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts)
   -- lsp info/restart
