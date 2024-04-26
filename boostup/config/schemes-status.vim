@@ -199,10 +199,23 @@ function! Buffers()
             let res = [buffers[0] + buffers[2], buffers[1], []]
         endif
     endif
-    if RootDir() == ''
-        let res[0] += [' # ' . FileDir()]
+    if WINDOWS()
+        if has('nvim')
+            if HAS_GUI()
+                let root_icon = ' Ⓡ  '
+            else
+                let root_icon = '   '
+            endif
+        else
+            let root_icon = ' # '
+        endif
     else
-        let res[0] += [' # ' . RootDir()]
+        let root_icon = '   '
+    endif
+    if RootDir() == ''
+        let res[0] += [root_icon . FileDir()]
+    else
+        let res[0] += [root_icon . RootDir()]
         let res[1] = [FileDir() . ' ' . res[1][0]]
     endif
     return res
