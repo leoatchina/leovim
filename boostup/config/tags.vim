@@ -169,17 +169,17 @@ if Installed('gutentags_plus')
     let g:gutentags_auto_add_gtags_cscope = 1
     let g:gutentags_plus_switch = 1
     let g:gutentags_plus_nomap  = 1
-    nnoremap <leader>gs <Plug>GscopeFindSymbol
-    nnoremap <leader>gd <Plug>GscopeFindDefinition
-    nnoremap <leader>gl <Plug>GscopeFindCallingFunc
-    nnoremap <leader>gh <Plug>GscopeFindCalledFunc
-    nnoremap <leader>gt <Plug>GscopeFindText
-    nnoremap <leader>ge <Plug>GscopeFindEgrep
-    nnoremap <leader>ga <Plug>GscopeFindAssign
-    nnoremap <leader>gg <Plug>GscopeFindCtag
+    nnoremap <silent><leader>gs :GscopeFind s <C-R><C-W><cr>
+    nnoremap <silent><leader>gd :GscopeFind g <C-R><C-W><cr>
+    nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><cr>
+    nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><cr>
+    nnoremap <silent><leader>gt :GscopeFind t <C-R><C-W><cr>
+    nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><cr>
+    nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><cr>
+    nnoremap <silent><leader>gg :GscopeFind z <C-R><C-W><cr>
     " file
-    nnoremap <leader>gf <Plug>GscopeFindFile
-    nnoremap <leader>gi <Plug>GscopeFindInclude
+    nnoremap <silent><leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+    nnoremap <silent><leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
     " kill
     nnoremap <silent><leader>gk :GscopeKill<cr>
     if InstalledLeaderf()
