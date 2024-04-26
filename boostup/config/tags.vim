@@ -171,12 +171,17 @@ if Installed('gutentags_plus')
     let g:gutentags_plus_nomap  = 1
     nnoremap <silent><leader>gs :GscopeFind s <C-R><C-W><cr>
     nnoremap <silent><leader>gd :GscopeFind g <C-R><C-W><cr>
-    nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><cr>
-    nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><cr>
     nnoremap <silent><leader>gt :GscopeFind t <C-R><C-W><cr>
     nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><cr>
     nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><cr>
     nnoremap <silent><leader>gg :GscopeFind z <C-R><C-W><cr>
+    if InstalledAdvCompEng()
+        nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><cr>
+        nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><cr>
+    else
+        nnoremap <silent>gl :GscopeFind d <C-R><C-W><cr>
+        nnoremap <silent>gh :GscopeFind c <C-R><C-W><cr>
+    endif
     " file
     nnoremap <silent><leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
     nnoremap <silent><leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
