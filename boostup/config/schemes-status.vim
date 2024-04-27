@@ -207,7 +207,7 @@ function! Buffers()
                 let root_icon = '   '
             endif
         else
-            let root_icon = ' # '
+            let root_icon = ' @ '
         endif
     else
         let root_icon = '   '
