@@ -292,16 +292,16 @@ nnoremap <M-j>s <C-w>f
 nnoremap <M-j>t <C-w>gf
 nnoremap <M-j>v <C-w>f<C-w>L
 if PrefFzf()
-    nnoremap <silent><leader>ff :FzfFiles<Cr>
-    nnoremap <silent><nowait>F  :FzfGitFiles<Cr>
+    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
+    nnoremap <silent><nowait><leader>E  :FzfGitFiles<Cr>
     nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
 elseif InstalledLeaderf()
-    nnoremap <silent><leader>ff :LeaderfFile ./<Cr>
-    nnoremap <silent><nowait>F  :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
+    nnoremap <silent><nowait><leader>E  :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
     nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
 else
-    nnoremap <silent><leader>ff :CtrlPCurFile<Cr>
-    nnoremap <silent><nowait>F  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
+    nnoremap <silent><nowait><leader>E  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
     nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
 endif
 if has('nvim') && InstalledCoc()
@@ -309,11 +309,11 @@ if has('nvim') && InstalledCoc()
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
     command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><leader>E :CocFile<Cr>
+    nnoremap <silent><nowait><leader>e :CocFile<Cr>
 elseif Installed('leaderf-filer')
-    nnoremap <silent><nowait><leader>E :LeaderfFiler<Cr>
+    nnoremap <silent><nowait><leader>e :LeaderfFiler<Cr>
 else
-    nnoremap <leader>E :e<Space>
+    nnoremap <leader>e :e<Space>
 endif
 nnoremap <leader><Cr> :e!
 " --------------------------
