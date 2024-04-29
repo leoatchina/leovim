@@ -1,6 +1,5 @@
 PlugAddOpt 'fern.vim'
 nnoremap <leader>fn :Fern
-nnoremap <leader>f. :Fern . -reveal=%<Cr>
 nnoremap <leader>fr :Fern . -drawer -reveal=%<Cr>
 nnoremap <leader>fo :Fern . -opener=tabedit<Cr>
 " icons

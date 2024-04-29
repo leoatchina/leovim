@@ -304,14 +304,17 @@ else
     nnoremap <silent><nowait><leader>E  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
     nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
 endif
+if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
+    source $OPTIONAL_DIR/fern.vim
+endif
 if has('nvim') && InstalledCoc()
     function! s:coc_file() abort
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
     command! CocFile call s:coc_file()
     nnoremap <silent><nowait><leader>e :CocFile<Cr>
-elseif Installed('leaderf-filer')
-    nnoremap <silent><nowait><leader>e :LeaderfFiler<Cr>
+elseif Installed('fern.vim')
+    nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
 else
     nnoremap <leader>e :e<Space>
 endif
