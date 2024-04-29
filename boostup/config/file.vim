@@ -112,7 +112,6 @@ function! s:quit() abort
 endfunction
 command! Quit call s:quit()
 nnoremap <silent><leader>q :Quit<Cr>
-nnoremap <silent><buffer><leader>q :q!<Cr>
 "------------------------
 " cd dir
 "------------------------
