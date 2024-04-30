@@ -112,7 +112,6 @@ function! s:quit() abort
 endfunction
 command! Quit call s:quit()
 nnoremap <silent><leader>q :Quit<Cr>
-nnoremap <silent><buffer><leader>q :q!<Cr>
 "------------------------
 " cd dir
 "------------------------
@@ -292,31 +291,35 @@ nnoremap <M-j>s <C-w>f
 nnoremap <M-j>t <C-w>gf
 nnoremap <M-j>v <C-w>f<C-w>L
 if PrefFzf()
-    nnoremap <silent><leader>ff :FzfFiles<Cr>
+    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
+    nnoremap <silent><nowait><leader>fg :FzfGitFiles<Cr>
     nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
-    nnoremap <silent><nowait><C-w><C-p> :FzfGitFiles<Cr>
 elseif InstalledLeaderf()
-    nnoremap <silent><leader>ff :LeaderfFile ./<Cr>
+    nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
+    nnoremap <silent><nowait><leader>fg :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
     nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
-    nnoremap <silent><nowait><C-w><C-p> :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
 else
-    nnoremap <silent><leader>ff :CtrlPCurFile<Cr>
+    nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
+    nnoremap <silent><nowait><leader>fg :CtrlP <C-r>=GitRootDir()<Cr><Cr>
     nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
-    nnoremap <silent><nowait><C-w><C-p> :CtrlP <C-r>=GitRootDir()<Cr><Cr>
+endif
+if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
+    source $OPTIONAL_DIR/fern.vim
 endif
 if has('nvim') && InstalledCoc()
     function! s:coc_file() abort
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
     command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><C-w><C-n> :CocFile<Cr>
-elseif Installed('leaderf-filer')
-    nnoremap <silent><nowait><C-w><C-n> :LeaderfFiler<Cr>
-else
-    nnoremap <C-w><C-n> :e<Space>
+    nnoremap <silent><nowait><leader>e :CocFile<Cr>
+elseif Installed('vim-floaterm') && executable('yazi')
+    command! Yazi FloatermNew --wintype=float --position=center --width=0.8 --height=0.8 yazi
+    nnoremap <silent><nowait><leader>e :Yazi<Cr>
+elseif Installed('fern.vim')
+    nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
 endif
-nnoremap <leader><Cr> :e<Cr>
-nnoremap <leader>E :e!<Cr>
+nnoremap <leader><Cr> :e!<Cr>
+nnoremap <leader>E :e<Space>
 " --------------------------
 " project
 " --------------------------

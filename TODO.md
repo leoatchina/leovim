@@ -70,8 +70,6 @@
   - [x] local
   - [x] remote url
 - [x] Add ctrl-e to edit command in FzfCallCommands
-- [ ] Expand and relative functions/configs optimize in WINDOWS
-- [ ] fzfx.nvim
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky

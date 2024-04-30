@@ -50,9 +50,9 @@ endif
 " --------------------------
 " tree_browser
 " --------------------------
-if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
-    let g:tree_browser = 'fern'
+if Installed('fern.vim')
     source $OPTIONAL_DIR/fern.vim
+    let g:tree_browser = 'fern'
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_buf_ft', ["fern"]),

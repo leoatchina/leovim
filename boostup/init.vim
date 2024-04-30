@@ -93,7 +93,7 @@ if MACVIM()
 endif
 if WINDOWS()
     if s:gui_running == 0 && !has('nvim') && v:version < 900
-        echoe "In windows , please update to vim9.0+ if without gui."
+        echoe "In windows, please update to vim9.0+ if without gui."
         finish
     elseif v:version < 800 && !has('nvim')
         echoe 'vim 8.0 or neovim 0.8 is at least required when uing leovim in windows.'

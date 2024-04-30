@@ -186,9 +186,6 @@ endif
 if has('nvim') || has('patch-7.4.1126')
     if g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
         PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
-        if !Planned('coc.nvim') || Planned('coc.nvim') && !has('nvim')
-            PlugAdd 'tamago324/LeaderF-filer'
-        endif
     endif
 endif
 " ----------------------------

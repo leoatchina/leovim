@@ -142,9 +142,6 @@ endif
 if InstalledLeaderf()
     nnoremap <leader>F :Leaderf
     source $OPTIONAL_DIR/leaderf.vim
-    if Installed('leaderf-filer')
-        source $OPTIONAL_DIR/leaderf-filer.vim
-    endif
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
     nnoremap <silent><leader>; :Leaderf --next<Cr>
     nnoremap <silent><leader>, :Leaderf --previous<Cr>

@@ -1,6 +1,5 @@
 PlugAddOpt 'fern.vim'
 nnoremap <leader>fn :Fern
-nnoremap <leader>f. :Fern . -reveal=%<Cr>
 nnoremap <leader>fr :Fern . -drawer -reveal=%<Cr>
 nnoremap <leader>fo :Fern . -opener=tabedit<Cr>
 " icons
@@ -17,28 +16,6 @@ PlugAddOpt 'fern-git-status.vim'
 PlugAddOpt 'fern-mapping-git.vim'
 PlugAddOpt 'fern-hijack.vim'
 PlugAddOpt 'fern-preview.vim'
-" fern init
-function! s:fern_init() abort
-    nmap <silent><buffer> <Plug>(fern-action-open) <Plug>(fern-action-open:select)
-    nmap <silent><buffer> <C-]> <Plug>(fern-action-open:vsplit)
-    nmap <silent><buffer> <C-x> <Plug>(fern-action-open:split)
-    nmap <silent><buffer> <C-t> <Plug>(fern-action-open:tabedit)
-    " preview
-    nmap <silent><buffer> P     <Plug>(fern-action-preview:toggle)
-    nmap <silent><buffer> <C-p> <Plug>(fern-action-preview:auto:toggle)
-    nmap <silent><buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
-    nmap <silent><buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
-    " smart close preview
-    nmap <silent><buffer> q     <Plug>(fern-quit-or-close-preview)
-    nmap <silent><buffer> Q     <Plug>(fern-quit-or-close-preview)
-    nmap <silent><buffer> <M-q> <Plug>(fern-quit-or-close-preview)
-    nmap <silent><buffer> <C-c> <Plug>(fern-quit-or-close-preview)
-    nmap <silent><buffer> <expr><Plug>(fern-quit-or-close-preview) fern_preview#smart_preview("\<Plug>(fern-action-preview:close)", ":q\<CR>")
-endfunction
-augroup FernInit
-    autocmd!
-    autocmd FileType fern call s:fern_init()
-augroup END
 " ---------------
 " fzf-fern
 " ---------------
