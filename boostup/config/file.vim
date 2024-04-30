@@ -292,15 +292,15 @@ nnoremap <M-j>t <C-w>gf
 nnoremap <M-j>v <C-w>f<C-w>L
 if PrefFzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
-    nnoremap <silent><nowait><leader>E  :FzfGitFiles<Cr>
+    nnoremap <silent><nowait><leader>fg :FzfGitFiles<Cr>
     nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
 elseif InstalledLeaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
-    nnoremap <silent><nowait><leader>E  :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>fg :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
     nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
-    nnoremap <silent><nowait><leader>E  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>fg :CtrlP <C-r>=GitRootDir()<Cr><Cr>
     nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
 endif
 if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
@@ -311,13 +311,12 @@ if has('nvim') && InstalledCoc()
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
     command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><leader>e :CocFile<Cr>
+    nnoremap <silent><nowait><leader>fe :CocFile<Cr>
 elseif Installed('fern.vim')
-    nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
-else
-    nnoremap <leader>e :e<Space>
+    nnoremap <silent><nowait><leader>fe :Fern . -reveal=%<Cr>
 endif
-nnoremap <leader><Cr> :e!
+nnoremap <leader><Cr> :e!<Cr>
+nnoremap <leader>E :e<Space>
 " --------------------------
 " project
 " --------------------------
