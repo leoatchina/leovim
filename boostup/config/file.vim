@@ -311,9 +311,12 @@ if has('nvim') && InstalledCoc()
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
     command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><leader>fe :CocFile<Cr>
+    nnoremap <silent><nowait><leader>e :CocFile<Cr>
+elseif Installed('vim-floaterm') && executable('yazi')
+    command! Yazi FloatermNew --wintype=float --position=center --width=0.8 --height=0.8 yazi
+    nnoremap <silent><nowait><leader>e :Yazi<Cr>
 elseif Installed('fern.vim')
-    nnoremap <silent><nowait><leader>fe :Fern . -reveal=%<Cr>
+    nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
 endif
 nnoremap <leader><Cr> :e!<Cr>
 nnoremap <leader>E :e<Space>
