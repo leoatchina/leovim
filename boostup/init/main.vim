@@ -252,12 +252,10 @@ let g:conflict_marker_enable_mappings = 0
 PlugAddOpt 'conflict-marker.vim'
 nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
 nnoremap <leader>co :ConflictMarkerOurselves<Cr>
-nnoremap <leader>c; :ConflictMarkerNextHunk<Cr>
-nnoremap <leader>c, :ConflictMarkerPrevHunk<Cr>
-nnoremap <leader>c/ /\v^[<\|=>]{7}( .*\|$)<CR>
-nnoremap <leader>c? ?\v^[<\|=>]{7}( .*\|$)<CR>
 nnoremap <leader>cN :ConflictMarkerNone<Cr>
 nnoremap <leader>cB :ConflictMarkerBoth<Cr>
+nnoremap <leader>c; :ConflictMarkerNextHunk<Cr>
+nnoremap <leader>c, :ConflictMarkerPrevHunk<Cr>
 " ------------------------------
 " nerdcommenter
 " ------------------------------
