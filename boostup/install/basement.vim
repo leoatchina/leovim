@@ -240,9 +240,6 @@ endfunction
 function! InstalledLeaderf() abort
     return Installed('leaderf')
 endfunction
-function! PrefFzf()
-    return InstalledFzf() && (get(g:, 'prefer_fzf', UNIX()) || !InstalledLeaderf())
-endfunction
 function! InstalledCoc() abort
     return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && InstalledFzf()
 endfunction
@@ -279,4 +276,7 @@ function! InstalledCmp() abort
 endfunction
 function! InstalledAdvCompEng() abort
     return InstalledCoc() || InstalledNvimLsp()
+endfunction
+function! PrefFzf()
+    return InstalledFzf() && (get(g:, 'prefer_fzf', UNIX()) || !InstalledLeaderf())
 endfunction
