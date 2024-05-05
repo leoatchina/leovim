@@ -68,6 +68,10 @@ if Require('java') && g:python_version > 3.09 && Planned('nvim-lspconfig') && ex
     let g:java_version = StringToFloat(java_version, 1)
     if g:java_version > 11
         let g:java_execute = Expand(g:java_execute)
-        let g:java_jdtls = 1
+    else
+        let g:java_execute = ''
     endif
+else
+    let g:java_version = 0
+    let g:java_execute = ''
 endif
