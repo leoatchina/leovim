@@ -479,14 +479,6 @@
     "when": "editorTextFocus && !editorHasSelection && !inlineSuggestionsVisible"
   },
   {
-    "key": "alt+\\",
-    "command": "workbench.action.openQuickChat.copilot"
-  },
-  {
-    "key": "shift+alt+\\",
-    "command": "workbench.action.chat.copilot.openInEditor"
-  },
-  {
     "key": "ctrl+shift+alt+\\",
     "command": "jupyter.selectCellContents",
     "when": "editorTextFocus && jupyter.hascodecells && !jupyter.webExtension && !notebookEditorFocused"
@@ -497,127 +489,28 @@
     "when": "editorTextFocus && jupyter.hascodecells && !jupyter.webExtension && !notebookEditorFocused"
   },
   {
-    "key": "ctrl+alt+\\",
-    "command": "inlineChat.start",
-    "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
-  },
-  {
     "key": "ctrl+k i",
     "command": "-inlineChat.start",
     "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
   },
-  // openai chat
   {
-    "key": "ctrl+alt+enter",
-    "command": "-workbench.action.chat.runInTerminal",
-    "when": "hasChatProvider && inChat"
+    "key": "ctrl+shift+\\",
+    "command": "workbench.panel.chat.view.copilot.focus"
   },
   {
-    "key": "ctrl+l",
-    "command": "-workbench.action.chat.newChat",
-    "when": "hasChatProvider && inChat"
-  },
-  {
-    "key": "ctrl+alt+pagedown",
-    "command": "-workbench.action.chat.nextCodeBlock",
-    "when": "hasChatProvider && inChat"
-  },
-  {
-    "key": "ctrl+f9",
-    "command": "-workbench.action.chat.nextFileTree",
-    "when": "hasChatProvider && inChat"
-  },
-  {
-    "key": "ctrl+alt+pageup",
-    "command": "-workbench.action.chat.previousCodeBlock",
-    "when": "hasChatProvider && inChat"
-  },
-  {
-    "key": "ctrl+shift+f9",
-    "command": "-workbench.action.chat.previousFileTree",
-    "when": "hasChatProvider && inChat"
-  },
-  {
-    "key": "ctrl+enter",
-    "command": "-workbench.action.chat.insertCodeBlock",
-    "when": "hasChatProvider && inChat && !inChatInput"
-  },
-  {
-    "key": "ctrl+shift+alt+h",
-    "command": "workbench.action.chat.clearInputHistory"
-  },
-  {
-    "key": "ctrl+shift+alt+c",
-    "command": "aichat.focus"
-  },
-  {
-    "key": "ctrl+shift+alt+e",
-    "command": "workbench.action.chat.export"
-  },
-  {
-    "key": "ctrl+shift+alt+a",
-    "command": "workbench.action.chat.clearHistory"
-  },
-  {
-    "key": "ctrl+shift+alt+s",
-    "command": "workbench.action.chat.import"
-  },
-  {
-    "key": "ctrl+shift+alt+n",
-    "command": "workbench.action.chat.newChat"
-  },
-  {
-    "key": "ctrl+shift+alt+f",
-    "command": "workbench.action.chat.insertIntoNewFile"
-  },
-  {
-    "key": "ctrl+shift+alt+w",
-    "command": "workbench.action.chat.openInNewWindow"
-  },
-  {
-    "key": "ctrl+shift+alt+i",
-    "command": "workbench.action.chat.runInTerminal"
+    "key": "ctrl+alt+\\",
+    "command": "workbench.action.chat.open"
   },
   {
     "key": "ctrl+alt+i",
-    "command": "workbench.action.chat.insertCodeBlock"
+    "command": "-workbench.action.chat.open"
   },
   {
-    "key": "shift+alt+i",
-    "command": "aichat.open-ai-chat-editor"
+    "key": "shift+alt+\\",
+    "command": "workbench.action.chat.openInEditor"
   },
   {
-    "key": "ctrl+shift+i",
-    "command": "workbench.action.chat.openInSidebar"
-  },
-  {
-    "key": "ctrl+i",
-    "command": "-inlineChat.start",
-    "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
-  },
-  {
-    "key": "ctrl+m i",
-    "command": "-inlineChat.start",
-    "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
-  },
-  {
-    "key": "shift+alt+,",
-    "command": "workbench.action.chat.previousCodeBlock"
-  },
-  {
-    "key": "ctrl+shift+alt+,",
-    "command": "workbench.action.chat.previousFileTree"
-  },
-  {
-    "key": "shift+alt+;",
-    "command": "workbench.action.chat.nextCodeBlock"
-  },
-  {
-    "key": "ctrl+shift+alt+;",
-    "command": "workbench.action.chat.nextFileTree"
-  },
-  {
-    "key": "alt+i",
-    "command": "aichat.focuschatpaneaction"
+    "key": "ctrl+shift+alt+\\",
+    "command": "workbench.action.chat.openInNewWindow"
   }
 ]
