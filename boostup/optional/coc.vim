@@ -56,11 +56,14 @@ let g:coc_global_extensions = [
             \ 'coc-sql',
             \ 'coc-xml',
             \ 'coc-sh',
-            \ 'coc-powershell',
             \ 'coc-vimlsp',
-            \ 'coc-lua',
             \ 'coc-pyright',
             \ ]
+if UNIX()
+    let g:coc_global_extensions += ['coc-lua']
+elseif WINDOWS()
+    let g:coc_global_extensions += ['coc-powershell']
+endif
 if has('nvim')
     let g:coc_global_extensions += ['coc-explorer', 'coc-symbol-line']
 endif
@@ -113,8 +116,6 @@ endif
 " ----------------------------
 nnoremap <silent><M-l>i :CocInfo<Cr>
 nnoremap <silent><M-l>r :CocRestart<Cr><Cr>
-nnoremap <silent><M-l><M-c> :CocFzfList<Cr>
-nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 nnoremap <silent><M-V>  :CocFzfList yank<Cr>
 nnoremap <silent><M-l>e :CocFzfList extensions<Cr>
 nnoremap <silent><M-l>M :CocFzfList marketplace<Cr>
@@ -122,6 +123,8 @@ nnoremap <silent><M-l>c :CocFzfList commands<Cr>
 nnoremap <silent><M-l>. :call CocAction('repeatCommand')<Cr>
 nnoremap <silent><M-l>; :CocNext<Cr>
 nnoremap <silent><M-l>, :CocPrev<Cr>
+nnoremap <silent><M-l><M-c> :CocFzfList<Cr>
+nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 " symbol
 nnoremap <silent><leader>s :Vista finder<Cr>
 nnoremap <silent><leader>S :CocFzfList symbols<Cr>
