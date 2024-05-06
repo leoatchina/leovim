@@ -427,12 +427,12 @@ nnoremap <silent>g/ :call SymbolOrTagOrSearchAll("tags", "list")<Cr>
 " preview
 nnoremap <silent><C-h> :call SymbolOrTagOrSearchAll("preview")<Cr>
 " definition
+au FileType help,vimdoc nnoremap <C-]> <C-]>
 nnoremap <silent><C-g> :call SymbolOrTagOrSearchAll("definition")<Cr>
 nnoremap <silent><C-]> :call SymbolOrTagOrSearchAll("definition", "vsplit")<Cr>
 nnoremap <silent><M-c> :call SymbolOrTagOrSearchAll("definition", "list")<Cr>
-nnoremap <silent><C-w>] :call SymbolOrTagOrSearchAll("definition", "tabe")<Cr>
+nnoremap <silent><C-w><C-g> :call SymbolOrTagOrSearchAll("definition", "tabe")<Cr>
 nnoremap <silent><C-w><C-]> :call SymbolOrTagOrSearchAll("definition", "split")<Cr>
-au FileType help,vimdoc nnoremap <C-]> <C-]>
 " references
 nnoremap <silent><M-/> :call SymbolOrTagOrSearchAll("references", "list")<Cr>
 if InstalledAdvCompEng()
