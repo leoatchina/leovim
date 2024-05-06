@@ -486,10 +486,10 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
             if a:0 == 0
                 lua require("dapui").eval()<Cr>
             elseif a:1 == 'F'
-                call GoToDAPWindows("DAP Console")
+                call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
             elseif a:1 == '-'
-                call GoToDAPWindows("DAP Console")
+                call GoToDAPWindows("DAP Breakpoints")
             elseif a:1 == '_'
                 lua require("dapui").float_element()<Cr>
             elseif a:1 == '='

@@ -9,7 +9,7 @@ dap.defaults.fallback.exception_breakpoints = { 'default' }
 dap.defaults.python.exception_breakpoints = { 'uncaught' }
 fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
 ---------------------
--- dapui
+-- layouts
 ---------------------
 local layouts = {
   {
@@ -39,29 +39,6 @@ local layouts = {
     position = "bottom",
   },
 }
-dapui.setup({
-  -- Expand lines larger than the window
-  expand_lines = true,
-  mappings = {
-    -- Use a table to apply multiple mappings
-    expand = { "<Space>", "<2-LeftMouse>" },
-    open = "<Cr>",
-    remove = "x",
-    edit = "e",
-    repl = "r",
-    toggle = "t",
-  },
-  layouts = layouts,
-  controls = {
-    element = "repl",
-    enabled = true,
-  },
-  floating = {
-    mappings = {
-      close = { "<Esc>", "<M-q>", "<C-c>", "q" },
-    },
-  },
-})
 local function dapui_toggle(open)
   local ok, result = pcall(function() return open > 0 end)
   if not ok then
@@ -96,6 +73,32 @@ vim.keymap.set("n", "<M-m><M-m>",
     dapui_toggle()
   end, { noremap = true, silent = true }
 )
+---------------------
+-- setup
+---------------------
+dapui.setup({
+  -- Expand lines larger than the window
+  expand_lines = true,
+  mappings = {
+    -- Use a table to apply multiple mappings
+    expand = { "<Space>", "<2-LeftMouse>" },
+    open = "<Cr>",
+    remove = "x",
+    edit = "e",
+    repl = "r",
+    toggle = "t",
+  },
+  layouts = layouts,
+  controls = {
+    element = "repl",
+    enabled = true,
+  },
+  floating = {
+    mappings = {
+      close = { "<Esc>", "<M-q>", "<C-c>", "q" },
+    },
+  },
+})
 -------------------------------------
 -- function get_mason_adapter
 -------------------------------------
