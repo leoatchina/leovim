@@ -162,5 +162,5 @@ nnoremap <silent><Tab>j :call SmartResize('k', 'j')<Cr>
 nnoremap <silent>\w     :call SmartResize('j', 'k')<Cr>
 nnoremap <silent>\s     :call SmartResize('j', 'j')<Cr>
 " open in vsplit/split
-nnoremap <Tab>] :vsplit<Space>
-nnoremap <Tab>[ :split<Space>
+nnoremap <Tab>v :vsplit<Space>
+nnoremap <Tab>s :split<Space>
