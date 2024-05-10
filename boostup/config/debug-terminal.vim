@@ -182,7 +182,7 @@ if InstalledFzf()
             let template_file = ''
         endif
         if dap
-            let json_file = fnamemodify(GetRootDir() . '/.vscode/dap.json', ':p')
+            let json_file = fnamemodify(GetRootDir() . '/.vim/dap.json', ':p')
             let json_dir = fnamemodify(json_file, ':h')
             if !isdirectory(json_dir)
                 try

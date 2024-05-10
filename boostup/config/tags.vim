@@ -16,7 +16,8 @@ catch /.*/
     let &tags = './.tags;,.tags'
 endtry
 if get(g:, 'ctags_type', '') != ''
-    let g:fzf_tags_command='ctags -R --exclude=.git --exclude=node_modules --exclude=lib --exclude=package-lock.json --exclude=.cache --exclude=.vscode'
+    let lst = g:root_patterns + ['lib', '.cache', 'package-lock.json']
+    let g:fzf_tags_command='ctags -R --exclude' . join(lst, " --exclude=")
 endif
 " T/F<Cr>
 if g:symbol_tool =~ 'leaderftags'
@@ -29,8 +30,8 @@ elseif g:symbol_tool =~ 'fzftags' && executable('perl')
 elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
-PlugAddOpt 'vim-funky'
 if Installed('fzf')
+    PlugAddOpt 'vim-funky'
     command! FzfFunky call funky#fzf#show()
     command! FzfFunkyAll call funky#fzf#show(1)
     nnoremap <silent>f<Cr> :FzfFunky<Cr>
