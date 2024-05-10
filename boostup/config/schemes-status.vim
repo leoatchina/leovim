@@ -86,7 +86,7 @@ else
     let g:lightline#bufferline#enable_nerdfont = 1
 endif
 function! LightlineBufferlineMaxWidth() abort
-    let left = &columns - len(FileReadonly() + GitBranch() + RootDir() + FileDir() + Mode())
+    let left = &columns - len(FileReadonly() + GitBranch() + RootDir() + RelativeDir() + Mode())
     return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
@@ -107,7 +107,7 @@ PlugAddOpt 'lightline-bufferline'
 " ------------------------
 " init
 " ------------------------
-function! FileDir()
+function! RelativeDir()
     let root = RootDir()
     let path = fnameescape(substitute(Expand('%:p:h'), '\\', '/', 'g'))
     if root == ''
@@ -213,10 +213,10 @@ function! Buffers()
         let root_icon = '   '
     endif
     if RootDir() == ''
-        let res[0] += [root_icon . FileDir()]
+        let res[0] += [root_icon . RelativeDir()]
     else
         let res[0] += [root_icon . RootDir()]
-        let res[1] = [FileDir() . ' ' . res[1][0]]
+        let res[1] = [RelativeDir() . ' ' . res[1][0]]
     endif
     return res
 endfunction
