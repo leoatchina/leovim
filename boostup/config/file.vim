@@ -287,9 +287,9 @@ nnoremap <leader>fv :DiffVsp<Space>
 " open files
 "------------------------
 nnoremap <M-j>e gf
-nnoremap <M-j>s <C-w>f
 nnoremap <M-j>t <C-w>gf
-nnoremap <M-j>v <C-w>f<C-w>L
+nnoremap <M-j>[ <C-w>f
+nnoremap <M-j>] <C-w>f<C-w>L
 if PrefFzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>fg :FzfGitFiles<Cr>
