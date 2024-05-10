@@ -70,6 +70,8 @@
   - [x] local
   - [x] remote url
 - [x] Add ctrl-e to edit command in FzfCallCommands
+- [ ] imap <tab> enhanced
+- [ ] put functions into plugin folder
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky

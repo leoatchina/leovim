@@ -195,7 +195,9 @@ if InstalledFzf()
         else
             let json_file = fnamemodify(GetRootDir() . '/.vimspector.json', ':p')
         endif
-        if !filereadable(json_file)
+        if filereadable(json_file)
+            execute "tabe " . json_file
+        else
             let json_dict = {}
             if dap
                 let json_dict['version'] = "0.2.0"
@@ -205,12 +207,12 @@ if InstalledFzf()
             endif
             let json = json_encode(json_dict)
             call writefile(split(json, "\n"), json_file)
+            execute "tabe " . json_file
             if executable('jq')
                 execute '%!jq'
                 w!
             endif
         endif
-        execute "tabe " . json_file
         if template_file != ''
             if &columns > &lines * 3
                 execute "vsplit " . template_file
