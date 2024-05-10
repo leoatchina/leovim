@@ -6,6 +6,7 @@ nnoremap <M-I> :set nopaste! nopaste?<CR>
 " ------------------------
 " basic yank && paste
 " ------------------------
+nnoremap Y y$
 nnoremap <Tab>y :0,-y<Cr>
 nnoremap <Tab>Y vGy
 function! YankFromBeginning() abort
@@ -19,8 +20,9 @@ function! YankFromBeginning() abort
     endif
     call setpos('.', original_cursor_position)
 endfunction
-nnoremap <silent><Leader>Y :call YankFromBeginning()<Cr>
+nnoremap <silent>,y :call YankFromBeginning()<Cr>
 if has('clipboard')
+    nnoremap ,Y "*y$
     if UNIX()
         nnoremap <leader>+ viw"+y
     else
@@ -30,7 +32,6 @@ if has('clipboard')
     cnoremap <M-v> <C-r>*
     inoremap <M-v> <C-r>*
 endif
-nnoremap Y y$
 cnoremap <M-v> <C-r>"
 inoremap <M-v> <C-r>"
 " M-x/BS
