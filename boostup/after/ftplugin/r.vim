@@ -18,7 +18,7 @@ if Installed('nvim-r')
     if !exists("*ToggleEnvLib")
         function! ToggleEnvLib() abort
             if string(g:SendCmdToR) == "function('SendCmdToR_fake')"
-                call RWarningMsg("The Object Browser can be opened only if R is running.")
+                call RWarningMsg("The Object Browser can be opened only if R is running. Press <M-B> to StartR.")
                 return
             elseif string(g:SendCmdToR) == "function('SendCmdToR_NotYet')"
                 call RWarningMsg("R is not ready yet")
@@ -33,16 +33,23 @@ if Installed('nvim-r')
                 call UpdateOB('both')
                 if g:rplugin.curview == "libraries"
                     let g:rplugin.curview = "GlobalEnv"
-                    call JobStdin(g:rplugin.jobs["ClientServer"], "31\n")
+                    call JobStdin(g:rplugin.jobs["Server"], "31\n")
                     let t:robjrb_status = 1
                 elseif g:rplugin.curview == "GlobalEnv"
                     let g:rplugin.curview = "libraries"
-                    call JobStdin(g:rplugin.jobs["ClientServer"], "321\n")
+                    call JobStdin(g:rplugin.jobs["Server"], "321\n")
                     let t:robjrb_status = 2
                 endif
             endif
         endfunction
         function! ToggleRObjBrowser() abort
+            if string(g:SendCmdToR) == "function('SendCmdToR_fake')"
+                call RWarningMsg("The Object Browser can be opened only if R is running. Press <M-B> to StartR.")
+                return
+            elseif string(g:SendCmdToR) == "function('SendCmdToR_NotYet')"
+                call RWarningMsg("R is not ready yet")
+                return
+            endif
             if get(t:, 'robjrb_status', 0) == 0
                 call RObjBrowser()
                 let t:robjrb_status = 1
