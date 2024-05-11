@@ -31,11 +31,11 @@ if Installed('nvim-r')
                 execute "wincmd p"
             else
                 call UpdateOB('both')
-                if g:rplugin.curview == "libraries"
+                if t:robjrb_status == 2
                     let g:rplugin.curview = "GlobalEnv"
                     call JobStdin(g:rplugin.jobs["Server"], "31\n")
                     let t:robjrb_status = 1
-                elseif g:rplugin.curview == "GlobalEnv"
+                elseif t:robjrb_status == 1
                     let g:rplugin.curview = "libraries"
                     call JobStdin(g:rplugin.jobs["Server"], "321\n")
                     let t:robjrb_status = 2
@@ -62,6 +62,8 @@ if Installed('nvim-r')
     endif
     nnoremap <buffer><silent><M-R> :call ToggleRObjBrowser()<Cr>
     nnoremap <buffer><silent><M-F> :call ToggleEnvLib()<Cr>
+    au FileType rbrowser nnoremap <silent><M-B> :call ToggleRObjBrowser()<Cr>
+    au FileType rbrowser nnoremap <silent><M-F> :call ToggleEnvLib()<Cr>
     " view variable
     nnoremap <buffer><silent>J :call RAction('print')<CR>
     nnoremap <buffer><silent>= :call RAction('viewobj')<CR>
