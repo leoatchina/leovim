@@ -64,6 +64,7 @@ if Installed('nvim-r')
     nnoremap <buffer><silent><M-F> :call ToggleEnvLib()<Cr>
     au FileType rbrowser nnoremap <silent><M-B> :call ToggleRObjBrowser()<Cr>
     au FileType rbrowser nnoremap <silent><M-F> :call ToggleEnvLib()<Cr>
+    au FileType rbrowser nnoremap <silent><Tab> :call ToggleEnvLib()<Cr>
     " view variable
     nnoremap <buffer><silent>J :call RAction('print')<CR>
     nnoremap <buffer><silent>= :call RAction('viewobj')<CR>
