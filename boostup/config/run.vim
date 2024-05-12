@@ -246,7 +246,7 @@ endfunction
 " ----------------
 if has('nvim') || v:version >= 801
     let g:asyncrun_rootmarks     = g:root_patterns
-    let g:asynctasks_config_name = [".tasks", ".git/tasks.ini", ".hg/tasks.ini", ".svn/tasks.ini", ".root/tasks.ini", ".project/tasks.ini"]
+    let g:asynctasks_config_name = [".vim/tasks.ini", ".git/tasks.ini", ".vscode/tasks.ini"]
     let g:asynctasks_rtp_config  = "tasks.ini"
     let g:asynctasks_term_reuse  = 1
     let g:asynctasks_term_focus  = 0
@@ -255,18 +255,18 @@ if has('nvim') || v:version >= 801
     " template
     let g:asynctasks_template = '~/.leovim/boostup/tasks/tasks_template.ini'
     let g:asynctasks_extra_config = [
-                \ '~/.leovim/boostup/tasks/tasks.ini',
+                \ '~/.leovim/boostup/tasks/tasks_common.ini',
                 \ '~/.leovim.d/tasks/tasks.ini',
                 \ ]
     " packadd
     PlugAddOpt 'asynctasks.vim'
     " open template
-    function! s:asynctask_common(...)
+    function! s:tasks_open(...)
         if a:0
             if a:1 > 0
                 tabe ~/.leovim/boostup/tasks/tasks_template.ini
             else
-                tabe ~/.leovim/boostup/tasks/tasks.ini
+                tabe ~/.leovim/boostup/tasks/tasks_common.ini
             endif
         else
             call mkdir("$HOME/.leovim.d/tasks", "p")
@@ -279,9 +279,9 @@ if has('nvim') || v:version >= 801
             wincmd p
         endif
     endfunction
-    command! AsyncTaskDeploy call s:asynctask_common()
-    command! AsyncTaskCommon call s:asynctask_common(0)
-    command! AsyncTaskTemplate call s:asynctask_common(1)
+    command! AsyncTaskDeploy call s:tasks_open()
+    command! AsyncTaskCommon call s:tasks_open(0)
+    command! AsyncTaskTemplate call s:tasks_open(1)
     nnoremap <leader>r<Cr> :AsyncTaskDeploy<Cr>
     nnoremap <leader>r<Tab> :AsyncTaskTemplate<Cr>
     nnoremap <leader>r<Space> :AsyncTaskCommon<Cr>

@@ -71,7 +71,7 @@
   - [x] remote url
 - [x] Add ctrl-e to edit command in FzfCallCommands
 - [ ] imap <tab> enhanced
-- [ ] put functions into plugin folder
+- [ ] neoconf 
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky

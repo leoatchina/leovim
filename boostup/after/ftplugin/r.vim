@@ -60,10 +60,10 @@ if Installed('nvim-r')
             endif
         endfunction
     endif
-    nnoremap <buffer><silent><M-R> :call ToggleRObjBrowser()<Cr>
-    nnoremap <buffer><silent><M-F> :call ToggleEnvLib()<Cr>
+    nnoremap <buffer><silent><M-B> :call ToggleRObjBrowser()<Cr>
+    nnoremap <buffer><silent><M-M> :call ToggleEnvLib()<Cr>
     au FileType rbrowser nnoremap <silent><M-B> :call ToggleRObjBrowser()<Cr>
-    au FileType rbrowser nnoremap <silent><M-F> :call ToggleEnvLib()<Cr>
+    au FileType rbrowser nnoremap <silent><M-M> :call ToggleEnvLib()<Cr>
     au FileType rbrowser nnoremap <silent><Tab> :call ToggleEnvLib()<Cr>
     " view variable
     nnoremap <buffer><silent>J :call RAction('print')<CR>
@@ -81,7 +81,7 @@ if Installed('nvim-r')
     nnoremap <buffer>_ :call RClearConsole()<Cr>
     nnoremap <buffer><M-_> :call RClearAll()<Cr>
     " run
-    nnoremap <buffer><M-B> :call StartR('R')<Cr>
+    nnoremap <buffer><M-R> :call StartR('R')<Cr>
     nnoremap <buffer><Tab>q :call RQuit('nosave')<Cr>
     nnoremap <buffer><Tab>Q :call RQuit('save')<Cr>
 endif
