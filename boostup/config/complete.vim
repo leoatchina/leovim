@@ -73,8 +73,8 @@ elseif Installed('luasnip')
     imap <silent><expr><C-b> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<C-o>I'
     imap <silent><expr><C-f> luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A", 'n')
 else
-    imap <C-f> <C-o>A
-    imap <C-b> <C-o>I
+    imap <silent><C-b> <C-o>I
+    imap <silent><C-f> :call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A", 'n')
 endif
 imap <M-n> <C-n>
 imap <M-p> <C-p>
