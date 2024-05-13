@@ -19,7 +19,7 @@ set ttimeout
 set ttimeoutlen=60
 set timeoutlen=300
 set updatetime=200
-if get(g:, 'which_key_type', 'vim') == ''
+if get(g:, 'leovim_indicate', 1) == 0
     echo "WhichKey indicate is disabled"
 else
     nnoremap ]c ]c
