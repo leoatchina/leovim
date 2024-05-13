@@ -11,6 +11,13 @@ else
 endif
 let g:mucomplete#chains = {}
 let g:mucomplete#chains.vim = ['path', 'cmd', 'keyn']
+let g:mucomplete#chains.markdown = ['path', 'cmd', 'keyn']
+" vsnip
+if Installed('vim-vsnip', 'vim-vsnip-integ')
+    let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'vsnip', 'dict']
+else
+    let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict']
+endif
 PlugAddOpt 'vim-mucomplete'
 function! MapTabCr(istab) abort
     let istab = a:istab
@@ -36,11 +43,5 @@ function! MapTabCr(istab) abort
 endfunction
 au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
 au WinEnter,BufEnter * imap <silent><Cr>  <C-R>=MapTabCr(0)<Cr>
-au WinEnter,BufEnter * imap <expr><down>  mucomplete#extend_fwd("\<down>")
-au WinEnter,BufEnter * imap <expr><C-e>   pumvisible()? "\<C-e>" : "\<C-O>A"
-" vsnip
-if Installed('vim-vsnip', 'vim-vsnip-integ')
-    let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'vsnip', 'dict']
-else
-    let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict']
-endif
+au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
+au WinEnter,BufEnter * imap <expr><C-e>  pumvisible()? "\<C-e>" : "\<C-O>A"
