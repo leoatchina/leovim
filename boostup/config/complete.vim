@@ -63,15 +63,18 @@ if Installed('vim-vsnip')
     nnoremap <M-h>S :tabe ~/.leovim/snippets
 endif
 if Installed('vim-vsnip', 'vim-vsnip-integ')
-    smap <expr><C-f> vsnip#jumpable(1) ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
-    smap <expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
-    imap <expr><C-f> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-o>A'
-    imap <expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
+    smap <silent><expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
+    smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
+    imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
+    imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A", 'n')
 elseif Installed('luasnip')
-    smap <silent><C-f> <cmd>lua require('luasnip').jump(1)<Cr>
     smap <silent><C-b> <cmd>lua require('luasnip').jump(-1)<Cr>
-    imap <silent><expr><C-f> luasnip#jumpable(1) ? '<Plug>luasnip-jump-next' : '<C-o>A'
+    smap <silent><C-f> <cmd>lua require('luasnip').jump(1)<Cr>
     imap <silent><expr><C-b> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<C-o>I'
+    imap <silent><expr><C-f> luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A", 'n')
+else
+    imap <C-f> <C-o>A
+    imap <C-b> <C-o>I
 endif
 imap <M-n> <C-n>
 imap <M-p> <C-p>
