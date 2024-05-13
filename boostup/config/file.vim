@@ -4,6 +4,39 @@ catch /.*/
     " pass
 endtry
 " ------------------------------
+" file functions
+" ------------------------------
+function! FileDir(file) abort
+    return Expand(fnamemodify(a:file , ':p:h'))
+endfunction
+function! FilePath(file) abort
+    return Expand(fnamemodify(a:file , ':h'))
+endfunction
+function! FileReadonly()
+    return &readonly && &filetype !=# 'help' ? 'RO' : ''
+endfunction
+function! GetRootDir(...)
+    let init_dir = Expand('%:p:h')
+    let curr_dir = init_dir
+    while 1
+        if WINDOWS() && curr_dir[-2:-1] == ':/' || UNIX() && curr_dir ==# '/'
+            return init_dir
+        endif
+        for each in g:root_patterns + g:root_files
+            let chk_path = curr_dir . '/' . each
+            if isdirectory(chk_path) || filereadable(chk_path)
+                if a:0 && a:1 > 0
+                    return substitute(curr_dir, '/', '\', 'g')
+                else
+                    return curr_dir
+                endif
+            endif
+        endfor
+        let curr_dir = fnamemodify(curr_dir, ":h")
+    endwhile
+endfunction
+nnoremap <M-h>R :echo GetRootDir()<Cr>
+" ------------------------------
 " vim-header
 " ------------------------------
 let g:header_auto_add_header = 0
@@ -387,4 +420,209 @@ if HAS_GUI() || WINDOWS()
         nnoremap <silent><M-\> :UseSystemBrowser<Cr>
         nnoremap <silent><M-\|> :UseSystemBrowser<Cr>
     endif
+endif
+" ------------------------
+" open config file
+" ------------------------
+nnoremap <M-h><Cr> :source ~/.leovim/boostup/init.vim<Cr>
+nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
+nnoremap <M-h>O :tabe ~/.leovim/boostup/optional/opt.vim<Cr>
+nnoremap <M-h>p :tabe ~/.leovim/pack
+function! TabeOpen(f) abort
+    let f = expand(a:f)
+    exec "tabe " . f
+endfunction
+nnoremap <silent><M-h>i :call TabeOpen("$BOOSTUP_DIR/init.vim")<Cr>
+nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
+nnoremap <silent><M-h>l :call TabeOpen("$LUA_DIR/lsp.lua")<Cr>
+nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
+nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
+nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
+nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
+nnoremap <silent><M-h>f :call TabeOpen("$OPTIONAL_DIR/fzf.vim")<Cr>
+if PrefFzf()
+    nnoremap <silent><M-h>e :FzfFiles <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
+elseif InstalledLeaderf()
+    nnoremap <silent><M-h>e :LeaderfFile <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
+else
+    nnoremap <silent><M-h>e :call TabeOpen("$CONFIG_DIR/file.vim")<Cr>
+endif
+" --------------------------
+" open other ides config
+" --------------------------
+nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_DIR/msvc/vs.vim")<Cr>
+nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
+" --------------------------
+" open or add file
+" --------------------------
+function! s:open_or_create_file(file, ...) abort
+    let file = Expand(a:file)
+    if filereadable(file)
+        try
+            execute "tabe " . file
+            return 1
+        catch /.*/
+            call preview#errmsg("Could not open file " . a:file)
+            return 0
+        endtry
+    else
+        let dir = FileDir(file)
+        try
+            if !isdirectory(dir)
+                call mkdir(dir, "p")
+            endif
+            let content = []
+            for each in a:000
+                if type(each) == v:t_list
+                    let content += each
+                elseif type(each) == v:t_dict
+                    let content += keys(each)
+                elseif type(each) == v:t_number
+                    call add(content, string(num))
+                elseif type(each) == v:t_string
+                    call add(content, each)
+                elseif index([v:t_func, v:t_job, v:t_none, v:t_channel]) < 0
+                    call add(content, string(each))
+                endif
+            endfor
+            let b:content = content
+            if len(content) > 0
+                call writefile(content, file)
+            endif
+            execute "tabe " . file
+            return 1
+        catch /.*/
+            call preview#errmsg("Could not create or write to file " . a:file)
+            return 0
+        endtry
+    endif
+endfunction
+" ssh/config
+nnoremap <M-h>c :call <SID>open_or_create_file("~/.ssh/config")<Cr>
+" gitconfig
+command! OpenGitConfig call <SID>open_or_create_file("~/.gitconfig")
+nnoremap <M-h>G :OpenGitConfig<Cr>
+" bashrc
+nnoremap <M-h>B :call <SID>open_or_create_file("~/.bashrc")<Cr>
+nnoremap <M-h>C :call <SID>open_or_create_file("~/.configrc")<Cr>
+" addtional vim config
+if filereadable(expand("~/.leovim.d/after.vim"))
+    source ~/.leovim.d/after.vim
+endif
+nnoremap <M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
+nnoremap <M-h>P :call <SID>open_or_create_file("~/.leovim.d/pack.vim")<Cr>
+" ------------------
+" create root file
+" ------------------
+function! s:open_or_create_rootfile(fl, ...) abort
+    let fl = GetRootDir() . '/' . a:fl
+    if a:0
+        call s:open_or_create_file(fl, a:000)
+    else
+        call s:open_or_create_file(fl)
+    endif
+endfunction
+command! OpenTODO call s:open_or_create_rootfile('TODO.md', '# TODO:', '- [ ]')
+nnoremap <M-h>t :OpenTODO<Cr>
+command! OpenREADME call s:open_or_create_rootfile('README.md', '# README')
+nnoremap <M-h>r :OpenREADME<Cr>
+command! OpenGitignore call s:open_or_create_rootfile('.gitignore')
+nnoremap <M-h>g :OpenGitignore<Cr>
+command! OpenWildignore call s:open_or_create_rootfile('.wildignore')
+nnoremap <M-h>w :OpenWildignore<Cr>
+" ------------------
+" vscode cursor
+" ------------------
+let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_keybindings_dir", "")), '/', '\', 'g')
+let s:cursor_dir = substitute(fnameescape(get(g:, "cursor_keybindings_dir", "")), '/', '\', 'g')
+if isdirectory(s:vscode_dir) || isdirectory(s:cursor_dir)
+    function! s:link_keybindings() abort
+        for dir in [s:vscode_dir, s:cursor_dir]
+            if !isdirectory(dir)
+                continue
+            endif
+            if WINDOWS()
+                let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
+                execute(delete_cmd)
+                let template = '!mklink %s %s'
+                let cmd = printf(template, dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
+            else
+                let template = '!ln -sf %s %s'
+                let cmd = printf(template, $INIT_DIR . '/keybindings.json', dir)
+            endif
+            execute(cmd)
+        endfor
+    endfunction
+    command! LinkKeyBindings call s:link_keybindings()
+    nnoremap <M-h>K :LinkKeyBindings<Cr>
+endif
+function! s:get_cursor_pos(text, col)
+    " Find the start location
+    let col = a:col
+    while col >= 0 && a:text[col] =~ '\f'
+        let col = col - 1
+    endwhile
+    let col = col + 1
+    " Match file name and position
+    let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
+    if len(m) > 0
+        return [m[1], m[2], m[3]]
+    endif
+    return []
+endfunc
+function! s:open_file_in_editor(editor, text, col)
+    let location = s:get_cursor_pos(a:text, a:col)
+    if a:editor == 'code'
+        let editor = 'code --goto'
+    else
+        let editor = a:editor
+    endif
+    " location 0: file, 1: row, 2: column
+    if location[0] != ''
+        if location[1] != ''
+            if location[2] != ''
+                if editor =~ 'code'
+                    let command = editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
+                else
+                    let command = editor . " --column " . str2nr(location[2]) . " " . location[0] . ":" . str2nr(location[1])
+                endif
+                if Installed('asyncrun.vim')
+                    exec "AsyncRun -silent " . command
+                else
+                    exec "! " . command
+                endif
+            else
+                let command = editor . " " . location[0] . ":" . str2nr(location[1])
+                if Installed('asyncrun.vim')
+                    exec "AsyncRun -silent " . command
+                else
+                    exec "! " . command
+                endif
+            endif
+        else
+            let command = editor . " " . location[0]
+            if Installed('asyncrun.vim')
+                exec "AsyncRun -silent " . command
+            else
+                exec "! " . command
+            endif
+        endif
+    else
+        echo "Not a valid file path"
+    endif
+endfunc
+if executable('code')
+    function! s:open_in_vscode()
+        if Installed('asyncrun.vim')
+            let cmd = printf("AsyncRun code --goto %s:%d", expand("%:p"), line("."))
+        else
+            let cmd = printf("!code --goto %s:%d", expand("%:p"), line("."))
+        endif
+        silent! exec cmd
+    endfunction
+    command! OpenInVSCode call s:open_in_vscode()
+    nnoremap <silent><M-j>o :OpenInVSCode<Cr>
+    " NOTE: open file under line in vscode
+    command! OpenFileLinkInVSCode call s:open_file_in_editor("code", getline("."), col("."))
+    nnoremap <silent><M-j>f :OpenFileLinkInVSCode<cr>
 endif
