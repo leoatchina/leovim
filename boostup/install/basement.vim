@@ -80,6 +80,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'L3MON4D3/luasnip'
     " lsp related
     PlugAdd 'neovim/nvim-lspconfig'
+    PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
     PlugAdd 'mfussenegger/nvim-lint'
     PlugAdd 'DNLHC/glance.nvim'
@@ -246,6 +247,7 @@ endfunction
 function! InstalledNvimLsp() abort
     return Installed(
                 \ 'nvim-lspconfig',
+                \ 'neoconf.nvim',
                 \ 'mason-lspconfig.nvim',
                 \ 'nvim-lsp-selection-range',
                 \ 'fzf-lsp.nvim',

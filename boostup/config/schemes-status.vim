@@ -333,7 +333,11 @@ elseif g:complete_engine == 'coc'
         call SetScheme('gruvbox-material', 'gruvbox')
     endif
 elseif g:complete_engine == 'cmp'
-    call SetScheme('catppuccin', 'codedark')
+    if InstalledNvimLsp()
+        call SetScheme('catppuccin', 'codedark')
+    else
+        call SetScheme('moonfly', 'space-vim-dark')
+    endif
 elseif g:complete_engine == 'mcm'
     call SetScheme('sonokai', 'sublime')
 elseif g:complete_engine == 'apm'
