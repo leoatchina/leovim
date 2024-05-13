@@ -25,7 +25,7 @@ PlugAdd 'kshenoy/vim-signature'
 " --------------------------
 " indentline
 " --------------------------
-if has('nvim')
+if has('nvim-0.8')
     PlugAdd 'lukas-reineke/indent-blankline.nvim'
 else
     PlugAdd 'Yggdroot/indentLine'
@@ -41,7 +41,7 @@ endif
 " devicons
 " ------------------------------
 if v:version >= 800
-    if has('nvim')
+    if has('nvim-0.8')
         PlugAdd 'nvim-tree/nvim-web-devicons'
     else
         PlugAdd 'ryanoasis/vim-devicons'

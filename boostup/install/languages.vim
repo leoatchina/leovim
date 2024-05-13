@@ -29,7 +29,7 @@ endif
 " --------------------------
 " R language
 " --------------------------
-if (Require('R') || Require('bioinfo')) && (has('nvim') || v:version >= 802)
+if (Require('R') || Require('bioinfo')) && (has('nvim-0.8') || v:version >= 802)
     PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
 " ------------------------------
