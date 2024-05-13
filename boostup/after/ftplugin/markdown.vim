@@ -2,8 +2,8 @@ let g:mdip_imgdir = '.'
 let g:mdip_imgname = 'image'
 let g:preview_markdown_vertical = 1
 if Installed('markdown-preview.nvim') || Installed('markdown-preview.vim')
-    nmap <silent><buffer><M-B> :MarkdownPreview<Cr>
-    nmap <silent><buffer><M-X> :MarkdownPreviewStop<Cr>
+    nmap <silent><buffer><M-R> :MarkdownPreview<Cr>
+    nmap <silent><buffer><Tab>q :MarkdownPreviewStop<Cr>
 endif
 if Installed('md-img-paste.vim')
     nmap <silent><buffer><leader>I :call mdip#MarkdownClipboardImage()<CR>
@@ -22,5 +22,5 @@ if Installed('preview-markdown.vim')
         endif
     endfunction
     command! SmartPreviewMarkdown call s:smart_preview_markdown()
-    nmap <silent><buffer><M-R> :SmartPreviewMarkdown<Cr>
+    nmap <silent><buffer><M-B> :SmartPreviewMarkdown<Cr>
 endif
