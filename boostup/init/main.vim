@@ -323,33 +323,17 @@ endif
 " --------------------------
 " textobj
 " --------------------------
-" for s:v in ['', 'v', 'V', '<c-v>']
-"     execute 'omap <expr>' s:v.'I%' "(v:count?'':'1').'".s:v."i%'"
-"     execute 'omap <expr>' s:v.'A%' "(v:count?'':'1').'".s:v."a%'"
-" endfor
+for s:v in ['', 'v', 'V', '<c-v>']
+    execute 'omap <expr>' s:v.'I%' "(v:count?'':'1').'".s:v."i%'"
+    execute 'omap <expr>' s:v.'A%' "(v:count?'':'1').'".s:v."a%'"
+endfor
 if exists('*search') && exists('*getpos')
-    " targets.vim
-    PlugAddOpt 'targets.vim'
-    nmap <leader>vt vit
-    nmap <leader>vT vat
-    nmap <leader>va via
-    nmap <leader>vA vaa
-    nmap <leader>vl vil
-    nmap <leader>vL val
-    nmap <leader>vn vin
-    nmap <leader>vN vaN
-    nmap <leader>Vt vIt
-    nmap <leader>VT vAt
-    nmap <leader>Va vIa
-    nmap <leader>VA vAa
-    nmap <leader>Vl vIl
-    nmap <leader>VL vAl
-    nmap <leader>Vn vIn
-    nmap <leader>VN vAN
+    " -------------------
+    " textobj
+    " -------------------
     PlugAddOpt 'vim-textobj-user'
     PlugAddOpt 'vim-textobj-uri'
     PlugAddOpt 'vim-textobj-syntax'
-    PlugAddOpt 'vim-textobj-line'
     PlugAddOpt 'vim-textobj-function'
     nmap <leader>vf vafo
     nmap <leader>vF vifo
@@ -361,30 +345,40 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vB vaB
     nmap <leader>vn vin
     nmap <leader>vN vaN
-    " goto first/last indent
-    nmap <leader>vi viio
-    nmap <leader>vI vaio
-    noautocmd nmap <silent>si viio<C-[>^
-    noautocmd nmap <silent>sg vii<C-[>^
-    " --------------------------
-    " sandwich
-    " --------------------------
-    PlugAddOpt 'vim-sandwich'
-    xmap is <Plug>(textobj-sandwich-auto-i)
-    xmap as <Plug>(textobj-sandwich-auto-a)
-    omap is <Plug>(textobj-sandwich-auto-i)
-    omap as <Plug>(textobj-sandwich-auto-a)
-    xmap iq <Plug>(textobj-sandwich-query-i)
-    xmap aq <Plug>(textobj-sandwich-query-a)
-    omap iq <Plug>(textobj-sandwich-query-i)
-    omap aq <Plug>(textobj-sandwich-query-a)
-    nmap <leader>vs vis
-    nmap <leader>vS vas
-    nmap <leader>vq viq
-    nmap <leader>vQ vaq
-    " ------------------------
+    " find line
+    call textobj#user#plugin('line', {
+                \   '-': {
+                \     'select-a-function': 'CurrentLineA',
+                \     'select-a': 'ak',
+                \     'select-i-function': 'CurrentLineI',
+                \     'select-i': 'ik',
+                \   },
+                \ })
+    function! CurrentLineA()
+        normal! ^
+        let head_pos = getpos('.')
+        normal! $
+        let tail_pos = getpos('.')
+        return ['v', head_pos, tail_pos]
+    endfunction
+    function! CurrentLineI()
+        normal! ^
+        let head_pos = getpos('.')
+        normal! g_
+        let tail_pos = getpos('.')
+        let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
+        return
+                    \ non_blank_char_exists_p
+                    \ ? ['v', head_pos, tail_pos]
+                    \ : 0
+    endfunction
+    vnoremap ik ^o$h
+    onoremap ik :normal vik<Cr>
+    vnoremap ak ^o$
+    onoremap ak :normal vak<Cr>
+    nmap <leader>vk vik
+    nmap <leader>vK vak
     " find block
-    " ------------------------
     let s:block_str = '^# In\[\d*\]\|^# %%\|^# STEP\d\+'
     function! BlockA()
         let beginline = search(s:block_str, 'ebW')
@@ -429,41 +423,49 @@ if exists('*search') && exists('*getpos')
                     \ })
     nmap <leader>vv viv
     nmap <leader>vV vav
-    " ------------------------
-    " find line
-    " ------------------------
-    call textobj#user#plugin('line', {
-                \   '-': {
-                \     'select-a-function': 'CurrentLineA',
-                \     'select-a': 'ak',
-                \     'select-i-function': 'CurrentLineI',
-                \     'select-i': 'ik',
-                \   },
-                \ })
-    function! CurrentLineA()
-        normal! ^
-        let head_pos = getpos('.')
-        normal! $
-        let tail_pos = getpos('.')
-        return ['v', head_pos, tail_pos]
-    endfunction
-    function! CurrentLineI()
-        normal! ^
-        let head_pos = getpos('.')
-        normal! g_
-        let tail_pos = getpos('.')
-        let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
-        return
-                    \ non_blank_char_exists_p
-                    \ ? ['v', head_pos, tail_pos]
-                    \ : 0
-    endfunction
-    vnoremap ik ^o$h
-    onoremap ik :normal vik<Cr>
-    vnoremap ak ^o$
-    onoremap ak :normal vak<Cr>
-    nmap <leader>vk vik
-    nmap <leader>vK vak
+    " -------------------
+    " indent textobj
+    " -------------------
+    nmap <leader>vi viio
+    nmap <leader>vI vaio
+    noautocmd nmap <silent>si viio<C-[>^
+    noautocmd nmap <silent>sg vii<C-[>^
+    " -------------------
+    " targets.vim
+    " -------------------
+    PlugAddOpt 'targets.vim'
+    nmap <leader>vt vit
+    nmap <leader>vT vat
+    nmap <leader>va via
+    nmap <leader>vA vaa
+    nmap <leader>vl vil
+    nmap <leader>vL val
+    nmap <leader>vn vin
+    nmap <leader>vN vaN
+    nmap <leader>Vt vIt
+    nmap <leader>VT vAt
+    nmap <leader>Va vIa
+    nmap <leader>VA vAa
+    nmap <leader>Vl vIl
+    nmap <leader>VL vAl
+    nmap <leader>Vn vIn
+    nmap <leader>VN vAN
+    " -------------------
+    " sandwich
+    " -------------------
+    PlugAddOpt 'vim-sandwich'
+    xmap is <Plug>(textobj-sandwich-auto-i)
+    xmap as <Plug>(textobj-sandwich-auto-a)
+    omap is <Plug>(textobj-sandwich-auto-i)
+    omap as <Plug>(textobj-sandwich-auto-a)
+    xmap iq <Plug>(textobj-sandwich-query-i)
+    xmap aq <Plug>(textobj-sandwich-query-a)
+    omap iq <Plug>(textobj-sandwich-query-i)
+    omap aq <Plug>(textobj-sandwich-query-a)
+    nmap <leader>vs vis
+    nmap <leader>vS vas
+    nmap <leader>vq viq
+    nmap <leader>vQ vaq
 endif
 " ----------------------------------
 " hl searchindex && multi replace

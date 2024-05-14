@@ -1,3 +1,0 @@
-flavor 'kana/vim-textobj-user', '~> 0.4'
-
-# vim: filetype=ruby
