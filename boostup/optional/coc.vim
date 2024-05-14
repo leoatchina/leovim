@@ -152,11 +152,6 @@ nnoremap <silent>gs :call CocAction('showSubTypes')<Cr>
 nnoremap <silent>gS :call CocAction('showSuperTypes')<Cr>
 " refactor
 nmap <silent><leader>R <Plug>(coc-refactor)
-" --------------------------
-" coc snippets
-" --------------------------
-let g:coc_snippet_next = "<C-f>"
-let g:coc_snippet_prev = "<C-b>"
 " ----------------------------
 " actions
 " ----------------------------

@@ -63,7 +63,7 @@ PlugAdd 'mbbill/undotree'
 " ------------------------------
 " zfvim
 " ------------------------------
-if (Require('wubi') || Require('pinyin')) && g:has_terminal
+if (Require('wubi') || Require('pinyin')) && g:has_terminal && (UNIX() || WINDOWS() && !has('nvim'))
     PlugAdd 'ZSaberLv0/ZFVimIM'
     if Require('wubi')
         PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'

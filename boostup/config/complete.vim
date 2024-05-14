@@ -54,6 +54,8 @@ elseif InstalledNvimLsp()
 elseif Installed('vista.vim')
     let g:vista_default_executive = 'ctags'
 endif
+imap <M-n> <C-n>
+imap <M-p> <C-p>
 " ------------------------------
 " vsnip
 " ------------------------------
@@ -66,11 +68,16 @@ fun! CtrlFSkipBracket()
     call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
     return ''
 endfunction
-if Installed('vim-vsnip', 'vim-vsnip-integ')
+if Installed('vim-vsnip-integ') && Installed('vim-vsnip')
     smap <silent><expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
     smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
     imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
     imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
+elseif InstalledCoc() && Installed('vim-vsnip')
+    let g:coc_snippet_next = "<C-f>"
+    let g:coc_snippet_prev = "<C-b>"
+    smap <silent><expr><C-f> coc#jumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'
+    imap <silent><expr><C-f> coc#jumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : CtrlFSkipBracket()
 elseif Installed('luasnip')
     smap <silent><C-b> <cmd>lua require('luasnip').jump(-1)<Cr>
     smap <silent><C-f> <cmd>lua require('luasnip').jump(1)<Cr>
@@ -78,10 +85,8 @@ elseif Installed('luasnip')
     imap <silent><expr><C-f> luasnip#jumpable(1)  ? '<Plug>luasnip-jump-next' : CtrlFSkipBracket()
 else
     imap <silent><C-b> <C-o>I
-    imap <silent><C-f> :call CtrlFSkipBracket()<Cr>
+    imap <silent><C-f> <C-o>A
 endif
-imap <M-n> <C-n>
-imap <M-p> <C-p>
 " -----------------------
 " fzf snippet
 " -----------------------
