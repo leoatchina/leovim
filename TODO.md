@@ -70,8 +70,9 @@
   - [x] local
   - [x] remote url
 - [x] Add ctrl-e to edit command in FzfCallCommands
-- [ ] imap <tab> enhanced
-- [ ] neoconf 
+- [x] neoconf 
+- [ ] imap <C-f> enhanced
+- [ ] Expand function
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
