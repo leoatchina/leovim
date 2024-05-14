@@ -79,6 +79,9 @@ if g:complete_engine == 'cmp'
     " snippet
     PlugAdd 'L3MON4D3/luasnip'
     " lsp related
+    if UNIX()
+        PlugAdd 'folke/neoconf.nvim'
+    endif
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
     PlugAdd 'mfussenegger/nvim-lint'
@@ -92,9 +95,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
-    if UNIX()
-        PlugAdd 'folke/neoconf.nvim'
-    endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0
         PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}

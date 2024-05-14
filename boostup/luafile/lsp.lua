@@ -1,9 +1,29 @@
 local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
+-----------------
+-- neoconf
+-----------------
+if Installed('neoconf.nvim') then
+  require("neoconf").setup({
+    -- name of the local settings files
+    local_settings = ".vim/neoconf.json",
+    import = {
+      vscode = true,
+      coc = true,
+      nlsp = false,
+    }
+  })
+  local opts_neoconf = { noremap = true, silent = true }
+  map("n", "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
+  map("n", "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
+  map("n", "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
+  map("n", "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
+end
+-----------------
+-- lspconfig
+-----------------
 local lspconfig = require("lspconfig")
-local glance = require("glance")
-local actions = glance.actions
 local lsp_inlayhints = require("lsp-inlayhints")
 if lsp_inlayhints then
   lsp_inlayhints.setup()
@@ -33,25 +53,6 @@ else
 end
 if capabilities then
   capabilities = require("lsp-selection-range").update_capabilities(capabilities)
-end
------------------
--- neoconf
------------------
-if Installed('neoconf.nvim') then
-  require("neoconf").setup({
-    -- name of the local settings files
-    local_settings = ".vim/neoconf.json",
-    import = {
-      vscode = true,
-      coc = true,
-      nlsp = false,
-    }
-  })
-  local opts_neoconf = { noremap = true, silent = true }
-  map("n", "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
-  map("n", "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
-  map("n", "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
-  map("n", "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
 end
 -----------------------
 -- fzf_lsp
@@ -223,6 +224,8 @@ end
 -----------------
 -- glance
 -----------------
+local glance = require("glance")
+local actions = glance.actions
 glance.setup({
   height = 40,
   mappings = {

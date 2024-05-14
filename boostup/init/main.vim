@@ -323,11 +323,29 @@ endif
 " --------------------------
 " textobj
 " --------------------------
-for s:v in ['', 'v', 'V', '<c-v>']
-    execute 'omap <expr>' s:v.'I%' "(v:count?'':'1').'".s:v."i%'"
-    execute 'omap <expr>' s:v.'A%' "(v:count?'':'1').'".s:v."a%'"
-endfor
+" for s:v in ['', 'v', 'V', '<c-v>']
+"     execute 'omap <expr>' s:v.'I%' "(v:count?'':'1').'".s:v."i%'"
+"     execute 'omap <expr>' s:v.'A%' "(v:count?'':'1').'".s:v."a%'"
+" endfor
 if exists('*search') && exists('*getpos')
+    " targets.vim
+    PlugAddOpt 'targets.vim'
+    nmap <leader>vt vit
+    nmap <leader>vT vat
+    nmap <leader>va via
+    nmap <leader>vA vaa
+    nmap <leader>vl vil
+    nmap <leader>vL val
+    nmap <leader>vn vin
+    nmap <leader>vN vaN
+    nmap <leader>Vt vIt
+    nmap <leader>VT vAt
+    nmap <leader>Va vIa
+    nmap <leader>VA vAa
+    nmap <leader>Vl vIl
+    nmap <leader>VL vAl
+    nmap <leader>Vn vIn
+    nmap <leader>VN vAN
     PlugAddOpt 'vim-textobj-user'
     PlugAddOpt 'vim-textobj-uri'
     PlugAddOpt 'vim-textobj-syntax'
@@ -348,24 +366,6 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vI vaio
     noautocmd nmap <silent>si viio<C-[>^
     noautocmd nmap <silent>sg vii<C-[>^
-    " targets.vim
-    PlugAddOpt 'targets.vim'
-    nmap <leader>vt vit
-    nmap <leader>vT vat
-    nmap <leader>va via
-    nmap <leader>vA vaa
-    nmap <leader>vl vil
-    nmap <leader>vL val
-    nmap <leader>vn vin
-    nmap <leader>vN vaN
-    nmap <leader>Vt vIt
-    nmap <leader>VT vAt
-    nmap <leader>Va vIa
-    nmap <leader>VA vAa
-    nmap <leader>Vl vIl
-    nmap <leader>VL vAl
-    nmap <leader>Vn vIn
-    nmap <leader>VN vAN
     " --------------------------
     " sandwich
     " --------------------------

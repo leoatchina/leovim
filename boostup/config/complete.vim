@@ -15,9 +15,7 @@ elseif g:complete_engine != ''
     let g:complete_engine = 'mcm'
     source $OPTIONAL_DIR/mcm.vim
 endif
-if InstalledCoc()
-    let g:vista_default_executive = 'coc'
-elseif InstalledNvimLsp()
+if InstalledNvimLsp()
     let g:vista_default_executive = 'nvim_lsp'
     if g:node_version > 14
         let g:ensure_installed = ['vimls', 'lua_ls', 'vale']
@@ -51,6 +49,8 @@ elseif InstalledNvimLsp()
         let g:ensure_installed += ['jdtls']
     endif
     luafile $LUA_DIR/lsp.lua
+elseif InstalledCoc()
+    let g:vista_default_executive = 'coc'
 elseif Installed('vista.vim')
     let g:vista_default_executive = 'ctags'
 endif
