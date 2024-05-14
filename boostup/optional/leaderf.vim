@@ -5,10 +5,9 @@ let g:Lf_ReverseOrder = 0
 let g:Lf_NoChdir      = 1
 let g:Lf_QuickSelect  = 0
 let g:Lf_PythonVersion = float2nr(g:python_version)
-" popu
-let g:Lf_PopupColorscheme = 'default'
-let g:Lf_PopupShowBorder = 1
-let g:Lf_PopupBorders = ["─","│","─","│","┌","┐","┘","└"]
+let g:Lf_DefaultExternalTool = "rg"
+let g:Lf_WorkingDirectoryMode = 'AF'
+" border
 highlight Lf_hl_popupBorder guifg=#ffffff guibg=#021316
 " icons
 if Installed('nvim-web-devicons') || Installed('vim-devicons')
@@ -16,6 +15,10 @@ if Installed('nvim-web-devicons') || Installed('vim-devicons')
 else
     let g:Lf_ShowDevIcons = 0
 endif
+" popup
+let g:Lf_PopupColorscheme = 'default'
+let g:Lf_PopupShowBorder = 1
+let g:Lf_PopupBorders = ["─","│","─","│","┌","┐","┘","└"]
 if g:has_popup_floating
     let g:Lf_WindowPosition = 'popup'
     let g:Lf_PopupHeight    = 0.7
@@ -37,7 +40,6 @@ else
     let g:Lf_PreviewPosition = 'top'
     let g:Lf_WindowPosition = 'bottom'
 endif
-let g:Lf_WorkingDirectoryMode = 'AF'
 let g:Lf_PreviewResult = {
             \ 'Buffer': 1,
             \ 'Tab': 1,
@@ -56,6 +58,7 @@ function! s:ZFIgnore_LeaderF()
     let g:Lf_WildIgnore = {'file' : ignore['file'], 'dir' : ignore['dir'] + g:root_patterns}
 endfunction
 autocmd User ZFIgnoreOnUpdate call s:ZFIgnore_LeaderF()
+" command_map
 let g:Lf_CommandMap = {
             \ '<C-p>': ['<C-g>'],
             \ '<C-f>': ['<C-e>'],
@@ -89,3 +92,6 @@ let g:Lf_NormalCommandMap = {
             \ "Gtags":  {},
             \ "Colorscheme": {}
             \ }
+" gtags
+let g:Lf_Gtags='gtags'
+let g:Lf_Global = "global"
