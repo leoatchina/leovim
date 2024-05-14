@@ -322,8 +322,6 @@ elseif Require('duskfox')
     call SetScheme('duskfox', 'hybrid')
 elseif Require('catppuccin')
     call SetScheme('catppuccin', 'codedark')
-elseif Require('nightfly')
-    call SetScheme('nightfly', 'space-vim-dark')
 elseif Require('moonfly')
     call SetScheme('moonfly', 'space-vim-dark')
 elseif g:complete_engine == 'coc'
