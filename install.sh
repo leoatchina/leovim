@@ -90,7 +90,7 @@ if [ $# -gt 0 ]; then
         installplug="yes"
     fi
     # leotmux
-    if [[ $mode == 'all' || $mode == 'leotmux' ]]; then
+    if [[ $mode == 'leotmux' ]]; then
         if [ -d ~/.leotmux ]; then
             info "leotmux already installed."
         else
@@ -98,7 +98,7 @@ if [ $# -gt 0 ]; then
             ln -sf ~/.leotmux/tmux.conf ~/.tmux.conf
             success "leotmux installed"
         fi
-        [ $mode == 'leotmux' ] && exit 0
+        exit 0
     fi
     # z.lua
     if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
