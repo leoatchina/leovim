@@ -71,6 +71,7 @@
   - [x] remote url
 - [x] Add ctrl-e to edit command in FzfCallCommands
 - [x] neoconf 
+- [ ] vimspector load template in WINDOWS()
 - [ ] imap <C-f> enhanced
 - [ ] Expand function
 - [ ] leaderf gtags settings 
