@@ -329,9 +329,10 @@ for s:v in ['', 'v', 'V', '<c-v>']
 endfor
 if exists('*search') && exists('*getpos')
     PlugAddOpt 'vim-textobj-user'
-    PlugAddOpt 'vim-textobj-function'
-    PlugAddOpt 'vim-textobj-syntax'
     PlugAddOpt 'vim-textobj-uri'
+    PlugAddOpt 'vim-textobj-syntax'
+    PlugAddOpt 'vim-textobj-line'
+    PlugAddOpt 'vim-textobj-function'
     nmap <leader>vf vafo
     nmap <leader>vF vifo
     nmap <leader>vc vaco
@@ -503,7 +504,34 @@ else
     set rtp+=$BOOSTUP_DIR/after
 endif
 " ------------------------
-" set optinal
+" osc52 yankpost
+" ------------------------
+if exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc52_yank', 1)
+    function! s:raw_echo(str)
+        if filewritable('/dev/fd/2')
+            call writefile([a:str], '/dev/fd/2', 'b')
+        else
+            exec("silent! !echo " . shellescape(a:str))
+            redraw!
+        endif
+    endfunction
+    function! s:copy() abort
+        let c = join(v:event.regcontents,"\n")
+        if len(Trim(c)) == 0
+            return
+        endif
+        let c64 = system("base64", c)
+        if $TMUX == ''
+            let s = "\e]52;c;" . Trim(c64) . "\x07"
+        else
+            let s = "\ePtmux;\e\e]52;c;" . Trim(c64) . "\x07\e\\"
+        endif
+        call s:raw_echo(s)
+    endfunction
+    autocmd TextYankPost * call s:copy()
+endif
+" ------------------------
+" set optional
 " ------------------------
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt

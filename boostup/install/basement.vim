@@ -202,10 +202,9 @@ if Planned('nvim-treesitter')
     PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
     PlugAdd 'm-demare/hlargs.nvim'
 elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
-    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
-    PlugAdd 'kentaro/vim-textobj-function-php', {'for': 'php'}
-    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
     PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
+    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
+    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
 endif
 if !Planned('nvim-treesitter') && Require('c') && (Planned('coc.nvim') || Planned('nvim-cmp'))
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}

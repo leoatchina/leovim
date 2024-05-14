@@ -1,6 +1,3 @@
-" --------------------------
-" nvim-treesitter
-" --------------------------
 if Installed('nvim-treesitter', 'hlargs.nvim')
     " parser_install_dir
     if WINDOWS()
@@ -33,4 +30,3 @@ else
         omap <C-s> <Plug>(coc-range-select)
     endif
 endif
-

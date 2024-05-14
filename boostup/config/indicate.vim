@@ -19,12 +19,9 @@ set ttimeout
 set ttimeoutlen=60
 set timeoutlen=300
 set updatetime=200
-if get(g:, 'leovim_indicate', 1) == 0
-    echo "WhichKey indicate is disabled"
-else
+if get(g:, 'leovim_whichkey', 1)
     nnoremap ]c ]c
     nnoremap [c [c
-    let g:which_key_type = 'vim'
     let g:which_key_group_dicts = ''
     let g:which_key_use_floating_win = g:has_popup_floating
     PlugAddOpt 'vim-which-key'
@@ -81,7 +78,7 @@ else
         au FileType fugitive nnoremap <buffer>d :WhichKey "d"<Cr>
         au FileType fugitive nnoremap <buffer>r :WhichKey "r"<Cr>
     endif
-    if Installed('GV.vim')
+    if Installed('gv.vim')
         au FileType GV nnoremap <buffer><C-c>
     endif
 endif
