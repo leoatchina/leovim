@@ -73,6 +73,7 @@
 - [x] neoconf 
 - [ ] imap <C-f> enhanced
 - [ ] Expand function
+- [ ] leaderf gtags settings 
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
