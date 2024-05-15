@@ -204,6 +204,7 @@ let g:ZFDirDiffKeymap_getFullPath = ['Y', 'P']
 nnoremap <Leader>fd :ZFDirDiff<Space>
 nnoremap <Leader>fm :ZFDirDiffMark<Cr>
 nnoremap <Leader>fu :ZFDirDiffUnmark<Cr>
+au FileType ZFDirDiff nnoremap M :tabe +180  $HOME/.leovim/boostup/config/file.vim<Cr>
 PlugAddOpt 'ZFVimDirDiff'
 " --------------------
 " ZFVimBackup
