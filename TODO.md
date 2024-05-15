@@ -72,10 +72,10 @@
 - [x] Add ctrl-e to edit command in FzfCallCommands
 - [x] neoconf 
 - [x] imap <C-f> enhanced
+- [x] vimspector preview template in WINDOWS()
 - [ ] targets.vim bug
-- [ ] vimspector preview template in WINDOWS()
-- [ ] Expand function
-- [ ] leaderf gtags settings 
+- [ ] Expand function modify
+- [ ] leaderf gtags bug 
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
