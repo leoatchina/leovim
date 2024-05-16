@@ -73,9 +73,8 @@
 - [x] neoconf 
 - [x] imap <C-f> enhanced
 - [x] vimspector preview template in WINDOWS()
-- [ ] targets.vim bug
-- [ ] Expand function modify
-- [ ] leaderf gtags bug 
+- [x] leaderf gtags bug 
+- [x] targets.vim bug
 - [ ] none-ls
 - [ ] fxfx.nvim
 - [ ] ====== My plugins ======
