@@ -76,6 +76,9 @@
 - [ ] targets.vim bug
 - [ ] Expand function modify
 - [ ] leaderf gtags bug 
+- [ ] none-ls
+- [ ] fxfx.nvim
+- [ ] ====== My plugins ======
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
