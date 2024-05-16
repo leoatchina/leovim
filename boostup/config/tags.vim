@@ -171,11 +171,11 @@ if Installed('gutentags_plus')
     let g:gutentags_plus_switch = 1
     let g:gutentags_plus_nomap  = 1
     nnoremap <silent><leader>gs :GscopeFind s <C-R><C-W><Cr>
-    nnoremap <silent><leader>gd :GscopeFind g <C-R><C-W><Cr>
+    nnoremap <silent><leader>gg :GscopeFind g <C-R><C-W><Cr>
     nnoremap <silent><leader>gt :GscopeFind t <C-R><C-W><Cr>
     nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><Cr>
     nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><Cr>
-    nnoremap <silent><leader>gg :GscopeFind z <C-R><C-W><Cr>
+    nnoremap <silent><leader>gz :GscopeFind z <C-R><C-W><Cr>
     if InstalledAdvCompEng()
         nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><Cr>
         nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><Cr>
@@ -196,7 +196,11 @@ if Installed('gutentags_plus')
         let g:Lf_GtagsAutoGenerate = 0
         let g:Lf_GtagsAcceptDotfiles = 0
         let g:Lf_GtagsSkipUnreadable = 1
-        nnoremap <silent><leader>G :Leaderf gtags<Cr>
+        nnoremap <silent><leader>G  :Leaderf gtags<Cr>
+        nnoremap <silent><leader>gd :Leaderf gtags -d <C-r><C-w><Cr>
+        nnoremap <silent><leader>gr :Leaderf gtags -r <C-r><C-w><Cr>
+        nnoremap <silent><leader>g? :Leaderf gtags -g <C-r><C-w><Cr>
+        nnoremap <silent><leader>g/ :Leaderf gtags --by-context<Cr>
     endif
 elseif has('+cscope')
     set cscopeprg=
