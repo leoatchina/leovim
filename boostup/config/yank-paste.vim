@@ -1,9 +1,4 @@
 " ------------------------
-" pastemode toggle
-" ------------------------
-inoremap <M-I> <C-\><C-o>:set nopaste<Cr>
-nnoremap <M-I> :set nopaste! nopaste?<CR>
-" ------------------------
 " specical yank
 " ------------------------
 nnoremap Y y$
@@ -117,3 +112,8 @@ nnoremap <leader>yp :let @*=Expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
 nnoremap <leader>yf :let @*=Expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
 " Copy bookmark position reference
 nnoremap <leader>ym :let @*=Expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
+" ------------------------
+" pastemode toggle
+" ------------------------
+inoremap <M-I> <C-\><C-o>:set nopaste<Cr>
+nnoremap <M-I> :set nopaste! nopaste?<CR>
