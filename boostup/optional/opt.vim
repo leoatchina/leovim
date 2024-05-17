@@ -1,8 +1,9 @@
 " nnoremap <M-g>n :!git config user.name "leoatchina"<Cr>:!git config user.email "leoatchina@outlook.com"<Cr>
-
 let g:require_group = get(g:, 'preset_group', [])
-let g:leovim_whichkey = 1
+
 let g:leovim_osc52_yank = 1
+let g:leovim_whichkey = 1
+let g:leovim_openmap = 0
 
 " if v:version < 800
 "     call AddRequire('notags')
