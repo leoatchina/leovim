@@ -4,11 +4,9 @@
 inoremap <M-I> <C-\><C-o>:set nopaste<Cr>
 nnoremap <M-I> :set nopaste! nopaste?<CR>
 " ------------------------
-" basic yank && paste
+" specical yank
 " ------------------------
 nnoremap Y y$
-nnoremap <Tab>y :0,-y<Cr>
-nnoremap <Tab>Y vGy
 function! YankBorder(...) abort
     if a:0 && a:1 > 0
         let y2end = 1
@@ -37,6 +35,7 @@ function! YankBorder(...) abort
 endfunction
 nnoremap <silent>,y :call YankBorder(0)<Cr>
 nnoremap <silent>,Y :call YankBorder(1)<Cr>
+" which clipboard yank
 if has('clipboard')
     if UNIX()
         nnoremap <leader>+ viw"+y
@@ -45,6 +44,11 @@ if has('clipboard')
         nnoremap <leader>+ viw"*y
         xnoremap <leader>+ "*y
     endif
+    nnoremap <Tab>y :0,-"*y<Cr>
+    nnoremap <Tab>Y vG"*y
+else
+    nnoremap <Tab>y :0,-y<Cr>
+    nnoremap <Tab>Y vGy
 endif
 " ------------------------------------
 " M-x/BS
