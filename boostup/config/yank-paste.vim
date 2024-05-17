@@ -35,17 +35,20 @@ nnoremap <silent>,Y :call YankBorder(1)<Cr>
 " ------------------------------------
 if has('clipboard')
     if UNIX()
-        nnoremap <leader>+ viw"+y
-        xnoremap <leader>+ "+y
+        nnoremap <leader>Y viw"+y
+        xnoremap <leader>Y "+y
     else
-        nnoremap <leader>+ viw"*y:echo "Yanked to clipboard"<Cr>
-        xnoremap <leader>+ "*y:echo "Yanked to clipboard"<Cr>
+        nnoremap <leader>Y viw"*y:echo "Yanked to clipboard"<Cr>
+        xnoremap <leader>Y "*y:echo "Yanked to clipboard"<Cr>
     endif
     nnoremap <Tab>y :0,-"*y<Cr>
     nnoremap <Tab>Y vG"*y
+    nnoremap \y :%"*y<Cr>
 else
+    nnoremap <leader>Y viwy
     nnoremap <Tab>y :0,-y<Cr>
     nnoremap <Tab>Y vGy
+    nnoremap \y :%y<Cr>
 endif
 " ------------------------------------
 " M-x/BS
