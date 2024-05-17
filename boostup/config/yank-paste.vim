@@ -40,18 +40,15 @@ nnoremap <silent>,Y :call YankBorder(1)<Cr>
 if has('clipboard')
     if UNIX()
         nnoremap <leader>+ viw"+y
+        xnoremap <leader>+ "+y
     else
         nnoremap <leader>+ viw"*y
+        xnoremap <leader>+ "*y
     endif
 endif
-cnoremap <M-v> <C-r>"
-inoremap <M-v> <C-r>"
-if g:has_terminal == 1
-    tnoremap <M-v> <C-\><C-n>""pa
-elseif g:has_terminal == 2
-    tnoremap <M-v> <C-_>""
-endif
+" ------------------------------------
 " M-x/BS
+" ------------------------------------
 nnoremap <M-x> x
 xnoremap <M-x> x
 nnoremap <Del> x
@@ -65,7 +62,6 @@ nnoremap <S-Insert> P
 xnoremap <S-Insert> P
 cnoremap <S-insert> <C-r>"
 inoremap <S-Insert> <C-r>"
-" del/bs
 inoremap <M-x> <Del>
 cnoremap <M-x> <Del>
 " switch 2 words
@@ -73,6 +69,13 @@ xnoremap <M-V> <Esc>`.``gvp``P
 " ------------------------------------
 " registers plugins with fzf
 " ------------------------------------
+cnoremap <M-v> <C-r>"
+inoremap <M-v> <C-r>"
+if g:has_terminal == 1
+    tnoremap <M-v> <C-\><C-n>""pa
+elseif g:has_terminal == 2
+    tnoremap <M-v> <C-_>""
+endif
 if InstalledFzf()
     PlugAddOpt 'fzf-registers'
     nnoremap <silent><M-v> :FzfRegisterPaste<Cr>
