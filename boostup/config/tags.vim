@@ -188,7 +188,8 @@ if Installed('gutentags_plus')
     nnoremap <silent><leader>gi :GscopeFind i <C-R>=expand("<cfile>")<Cr><Cr>
     " kill
     nnoremap <silent><leader>gk :GscopeKill<Cr>
-    if InstalledLeaderf()
+    " leaderfgtags
+    if InstalledLeaderf() && UNIX()
         let g:Lf_Gtagsconf = $GTAGSCONF
         let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
         let g:Lf_GtagsGutentags = 1
