@@ -4,13 +4,20 @@
 nnoremap Y y$
 function! YankBorder(...) abort
     if a:0 && a:1 > 0
-        let y2end = 1
+        if a:1 > 1
+            let yankmode = 2
+        else
+            let yankmode = 1
+        endif
     else
-        let y2end = 0
+        let yankmode = 0
     endif
     let original_cursor_position = getpos('.')
     if has('clipboard')
-        if y2end
+        if yankmode == 2
+            exec('normal! viw"*y')
+            echo "Yanked word to clipboard."
+        elseif yankmode == 1
             exec('normal! v$"*y')
             echo "Yanked to line end to clipboard."
         else
@@ -18,7 +25,10 @@ function! YankBorder(...) abort
             echo "Yanked from line beginning to clipboard."
         endif
     else
-        if y2end
+        if yankmode == 2
+            exec('normal! viwy')
+            echo "Yanked word."
+        elseif yankmode == 1
             exec('normal! v$y')
             echo "Yanked to line end."
         else
@@ -30,22 +40,18 @@ function! YankBorder(...) abort
 endfunction
 nnoremap <silent>,y :call YankBorder(0)<Cr>
 nnoremap <silent>,Y :call YankBorder(1)<Cr>
+nnoremap <silent><leader>W :call YankBorder(2)<Cr>
 " ------------------------------------
 " with/without clipboard yank
 " ------------------------------------
 if has('clipboard')
-    if UNIX()
-        nnoremap <leader>+ viw"+y
-        xnoremap <leader>+ "+y
-    else
-        nnoremap <leader>+ viw"*y:echo "Yanked to clipboard"<Cr>
-        xnoremap <leader>+ "*y:echo "Yanked to clipboard"<Cr>
-    endif
     nnoremap <Tab>y :0,-"*y<Cr>
     nnoremap <Tab>Y vG"*y
+    nnoremap <leader>Y :%"*y<Cr>
 else
     nnoremap <Tab>y :0,-y<Cr>
     nnoremap <Tab>Y vGy
+    nnoremap <leader>Y :%y<Cr>
 endif
 " ------------------------------------
 " M-x/BS

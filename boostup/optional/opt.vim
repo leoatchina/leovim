@@ -1,8 +1,8 @@
-" nnoremap <M-g>n :!git config user.name "leoatchina"<Cr>:!git config user.email "leoatchina@outlook.com"<Cr>
-
 let g:require_group = get(g:, 'preset_group', [])
-let g:leovim_whichkey = 1
+
 let g:leovim_osc52_yank = 1
+let g:leovim_whichkey = 1
+let g:leovim_openmap = 0
 
 " if v:version < 800
 "     call AddRequire('notags')
@@ -36,15 +36,14 @@ elseif UNIX()
     " set guifont=CascadiaCode\ Nerd\ Font 10.5
 endif
 
-
 " NOTE: visit https://ftp.gnu.org/pub/gnu/global/
 " wget https://ftp.gnu.org/pub/gnu/global/global-6.6.12.tar.gz && tar xvf global-6.6.12.tar.gz && cd global-6.6.12  && ./configure --prefix ~/.local/gtags && make && make install && cd ..
-
-" if executable('gtags')
+" if executable('gtags') && UNIX()
     " let $GTAGSCONF=expand($HOME."/.local/gtags/share/gtags/gtags.conf")
 " endif
 
 " let g:vimtex_view_method = 'zathura'
 
-let g:header_field_author = 'leoatchina'
-let g:header_field_author_email = 'leoatchina@outlook.com'
+" let g:header_field_author = 'leoatchina'
+" let g:header_field_author_email = 'leoatchina@outlook.com'
+" nnoremap <M-g>n :!git config user.name "leoatchina"<Cr>:!git config user.email "leoatchina@outlook.com"<Cr>

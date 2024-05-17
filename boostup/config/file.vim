@@ -427,32 +427,35 @@ endif
 " ------------------------
 nnoremap <M-h><Cr> :source ~/.leovim/boostup/init.vim<Cr>
 nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
-nnoremap <M-h>O :tabe ~/.leovim/boostup/optional/opt.vim<Cr>
-nnoremap <M-h>p :tabe ~/.leovim/pack
-function! TabeOpen(f) abort
-    let f = expand(a:f)
-    exec "tabe " . f
-endfunction
-nnoremap <silent><M-h>i :call TabeOpen("$BOOSTUP_DIR/init.vim")<Cr>
-nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
-nnoremap <silent><M-h>l :call TabeOpen("$LUA_DIR/lsp.lua")<Cr>
-nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
-nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
-nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
-nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
-nnoremap <silent><M-h>f :call TabeOpen("$OPTIONAL_DIR/fzf.vim")<Cr>
-if PrefFzf()
-    nnoremap <silent><M-h>e :FzfFiles <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
-elseif InstalledLeaderf()
-    nnoremap <silent><M-h>e :LeaderfFile <C-r>=expand('$CONFIG_DIR')<Cr><Cr>
-else
-    nnoremap <silent><M-h>e :call TabeOpen("$CONFIG_DIR/file.vim")<Cr>
+if get(g:, 'leovim_openmap', 1)
+    function! TabeOpen(f) abort
+        let f = expand(a:f)
+        exec "tabe " . f
+    endfunction
+    nnoremap <M-h>O :tabe ~/.leovim/boostup/optional/opt.vim<Cr>
+    nnoremap <M-h>p :tabe ~/.leovim/pack
+    nnoremap <silent><M-h>i :call TabeOpen("$BOOSTUP_DIR/init.vim")<Cr>
+    nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
+    nnoremap <silent><M-h>l :call TabeOpen("$LUA_DIR/lsp.lua")<Cr>
+    nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
+    nnoremap <silent><M-h>j :call TabeOpen("$BOOSTUP_DIR/after/ftplugin/java.vim")<Cr>
+    nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
+    nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
+    nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
+    nnoremap <silent><M-h>f :call TabeOpen("$OPTIONAL_DIR/fzf.vim")<Cr>
+    if InstalledLeaderf()
+        nnoremap <silent><M-h>e :LeaderfFile ~/.leovim/boostup/config<Cr>
+        nnoremap <silent><M-h>n :LeaderfFile ~/.leovim/boostup<Cr>
+    elseif InstalledFzf()
+        nnoremap <silent><M-h>e :FzfFiles $CONFIG_DIR<Cr>
+        nnoremap <silent><M-h>n :FzfFiles $BOOSTUP_DIR<Cr>
+    endif
+    " --------------------------
+    " open other ides config
+    " --------------------------
+    nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_DIR/msvc/vs.vim")<Cr>
+    nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
 endif
-" --------------------------
-" open other ides config
-" --------------------------
-nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_DIR/msvc/vs.vim")<Cr>
-nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
 " --------------------------
 " open or add file
 " --------------------------
