@@ -17,18 +17,18 @@ function! YankBorder(...) abort
     if has('clipboard')
         if y2end
             exec('normal! v$"*y')
-            echo "Yank to line end to clipboard."
+            echo "Yanked to line end to clipboard."
         else
             exec('normal! v^"*y')
-            echo "Yank from line beginning to clipboard."
+            echo "Yanked from line beginning to clipboard."
         endif
     else
         if y2end
             exec('normal! v$y')
-            echo "Yank to line end."
+            echo "Yanked to line end."
         else
             exec('normal! v^y')
-            echo "Yank from line beginning."
+            echo "Yanked from line beginning."
         endif
     endif
     call setpos('.', original_cursor_position)
@@ -43,8 +43,8 @@ if has('clipboard')
         nnoremap <leader>+ viw"+y
         xnoremap <leader>+ "+y
     else
-        nnoremap <leader>+ viw"*y
-        xnoremap <leader>+ "*y
+        nnoremap <leader>+ viw"*y:echo "Yanked to clipboard"<Cr>
+        xnoremap <leader>+ "*y:echo "Yanked to clipboard"<Cr>
     endif
     nnoremap <Tab>y :0,-"*y<Cr>
     nnoremap <Tab>Y vG"*y
@@ -95,8 +95,8 @@ if InstalledFzf()
 else
     nnoremap <silent><M-v> :registers<Cr>
     if has('clipboard')
-        nnoremap <M-y> "*y:echo "yanked to clipboard"<C>
-        xnoremap <M-y> "*y:echo "yanked to clipboard"<C>
+        nnoremap <M-y> "*y:echo "Yanked to clipboard"<C>
+        xnoremap <M-y> "*y:echo "Yanked to clipboard"<C>
     endif
 endif
 " ------------------------
