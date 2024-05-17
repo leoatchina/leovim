@@ -35,7 +35,9 @@ function! YankBorder(...) abort
 endfunction
 nnoremap <silent>,y :call YankBorder(0)<Cr>
 nnoremap <silent>,Y :call YankBorder(1)<Cr>
-" which clipboard yank
+" ------------------------------------
+" with/without clipboard yank
+" ------------------------------------
 if has('clipboard')
     if UNIX()
         nnoremap <leader>+ viw"+y
