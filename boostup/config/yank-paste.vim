@@ -48,6 +48,7 @@ if has('clipboard')
     nnoremap <Tab>y :0,-"*y<Cr>
     nnoremap <Tab>Y vG"*y
     nnoremap <leader>Y :%"*y<Cr>
+    xnoremap <leader>Y "*y
 else
     nnoremap <Tab>y :0,-y<Cr>
     nnoremap <Tab>Y vGy

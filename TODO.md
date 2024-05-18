@@ -75,7 +75,7 @@
 - [x] vimspector preview template in WINDOWS()
 - [x] leaderf gtags bug 
 - [x] targets.vim bug
-- [ ] none-ls
+- [x] yank optimize
 - [ ] fxfx.nvim
 - [ ] ====== My plugins ======
 - [ ] vim-funky
