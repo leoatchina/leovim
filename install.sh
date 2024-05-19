@@ -141,7 +141,7 @@ if [ $# -gt 0 ]; then
     fi
     # bashrc
     if [[ $mode == 'all' ]]; then
-        if [ -f ~/.bashrc ]; then
+        if [ -f ~/.bashrc ] && [ $(uname) == 'UNIX' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -157,7 +157,7 @@ else
 fi
 
 # my config
-[ ! -f ~/.bashrc ] && cp $APP_PATH/scripts/bashrc $HOME/.bashrc && success "bashrc copied."
+[ ! -f ~/.bashrc ] && $(uname) == 'UNIX' && cp $APP_PATH/scripts/bashrc $HOME/.bashrc && success "bashrc copied."
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
 
