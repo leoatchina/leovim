@@ -78,7 +78,16 @@ if g:complete_engine == 'cmp'
     PlugAdd 'saadparwaiz1/cmp_luasnip'
     " snippet
     PlugAdd 'L3MON4D3/luasnip'
-    " lsp related
+elseif g:complete_engine == 'coc'
+    if get(g:, 'coc_install_release', 0) == 0
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
+    else
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
+    endif
+    PlugAddOpt 'coc-fzf'
+endif
+" lsp related
+if !Planned('coc.nvim') && has('nvim-0.9')
     if UNIX()
         PlugAdd 'folke/neoconf.nvim'
     endif
@@ -95,13 +104,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
-elseif g:complete_engine == 'coc'
-    if get(g:, 'coc_install_release', 0) == 0
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
-    else
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
-    endif
-    PlugAddOpt 'coc-fzf'
 endif
 if g:complete_engine != '' && g:complete_engine != 'apm' && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'hrsh7th/vim-vsnip'
