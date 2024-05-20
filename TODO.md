@@ -76,7 +76,6 @@
 - [x] leaderf gtags bug 
 - [x] targets.vim bug
 - [x] yank optimize
-- [ ] fxfx.nvim
 - [ ] ====== My plugins ======
 - [ ] vim-funky
   - [x] open bug

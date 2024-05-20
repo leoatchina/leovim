@@ -325,7 +325,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " --------------------------
     " coc
     " --------------------------
-    if g:complete_engine == 'coc' && find_type != 'tags'
+    if InstalledCoc() && find_type != 'tags'
         let commands_dict = {
                     \ 'definition' : ['definitions', 'jumpDefinition'],
                     \ 'references' : ['references', 'jumpReferences'],
@@ -358,9 +358,9 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
             endif
         endif
     " --------------------------
-    " cmp
+    " nvim-lsp
     " --------------------------
-    elseif g:complete_engine == 'cmp' && find_type != 'tags'
+    elseif InstalledNvimLsp() && find_type != 'tags'
         let commands_dict = {
                     \ 'definition' : ['textDocument/definition', 'Glance definitions'],
                     \ 'references' : ['textDocument/references', 'Glance references'],
