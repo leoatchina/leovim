@@ -337,7 +337,11 @@ elseif g:complete_engine == 'cmp'
         call SetScheme('moonfly', 'space-vim-dark')
     endif
 elseif g:complete_engine == 'mcm'
-    call SetScheme('sonokai', 'sublime')
+    if InstalledNvimLsp()
+        call SetScheme('sonokai', 'sublime')
+    else
+        call SetScheme('everforest', 'deus')
+    endif
 elseif g:complete_engine == 'apm'
     call SetScheme('edge', 'one')
 else
