@@ -225,7 +225,7 @@ endif
 " ----------------------------
 " addtional plugins
 " ----------------------------
-if Planned('nvim-cmp') || Planned('nvim-dap') || Planned('CopilotChat.nvim')
+if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('CopilotChat.nvim')
     PlugAdd 'williamboman/mason.nvim'
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
