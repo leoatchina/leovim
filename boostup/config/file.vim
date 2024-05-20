@@ -377,7 +377,7 @@ if Installed('vim-project')
     nnoremap <silent><nowait><leader>P :ProjectCommands<Cr>
 endif
 " -----------------------------------
-" tmux is ignore in gui or windows
+" using system file explorer
 " -----------------------------------
 if HAS_GUI() || WINDOWS()
     imap <M-O> <C-o>O
@@ -419,44 +419,7 @@ if HAS_GUI() || WINDOWS()
         call s:filter_push("Vim Script", "*.vim")
         command! UseSystemBrowser call s:use_system_browser()
         nnoremap <silent><M-\> :UseSystemBrowser<Cr>
-        nnoremap <silent><M-\|> :UseSystemBrowser<Cr>
     endif
-endif
-" ------------------------
-" open config file
-" ------------------------
-nnoremap <M-h><Cr> :source ~/.leovim/boostup/init.vim<Cr>
-nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
-if get(g:, 'leovim_openmap', 1)
-    function! TabeOpen(f) abort
-        let f = expand(a:f)
-        exec "tabe " . f
-    endfunction
-    nnoremap <M-h>O :tabe ~/.leovim/boostup/optional/opt.vim<Cr>
-    nnoremap <M-h>p :tabe ~/.leovim/pack
-    nnoremap <silent><M-h>i :call TabeOpen("$BOOSTUP_DIR/init.vim")<Cr>
-    nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
-    nnoremap <silent><M-h>l :call TabeOpen("$LUA_DIR/lsp.lua")<Cr>
-    nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
-    nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
-    nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
-    nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
-    if InstalledLeaderf()
-        nnoremap <silent><M-h>j :LeaderfFile ~/.leovim/boostup/after/ftplugin<Cr>
-        nnoremap <silent><M-h>e :LeaderfFile ~/.leovim/boostup/config<Cr>
-        nnoremap <silent><M-h>f :LeaderfFile ~/.leovim/boostup<Cr>
-        nnoremap <silent><M-h>n :LeaderfFile ~/.leovim<Cr>
-    elseif InstalledFzf()
-        nnoremap <silent><M-h>j :FzfFiles ~/.leovim/boostup/after/ftplugin<Cr>
-        nnoremap <silent><M-h>e :FzfFiles ~/.leovim/boostup/config<Cr>
-        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/boostup<Cr>
-        nnoremap <silent><M-h>n :FzfFiles ~/.leovim<Cr>
-    endif
-    " --------------------------
-    " open other ides config
-    " --------------------------
-    nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_DIR/msvc/vs.vim")<Cr>
-    nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
 endif
 " --------------------------
 " open or add file
@@ -506,17 +469,11 @@ endfunction
 " ssh/config
 nnoremap <M-h>c :call <SID>open_or_create_file("~/.ssh/config")<Cr>
 " gitconfig
-command! OpenGitConfig call <SID>open_or_create_file("~/.gitconfig")
-nnoremap <M-h>G :OpenGitConfig<Cr>
+nnoremap <M-h>G :call <SID>open_or_create_file("~/.gitconfig")<Cr>
 " bashrc
 nnoremap <M-h>B :call <SID>open_or_create_file("~/.bashrc")<Cr>
+" configrc
 nnoremap <M-h>C :call <SID>open_or_create_file("~/.configrc")<Cr>
-" addtional vim config
-if filereadable(expand("~/.leovim.d/after.vim"))
-    source ~/.leovim.d/after.vim
-endif
-nnoremap <M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
-nnoremap <M-h>P :call <SID>open_or_create_file("~/.leovim.d/pack.vim")<Cr>
 " ------------------
 " create root file
 " ------------------
@@ -536,6 +493,50 @@ command! OpenGitignore call s:open_or_create_rootfile('.gitignore')
 nnoremap <M-h>g :OpenGitignore<Cr>
 command! OpenWildignore call s:open_or_create_rootfile('.wildignore')
 nnoremap <M-h>w :OpenWildignore<Cr>
+" ------------------------
+" open config file
+" ------------------------
+nnoremap <M-h><Cr> :source ~/.leovim/boostup/init.vim<Cr>
+nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
+if get(g:, 'leovim_openmap', 1)
+    function! TabeOpen(f) abort
+        let f = expand(a:f)
+        exec "tabe " . f
+    endfunction
+    nnoremap <M-h>O :tabe ~/.leovim/boostup/optional/opt.vim<Cr>
+    nnoremap <M-h>p :tabe ~/.leovim/pack
+    nnoremap <silent><M-h>i :call TabeOpen("$BOOSTUP_DIR/init.vim")<Cr>
+    nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
+    nnoremap <silent><M-h>l :call TabeOpen("$LUA_DIR/lsp.lua")<Cr>
+    nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
+    nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
+    nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
+    nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
+    if InstalledLeaderf()
+        nnoremap <silent><M-h>j :LeaderfFile ~/.leovim/boostup/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :LeaderfFile ~/.leovim/boostup/config<Cr>
+        nnoremap <silent><M-h>f :LeaderfFile ~/.leovim/boostup<Cr>
+        nnoremap <silent><M-h>n :LeaderfFile ~/.leovim<Cr>
+    elseif InstalledFzf()
+        nnoremap <silent><M-h>j :FzfFiles ~/.leovim/boostup/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :FzfFiles ~/.leovim/boostup/config<Cr>
+        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/boostup<Cr>
+        nnoremap <silent><M-h>n :FzfFiles ~/.leovim<Cr>
+    endif
+    " --------------------------
+    " open other ides config
+    " --------------------------
+    nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_DIR/msvc/vs.vim")<Cr>
+    nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
+    " --------------------------
+    " addtional vim config
+    " --------------------------
+    if filereadable(expand("~/.leovim.d/after.vim"))
+        source ~/.leovim.d/after.vim
+    endif
+    nnoremap <M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
+    nnoremap <M-h>P :call <SID>open_or_create_file("~/.leovim.d/pack.vim")<Cr>
+endif
 " ------------------
 " vscode cursor
 " ------------------

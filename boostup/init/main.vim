@@ -242,10 +242,10 @@ function! s:plug_add_opt(pack)
     if exists(':packadd')
         execute "packadd " . pack
     else
-        for opt_path in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
+        for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
             let added = 0
-            let dir = expand(opt_path . "/" . pack)
-            let after = expand(opt_path . "/" . pack . "/after")
+            let dir = expand(opt_dir . "/" . pack)
+            let after = expand(opt_dir . "/" . pack . "/after")
             if isdirectory(dir)
                 execute "set rtp^=" . dir
                 let added = 1
@@ -914,9 +914,8 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " install packs
 " ------------------------------
 let $DEPLOY_DIR = Expand("~/.leovim.d")
-let opt_path = Expand("$DEPLOY_DIR/pack/add/opt")
-call plug#begin(opt_path)
-if filereadable(expand("$DEPLOY_DIR/pack.vim"))
+call plug#begin(Expand("$DEPLOY_DIR/pack/add/opt"))
+if get(g:, 'leovim_openmap', 1) && filereadable(expand("$DEPLOY_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
 for vim in split(glob("$INSTALL_DIR/*.vim"), "\n")
