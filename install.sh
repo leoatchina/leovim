@@ -82,6 +82,7 @@ mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
 # install extended softwares
+OS=$(uname)
 if [ $# -gt 0 ]; then
     mode=$1
     if [ $# -gt 1 ]; then
@@ -141,7 +142,7 @@ if [ $# -gt 0 ]; then
     fi
     # bashrc
     if [[ $mode == 'all' ]]; then
-        if [ -f ~/.bashrc ] && [ $(uname) == 'UNIX' ]; then
+        if [ -f ~/.bashrc ] && [ $OS == 'UNIX' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -156,8 +157,9 @@ else
     installplug='yes'
 fi
 
-# my config
-[ ! -f ~/.bashrc ] && $(uname) == 'UNIX' && cp $APP_PATH/scripts/bashrc $HOME/.bashrc && success "bashrc copied."
+# cp .bashrc
+[ ! -f ~/.bashrc ] && $OS == 'UNIX' && cp $APP_PATH/scripts/bashrc $HOME/.bashrc && success "bashrc copied."
+
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
 
