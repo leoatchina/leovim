@@ -5,7 +5,7 @@
 REM mkdir necesarry
 call md "%HOME%\AppData\local\nvim"
 
-REM mklink of config dir
+REM mklink of conf.d dir
 IF "%APP_PATH%" == "%HOME%\.leovim" (
     echo "leovim is already installed in %HOME%\.leovim"
 ) ELSE (
@@ -45,7 +45,7 @@ IF NOT EXIST "%HOME%\.leovim.d" (
 
 REM copy local
 IF NOT EXIST "%HOME%\.vimrc.opt" (
-    call copy "%APP_PATH%\config\init\opt.vim" "%HOME%\.vimrc.opt"
+    call copy "%APP_PATH%\conf.d\init\opt.vim" "%HOME%\.vimrc.opt"
 )
 
 REM setup vim tools for windows
