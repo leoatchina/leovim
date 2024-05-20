@@ -442,15 +442,15 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
     if InstalledLeaderf()
-        nnoremap <silent><M-h>e :LeaderfFile ~/.leovim/boostup/config<Cr>
-        nnoremap <silent><M-h>f :LeaderfFile ~/.leovim/boostup/optional<Cr>
-        nnoremap <silent><M-h>n :LeaderfFile ~/.leovim/boostup<Cr>
         nnoremap <silent><M-h>j :LeaderfFile ~/.leovim/boostup/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :LeaderfFile ~/.leovim/boostup/config<Cr>
+        nnoremap <silent><M-h>f :LeaderfFile ~/.leovim/boostup<Cr>
+        nnoremap <silent><M-h>n :LeaderfFile ~/.leovim<Cr>
     elseif InstalledFzf()
-        nnoremap <silent><M-h>e :FzfFiles $CONFIG_DIR<Cr>
-        nnoremap <silent><M-h>f :FzfFiles $OPTIONAL_DIR<Cr>
-        nnoremap <silent><M-h>n :FzfFiles $BOOSTUP_DIR<Cr>
         nnoremap <silent><M-h>j :FzfFiles ~/.leovim/boostup/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :FzfFiles ~/.leovim/boostup/config<Cr>
+        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/boostup<Cr>
+        nnoremap <silent><M-h>n :FzfFiles ~/.leovim<Cr>
     endif
     " --------------------------
     " open other ides config
