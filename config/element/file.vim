@@ -503,26 +503,30 @@ function! TabeOpen(f) abort
     exec "tabe " . f
 endfunction
 if get(g:, 'leovim_openmap', 1)
-    nnoremap <M-h>O :tabe ~/.leovim/config/optional/opt.vim<Cr>
+    nnoremap <silent><M-h>O :tabe ~/.leovim/config/optional/opt.vim<Cr>
     nnoremap <silent><M-h>i :call TabeOpen("$CONFIG_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
     nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
     if InstalledLeaderf()
-        nnoremap <silent><M-h>f :LeaderfFile ~/.leovim/config/after/ftplugin<Cr>
-        nnoremap <silent><M-h>e :LeaderfFile ~/.leovim/config/element<Cr>
-        nnoremap <silent><M-h>l :LeaderfFile ~/.leovim<Cr>
+        nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/config/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :Leaderf file --no-sort ~/.leovim/config/element<Cr>
+        nnoremap <silent><M-h>p :Leaderf file --no-sort ~/.leovim/pack<Cr>
+        nnoremap <silent><M-h>d :Leaderf file --no-sort ~/.leovim/config<Cr>
+        nnoremap <silent><M-h>l :Leaderf file --no-sort ~/.leovim<Cr>
     elseif InstalledFzf()
         nnoremap <silent><M-h>f :FzfFiles ~/.leovim/config/after/ftplugin<Cr>
         nnoremap <silent><M-h>e :FzfFiles ~/.leovim/config/element<Cr>
+        nnoremap <silent><M-h>p :FzfFiles ~/.leovim/pack<Cr>
+        nnoremap <silent><M-h>d :FzfFiles ~/.leovim/config<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
     endif
     " --------------------------
     " open other ides config
     " --------------------------
     nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_DIR/msvc/vs.vim")<Cr>
-    nnoremap <silent><M-h>I :tabe TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
+    nnoremap <silent><M-h>I :call TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
     " --------------------------
     " addtional vim config
     " --------------------------

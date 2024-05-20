@@ -20,11 +20,11 @@ set rtp^=$CONFIG_DIR
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
-let $LUA_DIR = expand($CONFIG_DIR . '/luafile')
 let $INIT_DIR = expand($CONFIG_DIR. '/init')
-let $ELEMENT_DIR = expand($CONFIG_DIR . '/element')
 let $INSTALL_DIR = expand($CONFIG_DIR . '/install')
-let $OPTIONAL_DIR = expand($CONFIG_DIR . '/optional')
+let $ELEMENT_DIR = expand($CONFIG_DIR . '/element')
+let $LUA_DIR = expand($ELEMENT_DIR . '/lua')
+let $OPTIONAL_DIR = expand($ELEMENT_DIR . '/optional')
 " --------------------------
 " set opt path
 " --------------------------
