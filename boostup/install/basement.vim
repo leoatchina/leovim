@@ -87,7 +87,7 @@ elseif g:complete_engine == 'coc'
     PlugAddOpt 'coc-fzf'
 endif
 " lsp related
-if !Planned('coc.nvim') && has('nvim-0.9')
+if index(['cmp', 'mcm'], g:complete_engine) >= 0 && has('nvim-0.9')
     if UNIX()
         PlugAdd 'folke/neoconf.nvim'
     endif
