@@ -51,7 +51,7 @@ create_vimrc(){
 if filereadable(expand("~/.vimrc.test"))
     source ~/.vimrc.test
 else
-    source ~/.leovim/config/init.vim
+    source ~/.leovim/conf.d/init.vim
 endif
 EOF
 success "Setted up $vimrc"

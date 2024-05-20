@@ -253,9 +253,9 @@ if has('nvim') || v:version >= 801
     let g:asynctasks_term_listed = 0
     let g:asynctasks_sort        = 1
     " template
-    let g:asynctasks_template = '~/.leovim/config/tasks/tasks_template.ini'
+    let g:asynctasks_template = '~/.leovim/conf.d/tasks/tasks_template.ini'
     let g:asynctasks_extra_config = [
-                \ '~/.leovim/config/tasks/tasks_common.ini',
+                \ '~/.leovim/conf.d/tasks/tasks_common.ini',
                 \ '~/.leovim.d/tasks/tasks.ini',
                 \ ]
     " packadd
@@ -264,17 +264,17 @@ if has('nvim') || v:version >= 801
     function! s:tasks_open(...)
         if a:0
             if a:1 > 0
-                tabe ~/.leovim/config/tasks/tasks_template.ini
+                tabe ~/.leovim/conf.d/tasks/tasks_template.ini
             else
-                tabe ~/.leovim/config/tasks/tasks_common.ini
+                tabe ~/.leovim/conf.d/tasks/tasks_common.ini
             endif
         else
             call mkdir("$HOME/.leovim.d/tasks", "p")
             tabe ~/.leovim.d/tasks/tasks.ini
             if &columns > &lines * 3
-                vsplit ~/.leovim/config/tasks/tasks_example.ini
+                vsplit ~/.leovim/conf.d/tasks/tasks_example.ini
             else
-                split ~/.leovim/config/tasks/tasks_example.ini
+                split ~/.leovim/conf.d/tasks/tasks_example.ini
             endif
             wincmd p
         endif

@@ -204,7 +204,7 @@ let g:ZFDirDiffKeymap_getFullPath = ['Y']
 nnoremap <Leader>fd :ZFDirDiff<Space>
 nnoremap <Leader>fm :ZFDirDiffMark<Cr>
 nnoremap <Leader>fu :ZFDirDiffUnmark<Cr>
-au FileType ZFDirDiff nnoremap M :tabe +180  $HOME/.leovim/config/element/file.vim<Cr>
+au FileType ZFDirDiff nnoremap M :tabe +180  $HOME/.leovim/conf.d/element/file.vim<Cr>
 PlugAddOpt 'ZFVimDirDiff'
 " --------------------
 " ZFVimBackup
@@ -496,30 +496,30 @@ nnoremap <M-h>w :OpenWildignore<Cr>
 " ------------------------
 " open config file
 " ------------------------
-nnoremap <M-h><Cr> :source ~/.leovim/config/init.vim<Cr>
+nnoremap <M-h><Cr> :source ~/.leovim/conf.d/init.vim<Cr>
 nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
 function! TabeOpen(f) abort
     let f = expand(a:f)
     exec "tabe " . f
 endfunction
 if get(g:, 'leovim_openmap', 1)
-    nnoremap <silent><M-h>O :tabe ~/.leovim/config/optional/opt.vim<Cr>
+    nnoremap <silent><M-h>O :tabe ~/.leovim/conf.d/optional/opt.vim<Cr>
     nnoremap <silent><M-h>i :call TabeOpen("$CONFIG_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
     nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
     if InstalledLeaderf()
-        nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/config/after/ftplugin<Cr>
-        nnoremap <silent><M-h>e :Leaderf file --no-sort ~/.leovim/config/element<Cr>
+        nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/conf.d/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :Leaderf file --no-sort ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :Leaderf file --no-sort ~/.leovim/pack<Cr>
-        nnoremap <silent><M-h>d :Leaderf file --no-sort ~/.leovim/config<Cr>
+        nnoremap <silent><M-h>d :Leaderf file --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --no-sort ~/.leovim<Cr>
     elseif InstalledFzf()
-        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/config/after/ftplugin<Cr>
-        nnoremap <silent><M-h>e :FzfFiles ~/.leovim/config/element<Cr>
+        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/conf.d/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :FzfFiles ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/pack<Cr>
-        nnoremap <silent><M-h>d :FzfFiles ~/.leovim/config<Cr>
+        nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
     endif
     " --------------------------

@@ -11,7 +11,7 @@ endif
 " set dirs
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')
-let $CONFIG_DIR = expand($LEOVIM_DIR . '/config')
+let $CONFIG_DIR = expand($LEOVIM_DIR . '/conf.d')
 " --------------------------
 " set rtp && pack path
 " --------------------------
