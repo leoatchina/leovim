@@ -49,6 +49,11 @@ if has('gui_running')
 elseif has('nvim')
     if has('gui_vimr')
         let s:gui_running = 1
+    elseif exists('g:neovide')
+        let s:gui_running = 1
+        let g:neovide_cursor_animation_length = 0
+    elseif exists('g:vscode')
+        let s:gui_running = 0
     else
         if exists('g:GuiLoaded') && g:GuiLoaded != 0
             let s:gui_running = 1
