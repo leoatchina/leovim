@@ -204,7 +204,7 @@ let g:ZFDirDiffKeymap_getFullPath = ['Y']
 nnoremap <Leader>fd :ZFDirDiff<Space>
 nnoremap <Leader>fm :ZFDirDiffMark<Cr>
 nnoremap <Leader>fu :ZFDirDiffUnmark<Cr>
-au FileType ZFDirDiff nnoremap M :tabe +180  $HOME/.leovim/boostup/config/file.vim<Cr>
+au FileType ZFDirDiff nnoremap M :tabe +180  $HOME/.leovim/config/element/file.vim<Cr>
 PlugAddOpt 'ZFVimDirDiff'
 " --------------------
 " ZFVimBackup
@@ -496,32 +496,27 @@ nnoremap <M-h>w :OpenWildignore<Cr>
 " ------------------------
 " open config file
 " ------------------------
-nnoremap <M-h><Cr> :source ~/.leovim/boostup/init.vim<Cr>
+nnoremap <M-h><Cr> :source ~/.leovim/config/init.vim<Cr>
 nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
+function! TabeOpen(f) abort
+    let f = expand(a:f)
+    exec "tabe " . f
+endfunction
 if get(g:, 'leovim_openmap', 1)
-    function! TabeOpen(f) abort
-        let f = expand(a:f)
-        exec "tabe " . f
-    endfunction
-    nnoremap <M-h>O :tabe ~/.leovim/boostup/optional/opt.vim<Cr>
-    nnoremap <M-h>p :tabe ~/.leovim/pack
-    nnoremap <silent><M-h>i :call TabeOpen("$BOOSTUP_DIR/init.vim")<Cr>
+    nnoremap <M-h>O :tabe ~/.leovim/config/optional/opt.vim<Cr>
+    nnoremap <silent><M-h>i :call TabeOpen("$CONFIG_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
-    nnoremap <silent><M-h>l :call TabeOpen("$LUA_DIR/lsp.lua")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
     nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
-    nnoremap <silent><M-h>d :call TabeOpen("$CONFIG_DIR/debug-terminal.vim")<Cr>
     if InstalledLeaderf()
-        nnoremap <silent><M-h>j :LeaderfFile ~/.leovim/boostup/after/ftplugin<Cr>
-        nnoremap <silent><M-h>e :LeaderfFile ~/.leovim/boostup/config<Cr>
-        nnoremap <silent><M-h>f :LeaderfFile ~/.leovim/boostup<Cr>
-        nnoremap <silent><M-h>n :LeaderfFile ~/.leovim<Cr>
+        nnoremap <silent><M-h>f :LeaderfFile ~/.leovim/config/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :LeaderfFile ~/.leovim/config/element<Cr>
+        nnoremap <silent><M-h>l :LeaderfFile ~/.leovim<Cr>
     elseif InstalledFzf()
-        nnoremap <silent><M-h>j :FzfFiles ~/.leovim/boostup/after/ftplugin<Cr>
-        nnoremap <silent><M-h>e :FzfFiles ~/.leovim/boostup/config<Cr>
-        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/boostup<Cr>
-        nnoremap <silent><M-h>n :FzfFiles ~/.leovim<Cr>
+        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/config/after/ftplugin<Cr>
+        nnoremap <silent><M-h>e :FzfFiles ~/.leovim/config/element<Cr>
+        nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
     endif
     " --------------------------
     " open other ides config

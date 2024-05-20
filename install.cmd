@@ -25,7 +25,7 @@ REM create vimrc
 echo if filereadable(expand("~/.vimrc.test")) > "%HOME%\.vimrc"
 echo    source ~/.vimrc.test >> "%HOME%\.vimrc"
 echo else >> "%HOME%\.vimrc"
-echo    source ~/.leovim/boostup/init.vim >> "%HOME%\.vimrc"
+echo    source ~/.leovim/config/init.vim >> "%HOME%\.vimrc"
 echo endif >> "%HOME%\.vimrc"
 REM cp vimrc
 call copy "%HOME%\.vimrc" "%HOME%\.gvimrc"
@@ -45,7 +45,7 @@ IF NOT EXIST "%HOME%\.leovim.d" (
 
 REM copy local
 IF NOT EXIST "%HOME%\.vimrc.opt" (
-    call copy "%APP_PATH%\boostup\optional\opt.vim" "%HOME%\.vimrc.opt"
+    call copy "%APP_PATH%\config\init\opt.vim" "%HOME%\.vimrc.opt"
 )
 
 REM setup vim tools for windows

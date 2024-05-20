@@ -11,20 +11,20 @@ endif
 " set dirs
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')
-let $BOOSTUP_DIR = expand($LEOVIM_DIR . '/boostup')
+let $CONFIG_DIR = expand($LEOVIM_DIR . '/config')
 " --------------------------
 " set rtp && pack path
 " --------------------------
 set rtp^=$LEOVIM_DIR/pack
-set rtp^=$BOOSTUP_DIR
+set rtp^=$CONFIG_DIR
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
-let $LUA_DIR = expand($BOOSTUP_DIR . '/luafile')
-let $INIT_DIR = expand($BOOSTUP_DIR. '/init')
-let $CONFIG_DIR = expand($BOOSTUP_DIR . '/config')
-let $INSTALL_DIR = expand($BOOSTUP_DIR . '/install')
-let $OPTIONAL_DIR = expand($BOOSTUP_DIR . '/optional')
+let $LUA_DIR = expand($CONFIG_DIR . '/luafile')
+let $INIT_DIR = expand($CONFIG_DIR. '/init')
+let $ELEMENT_DIR = expand($CONFIG_DIR . '/element')
+let $INSTALL_DIR = expand($CONFIG_DIR . '/install')
+let $OPTIONAL_DIR = expand($CONFIG_DIR . '/optional')
 " --------------------------
 " set opt path
 " --------------------------

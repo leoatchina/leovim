@@ -501,9 +501,9 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " after
 " ------------------------
 if WINDOWS()
-    set rtp+=$BOOSTUP_DIR\\after
+    set rtp+=$CONFIG_DIR\\after
 else
-    set rtp+=$BOOSTUP_DIR/after
+    set rtp+=$CONFIG_DIR/after
 endif
 " ------------------------
 " osc52 yankpost
@@ -954,7 +954,7 @@ endif
 " ------------------------------
 " source config cfg
 " ------------------------------
-for vim in split(glob("$CONFIG_DIR/*.vim"), "\n")
+for vim in split(glob("$ELEMENT_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 " ------------------

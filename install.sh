@@ -51,7 +51,7 @@ create_vimrc(){
 if filereadable(expand("~/.vimrc.test"))
     source ~/.vimrc.test
 else
-    source ~/.leovim/boostup/init.vim
+    source ~/.leovim/config/init.vim
 endif
 EOF
 success "Setted up $vimrc"
@@ -220,7 +220,7 @@ echo
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
 else
-    cp $APP_PATH/boostup/optional/opt.vim $HOME/.vimrc.opt
+    cp $APP_PATH/config/init/opt.vim $HOME/.vimrc.opt
     success "$HOME/.vimrc.opt copied."
 fi
 
