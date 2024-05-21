@@ -48,8 +48,8 @@ create_vimrc(){
     local vimrc="$1"
     [[ -f "$vimrc" || -L "$vimrc" ]] && rm -f $vimrc
     cat << EOF > $vimrc
-if filereadable(expand("~/.vimrc.test"))
-    source ~/.vimrc.test
+if filereadable(expand("~/.vimrc.local"))
+    source ~/.vimrc.local
 else
     source ~/.leovim/conf.d/init.vim
 endif
