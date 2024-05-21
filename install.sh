@@ -54,7 +54,7 @@ else
     source ~/.leovim/conf.d/init.vim
 endif
 EOF
-success "Setted up $vimrc"
+    success "Setted up $vimrc"
 }
 
 create_symlinks() {
@@ -70,7 +70,7 @@ setup_plug() {
     export SHELL='/bin/sh'
     echo
     info "Starting update/install plugins for $1"
-    "$1" +PlugUpdate +qall
+    "$1" +PlugOptUpdate +qall
     export SHELL="$system_shell"
     success "Successfully updated/installed plugins for $1"
 }
@@ -94,6 +94,7 @@ if [ $# -gt 0 ]; then
     if [[ $mode == 'leotmux' ]]; then
         if [ -d ~/.leotmux ]; then
             info "leotmux already installed."
+            cd ~/.leotmux && git pull
         else
             git clone https://gitee.com/leoatchina/leotmux.git ~/.leotmux > /dev/null 2>&1
             ln -sf ~/.leotmux/tmux.conf ~/.tmux.conf
@@ -105,6 +106,7 @@ if [ $# -gt 0 ]; then
     if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
         if [ -d ~/z.lua ]; then
             info "z.lua already installed."
+            cd ~/z.lua && git pull
         else
             git clone https://github.com/skywind3000/z.lua ~/z.lua
             success "z.lua installed"
@@ -234,5 +236,6 @@ if [ $installplug != 'no' ]; then
     setup_plug "$HOME/.local/bin/nvi.sh"
 fi
 
-echo
+
+cd ~/.leovim
 success "Thanks for installing leoatchina's vim config. ©`date +%Y` https://github.com/leoatchina/leovim"

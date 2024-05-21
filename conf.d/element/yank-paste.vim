@@ -15,13 +15,25 @@ function! YankBorder(...) abort
     let original_cursor_position = getpos('.')
     if has('clipboard')
         if yankmode == 2
-            exec('normal! viw"*y')
+            if LINUX()
+                exec('normal! viw"+y')
+            else
+                exec('normal! viw"*y')
+            endif
             echo "Yanked word to clipboard."
         elseif yankmode == 1
-            exec('normal! v$"*y')
+            if LINUX()
+                exec('normal! v$"+y')
+            else
+                exec('normal! v$"*y')
+            endif
             echo "Yanked to line end to clipboard."
         else
-            exec('normal! v^"*y')
+            if LINUX()
+                exec('normal! v^"+y')
+            else
+                exec('normal! v^"*y')
+            endif
             echo "Yanked from line beginning to clipboard."
         endif
     else
@@ -48,7 +60,11 @@ if has('clipboard')
     nnoremap <Tab>y :0,-"*y<Cr>
     nnoremap <Tab>Y vG"*y
     nnoremap <leader>Y :%"*y<Cr>
-    xnoremap <leader>y "*y
+    if LINUX()
+        xnoremap + "+y
+    else
+        xnoremap + "*y
+    endif
 else
     nnoremap <Tab>y :0,-y<Cr>
     nnoremap <Tab>Y vGy
@@ -97,8 +113,13 @@ if InstalledFzf()
 else
     nnoremap <silent><M-v> :registers<Cr>
     if has('clipboard')
-        nnoremap <M-y> "*y:echo "Yanked to clipboard"<C>
-        xnoremap <M-y> "*y:echo "Yanked to clipboard"<C>
+        if LINUX()
+            nnoremap <M-y> "+y:echo "Yanked to clipboard"<C>
+            xnoremap <M-y> "+y:echo "Yanked to clipboard"<C>
+        else
+            nnoremap <M-y> "*y:echo "Yanked to clipboard"<C>
+            xnoremap <M-y> "*y:echo "Yanked to clipboard"<C>
+        endif
     endif
 endif
 " ------------------------

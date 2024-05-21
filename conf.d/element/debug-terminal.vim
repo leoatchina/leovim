@@ -276,7 +276,6 @@ if Installed('vimspector')
     nnoremap <M-d>V :call vimspector#
     " watch
     nnoremap + :VimspectorWatch <C-r>=expand('<cword>')<Cr>
-    xnoremap + :<C-u>VimspectorWatch <C-r>=GetVisualSelection()<Cr>
     nnoremap _ :VimspectorDisassemble<Cr>
     nnoremap = :VimspectorEval <C-r>=expand('<cword>')<Cr>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
