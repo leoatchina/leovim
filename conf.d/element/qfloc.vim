@@ -66,7 +66,7 @@ if g:has_terminal
     tnoremap <silent><M-,> <C-\><C-n>:QuickfixToggle<Cr>
     tnoremap <silent><M-;> <C-\><C-n>:LoclistToggle<Cr>
 endif
-if InstalledLeaderf() && !has('nvim')
+if InstalledLeaderf()
     function! s:leaderf_qf_loc()
         if s:loc_opened()
             lclose
