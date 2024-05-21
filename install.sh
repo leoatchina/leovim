@@ -113,10 +113,11 @@ if [ $# -gt 0 ]; then
     fi
     # neovim
     if [[ $mode == 'all' || $mode == 'neovim' ]]; then
-        if [ -d ~/.local/nvim-linux64 ]; then
+        if [ -d ~/.local/nvim-linux64 ] && [ $mode == 'all' ]; then
             info "neovim already installed"
         else
             cd ~/.local
+            rm -rf nvim-linux64*
             wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
             tar xvf nvim-linux64.tar.gz
             rm nvim-linux64.tar.gz
@@ -127,7 +128,7 @@ if [ $# -gt 0 ]; then
     # nodejs
     if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
         node_link=~/.local/node
-        if [ -L $node_link ]; then
+        if [ -L $node_link ] && [ $mode == 'all' ]; then
             info "$node_link already linked"
         else
             url=`wget -qO- https://nodejs.cn/download/current | grep -oP 'href="\K[^"]*linux-x64.tar.xz' | head -n 1`
