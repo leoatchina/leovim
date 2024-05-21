@@ -57,12 +57,15 @@ nnoremap <silent><leader>W :call YankBorder(2)<Cr>
 " with/without clipboard yank
 " ------------------------------------
 if has('clipboard')
-    nnoremap <Tab>y :0,-"*y<Cr>
-    nnoremap <Tab>Y vG"*y
-    nnoremap <leader>Y :%"*y<Cr>
     if LINUX()
+        nnoremap <Tab>y :0,-"+y<Cr>
+        nnoremap <Tab>Y vG"+y
+        nnoremap <leader>Y :%"+y<Cr>
         xnoremap + "+y
     else
+        nnoremap <Tab>y :0,-"*y<Cr>
+        nnoremap <Tab>Y vG"*y
+        nnoremap <leader>Y :%"*y<Cr>
         xnoremap + "*y
     endif
 else
