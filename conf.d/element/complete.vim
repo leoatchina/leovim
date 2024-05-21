@@ -61,8 +61,12 @@ imap <M-p> <C-p>
 " ------------------------------
 if Installed('vim-vsnip')
     let g:vsnip_snippet_dir = expand("~/.leovim/snippets")
-    nnoremap <M-h>s :VsnipOpen<Space>
-    nnoremap <M-h>S :tabe ~/.leovim/snippets
+    nnoremap <M-h>n :VsnipOpen<Space>
+    if InstalledLeaderf()
+        nnoremap <silent><M-h>s :LeaderF file ~/.leovim/snippets<Cr>
+    elseif InstalledFzf()
+        nnoremap <silent><M-h>s :FzfFiles ~/.leovim/snippets<Cr>
+    endif
 endif
 fun! CtrlFSkipBracket()
     call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
