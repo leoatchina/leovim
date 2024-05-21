@@ -72,6 +72,7 @@ else
     nnoremap <Tab>y :0,-y<Cr>
     nnoremap <Tab>Y vGy
     nnoremap <leader>Y :%y<Cr>
+    xnoremap + y
 endif
 " ------------------------------------
 " M-x/BS
