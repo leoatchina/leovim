@@ -42,10 +42,10 @@ if InstalledNvimLsp()
     if Require('go')
         let g:ensure_installed += ['gopls']
     endif
-    if Require('R') && executable('R')
+    if Require('R')
         let g:ensure_installed += ['r_language_server']
     endif
-    if Require('java') && executable('java')
+    if Require('java')
         let g:ensure_installed += ['jdtls']
     endif
     luafile $LUA_DIR/lsp.lua

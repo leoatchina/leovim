@@ -180,7 +180,7 @@ end)
 -- mason lspconfig
 -----------------
 require("mason-lspconfig").setup({
-  ensure_installed = vim.g.lsp_installer_servers,
+  ensure_installed = vim.g.ensure_installed,
   handlers = {
     lsp_zero.default_setup,
     jdtls = lsp_zero.noop,
