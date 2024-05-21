@@ -498,17 +498,17 @@ nnoremap <M-h>w :OpenWildignore<Cr>
 " ------------------------
 nnoremap <M-h><Cr> :source ~/.leovim/conf.d/init.vim<Cr>
 nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
-function! TabeOpen(f) abort
-    let f = expand(a:f)
-    exec "tabe " . f
-endfunction
 if get(g:, 'leovim_openmap', 1)
-    nnoremap <silent><M-h>O :tabe ~/.leovim/conf.d/optional/opt.vim<Cr>
+    function! TabeOpen(f) abort
+        let f = expand(a:f)
+        exec "tabe " . f
+    endfunction
     nnoremap <silent><M-h>i :call TabeOpen("$CONFIG_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
     nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
+    nnoremap <silent><M-h>O :call TabeOpen("$INIT_DIR/opt.vim")<Cr>
     if InstalledLeaderf()
         nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/conf.d/after/ftplugin<Cr>
         nnoremap <silent><M-h>e :Leaderf file --no-sort ~/.leovim/conf.d/element<Cr>
@@ -533,8 +533,8 @@ if get(g:, 'leovim_openmap', 1)
     if filereadable(expand("~/.leovim.d/after.vim"))
         source ~/.leovim.d/after.vim
     endif
-    nnoremap <M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
-    nnoremap <M-h>P :call <SID>open_or_create_file("~/.leovim.d/pack.vim")<Cr>
+    nnoremap <silent><M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
+    nnoremap <silent><M-h>P :call <SID>open_or_create_file("~/.leovim.d/pack.vim")<Cr>
 endif
 " ------------------
 " vscode cursor
