@@ -78,13 +78,8 @@ endfunction
 let g:lightline#bufferline#unnamed = ''
 let g:lightline#bufferline#show_number = 0
 let g:lightline#bufferline#unicode_symbols = 1
-if Installed("nvim-web-devicons") || Installed("vim-web-devicons")
-    let g:lightline#bufferline#enable_devicons = 1
-    let g:lightline#bufferline#enable_nerdfont = 0
-else
-    let g:lightline#bufferline#enable_devicons = 0
-    let g:lightline#bufferline#enable_nerdfont = 1
-endif
+let g:lightline#bufferline#enable_devicons = 0
+let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
     let left = &columns - len(FileReadonly() + GitBranch() + RootDir() + RelativeDir() + Mode())
     return left > 60 ? left - 60 : 0
