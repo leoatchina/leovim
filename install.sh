@@ -166,9 +166,9 @@ if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
     source ~/.bashrc
-    [ $mode == 'bashrc' ] && exit 0
 fi
 
+[ $mode == 'bashrc' ] && exit 0
 
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
