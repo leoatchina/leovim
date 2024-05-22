@@ -83,6 +83,7 @@ mkdir -p "$HOME/.local/bin"
 
 # install extended softwares
 OS=`uname`
+mode=``
 if [ $# -gt 0 ]; then
     mode=$1
     if [ $# -gt 1 ]; then
@@ -144,7 +145,7 @@ if [ $# -gt 0 ]; then
         [ $mode == 'nodejs' ] && exit 0
     fi
     # bashrc
-    if [[ $mode == 'all' ]]; then
+    if [[ $mode == 'all' || $mode == 'bashrc' ]]; then
         if [ -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
@@ -158,6 +159,14 @@ if [ $# -gt 0 ]; then
     fi
 else
     installplug='yes'
+fi
+
+# cp .bashrc
+if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
+    cp $APP_PATH/scripts/bashrc $HOME/.bashrc
+    success "bashrc copied."
+    source ~/.bashrc
+    [ $mode == 'bashrc' ] && exit 0
 fi
 
 
@@ -223,13 +232,6 @@ if [ -f $HOME/.vimrc.opt ];then
 else
     cp $APP_PATH/conf.d/init/opt.vim $HOME/.vimrc.opt
     success "$HOME/.vimrc.opt copied."
-fi
-
-# cp .bashrc
-if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
-    cp $APP_PATH/scripts/bashrc $HOME/.bashrc
-    success "bashrc copied."
-    source ~/.bashrc
 fi
 
 # install plugs
