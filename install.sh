@@ -82,7 +82,7 @@ mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
 # install extended softwares
-OS=$(uname)
+OS=`uname`
 if [ $# -gt 0 ]; then
     mode=$1
     if [ $# -gt 1 ]; then
@@ -161,7 +161,10 @@ else
 fi
 
 # cp .bashrc
-[ ! -f ~/.bashrc ] && [ $OS == 'UNIX' ] && cp $APP_PATH/scripts/bashrc $HOME/.bashrc && success "bashrc copied."
+if  [ ! -f ~/.bashrc ] && [ $OS == 'LINUX' ]; then
+    cp $APP_PATH/scripts/bashrc $HOME/.bashrc
+    success "bashrc copied."
+fi
 
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
@@ -223,11 +226,12 @@ echo
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
 else
-    cp $APP_PATH/config/init/opt.vim $HOME/.vimrc.opt
+    cp $APP_PATH/conf.d/init/opt.vim $HOME/.vimrc.opt
     success "$HOME/.vimrc.opt copied."
 fi
 
 # install plugs
+exit 0
 if [ $installplug != 'no' ]; then
     if program_exists "vim"; then
         setup_plug "vim"
@@ -237,5 +241,4 @@ if [ $installplug != 'no' ]; then
 fi
 
 
-cd ~/.leovim
 success "Thanks for installing leoatchina's vim config. ©`date +%Y` https://github.com/leoatchina/leovim"
