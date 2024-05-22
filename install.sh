@@ -229,7 +229,7 @@ fi
 if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
-    bash
+    source ~/.bashrc
 fi
 
 # install plugs
