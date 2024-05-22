@@ -161,7 +161,7 @@ else
 fi
 
 # cp .bashrc
-[ ! -f ~/.bashrc ] && $OS == 'UNIX' && cp $APP_PATH/scripts/bashrc $HOME/.bashrc && success "bashrc copied."
+[ ! -f ~/.bashrc ] && [ $OS == 'UNIX' ] && cp $APP_PATH/scripts/bashrc $HOME/.bashrc && success "bashrc copied."
 
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
