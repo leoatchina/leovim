@@ -145,7 +145,7 @@ if [ $# -gt 0 ]; then
     fi
     # bashrc
     if [[ $mode == 'all' ]]; then
-        if [ -f ~/.bashrc ] && [ $OS == 'LINUX' ]; then
+        if [ -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -226,7 +226,7 @@ else
 fi
 
 # cp .bashrc
-if  [ ! -f ~/.bashrc ] && [ $OS == 'LINUX' ]; then
+if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
     bash
