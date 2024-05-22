@@ -160,11 +160,6 @@ else
     installplug='yes'
 fi
 
-# cp .bashrc
-if  [ ! -f ~/.bashrc ] && [ $OS == 'LINUX' ]; then
-    cp $APP_PATH/scripts/bashrc $HOME/.bashrc
-    success "bashrc copied."
-fi
 
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
@@ -230,8 +225,13 @@ else
     success "$HOME/.vimrc.opt copied."
 fi
 
+# cp .bashrc
+if  [ ! -f ~/.bashrc ] && [ $OS == 'LINUX' ]; then
+    cp $APP_PATH/scripts/bashrc $HOME/.bashrc
+    success "bashrc copied."
+fi
+
 # install plugs
-exit 0
 if [ $installplug != 'no' ]; then
     if program_exists "vim"; then
         setup_plug "vim"
@@ -239,6 +239,5 @@ if [ $installplug != 'no' ]; then
     setup_plug "$HOME/.local/bin/nv.sh"
     setup_plug "$HOME/.local/bin/nvi.sh"
 fi
-
 
 success "Thanks for installing leoatchina's vim config. ©`date +%Y` https://github.com/leoatchina/leovim"
