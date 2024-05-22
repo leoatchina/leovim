@@ -145,7 +145,7 @@ if [ $# -gt 0 ]; then
     fi
     # bashrc
     if [[ $mode == 'all' ]]; then
-        if [ -f ~/.bashrc ] && [ $OS == 'UNIX' ]; then
+        if [ -f ~/.bashrc ] && [ $OS == 'LINUX' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
