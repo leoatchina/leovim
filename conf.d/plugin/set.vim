@@ -74,35 +74,3 @@ if has('wildignore')
     set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar,*.gz,*.pyd,*.pyc,*.ipynb
     set wildignore+=.ccls-cache/*,.idea/*,.vscode/*,__pycache__/*,.git/*,.svn/*,.hg/*,root/*
 endif
-" --------------------------
-" init directories
-" --------------------------
-let dir_list = {
-            \ 'backupdir': '~/.vim/backup',
-            \ 'viewdir':   '~/.vim/views',
-            \ 'directory': '~/.vim/swap',
-            \ }
-if has('persistent_undo')
-    if has('nvim')
-        let dir_list['undodir'] = '~/.vim/fundo'
-    else
-        let dir_list['undodir'] = '~/.vim/undo'
-    endif
-endif
-for [settingname, dirname] in items(dir_list)
-    let dir = expand(dirname)
-    if !isdirectory(dir)
-        try
-            silent! call mkdir(dir, "p")
-        catch
-            echo "Unable to create it. Try mkdir -p " . dir
-            continue
-        endtry
-    endif
-    exec "set " . settingname . "=" . dir
-endfor
-if has('nvim')
-    luafile $LUA_DIR/utils.lua
-    set shadafile=$HOME/.vim/shada.main
-endif
-let g:leovim_loaded = 1
