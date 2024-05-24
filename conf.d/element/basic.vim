@@ -170,10 +170,10 @@ else
     nnoremap <M-k>t :filetype<Space>
     nnoremap <M-k><M-k> :command<Space>
 endif
-if InstalledLeaderf()
-    nnoremap <silent><M-h><M-h> :LeaderfHelp<Cr>
-elseif InstalledFzf() && executable('perl')
+if InstalledFzf() && executable('perl')
     nnoremap <silent><M-h><M-h> :FzfHelptags<Cr>
+elseif InstalledLeaderf()
+    nnoremap <silent><M-h><M-h> :LeaderfHelp<Cr>
 else
     nnoremap <M-h><M-h> :h<Space>
 endif
