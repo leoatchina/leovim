@@ -97,7 +97,6 @@ if index(['cmp', 'mcm'], g:complete_engine) >= 0 && has('nvim-0.9')
     PlugAdd 'DNLHC/glance.nvim'
     PlugAdd 'gfanto/fzf-lsp.nvim'
     PlugAdd 'josa42/nvim-lightline-lsp'
-    PlugAdd 'lvimuser/lsp-inlayhints.nvim'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'fgheng/winbar.nvim'
     PlugAdd 'VonHeikemen/lsp-zero.nvim'

@@ -24,10 +24,6 @@ end
 -- lspconfig
 -----------------
 local lspconfig = require("lspconfig")
-local lsp_inlayhints = require("lsp-inlayhints")
-if lsp_inlayhints then
-  lsp_inlayhints.setup()
-end
 -- capabilities
 local capabilities
 if Installed('nvim-cmp') then
@@ -150,9 +146,10 @@ lsp_zero.on_attach(function(client, bufnr)
   map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
   map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
   -- inlayhints
-  if lsp_inlayhints then
-    lsp_inlayhints.on_attach(client, bufnr)
-    map({ "n", "x" }, "<leader>I", require('lsp-inlayhints').toggle, opts_nosilent)
+  if vim.fn.has('nvim-0.10') > 0 then
+    map({ "n", "x" }, "<leader>I", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr }, { bufnr = bufnr })
+    end, opts_nosilent)
   end
   -- select range
   local ok, _ = pcall(function()
