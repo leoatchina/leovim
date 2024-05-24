@@ -12,14 +12,10 @@ end
 function! fzf#registers#source(...)
     let alpha_only = a:0 && a:1 > 0
     let regs_added = []
-    if exists('*execute')
-        let reg_lst = split(execute('registers'), '\n')
-    else
-        redir => tmp
-        silent registers
-        redir END
-        let reg_lst = split(tmp, '\n')
-    endif
+    redir => tmp
+    silent registers
+    redir END
+    let reg_lst = split(tmp, '\n')
     let res = []
     let res_header = []
     for reg in reg_lst[1:]
