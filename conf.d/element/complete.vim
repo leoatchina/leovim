@@ -17,10 +17,9 @@ elseif g:complete_engine != ''
 endif
 if InstalledNvimLsp()
     let g:vista_default_executive = 'nvim_lsp'
+    let g:ensure_installed = ['vale_ls']
     if g:node_version > 14
-        let g:ensure_installed = ['vimls', 'lua_ls', 'vale']
-    else
-        let g:ensure_installed = []
+        let g:ensure_installed += ['vimls', 'lua_ls']
     endif
     if g:node_version > 14 && (g:python_version > 3.06 && !Require('pylsp') || g:python_version <= 3.06)
         let g:ensure_installed += ['pyright']
@@ -39,14 +38,14 @@ if InstalledNvimLsp()
     if Require('rust')
         let g:ensure_installed += ['rust_analyzer']
     endif
-    if Require('go')
-        let g:ensure_installed += ['gopls']
-    endif
     if Require('R')
         let g:ensure_installed += ['r_language_server']
     endif
     if Require('java')
         let g:ensure_installed += ['jdtls']
+    endif
+    if Require('go') && executable('go')
+        let g:ensure_installed += ['gopls']
     endif
     luafile $LUA_DIR/lsp.lua
 elseif InstalledCoc()
