@@ -84,9 +84,28 @@ mkdir -p "$HOME/.local/bin"
 
 # z scripts is for history file browser
 cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
+
 # enhanced config
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
+
+# set linke
+if [ "$APP_PATH" == "$HOME/.leovim" ]; then
+    info "leovim has been already installed in $HOME/.leovim"
+else
+    info "leovim is going to be linked to $HOME/.leovim"
+    rm -rf $HOME/.leovim
+    create_symlinks "$APP_PATH" "$HOME/.leovim"
+    success "leovim has been linked to $HOME/.leovim"
+fi
+create_symlinks "$APP_PATH/clean.sh" "$HOME/.leovim.clean"
+create_symlinks "$APP_PATH/jetbrains/idea.vim" "$HOME/.ideavimrc"
+
+# create config for vim/gvim/nvim/gnvim
+create_vimrc "$HOME/.vimrc"
+create_vimrc "$HOME/.gvimrc"
+create_vimrc "$HOME/.config/nvim/init.vim"
+create_vimrc "$HOME/.config/nvim/ginit.vim"
 
 # vim run scripts
 cp -n $APP_PATH/scripts/v.sh $HOME/.local/bin
@@ -195,39 +214,21 @@ if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
 fi
 [[ $mode == 'bashrc' ]] && exit 0
 
-############################################## set config ##################################### 
-ret='0'
-echo
-if [ "$APP_PATH" == "$HOME/.leovim" ]; then
-    info "leovim has been already installed in $HOME/.leovim"
-else
-    info "leovim is going to be linked to $HOME/.leovim"
-    rm -rf $HOME/.leovim
-    create_symlinks "$APP_PATH" "$HOME/.leovim"
-    success "leovim has been linked to $HOME/.leovim"
-fi
-
-echo
-create_symlinks "$APP_PATH/clean.sh" "$HOME/.leovim.clean"
-create_symlinks "$APP_PATH/jetbrains/idea.vim" "$HOME/.ideavimrc"
-create_vimrc "$HOME/.vimrc"
-create_vimrc "$HOME/.gvimrc"
-create_vimrc "$HOME/.config/nvim/init.vim"
-create_vimrc "$HOME/.config/nvim/ginit.vim"
-if [ -f $HOME/.vimrc.opt ];then
-    info "$HOME/.vimrc.opt exists. You can modify it."
-else
-    cp $APP_PATH/conf.d/init/opt.vim $HOME/.vimrc.opt
-    success "$HOME/.vimrc.opt copied."
-fi
-
-# clone unix tools
+# clone unix tools for (neo)vim
 if [ -d ~/.leovim.unix ]; then
     cd ~/.leovim.unix && git pull > /dev/null 2>&1
     success "~/.leovim.unix updated"
 else
     git clone https://github.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
     success "~/.leovim.unix cloned"
+fi
+
+############################################## set optional config ##################################### 
+if [ -f $HOME/.vimrc.opt ];then
+    info "$HOME/.vimrc.opt exists. You can modify it."
+else
+    cp $APP_PATH/conf.d/init/opt.vim $HOME/.vimrc.opt
+    success "$HOME/.vimrc.opt copied."
 fi
 
 ############################### install plugins ##################################
