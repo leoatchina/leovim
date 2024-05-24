@@ -1,6 +1,14 @@
 " NOTE: select[0] is the name of register
 let s:regs_alpha = map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
-let s:regs_special = ['+', '*', '"']
+if has('clipboard')
+    if has('unix') && !has('macunix') && !has('win32unix')
+        let s:regs_special = ['+', '*', '"']
+    else
+        let s:regs_special = ['*', '"']
+    endif
+else
+    let s:regs_special = ['"']
+end
 function! fzf#registers#source(...)
     let alpha_only = a:0 && a:1 > 0
     let regs_added = []

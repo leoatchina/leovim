@@ -88,7 +88,7 @@ function! MACOS()
     return has('macunix')
 endfunction
 function! UNIX()
-    return LINUX() || MACOS()
+    return has('unix')
 endfunction
 function! MACVIM()
     return has('gui_running') && MACOS()
