@@ -74,7 +74,6 @@ create_symlinks() {
 setup_plug() {
     local system_shell="$SHELL"
     export SHELL='/bin/sh'
-    echo
     info "Starting update/install plugins for $1"
     "$1" +PlugOptUpdate +qall
     export SHELL="$system_shell"
@@ -254,4 +253,5 @@ if [ $installplug != 'no' ]; then
     setup_plug "$HOME/.local/bin/nvi.sh"
 fi
 
+echo 
 success "Thanks for installing leoatchina's vim config. ©`date +%Y` https://github.com/leoatchina/leovim"
