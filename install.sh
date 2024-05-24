@@ -77,15 +77,39 @@ setup_plug() {
 
 ############################ MAIN() #################################
 variable_set "$HOME"
-mkdir -p "$HOME/.config/nvim"
-mkdir -p "$HOME/.local/bin"
-# z scripts is for history file browser
-cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
-
-
-# install extended softwares
 OS=`uname`
 mode=``
+mkdir -p "$HOME/.config/nvim"
+mkdir -p "$HOME/.local/bin"
+
+# z scripts is for history file browser
+cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
+# enhanced config
+cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
+cp -n $APP_PATH/scripts/configrc $HOME/.configrc
+
+# vim run scripts
+cp -n $APP_PATH/scripts/v.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/vi.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/nvi.sh $HOME/.local/bin
+
+# dirdiff
+ln -sf $APP_PATH/scripts/dirdiff $HOME/.local/bin
+
+# leovim command
+echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovim
+echo "export leovim=$HOME/.leovim" >> $HOME/.local/bin/leovim
+echo 'cd $leovim && git pull' >> $HOME/.local/bin/leovim
+echo '$SHELL' >> $HOME/.local/bin/leovim && chmod 755 $HOME/.local/bin/leovim
+
+# leovimd command
+echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovimd
+echo "export LEOVIM_D=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
+echo 'cd $LEOVIM_D' >> $HOME/.local/bin/leovimd
+echo '$SHELL' >> $HOME/.local/bin/leovimd && chmod 755 $HOME/.local/bin/leovimd
+
+########################### install softwares #####################################
 if [ $# -gt 0 ]; then
     mode=$1
     if [ $# -gt 1 ]; then
@@ -170,29 +194,6 @@ if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
     source ~/.bashrc
 fi
 [[ $mode == 'bashrc' ]] && exit 0
-cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
-cp -n $APP_PATH/scripts/configrc $HOME/.configrc
-
-# vim run scripts
-cp -n $APP_PATH/scripts/v.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/vi.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/nvi.sh $HOME/.local/bin
-
-# dirdiff
-ln -sf $APP_PATH/scripts/dirdiff $HOME/.local/bin
-
-# leovim command
-echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovim
-echo "export leovim=$HOME/.leovim" >> $HOME/.local/bin/leovim
-echo 'cd $leovim && git pull' >> $HOME/.local/bin/leovim
-echo '$SHELL' >> $HOME/.local/bin/leovim && chmod 755 $HOME/.local/bin/leovim
-
-# leovimd command
-echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovimd
-echo "export LEOVIM_D=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
-echo 'cd $LEOVIM_D' >> $HOME/.local/bin/leovimd
-echo '$SHELL' >> $HOME/.local/bin/leovimd && chmod 755 $HOME/.local/bin/leovimd
 
 ############################################## set config ##################################### 
 ret='0'
