@@ -218,7 +218,6 @@ fi
 
 # set bashrc config 
 if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
-    note "Copy leo's bashrc"
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
     source ~/.bashrc
