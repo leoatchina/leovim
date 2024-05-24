@@ -197,15 +197,6 @@ echo "export LEOVIM_D=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
 echo 'cd $LEOVIM_D' >> $HOME/.local/bin/leovimd
 echo '$SHELL' >> $HOME/.local/bin/leovimd && chmod 755 $HOME/.local/bin/leovimd
 
-# clone tools
-if [ -d ~/.leovim.unix ]; then
-    cd ~/.leovim.unix && git pull > /dev/null 2>&1
-    success "~/.leovim.unix updated"
-else
-    git clone https://github.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
-    success "~/.leovim.unix cloned"
-fi
-
 # set variable
 ret='0'
 echo
@@ -232,6 +223,15 @@ if [ -f $HOME/.vimrc.opt ];then
 else
     cp $APP_PATH/conf.d/init/opt.vim $HOME/.vimrc.opt
     success "$HOME/.vimrc.opt copied."
+fi
+
+# clone tools
+if [ -d ~/.leovim.unix ]; then
+    cd ~/.leovim.unix && git pull > /dev/null 2>&1
+    success "~/.leovim.unix updated"
+else
+    git clone https://github.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
+    success "~/.leovim.unix cloned"
 fi
 
 # install plugs
