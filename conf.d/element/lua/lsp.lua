@@ -113,7 +113,7 @@ lsp_zero.on_attach(function(client, bufnr)
     preserve_mappings = false,
     exclude = { 'K', 'gd', 'gi', 'go', 'gr', 'gl', '<F3>', '<F4>' }
   })
-  local opts = { noremap = true, silent = true, buffer = bufnr }
+  local opts_silent = { noremap = true, silent = true, buffer = bufnr }
   local opts_nosilent = { noremap = true, silent = false, buffer = bufnr }
   if capabilities.completionProvider then
     vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
@@ -122,33 +122,33 @@ lsp_zero.on_attach(function(client, bufnr)
     vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
   end
   -- signatureHelp
-  map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts)
+  map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
   -- format
-  map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts)
+  map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts_silent)
   -- fzf-lsp
-  map("n", "<leader>s", [[<Cmd>Vista finder<Cr>]], opts)
-  map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts)
-  map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts)
-  map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts)
+  map("n", "<leader>s", [[<Cmd>Vista finder<Cr>]], opts_silent)
+  map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts_silent)
+  map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts_silent)
+  map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts_silent)
   -- list workspace folder && omnifunc
-  map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts)
+  map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
   -- lsp info/restart
-  map("n", "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts)
-  map("n", "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts)
+  map("n", "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
+  map("n", "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
   -- diagnostic error
-  map('n', '[d', [[<Cmd>lua vim.diagnostic.goto_prev()<CR>]], opts)
-  map('n', ']d', [[<Cmd>lua vim.diagnostic.goto_next()<CR>]], opts)
-  map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts)
-  map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts)
+  map('n', '[d', [[<Cmd>lua vim.diagnostic.goto_prev()<CR>]], opts_silent)
+  map('n', ']d', [[<Cmd>lua vim.diagnostic.goto_next()<CR>]], opts_silent)
+  map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
+  map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
   -- codeaction && codelens
-  map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts)
-  map({ "n", "x" }, "<leader>A", require("lspimport").import, opts)
+  map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
+  map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
   map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
   map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
   -- inlayhints
   if vim.fn.has('nvim-0.10') > 0 then
     map({ "n", "x" }, "<leader>I", function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr }, { bufnr = bufnr })
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
     end, opts_nosilent)
   end
   -- select range
@@ -156,8 +156,8 @@ lsp_zero.on_attach(function(client, bufnr)
     vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
   end, bufnr)
   if not ok then
-    map("n", "<C-s>", require('lsp-selection-range').trigger, opts)
-    map("x", "<C-s>", require('lsp-selection-range').expand, opts)
+    map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
+    map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
   end
   -- semantic token highlight
   if capabilities.semanticTokensProvider and capabilities.semanticTokensProvider.full then

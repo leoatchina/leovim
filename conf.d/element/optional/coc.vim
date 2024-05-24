@@ -102,11 +102,11 @@ endif
 if Require('rust')
     let g:coc_global_extensions += ['coc-rust-analyzer']
 endif
-if Require('go')
-    let g:coc_global_extensions += ['coc-go']
-endif
 if Require('java')
     let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
+endif
+if Require('go') && executable('go')
+    let g:coc_global_extensions += ['coc-go']
 endif
 if Require('writing')
     let g:coc_global_extensions += ['coc-vimtex']
