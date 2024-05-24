@@ -88,7 +88,7 @@ function! MACOS()
     return has('macunix')
 endfunction
 function! UNIX()
-    return has('unix')
+    return has('unix') && !has('win32unix')
 endfunction
 function! MACVIM()
     return has('gui_running') && MACOS()
