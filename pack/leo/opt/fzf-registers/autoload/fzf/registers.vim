@@ -41,10 +41,7 @@ function! fzf#registers#source(...)
         endif
     endfor
     if alpha_only
-        if has('clipboard')
-            let res_header = res_header + filter(copy(s:regs_special), 'index(map(copy(res_header), "v:val[0]"), v:val) < 0')
-        endif
-        return res_header + filter(copy(s:regs_alpha), 'index(copy(regs_added), v:val) < 0') + res
+        return res_header + filter(copy(s:regs_special), 'index(map(copy(res_header), "v:val[0]"), v:val) < 0') + filter(copy(s:regs_alpha), 'index(copy(regs_added), v:val) < 0') + res
     else
         return res
     endif
