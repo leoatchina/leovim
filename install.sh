@@ -77,9 +77,11 @@ setup_plug() {
 
 ############################ MAIN() #################################
 variable_set "$HOME"
-
 mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
+# z scripts is for history file browser
+cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
+
 
 # install extended softwares
 OS=`uname`
@@ -161,20 +163,15 @@ else
     installplug='yes'
 fi
 
-# cp .bashrc
+# set bashrc config 
 if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
     source ~/.bashrc
 fi
-
 [[ $mode == 'bashrc' ]] && exit 0
-
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
-
-# z scripts is for history file browser
-cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
 
 # vim run scripts
 cp -n $APP_PATH/scripts/v.sh $HOME/.local/bin
@@ -197,7 +194,7 @@ echo "export LEOVIM_D=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
 echo 'cd $LEOVIM_D' >> $HOME/.local/bin/leovimd
 echo '$SHELL' >> $HOME/.local/bin/leovimd && chmod 755 $HOME/.local/bin/leovimd
 
-# set variable
+############################################## set config ##################################### 
 ret='0'
 echo
 if [ "$APP_PATH" == "$HOME/.leovim" ]; then
@@ -216,8 +213,6 @@ create_vimrc "$HOME/.vimrc"
 create_vimrc "$HOME/.gvimrc"
 create_vimrc "$HOME/.config/nvim/init.vim"
 create_vimrc "$HOME/.config/nvim/ginit.vim"
-
-echo
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
 else
@@ -225,7 +220,7 @@ else
     success "$HOME/.vimrc.opt copied."
 fi
 
-# clone tools
+# clone unix tools
 if [ -d ~/.leovim.unix ]; then
     cd ~/.leovim.unix && git pull > /dev/null 2>&1
     success "~/.leovim.unix updated"
@@ -234,7 +229,7 @@ else
     success "~/.leovim.unix cloned"
 fi
 
-# install plugs
+############################### install plugins ##################################
 if [ $installplug != 'no' ]; then
     if program_exists "vim"; then
         setup_plug "vim"
