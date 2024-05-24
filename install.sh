@@ -231,7 +231,7 @@ if [ -d ~/.leovim.unix ]; then
     cd ~/.leovim.unix && git pull > /dev/null 2>&1
     success "~/.leovim.unix updated"
 else
-    git clone https://gitee.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
+    git clone https://github.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
     success "~/.leovim.unix cloned"
 fi
 
