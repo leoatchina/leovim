@@ -8,6 +8,10 @@ msg() {
     printf '%b\n' "$1" >&2
 }
 
+note() {
+    msg "===\33[30m[I]\33[0m${1}${2}==="
+}
+
 info() {
     msg "\33[33m[I]\33[0m ${1}${2}"
 }
@@ -89,7 +93,10 @@ cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp -n $APP_PATH/scripts/configrc $HOME/.configrc
 
-# set linke
+
+note "Set links, create (neo)vim's configs, and cp start scripts."
+
+# set links
 if [ "$APP_PATH" == "$HOME/.leovim" ]; then
     info "leovim has been already installed in $HOME/.leovim"
 else
@@ -138,6 +145,7 @@ if [ $# -gt 0 ]; then
     fi
     # leotmux
     if [[ $mode == 'leotmux' ]]; then
+        note "Install leotmux."
         if [ -d ~/.leotmux ]; then
             info "leotmux already installed."
             cd ~/.leotmux && git pull
@@ -148,6 +156,7 @@ if [ $# -gt 0 ]; then
         fi
         exit 0
     fi
+    note "Install softwares."
     # z.lua
     if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
         if [ -d ~/z.lua ]; then
@@ -208,6 +217,7 @@ fi
 
 # set bashrc config 
 if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
+    note "Copy leo's bashrc."
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
     source ~/.bashrc
@@ -215,6 +225,7 @@ fi
 [[ $mode == 'bashrc' ]] && exit 0
 
 # clone unix tools for (neo)vim
+note "Install/update leovim.unix."
 if [ -d ~/.leovim.unix ]; then
     cd ~/.leovim.unix && git pull > /dev/null 2>&1
     success "~/.leovim.unix updated"
@@ -232,6 +243,7 @@ else
 fi
 
 ############################### install plugins ##################################
+note "Install (neo)vim's plugins"
 if [ $installplug != 'no' ]; then
     if program_exists "vim"; then
         setup_plug "vim"
