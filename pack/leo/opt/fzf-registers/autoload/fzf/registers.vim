@@ -1,18 +1,18 @@
 let s:regs_alpha = map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
+" get registers
 function! fzf#registers#list()
     redir => tmp
     silent registers
     redir END
     let reg_lst = split(tmp, '\n')
-    if reg_lst[0][0] !=# '-'
-        return map(copy(reg_lst[1:]), 'v:val[6:]')
-    else
+    if reg_lst[0][0] =# '-'
         return reg_lst[1:]
+    else
+        return map(copy(reg_lst[1:]), 'v:val[6:]')
     endif
 endfunction
-" NOTE: select[0] is the name of register
 let s:regs_temp = map(fzf#registers#list(), 'v:val[0]')
-if index(s:regs_temp, '+') >= 0
+if index(s:regs_temp, '+') >= 0 && index(s:regs_temp, '*') >= 0
     let s:regs_special = ['+', '*', '"']
 elseif index(s:regs_temp, '*') >= 0
     let s:regs_special = ['*','"']
@@ -20,6 +20,7 @@ else
     let s:regs_special = ['"']
 endif
 
+" NOTE: reg[0] is the name of register
 function! fzf#registers#source(...)
     let alpha_only = a:0 && a:1 == 1
     let result = []
@@ -61,7 +62,7 @@ function! fzf#registers#paste(select) dict
     call feedkeys(cmd)
 endfunction
 
-let s:action_a_letters = ['{', '[', '(', '<', 'S', 'A', 'k']
+let s:action_a_letters = ['{', '[', '(', '<', 'S', 'A']
 function! fzf#registers#yank(select) dict
     let reg = a:select[0]
     if self.visual > 0
