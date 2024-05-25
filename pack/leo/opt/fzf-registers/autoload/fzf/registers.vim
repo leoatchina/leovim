@@ -5,7 +5,7 @@ function! fzf#registers#list()
     silent registers
     redir END
     let reg_lst = split(tmp, '\n')
-    if reg_lst[0][0] =# '-'
+    if reg_lst[0][0] ==# '-'
         return reg_lst[1:]
     else
         return map(copy(reg_lst[1:]), 'v:val[6:]')
