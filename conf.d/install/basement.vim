@@ -75,7 +75,6 @@ endif
 " complete_engine
 " ------------------------------
 if g:complete_engine == 'cmp'
-    " complete related
     PlugAdd 'hrsh7th/nvim-cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lsp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
@@ -85,21 +84,10 @@ if g:complete_engine == 'cmp'
     PlugAdd 'petertriho/cmp-git'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
     PlugAdd 'onsails/lspkind-nvim'
-    PlugAdd 'saadparwaiz1/cmp_luasnip'
     " snippet
+    PlugAdd 'saadparwaiz1/cmp_luasnip'
     PlugAdd 'L3MON4D3/luasnip'
-elseif g:complete_engine == 'vcm'
-    PlugAdd 'girishji/vimcomplete'
-elseif g:complete_engine == 'coc'
-    if get(g:, 'coc_install_release', 0) == 0
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
-    else
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
-    endif
-    PlugAddOpt 'coc-fzf'
-endif
-" lsp related
-if index(['cmp', 'mcm'], g:complete_engine) >= 0 && has('nvim-0.9')
+    " lsp related
     if UNIX()
         PlugAdd 'folke/neoconf.nvim'
     endif
@@ -115,6 +103,15 @@ if index(['cmp', 'mcm'], g:complete_engine) >= 0 && has('nvim-0.9')
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
+elseif g:complete_engine == 'vcm'
+    PlugAdd 'girishji/vimcomplete'
+elseif g:complete_engine == 'coc'
+    if get(g:, 'coc_install_release', 0) == 0
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
+    else
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
+    endif
+    PlugAddOpt 'coc-fzf'
 endif
 if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'hrsh7th/vim-vsnip'
