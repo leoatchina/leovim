@@ -552,11 +552,12 @@ if isdirectory(s:vscode_dir) || isdirectory(s:cursor_dir)
                 execute(delete_cmd)
                 let template = '!mklink %s %s'
                 let cmd = printf(template, dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
+                execute(cmd)
             else
                 let template = '!ln -sf %s %s'
                 let cmd = printf(template, $INIT_DIR . '/keybindings.json', dir)
+                execute(cmd)
             endif
-            execute(cmd)
         endfor
     endfunction
     command! LinkKeyBindings call s:link_keybindings()

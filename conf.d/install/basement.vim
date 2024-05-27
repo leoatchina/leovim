@@ -23,7 +23,9 @@ try
         set completepopup=align:menu,border:off,highlight:WildMenu
     endif
 catch
-    call AddRequire('mcm')
+    if UNIX()
+        call AddRequire('mcm')
+    endif
 endtry
 if Require('nocomplete')
     let g:complete_engine = ''
@@ -35,15 +37,15 @@ elseif Require('apm')
     else
         let s:smart_engine_select = 1
     endif
-elseif Require('vcm')
-    if v:version > 900
-        let g:complete_engine = 'vcm'
-    else
-        let s:smart_engine_select = 1
-    endif
 elseif Require('cmp')
     if has('nvim-0.9')
         let g:complete_engine = 'cmp'
+    else
+        let s:smart_engine_select = 1
+    endif
+elseif Require('vcm')
+    if v:version >= 901
+        let g:complete_engine = 'vcm'
     else
         let s:smart_engine_select = 1
     endif
@@ -59,7 +61,7 @@ endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.9')
         let g:complete_engine = 'cmp'
-    elseif v:version > 900
+    elseif v:version >= 901
         let g:complete_engine = 'vcm'
     elseif g:node_version >= 16.18 && has('nvim-0.8.1')
         let g:complete_engine = 'coc'
