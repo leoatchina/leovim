@@ -44,7 +44,7 @@ elseif Require('cmp')
         let s:smart_engine_select = 1
     endif
 elseif Require('vcm')
-    if v:version >= 901
+    if v:version >= 901 && UNIX()
         let g:complete_engine = 'vcm'
     else
         let s:smart_engine_select = 1
@@ -61,7 +61,7 @@ endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.9')
         let g:complete_engine = 'cmp'
-    elseif v:version >= 901
+    elseif v:version >= 901 && UNIX()
         let g:complete_engine = 'vcm'
     elseif g:node_version >= 16.18 && has('nvim-0.8.1')
         let g:complete_engine = 'coc'
