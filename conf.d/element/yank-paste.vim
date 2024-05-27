@@ -110,7 +110,7 @@ if InstalledFzf()
     inoremap <silent><M-v> <C-o>:FzfRegisterPaste<Cr>
     xnoremap <silent><M-v> :<C-u>FzfRegisterPasteV<Cr>
     xnoremap <silent><M-y> :<C-u>FzfRegisterYankV<Cr>
-    for letter in ['{', '}', '[', ']', '(', ')', '<', '>', '"', "'", '.', 's', 'S', 'a', 'A', 'l', 'n', 't', 'w', 'u', 'v', 'b', 'c']
+    for letter in ['{', '}', '[', ']', '(', ')', '<', '>', '"', "'", '.', 's', 'S', 'a', 'A', 'l', 'n', 't', 'w', 'u', 'v', 'b', 'c', 'k']
         execute printf("nnoremap <silent><M-y>%s :FzfRegisterYank %s<Cr>", letter, letter)
         execute printf("inoremap <silent><M-y>%s <C-o>:FzfRegisterYank %s<Cr>", letter, letter)
     endfor

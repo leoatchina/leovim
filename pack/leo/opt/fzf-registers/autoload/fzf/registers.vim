@@ -1,49 +1,54 @@
-" NOTE: select[0] is the name of register
 let s:regs_alpha = map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
-if has('clipboard')
-    if has('unix') && !has('macunix') && !has('win32unix')
-        let s:regs_special = ['+', '*', '"']
-    else
-        let s:regs_special = ['*', '"']
-    endif
-else
-    let s:regs_special = ['"']
-end
-function! fzf#registers#source(...)
-    let alpha_only = a:0 && a:1 > 0
-    let regs_added = []
+" get registers
+function! fzf#registers#list()
     redir => tmp
     silent registers
     redir END
     let reg_lst = split(tmp, '\n')
-    let res = []
-    let res_header = []
-    for reg in reg_lst[1:]
-        if reg_lst[0][0] !=# '-'
-            let reg = reg[6:]
-        endif
+    if reg_lst[0][0] ==# '-'
+        return reg_lst[1:]
+    else
+        return map(copy(reg_lst[1:]), 'v:val[6:]')
+    endif
+endfunction
+let s:regs_temp = map(fzf#registers#list(), 'v:val[0]')
+if index(s:regs_temp, '+') >= 0 && index(s:regs_temp, '*') >= 0
+    let s:regs_special = ['+', '*', '"']
+elseif index(s:regs_temp, '*') >= 0
+    let s:regs_special = ['*','"']
+else
+    let s:regs_special = ['"']
+endif
+
+" NOTE: reg[0] is the name of register
+function! fzf#registers#source(...)
+    let alpha_only = a:0 && a:1 == 1
+    let result = []
+    let result_begin = []
+    let regs_added = []
+    for reg in fzf#registers#list()
         if alpha_only && index(s:regs_alpha, reg[0]) < 0 && index(s:regs_special, reg[0]) < 0
             continue
         endif
         if alpha_only && reg[0] =~ '"'
-            call insert(res_header, reg, 0)
+            call insert(result_begin, reg, 0)
         elseif reg[0] =~ '*' || reg[0] =~ '+'
             if alpha_only
-                call insert(res_header, reg, 0)
+                call insert(result_begin, reg, 0)
             else
-                call insert(res, reg, 0)
+                call insert(result, reg, 0)
             endif
         else
-            call add(res, reg)
+            call add(result, reg)
             if alpha_only
                 call add(regs_added, reg[0])
             endif
         endif
     endfor
     if alpha_only
-        return res_header + filter(copy(s:regs_special), 'index(map(copy(res_header), "v:val[0]"), v:val) < 0') + filter(copy(s:regs_alpha), 'index(copy(regs_added), v:val) < 0') + res
+        return result_begin + filter(copy(s:regs_special), 'index(map(copy(result_begin), "v:val[0]"), v:val) < 0') + filter(copy(s:regs_alpha), 'index(copy(regs_added), v:val) < 0') + result
     else
-        return res
+        return result
     endif
 endfunction
 

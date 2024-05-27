@@ -319,24 +319,22 @@ elseif Require('catppuccin')
     call SetScheme('catppuccin', 'codedark')
 elseif Require('moonfly')
     call SetScheme('moonfly', 'space-vim-dark')
-elseif g:complete_engine == 'coc'
-    if has('nvim')
-        call SetScheme('duskfox', 'hybrid')
-    else
-        call SetScheme('gruvbox-material', 'gruvbox')
-    endif
 elseif g:complete_engine == 'cmp'
     if InstalledNvimLsp()
         call SetScheme('catppuccin', 'codedark')
     else
         call SetScheme('moonfly', 'space-vim-dark')
     endif
-elseif g:complete_engine == 'mcm'
-    if InstalledNvimLsp()
-        call SetScheme('sonokai', 'sublime')
+elseif g:complete_engine == 'vcm'
+    call SetScheme('everforest', 'deus')
+elseif g:complete_engine == 'coc'
+    if has('nvim')
+        call SetScheme('duskfox', 'hybrid')
     else
-        call SetScheme('everforest', 'deus')
+        call SetScheme('gruvbox-material', 'gruvbox')
     endif
+elseif g:complete_engine == 'mcm'
+    call SetScheme('sonokai', 'sublime')
 elseif g:complete_engine == 'apm'
     call SetScheme('edge', 'one')
 else
