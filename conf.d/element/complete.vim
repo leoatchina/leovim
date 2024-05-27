@@ -7,6 +7,8 @@ if Installed('mason.nvim')
 endif
 if InstalledCmp()
     luafile $LUA_DIR/cmp.lua
+elseif Installed('vimcomplete')
+    source $OPTIONAL_DIR/vcm.vim
 elseif InstalledCoc()
     source $OPTIONAL_DIR/coc.vim
 elseif g:complete_engine == 'apm'

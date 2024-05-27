@@ -35,6 +35,12 @@ elseif Require('apm')
     else
         let s:smart_engine_select = 1
     endif
+elseif Require('vcm')
+    if v:version > 900
+        let g:complete_engine = 'vcm'
+    else
+        let s:smart_engine_select = 1
+    endif
 elseif Require('cmp')
     if has('nvim-0.9')
         let g:complete_engine = 'cmp'
@@ -53,6 +59,8 @@ endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.9')
         let g:complete_engine = 'cmp'
+    elseif v:version > 900
+        let g:complete_engine = 'vcm'
     elseif g:node_version >= 16.18 && has('nvim-0.8.1')
         let g:complete_engine = 'coc'
     elseif UNIX()
@@ -78,6 +86,8 @@ if g:complete_engine == 'cmp'
     PlugAdd 'saadparwaiz1/cmp_luasnip'
     " snippet
     PlugAdd 'L3MON4D3/luasnip'
+elseif g:complete_engine == 'vcm'
+    PlugAdd 'girishji/vimcomplete'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0
         PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
@@ -104,10 +114,10 @@ if index(['cmp', 'mcm'], g:complete_engine) >= 0 && has('nvim-0.9')
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
 endif
-if g:complete_engine != '' && g:complete_engine != 'apm' && exists('v:true') && exists("##TextChangedP")
+if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'hrsh7th/vim-vsnip'
     PlugAdd 'rafamadriz/friendly-snippets'
-    if g:complete_engine == 'mcm'
+    if index(['vcm', 'mcm'], g:complete_engine) >= 0
         PlugAdd 'hrsh7th/vim-vsnip-integ'
     endif
 endif
