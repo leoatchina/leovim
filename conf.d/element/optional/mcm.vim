@@ -19,29 +19,3 @@ else
     let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict']
 endif
 PlugAddOpt 'vim-mucomplete'
-function! MapTabCr(istab) abort
-    let istab = a:istab
-    if pumvisible()
-        if istab
-            if empty(get(v:, 'completed_item', {}))
-                return "\<C-n>"
-            elseif Installed('vim-vsnip', 'vim-vsnip-integ') && vsnip#available(1)
-                return "\<Plug>(vsnip-expand-or-jump)"
-            else
-                return "\<C-y>"
-            endif
-        else
-            return "\<C-y>"
-        endif
-    else
-        if istab
-            return "\<Tab>"
-        else
-            return "\<Cr>"
-        endif
-    endif
-endfunction
-au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
-au WinEnter,BufEnter * imap <silent><Cr>  <C-R>=MapTabCr(0)<Cr>
-au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
-au WinEnter,BufEnter * imap <expr><C-e>  pumvisible()? "\<C-e>" : "\<C-O>A"
