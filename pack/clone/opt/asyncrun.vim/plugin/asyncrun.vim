@@ -3,7 +3,7 @@
 " Maintainer: skywind3000 (at) gmail.com, 2016-2024
 " Homepage: https://github.com/skywind3000/asyncrun.vim
 "
-" Last Modified: 2024/05/14 03:50
+" Last Modified: 2024/05/23 01:31
 "
 " Run shell command in background and output to quickfix:
 "     :AsyncRun[!] [options] {cmd} ...
@@ -758,7 +758,10 @@ function! s:AsyncRun_Job_Start(cmd)
 			let l:args += [a:cmd]
 		else
 			let l:tmp = s:ScriptWrite(a:cmd, 0)
+			let l:args = ['cmd.exe', '/C']
 			if s:async_nvim == 0
+				let l:args += [l:tmp]
+			elseif has('nvim-0.9.0')
 				let l:args += [l:tmp]
 			else
 				let l:args = s:shellescape(l:tmp)
@@ -840,7 +843,14 @@ function! s:AsyncRun_Job_Start(cmd)
 				let l:callbacks.stdin = 'null'
 			endif
 		endif
+		let l:slash = &shellslash
+		if l:slash
+			set noshellslash
+		endif
 		let s:async_job = jobstart(l:args, l:callbacks)
+		if l:slash
+			set shellslash
+		endif
 		let l:success = (s:async_job > 0)? 1 : 0
 		if l:success != 0
 			if s:async_info.range > 0
@@ -2305,7 +2315,7 @@ endfunc
 " asyncrun - version
 "----------------------------------------------------------------------
 function! asyncrun#version()
-	return '2.12.6'
+	return '2.12.9'
 endfunc
 
 

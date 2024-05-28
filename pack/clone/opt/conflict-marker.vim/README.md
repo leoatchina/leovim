@@ -1,6 +1,6 @@
 conflict-marker.vim
 ===================
-[![CI](https://github.com/rhysd/conflict-marker.vim/workflows/CI/badge.svg?event=push)](https://github.com/rhysd/conflict-marker.vim/actions?query=workflow%3ACI)
+[![CI](https://github.com/rhysd/conflict-marker.vim/actions/workflows/ci.yml/badge.svg)](https://github.com/rhysd/conflict-marker.vim/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/rhysd/conflict-marker.vim/branch/master/graph/badge.svg)](https://codecov.io/gh/rhysd/conflict-marker.vim)
 
 Highlight, jump and resolve conflict markers quickly.
@@ -20,17 +20,9 @@ If you don't want to use default mappings, set `g:conflict_marker_enable_mapping
 
 ## Installation
 
-Please copy below files to corresponding directories in your "~/.vim" directory.
+Please follow the instruction in `:help add-package`.
 
-- plugin/conflict_marker.vim
-- autoload/conflict_marker.vim
-- autoload/conflict_marker/detect.vim
-- autoload/unite/sources/conflict.vim (if you use unite.vim)
-- doc/conflict-marker.txt
-
-Please do `:helptags ~/.vim/doc` to generate help tags.
-
-If you use a plugin manager, please follow its instruction and documentation to install.
+If you use some plugin manager, please follow its instruction and documentation to install.
 For example, you can install this plugin with [neobundle.vim](https://github.com/Shougo/neobundle.vim).
 
 ```vim
@@ -95,8 +87,9 @@ group, and define your own highlights for each syntax group.
 let g:conflict_marker_highlight_group = ''
 
 " Include text after begin and end markers
-let g:conflict_marker_begin = '^<<<<<<< .*$'
-let g:conflict_marker_end   = '^>>>>>>> .*$'
+let g:conflict_marker_begin = '^<<<<<<<\+ .*$'
+let g:conflict_marker_common_ancestors = '^|||||||\+ .*$'
+let g:conflict_marker_end   = '^>>>>>>>\+ .*$'
 
 highlight ConflictMarkerBegin guibg=#2f7366
 highlight ConflictMarkerOurs guibg=#2e5049
