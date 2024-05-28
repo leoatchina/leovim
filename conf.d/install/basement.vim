@@ -77,6 +77,8 @@ if get(s:, 'smart_engine_select', 0)
         let g:complete_engine = 'mcm'
     elseif v:version >= 800
         let g:complete_engine = 'apm'
+    else
+        let g:complete_engine = ''
     endif
 endif
 " ------------------------------
