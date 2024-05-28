@@ -5,10 +5,10 @@ endfunction
 if Installed('mason.nvim')
     luafile $LUA_DIR/mason.lua
 endif
-if InstalledCmp()
-    luafile $LUA_DIR/cmp.lua
-elseif Installed('vimcomplete')
+if Installed('vimcomplete')
     source $OPTIONAL_DIR/vcm.vim
+elseif InstalledCmp()
+    luafile $LUA_DIR/cmp.lua
 elseif InstalledCoc()
     source $OPTIONAL_DIR/coc.vim
 elseif g:complete_engine == 'apm'
