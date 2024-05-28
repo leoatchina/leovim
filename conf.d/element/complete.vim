@@ -60,6 +60,10 @@ imap <M-p> <C-p>
 " ------------------------------
 " vsnip
 " ------------------------------
+fun! CtrlFSkipBracket()
+    call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
+    return ''
+endfunction
 if Installed('vim-vsnip')
     let g:vsnip_snippet_dir = expand("~/.leovim/snippets")
     nnoremap <M-h>n :VsnipOpen<Space>
@@ -69,10 +73,6 @@ if Installed('vim-vsnip')
         nnoremap <silent><M-h>s :FzfFiles ~/.leovim/snippets<Cr>
     endif
 endif
-fun! CtrlFSkipBracket()
-    call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
-    return ''
-endfunction
 if Installed('vim-vsnip-integ') && Installed('vim-vsnip')
     smap <silent><expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
     smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
@@ -102,7 +102,6 @@ if Installed('vim-vsnip-integ') && Installed('vim-vsnip')
     endfunction
     au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
     au WinEnter,BufEnter * imap <silent><Cr> <C-R>=MapTabCr(0)<Cr>
-    au WinEnter,BufEnter * imap <expr><C-e> pumvisible()? "\<C-e>" : "\<C-O>A"
     if g:complete_engine == 'mcm'
         au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
     endif

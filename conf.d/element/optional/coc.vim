@@ -126,7 +126,7 @@ nnoremap <silent><M-l>, :CocPrev<Cr>
 nnoremap <silent><M-l><M-c> :CocFzfList<Cr>
 nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 " symbol
-nnoremap <silent><leader>s :Vista finder<Cr>
+nnoremap <silent><leader>s :Vista finder coc<Cr>
 nnoremap <silent><leader>S :CocFzfList symbols<Cr>
 inoremap <silent><C-x><C-x> <C-r>=CocActionAsync('showSignatureHelp')<Cr>
 " completion map
@@ -137,9 +137,9 @@ inoremap <silent><expr> <TAB> coc#pum#visible() == v:false ? "\<Tab>" :
             \ HasBackSpace() ? coc#refresh() :
             \ coc#_select_confirm()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-o>A"
-inoremap <silent><expr> <C-space> coc#refresh()
-inoremap <silent><expr> <C-@> coc#refresh()
+inoremap <silent> <C-e> coc#pum#cancel()
+inoremap <silent> <C-space> coc#refresh()
+inoremap <silent> <C-@> coc#refresh()
 " scroll
 imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<C-\><C-n>:call MoveToEndAndAddSemicolon(1)\<CR>"
 imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-\><C-n>:call MoveToEndAndAddSemicolon(0)\<CR>"
