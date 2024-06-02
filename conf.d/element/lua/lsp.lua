@@ -213,9 +213,6 @@ vim.g.rustaceanvim = {
     capabilities = lsp_zero.get_capabilities()
   },
 }
-if vim.g.java_jdtls and vim.g.java_jdtls > 0 then
-  local jdtls_config = {}
-end
 -----------------
 -- glance
 -----------------
