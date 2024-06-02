@@ -98,9 +98,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'saadparwaiz1/cmp_luasnip'
     PlugAdd 'L3MON4D3/luasnip'
     " lsp related
-    if UNIX()
-        PlugAdd 'folke/neoconf.nvim'
-    endif
+    PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
     PlugAdd 'mfussenegger/nvim-lint'
@@ -276,6 +274,7 @@ function! InstalledNvimLsp() abort
                 \ 'lsp-zero.nvim',
                 \ 'symbol-usage.nvim',
                 \ 'nvim-lspimport',
+                \ 'neoconf.nvim',
                 \ )
 endfunction
 function! InstalledCmp() abort
