@@ -44,7 +44,9 @@ else
     },
   }
 end
-capabilities = require("lsp-selection-range").update_capabilities(capabilities)
+if capabilities then
+  capabilities = require("lsp-selection-range").update_capabilities(capabilities)
+end
 -----------------------
 -- fzf_lsp
 -----------------------
