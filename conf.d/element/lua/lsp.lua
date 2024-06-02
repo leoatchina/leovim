@@ -6,7 +6,7 @@ local autocmd = vim.api.nvim_create_autocmd
 -----------------
 require("neoconf").setup({
   -- name of the local settings files
-  local_settings = ".vim/neoconf.json",
+  local_settings = ".neoconf.json",
   import = {
     vscode = true,
     coc = true,

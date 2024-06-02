@@ -2,13 +2,15 @@
 GPATH
 GRTAGS
 GTAGS
-.netrwhist
+tasks.ini
 tags
 tag-ja
 tag.lock
+.netrwhist
+.neoconf.json
+.vimspector.json
 
 # 文件通配
-.vimspector.*
 core.[0-9]*
 *.7z
 *.bak
@@ -19,14 +21,13 @@ core.[0-9]*
 *.rar
 *.so
 *.swp
+*.dll
 *.tags
 *.tar
 *.tar.*
 *.zip
 *.tags
 *.wildignore
-*.tasks.ini
-*.tasks
 *DS_Store
 
 # 文件夹
@@ -36,7 +37,6 @@ target/
 release/
 venv/
 .venv/
-.asynctasks/
 .hg/
 .idea/
 .ipynb_checkpoints/
@@ -44,11 +44,9 @@ venv/
 .cache/
 .root/
 .svn/
-.tasks/
 .vim/
 .vscode/
 .vs/
-.root/
 .ccls-cache/
 __pycache__/
 
