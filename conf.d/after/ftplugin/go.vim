@@ -2,10 +2,9 @@ setlocal commentstring=//\ %s
 if Installed('vim-go')
     let g:go_doc_balloon = 0
     let g:go_def_mapping_enabled = 0
-    nnoremap <buffer><silent>gl :GoCallees<Cr>
+    nnoremap <buffer><silent>gl :GoDefPop<Cr>
     nnoremap <buffer><silent>gh :GoCallers<Cr>
     nnoremap <buffer><silent><C-g> :GoDef<Cr>
-    nnoremap <buffer><silent><M-:> :GoDefPop<Cr>
     nnoremap <buffer><silent><M-?> :GoImpl<Cr>
     nnoremap <buffer><silent><M-.> :GoImplements<Cr>
     nnoremap <buffer><silent><M-/> :GoReferrers<Cr>

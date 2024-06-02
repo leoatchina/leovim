@@ -57,21 +57,3 @@ endif
 if WINDOWS()
     PlugAdd 'pprovost/vim-ps1', {'for': 'ps1'}
 endif
-" ---------------------------------
-" java
-" ---------------------------------
-if Require('java') && g:python_version > 3.09 && Planned('nvim-lspconfig') && executable(get(g:, 'java_execute', 'java'))
-    redir => java
-    silent! execute "!" . Expand(g:java_execute) . " --version"
-    redir END
-    let java_version = matchstr(java, '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
-    let g:java_version = StringToFloat(java_version, 1)
-    if g:java_version > 11
-        let g:java_execute = Expand(g:java_execute)
-    else
-        let g:java_execute = ''
-    endif
-else
-    let g:java_version = 0
-    let g:java_execute = ''
-endif
