@@ -1,5 +1,14 @@
 let s:regs_alpha = map(range(char2nr('a'), char2nr('z')), 'nr2char(v:val)')
-" get registers
+if has('clipboard')
+    if has('unix')
+        let s:regs_special = ['+', '*', '"']
+    else
+        let s:regs_special = ['*','"']
+    endif
+else
+    let s:regs_special = ['"']
+endif
+
 function! fzf#registers#list()
     redir => tmp
     silent registers
@@ -11,14 +20,6 @@ function! fzf#registers#list()
         return map(copy(reg_lst[1:]), 'v:val[6:]')
     endif
 endfunction
-let s:regs_temp = map(fzf#registers#list(), 'v:val[0]')
-if index(s:regs_temp, '+') >= 0 && index(s:regs_temp, '*') >= 0
-    let s:regs_special = ['+', '*', '"']
-elseif index(s:regs_temp, '*') >= 0
-    let s:regs_special = ['*','"']
-else
-    let s:regs_special = ['"']
-endif
 
 " NOTE: reg[0] is the name of register
 function! fzf#registers#source(...)

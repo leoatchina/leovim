@@ -15,21 +15,21 @@ function! YankBorder(...) abort
     let original_cursor_position = getpos('.')
     if has('clipboard')
         if yankmode == 2
-            if LINUX()
+            if UNIX()
                 exec('normal! viw"+y')
             else
                 exec('normal! viw"*y')
             endif
             echo "Yanked word to clipboard."
         elseif yankmode == 1
-            if LINUX()
+            if UNIX()
                 exec('normal! v$"+y')
             else
                 exec('normal! v$"*y')
             endif
             echo "Yanked to line end to clipboard."
         else
-            if LINUX()
+            if UNIX()
                 exec('normal! v^"+y')
             else
                 exec('normal! v^"*y')
@@ -57,7 +57,7 @@ nnoremap <silent><leader>W :call YankBorder(2)<Cr>
 " with/without clipboard yank
 " ------------------------------------
 if has('clipboard')
-    if LINUX()
+    if UNIX()
         nnoremap <Tab>y :0,-"+y<Cr>
         nnoremap <Tab>Y vG"+y
         nnoremap <leader>Y :%"+y<Cr>
@@ -117,7 +117,7 @@ if InstalledFzf()
 else
     nnoremap <silent><M-v> :registers<Cr>
     if has('clipboard')
-        if LINUX()
+        if UNIX()
             nnoremap <M-y> "+y:echo "Yanked to clipboard"<C>
             xnoremap <M-y> "+y:echo "Yanked to clipboard"<C>
         else
