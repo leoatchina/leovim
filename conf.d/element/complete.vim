@@ -55,8 +55,6 @@ elseif InstalledCoc()
 elseif Installed('vista.vim')
     let g:vista_default_executive = 'ctags'
 endif
-imap <M-n> <C-n>
-imap <M-p> <C-p>
 " ------------------------------
 " vsnip
 " ------------------------------
@@ -119,6 +117,8 @@ else
     imap <silent><C-b> <C-o>I
     imap <silent><C-f> <C-o>A
 endif
+imap <M-n> <C-n>
+imap <M-p> <C-p>
 " -----------------------
 " fzf snippet
 " -----------------------
@@ -129,7 +129,7 @@ if InstalledFzf()
     endif
 endif
 " ------------------------------
-" codeium
+" AI complete
 " ------------------------------
 if Installed('codeium.vim')
     let g:codeium_disable_bindings = 1
@@ -173,23 +173,8 @@ if Installed('gp.nvim')
     nnoremap <silent><M-i><M-g> :GpCommands<Cr>
 endif
 " ------------------------------
-" completedone
-" ------------------------------
-augroup CompleteModeChange
-    " 离开InsertMode时，关闭补全，非paste模式
-    autocmd InsertLeave * set nopaste
-    " 补全完成后关闭预览窗口
-    autocmd InsertLeave, CompleteDone * if pumvisible() == 0 | pclose | endif
-augroup END
-" ------------------------------
 " pairs
 " ------------------------------
 if Installed('pear-tree')
     let g:pear_tree_map_special_keys = 0
-endif
-" ------------------------------
-" vim-go
-" ------------------------------
-if Installed('vim-go')
-    command! GoCommands call FzfCallCommands('GoCommands', 'Go')
 endif
