@@ -87,7 +87,7 @@ endif
 if executable('ccls') && Require('ccls')
     call coc#config('languageserver.ccls', {
                 \ "command": "ccls",
-                \ "filetypes": g:c_filetypes,
+                \ "filetypes": g:cfile_types,
                 \ "rootPatterns": g:root_patterns,
                 \ "initializationOptions": {
                     \ "cache": {

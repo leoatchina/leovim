@@ -233,7 +233,7 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
 endif
 if !Planned('nvim-treesitter') && Require('c') && (Planned('coc.nvim') || Planned('nvim-cmp'))
-    PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
+    PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:cfile_types}
 endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'

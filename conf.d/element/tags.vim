@@ -323,9 +323,17 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     let pos = getcurpos()
     let pos[0] = bufnr('')
     " --------------------------
+    " check if cfile type
+    " --------------------------
+    if index(g:cfile_types, &ft) >= 0 && index(['definition', 'tags'], find_type) >= 0 && g:ctags_type != ''
+        let cfile = 1
+    else
+        let cfile = 0
+    endif
+    " --------------------------
     " coc
     " --------------------------
-    if InstalledCoc() && find_type != 'tags'
+    if InstalledCoc() && !cfile
         let commands_dict = {
                     \ 'definition' : ['definitions', 'jumpDefinition'],
                     \ 'references' : ['references', 'jumpReferences'],
@@ -360,7 +368,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " --------------------------
     " nvim-lsp
     " --------------------------
-    elseif InstalledNvimLsp() && find_type != 'tags'
+    elseif InstalledNvimLsp() && !cfile
         let commands_dict = {
                     \ 'definition' : ['textDocument/definition', 'Glance definitions'],
                     \ 'references' : ['textDocument/references', 'Glance references'],

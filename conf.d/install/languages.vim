@@ -3,13 +3,13 @@
 " --------------------------
 if Require('c')
     PlugAdd 'chxuan/cpp-mode'
-    PlugAdd 'leoatchina/a.vim', {'for': g:c_filetypes}
+    PlugAdd 'leoatchina/a.vim', {'for': g:cfile_types}
     if executable('cppman')
         PlugAdd 'skywind3000/vim-cppman'
     endif
 endif
 if executable('ccls') && Require('ccls')
-    PlugAdd 'm-pilia/vim-ccls', {'for': g:c_filetypes}
+    PlugAdd 'm-pilia/vim-ccls', {'for': g:cfile_types}
 endif
 " --------------------------
 " rust
