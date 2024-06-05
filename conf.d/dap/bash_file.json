@@ -1,0 +1,8 @@
+{
+  "name": "bash Debugger: Current File",
+  "request": "launch",
+  "type": "bashdb",
+  "console": "integratedTerminal",
+  "cwd": "",
+  "program": "${file}"
+}
