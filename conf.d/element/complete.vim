@@ -19,9 +19,9 @@ elseif g:complete_engine != ''
 endif
 if InstalledNvimLsp()
     let g:vista_default_executive = 'nvim_lsp'
-    let g:ensure_installed = ['vale_ls']
+    let g:ensure_installed = ['vale']
     if g:node_version > 14
-        let g:ensure_installed += ['vimls', 'lua_ls']
+        let g:ensure_installed += ['vimls', 'lua_ls', 'jsonlint','vale_ls']
     endif
     if g:node_version > 14 && (g:python_version > 3.06 && !Require('pylsp') || g:python_version <= 3.06)
         let g:ensure_installed += ['pyright']
