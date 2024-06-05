@@ -19,7 +19,8 @@ if Installed('vim-go')
     endif
     let g:go_doc_keywordprg_enabled = !InstalledAdvCompEng()
 endif
-if InstalledCoc()
+" NOTE: below in order to be comparable with vscode-neovim
+if Installed('coc.nvim')
     nmap <buffer>gtj :CocCommand go.tags.add json<cr>
     nmap <buffer>gty :CocCommand go.tags.add yaml<cr>
     nmap <buffer>gtx :CocCommand go.tags.clear<cr>
