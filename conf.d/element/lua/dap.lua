@@ -142,11 +142,11 @@ local function launch_dap(dap_json, run)
   return ok
 end
 function _G.DapLaunch(json)
-  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vscode/dap.json')
+  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
   return launch_dap(dap_json, true)
 end
 function _G.DapLoad(json)
-  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vscode/dap.json')
+  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
   return launch_dap(dap_json, false)
 end
 ---------------------------------

@@ -300,7 +300,6 @@ endfunction
 if Installed('catppuccin')
     luafile $LUA_DIR/catppuccin.lua
 endif
-let g:everforest_background = 'hard'
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 let g:everforest_better_performance = 1
@@ -319,12 +318,12 @@ elseif Require('catppuccin')
     call SetScheme('catppuccin', 'codedark')
 elseif Require('moonfly')
     call SetScheme('moonfly', 'space-vim-dark')
-elseif g:complete_engine == 'vcm'
-    call SetScheme('gruvbox-material', 'gruvbox')
-elseif g:complete_engine == 'mcm'
-    call SetScheme('everforest', 'deus')
 elseif g:complete_engine == 'apm'
     call SetScheme('edge', 'one')
+elseif g:complete_engine == 'mcm'
+    call SetScheme('gruvbox-material', 'gruvbox')
+elseif g:complete_engine == 'vcm'
+    call SetScheme('everforest', 'deus')
 elseif g:complete_engine == 'cmp'
     if InstalledNvimLsp()
         call SetScheme('catppuccin', 'codedark')
