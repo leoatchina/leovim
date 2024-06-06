@@ -346,7 +346,7 @@ if has('nvim') && InstalledCoc()
     endfunction
     command! CocFile call s:coc_file()
     nnoremap <silent><nowait><leader>e :CocFile<Cr>
-elseif Installed('vim-floaterm') && executable('yazi')
+elseif Installed('vim-floaterm') && executable('yazi') && UNIX()
     command! Yazi FloatermNew --wintype=float --position=center --width=0.8 --height=0.8 yazi
     nnoremap <silent><nowait><leader>e :Yazi<Cr>
 elseif Installed('fern.vim')
