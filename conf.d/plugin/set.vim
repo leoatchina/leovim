@@ -42,15 +42,6 @@ set textwidth=160
 set buftype=
 set switchbuf=useopen,usetab,newtab
 " --------------------------
-" number
-" --------------------------
-set number
-if !exists('g:vscode')
-    set relativenumber
-    nnoremap <leader>n :set relativenumber \| set number<Cr>
-    nnoremap <leader>N :set norelativenumber \| set nonu! nonu?<Cr>
-endif
-" --------------------------
 " wildmenu signcolumn wildignore
 " --------------------------
 set wildmenu

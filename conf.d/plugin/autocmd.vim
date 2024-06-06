@@ -40,7 +40,7 @@ augroup END
 set number
 if !exists('g:vscode')
     set relativenumber
-    nnoremap <leader>n :set relativenumber \| set number<Cr>
+    nnoremap <leader>n :set relativenumber! relativenumber? \| set number<Cr>
     nnoremap <leader>N :set norelativenumber \| set nonu! nonu?<Cr>
     augroup numbertoggle
         autocmd!
