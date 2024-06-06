@@ -72,11 +72,8 @@ create_symlinks() {
 }
 
 setup_plug() {
-    local system_shell="$SHELL"
-    export SHELL='/bin/sh'
     info "Starting update/install plugins for $1"
     "$1" +PlugOptUpdate +qall
-    export SHELL="$system_shell"
     success "Successfully updated/installed plugins for $1"
 }
 
