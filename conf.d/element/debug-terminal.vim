@@ -1,5 +1,5 @@
-function! s:check_or_selectline(...)
-    if a:0 && a:1 > 0
+function! s:diag_or_errmsg(diagnostic)
+    if a:diagnostic
         if Installed('ale')
             ALEDetail
         elseif InstalledCoc()
@@ -13,20 +13,21 @@ function! s:check_or_selectline(...)
         call preview#errmsg('Please select lines to merge!')
     endif
 endfunction
-function! s:j(line1, line2, ...) range abort
+function! s:j(line1, line2, diagnostic) range abort
     let pos = getpos('.')
     if a:line1 != a:line2
         normal! J
     else
-        call s:check_or_selectline(a:000)
+        call s:diag_or_errmsg(a:diagnostic)
         call setpos('.', pos)
     endif
 endfunction
-command! -range J call s:j(<line1>, <line2>)
-command! -range JCheck call s:j(<line1>, <line2>, 1)
+command! -range J call s:j(<line1>, <line2>, 0)
+command! -range JDiag call s:j(<line1>, <line2>, 1)
 xnoremap <silent>J :J<Cr>
+" NOTE
 if g:has_terminal == 0
-    nnoremap <silent>J :JCheck<Cr>
+    nnoremap <silent>J :JDiag<Cr>
     finish
 endif
 " --------------------------
@@ -363,7 +364,7 @@ if Installed('vimspector')
                 FloatermList
             endif
         else
-            call s:check_or_selectline(1)
+            call s:diag_or_errmsg(1)
         endif
     endfunction
     command! BalloonEval call s:vimspector_or_floaterm()
@@ -507,7 +508,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
                 FloatermList
             endif
         else
-            call s:check_or_selectline(1)
+            call s:diag_or_errmsg(1)
         endif
     endfunction
     command! DapUIEval call s:dap_or_floaterm()
@@ -557,7 +558,7 @@ else
         nnoremap <silent><M-m>s :Source<Cr>
         nnoremap <silent><M-m>g :Gdb<Cr>
     endif
-    nnoremap <silent>J :J<Cr>
+    nnoremap <silent>J :JDiag<Cr>
     nnoremap <silent><M-F> :FloatermList<Cr>
 endif
 " -------------------------------------

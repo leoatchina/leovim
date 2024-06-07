@@ -61,9 +61,15 @@ endif
 " nvim-java
 " ------------------------------
 if Require('java') && Planned('nvim-lspconfig')
-    PlugAdd 'nvim-java/lua-async-await'
+    PlugAdd 'nvim-java/nvim-java'
     PlugAdd 'nvim-java/nvim-java-refactor'
     PlugAdd 'nvim-java/nvim-java-core'
     PlugAdd 'nvim-java/nvim-java-test'
     PlugAdd 'nvim-java/nvim-java-dap'
+    PlugAdd 'nvim-java/lua-async-await'
+    if isdirectory(get(g:, 'jdt_extensions_path', expand('$HOME/.leovim.d/jdt_extensions_path')))
+        let jdt_path = expand(g:jdt_extensions_path)
+        let jdt_jars = ["io.projectreactor.reactor-core.jar", "org.reactivestreams.reactive-streams.jar", "jdt-ls-commons.jar", "jdt-ls-extension.jar", "sts-gradle-tooling.jar"]
+
+    endif
 endif
