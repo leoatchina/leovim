@@ -57,3 +57,13 @@ endif
 if WINDOWS()
     PlugAdd 'pprovost/vim-ps1', {'for': 'ps1'}
 endif
+" ------------------------------
+" nvim-java
+" ------------------------------
+if Require('java') && Planned('nvim-lspconfig')
+    PlugAdd 'nvim-java/lua-async-await'
+    PlugAdd 'nvim-java/nvim-java-refactor'
+    PlugAdd 'nvim-java/nvim-java-core'
+    PlugAdd 'nvim-java/nvim-java-test'
+    PlugAdd 'nvim-java/nvim-java-dap'
+endif
