@@ -49,10 +49,14 @@ if InstalledNvimLsp()
     if Require('go') && executable('go')
         let g:ensure_installed += ['gopls']
     endif
+    if Installed('nvim-java', 'lua-async-await', 'nvim-java-refactor', 'nvim-java-core', 'nvim-java-test', 'nvim-java-dap')
+        lua require('java').setup()
+    endif
     luafile $LUA_DIR/lsp.lua
 elseif InstalledCoc()
     let g:vista_default_executive = 'coc'
 elseif Installed('vista.vim')
+
     let g:vista_default_executive = 'ctags'
 endif
 " ------------------------------

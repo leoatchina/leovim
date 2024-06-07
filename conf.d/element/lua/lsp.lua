@@ -178,7 +178,6 @@ require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed,
   handlers = {
     lsp_zero.default_setup,
-    jdtls = lsp_zero.noop,
     lua_ls = function()
       lspconfig.lua_ls.setup({
         filetypes = { "lua" },
@@ -206,6 +205,13 @@ require("mason-lspconfig").setup({
       })
     end,
     rust_analyzer = lsp_zero.noop,
+    jdtls = function()
+      if Installed('nvim-java') then
+        lspconfig.jdtls.setup({})
+      else
+        return lsp_zero.noop
+      end
+    end
   }
 })
 vim.g.rustaceanvim = {
