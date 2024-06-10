@@ -19,9 +19,10 @@ elseif g:complete_engine != ''
 endif
 if InstalledNvimLsp()
     let g:vista_default_executive = 'nvim_lsp'
-    let g:ensure_installed = ['vale']
     if g:node_version > 14
-        let g:ensure_installed += ['vimls', 'lua_ls', 'jsonlint','vale_ls']
+        let g:ensure_installed = ['vimls', 'lua_ls', 'vale_ls']
+    else
+        let g:ensure_installed = []
     endif
     if g:node_version > 14 && (g:python_version > 3.06 && !Require('pylsp') || g:python_version <= 3.06)
         let g:ensure_installed += ['pyright']
@@ -48,7 +49,6 @@ if InstalledNvimLsp()
     endif
     if Installed('nvim-java', 'lua-async-await', 'nvim-java-refactor', 'nvim-java-core', 'nvim-java-test', 'nvim-java-dap')
         let g:nvim_java = 1
-        let g:ensure_installed += ['jdtls']
         lua require('java').setup()
     else
         let g:nvim_java = 0

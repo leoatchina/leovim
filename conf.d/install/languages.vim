@@ -1,8 +1,3 @@
-let g:R_exe = ''
-let g:java_exe = ''
-let g:ccls_exe = ''
-let g:cland_exe = ''
-let g:cargo_exe = ''
 " ------------------------------
 " ps1
 " ------------------------------
@@ -34,6 +29,8 @@ endif
 if (Require('R') || Require('bioinfo')) && (has('nvim-0.8') || v:version >= 802) && executable(Expand(get(g:, 'R_exe', 'R')))
     let g:R_exe = Expand(get(g:, 'R_exe', 'R'))
     PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
+else
+    let g:R_exe = ''
 endif
 " --------------------------
 " C language
@@ -48,6 +45,13 @@ endif
 if Require('ccls') && executable(Expand(get(g:, 'ccls_exe', 'ccls')))
     let g:ccls_exe = Expand(get(g:, 'ccls_exe', 'ccls'))
     PlugAdd 'm-pilia/vim-ccls', {'for': g:cfile_types}
+else
+    let g:ccls_exe = ''
+endif
+if Require('clangd') && executable(Expand(get(g:, 'clangd_exe', 'clangd')))
+    let g:clangd_exe = Expand(get(g:, 'clangd_exe', 'clangd'))
+else
+    let g:clangd_exe = ''
 endif
 " --------------------------
 " rust
@@ -58,6 +62,8 @@ if Require('rust') && executable(Expand(get(g:, 'cargo_exe', 'cargo'))) && v:ver
     if Planned('nvim-cmp')
         PlugAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
+else
+    let g:cargo_exe = ''
 endif
 " --------------------------
 " go
@@ -86,4 +92,6 @@ if Require('java') && executable(Expand(get(g:, 'java_exe', 'java')))
             PlugAdd('JavaHello/spring-boot.nvim')
         endif
     endif
+else
+    let g:java_exe = ''
 endif

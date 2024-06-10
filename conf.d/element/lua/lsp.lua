@@ -113,7 +113,22 @@ require("mason-lspconfig").setup({
     end,
     jdtls = function()
       if vim.g.nvim_java > 0 then
-        lspconfig.jdtls.setup({})
+        if Installed("spring-boot.nvim") then
+          local spring_boot = require('spring_boot')
+          spring_boot.setup({
+            ls_path = vim.g.jars_dir,
+            jdtls_name = 'jdtls',
+            log_file = nil,
+          })
+          spring_boot.init_lsp_commands()
+          lspconfig.jdtls.setup({
+            init_options = {
+              bundles = spring_boot.java_extensions(),
+            },
+          })
+        else
+          lspconfig.jdtls.setup({})
+        end
       else
         return lsp_zero.noop
       end
@@ -125,24 +140,6 @@ vim.g.rustaceanvim = {
     capabilities = capabilities
   },
 }
--- if vim.g.nvim_java > 0 then
-  -- if Installed("spring-boot.nvim") then
-  --   local spring_boot = require('spring_boot')
-  --   spring_boot.setup({
-  --     ls_path = vim.g.jars_dir,
-  --     jdtls_name = 'jdtls',
-  --     log_file = nil,
-  --   })
-  --   spring_boot.init_lsp_commands()
-  --   lspconfig.jdtls.setup {
-  --     init_options = {
-  --       bundles = spring_boot.java_extensions(),
-  --     },
-  --   }
-  -- else
-    -- lspconfig.jdtls.setup({})
-  -- end
--- end
 -----------------
 -- lsp attach
 -----------------
