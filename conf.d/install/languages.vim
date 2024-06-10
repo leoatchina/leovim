@@ -68,30 +68,33 @@ endif
 " --------------------------
 " go
 " --------------------------
-if Require('go') && (has('patch-8.1.2269') || has('nvim')) && executable('go') && exists('$GOPATH')
+if Require('go') && (has('patch-8.1.2269') || has('nvim')) && executable(Expand(get(g:, 'go_exe', 'go')))
+    let g:go_exe = Expand(get(g:, 'go_exe', 'go'))
     PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
+else
+    let g:go_exe = ''
 endif
 " ------------------------------
 " nvim-java
 " ------------------------------
-if Require('java') && executable(Expand(get(g:, 'java_exe', 'java')))
+if executable(Expand(get(g:, 'java_exe', 'java')))
     let g:java_exe = Expand(get(g:, 'java_exe', 'java'))
-    if Planned('nvim-lspconfig')
-        PlugAdd 'nvim-java/nvim-java'
-        PlugAdd 'nvim-java/nvim-java-refactor'
-        PlugAdd 'nvim-java/nvim-java-core'
-        PlugAdd 'nvim-java/nvim-java-test'
-        PlugAdd 'nvim-java/nvim-java-dap'
-        PlugAdd 'nvim-java/lua-async-await'
-        if WINDOWS()
-            let g:jars_dir = Expand("$HOME/.leovim.windows/jars")
-        else
-            let g:jars_dir = Expand("$HOME/.leovim.unix/jars")
-        endif
-        if isdirectory(g:jars_dir)
-            PlugAdd('JavaHello/spring-boot.nvim')
-        endif
-    endif
 else
     let g:java_exe = ''
+endif
+if Require('java') && Planned('nvim-lspconfig')
+    PlugAdd 'nvim-java/nvim-java-refactor'
+    PlugAdd 'nvim-java/nvim-java-core'
+    PlugAdd 'nvim-java/nvim-java-test'
+    PlugAdd 'nvim-java/nvim-java-dap'
+    PlugAdd 'nvim-java/lua-async-await'
+    PlugAdd 'nvim-java/nvim-java'
+    if WINDOWS()
+        let g:jars_dir = Expand("$HOME/.leovim.windows/jars")
+    else
+        let g:jars_dir = Expand("$HOME/.leovim.unix/jars")
+    endif
+    if isdirectory(g:jars_dir)
+        PlugAdd('JavaHello/spring-boot.nvim')
+    endif
 endif

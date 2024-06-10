@@ -44,7 +44,7 @@ if InstalledNvimLsp()
     if Require('R') && g:R_exe != ''
         let g:ensure_installed += ['r_language_server']
     endif
-    if Require('go') && executable('go') && exists('$GOPATH')
+    if Require('go') && g:go_exe != ''
         let g:ensure_installed += ['gopls']
     endif
     if Installed('nvim-java', 'lua-async-await', 'nvim-java-refactor', 'nvim-java-core', 'nvim-java-test', 'nvim-java-dap')
@@ -116,14 +116,13 @@ elseif InstalledCoc()
     if Require('java') && g:java_exe != ''
         let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
     endif
-    if Require('go') && executable('go') && exists('$GOPATH')
+    if Require('go') && g:go_exe != ''
         let g:coc_global_extensions += ['coc-go']
     endif
     if Require('writing')
         let g:coc_global_extensions += ['coc-vimtex']
     endif
 elseif Installed('vista.vim')
-
     let g:vista_default_executive = 'ctags'
 endif
 " ------------------------------
