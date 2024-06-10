@@ -67,9 +67,12 @@ if Require('java') && Planned('nvim-lspconfig')
     PlugAdd 'nvim-java/nvim-java-test'
     PlugAdd 'nvim-java/nvim-java-dap'
     PlugAdd 'nvim-java/lua-async-await'
-    if isdirectory(get(g:, 'jdt_extensions_path', expand('$HOME/.leovim.d/jdt_extensions_path')))
-        let jdt_path = expand(g:jdt_extensions_path)
-        let jdt_jars = ["io.projectreactor.reactor-core.jar", "org.reactivestreams.reactive-streams.jar", "jdt-ls-commons.jar", "jdt-ls-extension.jar", "sts-gradle-tooling.jar"]
-
+    if WINDOWS()
+        let g:jars_dir = Expand("$HOME/.leovim.windows/jars")
+    else
+        let g:jars_dir = Expand("$HOME/.leovim.unix/jars")
     endif
+    " if isdirectory(g:jars_dir)
+        " PlugAdd('JavaHello/spring-boot.nvim')
+    " endif
 endif

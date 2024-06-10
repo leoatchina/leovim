@@ -43,14 +43,15 @@ if InstalledNvimLsp()
     if Require('R')
         let g:ensure_installed += ['r_language_server']
     endif
-    if Require('java')
-        let g:ensure_installed += ['jdtls']
-    endif
     if Require('go') && executable('go')
         let g:ensure_installed += ['gopls']
     endif
     if Installed('nvim-java', 'lua-async-await', 'nvim-java-refactor', 'nvim-java-core', 'nvim-java-test', 'nvim-java-dap')
+        let g:nvim_java = 1
+        let g:ensure_installed += ['jdtls']
         lua require('java').setup()
+    else
+        let g:nvim_java = 0
     endif
     luafile $LUA_DIR/lsp.lua
 elseif InstalledCoc()
