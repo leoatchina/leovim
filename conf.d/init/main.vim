@@ -599,7 +599,7 @@ cnoremap <M-w> <ESC>
 " --------------------------
 " python_support
 " --------------------------
-function! s:get_python_path()
+function! s:get_python_exe()
     let python = ""
     try
         if executable('python')
@@ -615,7 +615,7 @@ function! s:get_python_path()
     endtry
 endfunction
 if has('nvim')
-    let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_path())
+    let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_exe())
 endif
 function! s:get_python_version()
     if CYGWIN()
@@ -649,7 +649,7 @@ function! s:get_python_version()
     return pyx_version
 endfunction
 let g:python_version = s:get_python_version()
-let g:python_path = s:get_python_path()
+let g:python_exe = s:get_python_exe()
 " --------------------------
 " has_terminal
 " --------------------------

@@ -178,7 +178,7 @@ endif
 " ------------------------------
 if g:python_version > 3.08 && (v:version >= 802 && (Require('debug') || Require('vimspector')) || has('nvim-0.8.1') && Require('vimspector'))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_path . vimspector_install}
+    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
 elseif has('nvim-0.9') && Require('debug')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
