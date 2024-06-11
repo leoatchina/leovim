@@ -91,7 +91,7 @@ elseif InstalledCoc()
     endif
     if Require('c')
         let g:coc_global_extensions += ['coc-cmake']
-        if executable('clangd')
+        if g:clangd_exe != ''
             let g:coc_global_extensions += ['coc-clangd']
         endif
     endif
@@ -128,11 +128,11 @@ endif
 " ------------------------------
 " vsnip
 " ------------------------------
-fun! CtrlFSkipBracket()
-    call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
-    return ''
-endfunction
 if Installed('vim-vsnip')
+    fun! CtrlFSkipBracket()
+        call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
+        return ''
+    endfunction
     let g:vsnip_snippet_dir = expand("~/.leovim/snippets")
     nnoremap <M-h>n :VsnipOpen<Space>
     if InstalledLeaderf()
@@ -140,13 +140,11 @@ if Installed('vim-vsnip')
     elseif InstalledFzf()
         nnoremap <silent><M-h>s :FzfFiles ~/.leovim/snippets<Cr>
     endif
-endif
-if Installed('vim-vsnip')
     if InstalledCoc()
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
-        smap <silent><expr><C-f> coc#jumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'
-        imap <silent><expr><C-f> coc#jumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : CtrlFSkipBracket()
+        smap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'
+        imap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : CtrlFSkipBracket()
     else
         smap <silent><expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
@@ -186,8 +184,6 @@ else
     imap <silent><C-b> <C-o>I
     imap <silent><C-f> <C-o>A
 endif
-imap <M-n> <C-n>
-imap <M-p> <C-p>
 " -----------------------
 " fzf snippet
 " -----------------------
