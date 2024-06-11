@@ -21,11 +21,12 @@ fi
 # export PATH=$HOME/.local/tmux/bin${PATH:+:${PATH}}
 # export PATH=$HOME/.local/ctags/bin${PATH:+:${PATH}}
 # export PATH=$HOME/.local/gtags/bin${PATH:+:${PATH}}
+
 export PATH=$HOME/.local/node/bin${PATH:+:${PATH}}
 export PATH=$HOME/.local/bin${PATH:+:${PATH}}
 
 export GOPATH=$HOME/go
-[ -d $GOPATH ] && export PATH=$HOME/go/bin${PATH:+:${PATH}} && export GOBIN=$HOME/go/bin
+[ -d $GOPATH ] && export PATH=$GOPATH/bin${PATH:+:${PATH}} && export GOBIN=$GOPATH/bin
 
 alias MV="rsync -ravpzHogt --progress --size-only --remove-source-files "
 alias SYNC="rsync -ravpzHogt --progress --size-only --delete "
