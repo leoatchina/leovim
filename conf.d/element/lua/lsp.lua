@@ -114,26 +114,15 @@ require("mason-lspconfig").setup({
     jdtls = function()
       if vim.g.nvim_java > 0 then
         if Installed("spring-boot.nvim") then
-          vim.g.spring_boot = {
-            jdt_extensions_path = vim.g.jars_dir,
-            jdt_extensions_jars = {
-              "io.projectreactor.reactor-core.jar",
-              "org.reactivestreams.reactive-streams.jar",
-              "jdt-ls-commons.jar",
-              "jdt-ls-extension.jar",
-              "sts-gradle-tooling.jar",
-            },
-          }
-          local spring_boot = require('spring_boot')
-          spring_boot.setup({
+          require('spring_boot').setup({
             ls_path = vim.g.jars_dir,
             jdtls_name = 'jdtls',
             log_file = nil,
           })
-          spring_boot.init_lsp_commands()
+          require('spring_boot').init_lsp_commands()
           lspconfig.jdtls.setup({
             init_options = {
-              bundles = spring_boot.java_extensions(),
+              bundles = require('spring_boot').java_extensions(),
             },
           })
         else
