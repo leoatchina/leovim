@@ -181,12 +181,10 @@ lsp_zero.on_attach(function(client, bufnr)
   map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
   map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
   map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
-  -- inlayhints
-  if vim.fn.has('nvim-0.10') > 0 then
-    map({ "n", "x" }, "<leader>I", function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-    end, opts_nosilent)
-  end
+  -- inlay_hint
+  map({ "n", "x" }, "<leader>I", function()
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+  end, opts_nosilent)
   -- select range
   local ok, _ = pcall(function()
     vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
