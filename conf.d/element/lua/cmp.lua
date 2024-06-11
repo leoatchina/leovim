@@ -7,7 +7,7 @@ local cmp = require('cmp')
 local compare = cmp.config.compare
 local lspkind = require('lspkind')
 local sources = {
-  { name = 'luasnip', priority = 32 },
+  { name = 'vsnip', priority = 32 },
   { name = 'nvim_lsp', priority = 16 },
   { name = 'nvim_lua', priority = 4 },
   { name = 'buffer', priority = 2 },
@@ -16,8 +16,6 @@ local sources = {
 if Installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 64})
 end
-require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_vscode").lazy_load({ paths = vim.fn.expand("~/.leovim/vsnip") })
 -- core setup
 local MAX_LABEL_WIDTH = 32
 local ELLIPSIS_CHAR = '...'
@@ -32,7 +30,7 @@ cmp.setup({
   sources = sources,
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body)
+      vim.fn["vsnip#anonymous"](args.body)
     end
   },
   sorting = {
@@ -153,8 +151,8 @@ cmp.setup({
         end
       end,
       s = function(fallback)
-        if Installed('luasnip') then
-          luasnip.expand_or_jump()
+        if Installed('vim-vsnip') then
+          vim.fn['vsnip#expand']()
         elseif has_words_before() then
           cmp.complete()
         else

@@ -103,8 +103,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
     PlugAdd 'onsails/lspkind-nvim'
     " snippet
-    PlugAdd 'saadparwaiz1/cmp_luasnip'
-    PlugAdd 'L3MON4D3/luasnip'
+    PlugAdd 'hrsh7th/cmp-vsnip'
     " lsp related
     PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
@@ -295,8 +294,7 @@ function! InstalledCmp() abort
                 \ 'cmp-async-path',
                 \ 'cmp-git',
                 \ 'cmp-nvim-lsp-signature-help',
-                \ 'cmp_luasnip',
-                \ 'luasnip',
+                \ 'cmp-vsnip',
                 \ 'friendly-snippets',
                 \ 'nvim-lint',
                 \ 'lspkind-nvim',
