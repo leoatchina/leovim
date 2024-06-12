@@ -1,7 +1,7 @@
 " -----------------------------------------------------
 " marks
 " -----------------------------------------------------
-if Installed('vim-signature')
+if Planned('vim-signature')
     let g:SignatureMap = {
                 \ 'Leader'           : "m",
                 \ 'ToggleMarkAtLine' : "m<Cr>",

@@ -1,4 +1,4 @@
-if Installed('emmet-vim')
+if Planned('emmet-vim')
     for c in ['n', 'x', 'i']
         let cmd = printf('au FileType %s %smap <M-y> <C-y>,', join(g:web_filetypes, ','), c)
         exec cmd

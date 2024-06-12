@@ -4,7 +4,7 @@
 filetype plugin indent on
 if Installed('indent-blankline.nvim')
     luafile $LUA_DIR/ibl.lua
-elseif Installed('indentline')
+elseif Planned('indentline')
     let g:vim_json_conceal = 0
     let g:indentLine_enabled = 0
     let g:markdown_syntax_conceal = 0
@@ -60,7 +60,7 @@ if get(g:, 'leovim_whichkey', 1)
         xnoremap <M-i> :WhichKeyVisual "\<M-i\>"<Cr>
         inoremap <M-i> <C-o>:WhichKey "\<M-i\>"<Cr>
     endif
-    if Installed("vim-table-mode")
+    if Planned("vim-table-mode")
         nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
         xnoremap <M-t> :WhichKeyVisual "\<M-t\>"<Cr>
     endif
@@ -72,13 +72,13 @@ if get(g:, 'leovim_whichkey', 1)
         nnoremap <M-d> :WhichKey "\<M-d\>"<Cr>
         nnoremap <M-m> :WhichKey "\<M-m\>"<Cr>
     endif
-    if Installed('vim-fugitive')
+    if Planned('vim-fugitive')
         au FileType fugitive nnoremap <buffer>g :WhichKey "g"<Cr>
         au FileType fugitive nnoremap <buffer>c :WhichKey "c"<Cr><Cr>
         au FileType fugitive nnoremap <buffer>d :WhichKey "d"<Cr>
         au FileType fugitive nnoremap <buffer>r :WhichKey "r"<Cr>
     endif
-    if Installed('gv.vim')
+    if Planned('gv.vim')
         au FileType GV nnoremap <buffer><C-c>
     endif
 endif

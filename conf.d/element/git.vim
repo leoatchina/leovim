@@ -58,7 +58,7 @@ augroup END
 "------------------------
 " fugitve and others
 "------------------------
-if Installed('vim-fugitive')
+if Planned('vim-fugitive')
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
     nnoremap <silent><M-g><Cr> :Git commit -av<Cr>
@@ -77,7 +77,7 @@ if Installed('vim-fugitive')
     " gitblame
     nnoremap <silent>,<Tab> :Git blame<Cr>
     " GV
-    if Installed('GV.vim')
+    if Planned('GV.vim')
         nnoremap <silent><M-g>c :GV!<Cr>
         nnoremap <silent><M-g>v :GV<Cr>
         nnoremap <silent><M-g>? :GV?<Cr>
@@ -115,7 +115,7 @@ else
         nnoremap <M-g>U :!git push<Space>
     endif
 endif
-if Installed('blamer.nvim')
+if Planned('blamer.nvim')
     let g:blamer_date_format = '%Y/%m/%d %H:%M'
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '

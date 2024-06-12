@@ -30,7 +30,7 @@ elseif g:symbol_tool =~ 'fzftags' && executable('perl')
 elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
-if Installed('fzf')
+if Planned('fzf')
     PlugAddOpt 'vim-funky'
     command! FzfFunky call funky#fzf#show()
     command! FzfFunkyAll call funky#fzf#show(1)
@@ -92,7 +92,7 @@ if !isdirectory(g:gutentags_cache_dir)
     silent! call mkdir(g:gutentags_cache_dir, 'p')
 endif
 let g:gutentags_modules = []
-if Installed('vim-gutentags')
+if Planned('vim-gutentags')
     " exclude files
     let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", "node_modules", "*.vim/bundle/*", ".ccls_cache", "__pycache__"] + g:root_patterns
     " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
@@ -159,7 +159,7 @@ endif
 " --------------------------
 " gtags
 " --------------------------
-if Installed('gutentags_plus')
+if Planned('gutentags_plus')
     if has('+cscope') && executable('gtags-cscope')
         set cscopeprg=gtags-cscope
     elseif has('+cscope')

@@ -238,11 +238,11 @@ PlugAddOpt 'ZFVimBackup'
 " ----------------------------------------------------
 " ########## Diff Option ##########
 " ----------------------------------------------------
-if Installed('ZFVimDirDiff', 'ZFVimJob')
+if Planned('ZFVimDirDiff', 'ZFVimJob')
     nnoremap <leader>fm :ZFDirDiffMark<Cr>
     nnoremap <leader>fd :ZFDirDiff<Space>
 endif
-if Installed('ZFVimIgnore')
+if Planned('ZFVimIgnore')
     autocmd User ZFIgnoreOnToggle let &wildignore = join(ZFIgnoreToWildignore(ZFIgnoreGet()), ',')
 endif
 try
@@ -357,7 +357,7 @@ nnoremap <leader>E :e<Space>
 " --------------------------
 " project
 " --------------------------
-if Installed('vim-project')
+if Planned('vim-project')
     nnoremap <leader>pp :Project
     nnoremap <leader>pa :Project <C-r>=GetRootDir()<Cr>
     nnoremap <leader>pI :ProjectIgnore<Space>

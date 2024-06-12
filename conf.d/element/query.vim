@@ -1,4 +1,4 @@
-if Installed('vim-translator')
+if Planned('vim-translator')
     let g:translator_default_engines=['bing', 'haici']
     if g:has_popup_floating
         " show translate in popup or floating windows
@@ -9,11 +9,11 @@ if Installed('vim-translator')
         xmap <silent>gw <Plug>TranslateV
     endif
 endif
-if Installed('dash.vim')
+if Planned('dash.vim')
     nmap g: :Dash<Space>
     nmap gy <Plug>DashGlobalSearch
     nmap gz <Plug>DashSearch
-elseif Installed('zeavim.vim')
+elseif Planned('zeavim.vim')
     nmap g: :Zeavim<Space>
     nmap gy <Plug>ZVKeyDocset
     nmap gz <Plug>Zeavim

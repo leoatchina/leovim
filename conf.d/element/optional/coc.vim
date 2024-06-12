@@ -37,9 +37,9 @@ augroup END
 " ------------------------
 " icons
 " ------------------------
-if Installed('nvim-web-devicons')
+if Planned('nvim-web-devicons')
     call coc#config('explorer.icon.source', 'nvim-web-devicons')
-elseif Installed('vim-devicons')
+elseif Planned('vim-devicons')
     call coc#config('explorer.icon.source', 'vim-devicons')
 endif
 " ----------------------------

@@ -12,7 +12,7 @@ if Installed('nvim-fundo')
     lua require('fundo').setup()
 endif
 " undotree
-if Installed('undotree')
+if Planned('undotree')
     let g:undotree_WindowLayout = 4
     nnoremap <silent><M-u> :UndotreeToggle<Cr>
 endif

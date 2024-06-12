@@ -1,6 +1,6 @@
 function! s:diag_or_errmsg(diagnostic)
     if a:diagnostic
-        if Installed('ale')
+        if Planned('ale')
             ALEDetail
         elseif PlannedCoc()
             call CocActionAsync('diagnosticInfo')

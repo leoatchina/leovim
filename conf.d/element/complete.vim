@@ -122,7 +122,7 @@ elseif PlannedCoc()
     if Require('writing')
         let g:coc_global_extensions += ['coc-vimtex']
     endif
-elseif Installed('vista.vim')
+elseif Planned('vista.vim')
     let g:vista_default_executive = 'ctags'
 endif
 " ------------------------------
