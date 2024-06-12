@@ -14,10 +14,10 @@ if Installed('vim-go')
     nnoremap <buffer><silent>,d :GoDeclsDir<Cr>
     nnoremap <buffer><silent>,c :GoCoverage<Cr>
     nnoremap <buffer><silent>,a :GoAlternate<Cr>
-    if InstalledAdvCompEng()
+    if AdvCompEngine()
         nnoremap <buffer><silent>gx :GoDoc<Cr>
     endif
-    let g:go_doc_keywordprg_enabled = !InstalledAdvCompEng()
+    let g:go_doc_keywordprg_enabled = !AdvCompEngine()
 endif
 " NOTE: below in order to be comparable with vscode-neovim
 if Installed('coc.nvim')
