@@ -546,7 +546,7 @@ endif
 let &termencoding=&enc
 nnoremap <M-h>u :set ff=unix<Cr>:%s/\r//g<Cr>
 " ------------------------------------
-" <M-Key> map to <Nop> if need
+" Meta key
 " ------------------------------------
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
 if !exists("g:vscode") && (has('nvim') || HAS_GUI())
@@ -567,6 +567,7 @@ for i in range(10)
     " 48 is ascii of 0
     call add(s:metacode_group, nr2char(48 + i))
 endfor
+" (neo)vim enhanced
 nnoremap <C-m> <Tab>
 nnoremap gQ gw
 xnoremap gQ gw
