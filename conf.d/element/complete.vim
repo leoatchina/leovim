@@ -5,11 +5,11 @@ endfunction
 if Installed('mason.nvim')
     luafile $LUA_DIR/mason.lua
 endif
-if Installed('vimcomplete')
+if Planned('vimcomplete')
     source $OPTIONAL_DIR/vcm.vim
 elseif InstalledCmp()
     luafile $LUA_DIR/cmp.lua
-elseif InstalledCoc()
+elseif PlannedCoc()
     source $OPTIONAL_DIR/coc.vim
 elseif g:complete_engine == 'apm'
     source $OPTIONAL_DIR/apm.vim
@@ -54,7 +54,7 @@ if InstalledNvimLsp()
         let g:nvim_java = 0
     endif
     luafile $LUA_DIR/lsp.lua
-elseif InstalledCoc()
+elseif PlannedCoc()
     let g:vista_default_executive = 'coc'
     let g:coc_global_extensions = [
                 \ 'coc-lists',
@@ -128,19 +128,19 @@ endif
 " ------------------------------
 " vsnip
 " ------------------------------
-if Installed('vim-vsnip')
+if Planned('vim-vsnip')
     fun! CtrlFSkipBracket()
         call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
         return ''
     endfunction
     let g:vsnip_snippet_dir = expand("~/.leovim/snippets")
     nnoremap <M-h>n :VsnipOpen<Space>
-    if InstalledLeaderf()
+    if PlannedLeaderf()
         nnoremap <silent><M-h>s :Leaderf file --no-sort  ~/.leovim/snippets<Cr>
-    elseif InstalledFzf()
+    elseif PlannedFzf()
         nnoremap <silent><M-h>s :FzfFiles ~/.leovim/snippets<Cr>
     endif
-    if InstalledCoc()
+    if PlannedCoc()
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
         smap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'
@@ -151,7 +151,7 @@ if Installed('vim-vsnip')
         imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
     endif
-    if Installed('vim-vsnip-integ')
+    if Planned('vim-vsnip-integ')
         function! MapTabCr(istab) abort
             let istab = a:istab
             if pumvisible()
@@ -187,7 +187,7 @@ endif
 " -----------------------
 " fzf snippet
 " -----------------------
-if InstalledFzf()
+if PlannedFzf()
     imap <c-x><c-l> <plug>(fzf-complete-line)
     if UNIX()
         imap <c-x><c-f> <plug>(fzf-complete-path)
@@ -196,7 +196,7 @@ endif
 " ------------------------------
 " AI complete
 " ------------------------------
-if Installed('codeium.vim')
+if Planned('codeium.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
     imap <silent><nowait><script><expr><M-i> codeium#Accept()
@@ -204,7 +204,7 @@ if Installed('codeium.vim')
     imap <silent><nowait><script><expr><M-/> codeium#Clear()
     imap <silent><nowait><script><expr><M-;> codeium#CycleCompletions(1)
     imap <silent><nowait><script><expr><M-,> codeium#CycleCompletions(-1)
-elseif Installed('copilot.vim')
+elseif Planned('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
     let g:copilot_no_tab_map = v:true
     imap <silent><nowait><script><expr><M-i> copilot#Accept("\<CR>")
@@ -240,6 +240,6 @@ endif
 " ------------------------------
 " pairs
 " ------------------------------
-if Installed('pear-tree')
+if Planned('pear-tree')
     let g:pear_tree_map_special_keys = 0
 endif

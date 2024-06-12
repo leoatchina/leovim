@@ -104,7 +104,7 @@ if g:has_terminal == 1
 elseif g:has_terminal == 2
     tnoremap <M-v> <C-_>""
 endif
-if InstalledFzf()
+if PlannedFzf()
     PlugAddOpt 'fzf-registers'
     nnoremap <silent><M-v> :FzfRegisterPaste<Cr>
     inoremap <silent><M-v> <C-o>:FzfRegisterPaste<Cr>

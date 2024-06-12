@@ -328,7 +328,7 @@ if PrefFzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>fg :FzfGitFiles<Cr>
     nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
-elseif InstalledLeaderf()
+elseif PlannedLeaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
     nnoremap <silent><nowait><leader>fg :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
     nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
@@ -340,7 +340,7 @@ endif
 if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
     source $OPTIONAL_DIR/fern.vim
 endif
-if has('nvim') && InstalledCoc()
+if has('nvim') && PlannedCoc()
     function! s:coc_file() abort
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
@@ -509,13 +509,13 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$INIT_DIR/opt.vim")<Cr>
-    if InstalledLeaderf()
+    if PlannedLeaderf()
         nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/conf.d/after/ftplugin<Cr>
         nnoremap <silent><M-h>e :Leaderf file --no-sort ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :Leaderf file --no-sort ~/.leovim/pack<Cr>
         nnoremap <silent><M-h>d :Leaderf file --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --no-sort ~/.leovim<Cr>
-    elseif InstalledFzf()
+    elseif PlannedFzf()
         nnoremap <silent><M-h>f :FzfFiles ~/.leovim/conf.d/after/ftplugin<Cr>
         nnoremap <silent><M-h>e :FzfFiles ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/pack<Cr>

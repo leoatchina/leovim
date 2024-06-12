@@ -36,7 +36,7 @@ nnoremap <silent><M-0> :tablast<Cr>
 " ---------------------------------------
 " choose tab using fuzzy_findeer
 " ---------------------------------------
-if InstalledFzf()
+if PlannedFzf()
     PlugAddOpt 'fzf-tabs'
     nnoremap <silent><Tab><Tab> :FzfTabs<Cr>
 endif

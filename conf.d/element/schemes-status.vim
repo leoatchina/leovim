@@ -26,7 +26,7 @@ if Installed('vim-signature')
                 \ 'GotoPrevMarkerAny' : "[=",
                 \ }
 endif
-if InstalledFzf()
+if PlannedFzf()
     nnoremap <silent><C-f>m :FzfMarks<CR>
 else
     nnoremap <silent><C-f>m :marks<Cr>
@@ -164,7 +164,7 @@ elseif Installed('nvim-lightline-lsp')
                 \ }
     let lint_info = ['lsp_ok', 'lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings']
     let g:lightline.active.right += [lint_info]
-elseif InstalledCoc()
+elseif PlannedCoc()
     function! CocDiagnostic()
         let info = get(b:, 'coc_diagnostic_info', {})
         if empty(info) | return get(b:, 'coc_git_status', '')  | endif
@@ -263,7 +263,7 @@ augroup UpdateLightline
     autocmd!
     autocmd ColorScheme * call UpdateLightline()
     autocmd WinEnter,VimEnter,BufWritePost * call lightline#update()
-    if InstalledCoc()
+    if PlannedCoc()
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
 augroup END

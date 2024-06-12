@@ -258,16 +258,16 @@ if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 endif
 " ----------------------------
-" extend Installed function
+" extend Planned function
 " ----------------------------
-function! InstalledFzf() abort
-    return Installed('fzf', 'fzf.vim')
+function! PlannedFzf() abort
+    return Planned('fzf', 'fzf.vim')
 endfunction
-function! InstalledLeaderf() abort
-    return Installed('leaderf')
+function! PlannedLeaderf() abort
+    return Planned('leaderf')
 endfunction
-function! InstalledCoc() abort
-    return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && InstalledFzf()
+function! PlannedCoc() abort
+    return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
 function! InstalledNvimLsp() abort
     return Installed(
@@ -301,8 +301,8 @@ function! InstalledCmp() abort
                 \ )
 endfunction
 function! InstalledAdvCompEng() abort
-    return InstalledCoc() || InstalledNvimLsp()
+    return PlannedCoc() || InstalledNvimLsp()
 endfunction
 function! PrefFzf()
-    return InstalledFzf() && (get(g:, 'prefer_fzf', UNIX()) || !InstalledLeaderf())
+    return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
 endfunction

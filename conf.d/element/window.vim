@@ -1,9 +1,9 @@
 " ------------------------
 " Choose windows
 " ------------------------
-if InstalledLeaderf()
+if PlannedLeaderf()
     nnoremap <silent><leader>w :LeaderfWindow<Cr>
-elseif InstalledFzf()
+elseif PlannedFzf()
     nnoremap <silent><leader>w :FzfWindow<Cr>
 endif
 " ------------------------

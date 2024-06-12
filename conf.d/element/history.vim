@@ -1,6 +1,6 @@
-if InstalledLeaderf()
+if PlannedLeaderf()
     nnoremap <silent><leader>m :LeaderfMru<Cr>
-elseif InstalledFzf()
+elseif PlannedFzf()
     nnoremap <silent><leader>m :FzfHistory<Cr>
 else
     nnoremap <silent><leader>m :CtrlPMRU<Cr>
@@ -78,7 +78,7 @@ if PrefFzf()
     nnoremap <silent><M-j><M-j> :FzfJumps<cr>
     nnoremap <silent><M-k>/ :FzfHistory/<Cr>
     nnoremap <silent><M-k>: :FzfHistory:<Cr>
-elseif InstalledLeaderf()
+elseif PlannedLeaderf()
     nnoremap <silent><M-j><M-j> :Leaderf jumps<cr>
     nnoremap <silent><M-k>/ :LeaderfHistorySearch<Cr>
     nnoremap <silent><M-k>: :LeaderfHistoryCmd<Cr>

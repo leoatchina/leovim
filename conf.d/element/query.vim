@@ -22,12 +22,12 @@ endif
 " map_K
 function! s:k()
     if index(['vim', 'help'], &ft) >= 0
-        if InstalledLeaderf()
+        if PlannedLeaderf()
             execute 'LeaderfHelpCword'
         else
             execute 'h '.expand('<cword>')
         endif
-    elseif InstalledCoc() && CocAction('hasProvider', 'hover')
+    elseif PlannedCoc() && CocAction('hasProvider', 'hover')
         call CocActionAsync('doHover')
     elseif InstalledNvimLsp()
         lua vim.lsp.buf.hover()

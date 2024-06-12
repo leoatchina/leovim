@@ -35,7 +35,7 @@ if v:version >= 802 || has('nvim')
     nnoremap <Tab>o :PreviewPopupFile
     nnoremap <F13> :call quickui#preview#scroll(1)<Cr>
     nnoremap <F14> :call quickui#preview#scroll(-1)<Cr>
-    if InstalledCoc()
+    if PlannedCoc()
         nmap <silent><expr><C-j> coc#float#has_scroll() ? coc#float#scroll(1) : quickui#preview#visible() > 0 ? "\<F13>" : "\%"
         nmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : quickui#preview#visible() > 0 ? "\<F14>" : "\g%"
     else
@@ -107,7 +107,7 @@ function! ChooseOne(lst, ...) abort
             call add(lines, cmd)
         endif
     endfor
-    if Installed('vim-quickui')
+    if Planned('vim-quickui')
         let opts = {'title': title, 'index':g:quickui#listbox#cursor, 'w': 64}
         let idx = quickui#listbox#inputlist(lines, opts)
         if idx >= 0
@@ -131,7 +131,7 @@ endfunction
 " --------------------------------
 " funzzy finder
 " --------------------------------
-if InstalledFzf()
+if PlannedFzf()
     source $OPTIONAL_DIR/fzf.vim
     nmap m<tab> <plug>(fzf-maps-n)
     xmap m<tab> <plug>(fzf-maps-x)
@@ -139,7 +139,7 @@ if InstalledFzf()
     command! FzfRunCommands call FzfCallCommands('FzfRunCommands', 'Fzf', ['FzfAg', 'FzfRG'])
     nnoremap <silent><M-k><M-f> :FzfRunCommands<Cr>
 endif
-if InstalledLeaderf()
+if PlannedLeaderf()
     nnoremap <leader>F :Leaderf
     source $OPTIONAL_DIR/leaderf.vim
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
@@ -147,13 +147,10 @@ if InstalledLeaderf()
     nnoremap <silent><leader>, :Leaderf --previous<Cr>
     nnoremap <silent><leader>. :Leaderf --recall<Cr>
 endif
-if !InstalledLeaderf() && !InstalledFzf()
+if !PlannedLeaderf() && !PlannedFzf()
     source $OPTIONAL_DIR/ctrlp.vim
     PlugAddOpt 'ctrlp.vim'
 endif
-function InstalledCtrlP()
-    return Installed('ctrlp.vim')
-endfunction
 " --------------------------------
 " common maps
 " --------------------------------
@@ -161,7 +158,7 @@ if PrefFzf()
     nnoremap <silent><M-k>c :FzfColors<Cr>
     nnoremap <silent><M-k>t :FzfFiletypes<Cr>
     nnoremap <silent><M-k><M-k> :FzfCommands<Cr>
-elseif InstalledLeaderf()
+elseif PlannedLeaderf()
     nnoremap <silent><M-k>c :LeaderfColorscheme<Cr>
     nnoremap <silent><M-k>t :LeaderfFiletype<Cr>
     nnoremap <silent><M-k><M-k> :LeaderfCommand<Cr>
@@ -170,9 +167,9 @@ else
     nnoremap <M-k>t :filetype<Space>
     nnoremap <M-k><M-k> :command<Space>
 endif
-if InstalledFzf() && executable('perl')
+if PlannedFzf() && executable('perl')
     nnoremap <silent><M-h><M-h> :FzfHelptags<Cr>
-elseif InstalledLeaderf()
+elseif PlannedLeaderf()
     nnoremap <silent><M-h><M-h> :LeaderfHelp<Cr>
 else
     nnoremap <M-h><M-h> :h<Space>

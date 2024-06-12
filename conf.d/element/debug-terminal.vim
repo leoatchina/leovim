@@ -2,7 +2,7 @@ function! s:diag_or_errmsg(diagnostic)
     if a:diagnostic
         if Installed('ale')
             ALEDetail
-        elseif InstalledCoc()
+        elseif PlannedCoc()
             call CocActionAsync('diagnosticInfo')
         elseif InstalledNvimLsp()
             lua vim.diagnostic.open_float()
@@ -174,7 +174,7 @@ endif
 " ---------------------------------
 " debug
 " ---------------------------------
-if InstalledFzf()
+if PlannedFzf()
     function! s:load_json(dap, ...)
         let dap = a:dap
         if a:0 && filereadable(a:1)
@@ -223,11 +223,11 @@ if InstalledFzf()
         endif
     endfunction
 endif
-if Installed('vimspector')
+if Planned('vimspector')
     let g:debug_tool = "vimspector"
     let g:vimspector_base_dir = $DEPLOY_DIR . "/vimspector"
     " load template
-    if InstalledFzf()
+    if PlannedFzf()
         function! ReadVimspectorTemplate(template_file) abort
             call s:load_json(0, a:template_file)
         endfunction
@@ -381,7 +381,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     let g:debug_tool = 'nvim-dap'
     luafile $LUA_DIR/dap.lua
     " load template
-    if InstalledFzf()
+    if PlannedFzf()
         function! ReadDapTemplate(template_file) abort
             call s:load_json(1, a:template_file)
         endfunction
@@ -565,7 +565,7 @@ endif
 " map Floaterm keys
 " -------------------------------------
 function! s:bind_keymap(mapvar, command) abort
-    if !Installed('vimspector') && !Installed('nvim-dap') || a:mapvar ==# '<M-{>' || a:mapvar ==# '<M-}>'
+    if !Planned('vimspector') && !Planned('nvim-dap') || a:mapvar ==# '<M-{>' || a:mapvar ==# '<M-}>'
         execute printf('nnoremap <silent> %s :%s<CR>', a:mapvar, a:command)
     endif
     execute printf('inoremap <silent> %s <C-o>:%s<CR>', a:mapvar, a:command)

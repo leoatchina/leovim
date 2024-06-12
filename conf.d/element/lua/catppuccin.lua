@@ -1,5 +1,5 @@
 require('catppuccin').setup({
-  coc_nvim = vim.fn.InstalledCoc() > 0,
+  coc_nvim = vim.fn.PlannedCoc() > 0,
   integration = {
     dap = {
       enabled = true,

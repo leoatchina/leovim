@@ -36,7 +36,7 @@ if Installed('fzf')
     command! FzfFunkyAll call funky#fzf#show(1)
     nnoremap <silent>f<Cr> :FzfFunky<Cr>
     nnoremap <silent>F<Cr> :FzfFunkyAll<Cr>
-elseif g:symbol_tool =~ 'leaderftags' && InstalledLeaderf()
+elseif g:symbol_tool =~ 'leaderftags' && PlannedLeaderf()
     nnoremap <silent>f<Cr> :LeaderfFunction<Cr>
     nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
 elseif Installed('vim-quickui') && g:symbol_tool =~ 'tags'
@@ -189,7 +189,7 @@ if Installed('gutentags_plus')
     " kill
     nnoremap <silent><leader>gk :GscopeKill<Cr>
     " leaderfgtags
-    if InstalledLeaderf() && UNIX()
+    if PlannedLeaderf() && UNIX()
         let g:Lf_Gtagsconf = $GTAGSCONF
         let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
         let g:Lf_GtagsGutentags = 1
@@ -333,7 +333,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " --------------------------
     " coc
     " --------------------------
-    if InstalledCoc() && !cfile
+    if PlannedCoc() && !cfile
         let commands_dict = {
                     \ 'definition' : ['definitions', 'jumpDefinition'],
                     \ 'references' : ['references', 'jumpReferences'],

@@ -121,14 +121,14 @@ if Installed('blamer.nvim')
     let g:blamer_prefix = ' >> '
     nnoremap ,<Cr> :BlamerToggle<Cr>
 endif
-if InstalledLeaderf()
+if PlannedLeaderf()
     nnoremap <silent><M-g><M-i> :Leaderf git<Cr>
     nnoremap <silent><M-g><M-h> :Leaderf git diff HEAD --directly<Cr>
     nnoremap <silent><M-g><M-l> :Leaderf git log<Cr>
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
     nnoremap <silent><M-g><M-/> :Leaderf git diff --current-file --side-by-side<Cr>
 endi
-if InstalledFzf()
+if PlannedFzf()
     command! GCommands call FzfCallCommands('GCommands', 'G', ['Glance', 'Gutentag', 'Grep', 'Get'])
     nnoremap <silent><M-g><M-g> :GCommands<Cr>
 endif
