@@ -19,8 +19,7 @@ let g:leovim_openmap = 0
 " let g:nvim_treesitter_install = 1
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
 
-" let g:vscode_keybindings_dir = 'C:\Scoop\persist\vscode\data\user-data\User'
-" let g:cursor_keybindings_dir = ''
+" let g:vscode_user_dir = 'C:\Scoop\persist\vscode\data\user-data\User'
 
 let g:highlight_filetypes = ['python', 'r', 'vim', 'markdown', 'lua']
 
