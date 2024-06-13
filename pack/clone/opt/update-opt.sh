@@ -7,6 +7,10 @@ git clone --depth 1 https://github.com/ctrlpvim/ctrlp.vim.git
 rm -rf tagbar
 git clone --depth 1 https://github.com/preservim/tagbar.git
 
+# vista
+rm -rf vista.vim
+git clone --depth 1 https://github.com/leoatchina/vista.vim.git
+
 # vim-signify
 rm -rf vim-signify
 git clone --depth 1 https://github.com/mhinz/vim-signify.git

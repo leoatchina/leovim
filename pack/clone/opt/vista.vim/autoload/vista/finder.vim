@@ -199,6 +199,7 @@ function! vista#finder#PrepareOpts(source, prompt) abort
     endif
     call extend(opts.options, preview_opts)
   endif
+
   return opts
 endfunction
 
