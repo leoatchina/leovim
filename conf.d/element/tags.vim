@@ -17,30 +17,34 @@ catch /.*/
 endtry
 if get(g:, 'ctags_type', '') != ''
     let lst = g:root_patterns + ['lib', '.cache', 'package-lock.json']
-    let g:fzf_tags_command='ctags -R --exclude' . join(lst, " --exclude=")
+    let g:fzf_tags_command='ctags -R --exclude=' . join(lst, " --exclude=")
 endif
-" T/F<Cr>
+" T<Cr>
 if g:symbol_tool =~ 'leaderftags'
     let g:Lf_Ctags = g:fzf_tags_command
     nnoremap <silent>T<Cr> :LeaderfBufTagAll<Cr>
-    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
     nnoremap <silent><leader>T :LeaderfTag<Cr>
 elseif g:symbol_tool =~ 'fzftags' && executable('perl')
     nnoremap <silent><leader>T :FzfTags<Cr>
 elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
+" f<Cr>
 if Planned('fzf')
     PlugAddOpt 'vim-funky'
     command! FzfFunky call funky#fzf#show()
-    command! FzfFunkyAll call funky#fzf#show(1)
     nnoremap <silent>f<Cr> :FzfFunky<Cr>
-    nnoremap <silent>F<Cr> :FzfFunkyAll<Cr>
 elseif g:symbol_tool =~ 'leaderftags' && PlannedLeaderf()
     nnoremap <silent>f<Cr> :LeaderfFunction<Cr>
-    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
 elseif Installed('vim-quickui') && g:symbol_tool =~ 'tags'
     nnoremap <silent>f<Cr> :call quickui#tools#list_function()<Cr>
+endif
+" F<Cr>
+if g:symbol_tool =~ 'leaderftags'
+    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
+elseif Planned('fzf')
+    command! FzfFunkyAll call funky#fzf#show(1)
+    nnoremap <silent>F<Cr> :FzfFunkyAll<Cr>
 endif
 " t<Cr> for tags
 if g:complete_engine == 'coc' && UNIX() && g:ctags_type != ''
