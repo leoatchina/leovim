@@ -34,7 +34,7 @@ if InstalledNvimLsp()
     endif
     if Require('c')
         let g:ensure_installed += ['cmake']
-        if executable('clangd')
+        if g:clangd_exe != ''
             let g:ensure_installed += ['clangd']
         endif
     endif
@@ -43,9 +43,6 @@ if InstalledNvimLsp()
     endif
     if Require('R') && g:R_exe != ''
         let g:ensure_installed += ['r_language_server']
-    endif
-    if Require('go') && g:go_exe != ''
-        let g:ensure_installed += ['gopls']
     endif
     if Installed('nvim-java', 'lua-async-await', 'nvim-java-refactor', 'nvim-java-core', 'nvim-java-test', 'nvim-java-dap')
         let g:nvim_java = 1
