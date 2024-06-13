@@ -324,18 +324,22 @@ nnoremap <M-j>e gf
 nnoremap <M-j>t <C-w>gf
 nnoremap <M-j>s <C-w>f
 nnoremap <M-j>v <C-w>f<C-w>L
+if PlannedFzf()
+    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
+elseif PlannedLeaderf()
+    nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
+else
+    nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
+endif
 if PrefFzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>fg :FzfGitFiles<Cr>
-    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
 elseif PlannedLeaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
     nnoremap <silent><nowait><leader>fg :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
-    nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>fg :CtrlP <C-r>=GitRootDir()<Cr><Cr>
-    nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
 endif
 if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
     source $OPTIONAL_DIR/fern.vim
