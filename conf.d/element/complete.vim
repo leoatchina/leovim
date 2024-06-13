@@ -7,10 +7,10 @@ if Installed('mason.nvim')
 endif
 if Planned('vimcomplete')
     source $OPTIONAL_DIR/vcm.vim
-elseif InstalledCmp()
-    luafile $LUA_DIR/cmp.lua
 elseif PlannedCoc()
     source $OPTIONAL_DIR/coc.vim
+elseif InstalledCmp()
+    luafile $LUA_DIR/cmp.lua
 elseif g:complete_engine == 'apm'
     source $OPTIONAL_DIR/apm.vim
 elseif g:complete_engine != ''

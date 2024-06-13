@@ -15,7 +15,7 @@ nmap <Tab>zb    zfaB
 nnoremap <silent><leader>z/ :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>:set foldmethod=manual<CR><CR>
 " ufo
 if Installed('nvim-ufo')
-    if InstalledAdvCompEng()
+    if AdvCompEngine()
         lua require('ufo').setup()
     elseif Installed('nvim-treesitter')
         lua require('ufo').setup({provider_selector = function(bufnr, filetype, buftype) return {'treesitter', 'indent'} end })
