@@ -1,6 +1,7 @@
 vim9script
 g:vimcomplete_tab_enable = 0
 var options = {
+    showSource: true,
     alwaysOn: false,
     completor: { shuffleEqualPriority: true, postfixHighlight: true },
     buffer: { enable: true, priority: 10, urlComplete: true, envComplete: true },
