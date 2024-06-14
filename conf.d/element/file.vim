@@ -543,26 +543,34 @@ endif
 " ------------------
 " vscode cursor
 " ------------------
-let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_keybindings_dir", "")), '/', '\', 'g')
-let s:cursor_dir = substitute(fnameescape(get(g:, "cursor_keybindings_dir", "")), '/', '\', 'g')
-if isdirectory(s:vscode_dir) || isdirectory(s:cursor_dir)
+if WINDOWS()
+    let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_user_dir", "")), '/', '\', 'g')
+else
+    let s:vscode_dir = fnameescape(get(g:, "vscode_user_dir", ""))
+endif
+if isdirectory(s:vscode_dir)
     function! s:link_keybindings() abort
-        for dir in [s:vscode_dir, s:cursor_dir]
-            if !isdirectory(dir)
-                continue
-            endif
-            if WINDOWS()
-                let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
-                execute(delete_cmd)
-                let template = '!mklink %s %s'
-                let cmd = printf(template, dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
-                execute(cmd)
-            else
-                let template = '!ln -sf %s %s'
-                let cmd = printf(template, $INIT_DIR . '/keybindings.json', dir)
-                execute(cmd)
-            endif
-        endfor
+        if WINDOWS()
+            " delete file and dir
+            let delete_cmd = printf('!del /Q /S %s\keybindings.json', s:vscode_dir)
+            execute(delete_cmd)
+            let rmdir_cmd = printf('!rmdir /Q /S %s\snippets', s:vscode_dir)
+            execute(rmdir_cmd)
+            " link file
+            let template = '!mklink %s %s'
+            let cmd = printf(template, s:vscode_dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
+            execute(cmd)
+            " link dir
+            let template = '!mklink /d %s %s'
+            let cmd = printf(template, s:vscode_dir . '\snippets', $LEOVIM_DIR . '\snippets')
+            execute(cmd)
+        else
+            let template = '!ln -sf %s %s'
+            let cmd = printf(template, $INIT_DIR . '/keybindings.json', s:vscode_dir)
+            execute(cmd)
+            let cmd = printf(template, $LEOVIM_DIR . '/snippets', s:vscode_dir)
+            execute(cmd)
+        endif
     endfunction
     command! LinkKeyBindings call s:link_keybindings()
     nnoremap <M-h>K :LinkKeyBindings<Cr>
