@@ -549,7 +549,8 @@ nnoremap <M-h>u :set ff=unix<Cr>:%s/\r//g<Cr>
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
 if has('nvim') || HAS_GUI()
     function! s:map_metacode_nop(key)
-        exec printf("map %s <Nop>", a:key)
+        let mkey = "<M-" . a:key . ">"
+        exec printf("map %s <Nop>", mkey)
     endfunction
     for c in s:metacode_group
         call s:map_metacode_nop(c)
