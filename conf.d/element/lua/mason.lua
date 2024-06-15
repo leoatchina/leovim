@@ -1,10 +1,11 @@
+local registries
 if Installed('nvim-java') then
-  local registries = {
+  registries = {
     "github:nvim-java/mason-registry",
     "github:mason-org/mason-registry"
   }
 else
-  local registries = {
+  registries = {
     "github:mason-org/mason-registry"
   }
 end

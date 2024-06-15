@@ -17,30 +17,34 @@ catch /.*/
 endtry
 if get(g:, 'ctags_type', '') != ''
     let lst = g:root_patterns + ['lib', '.cache', 'package-lock.json']
-    let g:fzf_tags_command='ctags -R --exclude' . join(lst, " --exclude=")
+    let g:fzf_tags_command='ctags -R --exclude=' . join(lst, " --exclude=")
 endif
-" T/F<Cr>
+" T<Cr>
 if g:symbol_tool =~ 'leaderftags'
     let g:Lf_Ctags = g:fzf_tags_command
     nnoremap <silent>T<Cr> :LeaderfBufTagAll<Cr>
-    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
     nnoremap <silent><leader>T :LeaderfTag<Cr>
 elseif g:symbol_tool =~ 'fzftags' && executable('perl')
     nnoremap <silent><leader>T :FzfTags<Cr>
 elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
-if Installed('fzf')
+" f<Cr>
+if Planned('fzf')
     PlugAddOpt 'vim-funky'
     command! FzfFunky call funky#fzf#show()
-    command! FzfFunkyAll call funky#fzf#show(1)
     nnoremap <silent>f<Cr> :FzfFunky<Cr>
-    nnoremap <silent>F<Cr> :FzfFunkyAll<Cr>
-elseif g:symbol_tool =~ 'leaderftags' && InstalledLeaderf()
+elseif g:symbol_tool =~ 'leaderftags' && PlannedLeaderf()
     nnoremap <silent>f<Cr> :LeaderfFunction<Cr>
-    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
 elseif Installed('vim-quickui') && g:symbol_tool =~ 'tags'
     nnoremap <silent>f<Cr> :call quickui#tools#list_function()<Cr>
+endif
+" F<Cr>
+if g:symbol_tool =~ 'leaderftags'
+    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
+elseif Planned('fzf')
+    command! FzfFunkyAll call funky#fzf#show(1)
+    nnoremap <silent>F<Cr> :FzfFunkyAll<Cr>
 endif
 " t<Cr> for tags
 if g:complete_engine == 'coc' && UNIX() && g:ctags_type != ''
@@ -92,7 +96,7 @@ if !isdirectory(g:gutentags_cache_dir)
     silent! call mkdir(g:gutentags_cache_dir, 'p')
 endif
 let g:gutentags_modules = []
-if Installed('vim-gutentags')
+if Planned('vim-gutentags')
     " exclude files
     let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", "node_modules", "*.vim/bundle/*", ".ccls_cache", "__pycache__"] + g:root_patterns
     " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
@@ -159,7 +163,7 @@ endif
 " --------------------------
 " gtags
 " --------------------------
-if Installed('gutentags_plus')
+if Planned('gutentags_plus')
     if has('+cscope') && executable('gtags-cscope')
         set cscopeprg=gtags-cscope
     elseif has('+cscope')
@@ -176,7 +180,7 @@ if Installed('gutentags_plus')
     nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><Cr>
     nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><Cr>
     nnoremap <silent><leader>gz :GscopeFind z <C-R><C-W><Cr>
-    if InstalledAdvCompEng()
+    if AdvCompEngine()
         nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><Cr>
         nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><Cr>
     else
@@ -189,7 +193,7 @@ if Installed('gutentags_plus')
     " kill
     nnoremap <silent><leader>gk :GscopeKill<Cr>
     " leaderfgtags
-    if InstalledLeaderf() && UNIX()
+    if PlannedLeaderf() && UNIX()
         let g:Lf_Gtagsconf = $GTAGSCONF
         let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
         let g:Lf_GtagsGutentags = 1
@@ -333,7 +337,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " --------------------------
     " coc
     " --------------------------
-    if InstalledCoc() && !cfile
+    if PlannedCoc() && !cfile
         let commands_dict = {
                     \ 'definition' : ['definitions', 'jumpDefinition'],
                     \ 'references' : ['references', 'jumpReferences'],
@@ -449,7 +453,7 @@ nnoremap <silent><C-w><C-g> :call SymbolOrTagOrSearchAll("definition", "tabe")<C
 nnoremap <silent><C-w><C-]> :call SymbolOrTagOrSearchAll("definition", "split")<Cr>
 " references
 nnoremap <silent><M-/> :call SymbolOrTagOrSearchAll("references", "list")<Cr>
-if InstalledAdvCompEng()
+if AdvCompEngine()
     " declaration
     nnoremap <silent><M-C> :call SymbolOrTagOrSearchAll("declaration", "list")<Cr>
     " implementation

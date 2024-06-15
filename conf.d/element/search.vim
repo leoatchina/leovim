@@ -1,7 +1,7 @@
 if PrefFzf()
     nnoremap <silent><nowait><M-l><M-l> :FzfBLines<Cr>
     nnoremap <silent><nowait><M-l><M-a> :FzfLines<Cr>
-elseif InstalledLeaderf()
+elseif PlannedLeaderf()
     nnoremap <silent><nowait><M-l><M-l> :Leaderf line --no-sort<Cr>
     nnoremap <silent><nowait><M-l><M-a> :Leaderf line --all --no-sort<Cr>
 else
@@ -50,7 +50,7 @@ xnoremap s\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection()<Cr>
 if executable('rg')
     set grepprg=rg\ --line-number\ --no-heading\ --smart-case
     set grepformat=%f:%l:%m,%f:%l,%f:%m,%f
-    if InstalledLeaderf()
+    if PlannedLeaderf()
         nnoremap <C-f><Tab> :Leaderf rg --no-ignore<Space>
         if LINUX()
             let g:Lf_Rg = expand('~/.leovim.unix/linux/rg')
@@ -165,7 +165,7 @@ cnoremap <M-S> cfdo up
 " --------------------------
 " search all
 " --------------------------
-if InstalledFzf()
+if PlannedFzf()
     if executable('rg')
         command! -bang -nargs=* FzfRG call fzf#vim#grep(
                     \ 'rg --vimgrep --no-heading --smart-case --color=always ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' ' . FindRootDir(),
@@ -241,7 +241,7 @@ if InstalledFzf()
 endif
 if exists(":LeaderfSearchAll")
     let g:searchall = 'LeaderfSearchAll'
-    if InstalledFzf()
+    if PlannedFzf()
         let g:search_tool = "fzf-leaderf"
     else
         let g:search_tool = "leaderf"
@@ -275,7 +275,7 @@ if exists(":LeaderfSearchAll")
     nnoremap <silent><nowait>,?  :Leaderf rg --no-ignore --fuzzy -L -S<Cr>
     nnoremap <silent><nowait>,\  :Leaderf rg --no-ignore --fuzzy -L -S --wd-mode=f --cword<Cr>
     nnoremap <silent><nowait>,\| :Leaderf rg --no-ignore --fuzzy -L -S --cword<Cr>
-elseif InstalledFzf()
+elseif PlannedFzf()
     let g:searchall = 'FzfSearchAll'
     let g:search_tool = 'fzf'
     " searchall
@@ -290,7 +290,7 @@ elseif InstalledFzf()
     nnoremap <silent><nowait><C-f>? :FzfSearch<Space>
 endif
 " flygrep
-if InstalledFzf()
+if PlannedFzf()
     nnoremap <silent><nowait><leader>/  :FzfRg<Cr>
     nnoremap <silent><nowait><leader>?  :FzfGGrep<Cr>
     nnoremap <silent><nowait><leader>\  :FzfRg <C-r><C-w><Cr>

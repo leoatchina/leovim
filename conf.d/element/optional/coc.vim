@@ -37,79 +37,10 @@ augroup END
 " ------------------------
 " icons
 " ------------------------
-if Installed('nvim-web-devicons')
+if Planned('nvim-web-devicons')
     call coc#config('explorer.icon.source', 'nvim-web-devicons')
-elseif Installed('vim-devicons')
+elseif Planned('vim-devicons')
     call coc#config('explorer.icon.source', 'vim-devicons')
-endif
-" ----------------------------
-" extensions
-" ----------------------------
-let g:coc_global_extensions = [
-            \ 'coc-lists',
-            \ 'coc-marketplace',
-            \ 'coc-snippets',
-            \ 'coc-yank',
-            \ 'coc-highlight',
-            \ 'coc-git',
-            \ 'coc-json',
-            \ 'coc-sql',
-            \ 'coc-xml',
-            \ 'coc-sh',
-            \ 'coc-vimlsp',
-            \ 'coc-pyright',
-            \ ]
-if UNIX()
-    let g:coc_global_extensions += ['coc-lua']
-elseif WINDOWS()
-    let g:coc_global_extensions += ['coc-powershell']
-endif
-if has('nvim')
-    let g:coc_global_extensions += ['coc-explorer', 'coc-symbol-line']
-endif
-if Require('web')
-    let g:coc_global_extensions += [
-                \ 'coc-html',
-                \ 'coc-css',
-                \ 'coc-yaml',
-                \ 'coc-phpls',
-                \ 'coc-tsserver',
-                \ 'coc-angular',
-                \ 'coc-vetur',
-                \ ]
-endif
-if Require('c')
-    let g:coc_global_extensions += ['coc-cmake']
-    if executable('clangd')
-        let g:coc_global_extensions += ['coc-clangd']
-    endif
-endif
-if executable('ccls') && Require('ccls')
-    call coc#config('languageserver.ccls', {
-                \ "command": "ccls",
-                \ "filetypes": g:cfile_types,
-                \ "rootPatterns": g:root_patterns,
-                \ "initializationOptions": {
-                    \ "cache": {
-                        \ "directory": $HOME . "/.leovim.d/ccls"
-                        \ }
-                    \ }
-                \ })
-endif
-if Require('R')
-    let g:coc_global_extensions += ['coc-r-lsp']
-endif
-if Require('rust')
-    let g:coc_global_extensions += ['coc-rust-analyzer']
-endif
-if Require('java')
-    let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
-endif
-if Require('go') && executable('go')
-    let g:coc_global_extensions += ['coc-go']
-endif
-if Require('writing')
-    let g:coc_global_extensions += ['coc-vimtex']
 endif
 " ----------------------------
 " map

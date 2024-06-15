@@ -47,8 +47,14 @@ elseif Require('vcm')
     else
         let s:smart_engine_select = 1
     endif
+elseif Require('coc')
+    if g:node_version >= 16.18 && (has('nvim-0.8.1') || has('patch-8.2.0750'))
+        let g:complete_engine = 'coc'
+    else
+        let s:smart_engine_select = 1
+    endif
 elseif Require('cmp')
-    if has('nvim-0.9')
+    if has('nvim-0.10')
         if UNIX() || WINDOWS() && HAS_GUI() == 0
             let g:complete_engine = 'cmp'
         else
@@ -73,14 +79,14 @@ if get(s:, 'smart_engine_select', 0)
         else
             let g:complete_engine = 'mcm'
         endif
-    elseif has('nvim-0.9')
+    elseif g:node_version >= 16.18 && has('nvim-0.8.1')
+        let g:complete_engine = 'coc'
+    elseif has('nvim-0.10')
         if UNIX() || WINDOWS() && HAS_GUI() == 0
             let g:complete_engine = 'cmp'
         else
             let g:complete_engine = 'mcm'
         endif
-    elseif g:node_version >= 16.18 && has('nvim-0.8.1')
-        let g:complete_engine = 'coc'
     elseif UNIX()
         let g:complete_engine = 'mcm'
     elseif v:version >= 800
@@ -103,8 +109,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
     PlugAdd 'onsails/lspkind-nvim'
     " snippet
-    PlugAdd 'saadparwaiz1/cmp_luasnip'
-    PlugAdd 'L3MON4D3/luasnip'
+    PlugAdd 'hrsh7th/cmp-vsnip'
     " lsp related
     PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
@@ -178,7 +183,7 @@ endif
 " ------------------------------
 if g:python_version > 3.08 && (v:version >= 802 && (Require('debug') || Require('vimspector')) || has('nvim-0.8.1') && Require('vimspector'))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_path . vimspector_install}
+    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
 elseif has('nvim-0.9') && Require('debug')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
@@ -259,16 +264,16 @@ if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 endif
 " ----------------------------
-" extend Installed function
+" extend Planned function
 " ----------------------------
-function! InstalledFzf() abort
-    return Installed('fzf', 'fzf.vim')
+function! PlannedFzf() abort
+    return Planned('fzf', 'fzf.vim')
 endfunction
-function! InstalledLeaderf() abort
-    return Installed('leaderf')
+function! PlannedLeaderf() abort
+    return Planned('leaderf')
 endfunction
-function! InstalledCoc() abort
-    return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && InstalledFzf()
+function! PlannedCoc() abort
+    return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
 function! InstalledNvimLsp() abort
     return Installed(
@@ -295,16 +300,15 @@ function! InstalledCmp() abort
                 \ 'cmp-async-path',
                 \ 'cmp-git',
                 \ 'cmp-nvim-lsp-signature-help',
-                \ 'cmp_luasnip',
-                \ 'luasnip',
+                \ 'cmp-vsnip',
                 \ 'friendly-snippets',
                 \ 'nvim-lint',
                 \ 'lspkind-nvim',
                 \ )
 endfunction
-function! InstalledAdvCompEng() abort
-    return InstalledCoc() || InstalledNvimLsp()
+function! AdvCompEngine() abort
+    return PlannedCoc() || InstalledNvimLsp()
 endfunction
 function! PrefFzf()
-    return InstalledFzf() && (get(g:, 'prefer_fzf', UNIX()) || !InstalledLeaderf())
+    return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
 endfunction

@@ -1,6 +1,5 @@
 export EDITOR=vim
 export TERM=xterm-256color
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     alias ls='/bin/ls --color=auto'
@@ -17,7 +16,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-
 # export PATH=$HOME/.local/tmux/bin${PATH:+:${PATH}}
 # export PATH=$HOME/.local/ctags/bin${PATH:+:${PATH}}
 # export PATH=$HOME/.local/gtags/bin${PATH:+:${PATH}}
@@ -25,7 +23,7 @@ export PATH=$HOME/.local/node/bin${PATH:+:${PATH}}
 export PATH=$HOME/.local/bin${PATH:+:${PATH}}
 
 export GOPATH=$HOME/go
-[ -d $GOPATH ] && export PATH=$HOME/go/bin${PATH:+:${PATH}} && export GOBIN=$HOME/go/bin
+[ -d $GOPATH ] && export PATH=$GOPATH/bin${PATH:+:${PATH}} && export GOBIN=$GOPATH/bin
 
 alias MV="rsync -ravpzHogt --progress --size-only --remove-source-files "
 alias SYNC="rsync -ravpzHogt --progress --size-only --delete "
@@ -35,8 +33,9 @@ alias GR='cd $(git rev-parse --show-toplevel)'
 alias GIT="\\ls -A --group-directories-first -1 | while IFS= read -r line; do git log --color --format=\"\$(\\ls -d -F --color \"\$line\") =} %C(bold black)▏%Creset%Cred%h %Cgreen(%cr)%Creset =} %C(bold black)▏%Creset%s %C(bold blue)<%an>%Creset\" --abbrev-commit --max-count 1 HEAD -- \"\$line\"; done | awk -F'=}' '{ nf[NR]=NF; for (i = 1; i <= NF; i++) { cell[NR,i] = \$i; gsub(/\\033\\[([[:digit:]]+(;[[:digit:]]+)*)?[mK]/, \"\", \$i); len[NR,i] = l = length(\$i); if (l > max[i]) max[i] = l; } } END { for (row = 1; row <= NR; row++) { for (col = 1; col < nf[row]; col++) printf \"%s%*s%s\", cell[row,col], max[col]-len[row,col], \"\", OFS; print cell[row,nf[row]]; } }'"
 alias ATT='tmux attach -t 0'
 
+alias tmp='cd /tmp'
 alias disks="df -lh | head -1; df -lh | sort | grep -E '/home|/srv|/export|/data|/mnt|/$'"
-# alias clash="https_proxy=http://127.0.0.1:9898  http_proxy=http://127.0.0.1:9898  all_proxy=socks5://127.0.0.1:9898 "
+# alias clash="https_proxy=http://127.0.0.1:9898 http_proxy=http://127.0.0.1:9898 all_proxy=socks5://127.0.0.1:9898 "
 
 alias v='bash ~/.local/bin/v.sh'
 alias vi='bash ~/.local/bin/vi.sh'

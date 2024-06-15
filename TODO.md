@@ -82,6 +82,7 @@
   - [x] preview funky
   - [x] multi buffers
   - [x] jump to another window bug
+  - [ ] FunkyAll not show background buffer bug
   - [ ] ctrlp intergrated
   - [ ] README
   - [ ] deploy to github

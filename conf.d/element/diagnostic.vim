@@ -6,7 +6,7 @@ catch
 endtry
 if InstalledNvimLsp()
     luafile $LUA_DIR/diagnostic.lua
-elseif InstalledCoc()
+elseif PlannedCoc()
     " highlight group
     highlight def link CocErrorHighlight   NONE
     highlight def link CocWarningHighlight NONE
@@ -36,7 +36,7 @@ elseif InstalledCoc()
     else
         function! s:Diagnostics()
             CocDiagnostics
-            if InstalledLeaderf() && !has('nvim')
+            if PlannedLeaderf() && !has('nvim')
                 LeaderfQfLoc
             endif
         endfunction
@@ -79,7 +79,7 @@ elseif InstalledCoc()
         nnoremap <silent><leader>o :CocDiagnosticToggleBuffer<Cr>
     endif
 endif
-if Installed('ale')
+if Planned('ale')
     " basic settings
     let g:ale_disable_lsp = 'auto'
     let g:ale_set_balloons = 0

@@ -238,11 +238,11 @@ PlugAddOpt 'ZFVimBackup'
 " ----------------------------------------------------
 " ########## Diff Option ##########
 " ----------------------------------------------------
-if Installed('ZFVimDirDiff', 'ZFVimJob')
+if Planned('ZFVimDirDiff', 'ZFVimJob')
     nnoremap <leader>fm :ZFDirDiffMark<Cr>
     nnoremap <leader>fd :ZFDirDiff<Space>
 endif
-if Installed('ZFVimIgnore')
+if Planned('ZFVimIgnore')
     autocmd User ZFIgnoreOnToggle let &wildignore = join(ZFIgnoreToWildignore(ZFIgnoreGet()), ',')
 endif
 try
@@ -324,23 +324,27 @@ nnoremap <M-j>e gf
 nnoremap <M-j>t <C-w>gf
 nnoremap <M-j>s <C-w>f
 nnoremap <M-j>v <C-w>f<C-w>L
+if PlannedFzf()
+    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
+elseif PlannedLeaderf()
+    nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
+else
+    nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
+endif
 if PrefFzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>fg :FzfGitFiles<Cr>
-    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
-elseif InstalledLeaderf()
+elseif PlannedLeaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
     nnoremap <silent><nowait><leader>fg :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
-    nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>fg :CtrlP <C-r>=GitRootDir()<Cr><Cr>
-    nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
 endif
 if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
     source $OPTIONAL_DIR/fern.vim
 endif
-if has('nvim') && InstalledCoc()
+if has('nvim') && PlannedCoc()
     function! s:coc_file() abort
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
@@ -357,7 +361,7 @@ nnoremap <leader>E :e<Space>
 " --------------------------
 " project
 " --------------------------
-if Installed('vim-project')
+if Planned('vim-project')
     nnoremap <leader>pp :Project
     nnoremap <leader>pa :Project <C-r>=GetRootDir()<Cr>
     nnoremap <leader>pI :ProjectIgnore<Space>
@@ -509,13 +513,13 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$INIT_DIR/opt.vim")<Cr>
-    if InstalledLeaderf()
+    if PlannedLeaderf()
         nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/conf.d/after/ftplugin<Cr>
         nnoremap <silent><M-h>e :Leaderf file --no-sort ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :Leaderf file --no-sort ~/.leovim/pack<Cr>
         nnoremap <silent><M-h>d :Leaderf file --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --no-sort ~/.leovim<Cr>
-    elseif InstalledFzf()
+    elseif PlannedFzf()
         nnoremap <silent><M-h>f :FzfFiles ~/.leovim/conf.d/after/ftplugin<Cr>
         nnoremap <silent><M-h>e :FzfFiles ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/pack<Cr>
@@ -539,26 +543,34 @@ endif
 " ------------------
 " vscode cursor
 " ------------------
-let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_keybindings_dir", "")), '/', '\', 'g')
-let s:cursor_dir = substitute(fnameescape(get(g:, "cursor_keybindings_dir", "")), '/', '\', 'g')
-if isdirectory(s:vscode_dir) || isdirectory(s:cursor_dir)
+if WINDOWS()
+    let s:vscode_dir = substitute(fnameescape(get(g:, "vscode_user_dir", "")), '/', '\', 'g')
+else
+    let s:vscode_dir = fnameescape(get(g:, "vscode_user_dir", ""))
+endif
+if isdirectory(s:vscode_dir)
     function! s:link_keybindings() abort
-        for dir in [s:vscode_dir, s:cursor_dir]
-            if !isdirectory(dir)
-                continue
-            endif
-            if WINDOWS()
-                let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
-                execute(delete_cmd)
-                let template = '!mklink %s %s'
-                let cmd = printf(template, dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
-                execute(cmd)
-            else
-                let template = '!ln -sf %s %s'
-                let cmd = printf(template, $INIT_DIR . '/keybindings.json', dir)
-                execute(cmd)
-            endif
-        endfor
+        if WINDOWS()
+            " delete file and dir
+            let delete_cmd = printf('!del /Q /S %s\keybindings.json', s:vscode_dir)
+            execute(delete_cmd)
+            let rmdir_cmd = printf('!rmdir /Q /S %s\snippets', s:vscode_dir)
+            execute(rmdir_cmd)
+            " link file
+            let template = '!mklink %s %s'
+            let cmd = printf(template, s:vscode_dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
+            execute(cmd)
+            " link dir
+            let template = '!mklink /d %s %s'
+            let cmd = printf(template, s:vscode_dir . '\snippets', $LEOVIM_DIR . '\snippets')
+            execute(cmd)
+        else
+            let template = '!ln -sf %s %s'
+            let cmd = printf(template, $INIT_DIR . '/keybindings.json', s:vscode_dir)
+            execute(cmd)
+            let cmd = printf(template, $LEOVIM_DIR . '/snippets', s:vscode_dir)
+            execute(cmd)
+        endif
     endfunction
     command! LinkKeyBindings call s:link_keybindings()
     nnoremap <M-h>K :LinkKeyBindings<Cr>

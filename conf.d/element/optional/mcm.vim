@@ -13,7 +13,7 @@ let g:mucomplete#chains = {}
 let g:mucomplete#chains.vim = ['path', 'cmd', 'keyn']
 let g:mucomplete#chains.markdown = ['path', 'cmd', 'keyn']
 " vsnip
-if Installed('vim-vsnip', 'vim-vsnip-integ')
+if Planned('vim-vsnip', 'vim-vsnip-integ')
     let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'vsnip', 'dict']
 else
     let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict']

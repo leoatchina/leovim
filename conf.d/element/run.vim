@@ -311,7 +311,7 @@ if has('nvim') || v:version >= 801
     command! AsyncTaskProfileLoop call AsyncTaskProfileLoop()
     nnoremap <leader>rp :<C-u>AsyncTaskProfileLoop<CR>
     nnoremap <leader>rf :<C-u>AsyncTaskProfile<CR>
-    if InstalledFzf()
+    if PlannedFzf()
         function! s:fzf_sink(what)
             let p1 = stridx(a:what, '<')
             if p1 >= 0

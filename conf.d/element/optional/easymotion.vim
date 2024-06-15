@@ -1,3 +1,5 @@
+PlugAddOpt 'vim-easymotion'
+PlugAddOpt 'vim-easymotion-chs'
 nmap <M-f> <Plug>(easymotion-w)
 xmap <M-f> <Plug>(easymotion-w)
 omap <M-f> <Plug>(easymotion-w)
@@ -31,7 +33,7 @@ omap st <Plug>(easymotion-t)
 nmap sT <Plug>(easymotion-T)
 xmap sT <Plug>(easymotion-T)
 omap sT <Plug>(easymotion-T)
-if !Installed('flash.nvim')
+if !Planned('flash.nvim')
     nmap sj <Plug>(easymotion-f2)
     xmap sj <Plug>(easymotion-f2)
     omap sj <Plug>(easymotion-f2)

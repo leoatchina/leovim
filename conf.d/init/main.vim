@@ -316,8 +316,6 @@ if exists('g:vscode')
     PlugAddOpt 'hop.nvim'
     luafile $LUA_DIR/hop.lua
 else
-    PlugAddOpt 'vim-easymotion'
-    PlugAddOpt 'vim-easymotion-chs'
     source $OPTIONAL_DIR/easymotion.vim
 endif
 " --------------------------
@@ -546,17 +544,19 @@ endif
 let &termencoding=&enc
 nnoremap <M-h>u :set ff=unix<Cr>:%s/\r//g<Cr>
 " ------------------------------------
-" <M-Key> map to <Nop> if need
+" Meta key
 " ------------------------------------
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
-if !exists("g:vscode") && (has('nvim') || HAS_GUI())
+if has('nvim') || HAS_GUI()
     function! s:map_metacode_nop(key)
-        exec "map <M-".a:key."> <Nop>"
+        let mkey = "<M-" . a:key . ">"
+        exec printf("map %s <Nop>", mkey)
     endfunction
     for c in s:metacode_group
         call s:map_metacode_nop(c)
     endfor
 endif
+" NOTE: add metacode_group must be execute after map_metacode_nop
 for i in range(26)
     " 65 is ascii of A
     call add(s:metacode_group, nr2char(65 + i))
@@ -567,6 +567,7 @@ for i in range(10)
     " 48 is ascii of 0
     call add(s:metacode_group, nr2char(48 + i))
 endfor
+" (neo)vim enhanced
 nnoremap <C-m> <Tab>
 nnoremap gQ gw
 xnoremap gQ gw
@@ -599,7 +600,7 @@ cnoremap <M-w> <ESC>
 " --------------------------
 " python_support
 " --------------------------
-function! s:get_python_path()
+function! s:get_python_exe()
     let python = ""
     try
         if executable('python')
@@ -615,7 +616,7 @@ function! s:get_python_path()
     endtry
 endfunction
 if has('nvim')
-    let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_path())
+    let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_exe())
 endif
 function! s:get_python_version()
     if CYGWIN()
@@ -649,7 +650,7 @@ function! s:get_python_version()
     return pyx_version
 endfunction
 let g:python_version = s:get_python_version()
-let g:python_path = s:get_python_path()
+let g:python_exe = s:get_python_exe()
 " --------------------------
 " has_terminal
 " --------------------------

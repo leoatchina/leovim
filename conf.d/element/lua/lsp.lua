@@ -19,35 +19,10 @@ map("n", "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
 map("n", "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
 map("n", "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
 -----------------
--- lspconfig
+-- lsp_zero
 -----------------
-local lspconfig = require("lspconfig")
--- capabilities
-local capabilities
-if Installed('nvim-cmp') then
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
-else
-  capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion = {
-    completionItem = {
-      snippetSupport = true,
-      resolveSupport = {
-        properties = { 'edit', 'documentation', 'detail', 'additionalTextEdits' },
-      },
-    },
-    completionList = {
-      itemDefaults = {
-        'editRange',
-        'insertTextFormat',
-        'insertTextMode',
-        'data',
-      },
-    },
-  }
-end
-if capabilities then
-  capabilities = require("lsp-selection-range").update_capabilities(capabilities)
-end
+local lsp_zero = require('lsp-zero')
+local capabilities = require("lsp-selection-range").update_capabilities(lsp_zero.get_capabilities())
 -----------------------
 -- fzf_lsp
 -----------------------
@@ -102,9 +77,71 @@ require('symbol-usage').setup({
   },
 })
 -----------------
--- attach
+-- mason lspconfig
 -----------------
-local lsp_zero = require('lsp-zero')
+local lspconfig = require("lspconfig")
+require("mason-lspconfig").setup({
+  ensure_installed = vim.g.ensure_installed,
+  handlers = {
+    lsp_zero.default_setup,
+    rust_analyzer = lsp_zero.noop,
+    lua_ls = function()
+      lspconfig.lua_ls.setup({
+        filetypes = { "lua" },
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+          },
+        },
+      })
+    end,
+    gopls = function()
+      lspconfig.gopls.setup({
+        filetypes = { "go" },
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+          },
+        },
+      })
+    end,
+    jdtls = function()
+      if vim.g.nvim_java > 0 then
+        if Installed("spring-boot.nvim") then
+          require('spring_boot').setup({
+            ls_path = vim.g.jars_dir,
+            jdtls_name = 'jdtls',
+            log_file = nil,
+          })
+          require('spring_boot').init_lsp_commands()
+          lspconfig.jdtls.setup({
+            init_options = {
+              bundles = require('spring_boot').java_extensions(),
+            },
+          })
+        else
+          lspconfig.jdtls.setup({})
+        end
+      else
+        return lsp_zero.noop
+      end
+    end
+  }
+})
+vim.g.rustaceanvim = {
+  server = {
+    capabilities = capabilities
+  },
+}
+-----------------
+-- lsp attach
+-----------------
 lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({
     buffer = bufnr,
@@ -143,12 +180,10 @@ lsp_zero.on_attach(function(client, bufnr)
   map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
   map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
   map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
-  -- inlayhints
-  if vim.fn.has('nvim-0.10') > 0 then
-    map({ "n", "x" }, "<leader>I", function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-    end, opts_nosilent)
-  end
+  -- inlay_hint
+  map({ "n", "x" }, "<leader>I", function()
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+  end, opts_nosilent)
   -- select range
   local ok, _ = pcall(function()
     vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
@@ -171,48 +206,6 @@ lsp_zero.on_attach(function(client, bufnr)
     vim.lsp.semantic_tokens.start(bufnr, client)
   end
 end)
------------------
--- mason lspconfig
------------------
-require("mason-lspconfig").setup({
-  ensure_installed = vim.g.ensure_installed,
-  handlers = {
-    lsp_zero.default_setup,
-    jdtls = lsp_zero.noop,
-    lua_ls = function()
-      lspconfig.lua_ls.setup({
-        filetypes = { "lua" },
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-          },
-        },
-      })
-    end,
-    gopls = function()
-      lspconfig.gopls.setup({
-        filetypes = { "go" },
-        settings = {
-          gopls = {
-            analyses = {
-              unusedparams = true,
-            },
-            staticcheck = true,
-            gofumpt = true,
-          },
-        },
-      })
-    end,
-    rust_analyzer = lsp_zero.noop,
-  }
-})
-vim.g.rustaceanvim = {
-  server = {
-    capabilities = lsp_zero.get_capabilities()
-  },
-}
 -----------------
 -- glance
 -----------------

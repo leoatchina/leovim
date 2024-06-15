@@ -3,7 +3,7 @@ if Installed('rust.vim')
     command! RustCommands call FzfCallCommands('RustCommands', 'Rust')
     nnoremap <buffer><silent><M-M> :RustCommands<Cr>
 endif
-if InstalledCoc()
+if PlannedCoc()
     nnoremap <buffer>\<Space> :CocCommand rust-analyzer.
 endif
 if Installed('vim-floaterm') && executable('cargo')
