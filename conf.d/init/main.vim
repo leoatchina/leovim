@@ -316,8 +316,6 @@ if exists('g:vscode')
     PlugAddOpt 'hop.nvim'
     luafile $LUA_DIR/hop.lua
 else
-    PlugAddOpt 'vim-easymotion'
-    PlugAddOpt 'vim-easymotion-chs'
     source $OPTIONAL_DIR/easymotion.vim
 endif
 " --------------------------
@@ -549,6 +547,16 @@ nnoremap <M-h>u :set ff=unix<Cr>:%s/\r//g<Cr>
 " Meta key
 " ------------------------------------
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
+if has('nvim') || HAS_GUI()
+    function! s:map_metacode_nop(key)
+        let mkey = "<M-" . a:key . ">"
+        exec printf("map %s <Nop>", mkey)
+    endfunction
+    for c in s:metacode_group
+        call s:map_metacode_nop(c)
+    endfor
+endif
+" NOTE: add metacode_group must be execute after map_metacode_nop
 for i in range(26)
     " 65 is ascii of A
     call add(s:metacode_group, nr2char(65 + i))
@@ -559,14 +567,6 @@ for i in range(10)
     " 48 is ascii of 0
     call add(s:metacode_group, nr2char(48 + i))
 endfor
-if has('nvim') || HAS_GUI()
-    function! s:map_metacode_nop(key)
-        exec "map <M-".a:key."> <Nop>"
-    endfunction
-    for c in s:metacode_group
-        call s:map_metacode_nop(c)
-    endfor
-endif
 " (neo)vim enhanced
 nnoremap <C-m> <Tab>
 nnoremap gQ gw

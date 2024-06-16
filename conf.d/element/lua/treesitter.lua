@@ -4,7 +4,6 @@ require("hlargs").setup({
 })
 require("nvim-treesitter.install").prefer_git = true
 require("nvim-treesitter.configs").setup({
-  parser_install_dir = vim.g.parser_install_dir,
   ensure_installed = vim.g.highlight_filetypes,
   sync_install = true,
   highlight = {

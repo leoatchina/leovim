@@ -63,6 +63,12 @@ elseif Require('cmp')
     else
         let s:smart_engine_select = 1
     endif
+elseif Require('coc')
+    if g:node_version >= 16.18 && (has('nvim-0.8.1') || has('patch-9.0.0438'))
+        let g:complete_engine = 'coc'
+    else
+        let s:smart_engine_select = 1
+    endif
 else
     let s:smart_engine_select = 1
 endif
