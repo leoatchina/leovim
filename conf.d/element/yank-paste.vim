@@ -137,7 +137,7 @@ endfor
 " Yank a line without leading whitespaces and line break
 nnoremap <leader>yu mp_yg_`p
 " Copy a line without leading whitespaces and line break to clipboard
-nnoremap <leader>yw mp_"+yg_`P
+nnoremap <leader>yw mp_"*yg_`p
 " Copy file path
 nnoremap <leader>yp :let @*=Expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
 " Copy file name
