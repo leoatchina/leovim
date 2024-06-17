@@ -353,6 +353,9 @@ if has('nvim') && PlannedCoc()
 elseif Installed('vim-floaterm') && executable('yazi') && UNIX()
     command! Yazi FloatermNew --wintype=float --position=center --width=0.8 --height=0.8 yazi
     nnoremap <silent><nowait><leader>e :Yazi<Cr>
+elseif Installed('vim-floaterm') && executable('ranger')
+    command! Ranger FloatermNew --wintype=float --position=center --width=0.8 --height=0.8 ranger
+    nnoremap <silent><nowait><leader>e :Ranger<Cr>
 elseif Installed('fern.vim')
     nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
 endif
