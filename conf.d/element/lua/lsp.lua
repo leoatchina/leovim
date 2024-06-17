@@ -105,8 +105,8 @@ require("mason-lspconfig").setup({
             analyses = {
               unusedparams = true,
             },
-            staticcheck = true,
-            gofumpt = true,
+            staticcheck = vim.g.go_exe_version > 1.1913,
+            gofumpt = vim.g.go_exe_version > 1.1913,
           },
         },
       })

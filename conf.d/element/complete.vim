@@ -32,6 +32,9 @@ if InstalledNvimLsp()
     if Require('web') && g:node_version > 14
         let g:ensure_installed += ['cssls', 'tsserver', 'eslint', 'html', 'vuels', 'angularls']
     endif
+    if Require('R') && g:R_exe != ''
+        let g:ensure_installed += ['r_language_server']
+    endif
     if Require('c')
         let g:ensure_installed += ['cmake']
         if g:clangd_exe != ''
@@ -41,8 +44,10 @@ if InstalledNvimLsp()
     if Require('rust') && g:cargo_exe != ''
         let g:ensure_installed += ['rust_analyzer']
     endif
-    if Require('R') && g:R_exe != ''
-        let g:ensure_installed += ['r_language_server']
+    if Require('go') && g:go_exe != ''
+        let g:go_exe_version = matchstr(execute(printf('!%s version', g:go_exe)), '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
+        let g:go_exe_version = StringToFloat(go_exe_version, 2)
+        let g:ensure_installed += ['gopls']
     endif
     if Installed('nvim-java', 'lua-async-await', 'nvim-java-refactor', 'nvim-java-core', 'nvim-java-test', 'nvim-java-dap')
         let g:nvim_java = 1
