@@ -113,12 +113,22 @@
   },
   // ctrl o
   {
-    "key": "ctrl+alt+o",
-    "command": "workbench.action.files.openFile"
-  },
-  {
     "key": "ctrl+o",
     "command": "-workbench.action.files.openFile"
+  },
+  {
+    "key": "ctrl+shift+o",
+    "command": "-editor.action.accessibleViewGoToSymbol",
+    "when": "accessibilityHelpIsShown && accessibleViewGoToSymbolSupported || accessibleViewGoToSymbolSupported && accessibleViewIsShown"
+  },
+  {
+    "key": "ctrl+shift+o",
+    "command": "-workbench.action.gotoSymbol",
+    "when": "!accessibilityHelpIsShown && !accessibleViewIsShown"
+  },
+  {
+    "key": "ctrl+shift+o",
+    "command": "workbench.action.files.openFile"
   },
   {
     "key": "ctrl+shift+alt+o",

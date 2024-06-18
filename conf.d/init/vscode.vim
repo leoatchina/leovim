@@ -28,9 +28,17 @@ nnoremap <C-.> <Cmd>lua require('vscode-neovim').action("keyboard-quickfix.openQ
 " open mru view
 nnoremap <leader>m <Cmd>lua require('vscode-neovim').action("workbench.action.openRecent")<Cr>
 " open view
-nnoremap <leader>e <Cmd>lua require('vscode-neovim').action("workbench.action.openView")<Cr>
+nnoremap <leader>s <Cmd>lua require('vscode-neovim').action("workbench.action.openView")<Cr>
 " open file
 nnoremap <leader>b <Cmd>lua require('vscode-neovim').action("workbench.action.quickOpen")<Cr>
+" marker
+nnoremap <leader>; <Cmd>lua require('vscode-neovim').action("editor.action.marker.nextInFiles")<Cr>
+nnoremap <leader>, <Cmd>lua require('vscode-neovim').action("editor.action.marker.prevInFiles")<Cr>
+" codeaction
+nnoremap <leader>a <Cmd>lua require('vscode-neovim').action("editor.action.sourceAction")<Cr>
+" symbol
+nnoremap <leader>t <Cmd>lua require('vscode-neovim').action("workbench.action.gotoSymbol")<Cr>
+nnoremap <leader>e <Cmd>lua require('vscode-neovim').action("editor.action.accessibleViewGoToSymbol")<Cr>
 " ------------------------
 " format
 " ------------------------
@@ -63,11 +71,6 @@ nnoremap J <Cmd>lua require('vscode-neovim').action("editor.debug.action.showDeb
 nnoremap <S-Cr> viB<C-Cr>
 nnoremap <leader>] <Cmd>lua require('vscode-neovim').action("editor.debug.action.goToNextBreakpoint")<Cr>
 nnoremap <leader>[ <Cmd>lua require('vscode-neovim').action("editor.debug.action.goToPreviousBreakpoint")<Cr>
-" marker
-nnoremap <leader>; <Cmd>lua require('vscode-neovim').action("editor.action.marker.nextInFiles")<Cr>
-nnoremap <leader>, <Cmd>lua require('vscode-neovim').action("editor.action.marker.prevInFiles")<Cr>
-" codeaction
-nnoremap <leader>a <Cmd>lua require('vscode-neovim').action("editor.action.sourceAction")<Cr>
 " ------------------------
 " window
 " ------------------------
