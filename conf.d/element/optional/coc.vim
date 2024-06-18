@@ -57,7 +57,7 @@ nnoremap <silent><M-l>, :CocPrev<Cr>
 nnoremap <silent><M-l><M-c> :CocFzfList<Cr>
 nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 " symbol
-nnoremap <silent><leader>s :Vista finder coc<Cr>
+nnoremap <silent><leader>t :Vista finder coc<Cr>
 nnoremap <silent><leader>S :CocFzfList symbols<Cr>
 inoremap <silent><C-x><C-x> <C-r>=CocActionAsync('showSignatureHelp')<Cr>
 " completion map

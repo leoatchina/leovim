@@ -161,7 +161,7 @@ lsp_zero.on_attach(function(client, bufnr)
   -- format
   map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts_silent)
   -- fzf-lsp
-  map("n", "<leader>s", [[<Cmd>Vista finder<Cr>]], opts_silent)
+  map("n", "<leader>t", [[<Cmd>Vista finder<Cr>]], opts_silent)
   map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts_silent)
   map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts_silent)
   map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts_silent)

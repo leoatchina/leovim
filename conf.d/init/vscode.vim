@@ -55,31 +55,13 @@ nnoremap <C-f> <Cmd>lua require('vscode-neovim').action("actions.find")<CR>
 " -------------------------------------
 " for debug or repl send or run
 " -------------------------------------
-nnoremap <S-Cr> viB<C-Cr>
 nnoremap J <Cmd>lua require('vscode-neovim').action("editor.debug.action.showDebugHover")<Cr>
-nnoremap <leader>q <Cmd>lua require('vscode-neovim').action("workbench.action.debug.disconnect")<Cr>
-nnoremap <leader>Q <Cmd>lua require('vscode-neovim').action("workbench.action.debug.stop")<Cr>
-nnoremap <leader>l <Cmd>lua require('vscode-neovim').action("workbench.action.debug.start")<Cr>
-nnoremap <leader>r <Cmd>lua require('vscode-neovim').action("workbench.action.debug.restart")<Cr>
-nnoremap <leader>d <Cmd>lua require('vscode-neovim').action("workbench.action.debug.continue")<Cr>
-nnoremap <leader>n <Cmd>lua require('vscode-neovim').action("workbench.action.debug.stepOver")<Cr>
-nnoremap <leader>o <Cmd>lua require('vscode-neovim').action("workbench.action.debug.stepOut")<Cr>
-nnoremap <leader>s <Cmd>lua require('vscode-neovim').action("workbench.action.debug.stepInto")<Cr>
-nnoremap <leader>i <Cmd>lua require('vscode-neovim').action("workbench.action.debug.stepIntoTarget")<Cr>
-nnoremap <leader>p <Cmd>lua require('vscode-neovim').action("workbench.action.debug.pause")<Cr>
-" breakpoints
-nnoremap <leader>b <Cmd>lua require('vscode-neovim').action("editor.debug.action.toggleBreakpoint")<Cr>
-nnoremap <leader>B <Cmd>lua require('vscode-neovim').action("workbench.debug.viewlet.action.removeAllBreakpoints")<Cr>
-nnoremap <leader>F <Cmd>lua require('vscode-neovim').action("workbench.debug.viewlet.action.addFunctionBreakpointAction")<Cr>
-nnoremap <leader>C <Cmd>lua require('vscode-neovim').action("editor.debug.action.conditionalBreakpoint")<Cr>
-nnoremap <leader>t <Cmd>lua require('vscode-neovim').action("debug.enableOrDisableBreakpoint")<Cr>
-nnoremap <leader>d <Cmd>lua require('vscode-neovim').action("workbench.debug.viewlet.action.disableAllBreakpoints")<Cr>
-nnoremap <leader>e <Cmd>lua require('vscode-neovim').action("workbench.debug.viewlet.action.enableAllBreakpoints")<Cr>
-nnoremap <leader>[ <Cmd>lua require('vscode-neovim').action("editor.debug.action.goToPreviousBreakpoint")<Cr>
+nnoremap <S-Cr> viB<C-Cr>
 nnoremap <leader>] <Cmd>lua require('vscode-neovim').action("editor.debug.action.goToNextBreakpoint")<Cr>
+nnoremap <leader>[ <Cmd>lua require('vscode-neovim').action("editor.debug.action.goToPreviousBreakpoint")<Cr>
 " marker
-nnoremap <leader>, <Cmd>lua require('vscode-neovim').action("editor.action.marker.prevInFiles")<Cr>
 nnoremap <leader>; <Cmd>lua require('vscode-neovim').action("editor.action.marker.nextInFiles")<Cr>
+nnoremap <leader>, <Cmd>lua require('vscode-neovim').action("editor.action.marker.prevInFiles")<Cr>
 " codeaction
 nnoremap <leader>a <Cmd>lua require('vscode-neovim').action("editor.action.sourceAction")<Cr>
 " ------------------------
