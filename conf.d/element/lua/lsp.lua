@@ -1,7 +1,11 @@
 local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
-local lsp_capabilities = require("lsp-selection-range").update_capabilities({})
+if Installed('cmp-nvim-lsp') then
+  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+else
+  local lsp_capabilities = require("lsp-selection-range").update_capabilities({})
+end
 -----------------
 -- neoconf
 -----------------
@@ -149,10 +153,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local bufnr = event.bufnr
     local opts_silent = { noremap = true, silent = true, buffer = bufnr }
     local opts_nosilent = { noremap = true, silent = false, buffer = bufnr }
-    if capabilities.completionProvider then
+    if lsp_capabilities and lsp_capabilities.completionProvider then
       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
     end
-    if capabilities.definitionProvider then
+    if lsp_capabilities and lsp_capabilities.definitionProvider then
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
     end
     -- signatureHelp
@@ -192,7 +196,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
     end
     -- semantic token highlight
-    if capabilities.semanticTokensProvider and capabilities.semanticTokensProvider.full then
+    if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
       local augroup = vim.api.nvim_create_augroup("SemanticTokens", {})
       autocmd("TextChanged", {
         group = augroup,
