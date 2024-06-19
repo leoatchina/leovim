@@ -18,7 +18,7 @@ if Installed('tagbar')
                 \ }
 elseif Installed('vista.vim')
     function! s:check_vista(nr) abort
-        return s:check_buf_ft('vista', a:nr)
+        return s:check_buf_ft('vista', a:nr) || s:check_buf_ft('vista_kind', a:nr)
     endfunction
     let g:sidebars.symbol = {
                 \ 'position': 'left',
