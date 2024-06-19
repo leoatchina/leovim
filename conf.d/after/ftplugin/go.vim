@@ -4,11 +4,7 @@ if Installed('vim-go')
     let g:go_doc_balloon = 0
     let g:go_def_mapping_enabled = 0
     nnoremap <buffer><silent>gl :GoDefPop<Cr>
-    nnoremap <buffer><silent>gh :GoCallers<Cr>
-    nnoremap <buffer><silent><C-g> :GoDef<Cr>
     nnoremap <buffer><silent><M-?> :GoImpl<Cr>
-    nnoremap <buffer><silent><M-.> :GoImplements<Cr>
-    nnoremap <buffer><silent><M-/> :GoReferrers<Cr>
     nnoremap <buffer><silent><leader>A :GoImports<Cr>
     nnoremap <buffer><silent><M-M> :GoCommands<Cr>
     nnoremap <buffer><silent>,d :GoDeclsDir<Cr>
@@ -16,14 +12,19 @@ if Installed('vim-go')
     nnoremap <buffer><silent>,a :GoAlternate<Cr>
     if AdvCompEngine()
         nnoremap <buffer><silent>gx :GoDoc<Cr>
+    else
+        nnoremap <buffer><silent><C-g> :GoDef<Cr>
+        nnoremap <buffer><silent><M-/> :GoReferrers<Cr>
+        nnoremap <buffer><silent><M-.> :GoImplements<Cr>
+        nnoremap <buffer><silent>gh :GoCallers<Cr>
     endif
     let g:go_doc_keywordprg_enabled = !AdvCompEngine()
 endif
 " NOTE: below in order to be comparable with vscode-neovim
 if Installed('coc.nvim')
-    nmap <buffer>gtj :CocCommand go.tags.add json<cr>
-    nmap <buffer>gty :CocCommand go.tags.add yaml<cr>
-    nmap <buffer>gtx :CocCommand go.tags.clear<cr>
+    nmap <buffer>,tj :CocCommand go.tags.add json<cr>
+    nmap <buffer>,ty :CocCommand go.tags.add yaml<cr>
+    nmap <buffer>,tx :CocCommand go.tags.clear<cr>
 endif
 if Installed('vim-floaterm') && executable('go')
     nnoremap <buffer><M-B> :call SmartRunTerm(printf("time go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "smart")<Cr>
