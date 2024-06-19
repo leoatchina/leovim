@@ -76,7 +76,7 @@
 - [x] leaderf gtags bug 
 - [x] targets.vim bug
 - [x] yank optimize
-- [ ] delete lsp_zero 
+- [x] delete lsp_zero 
 - [ ] ====== My plugins ======
 - [ ] vim-funky
   - [x] open bug
