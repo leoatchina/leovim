@@ -120,7 +120,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'josa42/nvim-lightline-lsp'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'fgheng/winbar.nvim'
-    PlugAdd 'VonHeikemen/lsp-zero.nvim'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
@@ -284,7 +283,6 @@ function! InstalledNvimLsp() abort
                 \ 'glance.nvim',
                 \ 'winbar.nvim',
                 \ 'actions-preview.nvim',
-                \ 'lsp-zero.nvim',
                 \ 'symbol-usage.nvim',
                 \ 'nvim-lspimport',
                 \ 'neoconf.nvim',

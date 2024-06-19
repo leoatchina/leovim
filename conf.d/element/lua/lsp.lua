@@ -1,6 +1,7 @@
 local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
+local lsp_capabilities = require("lsp-selection-range").update_capabilities({})
 -----------------
 -- neoconf
 -----------------
@@ -18,11 +19,6 @@ map("n", "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
 map("n", "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
 map("n", "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
 map("n", "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
------------------
--- lsp_zero
------------------
-local lsp_zero = require('lsp-zero')
-local capabilities = require("lsp-selection-range").update_capabilities(lsp_zero.get_capabilities())
 -----------------------
 -- fzf_lsp
 -----------------------
@@ -46,6 +42,7 @@ vim.api.nvim_set_hl(0, 'SymbolUsageContent', { bg = hl('CursorLine').bg, fg = hl
 vim.api.nvim_set_hl(0, 'SymbolUsageRef', { fg = hl('Function').fg, bg = hl('CursorLine').bg, italic = true })
 vim.api.nvim_set_hl(0, 'SymbolUsageDef', { fg = hl('Type').fg, bg = hl('CursorLine').bg, italic = true })
 vim.api.nvim_set_hl(0, 'SymbolUsageImpl', { fg = hl('@keyword').fg, bg = hl('CursorLine').bg, italic = true })
+-- symbol_format
 local function text_format(symbol)
   local res = {}
   local round_start = { '', 'SymbolUsageRounding' }
@@ -76,17 +73,22 @@ require('symbol-usage').setup({
     filetypes = { 'txt', 'log' },
   },
 })
------------------
+-------------------------
 -- mason lspconfig
------------------
+-------------------------
 local lspconfig = require("lspconfig")
+local default_setup = function(server)
+  lspconfig[server].setup({
+    capabilities = lsp_capabilities,
+  })
+end
 require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed,
   handlers = {
-    lsp_zero.default_setup,
-    rust_analyzer = lsp_zero.noop,
+    default_setup,
     lua_ls = function()
       lspconfig.lua_ls.setup({
+        capabilities = lsp_capabilities,
         filetypes = { "lua" },
         settings = {
           Lua = {
@@ -100,6 +102,7 @@ require("mason-lspconfig").setup({
     gopls = function()
       lspconfig.gopls.setup({
         filetypes = { "go" },
+        capabilities = lsp_capabilities,
         settings = {
           gopls = {
             analyses = {
@@ -121,91 +124,88 @@ require("mason-lspconfig").setup({
           })
           require('spring_boot').init_lsp_commands()
           lspconfig.jdtls.setup({
+            capabilities = lsp_capabilities,
             init_options = {
               bundles = require('spring_boot').java_extensions(),
             },
           })
         else
-          lspconfig.jdtls.setup({})
+          lspconfig.jdtls.setup({
+            capabilities = lsp_capabilities,
+          })
         end
       else
-        return lsp_zero.noop
+        return default_setup
       end
     end
   }
 })
-vim.g.rustaceanvim = {
-  server = {
-    capabilities = capabilities
-  },
-}
 -----------------
 -- lsp attach
 -----------------
-lsp_zero.on_attach(function(client, bufnr)
-  lsp_zero.default_keymaps({
-    buffer = bufnr,
-    preserve_mappings = false,
-    exclude = { 'K', 'gd', 'gi', 'go', 'gr', 'gl', '<F3>', '<F4>' }
-  })
-  local opts_silent = { noremap = true, silent = true, buffer = bufnr }
-  local opts_nosilent = { noremap = true, silent = false, buffer = bufnr }
-  if capabilities.completionProvider then
-    vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local bufnr = event.bufnr
+    local opts_silent = { noremap = true, silent = true, buffer = bufnr }
+    local opts_nosilent = { noremap = true, silent = false, buffer = bufnr }
+    if capabilities.completionProvider then
+      vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+    end
+    if capabilities.definitionProvider then
+      vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+    end
+    -- signatureHelp
+    map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
+    -- format
+    map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts_silent)
+    -- fzf-lsp
+    map("n", "<leader>t", [[<Cmd>Vista finder<Cr>]], opts_silent)
+    map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts_silent)
+    map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts_silent)
+    map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts_silent)
+    -- list workspace folder && omnifunc
+    map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
+    -- lsp info/restart
+    map("n", "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
+    map("n", "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
+    -- diagnostic error
+    map('n', '[d', [[<Cmd>lua vim.diagnostic.goto_prev()<CR>]], opts_silent)
+    map('n', ']d', [[<Cmd>lua vim.diagnostic.goto_next()<CR>]], opts_silent)
+    map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
+    map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
+    -- codeaction && codelens
+    map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
+    map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
+    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
+    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
+    -- inlay_hint
+    map({ "n", "x" }, "<leader>I", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+    end, opts_nosilent)
+    -- select range
+    local ok, _ = pcall(function()
+      vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
+    end, bufnr)
+    if not ok then
+      map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
+      map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
+    end
+    -- semantic token highlight
+    if capabilities.semanticTokensProvider and capabilities.semanticTokensProvider.full then
+      local augroup = vim.api.nvim_create_augroup("SemanticTokens", {})
+      autocmd("TextChanged", {
+        group = augroup,
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.semantic_tokens.force_refresh(bufnr)
+        end,
+      })
+      -- fire it first time on load as well
+      vim.lsp.semantic_tokens.start(bufnr, client)
+    end
   end
-  if capabilities.definitionProvider then
-    vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
-  end
-  -- signatureHelp
-  map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
-  -- format
-  map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts_silent)
-  -- fzf-lsp
-  map("n", "<leader>t", [[<Cmd>Vista finder<Cr>]], opts_silent)
-  map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts_silent)
-  map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts_silent)
-  map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts_silent)
-  -- list workspace folder && omnifunc
-  map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
-  -- lsp info/restart
-  map("n", "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
-  map("n", "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
-  -- diagnostic error
-  map('n', '[d', [[<Cmd>lua vim.diagnostic.goto_prev()<CR>]], opts_silent)
-  map('n', ']d', [[<Cmd>lua vim.diagnostic.goto_next()<CR>]], opts_silent)
-  map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
-  map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
-  -- codeaction && codelens
-  map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
-  map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
-  map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
-  map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
-  -- inlay_hint
-  map({ "n", "x" }, "<leader>I", function()
-    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-  end, opts_nosilent)
-  -- select range
-  local ok, _ = pcall(function()
-    vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
-  end, bufnr)
-  if not ok then
-    map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
-    map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
-  end
-  -- semantic token highlight
-  if capabilities.semanticTokensProvider and capabilities.semanticTokensProvider.full then
-    local augroup = vim.api.nvim_create_augroup("SemanticTokens", {})
-    autocmd("TextChanged", {
-      group = augroup,
-      buffer = bufnr,
-      callback = function()
-        vim.lsp.semantic_tokens.force_refresh(bufnr)
-      end,
-    })
-    -- fire it first time on load as well
-    vim.lsp.semantic_tokens.start(bufnr, client)
-  end
-end)
+})
 -----------------
 -- glance
 -----------------
@@ -267,15 +267,9 @@ glance.setup({
     enable = false,
   },
 })
--- border
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = "single",
-})
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = "single",
-  close_events = { "BufHidden", "InsertLeave" },
-})
+------------------------------
 -- winbar
+------------------------------
 require("winbar").setup({
   enabled = true,
   show_file_path = true,
@@ -331,6 +325,17 @@ autocmd({ "BufEnter", "BufRead", "BufReadPost", "BufCreate" }, {
       vim.wo.winbar = ""
     end
   end,
+})
+------------------
+-- others
+------------------
+-- border
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = "single",
+})
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+  border = "single",
+  close_events = { "BufHidden", "InsertLeave" },
 })
 -- lint
 autocmd({ "BufWritePost" }, {
