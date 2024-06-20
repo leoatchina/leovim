@@ -34,17 +34,6 @@ endif
 " basic terminal map
 " --------------------------
 tmap <expr><C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
-" tab control
-tnoremap <silent><M-1> <C-\><C-n>:tabn1<Cr>
-tnoremap <silent><M-2> <C-\><C-n>:tabn2<Cr>
-tnoremap <silent><M-3> <C-\><C-n>:tabn3<Cr>
-tnoremap <silent><M-4> <C-\><C-n>:tabn4<Cr>
-tnoremap <silent><M-5> <C-\><C-n>:tabn5<Cr>
-tnoremap <silent><M-6> <C-\><C-n>:tabn6<Cr>
-tnoremap <silent><M-7> <C-\><C-n>:tabn7<Cr>
-tnoremap <silent><M-8> <C-\><C-n>:tabn8<Cr>
-tnoremap <silent><M-9> <C-\><C-n>:tabn9<Cr>
-tnoremap <silent><M-0> <C-\><C-n>:tablast<Cr>
 " --------------------------
 " open terminal
 " --------------------------
