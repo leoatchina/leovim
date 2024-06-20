@@ -194,20 +194,19 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
     map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
     map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
-    -- inlay_hint
-    if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
-      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      map({ "n", "x" }, "<leader>I", function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-      end, opts)
-    end
-    -- select range && semantic token highlight
+    -- select range
     local ok, _ = pcall(function()
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
       map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
       map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
+    end
+    local ok, _ = pcall(function()
+      vim.treesitter.get_parser(bufnr)
+    end, bufnr)
+    -- semantic token highlight
+    if not ok then
       if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
         autocmd("TextChanged", {
           group = vim.api.nvim_create_augroup("SemanticTokens", {}),
@@ -219,6 +218,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
         -- fire it first time on load as well
         vim.lsp.semantic_tokens.start(bufnr, client)
       end
+    end
+    -- inlay_hint
+    if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+      map({ "n", "x" }, "<leader>I", function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+      end, opts_echo)
     end
   end
 })
