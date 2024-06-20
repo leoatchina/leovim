@@ -114,6 +114,9 @@ endfunction
 function! RootDir()
     return GitRootDir() == '' ? '' : GitRootDir() . '/'
 endfunction
+function! AbsPath()
+    return fnameescape(substitute(Expand('%:p'), '\\', '/', 'g'))
+endfunction
 let g:lightline = {
                 \ 'component': {
                     \ 'lineinfo': '%l/%L:%c'
@@ -122,17 +125,21 @@ let g:lightline = {
                     \ 'readonly': 'FileReadonly',
                     \ 'gitbranch': 'GitBranch',
                     \ 'mode': 'Mode',
+                    \ 'abspath': 'AbsPath',
                     \ },
                 \ 'component_expand': {},
                 \ 'component_type': {
                     \ 'gitbranch': 'info',
+                    \ 'buffers': 'tabsel'
                     \ },
-                \ 'active': {}
+                \ 'active': {},
+                \ 'inactive':{}
             \ }
 "------------------------
 " right part
 "------------------------
 let g:lightline.active.right = [['gitbranch', 'filetype', 'fileencoding', 'lineinfo']]
+let g:lightline.inactive.right = [['gitbranch', 'filetype', 'fileencoding', 'lineinfo']]
 if Installed('lightline-ale')
     let g:lightline.component_expand =  {
                 \ 'linter_checking': 'lightline#ale#checking',
@@ -216,11 +223,11 @@ function! Buffers()
     return res
 endfunction
 let g:lightline['component_expand']['buffers'] = 'Buffers'
-let g:lightline['component_type']['buffers'] = 'tabsel'
 "------------------------
 " left part
 "------------------------
 let g:lightline.active.left = [['mode'], ['buffers', 'paste']]
+let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------
 " lightline themes
 " ------------------------
