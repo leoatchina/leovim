@@ -1,11 +1,7 @@
 local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
-if Installed('cmp-nvim-lsp') then
-  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-else
-  local lsp_capabilities = require("lsp-selection-range").update_capabilities({})
-end
+local lsp_capabilities = require("lsp-selection-range").update_capabilities({})
 -----------------
 -- neoconf
 -----------------
@@ -205,26 +201,24 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
       end, opts)
     end
-    -- select range
+    -- select range && semantic token highlight
     local ok, _ = pcall(function()
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
       map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
       map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
-    end
-    -- semantic token highlight
-    if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
-      local augroup = vim.api.nvim_create_augroup("SemanticTokens", {})
-      autocmd("TextChanged", {
-        group = augroup,
-        buffer = bufnr,
-        callback = function()
-          vim.lsp.semantic_tokens.force_refresh(bufnr)
-        end,
-      })
-      -- fire it first time on load as well
-      vim.lsp.semantic_tokens.start(bufnr, client)
+      if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
+        autocmd("TextChanged", {
+          group = vim.api.nvim_create_augroup("SemanticTokens", {}),
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.semantic_tokens.force_refresh(bufnr)
+          end,
+        })
+        -- fire it first time on load as well
+        vim.lsp.semantic_tokens.start(bufnr, client)
+      end
     end
   end
 })

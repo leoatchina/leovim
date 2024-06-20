@@ -63,8 +63,8 @@ if Installed("nvim-treesitter-textobjects") then
           -- nvim_buf_set_keymap) which plugins like which-key display
           ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
           -- You can also use captures from other query groups like `locals.scm`
-          ['al'] = '@loop.outer',
-          ['il'] = '@loop.inner',
+          ['aL'] = '@loop.outer',
+          ['iL'] = '@loop.inner',
         },
         selection_modes = {
           ["@parameter.outer"] = "v", -- charwise
@@ -82,7 +82,6 @@ if Installed("nvim-treesitter-textobjects") then
           ["]l"] = "@loop.*",
           ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
         },
-        -- TODO:  sm to jump up, need to custom queries
         -- https://tree-sitter.github.io/tree-sitter/using-parsers#pattern-matching-with-queries
         goto_previous_start = {
           ["sm"] = { query = { "@block.outer", "@function.outer", "@class.outer" } },
