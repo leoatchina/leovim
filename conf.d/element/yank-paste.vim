@@ -138,12 +138,21 @@ endfor
 nnoremap <leader>yu mp_yg_`p
 " Copy a line without leading whitespaces and line break to clipboard
 nnoremap <leader>yw mp_"*yg_`p
-" Copy file path
-nnoremap <leader>yp :let @*=Expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
-" Copy file name
-nnoremap <leader>yf :let @*=Expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
-" Copy bookmark position reference
-nnoremap <leader>ym :let @*=Expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
+if has('clipboard')
+    " Copy file path
+    nnoremap <leader>yp :let @*=Expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
+    " Copy file name
+    nnoremap <leader>yf :let @*=Expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
+    " Copy bookmark position reference
+    nnoremap <leader>ym :let @*=Expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
+else
+    " Copy file path
+    nnoremap <leader>yp :let @"=Expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
+    " Copy file name
+    nnoremap <leader>yf :let @"=Expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
+    " Copy bookmark position reference
+    nnoremap <leader>ym :let @"=Expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
+endif
 " ------------------------
 " pastemode toggle
 " ------------------------
