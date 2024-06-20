@@ -152,7 +152,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(event)
     local bufnr = event.bufnr
     local opts_silent = { noremap = true, silent = true, buffer = bufnr }
-    local opts_nosilent = { noremap = true, silent = false, buffer = bufnr }
+    local opts_echo = { noremap = true, silent = false, buffer = bufnr }
     if lsp_capabilities and lsp_capabilities.completionProvider then
       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
     end
@@ -163,6 +163,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
     -- format
     map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts_silent)
+    -- Rename
+    map({ "n", "x" }, "<F2>", vim.lsp.buf.rename, opts_echo)
     -- fzf-lsp
     map("n", "<leader>t", [[<Cmd>Vista finder<Cr>]], opts_silent)
     map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts_silent)
@@ -174,19 +176,19 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map("n", "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
     map("n", "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
     -- diagnostic error
-    map('n', '[d', [[<Cmd>lua vim.diagnostic.goto_prev()<CR>]], opts_silent)
-    map('n', ']d', [[<Cmd>lua vim.diagnostic.goto_next()<CR>]], opts_silent)
+    map('n', '[d', vim.diagnostic.goto_prev, opts_silent)
+    map('n', ']d', vim.diagnostic.goto_next, opts_silent)
     map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
     map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
     -- codeaction && codelens
     map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
     map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
-    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_nosilent)
-    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_nosilent)
+    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
+    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
     -- inlay_hint
     map({ "n", "x" }, "<leader>I", function()
       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-    end, opts_nosilent)
+    end, opts)
     -- select range
     local ok, _ = pcall(function()
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
