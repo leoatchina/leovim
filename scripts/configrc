@@ -25,6 +25,7 @@ export PATH=$HOME/.local/bin${PATH:+:${PATH}}
 export GOPATH=$HOME/go
 [ -d $GOPATH ] && export PATH=$GOPATH/bin${PATH:+:${PATH}} && export GOBIN=$GOPATH/bin
 
+alias ..="cd ../"
 alias MV="rsync -ravpzHogt --progress --size-only --remove-source-files "
 alias SYNC="rsync -ravpzHogt --progress --size-only --delete "
 
