@@ -132,22 +132,6 @@ if Planned('vim-gutentags')
                         let cmd = printf('!rm -f %s' % path)
                     endif
                     call add(del_cmds, cmd)
-                    let gpath = substitute(path, '-.tags$', '', 'g')
-                    if isdirectory(gpath)
-                        if WINDOWS()
-                            let cmd = printf('!del %s/* /a /q' % gpath)
-                        else
-                            let cmd = printf('!rm -f %s/*' % gpath)
-                        endif
-                        call add(del_cmds, cmd)
-                    endif
-                elseif isdirectory(path)
-                    if WINDOWS()
-                        let cmd = printf('!del %s/* /a /q' % path)
-                    else
-                        let cmd = printf('!rm -f %s/*' % path)
-                    endif
-                    call add(del_cmds, cmd)
                 endif
             endfor
             for del_cmd in del_cmds
@@ -159,9 +143,9 @@ if Planned('vim-gutentags')
     endfunction
     command! -bar GutentagsDelTags call s:delete_tags()
     command! GutentagsDelTagsAndUpdate GutentagsDelTags | GutentagsUpdate
-    nnoremap <leader>g<Cr> :GutentagsDelTagsAndUpdate<Cr>
-    nnoremap <leader>g<Tab> :GutentagsUpdate<Cr>
-    nnoremap <leader>g<Space> :GutentagsDelTags<Cr>
+    nnoremap <leader>g<Cr> :GutentagsUpdate<Cr>
+    nnoremap <leader>g<Tab> :GutentagsDelTags<Cr>
+    nnoremap <leader>g<Space> :GutentagsDelTagsAndUpdate<Cr>
     command! GutentagsCommands call FzfCallCommands('GutentagsCommands', 'Gutentags')
     nnoremap <leader>gc :GutentagsCommands<Cr>
 endif
