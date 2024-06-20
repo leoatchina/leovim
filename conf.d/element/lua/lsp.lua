@@ -92,8 +92,14 @@ require("mason-lspconfig").setup({
     default_setup,
     lua_ls = function()
       lspconfig.lua_ls.setup({
-        capabilities = lsp_capabilities,
         filetypes = { "lua" },
+        capabilities = lsp_capabilities,
+        hint = {
+          enable = true,
+        },
+        codeLens = {
+          enable = true,
+        },
         settings = {
           Lua = {
             diagnostics = {
@@ -107,6 +113,12 @@ require("mason-lspconfig").setup({
       lspconfig.gopls.setup({
         filetypes = { "go" },
         capabilities = lsp_capabilities,
+        hint = {
+          enable = true,
+        },
+        codeLens = {
+          enable = true,
+        },
         settings = {
           gopls = {
             analyses = {
@@ -149,8 +161,9 @@ require("mason-lspconfig").setup({
 -----------------
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
-  callback = function(event)
-    local bufnr = event.bufnr
+  callback = function(args)
+    local bufnr = args.bufnr
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
     local opts_silent = { noremap = true, silent = true, buffer = bufnr }
     local opts_echo = { noremap = true, silent = false, buffer = bufnr }
     if lsp_capabilities and lsp_capabilities.completionProvider then
@@ -186,9 +199,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
     map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
     -- inlay_hint
-    map({ "n", "x" }, "<leader>I", function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-    end, opts)
+    if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+      map({ "n", "x" }, "<leader>I", function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+      end, opts)
+    end
     -- select range
     local ok, _ = pcall(function()
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
