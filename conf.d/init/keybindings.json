@@ -178,18 +178,25 @@
     "command": "typescript.goToSourceDefinition",
     "when": "editorTextFocus && editorLangId == 'typescript'"
   },
-  // implementation
-  {
-    "key": "alt+.",
-    "command": "editor.action.peekImplementation",
-    "when": "editorTextFocus && !isInEmbeddedEditor"
-  },
-  // typeDefinition
+  // type_definition
   {
     "key": "shift+alt+/",
     "command": "editor.action.peekTypeDefinition",
     "when": "editorTextFocus && !isInEmbeddedEditor"
   },
+  // implementation
+  {
+    "key": "alt+.",
+    "command": "-auto-close-tag.closeTag"
+  },
+  {
+    "key": "alt+.",
+    "command": "references-view.findImplementations"
+  },
+  {
+    "key": "shift+alt+'",
+    "command": "references-view.showCallHierarchy"
+  }
   // references
   {
     "key": "alt+/",
@@ -211,16 +218,6 @@
     "key": "shift+alt+h",
     "command": "-references-view.showCallHierarchy",
     "when": "editorHasCallHierarchyProvider"
-  },
-  {
-    "key": "alt+.",
-    "command": "editor.showCallHierarchy",
-    "when": "editorHasCallHierarchyProvider && editorTextFocus && !inReferenceSearchEditor"
-  },
-  {
-    "key": "alt+.",
-    "command": "references-view.showCallHierarchy",
-    "when": "editorHasCallHierarchyProvider && inReferenceSearchEditor"
   },
   {
     "key": "alt+l",
