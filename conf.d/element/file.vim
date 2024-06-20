@@ -647,3 +647,11 @@ if executable('code')
     command! OpenFileLinkInVSCode call s:open_file_in_editor("code", getline("."), col("."))
     nnoremap <silent><M-j>f :OpenFileLinkInVSCode<cr>
 endif
+" ------------------
+" delete tmp files
+" ------------------
+if WINDOWS()
+    nnoremap <leader>x :!powershell <C-r>=Expand("~/_leovim.clean.cmd")<Cr><Cr> \| e %<Cr><C-o>
+else
+    nnoremap <leader>x :!bash <C-r>=Expand("~/.leovim.clean")<Cr><Cr> \| e %<Cr><C-o>
+endif

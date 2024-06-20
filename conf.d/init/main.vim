@@ -933,6 +933,17 @@ command! PlugOptUpdate call s:plug_update()
 noremap <silent><leader>U :PlugOptUpdate<Cr>
 call plug#end()
 " ------------------------------
+" set $PATH
+" ------------------------------
+let mason_bin = Expand('~/.leovim.d/mason/bin')
+if g:complete_engine != 'cmp' && isdirectory(mason_bin) && $PATH !~ 'mason/bin'
+    if WINDOWS()
+        let $PATH = mason_bin . ';' . $PATH
+    else
+        let $PATH = mason_bin . ':' . $PATH
+    endif
+endif
+" ------------------------------
 " set installed
 " ------------------------------
 for [plug, value] in items(g:plugs)
@@ -942,30 +953,11 @@ for [plug, value] in items(g:plugs)
     endif
 endfor
 " ------------------------------
-" set $PATH
-" ------------------------------
-let mason_bin = expand('~/.leovim.d/mason/bin')
-if g:complete_engine != 'cmp' && isdirectory(mason_bin)
-    if WINDOWS()
-        let $PATH = mason_bin . ';' . $PATH
-    else
-        let $PATH = mason_bin . ':' . $PATH
-    endif
-endif
-" ------------------------------
 " source config cfg
 " ------------------------------
 for vim in split(glob("$ELEMENT_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
-" ------------------
-" delete tmp files
-" ------------------
-if WINDOWS()
-    nnoremap <leader>x :!powershell <C-r>=Expand("~/_leovim.clean.cmd")<Cr><Cr> \| e %<Cr><C-o>
-else
-    nnoremap <leader>x :!bash <C-r>=Expand("~/.leovim.clean")<Cr><Cr> \| e %<Cr><C-o>
-endif
 " ----------------------
 " <M-Key> map for vim
 " ----------------------
