@@ -143,6 +143,9 @@ if Planned('vim-vsnip')
         nnoremap <silent><M-h>s :FzfFiles ~/.leovim/snippets<Cr>
     endif
     if PlannedCoc()
+        if Installed('coc.nvim')
+            call coc#config("snippets.userSnippetsDirectory", Expand("~/.leovim/snippets"))
+        endif
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
         smap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'

@@ -1,3 +1,7 @@
+" ------------------------
+" coc-fzf
+" ------------------------
+let g:coc_fzf_location_delay = 100
 " ----------------------------
 " Disable file with size > 1MB
 " ----------------------------
@@ -136,27 +140,6 @@ xmap ag <Plug>(coc-git-chunk-outer)
 nmap <leader>vg vig
 nmap <leader>vG vag
 " ------------------------
-" symbol line
-" ------------------------
-if has('nvim')
-    call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
-    luafile $LUA_DIR/coc.lua
-else
-    call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
-endif
-augroup FixCocColorScheme
-    autocmd!
-    autocmd ColorScheme edge,sonokai,gruvbox-material,gruvbox hi! CocExplorerIndentLine ctermbg=NONE guibg=NONE
-augroup END
-" ------------------------
-" snippets
-" ------------------------
-call coc#config("snippets.userSnippetsDirectory", expand("~/.leovim/vsnip"))
-" ------------------------
-" coc-fzf
-" ------------------------
-let g:coc_fzf_location_delay = 100
-" ------------------------
 " textobject using coc lsp
 " ------------------------
 xmap if <Plug>(coc-funcobj-i)
@@ -167,3 +150,24 @@ xmap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ic <Plug>(coc-classobj-i)
 omap ac <Plug>(coc-classobj-a)
+" ------------------------
+" symbol line and other
+" ------------------------
+if has('nvim')
+    call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
+    luafile $LUA_DIR/coc.lua
+else
+    call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
+endif
+" ------------------------
+" ColorScheme
+" ------------------------
+if Planned('nvim-treesitter')
+    call coc#config('go.goplsOptions.semanticTokens', v:false)
+else
+    call coc#config('go.goplsOptions.semanticTokens', v:true)
+endif
+augroup FixCocColorScheme
+    autocmd!
+    autocmd ColorScheme edge,sonokai,gruvbox-material,gruvbox hi! CocExplorerIndentLine ctermbg=NONE guibg=NONE
+augroup END
