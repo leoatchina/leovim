@@ -321,9 +321,9 @@ elseif Require('moonfly')
 elseif g:complete_engine == 'apm'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'mcm'
-    call SetScheme('gruvbox-material', 'gruvbox')
+    call SetScheme('sonokai', 'sublime')
 elseif g:complete_engine == 'vcm'
-    call SetScheme('everforest', 'deus')
+    call SetScheme('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'cmp'
     if InstalledNvimLsp()
         call SetScheme('catppuccin', 'codedark')
@@ -334,7 +334,7 @@ elseif g:complete_engine == 'coc'
     if has('nvim')
         call SetScheme('duskfox', 'hybrid')
     else
-        call SetScheme('sonokai', 'sublime')
+        call SetScheme('everforest', 'deus')
     endif
 else
     colorscheme hybrid

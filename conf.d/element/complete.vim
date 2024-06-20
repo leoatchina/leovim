@@ -247,3 +247,10 @@ endif
 if Planned('pear-tree')
     let g:pear_tree_map_special_keys = 0
 endif
+if Installed('vim-go')
+    if AdvCompEngine()
+        let g:go_doc_keywordprg_enabled = 0
+    else
+        let g:go_doc_keywordprg_enabled = 1
+    endif
+endif
