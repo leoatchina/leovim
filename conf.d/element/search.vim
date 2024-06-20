@@ -239,19 +239,13 @@ if PlannedFzf()
     command! FzfSearchAllLast call s:fzf_search(2)
     command! -nargs=1 FzfSearchAll call s:fzf_search(2, <q-args>)
 endif
+" set search_tool && search all command
 if exists(":LeaderfSearchAll")
-    let g:searchall = 'LeaderfSearchAll'
-    if PlannedFzf()
-        let g:search_tool = "fzf-leaderf"
-    else
-        let g:search_tool = "leaderf"
-    endif
     nnoremap <C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
     xnoremap <C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
-    nnoremap <C-f>] :LeaderfSearch <C-r><C-w><Cr>
-    xnoremap <C-f>] :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
     nnoremap <C-f>/ :LeaderfSearchAll<Space>
-    nnoremap <C-f>? :LeaderfSearch<Space>
+    nnoremap <C-f><C-f> :LeaderfSearch<Space>
+    xnoremap <C-f><C-f> :LeaderfSearch <C-r>=GetVisualSelection()<Cr>
     " recall previous next recall
     nnoremap <silent><nowait><C-f>; :Leaderf rg --next<Cr>
     nnoremap <silent><nowait><C-f>, :Leaderf rg --previous<Cr>
@@ -275,19 +269,30 @@ if exists(":LeaderfSearchAll")
     nnoremap <silent><nowait>,?  :Leaderf rg --no-ignore --fuzzy -L -S<Cr>
     nnoremap <silent><nowait>,\  :Leaderf rg --no-ignore --fuzzy -L -S --wd-mode=f --cword<Cr>
     nnoremap <silent><nowait>,\| :Leaderf rg --no-ignore --fuzzy -L -S --cword<Cr>
-elseif PlannedFzf()
-    let g:searchall = 'FzfSearchAll'
-    let g:search_tool = 'fzf'
-    " searchall
-    nnoremap <silent><nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
-    xnoremap <silent><nowait><C-f><Cr> :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
-    nnoremap <silent><nowait><C-f>. :FzfSearchAllLast<Cr>
-    nnoremap <silent><nowait><C-f>/ :FzfSearchAll<Space>
+endif
+if PlannedFzf()
     " search
     nnoremap <silent><nowait><C-f>] :FzfSearch <C-r><C-w><Cr>
     xnoremap <silent><nowait><C-f>] :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
     nnoremap <silent><nowait><C-f>[ :FzfSearchLast<Cr>
     nnoremap <silent><nowait><C-f>? :FzfSearch<Space>
+    if !PlannedLeaderf()
+        let g:searchall = 'FzfSearchAll'
+        " searchall
+        nnoremap <silent><nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
+        xnoremap <silent><nowait><C-f><Cr> :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
+        nnoremap <silent><nowait><C-f>. :FzfSearchAllLast<Cr>
+        nnoremap <silent><nowait><C-f>/ :FzfSearchAll<Space>
+    endif
+endif
+if PlannedLeaderf()
+    if PlannedFzf()
+        let g:search_tool = "fzf-leaderf"
+    else
+        let g:search_tool = "leaderf"
+    endif
+elseif PlannedFzf()
+    let g:search_tool = "fzf"
 endif
 " flygrep
 if PlannedFzf()
