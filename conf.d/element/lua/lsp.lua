@@ -1,11 +1,7 @@
 local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
-if Installed('cmp-nvim-lsp') then
-  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-else
-  local lsp_capabilities = require("lsp-selection-range").update_capabilities({})
-end
+local lsp_capabilities = require("lsp-selection-range").update_capabilities({})
 -----------------
 -- neoconf
 -----------------
@@ -92,8 +88,14 @@ require("mason-lspconfig").setup({
     default_setup,
     lua_ls = function()
       lspconfig.lua_ls.setup({
-        capabilities = lsp_capabilities,
         filetypes = { "lua" },
+        capabilities = lsp_capabilities,
+        hint = {
+          enable = true,
+        },
+        codeLens = {
+          enable = true,
+        },
         settings = {
           Lua = {
             diagnostics = {
@@ -107,6 +109,12 @@ require("mason-lspconfig").setup({
       lspconfig.gopls.setup({
         filetypes = { "go" },
         capabilities = lsp_capabilities,
+        hint = {
+          enable = true,
+        },
+        codeLens = {
+          enable = true,
+        },
         settings = {
           gopls = {
             analyses = {
@@ -149,8 +157,9 @@ require("mason-lspconfig").setup({
 -----------------
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
-  callback = function(event)
-    local bufnr = event.bufnr
+  callback = function(args)
+    local bufnr = args.bufnr
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
     local opts_silent = { noremap = true, silent = true, buffer = bufnr }
     local opts_echo = { noremap = true, silent = false, buffer = bufnr }
     if lsp_capabilities and lsp_capabilities.completionProvider then
@@ -180,36 +189,54 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', ']d', vim.diagnostic.goto_next, opts_silent)
     map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
     map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
-    -- codeaction && codelens
-    map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
-    map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
-    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
-    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
-    -- inlay_hint
-    map({ "n", "x" }, "<leader>I", function()
-      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-    end, opts)
     -- select range
-    local ok, _ = pcall(function()
+    local ok
+    ok, _ = pcall(function()
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
       map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
       map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
     end
+    ok, _ = pcall(function()
+      vim.treesitter.get_parser(bufnr)
+    end, bufnr)
     -- semantic token highlight
-    if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
-      local augroup = vim.api.nvim_create_augroup("SemanticTokens", {})
-      autocmd("TextChanged", {
-        group = augroup,
+    if not ok then
+      if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
+        autocmd("TextChanged", {
+          group = vim.api.nvim_create_augroup("SemanticTokens", {}),
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.semantic_tokens.force_refresh(bufnr)
+          end,
+        })
+        -- fire it first time on load as well
+        vim.lsp.semantic_tokens.start(bufnr, client)
+      end
+    end
+    -- inlay_hint
+    if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+      map({ "n", "x" }, "<leader>I", function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+      end, opts_echo)
+    end
+    -- codelens
+    if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
+      vim.lsp.codelens.refresh({ bufnr = bufnr })
+      vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
         buffer = bufnr,
         callback = function()
-          vim.lsp.semantic_tokens.force_refresh(bufnr)
+          vim.lsp.codelens.refresh({ bufnr = bufnr })
         end,
       })
-      -- fire it first time on load as well
-      vim.lsp.semantic_tokens.start(bufnr, client)
     end
+    -- codeaction && symbols
+    map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
+    map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
+    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
+    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
   end
 })
 -----------------
