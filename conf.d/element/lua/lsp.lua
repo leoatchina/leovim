@@ -175,7 +175,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Rename
     map({ "n", "x" }, "<F2>", vim.lsp.buf.rename, opts_echo)
     -- fzf-lsp
-    map("n", "<leader>t", [[<Cmd>Vista finder<Cr>]], opts_silent)
+    map("n", "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent0
     map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts_silent)
     map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts_silent)
     map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts_silent)
