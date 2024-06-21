@@ -189,20 +189,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', ']d', vim.diagnostic.goto_next, opts_silent)
     map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
     map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
-    -- codeaction && codelens
-    map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
-    map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
-    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
-    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
     -- select range
-    local ok, _ = pcall(function()
+    local ok
+    ok, _ = pcall(function()
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
       map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
       map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
     end
-    local ok, _ = pcall(function()
+    ok, _ = pcall(function()
       vim.treesitter.get_parser(bufnr)
     end, bufnr)
     -- semantic token highlight
@@ -226,6 +222,21 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
       end, opts_echo)
     end
+    -- codelens
+    if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
+      vim.lsp.codelens.refresh({ bufnr = bufnr })
+      vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.codelens.refresh({ bufnr = bufnr })
+        end,
+      })
+    end
+    -- codeaction && symbols
+    map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
+    map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
+    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
+    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
   end
 })
 -----------------
