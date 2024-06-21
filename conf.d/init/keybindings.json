@@ -196,7 +196,7 @@
   {
     "key": "shift+alt+'",
     "command": "references-view.showCallHierarchy"
-  }
+  },
   // references
   {
     "key": "alt+/",
@@ -311,7 +311,7 @@
   },
   {
     "key": "alt+[",
-    "command": "workbench.action.terminal.focusPrevious"
+      "command": "workbench.action.terminal.focusPrevious"
   },
   {
     "key": "alt+]",
@@ -319,8 +319,8 @@
   },
   {
     "key": "shift+alt+[",
-    "command": "workbench.action.terminal.focusPreviousPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+      "command": "workbench.action.terminal.focusPreviousPane",
+      "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
   },
   {
     "key": "shift+alt+]",
