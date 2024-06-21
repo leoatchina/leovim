@@ -341,7 +341,12 @@ else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>fg :CtrlP <C-r>=GitRootDir()<Cr><Cr>
 endif
-if (has('patch-8.1.2269') || has('nvim')) && !Require('netrw')
+nnoremap <leader><Cr> :e!<Cr>
+nnoremap <leader>E :e<Space>
+" ---------------------------------
+" file browser
+" ---------------------------------
+if has('patch-8.1.2269') || has('nvim')
     source $OPTIONAL_DIR/fern.vim
 endif
 if has('nvim') && PlannedCoc()
@@ -350,17 +355,33 @@ if has('nvim') && PlannedCoc()
     endfunction
     command! CocFile call s:coc_file()
     nnoremap <silent><nowait><leader>e :CocFile<Cr>
-elseif Installed('vim-floaterm') && executable('yazi') && UNIX()
-    command! Yazi FloatermNew --wintype=float --position=center --width=0.8 --height=0.8 yazi
-    nnoremap <silent><nowait><leader>e :Yazi<Cr>
-elseif Installed('vim-floaterm') && executable('ranger')
-    command! Ranger FloatermNew --wintype=float --position=center --width=0.8 --height=0.8 ranger
-    nnoremap <silent><nowait><leader>e :Ranger<Cr>
 elseif Installed('fern.vim')
     nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
 endif
-nnoremap <leader><Cr> :e!<Cr>
-nnoremap <leader>E :e<Space>
+" ---------------------------------
+" Floaterm
+" ---------------------------------
+if Installed('vim-floaterm')
+    function! s:floaterm(prg)
+        let prg = a:prg
+        if g:has_popup_floating
+            execute printf("FloatermNew --title=%s --titleposition=right --wintype=float --position=center --width=0.9 --height=0.9 %s", prg, prg)
+        else
+            if &columns > &lines * 3
+                execute printf("FloatermNew --title=%s --titleposition=right --wintype=vsplit --position=right --width=0.45 %s", prg, prg)
+            else
+                execute printf("FloatermNew --title=%s --titleposition=right --wintype=split --position=botright --height=0.6 %s", prg, prg)
+            endif
+        endif
+    endfunction
+    if executable('yazi')
+        command! FloatermYazi call s:floaterm('yazi')
+        nnoremap <silent><leader>` :FloatermYazi<Cr>
+    elseif executable('ranger')
+        command! FloatermRanger call s:floaterm('ranger')
+        nnoremap <silent><leader>` :FloatermRanger<Cr>
+    endif
+endif
 " --------------------------
 " project
 " --------------------------

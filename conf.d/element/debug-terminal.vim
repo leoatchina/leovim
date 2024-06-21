@@ -143,24 +143,6 @@ command! FloatermList call s:floaterm_list()
 tnoremap <silent><C-\><C-f> <C-\><C-n>:FloatermList<Cr>
 nnoremap <silent><C-\><C-f> :FloatermList<Cr>
 " ---------------------------------
-" FloatermYazi
-" ---------------------------------
-if executable('yazi')
-    function! s:floaterm_yazi()
-        if g:has_popup_floating
-            FloatermNew --title=yazi --titleposition=right --wintype=float --position=center --width=0.9 --height=0.9 yazi
-        else
-            if &columns > &lines * 3
-                FloatermNew --title=yazi --titleposition=right --wintype=vsplit --position=right --width=0.45 yazi
-            else
-                FloatermNew --title=yazi --titleposition=right --wintype=split --position=botright --height=0.6 yazi
-            endif
-        endif
-    endfunction
-    command! FloatermYazi call s:floaterm_yazi()
-    nnoremap <silent><leader>` :FloatermYazi<Cr>
-endif
-" ---------------------------------
 " debug
 " ---------------------------------
 if PlannedFzf()
