@@ -16,7 +16,7 @@ endfunction
 function! s:j(line1, line2, diagnostic) range abort
     let pos = getpos('.')
     if a:line1 != a:line2
-        normal! J
+        execute a:line1 . "," . a:line2 . "join"
     else
         call s:diag_or_errmsg(a:diagnostic)
         call setpos('.', pos)
