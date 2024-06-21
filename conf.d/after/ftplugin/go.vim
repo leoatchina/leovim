@@ -4,15 +4,13 @@ if Installed('vim-go')
     let g:go_doc_balloon = 0
     let g:go_def_mapping_enabled = 0
     nnoremap <buffer><silent>gl :GoDefPop<Cr>
-    nnoremap <buffer><silent><M-?> :GoImpl<Cr>
-    nnoremap <buffer><silent><leader>A :GoImports<Cr>
-    nnoremap <buffer><silent><M-M> :GoCommands<Cr>
     nnoremap <buffer><silent>,d :GoDeclsDir<Cr>
     nnoremap <buffer><silent>,c :GoCoverage<Cr>
     nnoremap <buffer><silent>,a :GoAlternate<Cr>
-    if AdvCompEngine()
-        nnoremap <buffer><silent>gx :GoDoc<Cr>
-    else
+    nnoremap <buffer><silent><M-?> :GoImpl<Cr>
+    nnoremap <buffer><silent><M-M> :GoCommands<Cr>
+    nnoremap <buffer><silent><leader>A :GoImports<Cr>
+    if !AdvCompEngine()
         nnoremap <buffer><silent><C-g> :GoDef<Cr>
         nnoremap <buffer><silent><M-/> :GoReferrers<Cr>
         nnoremap <buffer><silent><M-.> :GoImplements<Cr>
