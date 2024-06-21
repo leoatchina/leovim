@@ -319,14 +319,18 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " check if cfile type
     " --------------------------
     if index(g:cfile_types, &ft) >= 0 && index(['definition', 'tags'], find_type) >= 0 && g:ctags_type != ''
-        let cfile = 1
+        let lsp = 0
     else
-        let cfile = 0
+        if find_type == "tags"
+            let lsp = 0
+        else
+            let lsp = 1
+        endif
     endif
     " --------------------------
     " coc
     " --------------------------
-    if PlannedCoc() && !cfile
+    if PlannedCoc() && lsp
         let commands_dict = {
                     \ 'definition' : ['definitions', 'jumpDefinition'],
                     \ 'references' : ['references', 'jumpReferences'],
@@ -361,7 +365,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " --------------------------
     " nvim-lsp
     " --------------------------
-    elseif InstalledNvimLsp() && !cfile
+    elseif InstalledNvimLsp() && lsp
         let commands_dict = {
                     \ 'definition' : ['textDocument/definition', 'Glance definitions'],
                     \ 'references' : ['textDocument/references', 'Glance references'],
