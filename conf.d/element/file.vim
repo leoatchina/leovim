@@ -470,9 +470,9 @@ endfunc
 if executable('code')
     function! s:open_in_vscode()
         if Installed('asyncrun.vim')
-            let cmd = printf("AsyncRun code --goto %s:%d", expand("%:p"), line("."))
+            let cmd = printf("AsyncRun code --goto %s:%d", Expand("%:p"), line("."))
         else
-            let cmd = printf("!code --goto %s:%d", expand("%:p"), line("."))
+            let cmd = printf("!code --goto %s:%d", Expand("%:p"), line("."))
         endif
         silent! exec cmd
     endfunction

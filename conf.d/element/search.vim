@@ -270,6 +270,7 @@ if exists(":LeaderfSearchAll")
     nnoremap <silent><nowait>,\  :Leaderf rg --no-ignore --fuzzy -L -S --wd-mode=f --cword<Cr>
     nnoremap <silent><nowait>,\| :Leaderf rg --no-ignore --fuzzy -L -S --cword<Cr>
 endif
+" FzfSearch
 if PlannedFzf()
     " search
     nnoremap <silent><nowait><C-f>] :FzfSearch <C-r><C-w><Cr>
@@ -284,15 +285,6 @@ if PlannedFzf()
         nnoremap <silent><nowait><C-f>. :FzfSearchAllLast<Cr>
         nnoremap <silent><nowait><C-f>/ :FzfSearchAll<Space>
     endif
-endif
-if PlannedLeaderf()
-    if PlannedFzf()
-        let g:search_tool = "fzf-leaderf"
-    else
-        let g:search_tool = "leaderf"
-    endif
-elseif PlannedFzf()
-    let g:search_tool = "fzf"
 endif
 " flygrep
 if PlannedFzf()
@@ -317,4 +309,18 @@ elseif exists(":LeaderfSearch")
     nnoremap <silent><nowait><leader>\| :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
     xnoremap <silent><nowait><leader>\  :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
     xnoremap <silent><nowait><leader>\| :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
+endif
+" search path && dir
+if PlannedLeaderf()
+    if PlannedFzf()
+        let g:search_tool = "leaderf-fzf"
+    else
+        let g:search_tool = "leaderf"
+    endif
+    nnoremap <silent><leader>sp :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <silent><leader>sd :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+elseif PlannedFzf()
+    let g:search_tool = "fzf"
+    nnoremap <silent><leader>sp :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <silent><leader>sd :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 endif
