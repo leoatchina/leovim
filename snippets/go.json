@@ -15,7 +15,7 @@
       "    $0",
       "  default:",
       "    // TODO: implement",
-      "}",
+      "}"
     ]
   },
 
@@ -103,7 +103,7 @@
       "func $3FromContext(ctx context.Context) (*${2:Type}, bool) {",
       "  v, ok := ctx.Value(${1:name}Key{}).(*${2:Type})",
       "  return v, ok",
-      "}",
+      "}"
     ]
   },
 
@@ -112,7 +112,7 @@
     "body": [
       "go func(){",
       "  $0",
-      "}()",
+      "}()"
     ]
   },
 
@@ -158,7 +158,7 @@
       "const (",
         "  $1$3 $1 = iota",
         "  $0",
-      ")",
+      ")"
     ]
   },
   
@@ -172,7 +172,7 @@
       "// $1s available.",
       "const (",
       "  $0",
-      ")",
+      ")"
     ]
   },
 
@@ -391,7 +391,7 @@
     "body": [
       "if errors.Is(err, ${1:io.ErrUnexpectedEOF}) {",
       "  $0",
-      "}",
+      "}"
     ]
   },
   
@@ -401,7 +401,7 @@
       "var e ${1:*os.PathError}",
       "if errors.As(err, &e) {",
       "  $0",
-      "}",
+      "}"
     ]
   },
 
@@ -652,7 +652,7 @@
       "  enc.SetIndent(\"\", \"  \")",
       "  enc.Encode($0)",
       "}"
-    ],
+    ]
   },
 
   "For Range": {
@@ -702,7 +702,7 @@
       "case $1 <- $0:",
       "case <-ctx.Done():",
       " return ctx.Err()",
-      "}",
+      "}"
     ]
   },
 
@@ -712,7 +712,7 @@
       "select {",
       "case $1 <- $0:",
       "default:",
-      "}",
+      "}"
     ]
   },
 
