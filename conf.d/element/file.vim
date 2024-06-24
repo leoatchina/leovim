@@ -45,26 +45,6 @@ let g:header_field_timestamp_format = '%Y.%m.%d'
 PlugAddOpt 'vim-header'
 nnoremap <M-h>a :AddHeader<Cr>
 nnoremap <M-h>h :AddBangHeader<Cr>
-" ------------------------
-" toggle_modify
-" ------------------------
-function! s:toggle_modify() abort
-    if &modifiable
-        setl nomodifiable
-        echo 'Current buffer is now non-modifiable'
-    else
-        setl modifiable
-        echo 'Current buffer is now modifiable'
-    endif
-endfunction
-command! ToggleModity call s:toggle_modify()
-nnoremap <silent> <M-k><space> :ToggleModity<Cr>
-" ------------------------
-" basic toggle and set
-" ------------------------
-nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
-nnoremap <M-k>f :set nofoldenable! nofoldenable?<Cr>
-nnoremap <M-k>w :set nowrap! nowrap?<Cr>
 " --------------------------
 " Quit Config
 " --------------------------

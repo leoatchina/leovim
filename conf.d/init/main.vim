@@ -182,16 +182,6 @@ cmap <C-a> <Home>
 cmap <C-e> <End>
 imap <expr><C-b> pumvisible()? "\<C-b>":"\<C-o>I"
 imap <expr><C-f> pumvisible()? "\<C-f>":"\<C-o>A"
-if exists('g:vscode')
-    imap <C-a> <ESC>ggVG
-    xmap <C-a> <ESC>ggVG
-    nmap <C-a> ggVG
-    imap <C-x> <C-o>"*
-    xmap <C-x> "*x
-    nmap <C-x> "*x
-else
-    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
-endif
 nnoremap H ^
 xnoremap H ^
 onoremap H ^
@@ -234,9 +224,6 @@ xnoremap zP "_c<ESC>P"
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------
-if exists(':packadd') && !exists('g:vscode')
-    set packpath^=$HOME/.leovim.d
-endif
 function! s:plug_add_opt(pack)
     let pack = a:pack
     if exists(':packadd')
@@ -311,12 +298,6 @@ else
     nmap ,, <Plug>(clever-f-repeat-back)
     xmap ,, <Plug>(clever-f-repeat-back)
     PlugAddOpt 'clever-f.vim'
-endif
-if exists('g:vscode')
-    PlugAddOpt 'hop.nvim'
-    luafile $LUA_DIR/hop.lua
-else
-    source $OPTIONAL_DIR/easymotion.vim
 endif
 " --------------------------
 " textobj
@@ -537,12 +518,42 @@ if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
 if exists('g:vscode')
+    imap <C-a> <ESC>ggVG
+    xmap <C-a> <ESC>ggVG
+    nmap <C-a> ggVG
+    imap <C-x> <C-o>"*
+    xmap <C-x> "*x
+    nmap <C-x> "*x
+    " hop for neovim-vscode only
+    PlugAddOpt 'hop.nvim'
+    luafile $LUA_DIR/hop.lua
     source $INIT_DIR/vscode.vim
     finish
+else
+    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
+    source $OPTIONAL_DIR/easymotion.vim
 endif
 " ============================================ below is (neo)vim only ===============================================
 let &termencoding=&enc
 nnoremap <M-h>u :set ff=unix<Cr>:%s/\r//g<Cr>
+" ------------------------
+" toggle_modify
+" ------------------------
+nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
+nnoremap <M-k>f :set nofoldenable! nofoldenable?<Cr>
+nnoremap <M-k>w :set nowrap! nowrap?<Cr>
+" toggle modifiable
+function! s:toggle_modify() abort
+    if &modifiable
+        setl nomodifiable
+        echo 'Current buffer is now non-modifiable'
+    else
+        setl modifiable
+        echo 'Current buffer is now modifiable'
+    endif
+endfunction
+command! ToggleModity call s:toggle_modify()
+nnoremap <M-k><space> :ToggleModity<Cr>
 " ------------------------------------
 " Meta key
 " ------------------------------------
