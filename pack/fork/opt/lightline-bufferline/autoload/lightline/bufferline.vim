@@ -58,10 +58,10 @@ function! lightline#bufferline#load()
   function! s:get_separator(sub, def)
     " Cannot use `get()` as it doesn't support dict deep indexing
     let l:align = s:right_aligned ? 'right' : 'left'
-    if exists('g:lightline.tabline_' .. a:sub .. 'separator.' .. l:align)
-      return g:lightline['tabline_' .. a:sub .. 'separator'][l:align]
-    elseif exists('g:lightline.' .. a:sub .. 'separator.' .. l:align)
-      return g:lightline[a:sub .. 'separator'][l:align]
+    if exists('g:lightline.tabline_' . a:sub . 'separator.' . l:align)
+      return g:lightline['tabline_' . a:sub . 'separator'][l:align]
+    elseif exists('g:lightline.' . a:sub . 'separator.' . l:align)
+      return g:lightline[a:sub . 'separator'][l:align]
     else
       return a:def
     endif
@@ -553,7 +553,7 @@ function lightline#bufferline#go_relative(offset)
   endif
 
   let l:new_index = s:clamp(l:current_index + a:offset, len(l:buffers))
-  execute 'b' .. l:buffers[l:new_index]
+  execute 'b' . l:buffers[l:new_index]
 endfunction
 
 function! lightline#bufferline#go_next()
@@ -579,7 +579,7 @@ function! lightline#bufferline#go_relative_category(offset)
   let l:new_index = s:clamp(l:current_index + a:offset, len(l:categories))
   let l:new_category = l:categories[l:new_index]
   let l:buffer = s:filtered_buffers(l:new_category)[0]
-  execute 'b' .. l:buffer
+  execute 'b' . l:buffer
 endfunction
 
 function! lightline#bufferline#go_next_category()

@@ -81,9 +81,6 @@ git clone --depth 1 https://github.com/roxma/vim-tmux-clipboard.git
 rm -rf lightline.vim
 git clone --depth 1 https://github.com/itchyny/lightline.vim.git
 
-rm -rf lightline-bufferline
-git clone --depth 1 https://github.com/mengelbrecht/lightline-bufferline
-
 # startify
 rm -rf vim-startify
 git clone --depth 1 https://github.com/mhinz/vim-startify.git
