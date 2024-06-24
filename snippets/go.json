@@ -266,7 +266,7 @@
   "Pretty Print": {
     "prefix": "pp",
     "body": [
-      "pretty.Print($0)",
+      "pretty.Print($0)"
     ]
   },
 
@@ -318,7 +318,7 @@
       "js.FuncOf(func(this js.Value, args []js.Value) interface{} {",
       "  $0",
       "  return nil",
-      "})",
+      "})"
     ]
   },
 
@@ -735,7 +735,7 @@
       "func Test$1(t *testing.T) {",
       "  $0",
       "}"
-    ],
+    ]
   },
 
   "Test Case": {
