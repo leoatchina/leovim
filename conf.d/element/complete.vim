@@ -136,9 +136,9 @@ if Planned('vim-vsnip')
         return ''
     endfunction
     let g:vsnip_snippet_dir = expand("~/.leovim/snippets")
-    nnoremap <M-h>n :VsnipOpen<Space>
+    nnoremap <M-h>n :VsnipOpen<Cr>
     if PlannedLeaderf()
-        nnoremap <M-h>s :Leaderf file --no-sort  ~/.leovim/snippets<Cr>
+        nnoremap <M-h>s :Leaderf file --no-sort ~/.leovim/snippets<Cr>
     elseif PlannedFzf()
         nnoremap <M-h>s :FzfFiles ~/.leovim/snippets<Cr>
     endif
