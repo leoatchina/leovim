@@ -404,15 +404,6 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     if messages =~ '^no ' || messages =~ 'not ' || messages =~ 'error'
         let found_symbol = 0
     endif
-    " references
-    if find_type == "references" && get(g:, 'symbol_tool', '') =~ 'plus' && found_symbol == 0
-        redir => messages
-        call <SID>GscopeFind(0, 't')
-        redir END
-        if messages !~ 'Error'
-            let found_symbol = 1
-        endif
-    endif
     " tags
     if found_symbol == 0 && g:ctags_type != ''
         let found_symbol = s:view_tag(tagname, open_position)
