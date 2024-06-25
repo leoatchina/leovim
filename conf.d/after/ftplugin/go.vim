@@ -25,7 +25,6 @@ if Installed('coc.nvim')
 endif
 if Installed('vim-floaterm') && executable('go')
     nnoremap <buffer><M-B> :call SmartRunTerm(printf("time go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "smart")<Cr>
-    nnoremap <buffer><M-'> :call SmartRunTerm(printf("time go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "tab")<Cr>
 endif
 inoremap <buffer>:: :=
 inoremap <buffer>!! !=
