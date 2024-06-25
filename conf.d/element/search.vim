@@ -317,10 +317,10 @@ if PlannedLeaderf()
     else
         let g:search_tool = "leaderf"
     endif
-    nnoremap <silent><leader>sp :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <silent><leader>sd :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <silent><C-f>p :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <silent><C-f>d :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 elseif PlannedFzf()
     let g:search_tool = "fzf"
-    nnoremap <silent><leader>sp :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <silent><leader>sd :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <silent><C-f>p :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <silent><C-f>d :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 endif
