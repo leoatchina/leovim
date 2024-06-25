@@ -5,12 +5,12 @@ endfunction
 if Installed('mason.nvim')
     luafile $LUA_DIR/mason.lua
 endif
-if Planned('vimcomplete')
+if Installed('vimcomplete')
     source $OPTIONAL_DIR/vcm.vim
-elseif PlannedCoc()
-    source $OPTIONAL_DIR/coc.vim
 elseif InstalledCmp()
     luafile $LUA_DIR/cmp.lua
+elseif Installed('coc.vim')
+    source $OPTIONAL_DIR/coc.vim
 elseif g:complete_engine == 'apm'
     source $OPTIONAL_DIR/apm.vim
 elseif g:complete_engine != ''
@@ -56,7 +56,7 @@ if InstalledNvimLsp()
         let g:nvim_java = 0
     endif
     luafile $LUA_DIR/lsp.lua
-elseif PlannedCoc()
+elseif Installed('coc.nvim')
     let g:vista_default_executive = 'coc'
     let g:coc_global_extensions = [
                 \ 'coc-lists',
