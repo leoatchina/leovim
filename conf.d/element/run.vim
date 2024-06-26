@@ -160,9 +160,21 @@ if has('nvim') || v:version >= 801
             call preview#errmsg("Please update to vim8.1+/nvim0.6+ to run script in floating or popup window.")
             return
         endif
-        let cmd = 'FloatermNew --wintype=' . a:wintype
-        let curr_bufnr = floaterm#buflist#curr()
-        if curr_bufnr == -1 || get(a:opts, 'reuse', 1) == 0
+        let found_same_floaterm = v:false
+        let buflist = floaterm#buflist#gather()
+        if len(buflist) > 0
+            for floaterm_bufnr in buflist
+                " NOTE: found floaterm of same floaterm wintype
+                if floaterm#config#get(floaterm_bufnr, 'wintype') == a:wintype
+                    let found_same_floaterm = v:true
+                    break
+                endif
+            endfor
+        endif
+        if found_same_floaterm
+            call floaterm#terminal#open_existing(floaterm_bufnr)
+        else
+            let cmd = 'FloatermNew --wintype=' . a:wintype
             if has_key(a:opts, 'width')
                 let cmd .= " --width=" . a:opts.width
             elseif a:wintype == 'float'
@@ -175,16 +187,14 @@ if has('nvim') || v:version >= 801
             endif
             let cmd .= " --position=" . a:position
             exec cmd
-            let curr_bufnr = floaterm#buflist#curr()
-        else
-            call floaterm#terminal#open_existing(curr_bufnr)
+            let floaterm_bufnr = floaterm#buflist#curr()
         endif
         if has_key(a:opts, 'silent') && a:opts.silent == 1
             FloatermHide!
         endif
         let cd = 'cd ' . shellescape(getcwd())
-        call floaterm#terminal#send(curr_bufnr, [cd])
-        call floaterm#terminal#send(curr_bufnr, [a:opts.cmd])
+        call floaterm#terminal#send(floaterm_bufnr, [cd])
+        call floaterm#terminal#send(floaterm_bufnr, [a:opts.cmd])
         if get(a:opts, 'focus', 1) == 0
             if has('nvim')
                 stopinsert | noa wincmd p
