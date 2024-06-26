@@ -221,11 +221,11 @@ if has('nvim') || v:version >= 801
     command! RunFloatermFloat call s:asyncrun('floaterm_float', 'term')
     command! RunFloatermBottom call s:asyncrun('floaterm_bottom', 'term')
     nnoremap <silent><M-R> :RunFloatermRight<CR>
-    nnoremap <silent><M-'> :RunFloatermFloat<CR>
+    nnoremap <silent><M-F> :RunFloatermFloat<CR>
     nnoremap <silent><M-B> :RunFloatermBottom<CR>
 else
     nnoremap <M-T> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
-    nnoremap <M-'> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
+    nnoremap <M-F> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
     command! RunQfBottom call s:asyncrun('', 'qf')
     nnoremap <silent><M-B> :RunQfBottom<CR>
     command! RunQfRight call s:asyncrun('right', 'qf')
