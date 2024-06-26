@@ -255,8 +255,6 @@ function! UpdateLightline() abort
         let g:lightline.colorscheme = 'everforest'
     elseif colors_name =~ 'gruvbox'
         let g:lightline.colorscheme = 'gruvboxdark'
-    elseif colors_name =~ 'catppuccin'
-        let g:lightline.colorscheme = 'catppuccin'
     elseif colors_name =~ 'fox' || colors_name =~ 'fly'
         let g:lightline.colorscheme = g:colors_name
     else
@@ -304,9 +302,6 @@ endfunction
 " --------------------------
 " schemes need truecolor
 " --------------------------
-if Installed('catppuccin')
-    luafile $LUA_DIR/catppuccin.lua
-endif
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 let g:everforest_better_performance = 1
@@ -321,8 +316,8 @@ elseif Require('edge')
     call SetScheme('edge', 'one')
 elseif Require('duskfox')
     call SetScheme('duskfox', 'hybrid')
-elseif Require('catppuccin')
-    call SetScheme('catppuccin', 'codedark')
+elseif Require('nightfox')
+    call SetScheme('nightfox', 'hybrid')
 elseif Require('moonfly')
     call SetScheme('moonfly', 'space-vim-dark')
 elseif g:complete_engine == 'apm'
@@ -333,7 +328,7 @@ elseif g:complete_engine == 'vcm'
     call SetScheme('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'cmp'
     if InstalledNvimLsp()
-        call SetScheme('catppuccin', 'codedark')
+        call SetScheme('nightfox', 'hybrid')
     else
         call SetScheme('moonfly', 'space-vim-dark')
     endif

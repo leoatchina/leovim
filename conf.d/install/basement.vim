@@ -246,7 +246,6 @@ if g:has_truecolor
     PlugAdd 'sainnhe/gruvbox-material'
     PlugAdd 'bluz71/vim-moonfly-colors'
     if has('nvim-0.8.1')
-        PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
         PlugAdd 'EdenEast/nightfox.nvim'
     endif
 endif
