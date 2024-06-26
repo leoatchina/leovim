@@ -42,7 +42,7 @@ elseif Require('apm')
         let s:smart_engine_select = 1
     endif
 elseif Require('vcm')
-    if v:version >= 901 && UNIX()
+    if v:version >= 901
         let g:complete_engine = 'vcm'
     else
         let s:smart_engine_select = 1
@@ -98,7 +98,9 @@ endif
 " ------------------------------
 " complete_engine
 " ------------------------------
-if g:complete_engine == 'cmp'
+if g:complete_engine == 'vcm'
+    PlugAdd 'girishji/vimcomplete'
+elseif g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/nvim-cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lsp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
@@ -123,8 +125,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
-elseif g:complete_engine == 'vcm'
-    PlugAdd 'girishji/vimcomplete'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0
         PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
