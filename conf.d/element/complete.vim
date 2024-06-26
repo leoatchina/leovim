@@ -9,7 +9,7 @@ if Installed('vimcomplete')
     source $OPTIONAL_DIR/vcm.vim
 elseif InstalledCmp()
     luafile $LUA_DIR/cmp.lua
-elseif Installed('coc.vim')
+elseif Installed('coc.nvim')
     source $OPTIONAL_DIR/coc.vim
 elseif g:complete_engine == 'apm'
     source $OPTIONAL_DIR/apm.vim
