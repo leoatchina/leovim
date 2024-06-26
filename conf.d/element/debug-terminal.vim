@@ -532,6 +532,8 @@ else
     nnoremap <silent>J :JDiag<Cr>
     nnoremap <silent><M-'> :FloatermList<Cr>
 endif
+inoremap <silent><M-'> <C-o>:FloatermList<Cr>
+tnoremap <silent><M-'> <C-\><C-n>:FloatermList<Cr>
 " -------------------------------------
 " map Floaterm keys
 " -------------------------------------
@@ -539,8 +541,8 @@ function! s:bind_keymap(mapvar, command) abort
     if !Planned('vimspector') && !Planned('nvim-dap') || a:mapvar ==# '<M-{>' || a:mapvar ==# '<M-}>'
         execute printf('nnoremap <silent> %s :%s<CR>', a:mapvar, a:command)
     endif
-    execute printf('inoremap <silent> %s <C-o>:%s<CR>', a:mapvar, a:command)
-    execute printf('tnoremap <silent> %s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
+    execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
+    execute printf('tnoremap <silent>%s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
 endfunction
 call s:bind_keymap('<M-{>', 'FloatermPrev')
 call s:bind_keymap('<M-}>', 'FloatermNext')
