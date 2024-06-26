@@ -70,13 +70,14 @@
   - [x] local
   - [x] remote url
 - [x] Add ctrl-e to edit command in FzfCallCommands
-- [x] neoconf 
+- [x] neoconf
 - [x] imap <C-f> enhanced
 - [x] vimspector preview template in WINDOWS()
-- [x] leaderf gtags bug 
+- [x] leaderf gtags bug
 - [x] targets.vim bug
 - [x] yank optimize
-- [x] delete lsp_zero 
+- [x] delete lsp_zero
+- [ ] run reuse
 - [ ] ====== My plugins ======
 - [ ] vim-funky
   - [x] open bug
@@ -100,7 +101,7 @@
   - [ ] README
   - [ ] deploy to github
 - [ ] ====== Below need plenty of works ======
-- [ ] vista 
+- [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
   - [ ] ctags enhanced, according to zhihu user `成隽`

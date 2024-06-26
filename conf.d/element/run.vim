@@ -240,7 +240,7 @@ function SmartRunTerm(cmd, pos)
     elseif a:pos ==# "external"
         execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=external " . a:cmd
     else
-        execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -reuse=1 -mode=term -pos=" . a:pos . " " . a:cmd
+        execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=" . a:pos . " " . a:cmd
     endif
 endfunction
 " ----------------
