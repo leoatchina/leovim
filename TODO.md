@@ -77,7 +77,8 @@
 - [x] targets.vim bug
 - [x] yank optimize
 - [x] delete lsp_zero
-- [ ] run reuse
+- [x] run reuse
+- [ ] Extend
 - [ ] ====== My plugins ======
 - [ ] vim-funky
   - [x] open bug
