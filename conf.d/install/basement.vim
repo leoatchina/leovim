@@ -262,6 +262,12 @@ if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 endif
 " ----------------------------
+" helpful
+" ----------------------------
+if Require('helpful')
+    PlugAdd 'tweekmonster/helpful.vim'
+endif
+" ----------------------------
 " extend Planned function
 " ----------------------------
 function! PlannedFzf() abort
