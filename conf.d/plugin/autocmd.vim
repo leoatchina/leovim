@@ -80,3 +80,7 @@ autocmd BufNewFile .gitconfig      0r $CONFIG_DIR/templates/gitconfig.spec
 autocmd BufNewFile .gitignore      0r $CONFIG_DIR/templates/gitignore.spec
 autocmd BufNewFile .wildignore     0r $CONFIG_DIR/templates/wildignore.spec
 autocmd BufNewFile .radian_profile 0r $CONFIG_DIR/templates/radian_profile.spec
+" --------------------------
+" helpful
+" --------------------------
+au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
