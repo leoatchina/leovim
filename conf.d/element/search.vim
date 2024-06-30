@@ -41,9 +41,9 @@ function! s:search_cur(...)
 endfunction
 command! -nargs=? SearchCurrBuf call s:search_cur(<f-args>)
 nnoremap \| :SearchCurrBuf <C-r><C-w><Cr>
-xnoremap \| :<C-u>SearchCurrBuf <C-r>=GetVisualSelection()<Cr><Cr>
+xnoremap \| :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
 nnoremap s\ :SearchCurrBuf <C-r><C-w>
-xnoremap s\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection()<Cr>
+xnoremap s\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
 " ----------------------------
 " grepsearch search
 " ----------------------------
@@ -150,12 +150,12 @@ command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(2, <q-args>)
 " searchall
 nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
+xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection(1)<Cr>
 nnoremap s. :GrepAllLast<Cr>
 nnoremap s/ :GrepAll<Space>
 " search
 nnoremap s] :Grep <C-r><C-w><Cr>
-xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
+xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection(1)<Cr>
 nnoremap s[ :GrepLast<Cr>
 nnoremap s? :Grep<Space>
 au FileType qf nnoremap <buffer>r :cdo s/<C-r>=get(t:, 'grepper', '')<Cr>//gc<Left><Left><Left>
