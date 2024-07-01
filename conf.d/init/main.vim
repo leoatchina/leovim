@@ -5,10 +5,10 @@ function! Trim(str) abort
     return substitute(a:str, "^\s\+\|\s\+$", "", "g")
 endfunction
 function! Expand(path, ...) abort
-    if a:0 && a:1 == 0
-        return substitute(expand(a:path), '\', '/', 'g')
-    else
+    if a:0 && a:1
         return substitute(fnameescape(expand(a:path)), '\', '/', 'g')
+    else
+        return fnameescape(expand(a:path))
     endif
 endfunction
 function! Execute(cmd)
@@ -69,7 +69,7 @@ xnoremap ? "yy?<C-r>=Escape(@y)<CR><Cr>
 xnoremap s "yy:%s/<C-r>=Escape(@y)<CR>/<C-r>=Escape(@y)<CR>/gc<Left><Left><Left>
 xnoremap <Cr> "yy:%s/<C-r>=Escape(@y)<CR>//gc<Left><Left><Left>
 " GetVisualSelection only in one line
-function! GetVisualSelection() abort
+function! GetVisualSelection(...) abort
 	" call with visualmode() as the argument
 	let [line_start, column_start] = [line("'<"), charcol("'<")]
 	let [line_end, column_end]     = [line("'>"), charcol("'>")]
@@ -81,7 +81,11 @@ function! GetVisualSelection() abort
 		" Must trim the end before the start, the beginning will shift left.
     let lines[-1] = list2str(str2list(lines[-1])[:column_end - inclusive])
     let lines[0] = list2str(str2list(lines[0])[column_start - 1:])
-	return join(lines, "\n")
+    if a:0 && a:1
+        return Escape(join(lines, "\n"))
+    else
+        return join(lines, "\n")
+    endif
 endfunction
 " -----------------------------------
 " filetypes definition
