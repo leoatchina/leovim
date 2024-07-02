@@ -106,11 +106,9 @@ fi
 create_symlinks "$APP_PATH/clean.sh" "$HOME/.leovim.clean"
 create_symlinks "$APP_PATH/jetbrains/idea.vim" "$HOME/.ideavimrc"
 
-# create config for vim/gvim/nvim/gnvim
+# create config
 create_vimrc "$HOME/.vimrc"
-create_vimrc "$HOME/.gvimrc"
 create_vimrc "$HOME/.config/nvim/init.vim"
-create_vimrc "$HOME/.config/nvim/ginit.vim"
 
 # vim run scripts
 cp -n $APP_PATH/scripts/v.sh $HOME/.local/bin
@@ -213,7 +211,7 @@ else
     installplug='yes'
 fi
 
-# set bashrc config 
+# set bashrc config
 if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
@@ -231,7 +229,7 @@ else
     success "~/.leovim.unix cloned"
 fi
 
-############################################## set optional config ##################################### 
+############################################## set optional config #####################################
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
 else
@@ -249,5 +247,5 @@ if [ $installplug != 'no' ]; then
     setup_plug "$HOME/.local/bin/nvi.sh"
 fi
 
-echo 
+echo
 success "Thanks for installing leoatchina's vim config. ©`date +%Y` https://github.com/leoatchina/leovim"

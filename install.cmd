@@ -17,9 +17,7 @@ echo
 
 REM delete files
 call del "%HOME%\.vimrc"
-call del "%HOME%\.gvimrc"
 call del "%HOME%\AppData\local\nvim\init.vim"
-call del "%HOME%\AppData\local\nvim\ginit.vim"
 
 REM create vimrc
 echo if filereadable(expand("~/.vimrc.local")) > "%HOME%\.vimrc"
@@ -28,9 +26,7 @@ echo else >> "%HOME%\.vimrc"
 echo    source ~/.leovim/conf.d/init.vim >> "%HOME%\.vimrc"
 echo endif >> "%HOME%\.vimrc"
 REM cp vimrc
-call copy "%HOME%\.vimrc" "%HOME%\.gvimrc"
 call copy "%HOME%\.vimrc" "%HOME%\AppData\local\nvim\init.vim"
-call copy "%HOME%\.vimrc" "%HOME%\AppData\local\nvim\ginit.vim"
 
 REM mklink
 call del    "%HOME%\_leovim.clean.cmd"
