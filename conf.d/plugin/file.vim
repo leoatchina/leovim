@@ -352,13 +352,13 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>v :call TabeOpen("$ELEMENT_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$ELEMENT_DIR/opt.vim")<Cr>
     if PlannedLeaderf()
-        nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/conf.d/element/after/ftplugin<Cr>
+        nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/conf.d/common<Cr>
         nnoremap <silent><M-h>e :Leaderf file --no-sort ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :Leaderf file --no-sort ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --no-sort ~/.leovim<Cr>
     elseif PlannedFzf()
-        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/conf.d/element/after/ftplugin<Cr>
+        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/conf.d/common<Cr>
         nnoremap <silent><M-h>e :FzfFiles ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>

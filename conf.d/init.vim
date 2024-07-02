@@ -16,7 +16,7 @@ let $CONFIG_DIR = expand($LEOVIM_DIR . '/conf.d')
 " set rtp && pack path
 " --------------------------
 set rtp^=$LEOVIM_DIR/pack
-set rtp^=$CONFIG_DIR/element
+set rtp^=$CONFIG_DIR/common
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
