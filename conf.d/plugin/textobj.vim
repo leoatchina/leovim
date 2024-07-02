@@ -12,7 +12,7 @@ if Installed('nvim-treesitter', 'hlargs.nvim')
         endfunction
     endif
     command! TSCleanup call s:cleanup_ts()
-    luafile $LUA_DIR/treesitter.lua
+    luafile $ELEMENT_DIR/treesitter.lua
 else
     nmap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
     xmap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>

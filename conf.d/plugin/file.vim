@@ -161,7 +161,7 @@ nnoremap <leader>E :e<Space>
 " file browser
 " ---------------------------------
 if has('patch-8.1.2269') || has('nvim')
-    source $OPTIONAL_DIR/fern.vim
+    source $ELEMENT_DIR/fern.vim
 endif
 if has('nvim') && PlannedCoc()
     function! s:coc_file() abort
@@ -347,20 +347,20 @@ if get(g:, 'leovim_openmap', 1)
     endfunction
     nnoremap <silent><M-h>i :call TabeOpen("$CONFIG_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
-    nnoremap <silent><M-h>m :call TabeOpen("$INIT_DIR/main.vim")<Cr>
-    nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
-    nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
-    nnoremap <silent><M-h>O :call TabeOpen("$INIT_DIR/opt.vim")<Cr>
+    nnoremap <silent><M-h>m :call TabeOpen("$ELEMENT_DIR/main.vim")<Cr>
+    nnoremap <silent><M-h>k :call TabeOpen("$ELEMENT_DIR/keybindings.json")<Cr>
+    nnoremap <silent><M-h>v :call TabeOpen("$ELEMENT_DIR/vscode.vim")<Cr>
+    nnoremap <silent><M-h>O :call TabeOpen("$ELEMENT_DIR/opt.vim")<Cr>
     if PlannedLeaderf()
-        nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/conf.d/after/ftplugin<Cr>
+        nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim/conf.d/element/after/ftplugin<Cr>
         nnoremap <silent><M-h>e :Leaderf file --no-sort ~/.leovim/conf.d/element<Cr>
-        nnoremap <silent><M-h>p :Leaderf file --no-sort ~/.leovim/pack<Cr>
+        nnoremap <silent><M-h>p :Leaderf file --no-sort ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --no-sort ~/.leovim<Cr>
     elseif PlannedFzf()
-        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/conf.d/after/ftplugin<Cr>
+        nnoremap <silent><M-h>f :FzfFiles ~/.leovim/conf.d/element/after/ftplugin<Cr>
         nnoremap <silent><M-h>e :FzfFiles ~/.leovim/conf.d/element<Cr>
-        nnoremap <silent><M-h>p :FzfFiles ~/.leovim/pack<Cr>
+        nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
     endif
@@ -395,7 +395,7 @@ if isdirectory(s:vscode_user_dir)
             execute(rmdir_cmd)
             " create keybindings.json link
             let template = '!mklink %s %s'
-            let cmd = printf(template, s:vscode_user_dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
+            let cmd = printf(template, s:vscode_user_dir . '\keybindings.json', $ELEMENT_DIR . '\keybindings.json')
             execute(cmd)
             " create snippets link
             let template = '!mklink /d %s %s'
@@ -403,7 +403,7 @@ if isdirectory(s:vscode_user_dir)
             execute(cmd)
         else
             let template = '!ln -sf %s %s'
-            let cmd = printf(template, $INIT_DIR . '/keybindings.json', s:vscode_user_dir)
+            let cmd = printf(template, $ELEMENT_DIR . '/keybindings.json', s:vscode_user_dir)
             execute(cmd)
             let cmd = printf(template, $LEOVIM_DIR . '/snippets', s:vscode_user_dir)
             execute(cmd)

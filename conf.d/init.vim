@@ -16,15 +16,12 @@ let $CONFIG_DIR = expand($LEOVIM_DIR . '/conf.d')
 " set rtp && pack path
 " --------------------------
 set rtp^=$LEOVIM_DIR/pack
-set rtp^=$CONFIG_DIR
+set rtp^=$CONFIG_DIR/element
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
-let $INIT_DIR = expand($CONFIG_DIR. '/init')
 let $INSTALL_DIR = expand($CONFIG_DIR . '/install')
 let $ELEMENT_DIR = expand($CONFIG_DIR . '/element')
-let $LUA_DIR = expand($ELEMENT_DIR . '/lua')
-let $OPTIONAL_DIR = expand($ELEMENT_DIR . '/optional')
 " --------------------------
 " set opt path
 " --------------------------
@@ -136,7 +133,7 @@ for [settingname, dirname] in items(dir_list)
     exec "set " . settingname . "=" . dir
 endfor
 if has('nvim')
-    luafile $LUA_DIR/utils.lua
+    luafile $ELEMENT_DIR/utils.lua
     set shadafile=$HOME/.vim/shada.main
 endif
 " ------------------------
@@ -186,5 +183,5 @@ function! Installed(...)
     endfor
     return 1
 endfunction
-source $INIT_DIR/main.vim
+source $ELEMENT_DIR/main.vim
 let g:leovim_loaded = 1

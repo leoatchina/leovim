@@ -11,7 +11,7 @@ autocmd BufAdd * if getfsize(expand('<afile>')) > 1024*1024 |
 " ----------------------------
 " set coc data $PATH
 " ----------------------------
-let g:coc_config_home = expand("$OPTIONAL_DIR")
+let g:coc_config_home = expand("$ELEMENT_DIR")
 if WINDOWS()
     let g:coc_data_home = $DEPLOY_DIR . "\\coc"
 else
@@ -155,7 +155,7 @@ omap ac <Plug>(coc-classobj-a)
 " ------------------------
 if has('nvim')
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
-    luafile $LUA_DIR/coc.lua
+    luafile $ELEMENT_DIR/coc.lua
 else
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
 endif

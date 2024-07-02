@@ -5,7 +5,7 @@ catch
     finish
 endtry
 if InstalledNvimLsp()
-    luafile $LUA_DIR/diagnostic.lua
+    luafile $ELEMENT_DIR/diagnostic.lua
 elseif PlannedCoc()
     " highlight group
     highlight def link CocErrorHighlight   NONE
