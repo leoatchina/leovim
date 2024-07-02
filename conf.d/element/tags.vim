@@ -78,6 +78,7 @@ if Installed('tagbar')
                     \ ]}
 elseif Installed('vista.vim')
     let g:vista_sidebar_position = 'vertical topleft'
+    let g:vista#renderer#ctags = 'kind'
     let g:vista_update_on_text_changed = 1
     let g:vista_sidebar_width = 35
     let g:vista_echo_cursor   = 0

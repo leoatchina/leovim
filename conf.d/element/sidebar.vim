@@ -1,7 +1,7 @@
 PlugAddOpt 'vim-sidebar-manager'
 let g:sidebars = {}
 function! s:check_buf_ft(name, nr) abort
-    return getwinvar(a:nr, '&filetype') =~ tolower(a:name) || bufname(winbufnr(a:nr)) =~ tolower(a:name)
+    return getwinvar(a:nr, '&filetype') ==# tolower(a:name) || bufname(winbufnr(a:nr)) ==# tolower(a:name)
 endfunction
 " --------------------------
 " symbol
@@ -17,35 +17,32 @@ if Installed('tagbar')
                 \ 'close': 'TagbarClose'
                 \ }
 elseif Installed('vista.vim')
-    function! s:check_vista(nr) abort
-        return s:check_buf_ft('vista', a:nr) || s:check_buf_ft('vista_kind', a:nr)
-    endfunction
+    if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
+        function! s:check_vista_kind(nr) abort
+            return s:check_buf_ft('vista_kind', a:nr)
+        endfunction
+        function! s:check_vista(nr) abort
+            return s:check_buf_ft('vista', a:nr)
+        endfunction
+        let g:sidebars.vistactags = {
+                    \ 'position': 'left',
+                    \ 'check_win': function('s:check_vista_kind'),
+                    \ 'open': 'Vista ctags',
+                    \ 'close': 'Vista!!'
+                    \ }
+        nnoremap <silent>t<tab> :call sidebar#toggle('vistactags')<CR>
+    else
+        function! s:check_vista(nr) abort
+            return s:check_buf_ft('vista', a:nr) || s:check_buf_ft('vista_kind', a:nr)
+        endfunction
+    endif
     let g:sidebars.symbol = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_vista'),
-                \ 'open': 'Vista',
+                \ 'open': 'Vista ' . g:vista_default_executive,
                 \ 'close': 'Vista!!'
                 \ }
-endif
-if get(g:, 'ctags_type', '') =~ 'Universal' && Installed('vista.vim')
-    function! s:check_vista_kind(nr) abort
-        return s:check_buf_ft('vista_kind', a:nr)
-    endfunction
-    let g:vista#renderer#ctags = 'kind'
-    let g:sidebars.vistactags = {
-                \ 'position': 'left',
-                \ 'check_win': function('s:check_vista_kind'),
-                \ 'open': 'Vista ctags',
-                \ 'close': 'Vista!!'
-                \ }
-endif
-if has_key(g:sidebars, 'symbol')
     nnoremap <silent><C-t> :call sidebar#toggle('symbol')<CR>
-    if has_key(g:sidebars, 'vistactags')
-        nnoremap <silent>t<tab> :call sidebar#toggle('vistactags')<CR>
-    endif
-elseif has_key(g:sidebars, 'vistactags')
-    nnoremap <silent><C-t> :call sidebar#toggle('vistactags')<CR>
 endif
 " --------------------------
 " tree_browser
