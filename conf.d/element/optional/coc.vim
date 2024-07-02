@@ -62,8 +62,10 @@ nnoremap <silent><M-l><M-c> :CocFzfList<Cr>
 nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 " symbol
 nnoremap <silent><leader>t :Vista finder coc<Cr>
-nnoremap <silent><leader>S :CocFzfList symbols<Cr>
 inoremap <silent><C-x><C-x> <C-r>=CocActionAsync('showSignatureHelp')<Cr>
+if has('nvim')
+    nnoremap <silent><leader>S :CocFzfList symbols<Cr>
+endif
 " completion map
 inoremap <silent><expr> <Cr>  coc#pum#visible() ? coc#pum#stop() : "\<C-g>u\<Cr>\<C-r>=coc#on_enter()\<Cr>"
 inoremap <silent><expr> <TAB> coc#pum#visible() == v:false ? "\<Tab>" :
