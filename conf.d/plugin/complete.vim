@@ -158,34 +158,32 @@ if Planned('vim-vsnip')
         imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
     endif
-    if Planned('vim-vsnip-integ')
-        function! MapTabCr(istab) abort
-            let istab = a:istab
-            if pumvisible()
-                if istab
-                    if empty(get(v:, 'completed_item', {}))
-                        return "\<C-n>"
-                    elseif vsnip#available(1)
-                        return "\<Plug>(vsnip-expand-or-jump)"
-                    else
-                        return "\<C-y>"
-                    endif
+    function! MapTabCr(istab) abort
+        let istab = a:istab
+        if pumvisible()
+            if istab
+                if empty(get(v:, 'completed_item', {}))
+                    return "\<C-n>"
+                elseif vsnip#available(1)
+                    return "\<Plug>(vsnip-expand-or-jump)"
                 else
                     return "\<C-y>"
                 endif
             else
-                if istab
-                    return "\<Tab>"
-                else
-                    return "\<Cr>"
-                endif
+                return "\<C-y>"
             endif
-        endfunction
-        au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
-        au WinEnter,BufEnter * imap <silent><Cr> <C-R>=MapTabCr(0)<Cr>
-        if g:complete_engine == 'mcm'
-            au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
+        else
+            if istab
+                return "\<Tab>"
+            else
+                return "\<Cr>"
+            endif
         endif
+    endfunction
+    au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
+    au WinEnter,BufEnter * imap <silent><Cr> <C-R>=MapTabCr(0)<Cr>
+    if g:complete_engine == 'mcm'
+        au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
     endif
 else
     imap <silent><C-b> <C-o>I
