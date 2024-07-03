@@ -3,19 +3,19 @@ function! HasBackSpace() abort
     return !col || getline('.')[col - 1] =~ '\s'
 endfunction
 if Installed('mason.nvim')
-    luafile $LUA_DIR/mason.lua
+    luafile $ELEMENT_DIR/mason.lua
 endif
 if Installed('vimcomplete')
-    source $OPTIONAL_DIR/vcm.vim
+    source $ELEMENT_DIR/vcm.vim
 elseif InstalledCmp()
-    luafile $LUA_DIR/cmp.lua
+    luafile $ELEMENT_DIR/cmp.lua
 elseif Installed('coc.nvim')
-    source $OPTIONAL_DIR/coc.vim
+    source $ELEMENT_DIR/coc.vim
 elseif g:complete_engine == 'apm'
-    source $OPTIONAL_DIR/apm.vim
+    source $ELEMENT_DIR/apm.vim
 elseif g:complete_engine != ''
     let g:complete_engine = 'mcm'
-    source $OPTIONAL_DIR/mcm.vim
+    source $ELEMENT_DIR/mcm.vim
 endif
 if InstalledNvimLsp()
     let g:vista_default_executive = 'nvim_lsp'
@@ -55,7 +55,7 @@ if InstalledNvimLsp()
     else
         let g:nvim_java = 0
     endif
-    luafile $LUA_DIR/lsp.lua
+    luafile $ELEMENT_DIR/lsp.lua
 elseif Installed('coc.nvim')
     let g:vista_default_executive = 'coc'
     let g:coc_global_extensions = [
@@ -142,50 +142,44 @@ if Planned('vim-vsnip')
     elseif PlannedFzf()
         nnoremap <M-h>s :FzfFiles ~/.leovim/snippets<Cr>
     endif
-    if PlannedCoc()
-        if Installed('coc.nvim')
-            call coc#config("snippets.userSnippetsDirectory", Expand("~/.leovim/snippets"))
-        endif
+    if Installed('coc.nvim')
+        call coc#config("snippets.userSnippetsDirectory", Expand("~/.leovim/snippets"))
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
         smap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'
         imap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : CtrlFSkipBracket()
     else
-        if UNIX()
-            smap <silent><expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
-            smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
-        endif
+        smap <silent><expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
+        smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
         imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
     endif
-    if Planned('vim-vsnip-integ')
-        function! MapTabCr(istab) abort
-            let istab = a:istab
-            if pumvisible()
-                if istab
-                    if empty(get(v:, 'completed_item', {}))
-                        return "\<C-n>"
-                    elseif vsnip#available(1)
-                        return "\<Plug>(vsnip-expand-or-jump)"
-                    else
-                        return "\<C-y>"
-                    endif
+    function! MapTabCr(istab) abort
+        let istab = a:istab
+        if pumvisible()
+            if istab
+                if empty(get(v:, 'completed_item', {}))
+                    return "\<C-n>"
+                elseif vsnip#available(1)
+                    return "\<Plug>(vsnip-expand-or-jump)"
                 else
                     return "\<C-y>"
                 endif
             else
-                if istab
-                    return "\<Tab>"
-                else
-                    return "\<Cr>"
-                endif
+                return "\<C-y>"
             endif
-        endfunction
-        au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
-        au WinEnter,BufEnter * imap <silent><Cr> <C-R>=MapTabCr(0)<Cr>
-        if g:complete_engine == 'mcm'
-            au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
+        else
+            if istab
+                return "\<Tab>"
+            else
+                return "\<Cr>"
+            endif
         endif
+    endfunction
+    au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
+    au WinEnter,BufEnter * imap <silent><Cr> <C-R>=MapTabCr(0)<Cr>
+    if g:complete_engine == 'mcm'
+        au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
     endif
 else
     imap <silent><C-b> <C-o>I
@@ -222,17 +216,17 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
     if Installed('CopilotChat.nvim')
-        luafile $LUA_DIR/copilotchat.lua
+        luafile $ELEMENT_DIR/copilotchat.lua
         command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
         nnoremap <silent><M-i>g :CopilotChatCommands<Cr>
         nnoremap <M-i>c :CopliotChat<Space>
         nnoremap <M-i>s :CopliotChatSave<Space>
         nnoremap <M-i>l :CopliotChatLoad<Space>
-        luafile $LUA_DIR/copilotchat.lua
+        luafile $ELEMENT_DIR/copilotchat.lua
     endif
 endif
 if Installed('gp.nvim')
-    luafile $LUA_DIR/gp.lua
+    luafile $ELEMENT_DIR/gp.lua
     function! s:gp_toggle()
         if &columns > &lines * 3
             GpChatToggle vsplit

@@ -65,3 +65,6 @@ if has('wildignore')
     set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar,*.gz,*.pyd,*.pyc,*.ipynb
     set wildignore+=.ccls-cache/*,.idea/*,.vscode/*,__pycache__/*,.git/*,.svn/*,.hg/*,root/*
 endif
+if has('nvim-0.9') || has('patch-9.0.0647')
+    set splitkeep=screen
+endif
