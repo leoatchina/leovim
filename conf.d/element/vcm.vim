@@ -12,4 +12,4 @@ var options = {
     lsp: { enable: false, priority: 10, maxCount: 5 },
     ngram: { enable: false, priority: 10 },
 }
-autocmd VimEnter * g:VimCompleteOptionsSet(options)
+autocmd VimEnter,BufEnter * call g:VimCompleteOptionsSet(options)

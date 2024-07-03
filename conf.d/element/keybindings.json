@@ -17,8 +17,28 @@
   },
   // open keybindings
   {
-    "key": "ctrl+shift+alt+k",
+    "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
+  },
+  {
+    "key": "ctrl+shift+alt+,",
+    "command": "breadcrumbs.focusAndSelect",
+    "when": "breadcrumbsPossible && breadcrumbsVisible"
+  },
+  {
+    "key": "ctrl+shift+.",
+    "command": "-breadcrumbs.focusAndSelect",
+    "when": "breadcrumbsPossible && breadcrumbsVisible"
+  },
+  {
+    "key": "ctrl+shift+alt+,",
+    "command": "editor.action.accessibleViewGoToSymbol",
+    "when": "accessibilityHelpIsShown && accessibleViewGoToSymbolSupported || accessibleViewGoToSymbolSupported && accessibleViewIsShown"
+  },
+  {
+    "key": "ctrl+shift+.",
+    "command": "-editor.action.accessibleViewGoToSymbol",
+    "when": "accessibilityHelpIsShown && accessibleViewGoToSymbolSupported || accessibleViewGoToSymbolSupported && accessibleViewIsShown"
   },
   // fullScreen && Zen mode
   {
