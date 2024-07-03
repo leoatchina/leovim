@@ -17,7 +17,7 @@
   },
   // open keybindings
   {
-    "key": "ctrl+shift+alt+k",
+    "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
   },
   // fullScreen && Zen mode
