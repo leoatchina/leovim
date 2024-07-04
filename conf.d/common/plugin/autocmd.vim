@@ -74,12 +74,12 @@ augroup END
 " --------------------------
 " file templates
 " --------------------------
-autocmd BufNewFile .lintr          0r $CONFIG_DIR/templates/lintr.spec
-autocmd BufNewFile .Rprofile       0r $CONFIG_DIR/templates/Rprofile.spec
-autocmd BufNewFile .gitconfig      0r $CONFIG_DIR/templates/gitconfig.spec
-autocmd BufNewFile .gitignore      0r $CONFIG_DIR/templates/gitignore.spec
-autocmd BufNewFile .wildignore     0r $CONFIG_DIR/templates/wildignore.spec
-autocmd BufNewFile .radian_profile 0r $CONFIG_DIR/templates/radian_profile.spec
+autocmd BufNewFile .lintr          0r $CONF_D_DIR/templates/lintr.spec
+autocmd BufNewFile .Rprofile       0r $CONF_D_DIR/templates/Rprofile.spec
+autocmd BufNewFile .gitconfig      0r $CONF_D_DIR/templates/gitconfig.spec
+autocmd BufNewFile .gitignore      0r $CONF_D_DIR/templates/gitignore.spec
+autocmd BufNewFile .wildignore     0r $CONF_D_DIR/templates/wildignore.spec
+autocmd BufNewFile .radian_profile 0r $CONF_D_DIR/templates/radian_profile.spec
 " --------------------------
 " helpful
 " --------------------------

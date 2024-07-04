@@ -481,14 +481,6 @@ function! EnhancedSearch() range
 endfunction
 xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------
-" after
-" ------------------------
-if WINDOWS()
-    set rtp+=$CONFIG_DIR\\after
-else
-    set rtp+=$CONFIG_DIR/after
-endif
-" ------------------------
 " osc52 yankpost
 " ------------------------
 if exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc52_yank', 1)

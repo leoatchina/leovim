@@ -205,7 +205,7 @@ if Planned('vimspector')
         function! s:load_vimspector()
             let options = ['--prompt', 'VimspectorTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('vimspector',{
-                        \ 'source': WINDOWS() ? 'dir /B /S ' . $CONFIG_DIR . '\\vimspector\\*.json' : 'ls -1 ' . $CONFIG_DIR . '/vimspector/*.json',
+                        \ 'source': WINDOWS() ? 'dir /B /S ' . $CONF_D_DIR . '\\vimspector\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/vimspector/*.json',
                         \ 'sink': function('ReadVimspectorTemplate'),
                         \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
                         \ })
@@ -359,7 +359,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         function! s:load_dap() abort
             let options = ['--prompt', 'DapTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('dap',{
-                        \ 'source': WINDOWS() ? 'dir /B /S ' . $CONFIG_DIR . '\\dap\\*.json' : 'ls -1 ' . $CONFIG_DIR . '/dap/*.json',
+                        \ 'source': WINDOWS() ? 'dir /B /S ' . $CONF_D_DIR . '\\dap\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/dap/*.json',
                         \ 'sink': function('ReadDapTemplate'),
                         \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
                         \ })

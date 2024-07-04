@@ -345,7 +345,7 @@ if get(g:, 'leovim_openmap', 1)
         let f = expand(a:f)
         exec "tabe " . f
     endfunction
-    nnoremap <silent><M-h>i :call TabeOpen("$CONFIG_DIR/init.vim")<Cr>
+    nnoremap <silent><M-h>i :call TabeOpen("$CONF_D_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$ELEMENT_DIR/main.vim")<Cr>
     nnoremap <silent><M-h>k :call TabeOpen("$ELEMENT_DIR/keybindings.json")<Cr>

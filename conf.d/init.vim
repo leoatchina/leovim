@@ -11,17 +11,17 @@ endif
 " set dirs
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')
-let $CONFIG_DIR = expand($LEOVIM_DIR . '/conf.d')
+let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
 " --------------------------
 " set rtp && pack path
 " --------------------------
 set rtp^=$LEOVIM_DIR/pack
-set rtp^=$CONFIG_DIR/common
+set rtp^=$CONF_D_DIR/common
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
-let $INSTALL_DIR = expand($CONFIG_DIR . '/install')
-let $ELEMENT_DIR = expand($CONFIG_DIR . '/element')
+let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
+let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
 " --------------------------
 " set opt path
 " --------------------------
