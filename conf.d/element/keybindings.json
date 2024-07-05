@@ -81,16 +81,15 @@
   },
   {
     "key": "ctrl+t",
-    "command": "workbench.action.showAllSymbols"
+    "command": "-workbench.action.showAllSymbols"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "outline.focus"
   },
   {
     "key": "ctrl+shift+,",
     "command": "-editor.action.inPlaceReplace.up"
-  },
-  {
-    "key": "ctrl+shift+,",
-    "command": "outline-map.workspace.goToLocation",
-    "when": "editorTextFocus"
   },
   // git
   {
@@ -104,32 +103,6 @@
   {
     "key": "ctrl+alt+t",
     "command": "timeline.focus"
-  },
-  // ctrl n
-  {
-    "key": "ctrl+n",
-    "command": "-workbench.action.files.newUntitledFile"
-  },
-  {
-    "key": "ctrl+d",
-    "command": "-editor.action.addSelectionToNextFindMatch",
-    "when": "editorFocus"
-  },
-  {
-    "key": "ctrl+alt+n",
-    "command": "welcome.showNewFileEntries"
-  },
-  {
-    "key": "ctrl+alt+meta+n",
-    "command": "-welcome.showNewFileEntries"
-  },
-  {
-    "key": "ctrl+alt+n",
-    "command": "-code-runner.run"
-  },
-  {
-    "key": "ctrl+alt+r",
-    "command": "code-runner.run"
   },
   // ctrl o
   {
@@ -590,5 +563,33 @@
     "key": "ctrl+i",
     "command": "-inlineChat.holdForSpeech",
     "when": "hasSpeechProvider && inlineChatHasProvider && inlineChatVisible && textInputFocus"
+  },
+  // ctrl n
+  {
+    "key": "ctrl+n",
+    "command": "-workbench.action.files.newUntitledFile"
+  },
+  {
+    "key": "ctrl+d",
+    "command": "-editor.action.addSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+alt+n",
+    "command": "welcome.showNewFileEntries"
+  },
+  {
+    "key": "ctrl+alt+meta+n",
+    "command": "-welcome.showNewFileEntries"
+  },
+  {
+    "key": "ctrl+alt+n",
+    "command": "-code-runner.run"
+  },
+  // run
+  {
+    "key": "ctrl+alt+r",
+    "command": "code-runner.run"
   }
+  // last
 ]
