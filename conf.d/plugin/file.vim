@@ -383,12 +383,11 @@ endif
 " ------------------
 if WINDOWS()
     let s:vscode_user_dir = substitute(fnameescape(get(g:, "vscode_user_dir", "")), '/', '\', 'g')
-    let s:theia_user_dir = Expand('~/.theia-ide')
 else
     let s:vscode_user_dir = fnameescape(get(g:, "vscode_user_dir", ""))
-    let s:theia_user_dir = Expand('~/.theia-ide', 1)
 endif
-silent! mkdir(s:theia_user_dir, "p")
+let s:theia_user_dir = Expand('~/.theia-ide')
+silent! call mkdir(s:theia_user_dir, 'p')
 function! s:link_keybindings() abort
     if WINDOWS()
         if isdirectory(s:vscode_user_dir)
@@ -414,8 +413,8 @@ function! s:link_keybindings() abort
             let ln_cmd = printf('!ln -sf %s %s', $LEOVIM_DIR . '/snippets', s:vscode_user_dir)
             execute(ln_cmd)
         endif
-        let ln_cmd = printf('!ln -sf %s %s', $ELEMENT_DIR . '/keybindings.json', s:theia_user_dir)
-        execute(mklink_cmd)
+        let ln_cmd = printf('!ln -sf %s %s', $ELEMENT_DIR . '/keybindings.json', s:theia_user_dir . '/keymaps.json')
+        execute(ln_cmd)
     endif
 endfunction
 command! LinkKeyBindings call s:link_keybindings()

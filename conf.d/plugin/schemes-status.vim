@@ -104,7 +104,7 @@ PlugAddOpt 'lightline-bufferline'
 " ------------------------
 function! RelativeDir()
     let root = RootDir()
-    let path = fnameescape(substitute(Expand('%:p:h'), '\\', '/', 'g'))
+    let path = Expand('%:p:h', 1)
     if root == ''
         return path
     else
@@ -115,7 +115,7 @@ function! RootDir()
     return GitRootDir() == '' ? '' : GitRootDir() . '/'
 endfunction
 function! AbsPath()
-    return fnameescape(substitute(Expand('%:p'), '\\', '/', 'g'))
+    return Expand('%:p', 1)
 endfunction
 let g:lightline = {
                 \ 'component': {
