@@ -383,35 +383,43 @@ endif
 " ------------------
 if WINDOWS()
     let s:vscode_user_dir = substitute(fnameescape(get(g:, "vscode_user_dir", "")), '/', '\', 'g')
+    let s:theia_user_dir = Expand('~/.theia-ide')
 else
     let s:vscode_user_dir = fnameescape(get(g:, "vscode_user_dir", ""))
+    let s:theia_user_dir = Expand('~/.theia-ide', 1)
 endif
-if isdirectory(s:vscode_user_dir)
-    function! s:link_keybindings() abort
-        if WINDOWS()
+silent! mkdir(s:theia_user_dir, "p")
+function! s:link_keybindings() abort
+    if WINDOWS()
+        if isdirectory(s:vscode_user_dir)
             let delete_cmd = printf('!del /Q /S %s\keybindings.json', s:vscode_user_dir)
             execute(delete_cmd)
             let rmdir_cmd = printf('!rmdir /Q /S %s\snippets', s:vscode_user_dir)
             execute(rmdir_cmd)
             " create keybindings.json link
-            let template = '!mklink %s %s'
-            let cmd = printf(template, s:vscode_user_dir . '\keybindings.json', $ELEMENT_DIR . '\keybindings.json')
-            execute(cmd)
+            let mklink_cmd = printf('!mklink %s %s', s:vscode_user_dir . '\keybindings.json', $ELEMENT_DIR . '\keybindings.json')
+            execute(mklink_cmd)
             " create snippets link
-            let template = '!mklink /d %s %s'
-            let cmd = printf(template, s:vscode_user_dir . '\snippets', $LEOVIM_DIR . '\snippets')
-            execute(cmd)
-        else
-            let template = '!ln -sf %s %s'
-            let cmd = printf(template, $ELEMENT_DIR . '/keybindings.json', s:vscode_user_dir)
-            execute(cmd)
-            let cmd = printf(template, $LEOVIM_DIR . '/snippets', s:vscode_user_dir)
-            execute(cmd)
+            let mklink_cmd = printf('!mklink /d %s %s', s:vscode_user_dir . '\snippets', $LEOVIM_DIR . '\snippets')
+            execute(mklink_cmd)
         endif
-    endfunction
-    command! LinkKeyBindings call s:link_keybindings()
-    nnoremap <M-h>K :LinkKeyBindings<Cr>
-endif
+        let delete_cmd = printf('!del /Q /S %s\keymaps.json', s:theia_user_dir)
+        execute(delete_cmd)
+        let mklink_cmd = printf('!mklink %s %s', s:theia_user_dir . '\keymaps.json', $ELEMENT_DIR . '\keybindings.json')
+        execute(mklink_cmd)
+    else
+        if isdirectory(s:vscode_user_dir)
+            let ln_cmd = printf('!ln -sf %s %s', $ELEMENT_DIR . '/keybindings.json', s:vscode_user_dir)
+            execute(ln_cmd)
+            let ln_cmd = printf('!ln -sf %s %s', $LEOVIM_DIR . '/snippets', s:vscode_user_dir)
+            execute(ln_cmd)
+        endif
+        let ln_cmd = printf('!ln -sf %s %s', $ELEMENT_DIR . '/keybindings.json', s:theia_user_dir)
+        execute(mklink_cmd)
+    endif
+endfunction
+command! LinkKeyBindings call s:link_keybindings()
+nnoremap <M-h>K :LinkKeyBindings<Cr>
 function! s:get_cursor_pos(text, col)
     " Find the start location
     let col = a:col
