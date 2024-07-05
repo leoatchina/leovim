@@ -21,6 +21,7 @@
 __pycache__
 .netrwhist
 .vscode
+.theia
 .vs
 .fleet
 .idea

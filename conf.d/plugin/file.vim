@@ -404,16 +404,16 @@ function! s:link_keybindings() abort
         endif
         let delete_cmd = printf('!del /Q /S %s\keymaps.json', s:theia_user_dir)
         execute(delete_cmd)
-        let mklink_cmd = printf('!mklink %s %s', s:theia_user_dir . '\keymaps.json', $ELEMENT_DIR . '\keybindings.json')
+        let mklink_cmd = printf('!mklink %s %s', s:theia_user_dir . '\keymaps.json', $ELEMENT_DIR . '\keymaps.json')
         execute(mklink_cmd)
     else
         if isdirectory(s:vscode_user_dir)
-            let ln_cmd = printf('!ln -sf %s %s', $ELEMENT_DIR . '/keybindings.json', s:vscode_user_dir)
+            let ln_cmd = printf('!ln -sf %s %s', $ELEMENT_DIR . '/keybindings.json', s:vscode_user_dir . '/keybindings.json')
             execute(ln_cmd)
-            let ln_cmd = printf('!ln -sf %s %s', $LEOVIM_DIR . '/snippets', s:vscode_user_dir)
+            let ln_cmd = printf('!ln -sf %s %s', $LEOVIM_DIR . '/snippets', s:vscode_user_dir . '/snippets')
             execute(ln_cmd)
         endif
-        let ln_cmd = printf('!ln -sf %s %s', $ELEMENT_DIR . '/keybindings.json', s:theia_user_dir . '/keymaps.json')
+        let ln_cmd = printf('!ln -sf %s %s', $ELEMENT_DIR . '/keymaps.json', s:theia_user_dir . '/keymaps.json')
         execute(ln_cmd)
     endif
 endfunction

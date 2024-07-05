@@ -1,0 +1,10 @@
+[
+    {
+        "command": "-core.nextTab",
+        "keybinding": "ctrlcmd+alt+d"
+    },
+    {
+        "command": "debug.configurations.add",
+        "keybinding": "ctrlcmd+alt+d"
+    }
+]
