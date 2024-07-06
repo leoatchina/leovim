@@ -434,6 +434,8 @@ au FileType help,vimdoc nnoremap <C-]> <C-]>
 nnoremap <silent><C-g> :call SymbolOrTagOrSearchAll("definition")<Cr>
 nnoremap <silent><C-]> :call SymbolOrTagOrSearchAll("definition", "vsplit")<Cr>
 nnoremap <silent><M-c> :call SymbolOrTagOrSearchAll("definition", "list")<Cr>
+nnoremap <silent><C-w>g :call SymbolOrTagOrSearchAll("definition", "tabe")<Cr>
+nnoremap <silent><C-w>] :call SymbolOrTagOrSearchAll("definition", "split")<Cr>
 nnoremap <silent><C-w><C-g> :call SymbolOrTagOrSearchAll("definition", "tabe")<Cr>
 nnoremap <silent><C-w><C-]> :call SymbolOrTagOrSearchAll("definition", "split")<Cr>
 " references
