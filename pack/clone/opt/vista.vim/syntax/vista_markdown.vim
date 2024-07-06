@@ -3,7 +3,7 @@
 " vim: ts=2 sw=2 sts=2 et
 
 if exists('b:current_syntax') && b:current_syntax ==# 'vista_markdown'
-  finish
+    finish
 endif
 
 syntax match VistaColon /:/ contained

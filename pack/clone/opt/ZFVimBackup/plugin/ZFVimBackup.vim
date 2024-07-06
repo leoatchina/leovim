@@ -138,7 +138,7 @@ function! ZFBackup_backupDir()
 endfunction
 
 function! ZFBackup_isInBackupDir(path)
-    return (stridx(CygpathFix_absPath(a:path), CygpathFix_absPath(ZFBackup_backupDir())) == 0)
+    return (stridx(CygpathFix_absPath(a:path), CygpathFix_absPath(ZFBackup_backupDir()) . '/') == 0)
 endfunction
 
 function! CygpathFix_absPath(path)
@@ -454,7 +454,7 @@ function! s:backupSave(filePath, options)
         if !exists('s:tempDir')
             let s:tempDir = CygpathFix_absPath(fnamemodify(tempname(), ':h'))
         endif
-        if stridx(absPath, s:tempDir) == 0
+        if stridx(absPath, s:tempDir . '/') == 0
             return
         endif
     endif
@@ -570,7 +570,7 @@ function! s:backupRemoveDir(dirPath)
 
     let backupDir = ZFBackup_backupDir()
     for backupInfo in ZFBackup_getAllBackupInfoList()
-        if stridx(backupInfo['path'], absPath) == 0
+        if stridx(backupInfo['path'], absPath . '/') == 0
             silent! call delete(backupDir . '/' . backupInfo['backupFile'])
         endif
     endfor

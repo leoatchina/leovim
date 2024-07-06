@@ -19,7 +19,7 @@ function! ZFBackupListDir(...)
     let absPath = CygpathFix_absPath(dirPath)
     let backupsInDir = {}
     for backupInfo in ZFBackup_getAllBackupInfoList()
-        if stridx(backupInfo['path'], absPath) == 0
+        if stridx(backupInfo['path'], absPath . '/') == 0
             let backupsInDir[backupInfo['path'] . '/' . backupInfo['name']] = backupInfo
         endif
     endfor
@@ -77,7 +77,7 @@ function! ZFBackupListDir(...)
     call sort(backupInfoList, function('s:ZFBackupListDir_sortFunc'))
     for backupInfo in backupInfoList
         call add(b:ZFBackupListDir_filesToList, backupInfo['path'] . '/' . backupInfo['name'])
-        let relIndex = stridx(backupInfo['path'] . '/' . backupInfo['name'], absPath)
+        let relIndex = stridx(backupInfo['path'] . '/' . backupInfo['name'], absPath . '/')
         if relIndex == 0
             let pathInfo = strpart(backupInfo['path'] . '/' . backupInfo['name'], len(absPath))
         else
