@@ -148,7 +148,7 @@ if has('patch-9.0.0185') || has('nvim')
         endif
     endif
 endif
-if has('nvim') && UNIX() && filereadable(expand("~/.gp.key"))
+if has('nvim') && UNIX() && filereadable(Expand("~/.gp.key"))
     PlugAdd 'Robitx/gp.nvim'
 endif
 " ------------------------------
@@ -202,9 +202,9 @@ endif
 if exists('*systemlist') && has('patch-7.4.1304')
     PlugAdd 'junegunn/fzf.vim'
     if WINDOWS()
-        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': expand('$HOME\\AppData\\Local\\fzf')}
+        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
     else
-        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': expand('~/.local/fzf')}
+        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
     endif
     if has('nvim')
         PlugAdd 'kevinhwang91/nvim-bqf'
