@@ -82,6 +82,7 @@
 - [ ] wilder.nvim
 - [ ] tabbar show all windows
 - [ ] run in qf and show in statusline
+- [ ] floaterm drop command
 - [ ] ====== My plugins ======
 - [ ] vim-funky
   - [x] open bug
