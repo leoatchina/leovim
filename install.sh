@@ -109,6 +109,8 @@ create_symlinks "$APP_PATH/jetbrains/idea.vim" "$HOME/.ideavimrc"
 # create config
 create_vimrc "$HOME/.vimrc"
 create_vimrc "$HOME/.config/nvim/init.vim"
+[ ! -f $HOME/.gvimrc ] && echo '" set guifont=CascadiaCode\ Nerd\ Font:h11.5' > $HOME/.gvimrc
+[ ! -f $HOME/.config/nvim/ginit.vim ] && echo '" set guifont=CascadiaCode\ Nerd\ Font:h11.5' > $HOME/.config/nvim/ginit.vim
 
 # vim run scripts
 cp -n $APP_PATH/scripts/v.sh $HOME/.local/bin
