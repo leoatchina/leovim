@@ -25,8 +25,15 @@ echo    source ~/.vimrc.local >> "%HOME%\.vimrc"
 echo else >> "%HOME%\.vimrc"
 echo    source ~/.leovim/conf.d/init.vim >> "%HOME%\.vimrc"
 echo endif >> "%HOME%\.vimrc"
+
 REM cp vimrc
 call copy "%HOME%\.vimrc" "%HOME%\AppData\local\nvim\init.vim"
+
+REM create gvimrc 
+IF NOT EXIST "%HOME%\.gvimrc" (
+    echo set guifont=CascadiaCode\ COde:h11 > "%HOME%\.gvimrc"
+    echo set guifont=CascadiaCode\ Nerd\ Font:h11.5 >> "%HOME%\.gvimrc"
+)
 
 REM mklink
 call del    "%HOME%\_leovim.clean.cmd"
