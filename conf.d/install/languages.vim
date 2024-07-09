@@ -99,6 +99,6 @@ if Require('java') && Planned('nvim-lspconfig') && Planned('nvim-dap') && g:pyth
         let g:jars_dir = Expand("$HOME/.leovim.unix/jars")
     endif
     if isdirectory(g:jars_dir)
-        PlugAdd('JavaHello/spring-boot.nvim')
+        PlugAdd 'JavaHello/spring-boot.nvim'
     endif
 endif
