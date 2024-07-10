@@ -11,7 +11,7 @@ local sources = {
   { name = 'nvim_lsp', priority = 16 },
   { name = 'nvim_lua', priority = 4 },
   { name = 'buffer', priority = 2 },
-  { name = 'async_path', priority = 1 },
+  { name = 'path', priority = 1 },
 }
 if Installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 64})
@@ -191,12 +191,12 @@ cmp.setup.cmdline({'/', '?'}, {
     { name = 'nvim_lsp_document_symbol' }
   }, {
     { name = 'buffer' }
-  })
+  }),
 })
 cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
-    { name = 'async_path' }
+    { name = 'path', option = { reat_trailing_slash = false }}
   }, {
     { name = 'cmdline' }
   })
