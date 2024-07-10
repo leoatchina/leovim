@@ -79,7 +79,7 @@
 - [x] delete lsp_zero
 - [x] Expand
 - [x] run reuse
-- [ ] wilder.nvim
+- [ ] wilder.nvim  && cmp-cmdline
 - [ ] tabbar show all windows
 - [ ] run in qf and show in statusline
 - [ ] floaterm drop command

@@ -255,6 +255,12 @@ if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 endif
 " ----------------------------
+" cmdline
+" ----------------------------
+if (has('nvim') || v:version >= 801) && !Planned('nvim-cmp')
+    PlugAdd 'gelguy/wilder.nvim'
+endif
+" ----------------------------
 " helpful
 " ----------------------------
 if Require('helpful')
