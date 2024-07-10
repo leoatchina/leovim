@@ -80,6 +80,9 @@ local lspconfig = require("lspconfig")
 local default_setup = function(server)
   lspconfig[server].setup({
     capabilities = lsp_capabilities,
+    codeLens = {
+      enable = false,
+    },
   })
 end
 require("mason-lspconfig").setup({
@@ -127,29 +130,10 @@ require("mason-lspconfig").setup({
       })
     end,
     jdtls = function()
-      if vim.g.nvim_java > 0 then
-        if Installed("spring-boot.nvim") then
-          require('spring_boot').setup({
-            ls_path = vim.g.jars_dir,
-            jdtls_name = 'jdtls',
-            log_file = nil,
-          })
-          require('spring_boot').init_lsp_commands()
-          lspconfig.jdtls.setup({
-            capabilities = lsp_capabilities,
-            init_options = {
-              bundles = require('spring_boot').java_extensions(),
-            },
-          })
-        else
-          lspconfig.jdtls.setup({
-            capabilities = lsp_capabilities,
-          })
-        end
-      else
-        return default_setup
-      end
-    end
+      lspconfig.jdtls.setup({
+        capabilities = lsp_capabilities,
+      })
+    end,
   }
 })
 -----------------
