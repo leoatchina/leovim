@@ -49,8 +49,11 @@ if InstalledNvimLsp()
         let g:go_exe_version = StringToFloat(go_exe_version, 2)
         let g:ensure_installed += ['gopls']
     endif
-    if Installed('nvim-java', 'nvim-java-dap', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'spring-boot.nvim')
-      lua require('java').setup()
+    if Installed('nvim-java', 'nvim-java-dap', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'spring-boot.nvim', 'lua-async-await')
+        lua require('java').setup()
+    endif
+    if Installed('spring-boot.nvim')
+        luafile $ELEMENT_DIR/springboot.lua
     endif
     luafile $ELEMENT_DIR/lsp.lua
 elseif Installed('coc.nvim')
