@@ -110,7 +110,6 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
-    PlugAdd 'mfussenegger/nvim-lint'
     PlugAdd 'DNLHC/glance.nvim'
     PlugAdd 'gfanto/fzf-lsp.nvim'
     PlugAdd 'josa42/nvim-lightline-lsp'
@@ -299,7 +298,6 @@ function! InstalledCmp() abort
                 \ 'cmp-nvim-lsp-signature-help',
                 \ 'cmp-vsnip',
                 \ 'friendly-snippets',
-                \ 'nvim-lint',
                 \ 'lspkind-nvim',
                 \ )
 endfunction
