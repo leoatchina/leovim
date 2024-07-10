@@ -52,20 +52,7 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping({
-    ['<C-n>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-      else
-        fallback()
-      end
-    end, { "i" }),
-    ['<C-p>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-      else
-        fallback()
-      end
-    end, { "i" }),
+    -- cmdline only mapping
     ['<C-j>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
@@ -80,15 +67,31 @@ cmp.setup({
         fallback()
       end
     end, { "c" }),
+    -- insert mapping
+    ['<C-n>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+      else
+        fallback()
+      end
+    end, { "i" }),
+    ['<C-p>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+      else
+        fallback()
+      end
+    end, { "i" }),
+    -- others
     ['<C-e>'] = {
-      c = cmp.mapping.abort(),
       i = function()
         if cmp.visible() then
           cmp.abort()
         else
           vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>A', true, false, true), 'i', true)
         end
-      end
+      end,
+      c = cmp.mapping.abort(),
     },
     ['<C-y>'] = {
       i = function()
@@ -97,19 +100,20 @@ cmp.setup({
         else
           vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-y>"', true, false, true), 'i', true)
         end
-      end
+      end,
+      c = cmp.mapping.close(),
     },
     ['<Cr>'] = {
-      c = cmp.mapping.confirm({
-        select = false,
-      }),
       i = function(fallback)
         if cmp.visible() then
           cmp.close()
         else
           fallback()
         end
-      end
+      end,
+      c = cmp.mapping.confirm({
+        select = false,
+      }),
     },
     ['<S-Tab>'] = {
       i = function(fallback)
