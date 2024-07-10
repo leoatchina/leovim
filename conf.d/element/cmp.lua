@@ -52,44 +52,28 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping({
-    ["<S-Tab>"] = {
-      c = function()
-        if cmp.visible() then
-          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-        else
-          cmp.complete()
-        end
-      end,
-      i = function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-        else
-          fallback()
-        end
-      end
-    },
-    ["<C-n>"] = cmp.mapping(function(fallback)
+    ['<C-n>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
       else
         fallback()
       end
     end, { "i" }),
-    ["<C-p>"] = cmp.mapping(function(fallback)
+    ['<C-p>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
       else
         fallback()
       end
     end, { "i" }),
-    ["<C-j>"] = cmp.mapping(function(fallback)
+    ['<C-j>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
       else
         fallback()
       end
     end, { "c" }),
-    ["<C-k>"] = cmp.mapping(function(fallback)
+    ['<C-k>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
       else
@@ -126,6 +110,22 @@ cmp.setup({
           fallback()
         end
       end
+    },
+    ['<S-Tab>'] = {
+      i = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+      c = function()
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          cmp.complete()
+        end
+      end,
     },
     ['<Tab>'] = {
       i = function(fallback)
@@ -196,7 +196,7 @@ cmp.setup.cmdline({'/', '?'}, {
 cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
-    { name = 'path', option = { reat_trailing_slash = false }}
+    { name = 'path' }
   }, {
     { name = 'cmdline' }
   })
