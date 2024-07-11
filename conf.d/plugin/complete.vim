@@ -49,11 +49,11 @@ if InstalledNvimLsp()
         let g:go_exe_version = StringToFloat(go_exe_version, 2)
         let g:ensure_installed += ['gopls']
     endif
-    if Installed('nvim-java', 'lua-async-await', 'nvim-java-refactor', 'nvim-java-core', 'nvim-java-test', 'nvim-java-dap')
-        let g:nvim_java = 1
+    if Installed('nvim-java', 'nvim-java-dap', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'spring-boot.nvim', 'lua-async-await')
         lua require('java').setup()
-    else
-        let g:nvim_java = 0
+    endif
+    if Installed('spring-boot.nvim')
+        luafile $ELEMENT_DIR/springboot.lua
     endif
     luafile $ELEMENT_DIR/lsp.lua
 elseif Installed('coc.nvim')
@@ -115,7 +115,7 @@ elseif Installed('coc.nvim')
     if Require('rust') && g:cargo_exe != ''
         let g:coc_global_extensions += ['coc-rust-analyzer']
     endif
-    if Require('java') && g:java_exe != ''
+    if Require('java') && executable('java')
         let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
     endif
     if Require('go') && g:go_exe != ''
@@ -237,6 +237,30 @@ if Installed('gp.nvim')
     command! GpChatToggleSmartPosition call s:gp_toggle()
     command! GpCommands call FzfCallCommands('GpCommands', 'Gp')
     nnoremap <silent><M-i><M-g> :GpCommands<Cr>
+endif
+" ------------------------------
+" wilder.nvim
+" ------------------------------
+if Installed('wilder.nvim')
+    " Default keys
+    call wilder#setup({
+                \ 'modes': [':', '/', '?'],
+                \ 'next_key': '<Tab>',
+                \ 'previous_key': '<S-Tab>',
+                \ 'accept_key': '<Down>',
+                \ 'reject_key': '<Up>',
+                \ })
+
+    call wilder#set_option('pipeline', [
+                \   wilder#branch(
+                \     wilder#cmdline_pipeline(),
+                \     wilder#search_pipeline(),
+                \   ),
+                \ ])
+
+    call wilder#set_option('renderer', wilder#popupmenu_renderer({
+                \ 'highlighter': wilder#basic_highlighter(),
+                \ }))
 endif
 " ------------------------------
 " pairs

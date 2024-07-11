@@ -81,24 +81,12 @@ endif
 " ------------------------------
 " nvim-java
 " ------------------------------
-if executable(Expand(get(g:, 'java_exe', 'java')))
-    let g:java_exe = Expand(exepath(get(g:, 'java_exe', 'java')))
-else
-    let g:java_exe = ''
-endif
 if Require('java') && Planned('nvim-lspconfig') && Planned('nvim-dap') && g:python_version > 3.09
+    PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'nvim-java/nvim-java-refactor'
     PlugAdd 'nvim-java/nvim-java-core'
     PlugAdd 'nvim-java/nvim-java-test'
     PlugAdd 'nvim-java/nvim-java-dap'
-    PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'nvim-java/nvim-java'
-    if WINDOWS()
-        let g:jars_dir = Expand("$HOME/.leovim.windows/jars")
-    else
-        let g:jars_dir = Expand("$HOME/.leovim.unix/jars")
-    endif
-    if isdirectory(g:jars_dir)
-        PlugAdd('JavaHello/spring-boot.nvim')
-    endif
+    PlugAdd 'JavaHello/spring-boot.nvim'
 endif

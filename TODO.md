@@ -77,8 +77,12 @@
 - [x] targets.vim bug
 - [x] yank optimize
 - [x] delete lsp_zero
+- [x] Expand
 - [x] run reuse
-- [ ] Extend
+- [ ] wilder.nvim  && cmp-cmdline
+- [ ] tabbar show all windows
+- [ ] run in qf and show in statusline
+- [ ] floaterm drop command
 - [ ] ====== My plugins ======
 - [ ] vim-funky
   - [x] open bug

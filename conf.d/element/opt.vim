@@ -23,16 +23,17 @@ let g:leovim_openmap = 0
 
 let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'query', 'c', 'cpp', 'go', 'rust', 'java']
 
+if has('nvim') && HAS_GUI()
+    " set guifont=Cascadia\ Code:h10.5
+    " set guifont=CascadiaCode\ Nerd\ Font:h11.5
+endif
+
 if WINDOWS()
     " let g:python3_host_prog='C:\\Python37\\python.exe'
     " let &pythonthreedll='C:\\Python37\\python37.dll'
     " let &pythonthreehome='C:\\Python37'
-    " set guifont=Cascadia\ Code:h10.5
-    " set guifont=CascadiaCode\ Nerd\ Font:h10.5
 elseif UNIX()
     " let g:python3_host_prog=$HOME.'/miniconda3/bin/python3'
-    " set guifont=Cascadia\ Code\ 10.5
-    " set guifont=CascadiaCode\ Nerd\ Font 10.5
 endif
 
 " NOTE: visit https://ftp.gnu.org/pub/gnu/global/

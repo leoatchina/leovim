@@ -1,4 +1,5 @@
 #!/bin/env bash
+
 # ctrlp
 rm -rf ctrlp.vim
 git clone --depth 1 https://github.com/ctrlpvim/ctrlp.vim.git
@@ -6,11 +7,6 @@ git clone --depth 1 https://github.com/ctrlpvim/ctrlp.vim.git
 # tagbar
 rm -rf tagbar
 git clone --depth 1 https://github.com/preservim/tagbar.git
-
-# vista
-rm -rf vista.vim
-git clone --depth 1 https://github.com/leoatchina/vista.vim.git
-for fl in `find ./vista.vim -type f | grep vim$` ; do echo $fl; vim -c "normal ggVG=" -c "wq!" $fl ; done
 
 # vim-signify
 rm -rf vim-signify

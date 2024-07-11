@@ -100,7 +100,7 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
     PlugAdd 'hrsh7th/cmp-buffer'
     PlugAdd 'hrsh7th/cmp-cmdline'
-    PlugAdd 'FelipeLema/cmp-async-path'
+    PlugAdd 'hrsh7th/cmp-path'
     PlugAdd 'petertriho/cmp-git'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
     PlugAdd 'onsails/lspkind-nvim'
@@ -110,7 +110,6 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
-    PlugAdd 'mfussenegger/nvim-lint'
     PlugAdd 'DNLHC/glance.nvim'
     PlugAdd 'gfanto/fzf-lsp.nvim'
     PlugAdd 'josa42/nvim-lightline-lsp'
@@ -256,6 +255,12 @@ if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 endif
 " ----------------------------
+" cmdline
+" ----------------------------
+if (has('nvim') || v:version >= 801) && !Planned('nvim-cmp')
+    PlugAdd 'gelguy/wilder.nvim'
+endif
+" ----------------------------
 " helpful
 " ----------------------------
 if Require('helpful')
@@ -294,12 +299,11 @@ function! InstalledCmp() abort
                 \ 'cmp-cmdline',
                 \ 'cmp-nvim-lsp',
                 \ 'cmp-nvim-lua',
-                \ 'cmp-async-path',
+                \ 'cmp-path',
                 \ 'cmp-git',
                 \ 'cmp-nvim-lsp-signature-help',
                 \ 'cmp-vsnip',
                 \ 'friendly-snippets',
-                \ 'nvim-lint',
                 \ 'lspkind-nvim',
                 \ )
 endfunction

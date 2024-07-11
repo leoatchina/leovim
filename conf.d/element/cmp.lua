@@ -11,7 +11,7 @@ local sources = {
   { name = 'nvim_lsp', priority = 16 },
   { name = 'nvim_lua', priority = 4 },
   { name = 'buffer', priority = 2 },
-  { name = 'async_path', priority = 1 },
+  { name = 'path', priority = 1 },
 }
 if Installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 64})
@@ -52,59 +52,46 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping({
-    ["<S-Tab>"] = {
-      c = function()
-        if cmp.visible() then
-          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-        else
-          cmp.complete()
-        end
-      end,
-      i = function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-        else
-          fallback()
-        end
-      end
-    },
-    ["<C-n>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-      else
-        fallback()
-      end
-    end, { "i" }),
-    ["<C-p>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-      else
-        fallback()
-      end
-    end, { "i" }),
-    ["<C-j>"] = cmp.mapping(function(fallback)
+    -- cmdline only mapping
+    ['<C-j>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
       else
         fallback()
       end
     end, { "c" }),
-    ["<C-k>"] = cmp.mapping(function(fallback)
+    ['<C-k>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
       else
         fallback()
       end
     end, { "c" }),
+    -- insert mapping
+    ['<C-n>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+      else
+        fallback()
+      end
+    end, { "i" }),
+    ['<C-p>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+      else
+        fallback()
+      end
+    end, { "i" }),
+    -- others
     ['<C-e>'] = {
-      c = cmp.mapping.abort(),
       i = function()
         if cmp.visible() then
           cmp.abort()
         else
           vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>A', true, false, true), 'i', true)
         end
-      end
+      end,
+      c = cmp.mapping.abort(),
     },
     ['<C-y>'] = {
       i = function()
@@ -113,19 +100,36 @@ cmp.setup({
         else
           vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-y>"', true, false, true), 'i', true)
         end
-      end
+      end,
+      c = cmp.mapping.close(),
     },
     ['<Cr>'] = {
-      c = cmp.mapping.confirm({
-        select = false,
-      }),
       i = function(fallback)
         if cmp.visible() then
           cmp.close()
         else
           fallback()
         end
-      end
+      end,
+      c = cmp.mapping.confirm({
+        select = false,
+      }),
+    },
+    ['<S-Tab>'] = {
+      i = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+      c = function()
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          cmp.complete()
+        end
+      end,
     },
     ['<Tab>'] = {
       i = function(fallback)
@@ -191,12 +195,12 @@ cmp.setup.cmdline({'/', '?'}, {
     { name = 'nvim_lsp_document_symbol' }
   }, {
     { name = 'buffer' }
-  })
+  }),
 })
 cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
-    { name = 'async_path' }
+    { name = 'path' }
   }, {
     { name = 'cmdline' }
   })

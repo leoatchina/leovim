@@ -4,7 +4,7 @@ let g:Lf_DefaultMode  = 'Regex'
 let g:Lf_ReverseOrder = 0
 let g:Lf_NoChdir      = 1
 let g:Lf_QuickSelect  = 0
-let g:Lf_PythonVersion = float2nr(g:python_version)
+let g:Lf_PythonVersion = get(g:, 'Lf_PythonVersion', float2nr(g:python_version))
 let g:Lf_DefaultExternalTool = "rg"
 let g:Lf_WorkingDirectoryMode = 'AF'
 " border
@@ -93,6 +93,6 @@ let g:Lf_NormalCommandMap = {
             \ "Colorscheme": {}
             \ }
 " gtags
-let g:Lf_Gtags='gtags'
+let g:Lf_Gtags = 'gtags'
 let g:Lf_Global = "global"
 " loclist
