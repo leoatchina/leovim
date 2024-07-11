@@ -115,7 +115,7 @@ elseif Installed('coc.nvim')
     if Require('rust') && g:cargo_exe != ''
         let g:coc_global_extensions += ['coc-rust-analyzer']
     endif
-    if Require('java') && g:java_exe != ''
+    if Require('java') && executable('java')
         let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
     endif
     if Require('go') && g:go_exe != ''
