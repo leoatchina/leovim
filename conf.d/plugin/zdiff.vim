@@ -34,12 +34,12 @@ let g:ZFIgnoreOption_ZFDirDiff = {
             \ 'ZFDirDiff' : 1,
             \ }
 let g:ZFIgnore_ignore_gitignore_detectOption = {
-        \ 'pattern' : '\.wildignore',
-        \ 'path' : '',
-        \ 'cur' : 1,
-        \ 'parent' : 1,
-        \ 'parentRecursive' : 0,
-        \ }
+            \ 'pattern' : '\.wildignore',
+            \ 'path' : '',
+            \ 'cur' : 1,
+            \ 'parent' : 1,
+            \ 'parentRecursive' : 0,
+            \ }
 PlugAddOpt 'ZFVimIgnore'
 autocmd User ZFIgnoreOnToggle let &wildignore = join(ZFIgnoreToWildignore(ZFIgnoreGet()), ',')
 " --------------------
@@ -101,8 +101,8 @@ let g:ZFDirDiffKeymap_getFullPath = ['Y']
 nnoremap <Leader>fd :ZFDirDiff<Space>
 nnoremap <Leader>fm :ZFDirDiffMark<Cr>
 nnoremap <Leader>fu :ZFDirDiffUnmark<Cr>
-au FileType ZFDirDiff nnoremap M :tabe +180 $HOME/.leovim/conf.d/element/file.vim<Cr>
 PlugAddOpt 'ZFVimDirDiff'
+au FileType ZFDirDiff nnoremap M :tabe +77 $HOME/.leovim/conf.d/plugin/zdiff.vim<Cr>
 " --------------------
 " diff opt
 " --------------------
