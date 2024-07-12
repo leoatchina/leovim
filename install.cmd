@@ -31,8 +31,7 @@ call copy "%HOME%\.vimrc" "%HOME%\AppData\local\nvim\init.vim"
 
 REM create gvimrc 
 IF NOT EXIST "%HOME%\.gvimrc" (
-    echo set guifont=CascadiaCode\ COde:h11 > "%HOME%\.gvimrc"
-    echo set guifont=CascadiaCode\ Nerd\ Font:h11.5 >> "%HOME%\.gvimrc"
+    copy "%HOME%\.leovim\scripts\gvimrc" "%HOME%\.gvimrc"
 )
 
 REM mklink
