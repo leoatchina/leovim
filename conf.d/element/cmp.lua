@@ -5,6 +5,7 @@ local unpack = table.unpack or unpack
 local fn = vim.fn
 local cmp = require('cmp')
 local compare = cmp.config.compare
+local keymap = require('cmp.utils.keymap')
 local lspkind = require('lspkind')
 local sources = {
   { name = 'vsnip', priority = 32 },
@@ -189,6 +190,8 @@ cmp.setup({
           cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
         elseif has_words_before() then
           cmp.complete()
+        elseif vim.fn.pumvisible() == 0 then
+          vim.api.nvim_feedkeys(keymap.t('<C-z>'), 'in', true)
         else
           fallback()
         end
@@ -234,7 +237,6 @@ cmp.setup.cmdline({'/', '?'}, {
   },
 })
 cmp.setup.cmdline(':', {
-  autocomplete = false,
   sources = cmp.config.sources({
     { name = 'path' }
   }, {

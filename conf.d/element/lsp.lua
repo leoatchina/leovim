@@ -209,12 +209,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- codelens
     if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
       vim.lsp.codelens.refresh({ bufnr = bufnr })
-      vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
-        buffer = bufnr,
-        callback = function()
-          vim.lsp.codelens.refresh({ bufnr = bufnr })
-        end,
-      })
     end
     -- codeaction && symbols
     map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
