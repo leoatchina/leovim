@@ -53,35 +53,76 @@ cmp.setup({
   },
   mapping = cmp.mapping({
     -- cmdline only mapping
-    ['<C-j>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-      else
-        fallback()
-      end
-    end, { "c" }),
-    ['<C-k>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-      else
-        fallback()
-      end
-    end, { "c" }),
+    ['<C-j>'] = {
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+    },
+    ['<C-k>'] = {
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+    },
     -- insert mapping
-    ['<C-n>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-      else
-        fallback()
-      end
-    end, { "i" }),
-    ['<C-p>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
-      else
-        fallback()
-      end
-    end, { "i" }),
+    ['<C-n>'] = {
+      i = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+    },
+    ['<C-p>'] = {
+      i = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+    },
+    -- Up down in inseat/cmdline
+    ['<Down>'] = {
+      i = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+    },
+    ['<Up>'] = {
+      i = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        else
+          fallback()
+        end
+      end,
+    },
     -- others
     ['<C-e>'] = {
       i = function()
@@ -112,7 +153,7 @@ cmp.setup({
         end
       end,
       c = cmp.mapping.confirm({
-        select = false,
+        select = true,
       }),
     },
     ['<S-Tab>'] = {
@@ -190,15 +231,11 @@ cmp.setup({
 -- cmdline
 ----------------------------------
 cmp.setup.cmdline({'/', '?'}, {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp_document_symbol' }
-  }, {
-    { name = 'buffer' }
-  }),
+  sources = {
+    { name = "buffer" },
+  },
 })
 cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = 'path' }
   }, {

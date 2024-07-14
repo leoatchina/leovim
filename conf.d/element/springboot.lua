@@ -9,4 +9,3 @@ require('spring_boot').setup({
   jdtls_name = "jdtls",
   log_file = nil,
 })
-
