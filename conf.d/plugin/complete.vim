@@ -250,14 +250,14 @@ if Installed('wilder.nvim')
                 \ 'accept_key': '<Down>',
                 \ 'reject_key': '<Up>',
                 \ })
-
+    cmap <expr><C-j> wilder#in_context() ? wilder#next() : "\<C-j>"
+    cmap <expr><C-k> wilder#in_context() ? wilder#previous() : "\<C-k>"
     call wilder#set_option('pipeline', [
                 \   wilder#branch(
                 \     wilder#cmdline_pipeline(),
                 \     wilder#search_pipeline(),
                 \   ),
                 \ ])
-
     call wilder#set_option('renderer', wilder#popupmenu_renderer({
                 \ 'highlighter': wilder#basic_highlighter(),
                 \ }))

@@ -101,7 +101,7 @@ cmp.setup({
       end,
       c = function(fallback)
         if cmp.visible() then
-          cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+          cmp.close()
         else
           fallback()
         end
@@ -117,7 +117,7 @@ cmp.setup({
       end,
       c = function(fallback)
         if cmp.visible() then
-          cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+          cmp.abort()
         else
           fallback()
         end
@@ -152,9 +152,7 @@ cmp.setup({
           fallback()
         end
       end,
-      c = cmp.mapping.confirm({
-        select = true,
-      }),
+      c = cmp.confirm()
     },
     ['<S-Tab>'] = {
       i = function(fallback)
@@ -236,6 +234,7 @@ cmp.setup.cmdline({'/', '?'}, {
   },
 })
 cmp.setup.cmdline(':', {
+  autocomplete = false,
   sources = cmp.config.sources({
     { name = 'path' }
   }, {
