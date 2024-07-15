@@ -216,7 +216,7 @@ local defaults = {
     -- `require("flash").treesitter()`
     treesitter = {
       labels = "abcdefghijklmnopqrstuvwxyz",
-      jump = { pos = "range" },
+      jump = { pos = "range", autojump = true },
       search = { incremental = false },
       label = { before = true, after = true, style = "inline" },
       highlight = {
@@ -237,6 +237,7 @@ local defaults = {
   },
   -- options for the floating window that shows the prompt,
   -- for regular jumps
+  -- `require("flash").prompt()` is always available to get the prompt text
   prompt = {
     enabled = true,
     prefix = { { "⚡", "FlashPromptIcon" } },

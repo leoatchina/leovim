@@ -1,4 +1,4 @@
-*flash.nvim.txt*              For Neovim             Last change: 2024 July 06
+*flash.nvim.txt*              For Neovim             Last change: 2024 July 13
 
 ==============================================================================
 Table of Contents                               *flash.nvim-table-of-contents*
@@ -292,7 +292,7 @@ Default Settings ~
         -- `require("flash").treesitter()`
         treesitter = {
           labels = "abcdefghijklmnopqrstuvwxyz",
-          jump = { pos = "range" },
+          jump = { pos = "range", autojump = true },
           search = { incremental = false },
           label = { before = true, after = true, style = "inline" },
           highlight = {
@@ -313,6 +313,7 @@ Default Settings ~
       },
       -- options for the floating window that shows the prompt,
       -- for regular jumps
+      -- `require("flash").prompt()` is always available to get the prompt text
       prompt = {
         enabled = true,
         prefix = { { "⚡", "FlashPromptIcon" } },
@@ -395,7 +396,8 @@ USAGE                                            *flash.nvim-flash.nvim-usage*
     - type any number of characters before typing a jump label
 - **VS Code**some functionality is changed/disabled when running **flash** in
     **VS Code**
-    - `prompt`is disabled
+    - `prompt`is disabled. You can use `require("flash").prompt()` to get the
+        prompt text and integrate it into the statusline.
     - `highlights` are set to different defaults that will actually work in VS Code
 
 
