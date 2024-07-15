@@ -22,6 +22,7 @@ if exists(':packadd')
 endif
 let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
 let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
+let $VIM_DIR = expand($ELEMENT_DIR . '/vim')
 " --------------------------
 " set opt path
 " --------------------------

@@ -1,5 +1,5 @@
 let &termencoding=&enc
-nnoremap <M-h>u :set ff=unix<Cr>:%s/\r//g<Cr>
+nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
 set rtp^=$CONF_D_DIR
 " ------------------------
 " toggle_modify

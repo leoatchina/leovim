@@ -43,8 +43,8 @@ let g:header_auto_add_header = 0
 let g:header_auto_update_header = 0
 let g:header_field_timestamp_format = '%Y.%m.%d'
 PlugAddOpt 'vim-header'
-nnoremap <M-h>a :AddHeader<Cr>
-nnoremap <M-h>h :AddBangHeader<Cr>
+nnoremap <M-k>a :AddHeader<Cr>
+nnoremap <M-k>h :AddBangHeader<Cr>
 " --------------------------
 " Quit Config
 " --------------------------
