@@ -6,16 +6,16 @@ if Installed('mason.nvim')
     lua require("mason_cfg")
 endif
 if Installed('vimcomplete')
-    source $ELEMENT_DIR/vcm.vim
+    source $VIM_DIR/vcm.vim
 elseif InstalledCmp()
     lua require("cmp_cfg")
 elseif Installed('coc.nvim')
-    source $ELEMENT_DIR/coc.vim
+    source $VIM_DIR/coc.vim
 elseif g:complete_engine == 'apm'
-    source $ELEMENT_DIR/apm.vim
+    source $VIM_DIR/apm.vim
 elseif g:complete_engine != ''
     let g:complete_engine = 'mcm'
-    source $ELEMENT_DIR/mcm.vim
+    source $VIM_DIR/mcm.vim
 endif
 if InstalledNvimLsp()
     let g:vista_default_executive = 'nvim_lsp'

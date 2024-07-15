@@ -523,9 +523,9 @@ if exists('g:vscode')
     " hop for neovim-vscode only
     PlugAddOpt 'hop.nvim'
     lua require("hop_cfg")
-    source $ELEMENT_DIR/vscode.vim
+    source $VIM_DIR/vscode.vim
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
-    source $ELEMENT_DIR/easymotion.vim
-    source $ELEMENT_DIR/vim.vim
+    source $VIM_DIR/easymotion.vim
+    source $VIM_DIR/vim.vim
 endif

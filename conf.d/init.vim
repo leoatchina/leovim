@@ -12,23 +12,20 @@ endif
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
+let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
+let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
+let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
+let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
+let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
+let $VIM_DIR = expand($ELEMENT_DIR . '/vim')
 " --------------------------
 " set rtp && pack path
 " --------------------------
 set rtp^=$LEOVIM_DIR/pack
-set rtp^=$CONF_D_DIR/common
+set rtp^=$CONF_D_DIR/element
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
-let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
-let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
-let $VIM_DIR = expand($ELEMENT_DIR . '/vim')
-" --------------------------
-" set opt path
-" --------------------------
-let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
-let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
-let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
 " --------------------------
 " gui_running && OS
 " --------------------------
@@ -184,5 +181,5 @@ function! Installed(...)
     endfor
     return 1
 endfunction
-source $ELEMENT_DIR/main.vim
+source $VIM_DIR/main.vim
 let g:leovim_loaded = 1
