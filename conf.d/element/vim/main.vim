@@ -123,8 +123,6 @@ map <C-q> <Nop>
 map <C-s> <Nop>
 map <C-i> <Nop>
 map <C-z> <Nop>
-nnoremap gx <Nop>
-xnoremap gx <Nop>
 nnoremap s <Nop>
 nnoremap S <Nop>
 nnoremap , <Nop>
