@@ -8,23 +8,28 @@ else
     set nocompatible
 endif
 " --------------------------
-" set dirs
+" system check functions
 " --------------------------
-let $LEOVIM_DIR = expand('~/.leovim')
-let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
-let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
-let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
-let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
-let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
-let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
-let $VIM_DIR = expand($ELEMENT_DIR . '/vim')
-" --------------------------
-" set rtp && pack path
-" --------------------------
-set rtp^=$LEOVIM_DIR/pack
-set rtp^=$CONF_D_DIR/element
-if exists(':packadd')
-    set packpath^=$LEOVIM_DIR
+function! CYGWIN()
+    return has('win32unix') && !has('macunix')
+endfunction
+function! WINDOWS()
+    return has('win32') || has('win64')
+endfunction
+function! LINUX()
+    return has('unix') && !has('macunix') && !has('win32unix')
+endfunction
+function! MACOS()
+    return has('macunix')
+endfunction
+function! UNIX()
+    return has('unix') && !has('win32unix')
+endfunction
+function! MACVIM()
+    return has('gui_running') && MACOS()
+endfunction
+if MACVIM()
+    set macmeta
 endif
 " --------------------------
 " gui_running && OS
@@ -67,30 +72,6 @@ endif
 function! HAS_GUI()
     return s:gui_running
 endfunction
-" --------------------------
-" system check functions
-" --------------------------
-function! CYGWIN()
-    return has('win32unix') && !has('macunix')
-endfunction
-function! WINDOWS()
-    return has('win32') || has('win64')
-endfunction
-function! LINUX()
-    return has('unix') && !has('macunix') && !has('win32unix')
-endfunction
-function! MACOS()
-    return has('macunix')
-endfunction
-function! UNIX()
-    return has('unix') && !has('win32unix')
-endfunction
-function! MACVIM()
-    return has('gui_running') && MACOS()
-endfunction
-if MACVIM()
-    set macmeta
-endif
 if WINDOWS()
     if s:gui_running == 0 && !has('nvim') && v:version < 900
         echoe "In windows, please update to vim9.0+ if without gui."
@@ -102,6 +83,30 @@ if WINDOWS()
 elseif exists('g:vscode') && !has('nvim-0.9')
     echoe "vscode-neovm required nvim-0.9+!"
     finish
+endif
+" --------------------------
+" set dirs
+" --------------------------
+let $LEOVIM_DIR = expand('~/.leovim')
+let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
+let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
+let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
+let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
+let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
+let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
+let $VIM_DIR = expand($ELEMENT_DIR . '/vim')
+" --------------------------
+" set rtp && pack path
+" --------------------------
+if WINDOWS()
+    set rtp^=$LEOVIM_DIR\pack
+    set rtp^=$CONF_D_DIR\element
+else
+    set rtp^=$LEOVIM_DIR/pack
+    set rtp^=$CONF_D_DIR/element
+endif
+if exists(':packadd')
+    set packpath^=$LEOVIM_DIR
 endif
 " --------------------------
 " init directories
