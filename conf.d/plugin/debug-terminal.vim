@@ -350,7 +350,7 @@ if Planned('vimspector')
     nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
-    luafile $ELEMENT_DIR/dap.lua
+    lua require("dap_cfg")
     " load template
     if PlannedFzf()
         function! ReadDapTemplate(template_file) abort

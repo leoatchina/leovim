@@ -293,7 +293,7 @@ PlugAddOpt 'nerdcommenter'
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim-0.8')
     PlugAddOpt 'flash.nvim'
-    luafile $ELEMENT_DIR/flash.lua
+    lua require("flash_cfg")
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
@@ -522,7 +522,7 @@ if exists('g:vscode')
     nmap <C-x> "*x
     " hop for neovim-vscode only
     PlugAddOpt 'hop.nvim'
-    luafile $ELEMENT_DIR/hop.lua
+    lua require("hop_cfg")
     source $ELEMENT_DIR/vscode.vim
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"

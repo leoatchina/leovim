@@ -3,12 +3,12 @@ function! HasBackSpace() abort
     return !col || getline('.')[col - 1] =~ '\s'
 endfunction
 if Installed('mason.nvim')
-    luafile $ELEMENT_DIR/mason.lua
+    lua require("mason_cfg")
 endif
 if Installed('vimcomplete')
     source $ELEMENT_DIR/vcm.vim
 elseif InstalledCmp()
-    luafile $ELEMENT_DIR/cmp.lua
+    lua require("cmp_cfg")
 elseif Installed('coc.nvim')
     source $ELEMENT_DIR/coc.vim
 elseif g:complete_engine == 'apm'
@@ -53,9 +53,9 @@ if InstalledNvimLsp()
         lua require('java').setup()
     endif
     if Installed('spring-boot.nvim')
-        luafile $ELEMENT_DIR/springboot.lua
+        lua require("springboot")
     endif
-    luafile $ELEMENT_DIR/lsp.lua
+    lua require("lsp")
 elseif Installed('coc.nvim')
     let g:vista_default_executive = 'coc'
     let g:coc_global_extensions = [
@@ -216,17 +216,17 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
     if Installed('CopilotChat.nvim')
-        luafile $ELEMENT_DIR/copilotchat.lua
+        lua require("copilotchat")
         command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
         nnoremap <silent><M-i>g :CopilotChatCommands<Cr>
         nnoremap <M-i>c :CopliotChat<Space>
         nnoremap <M-i>s :CopliotChatSave<Space>
         nnoremap <M-i>l :CopliotChatLoad<Space>
-        luafile $ELEMENT_DIR/copilotchat.lua
+        lua require("copilotchat")
     endif
 endif
 if Installed('gp.nvim')
-    luafile $ELEMENT_DIR/gp.lua
+    lua require("gp_cfg")
     function! s:gp_toggle()
         if &columns > &lines * 3
             GpChatToggle vsplit
