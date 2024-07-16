@@ -80,9 +80,6 @@ local lspconfig = require("lspconfig")
 local default_setup = function(server)
   lspconfig[server].setup({
     capabilities = lsp_capabilities,
-    codeLens = {
-      enable = false,
-    },
   })
 end
 require("mason-lspconfig").setup({
@@ -97,7 +94,7 @@ require("mason-lspconfig").setup({
           enable = true,
         },
         codeLens = {
-          enable = true,
+          enable = false,
         },
         settings = {
           Lua = {
