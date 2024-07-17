@@ -31,6 +31,7 @@ __pycache__
 .vim
 .github
 .tasks
+core
 core.[0-9]*
 Gemfile
 GPATH

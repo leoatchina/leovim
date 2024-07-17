@@ -80,8 +80,8 @@
 - [x] Expand
 - [x] run reuse
 - [x] wilder.nvim && cmp-cmdline
-- [ ] lsp codelens warn bug
-- [ ] tabbar show all windows
+- [x] lsp codelens warn bug
+- [ ] tabline show all windows
 - [ ] run in qf and show in statusline
 - [ ] floaterm drop command
 - [ ] ====== My plugins ======
