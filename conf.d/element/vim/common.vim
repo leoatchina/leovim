@@ -1,6 +1,6 @@
+set rtp^=$CONF_D_DIR
 let &termencoding=&enc
 nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
-set rtp^=$CONF_D_DIR
 " ------------------------
 " toggle_modify
 " ------------------------
