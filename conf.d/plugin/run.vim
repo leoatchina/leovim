@@ -76,14 +76,16 @@ function! s:asyncrun(...)
     elseif type == 'term'
         if pos == 'tab'
             let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=1 -pos=tab -reuse'
-        elseif pos == 'right'
-            let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=0 -pos=right -width=0.382'
-        elseif pos == 'floaterm_float'
-            let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=0 -pos=floaterm_float -width=0.45 -height=0.3'
         elseif pos == 'floaterm_right'
             let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=0 -pos=floaterm_right -width=0.45'
+        elseif pos == 'floaterm_float'
+            let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=0 -pos=floaterm_float -width=0.45 -height=0.3'
+        elseif pos == 'floaterm_bottom'
+            let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=0 -pos=floaterm_bottom -height=0.3'
+        elseif pos == 'right'
+            let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=0 -pos=right -width=0.45'
         else
-            let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=0 -pos=bottom -rows=0.3'
+            let params = ' -cwd=$(VIM_FILEDIR) -mode=term -focus=0 -pos=bottom -height=0.3'
         endif
     else
         if has('patch-7.4.1829') || has('nvim')
@@ -179,10 +181,12 @@ if has('nvim') || v:version >= 801
                 let cmd .= " --width=" . a:opts.width
             elseif a:wintype == 'float'
                 let cmd .= " --width=0.7"
+            elseif a:wintype == 'vsplit'
+                let cmd .= " --width=0.45"
             endif
             if has_key(a:opts, 'height')
                 let cmd .= " --height=" . a:opts.height
-            elseif a:wintype == 'float'
+            elseif a:wintype == 'float' || a:wintype == 'split'
                 let cmd .= " --height=0.3"
             endif
             let cmd .= " --position=" . a:position
