@@ -244,6 +244,7 @@ if [ $installplug != 'no' ]; then
     if program_exists "vim"; then
         setup_plug "vim"
     fi
+    setup_plug "$HOME/.local/bin/vi.sh"
     setup_plug "$HOME/.local/bin/nv.sh"
     setup_plug "$HOME/.local/bin/nvi.sh"
 fi
