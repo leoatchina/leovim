@@ -399,9 +399,9 @@ for vim in split(glob("$INSTALL_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 function! s:plug_update() abort
-    let opt_vim = Expand('~/.vimrc.opt')
-    if filereadable(opt_vim)
-        execute "source " . opt_vim
+    let vimrc_opt = Expand('~/.vimrc.opt')
+    if filereadable(vimrc_opt)
+        execute "source " . vimrc_opt
     endif
     PlugUpdate
 endfunction

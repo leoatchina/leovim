@@ -47,7 +47,7 @@ IF NOT EXIST "%HOME%\.leovim.d" (
 
 REM copy local
 IF NOT EXIST "%HOME%\.vimrc.opt" (
-    call copy "%APP_PATH%\conf.d\element\opt.vim" "%HOME%\.vimrc.opt"
+    call copy "%APP_PATH%\conf.d\element\vim\opt.vim" "%HOME%\.vimrc.opt"
 )
 
 REM setup vim tools for windows
