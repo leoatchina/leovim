@@ -525,5 +525,5 @@ if exists('g:vscode')
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
     source $VIM_DIR/easymotion.vim
-    source $VIM_DIR/commom.vim
+    source $VIM_DIR/common.vim
 endif
