@@ -237,9 +237,10 @@ if g:has_truecolor
     PlugAdd 'sainnhe/sonokai'
     PlugAdd 'sainnhe/everforest'
     PlugAdd 'sainnhe/gruvbox-material'
-    PlugAdd 'bluz71/vim-moonfly-colors'
     if has('nvim-0.8.1')
         PlugAdd 'EdenEast/nightfox.nvim'
+        PlugAdd 'zenbones-theme/zenbones.nvim'
+        PlugAdd 'rktjmp/lush.nvim'
     endif
 endif
 " ----------------------------

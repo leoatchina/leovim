@@ -247,15 +247,11 @@ function! UpdateLightline() abort
         let g:lightline.colorscheme = 'nord'
     elseif colors_name == 'gruvbox-material'
         let g:lightline.colorscheme = 'gruvbox_material'
-    elseif colors_name == 'sonokai'
-        let g:lightline.colorscheme = 'sonokai'
-    elseif colors_name == 'edge'
-        let g:lightline.colorscheme = 'edge'
-    elseif colors_name == 'everforest'
-        let g:lightline.colorscheme = 'everforest'
     elseif colors_name =~ 'gruvbox'
         let g:lightline.colorscheme = 'gruvboxdark'
-    elseif colors_name =~ 'fox' || colors_name =~ 'fly'
+    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest'
+        let g:lightline.colorscheme = g:colors_name
+    elseif colors_name =~ 'fox' || colors_name =~ 'bones' || colors_name =~ '^zen'
         let g:lightline.colorscheme = g:colors_name
     else
         let g:lightline.colorscheme = 'default'
@@ -306,21 +302,7 @@ let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 let g:everforest_better_performance = 1
 let g:gruvbox_material_better_performance = 1
-if Require('gruvbox')
-    call SetScheme('gruvbox-material', 'gruvbox')
-elseif Require('everforest')
-    call SetScheme('everforest', 'deus')
-elseif Require('sonokai')
-    call SetScheme('sonokai', 'sublime')
-elseif Require('edge')
-    call SetScheme('edge', 'one')
-elseif Require('duskfox')
-    call SetScheme('duskfox', 'hybrid')
-elseif Require('nightfox')
-    call SetScheme('nightfox', 'hybrid')
-elseif Require('moonfly')
-    call SetScheme('moonfly', 'space-vim-dark')
-elseif g:complete_engine == 'apm'
+if g:complete_engine == 'apm'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'mcm'
     call SetScheme('sonokai', 'sublime')
@@ -328,13 +310,13 @@ elseif g:complete_engine == 'vcm'
     call SetScheme('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'cmp'
     if InstalledNvimLsp()
-        call SetScheme('nightfox', 'hybrid')
+        call SetScheme('nightfox', 'space-vim-dark')
     else
-        call SetScheme('moonfly', 'space-vim-dark')
+        call SetScheme('tokyobones', 'space-vim-dark')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('duskfox', 'hybrid')
+        call SetScheme('zenburned', 'deus')
     else
         call SetScheme('everforest', 'deus')
     endif
