@@ -316,7 +316,7 @@ elseif g:complete_engine == 'cmp'
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('zenburned', 'deus')
+        call SetScheme('forestbones', 'deus')
     else
         call SetScheme('everforest', 'deus')
     endif
