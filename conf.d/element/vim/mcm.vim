@@ -10,12 +10,12 @@ else
     let g:jedi#popup_on_dot = 1
 endif
 let g:mucomplete#chains = {}
-let g:mucomplete#chains.vim = ['path', 'cmd', 'keyn']
-let g:mucomplete#chains.markdown = ['path', 'cmd', 'keyn']
 " vsnip
-if Planned('vim-vsnip', 'vim-vsnip-integ')
-    let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'vsnip', 'dict']
+if Installed('vim-vsnip', 'vim-vsnip-integ')
+    let g:mucomplete#chains.default = ['path', 'omni', 'vsnip', 'keyn', 'dict']
 else
     let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict']
 endif
+" other
+let g:mucomplete#chains.markdown = ['path', 'cmd', 'keyn']
 PlugAddOpt 'vim-mucomplete'
