@@ -358,14 +358,18 @@ if get(g:, 'leovim_openmap', 1)
         nnoremap <silent><M-h>p :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --fuzzy --no-sort ~/.leovim<Cr>
-        nnoremap <silent><M-h>L :Leaderf file --fuzzy --no-sort ~/.local/bin<Cr>
+        if UNIX()
+            nnoremap <silent><M-h>L :Leaderf file --fuzzy --no-sort ~/.local/bin<Cr>
+        endf
     elseif PlannedFzf()
         nnoremap <silent><M-h>a :FzfFiles ~/.leovim/conf.d/autoload<Cr>
         nnoremap <silent><M-h>e :FzfFiles ~/.leovim/conf.d/element<Cr>
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
-        nnoremap <silent><M-h>L :FzfFiles ~/.local/bin<Cr>
+        if UNIX()
+            nnoremap <silent><M-h>L :FzfFiles ~/.local/bin<Cr>
+        endif
     endif
     " --------------------------
     " open other ides config
