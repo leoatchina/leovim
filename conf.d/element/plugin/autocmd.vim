@@ -27,9 +27,13 @@ augroup END
 " --------------------------
 augroup AUTOLCD
     " cd file dir
+    " NOTE: getbufvar(winbufnr(winnr()), "&buftype")
     autocmd WinEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
-                \ && bufname("") !~ "Rg"                   " rg
+                \ && bufname("") !~ "rg"                   " rg
                 \ && bufname("") !~ "outline"              " outline
+                \ && bufname("") !~ "vista"                " vista
+                \ && bufname("") !~ "tag"                  " tag
+                \ && bufname("") !~ "fern"                 " fern
                 \ && bufname("")[0] != "!"                 " some special buf
                 \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
                 \ | lcd %:p:h | endif
