@@ -255,17 +255,17 @@ if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 endif
 " ----------------------------
-" cmdline
+" wilder
 " ----------------------------
-if (has('nvim') || v:version >= 801) && !Planned('nvim-cmp') && (UNIX() || !has('nvim'))
-    if g:python_version > 3 && has('nvim')
+if !Planned('nvim-cmp')
+    if g:python_version > 3 && has('nvim') && UNIX()
         function! UpdateRemotePlugins(...)
             " Needed to refresh runtime files
             let &rtp=&rtp
             UpdateRemotePlugins
         endfunction
         Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
-    else
+    elseif !has('nvim') && v:version >= 801 || has('nvim') && !WINDOWS()
         PlugAdd 'gelguy/wilder.nvim'
     endif
 endif
