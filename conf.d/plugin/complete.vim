@@ -252,7 +252,7 @@ if Installed('wilder.nvim')
                 \ })
     cmap <expr><C-j> wilder#in_context() ? wilder#next() : "\<C-j>"
     cmap <expr><C-k> wilder#in_context() ? wilder#previous() : "\<C-k>"
-    if has('nvim') && g:python_version > 3
+    if g:python_version > 3 && has('nvim') || Installed('nvim-yarp', 'vim-hug-neovim-rpc')
         call wilder#set_option('pipeline', [
                     \   wilder#branch(
                     \     wilder#cmdline_pipeline({

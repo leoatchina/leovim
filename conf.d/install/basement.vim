@@ -258,13 +258,19 @@ endif
 " cmdline
 " ----------------------------
 if (has('nvim') || v:version >= 801) && !Planned('nvim-cmp')
-    if has('nvim')
-        function! UpdateRemotePlugins(...)
-            " Needed to refresh runtime files
-            let &rtp=&rtp
-            UpdateRemotePlugins
-        endfunction
-        Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+    if g:python_version > 3
+        if has('nvim')
+            function! UpdateRemotePlugins(...)
+                " Needed to refresh runtime files
+                let &rtp=&rtp
+                UpdateRemotePlugins
+            endfunction
+            Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+        else
+            PlugAdd 'gelguy/wilder.nvim'
+            PlugAdd 'roxma/nvim-yarp'
+            PlugAdd 'roxma/vim-hug-neovim-rpc'
+        endif
     else
         PlugAdd 'gelguy/wilder.nvim'
     endif
