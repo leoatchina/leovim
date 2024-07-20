@@ -308,11 +308,7 @@ elseif g:complete_engine == 'mcm'
 elseif g:complete_engine == 'vcm'
     call SetScheme('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'cmp'
-    if Installed('tokyonight.nvim')
-        colorscheme tokyonight
-    else
-        colorscheme space-vim-dark
-    endif
+    call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
         call SetScheme('terafox', 'deus')
