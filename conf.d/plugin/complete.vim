@@ -277,7 +277,7 @@ if Installed('wilder.nvim')
     call wilder#set_option('renderer', wilder#popupmenu_renderer({
                 \ 'highlighter': wilder#basic_highlighter(),
                 \ }))
-else
+elseif !InstalledCmp()
     cnoremap <expr><C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
     cnoremap <expr><C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
     cnoremap <expr><C-n> pumvisible() ? "\<Down>" : "\<C-n>"
