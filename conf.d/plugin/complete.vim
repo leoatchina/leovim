@@ -280,8 +280,8 @@ if Installed('wilder.nvim')
 else
     cnoremap <expr><C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
     cnoremap <expr><C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
-    cnoremap <expr><C-n> pumvisible() ? "\<Esc>\<C-n>" : "\<C-n>"
-    cnoremap <expr><C-p> pumvisible() ? "\<Esc>\<C-p>" : "\<C-p>"
+    cnoremap <expr><C-n> pumvisible() ? "\<Down>" : "\<C-n>"
+    cnoremap <expr><C-p> pumvisible() ? "\<Up>" : "\<C-p>"
 endif
 " ------------------------------
 " pairs
