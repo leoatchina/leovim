@@ -233,25 +233,21 @@ let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------
 function! UpdateLightline() abort
     let colors_name = get(g:, 'colors_name', '')
-    if colors_name == 'codedark'
-        let g:lightline.colorscheme = 'codedark'
+    if colors_name == 'codedark' || colors_name == 'deus' || colors_name == 'one'
+        let g:lightline.colorscheme = g:colors_name
     elseif colors_name == 'space-vim-dark'
         let g:lightline.colorscheme = 'simpleblack'
     elseif colors_name == 'sublime'
         let g:lightline.colorscheme = 'molokai'
-    elseif colors_name == 'deus'
-        let g:lightline.colorscheme = 'deus'
-    elseif colors_name == 'one'
-        let g:lightline.colorscheme = 'one'
     elseif colors_name == 'hybrid'
         let g:lightline.colorscheme = 'nord'
-    elseif colors_name == 'gruvbox-material'
-        let g:lightline.colorscheme = 'gruvbox_material'
     elseif colors_name =~ 'gruvbox'
-        let g:lightline.colorscheme = 'gruvboxdark'
-    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest'
-        let g:lightline.colorscheme = g:colors_name
-    elseif colors_name =~ 'fox' || colors_name =~ 'bones' || colors_name =~ '^zen'
+        if colors_name == 'gruvbox-material'
+            let g:lightline.colorscheme = 'gruvbox_material'
+        else
+            let g:lightline.colorscheme = 'gruvboxdark'
+        endif
+    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest' || colors_name == 'tokyonight' || colors_name =~ 'fox'
         let g:lightline.colorscheme = g:colors_name
     else
         let g:lightline.colorscheme = 'default'
@@ -309,14 +305,10 @@ elseif g:complete_engine == 'mcm'
 elseif g:complete_engine == 'vcm'
     call SetScheme('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'cmp'
-    if InstalledNvimLsp()
-        call SetScheme('nightfox', 'space-vim-dark')
-    else
-        call SetScheme('tokyobones', 'space-vim-dark')
-    endif
+    call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('forestbones', 'deus')
+        call SetScheme('terafox', 'deus')
     else
         call SetScheme('everforest', 'deus')
     endif
