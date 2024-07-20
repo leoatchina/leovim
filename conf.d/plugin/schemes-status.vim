@@ -247,7 +247,9 @@ function! UpdateLightline() abort
         else
             let g:lightline.colorscheme = 'gruvboxdark'
         endif
-    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest' || colors_name == 'tokyonight' || colors_name =~ 'fox'
+    elseif colors_name =~ 'tokyonight'
+        let g:lightline.colorscheme = "tokyonight"
+    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest' || colors_name =~ 'fox'
         let g:lightline.colorscheme = g:colors_name
     else
         let g:lightline.colorscheme = 'default'
@@ -294,6 +296,7 @@ endfunction
 " --------------------------
 " schemes need truecolor
 " --------------------------
+let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 let g:everforest_better_performance = 1
