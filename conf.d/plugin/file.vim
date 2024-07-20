@@ -360,7 +360,7 @@ if get(g:, 'leovim_openmap', 1)
         nnoremap <silent><M-h>l :Leaderf file --fuzzy --no-sort ~/.leovim<Cr>
         if UNIX()
             nnoremap <silent><M-h>L :Leaderf file --fuzzy --no-sort ~/.local/bin<Cr>
-        endf
+        endif
     elseif PlannedFzf()
         nnoremap <silent><M-h>a :FzfFiles ~/.leovim/conf.d/autoload<Cr>
         nnoremap <silent><M-h>e :FzfFiles ~/.leovim/conf.d/element<Cr>
