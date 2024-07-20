@@ -89,12 +89,13 @@ endif
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
-let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
 let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
-let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
-let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
+let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
+let $CFG_DIR = expand($ELEMENT_DIR . '/cfg')
+" opt dirs
 let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
-let $VIM_DIR = expand($ELEMENT_DIR . '/vim')
+let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
+let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
 " --------------------------
 " set rtp && pack path
 " --------------------------
@@ -186,5 +187,5 @@ function! Installed(...)
     endfor
     return 1
 endfunction
-source $VIM_DIR/main.vim
+source $CFG_DIR/main.vim
 let g:leovim_loaded = 1

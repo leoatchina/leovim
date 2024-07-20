@@ -161,7 +161,7 @@ nnoremap <leader>E :e<Space>
 " file browser
 " ---------------------------------
 if has('patch-8.1.2269') || has('nvim')
-    source $VIM_DIR/fern.vim
+    source $CFG_DIR/fern.vim
 endif
 if has('nvim') && PlannedCoc()
     function! s:coc_file() abort
@@ -347,10 +347,10 @@ if get(g:, 'leovim_openmap', 1)
     endfunction
     nnoremap <silent><M-h>i :call TabeOpen("$CONF_D_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>b :call TabeOpen("$INSTALL_DIR/basement.vim")<Cr>
-    nnoremap <silent><M-h>m :call TabeOpen("$VIM_DIR/main.vim")<Cr>
-    nnoremap <silent><M-h>k :call TabeOpen("$VIM_DIR/keybindings.json")<Cr>
-    nnoremap <silent><M-h>v :call TabeOpen("$VIM_DIR/vscode.vim")<Cr>
-    nnoremap <silent><M-h>O :call TabeOpen("$VIM_DIR/opt.vim")<Cr>
+    nnoremap <silent><M-h>m :call TabeOpen("$CFG_DIR/main.vim")<Cr>
+    nnoremap <silent><M-h>k :call TabeOpen("$CFG_DIR/keybindings.json")<Cr>
+    nnoremap <silent><M-h>v :call TabeOpen("$CFG_DIR/vscode.vim")<Cr>
+    nnoremap <silent><M-h>O :call TabeOpen("$CFG_DIR/opt.vim")<Cr>
     nnoremap <silent><M-h>f :call TabeOpen("$CONF_D_DIR/plugin/file.vim")<Cr>
     if PlannedLeaderf()
         nnoremap <silent><M-h>a :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/autoload<Cr>
@@ -403,7 +403,7 @@ function! s:link_keybindings() abort
             let rmdir_cmd = printf('!rmdir /Q /S %s\snippets', s:vscode_user_dir)
             execute(rmdir_cmd)
             " create keybindings.json link
-            let mklink_cmd = printf('!mklink %s %s', s:vscode_user_dir . '\keybindings.json', $VIM_DIR . '\keybindings.json')
+            let mklink_cmd = printf('!mklink %s %s', s:vscode_user_dir . '\keybindings.json', $CFG_DIR . '\keybindings.json')
             execute(mklink_cmd)
             " create snippets link
             let mklink_cmd = printf('!mklink /d %s %s', s:vscode_user_dir . '\snippets', $LEOVIM_DIR . '\snippets')
@@ -411,16 +411,16 @@ function! s:link_keybindings() abort
         endif
         let delete_cmd = printf('!del /Q /S %s\keymaps.json', s:theia_user_dir)
         execute(delete_cmd)
-        let mklink_cmd = printf('!mklink %s %s', s:theia_user_dir . '\keymaps.json', $VIM_DIR . '\keymaps.json')
+        let mklink_cmd = printf('!mklink %s %s', s:theia_user_dir . '\keymaps.json', $CFG_DIR . '\keymaps.json')
         execute(mklink_cmd)
     else
         if isdirectory(s:vscode_user_dir)
-            let ln_cmd = printf('!ln -sf %s %s', $VIM_DIR . '/keybindings.json', s:vscode_user_dir . '/keybindings.json')
+            let ln_cmd = printf('!ln -sf %s %s', $CFG_DIR . '/keybindings.json', s:vscode_user_dir . '/keybindings.json')
             execute(ln_cmd)
             let ln_cmd = printf('!ln -sf %s %s', $LEOVIM_DIR . '/snippets', s:vscode_user_dir . '/snippets')
             execute(ln_cmd)
         endif
-        let ln_cmd = printf('!ln -sf %s %s', $VIM_DIR . '/keymaps.json', s:theia_user_dir . '/keymaps.json')
+        let ln_cmd = printf('!ln -sf %s %s', $CFG_DIR . '/keymaps.json', s:theia_user_dir . '/keymaps.json')
         execute(ln_cmd)
     endif
 endfunction

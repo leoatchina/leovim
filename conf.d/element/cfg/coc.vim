@@ -11,7 +11,7 @@ autocmd BufAdd * if getfsize(expand('<afile>')) > 1024*1024 |
 " ----------------------------
 " set coc data $PATH
 " ----------------------------
-let g:coc_config_home = expand("$VIM_DIR")
+let g:coc_config_home = expand("$CFG_DIR")
 if WINDOWS()
     let g:coc_data_home = $DEPLOY_DIR . "\\coc"
 else

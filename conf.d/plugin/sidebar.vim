@@ -48,7 +48,7 @@ endif
 " tree_browser
 " --------------------------
 if Installed('fern.vim')
-    source $VIM_DIR/fern.vim
+    source $CFG_DIR/fern.vim
     let g:tree_browser = 'fern'
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',

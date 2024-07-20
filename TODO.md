@@ -81,6 +81,7 @@
 - [x] run reuse
 - [x] wilder.nvim && cmp-cmdline
 - [x] lsp codelens warn bug
+- [ ] grep replace bug
 - [ ] tabline show all windows
 - [ ] run in qf and show in statusline
 - [ ] floaterm drop command
@@ -106,6 +107,7 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [ ] README
   - [ ] deploy to github
+- [ ] fzf-registers 
 - [ ] ====== Below need plenty of works ======
 - [ ] vista
   - [ ] icons bug in windows-terminal
