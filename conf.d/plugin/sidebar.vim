@@ -10,19 +10,20 @@ if Installed('tagbar')
     function! s:check_tags(nr) abort
         return s:check_buf_ft('tagbar', a:nr)
     endfunction
-    let g:sidebars.symbol = {
+    let g:sidebars.tagbar = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_tags'),
                 \ 'open': 'TagbarOpen',
                 \ 'close': 'TagbarClose'
                 \ }
+    nnoremap <silent><C-t> :call sidebar#toggle('tagbar')<CR>
 elseif Installed('vista.vim')
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
-        function! s:check_vista_kind(nr) abort
-            return s:check_buf_ft('vista_kind', a:nr)
-        endfunction
         function! s:check_vista(nr) abort
             return s:check_buf_ft('vista', a:nr)
+        endfunction
+        function! s:check_vista_kind(nr) abort
+            return s:check_buf_ft('vista_kind', a:nr)
         endfunction
         let g:sidebars.vistactags = {
                     \ 'position': 'left',
@@ -31,18 +32,24 @@ elseif Installed('vista.vim')
                     \ 'close': 'Vista!!'
                     \ }
         nnoremap <silent>t<tab> :call sidebar#toggle('vistactags')<CR>
+        let g:sidebars.vista = {
+                    \ 'position': 'left',
+                    \ 'check_win': function('s:check_vista'),
+                    \ 'open': 'Vista ' . g:vista_default_executive,
+                    \ 'close': 'Vista!!'
+                    \ }
     else
-        function! s:check_vista(nr) abort
-            return s:check_buf_ft('vista', a:nr) || s:check_buf_ft('vista_kind', a:nr)
+        function! s:check_vista_all(nr) abort
+            return s:check_buf_ft('vista_kind', a:nr) || s:check_buf_ft('vista', a:nr)
         endfunction
+        let g:sidebars.vista = {
+                    \ 'position': 'left',
+                    \ 'check_win': function('s:check_vista_all'),
+                    \ 'open': 'Vista ' . g:vista_default_executive,
+                    \ 'close': 'Vista!!'
+                    \ }
     endif
-    let g:sidebars.symbol = {
-                \ 'position': 'left',
-                \ 'check_win': function('s:check_vista'),
-                \ 'open': 'Vista ' . g:vista_default_executive,
-                \ 'close': 'Vista!!'
-                \ }
-    nnoremap <silent><C-t> :call sidebar#toggle('symbol')<CR>
+    nnoremap <silent><C-t> :call sidebar#toggle('vista')<CR>
 endif
 " --------------------------
 " tree_browser
