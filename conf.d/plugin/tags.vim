@@ -91,7 +91,6 @@ elseif Installed('tagbar')
                     \ 's:selectors',
                     \ 'i:identities'
                     \ ]}
-e
 endif
 " -------------------------------
 " vim-gutentags
