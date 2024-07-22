@@ -6,18 +6,7 @@ endfunction
 " --------------------------
 " symbol
 " --------------------------
-if Installed('tagbar')
-    function! s:check_tags(nr) abort
-        return s:check_buf_ft('tagbar', a:nr)
-    endfunction
-    let g:sidebars.tagbar = {
-                \ 'position': 'left',
-                \ 'check_win': function('s:check_tags'),
-                \ 'open': 'TagbarOpen',
-                \ 'close': 'TagbarClose'
-                \ }
-    nnoremap <silent><C-t> :call sidebar#toggle('tagbar')<CR>
-elseif Installed('vista.vim')
+if Installed('vista.vim')
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort
             return s:check_buf_ft('vista', a:nr)
@@ -50,6 +39,17 @@ elseif Installed('vista.vim')
                     \ }
     endif
     nnoremap <silent><C-t> :call sidebar#toggle('vista')<CR>
+elseif Installed('tagbar')
+    function! s:check_tags(nr) abort
+        return s:check_buf_ft('tagbar', a:nr)
+    endfunction
+    let g:sidebars.tagbar = {
+                \ 'position': 'left',
+                \ 'check_win': function('s:check_tags'),
+                \ 'open': 'TagbarOpen',
+                \ 'close': 'TagbarClose'
+                \ }
+    nnoremap <silent><C-t> :call sidebar#toggle('tagbar')<CR>
 endif
 " --------------------------
 " tree_browser

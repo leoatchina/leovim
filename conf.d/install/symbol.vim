@@ -56,8 +56,8 @@ endif
 if s:planned_symbol('plus')
     PlugAdd 'skywind3000/gutentags_plus'
 endif
-if s:planned_symbol('tagbar')
-    PlugAddOpt 'tagbar'
-elseif s:planned_symbol('vista')
+if s:planned_symbol('vista')
     PlugAddOpt 'vista.vim'
+elseif s:planned_symbol('tagbar')
+    PlugAddOpt 'tagbar'
 endif
