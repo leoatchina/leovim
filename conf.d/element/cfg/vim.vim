@@ -4,7 +4,6 @@ nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
 " ------------------------
 " toggle_modify
 " ------------------------
-nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
 nnoremap <M-k>f :set nofoldenable! nofoldenable?<Cr>
 nnoremap <M-k>w :set nowrap! nowrap?<Cr>
 " toggle modifiable
