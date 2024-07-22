@@ -79,19 +79,19 @@ if Installed('vista.vim')
     if g:ctags_type != ''
         let g:vista_executive_for.go = 'ctags'
     endif
-else
-    if Installed('tagbar')
-        let g:tagbar_position = 'leftabove vertical'
-        let g:tagbar_sort  = 0
-        let g:tagbar_width = 35
-        let g:tagbar_autoclose_netrw = 1
-        let g:tagbar_type_css = {
-                    \ 'ctagstype' : 'css',
-                    \ 'kinds' : [
-                        \ 'c:classes',
-                        \ 's:selectors',
-                        \ 'i:identities'
-                        \ ]}
+elseif Installed('tagbar')
+    let g:tagbar_position = 'leftabove vertical'
+    let g:tagbar_sort  = 0
+    let g:tagbar_width = 35
+    let g:tagbar_autoclose_netrw = 1
+    let g:tagbar_type_css = {
+                \ 'ctagstype' : 'css',
+                \ 'kinds' : [
+                    \ 'c:classes',
+                    \ 's:selectors',
+                    \ 'i:identities'
+                    \ ]}
+e
 endif
 " -------------------------------
 " vim-gutentags
