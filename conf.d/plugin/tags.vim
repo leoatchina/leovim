@@ -64,22 +64,9 @@ elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent>t<Cr> :CtrlPBufTag<Cr>
 endif
 " siderbar tag config
-if Installed('tagbar')
-    let g:tagbar_position = 'leftabove vertical'
-    let g:tagbar_sort  = 0
-    let g:tagbar_width = 35
-    let g:tagbar_autoclose_netrw = 1
-    let g:tagbar_type_css = {
-                \ 'ctagstype' : 'css',
-                \ 'kinds' : [
-                    \ 'c:classes',
-                    \ 's:selectors',
-                    \ 'i:identities'
-                    \ ]}
-elseif Installed('vista.vim')
-    let g:vista_sidebar_position = 'vertical topleft'
-    let g:vista#renderer#ctags = 'kind'
+if Installed('vista.vim')
     let g:vista_update_on_text_changed = 1
+    let g:vista_sidebar_position = 'vertical topleft'
     let g:vista_sidebar_width = 35
     let g:vista_echo_cursor   = 0
     let g:vista_stay_on_open  = 0
@@ -92,6 +79,19 @@ elseif Installed('vista.vim')
     if g:ctags_type != ''
         let g:vista_executive_for.go = 'ctags'
     endif
+else
+    if Installed('tagbar')
+        let g:tagbar_position = 'leftabove vertical'
+        let g:tagbar_sort  = 0
+        let g:tagbar_width = 35
+        let g:tagbar_autoclose_netrw = 1
+        let g:tagbar_type_css = {
+                    \ 'ctagstype' : 'css',
+                    \ 'kinds' : [
+                        \ 'c:classes',
+                        \ 's:selectors',
+                        \ 'i:identities'
+                        \ ]}
 endif
 " -------------------------------
 " vim-gutentags

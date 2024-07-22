@@ -7,6 +7,7 @@ endfunction
 " symbol
 " --------------------------
 if Installed('vista.vim')
+    let g:vista#renderer#ctags = 'kind'
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort
             return s:check_buf_ft('vista', a:nr)
