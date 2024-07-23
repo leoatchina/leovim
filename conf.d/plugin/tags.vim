@@ -183,6 +183,7 @@ if Planned('gutentags_plus')
     nnoremap <silent><leader>gk :GscopeKill<Cr>
     " leaderfgtags
     if PlannedLeaderf() && UNIX()
+        let g:Lf_Gtags = Expand(exepath('gtags'))
         let g:Lf_Gtagsconf = $GTAGSCONF
         let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
         let g:Lf_GtagsGutentags = 1
