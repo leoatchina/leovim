@@ -278,7 +278,7 @@ filetype plugin on
 set background=dark
 function! SetScheme(scheme, ...) abort
     let scheme = a:scheme
-    let defaultscheme = get(a:, 1, 'space-vim-dark')
+    let defaultscheme = get(a:, 1, 'hybrid')
     try
         if g:has_truecolor
             execute('colorscheme '. scheme)
@@ -289,14 +289,14 @@ function! SetScheme(scheme, ...) abort
         try
             execute('colorscheme '. defaultscheme)
         catch
-            colorscheme space-vim-dark
+            colorscheme hybrid
         endtry
     endtry
 endfunction
 " --------------------------
 " schemes need truecolor
 " --------------------------
-let g:terminal_color_13 = ''
+let g:terminal_color_13 = '#000000'
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 let g:everforest_better_performance = 1
