@@ -20,5 +20,6 @@ cd ~ && tar -cvzf \
   .local/ctags \
   .local/gtags \
   .local/tmux \
+  .leovim.unix \
   .leovim.d \
   .leovim
