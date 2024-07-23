@@ -1,7 +1,7 @@
 if !Installed('ZFVimIM')
     finish
 endif
-let g:ZFVimIM_cachePath=$HOME.'/.leovim.d/ZFVimIM'
+let g:ZFVimIM_cachePath=$HOME.'/.vim/ZFVimIM'
 let g:ZFVimIM_key_pageUp = ['-']
 let g:ZFVimIM_key_pageDown = ['=']
 let g:ZFVimIM_key_chooseL = ['[']
