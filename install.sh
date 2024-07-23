@@ -234,16 +234,14 @@ fi
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
 else
-    cp $APP_PATH/conf.d/element/vim/opt.vim $HOME/.vimrc.opt
+    cp $APP_PATH/conf.d/element/cfg/opt.vim $HOME/.vimrc.opt
     success "$HOME/.vimrc.opt copied."
 fi
 
 ############################### install plugins ##################################
-note "Install (neo)vim's plugins"
 if [ $installplug != 'no' ]; then
-    if program_exists "vim"; then
-        setup_plug "vim"
-    fi
+    note "Install (neo)vim's plugins"
+    setup_plug "vim"
     setup_plug "$HOME/.local/bin/vi.sh"
     setup_plug "$HOME/.local/bin/nv.sh"
     setup_plug "$HOME/.local/bin/nvi.sh"
