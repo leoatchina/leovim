@@ -81,6 +81,7 @@
 - [x] run reuse
 - [x] wilder.nvim && cmp-cmdline
 - [x] lsp codelens warn bug
+- [ ] tabline add nr
 - [ ] grep replace bug
 - [ ] fzflsp -> fzfx.nvim
 - [ ] glance -> lspui

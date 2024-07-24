@@ -1,6 +1,9 @@
 set rtp^=$CONF_D_DIR
 let &termencoding=&enc
 nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
+if has('nvim')
+    nnoremap <M-k>U :UpdateRemotePlugins<Cr>
+endif
 " ------------------------
 " toggle_modify
 " ------------------------
@@ -367,4 +370,3 @@ if !has('nvim') && HAS_GUI() == 0
         call s:set_metacode(c)
     endfor
 endif
-
