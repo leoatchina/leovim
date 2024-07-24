@@ -82,6 +82,8 @@
 - [x] wilder.nvim && cmp-cmdline
 - [x] lsp codelens warn bug
 - [ ] grep replace bug
+- [ ] fzflsp -> fzfx.nvim
+- [ ] glance -> lspui
 - [ ] tabline show all windows
 - [ ] run in qf and show in statusline
 - [ ] floaterm drop command
