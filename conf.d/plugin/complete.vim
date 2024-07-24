@@ -50,7 +50,7 @@ if InstalledNvimLsp()
         let g:ensure_installed += ['gopls']
     endif
     if Installed('nvim-java', 'nvim-java-dap', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'spring-boot.nvim', 'lua-async-await')
-        lua require('java').setup()
+        lua require('java').setup({verification = { invalid_mason_registry = false }})
     endif
     if Installed('spring-boot.nvim')
         lua require("springboot")
