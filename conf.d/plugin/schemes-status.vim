@@ -196,6 +196,7 @@ elseif PlannedCoc()
 endif
 function! Buffers()
     let buffers = lightline#bufferline#buffers()
+    " 把active 的 buffer 放最后
     if empty(buffers[-1])
         let res = copy(buffers)
     else
@@ -208,22 +209,17 @@ function! Buffers()
     if WINDOWS()
         if has('nvim')
             if HAS_GUI()
-                let root_icon = ' Ⓡ  '
+                let icon = 'Ⓡ '
             else
-                let root_icon = '   '
+                let icon = ' '
             endif
         else
-            let root_icon = ' @ '
+            let icon = '@'
         endif
     else
-        let root_icon = '   '
+        let icon = ' '
     endif
-    if RootDir() == ''
-        let res[0] += [root_icon . RelativeDir()]
-    else
-        let res[0] += [root_icon . RootDir()]
-        let res[1] = [RelativeDir() . ' ' . res[1][0]]
-    endif
+    let res[1] = [icon . ' ' . res[1][0] . ' ' . icon]
     return res
 endfunction
 let g:lightline['component_expand']['buffers'] = 'Buffers'
@@ -325,7 +321,7 @@ function! Vim_NeatTabLine()
         " set the tab page number (for mouse clicks)
         let s .= '%' . nr . 'T'
         " set nr
-        let s .= '[' . nr . ']'
+        let s .= '【' . nr . '】'
         " set hl
         let s .= '%{Vim_NeatTabLabel(' . nr . ',' . a .  ')} '
     endfor
