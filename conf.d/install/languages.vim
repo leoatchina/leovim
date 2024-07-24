@@ -86,7 +86,9 @@ if Require('java') && Planned('nvim-lspconfig') && g:python_version > 3.09
     PlugAdd 'nvim-java/nvim-java-refactor'
     PlugAdd 'nvim-java/nvim-java-core'
     PlugAdd 'nvim-java/nvim-java-test'
-    PlugAdd 'nvim-java/nvim-java-dap'
     PlugAdd 'nvim-java/nvim-java'
     PlugAdd 'JavaHello/spring-boot.nvim'
+    if Planned('nvim-dap')
+        PlugAdd 'nvim-java/nvim-java-dap'
+    endif
 endif
