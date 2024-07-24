@@ -81,14 +81,12 @@ endif
 " ------------------------------
 " nvim-java
 " ------------------------------
-if Require('java') && Planned('nvim-lspconfig') && g:python_version > 3.09
+if Require('java') && Planned('nvim-lspconfig') && Planned('nvim-dap') && g:python_version > 3.09
     PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'nvim-java/nvim-java-refactor'
     PlugAdd 'nvim-java/nvim-java-core'
     PlugAdd 'nvim-java/nvim-java-test'
     PlugAdd 'nvim-java/nvim-java'
     PlugAdd 'JavaHello/spring-boot.nvim'
-    if Planned('nvim-dap')
-        PlugAdd 'nvim-java/nvim-java-dap'
-    endif
+    PlugAdd 'nvim-java/nvim-java-dap'
 endif
