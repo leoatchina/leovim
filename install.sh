@@ -118,7 +118,7 @@ cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/nvi.sh $HOME/.local/bin
 
 # dirdiff
-ln -sf $APP_PATH/scripts/dirdiff $HOME/.local/bin
+cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin
 
 # leovim command
 echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovim
