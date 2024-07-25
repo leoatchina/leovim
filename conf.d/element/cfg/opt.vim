@@ -3,6 +3,7 @@ let g:require_group = get(g:, 'preset_group', [])
 let g:leovim_osc52_yank = 1
 let g:leovim_whichkey = 1
 let g:leovim_openmap = 0
+let g:nvim_treesitter_install = 0
 
 " if v:version < 800
 "     call AddRequire('notags')
@@ -13,12 +14,12 @@ let g:leovim_openmap = 0
 " call AddRequire('wubi')
 " call AddRequire('query')
 " call AddRequire('markdown')
-" call AddRequire('c', 'rust', 'go')
 
-" let g:vim_path="nvim-qt.exe"
-" let g:nvim_treesitter_install = 1
+" call AddRequire('c', 'rust', 'go', 'java')
+
+" let g:vim_path="nvim.exe"
+
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
-
 " let g:vscode_user_dir = 'C:\Scoop\persist\vscode\data\user-data\User'
 
 let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'query', 'c', 'cpp', 'go', 'rust', 'java']

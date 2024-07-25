@@ -82,6 +82,7 @@
 - [x] wilder.nvim && cmp-cmdline
 - [x] lsp codelens warn bug
 - [x] tabline add nr
+- [ ] vim's registers unamed
 - [ ] tabline show current tab's all buffers
 - [ ] grep replace bug
 - [ ] fzflsp -> fzfx.nvim or fzf-lua
