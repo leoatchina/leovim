@@ -216,28 +216,6 @@ if Installed('vim-floaterm')
         nnoremap <silent><leader>` :FloatermRanger<Cr>
     endif
 endif
-" --------------------------
-" project
-" --------------------------
-if Planned('vim-project')
-    nnoremap <leader>pp :Project
-    nnoremap <leader>pa :Project <C-r>=GetRootDir()<Cr>
-    nnoremap <leader>pI :ProjectIgnore<Space>
-    nnoremap <leader>po :ProjectOpen<Space>
-    nnoremap <leader>pR :ProjectRemove<Space>
-    nnoremap <leader>pn :ProjectRename<Space>
-    nnoremap <leader>p/ :ProjectFindInFiles<Space>
-    nnoremap <silent><nowait><leader>pl :ProjectList<Cr>
-    nnoremap <silent><nowait><leader>pA :ProjectAllInfo<Cr>
-    nnoremap <silent><nowait><leader>pc :ProjectConfig<Cr>
-    nnoremap <silent><nowait><leader>pC :ProjectAllConfig<Cr>
-    nnoremap <silent><nowait><leader>pr :ProjectRoot<Cr>
-    nnoremap <silent><nowait><leader>pi :ProjectInfo<Cr>
-    nnoremap <silent><nowait><leader>pq :ProjectQuit<Cr>
-    nnoremap <silent><nowait><leader>pf :ProjectSearchFiles<Cr>
-    command! ProjectCommands call FzfCallCommands('ProjectCommands', 'Project')
-    nnoremap <silent><nowait><leader>P :ProjectCommands<Cr>
-endif
 " -----------------------------------
 " using system file explorer
 " -----------------------------------

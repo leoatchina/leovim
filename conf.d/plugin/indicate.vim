@@ -195,7 +195,7 @@ endif
 if !isdirectory(g:startify_session_dir)
     silent! call mkdir(g:startify_session_dir, "p")
 endif
-nnoremap <leader>fS :Startify<Cr>
-nnoremap <leader>fs :SSave<Space>
-nnoremap <leader>fl :SLoad<Space>
-nnoremap <leader>fx :SDelete<Space>
+nnoremap <leader>st :Startify<Cr>
+nnoremap <leader>ss :SSave<Space>
+nnoremap <leader>sl :SLoad<Space>
+nnoremap <leader>sx :SDelete<Space>

@@ -48,12 +48,6 @@ if v:version >= 800
     endif
 endif
 " ------------------------------
-" project
-" ------------------------------
-if has('patch-8.0.1832') && exists("v:null") || has('nvim')
-    PlugAdd 'leafOfTree/vim-project'
-endif
-" ------------------------------
 " undo && search hl
 " ------------------------------
 if has('nvim') && UNIX()
