@@ -76,7 +76,8 @@ let g:lightline = {
                 \ 'component_expand': {},
                 \ 'component_type': {
                     \ 'gitbranch': 'info',
-                    \ 'buffers': 'tabsel'
+                    \ 'buffers': 'tabsel',
+                    \ 'relativepath': 'info'
                     \ },
                 \ 'active': {},
                 \ 'inactive':{},
@@ -140,18 +141,8 @@ elseif PlannedCoc()
     let g:lightline.component_function.coc_diag = 'CocDiagnostic'
     let g:lightline.active.right += [['coc_diag']]
 endif
+" show buffers and current file path
 function! Buffers()
-    let buffers = lightline#bufferline#buffers()
-    " 把active 的 buffer 放最后
-    if empty(buffers[-1])
-        let res = copy(buffers)
-    else
-        if empty(buffers[0])
-            let res = [buffers[2], buffers[1], []]
-        else
-            let res = [buffers[0] + buffers[2], buffers[1], []]
-        endif
-    endif
     if WINDOWS()
         if has('nvim')
             let icon = 'Ⓡ '
@@ -161,19 +152,34 @@ function! Buffers()
     else
         let icon = 'Ⓡ '
     endif
-    if RootDir() == ''
-        let res[0] += [icon . ' ' . RelativeDir() . '/']
+    " origin buffers list
+    let buffers = lightline#bufferline#buffers()
+    " reorder buffers
+    if empty(buffers[2])
+        let res = copy(buffers)
     else
-        let res[0] += [RootDir()]
-        let res[1] = [icon . ' ' . RelativeDir() . '/' . res[1][0]]
+        if empty(buffers[0])
+            let res = [buffers[2], buffers[1], []]
+        else
+            let res = [buffers[0] + buffers[2], buffers[1], []]
+        endif
+    endif
+    if RootDir() != ''
+        let res[1] = [icon . ' ' . RootDir()]
+    else
+        let res[1] = []
     endif
     return res
 endfunction
 let g:lightline['component_expand']['buffers'] = 'Buffers'
+function! RelativePath()
+    return  RelativeDir() . '/' . expand('%')
+endfunction
+let g:lightline['component_expand']['relativepath'] = 'RelativePath'
 "------------------------
 " left part
 "------------------------
-let g:lightline.active.left = [['mode'], ['buffers', 'paste']]
+let g:lightline.active.left = [['mode'], ['buffers', 'relativepath', 'paste']]
 let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------
 " lightline themes
