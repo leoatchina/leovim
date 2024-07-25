@@ -81,11 +81,11 @@
 - [x] run reuse
 - [x] wilder.nvim && cmp-cmdline
 - [x] lsp codelens warn bug
-- [ ] tabline add nr
+- [x] tabline add nr
+- [ ] tabline show current tab's all buffers
 - [ ] grep replace bug
-- [ ] fzflsp -> fzfx.nvim
+- [ ] fzflsp -> fzfx.nvim or fzf-lua
 - [ ] glance -> lspui
-- [ ] tabline show all windows
 - [ ] run in qf and show in statusline
 - [ ] floaterm drop command
 - [ ] ====== My plugins ======
@@ -94,7 +94,7 @@
   - [x] preview funky
   - [x] multi buffers
   - [x] jump to another window bug
-  - [ ] FunkyAll not show background buffer bug
+  - [ ] FunkyAll not show buffer modified bug
   - [ ] ctrlp intergrated
   - [ ] README
   - [ ] deploy to github

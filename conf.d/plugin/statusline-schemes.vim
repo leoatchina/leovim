@@ -1,3 +1,18 @@
+function! RootDir()
+    return GitRootDir() == '' ? '' : GitRootDir() . '/'
+endfunction
+function! RelativeDir()
+    let root = RootDir()
+    let path = Expand('%:p:h', 1)
+    if root == ''
+        return path
+    else
+        return path[len(root):]
+    endif
+endfunction
+function! AbsPath()
+    return Expand('%:p', 1)
+endfunction
 "-----------------------------------------------------
 " lightline init, NOTE: must be set before schemes
 "-----------------------------------------------------
@@ -48,21 +63,6 @@ PlugAddOpt 'lightline-bufferline'
 " ------------------------
 " init
 " ------------------------
-function! RelativeDir()
-    let root = RootDir()
-    let path = Expand('%:p:h', 1)
-    if root == ''
-        return path
-    else
-        return path[len(root):]
-    endif
-endfunction
-function! RootDir()
-    return GitRootDir() == '' ? '' : GitRootDir() . '/'
-endfunction
-function! AbsPath()
-    return Expand('%:p', 1)
-endfunction
 let g:lightline = {
                 \ 'component': {
                     \ 'lineinfo': '%l/%L:%c'
@@ -164,8 +164,8 @@ function! Buffers()
             let res = [buffers[0] + buffers[2], buffers[1], []]
         endif
     endif
-    if RootDir() != ''
-        let res[1] = [icon . ' ' . RootDir()]
+    if GitRootDir() != ''
+        let res[1] = [icon . ' ' . GitRootDir()]
     else
         let res[1] = []
     endif
