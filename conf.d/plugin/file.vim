@@ -4,7 +4,12 @@ catch /.*/
     " pass
 endtry
 "----------------------------------------------------------------------
-" display side by side diff in a new tabpage
+" Sudo
+"----------------------------------------------------------------------
+nnoremap <leader>su :Sudo
+nnoremap <leader>se :SudoEdit<Space>
+nnoremap <leader>sw :SudoWrite<Space>
+"----------------------------------------------------------------------
 " usage: DiffVsp <left_file> <right_file>
 "----------------------------------------------------------------------
 command! -nargs=+ -complete=file DiffVsp call s:DiffVsp(<f-args>)
