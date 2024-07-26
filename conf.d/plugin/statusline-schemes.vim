@@ -11,8 +11,7 @@ function! AbsPath()
     return Expand('%:p', 1)
 endfunction
 function! RelativePath()
-    let rd = RelativeDir()
-    if rd == ''
+    if GitRootDir() == ''
         return expand('%')
     else
         return RelativeDir() . '/' . expand('%')
@@ -171,10 +170,10 @@ function! Buffers()
             let res = [buffers[0] + buffers[2], buffers[1], []]
         endif
     endif
-    if GitRootDir() != ''
-        let res[1] = [icon . ' ' . GitRootDir()]
+    if GitRootDir() == ''
+        let res[1] = [icon . ' ' . RelativeDir()]
     else
-        let res[1] = [icon]
+        let res[1] = [icon . ' ' . GitRootDir()]
     endif
     return res
 endfunction
