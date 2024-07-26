@@ -24,6 +24,7 @@ nnoremap <M-k><space> :ToggleModity<Cr>
 " ------------------------------------
 " Meta key
 " ------------------------------------
+" NOTE: add metacode_group must be execute after map_metacode_nop
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
 if has('nvim') || HAS_GUI()
     function! s:map_metacode_nop(key)
@@ -34,7 +35,6 @@ if has('nvim') || HAS_GUI()
         call s:map_metacode_nop(c)
     endfor
 endif
-" NOTE: add metacode_group must be execute after map_metacode_nop
 for i in range(26)
     " 65 is ascii of A
     call add(s:metacode_group, nr2char(65 + i))
@@ -45,7 +45,9 @@ for i in range(10)
     " 48 is ascii of 0
     call add(s:metacode_group, nr2char(48 + i))
 endfor
-" (neo)vim enhanced
+" ------------------------------------
+" map adjust
+" ------------------------------------
 nnoremap <C-m> <Tab>
 nnoremap gQ gw
 xnoremap gQ gw
@@ -318,9 +320,9 @@ function! s:plug_add(plugin, ...)
     let g:leovim_installed[pack] = 0
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
-" ------------------------------
-" install packs
-" ------------------------------
+" ===============================================================================================================
+" install begin
+" ===============================================================================================================
 let $DEPLOY_DIR = Expand("~/.leovim.d")
 call plug#begin(Expand("$DEPLOY_DIR/pack/add/opt"))
 if filereadable(expand("$DEPLOY_DIR/pack.vim"))
@@ -359,9 +361,10 @@ for [plug, value] in items(g:plugs)
         let g:leovim_installed[tolower(plug)] = 1
     endif
 endfor
-" ----------------------
+" ===============================================================================================================
 " <M-Key> map for vim
-" ----------------------
+" ===============================================================================================================
+" NOTE: must be set affer all plugins are installed
 if !has('nvim') && HAS_GUI() == 0
     function! s:set_metacode(key)
         exec "set <M-".a:key.">=\e".a:key

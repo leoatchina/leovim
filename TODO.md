@@ -77,19 +77,21 @@
 - [x] targets.vim bug
 - [x] yank optimize
 - [x] delete lsp_zero
-- [x] Expand
+- [x] Expand function
 - [x] run reuse
 - [x] wilder.nvim && cmp-cmdline
 - [x] lsp codelens warn bug
 - [x] tabline add nr
+- [ ] glance -> lspui
+- [ ] fzf-project 
 - [ ] vim's registers unamed
 - [ ] tabline show current tab's all buffers
 - [ ] grep replace bug
 - [ ] fzflsp -> fzfx.nvim or fzf-lua
-- [ ] glance -> lspui
 - [ ] run in qf and show in statusline
 - [ ] floaterm drop command
 - [ ] ====== My plugins ======
+- [x] fzf-registers 
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
@@ -111,7 +113,6 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [ ] README
   - [ ] deploy to github
-- [ ] fzf-registers 
 - [ ] ====== Below need plenty of works ======
 - [ ] vista
   - [ ] icons bug in windows-terminal
