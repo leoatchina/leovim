@@ -1,17 +1,22 @@
-function! RootDir()
-    return GitRootDir() == '' ? '' : GitRootDir() . '/'
-endfunction
 function! RelativeDir()
-    let root = RootDir()
+    let root = GitRootDir()
     let path = Expand('%:p:h', 1)
     if root == ''
         return path
     else
-        return path[len(root):]
+        return path[len(root) + 1:]
     endif
 endfunction
 function! AbsPath()
     return Expand('%:p', 1)
+endfunction
+function! RelativePath()
+    let rd = RelativeDir()
+    if rd == ''
+        return expand('%')
+    else
+        return RelativeDir() . '/' . expand('%')
+    endif
 endfunction
 "-----------------------------------------------------
 " lightline init, NOTE: must be set before schemes
@@ -42,7 +47,7 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
-    let left = &columns - len(FileReadonly() + GitBranch() + RootDir() + RelativeDir() + Mode())
+    let left = &columns - len(FileReadonly() + GitBranch() + GitRootDir() + RelativeDir() + Mode())
     return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
@@ -141,7 +146,9 @@ elseif PlannedCoc()
     let g:lightline.component_function.coc_diag = 'CocDiagnostic'
     let g:lightline.active.right += [['coc_diag']]
 endif
+" ---------------------------------------
 " show buffers and current file path
+" ---------------------------------------
 function! Buffers()
     if WINDOWS()
         if has('nvim')
@@ -167,18 +174,18 @@ function! Buffers()
     if GitRootDir() != ''
         let res[1] = [icon . ' ' . GitRootDir()]
     else
-        let res[1] = []
+        let res[1] = [icon]
     endif
     return res
 endfunction
+" ------------------------
+" RelativePath
+" ------------------------
 let g:lightline['component_expand']['buffers'] = 'Buffers'
-function! RelativePath()
-    return  RelativeDir() . '/' . expand('%')
-endfunction
 let g:lightline['component_expand']['relativepath'] = 'RelativePath'
-"------------------------
+" ------------------------
 " left part
-"------------------------
+" ------------------------
 let g:lightline.active.left = [['mode'], ['buffers', 'relativepath', 'paste']]
 let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------

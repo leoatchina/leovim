@@ -25,30 +25,31 @@ function! UpdateBufGit()
         let idx = 0
     endif
     if g:git_version > 1.8
+        exec "lcd " . Expand("%:p:h")
         let b:git_root_dir = split(system('git rev-parse --show-toplevel'), "\\n")[idx]
-        if b:git_root_dir =~ 'fatal:' && b:git_root_dir =~ 'git'
-            let b:git_branch = ''
+        if b:git_root_dir =~ 'fatal:' && b:git_root_dir =~ '.git'
             let b:git_root_dir = ''
+            let b:git_branch = ''
         else
             if Expand('%:t') !~? 'Tagbar\|Vista\|Gundo\|NERD\|coc\|fern\|netrw\|neo-tree' && &ft !~ 'vimfiler' && index(['nofile', 'popup'], &buftype) < 0
                 try
                     let b:git_branch = split(system('git rev-parse --abbrev-ref HEAD'), "\\n")[idx]
                     if b:git_branch =~ 'fatal:'
-                        let b:git_branch = ''
                         let b:git_root_dir = ''
+                        let b:git_branch = ''
                     endif
                 catch /.*/
-                    let b:git_branch = ''
                     let b:git_root_dir = ''
+                    let b:git_branch = ''
                 endtry
             else
-                let b:git_branch = ''
                 let b:git_root_dir = ''
+                let b:git_branch = ''
             endif
         endif
     else
-        let b:git_branch = ''
         let b:git_root_dir = ''
+        let b:git_branch = ''
     endif
 endfunction
 augroup UpdateBufGit
