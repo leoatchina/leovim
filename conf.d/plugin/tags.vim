@@ -363,10 +363,11 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
                 echohl WarningMsg | echom "found by coc " . jump_command | echohl None
             endif
         endif
+    elseif Installed('lspui.nvim') && lsp
     " --------------------------
-    " nvim-lsp
+    " glance
     " --------------------------
-    elseif InstalledNvimLsp() && lsp
+    elseif Installed('glance.nvim') && lsp
         let commands_dict = {
                     \ 'definition' : ['textDocument/definition', 'Glance definitions'],
                     \ 'references' : ['textDocument/references', 'Glance references'],
@@ -375,7 +376,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
                     \ 'declaration' : ['textDocument/declaration', 'Declarations'],
                     \ }
         let [handler, float_command] = commands_dict[find_type]
-        let found_symbol = luaeval(printf("CheckHandler('%s')", handler))
+        let found_symbol = luaeval(printf("ChecHandler('%s')", handler))
         if found_symbol
             redir => l:messages
             if open_position == 'list'

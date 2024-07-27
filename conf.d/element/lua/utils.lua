@@ -52,7 +52,3 @@ function _G.CheckHandler(handler)
     return 0
   end
 end
-
-if vim.fn.has('nvim-0.10') > 0 then
-  vim.lsp.inlay_hint.enable()
-end

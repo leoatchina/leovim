@@ -118,7 +118,7 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
     if Require('lspui')
-        PlugAdd 'jinzhongjia/LspUI.nvim'
+        PlugAdd 'jinzhongjia/LspUI.nvim', {'branch': 'callback'}
     else
         PlugAdd 'DNLHC/glance.nvim'
     endif

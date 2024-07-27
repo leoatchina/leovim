@@ -1,3 +1,4 @@
+local M = {}
 local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
@@ -215,9 +216,33 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end
 })
 -----------------
--- glance
+-- lsp ui call
 -----------------
-if Installed('glance.nvim') then
+if Installed('lspui.nvim') then
+  local LspUI = require('LspUI')
+  LspUI.setup()
+  function M.LspUICall()
+    LspUI.api.definition(callback == function(data)
+      if data then
+        vim.api.nvim_set_var('lsp_found', 1)
+      else
+        vim.api.nvim_set_var('lsp_found', 0)
+      end
+    end)
+  end
+elseif Installed('glance.nvim') then
+  function _G.CheckHandler(handler)
+    local ok, res = pcall(function() return vim.lsp.buf_request_sync(0, handler, vim.lsp.util.make_position_params()) end)
+    if ok then
+      if res and type(res) == 'table' and next(res) then
+        return 1
+      else
+        return 0
+      end
+    else
+      return 0
+    end
+  end
   local glance = require("glance")
   local actions = glance.actions
   glance.setup({
@@ -347,3 +372,5 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
   border = "single",
   close_events = { "BufHidden", "InsertLeave" },
 })
+
+return M
