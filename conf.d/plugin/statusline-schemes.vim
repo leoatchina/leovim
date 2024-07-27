@@ -10,17 +10,6 @@ endfunction
 function! AbsPath()
     return Expand('%:p', 1)
 endfunction
-function! RelativePath()
-    if GitRootDir() == ''
-        return Expand('%')
-    else
-        if &ft == ''
-            return ''
-        else
-            return RelativeDir() . '/' . expand('%')
-        endif
-    endif
-endfunction
 "-----------------------------------------------------
 " lightline init, NOTE: must be set before schemes
 "-----------------------------------------------------
@@ -82,11 +71,6 @@ let g:lightline = {
                     \ 'abspath': 'AbsPath',
                     \ },
                 \ 'component_expand': {},
-                \ 'component_type': {
-                    \ 'gitbranch': 'info',
-                    \ 'buffers': 'tabsel',
-                    \ 'relativepath': 'info'
-                    \ },
                 \ 'active': {},
                 \ 'inactive':{},
                 \ 'enable': {
@@ -181,10 +165,19 @@ function! Buffers()
     endif
     return res
 endfunction
+let g:lightline['component_expand']['buffers'] = 'Buffers'
 " ------------------------
 " RelativePath
 " ------------------------
-let g:lightline['component_expand']['buffers'] = 'Buffers'
+function! RelativePath()
+    if &ft == ''
+        return ''
+    elseif GitRootDir() == ''
+        return Expand('%')
+    else
+        return RelativeDir() . '/' . expand('%')
+    endif
+endfunction
 let g:lightline['component_expand']['relativepath'] = 'RelativePath'
 " ------------------------
 " left part
@@ -192,45 +185,13 @@ let g:lightline['component_expand']['relativepath'] = 'RelativePath'
 let g:lightline.active.left = [['mode'], ['buffers', 'relativepath', 'paste']]
 let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------
-" lightline themes
+" lightline component_type
 " ------------------------
-function! UpdateLightline() abort
-    let colors_name = get(g:, 'colors_name', '')
-    if colors_name == 'codedark' || colors_name == 'deus' || colors_name == 'one'
-        let g:lightline.colorscheme = g:colors_name
-    elseif colors_name == 'space-vim-dark'
-        let g:lightline.colorscheme = 'simpleblack'
-    elseif colors_name == 'sublime'
-        let g:lightline.colorscheme = 'molokai'
-    elseif colors_name == 'hybrid'
-        let g:lightline.colorscheme = 'nord'
-    elseif colors_name =~ 'gruvbox'
-        if colors_name == 'gruvbox-material'
-            let g:lightline.colorscheme = 'gruvbox_material'
-        else
-            let g:lightline.colorscheme = 'gruvboxdark'
-        endif
-    elseif colors_name =~ 'tokyonight'
-        let g:lightline.colorscheme = "tokyonight"
-    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest' || colors_name =~ 'fox'
-        let g:lightline.colorscheme = g:colors_name
-    else
-        let g:lightline.colorscheme = 'default'
-    endif
-    call lightline#init()
-    call lightline#colorscheme()
-    call lightline#update()
-endfunction
-augroup UpdateLightline
-    autocmd!
-    autocmd ColorScheme * call UpdateLightline()
-    autocmd WinEnter,VimEnter,BufWritePost * call lightline#update()
-    if PlannedCoc()
-        autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
-    endif
-augroup END
-nnoremap <silent><C-l> <C-l>:call lightline#update()<Cr>
-inoremap <silent><C-l> <C-o>:call lightline#update()<Cr>
+let g:lightline.component_type = {
+            \ 'gitbranch': 'info',
+            \ 'buffers': 'tabsel',
+            \ 'relativepath': 'info'
+            \ }
 " ------------------------
 " tab label
 " ------------------------
@@ -307,9 +268,9 @@ endfunc
 " set label && tabline
 set guitablabel=%{Vim_NeatGuiTabLabel()}
 set tabline=%!Vim_NeatTabLine()
-" --------------------------
+" ==============================================================================
 " schemes
-" --------------------------
+" ==============================================================================
 syntax on
 syntax enable
 filetype on
@@ -332,6 +293,43 @@ function! SetScheme(scheme, ...) abort
         endtry
     endtry
 endfunction
+function! UpdateLightline() abort
+    let colors_name = get(g:, 'colors_name', '')
+    if colors_name == 'codedark' || colors_name == 'deus' || colors_name == 'one'
+        let g:lightline.colorscheme = g:colors_name
+    elseif colors_name == 'space-vim-dark'
+        let g:lightline.colorscheme = 'simpleblack'
+    elseif colors_name == 'sublime'
+        let g:lightline.colorscheme = 'molokai'
+    elseif colors_name == 'hybrid'
+        let g:lightline.colorscheme = 'nord'
+    elseif colors_name =~ 'gruvbox'
+        if colors_name == 'gruvbox-material'
+            let g:lightline.colorscheme = 'gruvbox_material'
+        else
+            let g:lightline.colorscheme = 'gruvboxdark'
+        endif
+    elseif colors_name =~ 'tokyonight'
+        let g:lightline.colorscheme = "tokyonight"
+    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest' || colors_name =~ 'fox'
+        let g:lightline.colorscheme = g:colors_name
+    else
+        let g:lightline.colorscheme = 'default'
+    endif
+    call lightline#init()
+    call lightline#colorscheme()
+    call lightline#update()
+endfunction
+augroup UpdateLightline
+    autocmd!
+    autocmd ColorScheme * call UpdateLightline()
+    autocmd WinEnter,VimEnter,BufWritePost * call lightline#update()
+    if PlannedCoc()
+        autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
+    endif
+augroup END
+nnoremap <silent><C-l> <C-l>:call lightline#update()<Cr>
+inoremap <silent><C-l> <C-o>:call lightline#update()<Cr>
 " --------------------------
 " schemes need truecolor
 " --------------------------
