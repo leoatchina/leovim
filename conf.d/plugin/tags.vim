@@ -372,7 +372,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
                     \ 'references' : ['textDocument/references', 'Glance references'],
                     \ 'type_defition' : ['textDocument/typeDefinition', 'Glance type_definitions'],
                     \ 'implementation' : ['textDocument/implementation', 'Glance implementations'],
-                    \ 'declaration' : ['textDocument/declaration', 'Declarations'],
+                    \ 'declaration' : ['textDocument/declaration', 'lua vim.lsp.buf.declaration()'],
                     \ }
         let [handler, float_command] = commands_dict[find_type]
         let found_symbol = luaeval(printf("CheckHandler('%s')", handler))
