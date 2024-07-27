@@ -145,9 +145,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- lsp
     map("n", "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
     -- native lsp
-    map(n, "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
-    map(n, "gl", vim.lsp.buf.outgoing_calls, opts_silent)
-    map(n, "gh", vim.lsp.buf.incoming_calls, opts_silent)
+    map("n", "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
+    map("n", "gl", vim.lsp.buf.outgoing_calls, opts_silent)
+    map("n", "gh", vim.lsp.buf.incoming_calls, opts_silent)
     -- list workspace folder && omnifunc
     map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
     -- lsp info/restart
