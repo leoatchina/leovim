@@ -15,10 +15,10 @@ require("neoconf").setup({
   }
 })
 local opts_neoconf = { noremap = true, silent = true }
-map("n", "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
-map("n", "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
-map("n", "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
-map("n", "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
+map('n', "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
+map('n', "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
+map('n', "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
+map('n', "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
 -----------------------
 -- symbol usage
 -----------------------
@@ -137,22 +137,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
     end
     -- signatureHelp
-    map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
+    map('i', "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
     -- format
-    map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts_silent)
+    map({ 'n', 'x' }, "<C-q>", vim.lsp.buf.format, opts_silent)
     -- Rename
-    map({ "n", "x" }, "<F2>", vim.lsp.buf.rename, opts_echo)
+    map({ 'n', 'x' }, "<F2>", vim.lsp.buf.rename, opts_echo)
     -- lsp
-    map("n", "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
+    map('n', "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
     -- native lsp
-    map("n", "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
-    map("n", "gl", vim.lsp.buf.outgoing_calls, opts_silent)
-    map("n", "gh", vim.lsp.buf.incoming_calls, opts_silent)
+    map('n', "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
+    map('n', "gl", vim.lsp.buf.outgoing_calls, opts_silent)
+    map('n', "gh", vim.lsp.buf.incoming_calls, opts_silent)
     -- list workspace folder && omnifunc
-    map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
+    map('n', "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
     -- lsp info/restart
-    map("n", "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
-    map("n", "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
+    map('n', "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
+    map('n', "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
     -- diagnostic error
     map('n', '[d', vim.diagnostic.goto_prev, opts_silent)
     map('n', ']d', vim.diagnostic.goto_next, opts_silent)
@@ -164,8 +164,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
-      map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
-      map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
+      map('n', "<C-s>", require('lsp-selection-range').trigger, opts_silent)
+      map('x', "<C-s>", require('lsp-selection-range').expand, opts_silent)
     end
     ok, _ = pcall(function()
       vim.treesitter.get_parser(bufnr)
@@ -187,7 +187,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- inlay_hint
     if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      map({ "n", "x" }, "<leader>I", function()
+      map({ 'n', 'x' }, "<leader>I", function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
       end, opts_echo)
     end
@@ -196,10 +196,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.lsp.codelens.refresh({ bufnr = bufnr })
     end
     -- codeaction && symbols
-    map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
-    map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
-    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
-    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
+    map({ 'n', 'x' }, "<M-a>", require("actions-preview").code_actions, opts_silent)
+    map({ 'n', 'x' }, "<leader>A", require("lspimport").import, opts_silent)
+    map({ 'n', 'x' }, "<leader>R", require('symbol-usage').refresh, opts_echo)
+    map({ 'n', 'x' }, "<leader>C", require('symbol-usage').toggle, opts_echo)
   end
 })
 -----------------
