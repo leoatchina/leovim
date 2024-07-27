@@ -217,64 +217,66 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -----------------
 -- glance
 -----------------
-local glance = require("glance")
-local actions = glance.actions
-glance.setup({
-  height = 40,
-  mappings = {
+if Installed('glance.nvim') then
+  local glance = require("glance")
+  local actions = glance.actions
+  glance.setup({
+    height = 40,
+    mappings = {
+      list = {
+        ["<C-b>"] = actions.preview_scroll_win(5),
+        ["<C-f>"] = actions.preview_scroll_win(-5),
+        ["<C-]>"] = actions.jump_vsplit,
+        ["<C-x>"] = actions.jump_split,
+        ["<C-t>"] = actions.jump_tab,
+        ["<M-L>"] = actions.enter_win("preview"),
+        ["q"] = actions.close,
+        ["Q"] = actions.close,
+        ["<M-q>"] = actions.close,
+        ["<leader>q"] = actions.close,
+        -- action disable
+        ["<leader>l"] = false,
+        ["<C-u>"] = false,
+        ["<C-d>"] = false,
+        ["v"] = false,
+        ["s"] = false,
+        ["t"] = false,
+        ["o"] = false,
+      },
+      preview = {
+        ["<M-q>"] = actions.close,
+        ["<leader>q"] = actions.close,
+        ["<Tab>"] = actions.next_location,
+        ["<S-Tab>"] = actions.previous_location,
+        ["q"] = actions.enter_win("list"),
+        ["Q"] = actions.enter_win("list"),
+        ["<M-H>"] = actions.enter_win("list"),
+        -- action disable
+        ["<leader>l"] = false,
+      },
+    },
     list = {
-      ["<C-b>"] = actions.preview_scroll_win(5),
-      ["<C-f>"] = actions.preview_scroll_win(-5),
-      ["<C-]>"] = actions.jump_vsplit,
-      ["<C-x>"] = actions.jump_split,
-      ["<C-t>"] = actions.jump_tab,
-      ["<M-L>"] = actions.enter_win("preview"),
-      ["q"] = actions.close,
-      ["Q"] = actions.close,
-      ["<M-q>"] = actions.close,
-      ["<leader>q"] = actions.close,
-      -- action disable
-      ["<leader>l"] = false,
-      ["<C-u>"] = false,
-      ["<C-d>"] = false,
-      ["v"] = false,
-      ["s"] = false,
-      ["t"] = false,
-      ["o"] = false,
+      position = "left",
+      width = 0.3,
     },
-    preview = {
-      ["<M-q>"] = actions.close,
-      ["<leader>q"] = actions.close,
-      ["<Tab>"] = actions.next_location,
-      ["<S-Tab>"] = actions.previous_location,
-      ["q"] = actions.enter_win("list"),
-      ["Q"] = actions.enter_win("list"),
-      ["<M-H>"] = actions.enter_win("list"),
-      -- action disable
-      ["<leader>l"] = false,
+    -- Configure preview window options
+    preview_win_opts = {
+      cursorline = true,
+      number = true,
+      wrap = false,
     },
-  },
-  list = {
-    position = "left",
-    width = 0.3,
-  },
-  -- Configure preview window options
-  preview_win_opts = {
-    cursorline = true,
-    number = true,
-    wrap = false,
-  },
-  border = {
-    enable = true,
-  },
-  theme = {
-    enable = true,
-    mode = "auto",
-  },
-  winbar = {
-    enable = false,
-  },
-})
+    border = {
+      enable = true,
+    },
+    theme = {
+      enable = true,
+      mode = "auto",
+    },
+    winbar = {
+      enable = false,
+    },
+  })
+end
 ------------------------------
 -- winbar
 ------------------------------

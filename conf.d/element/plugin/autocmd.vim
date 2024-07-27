@@ -1,4 +1,17 @@
-autocmd BufRead acwrite set ma
+" --------------------------
+" auto lcd current dir
+" --------------------------
+augroup AUTOLCD
+    autocmd WinEnter,BufCreate,BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
+                \ && bufname("") !~ "rg"                   " rg
+                \ && bufname("") !~ "outline"              " outline
+                \ && bufname("") !~ "vista"                " vista
+                \ && bufname("") !~ "tag"                  " tag
+                \ && bufname("") !~ "fern"                 " fern
+                \ && bufname("")[0] != "!"                 " some special buf
+                \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
+                \ | lcd %:p:h | endif
+augroup END
 " -----------------------------------
 " swap exists ignore
 " -----------------------------------
@@ -7,6 +20,7 @@ autocmd SwapExists * let v:swapchoice = 'o'
 " autoread modified file outside (neo)vim
 " -----------------------------------
 set autoread
+autocmd BufRead acwrite set ma
 if has('nvim') || !HAS_GUI()
     autocmd FocusGained * :silent! !
 endif
@@ -21,22 +35,6 @@ augroup FOLDS
     autocmd!
     autocmd FileType tex setl foldlevel=0 foldnestmax=1
     autocmd BufRead,BufNewFile *.c,*.cpp,*.cc setl foldlevel=0 foldnestmax=1
-augroup END
-" --------------------------
-" auto lcd current dir
-" --------------------------
-augroup AUTOLCD
-    " cd file dir
-    " NOTE: getbufvar(winbufnr(winnr()), "&buftype")
-    autocmd WinEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
-                \ && bufname("") !~ "rg"                   " rg
-                \ && bufname("") !~ "outline"              " outline
-                \ && bufname("") !~ "vista"                " vista
-                \ && bufname("") !~ "tag"                  " tag
-                \ && bufname("") !~ "fern"                 " fern
-                \ && bufname("")[0] != "!"                 " some special buf
-                \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
-                \ | lcd %:p:h | endif
 augroup END
 " --------------------------
 " number

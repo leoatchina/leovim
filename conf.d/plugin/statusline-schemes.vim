@@ -12,9 +12,13 @@ function! AbsPath()
 endfunction
 function! RelativePath()
     if GitRootDir() == ''
-        return expand('%')
+        return Expand('%')
     else
-        return RelativeDir() . '/' . expand('%')
+        if &ft == ''
+            return ''
+        else
+            return RelativeDir() . '/' . expand('%')
+        endif
     endif
 endfunction
 "-----------------------------------------------------
