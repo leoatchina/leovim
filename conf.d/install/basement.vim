@@ -110,18 +110,12 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
-    PlugAdd 'gfanto/fzf-lsp.nvim'
     PlugAdd 'josa42/nvim-lightline-lsp'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'fgheng/winbar.nvim'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
-    if Require('lspui')
-        PlugAdd 'jinzhongjia/LspUI.nvim'
-    else
-        PlugAdd 'DNLHC/glance.nvim'
-    endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0
         PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
@@ -300,7 +294,6 @@ function! InstalledNvimLsp() abort
                 \ 'symbol-usage.nvim',
                 \ 'nvim-lspimport',
                 \ 'neoconf.nvim',
-                \ 'fzf-lsp.nvim',
                 \ 'winbar.nvim',
                 \ )
 endfunction

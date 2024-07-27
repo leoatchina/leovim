@@ -20,19 +20,6 @@ map("n", "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
 map("n", "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
 map("n", "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
 -----------------------
--- fzf_lsp
------------------------
-vim.lsp.handlers["textDocument/codeAction"] = require 'fzf_lsp'.code_action_handler
-vim.lsp.handlers["textDocument/definition"] = require 'fzf_lsp'.definition_handler
-vim.lsp.handlers["textDocument/declaration"] = require 'fzf_lsp'.declaration_handler
-vim.lsp.handlers["textDocument/typeDefinition"] = require 'fzf_lsp'.type_definition_handler
-vim.lsp.handlers["textDocument/implementation"] = require 'fzf_lsp'.implementation_handler
-vim.lsp.handlers["textDocument/references"] = require 'fzf_lsp'.references_handler
-vim.lsp.handlers["textDocument/documentSymbol"] = require 'fzf_lsp'.document_symbol_handler
-vim.lsp.handlers["callHierarchy/incomingCalls"] = require 'fzf_lsp'.incoming_calls_handler
-vim.lsp.handlers["callHierarchy/outgoingCalls"] = require 'fzf_lsp'.outgoing_calls_handler
-vim.lsp.handlers["workspace/symbol"] = require 'fzf_lsp'.workspace_symbol_handler
------------------------
 -- symbol usage
 -----------------------
 local function hl(name) return vim.api.nvim_get_hl(0, { name = name }) end
@@ -155,11 +142,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts_silent)
     -- Rename
     map({ "n", "x" }, "<F2>", vim.lsp.buf.rename, opts_echo)
-    -- fzf-lsp
+    -- lsp
     map("n", "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
-    map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts_silent)
-    map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts_silent)
-    map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts_silent)
+    -- native lsp
+    map(n, "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
+    map(n, "gl", vim.lsp.buf.outgoing_calls, opts_silent)
+    map(n, "gh", vim.lsp.buf.incoming_calls, opts_silent)
     -- list workspace folder && omnifunc
     map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
     -- lsp info/restart
