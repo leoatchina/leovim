@@ -208,8 +208,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -----------------
 if Installed('lspui.nvim') then
   require('LspUI').setup()
-  function M.LspUICall(method)
-    require('LspUI').api[method](function(data)
+  function M.LspUIApi(method)
+    if method == 'references' then
+      method = 'reference'
+    end
+    require("LspUI")["api"][method](function(data)
       if data then
         vim.api.nvim_set_var("lsp_found", 1)
       else

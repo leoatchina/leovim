@@ -367,7 +367,9 @@ function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
     " LspUI
     " --------------------------
     elseif Installed('lspui.nvim') && lsp
-        lua require("lsp").LspUICall(find_cmd)
+        let cmd = printf('lua require("lsp").LspUIApi("%s")', find_cmd)
+        call execute(cmd)
+        sleep 100m
         let symbol_found = get(g:, 'lsp_found', 0)
     " --------------------------
     " glance
