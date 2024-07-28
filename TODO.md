@@ -83,11 +83,11 @@
 - [x] lsp codelens warn bug
 - [x] tabline add nr
 - [ ] glance -> lspui
-- [ ] fzf-project 
-- [ ] vim's registers unamed
+- [ ] ~fzflsp -> fzfx.nvim or fzf-lua~
 - [ ] tabline show current tab's all buffers
 - [ ] grep replace bug
-- [ ] fzflsp -> fzfx.nvim or fzf-lua
+- [ ] vim's registers unamed
+- [ ] fzf-project 
 - [ ] run in qf and show in statusline
 - [ ] floaterm drop command
 - [ ] ====== My plugins ======

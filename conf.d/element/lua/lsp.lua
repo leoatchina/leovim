@@ -207,7 +207,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- lsp ui call
 -----------------
 if Installed('lspui.nvim') then
-  require('LspUI').setup()
+  require('LspUI').setup({
+    pos_keybind = {
+      main = {
+        back = "L",
+        hide_secondary = "H",
+      },
+      secondary = {
+        jump = "o",
+        jump_split = "<C-]>",
+        jump_vsplit = "<C-v>",
+        jump_tab = "<C-t>",
+        quit = "q",
+        hide_main = "H",
+        fold_all = "X",
+        expand_all = "O",
+        enter = "L",
+      },
+    }
+  })
   function M.LspUIApi(method)
     if method == 'references' then
       method = 'reference'
