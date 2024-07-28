@@ -243,11 +243,11 @@ function! s:view_tag(...)
         endif
     endif
     try
-        let found_symbol = preview#quickfix_list(tagname, 0, &filetype)
+        let symbol_found = preview#quickfix_list(tagname, 0, &filetype)
     catch /.*/
-        let found_symbol = 0
+        let symbol_found = 0
     endtry
-    if found_symbol
+    if symbol_found
         silent! pclose
         if open_position == 'list'
             execute "copen " . g:asyncrun_open
@@ -263,29 +263,29 @@ function! s:view_tag(...)
             call feedkeys("zz", "n")
         endif
     endif
-    return found_symbol
+    return symbol_found
 endfunction
 " --------------------------
 " use lsp or tag to find
 " --------------------------
-function! SymbolOrTagOrSearchAll(find_type, ...) abort
+function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
     let tagname = expand('<cword>')
     if empty(tagname)
         call preview#errmsg("No symbol under cursor.")
         return
     endif
-    let find_type = a:find_type
-    if find_type == 'preview'
+    let find_cmd = a:find_cmd
+    if find_cmd == 'preview'
         if g:ctags_type == ''
             call preview#errmsg("Preview need ctags.")
         else
             try
                 if &rtp =~ 'vim-quickui'
-                    let found_symbol = quickui#tools#preview_tag(tagname, v:false) == 0
+                    let symbol_found = quickui#tools#preview_tag(tagname, v:false) == 0
                 else
-                    let found_symbol = preview#preview_tag(tagname) == 0
+                    let symbol_found = preview#preview_tag(tagname) == 0
                 endif
-                if found_symbol == 0
+                if symbol_found == 0
                     call preview#errmsg("Preview not found.")
                 endif
             catch /.*/
@@ -294,9 +294,9 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
         endif
         return
     else
-        let found_symbol = 0
-        if index(['definition', 'references', 'type_defition', 'implementation', 'declaration', 'tags'], find_type) < 0
-            let find_type = 'definition'
+        let symbol_found = 0
+        if index(['definition', 'references', 'type_defition', 'implementation', 'declaration', 'tags'], find_cmd) < 0
+            let find_cmd = 'definition'
         endif
     endif
     " --------------------------
@@ -319,10 +319,10 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " --------------------------
     " check if cfile type
     " --------------------------
-    if index(g:cfile_types, &ft) >= 0 && index(['definition', 'tags'], find_type) >= 0 && g:ctags_type != ''
+    if index(g:cfile_types, &ft) >= 0 && index(['definition', 'tags'], find_cmd) >= 0 && g:ctags_type != ''
         let lsp = 0
     else
-        if find_type == "tags"
+        if find_cmd == "tags"
             let lsp = 0
         else
             let lsp = 1
@@ -331,7 +331,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " --------------------------
     " coc
     " --------------------------
-    if PlannedCoc() && lsp
+    if Installed('coc.nvim') && lsp
         let commands_dict = {
                     \ 'definition' : ['definitions', 'jumpDefinition'],
                     \ 'references' : ['references', 'jumpReferences'],
@@ -339,16 +339,16 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
                     \ 'implementation' : ['implementations', 'jumpImplementation'],
                     \ 'declaration' : ['declarations', 'jumpDeclaration'],
                     \ }
-        let [handler, jump_command] = commands_dict[find_type]
+        let [handler, jump_command] = commands_dict[find_cmd]
         try
             let res = CocAction(handler)
         catch /.*/
             let res = []
         endtry
         if empty(res)
-            let found_symbol = 0
+            let symbol_found = 0
         else
-            let found_symbol = 1
+            let symbol_found = 1
             if open_position == 'list'
                 call CocAction(jump_command, v:false)
             else
@@ -363,7 +363,12 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
                 echohl WarningMsg | echom "found by coc " . jump_command | echohl None
             endif
         endif
+    " --------------------------
+    " LspUI
+    " --------------------------
     elseif Installed('lspui.nvim') && lsp
+        lua require("lsp").LspUICall(find_cmd)
+        let symbol_found = get(g:, 'lsp_found', 0)
     " --------------------------
     " glance
     " --------------------------
@@ -373,17 +378,17 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
                     \ 'references' : ['textDocument/references', 'Glance references'],
                     \ 'type_defition' : ['textDocument/typeDefinition', 'Glance type_definitions'],
                     \ 'implementation' : ['textDocument/implementation', 'Glance implementations'],
-                    \ 'declaration' : ['textDocument/declaration', 'Declarations'],
+                    \ 'declaration' : ['textDocument/declaration', 'lua vim.lsp.buf.declaration()'],
                     \ }
-        let [handler, float_command] = commands_dict[find_type]
-        let found_symbol = luaeval(printf("ChecHandler('%s')", handler))
-        if found_symbol
+        let [handler, float_command] = commands_dict[find_cmd]
+        let symbol_found = luaeval(printf("lua require('lsp').ChecHandler('%s')", handler))
+        if symbol_found
             redir => l:messages
             if open_position == 'list'
                 call execute(float_command)
             else
                 call s:settagstack(winnr, tagname, pos)
-                let lua_command = printf('lua vim.lsp.buf.%s()', find_type)
+                let lua_command = printf('lua vim.lsp.buf.%s()', find_cmd)
                 if open_position == 'goto'
                     call execute(lua_command)
                 elseif open_position == 'tabe'
@@ -395,7 +400,7 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
                     call execute(lua_command)
                 endif
                 call feedkeys("zz", "n")
-                echohl WarningMsg | echom "found by vim.lsp.buf." . find_type  | echohl None
+                echohl WarningMsg | echom "found by vim.lsp.buf." . find_cmd  | echohl None
             endif
             redir END
             let l:messages = tolower(l:messages)
@@ -404,14 +409,14 @@ function! SymbolOrTagOrSearchAll(find_type, ...) abort
     " 利用errormsg判断是否找到
     let messages = get(l:, 'messages', '')
     if messages =~ '^no ' || messages =~ 'not ' || messages =~ 'error'
-        let found_symbol = 0
+        let symbol_found = 0
     endif
     " tags
-    if found_symbol == 0 && g:ctags_type != ''
-        let found_symbol = s:view_tag(tagname, open_position)
+    if symbol_found == 0 && g:ctags_type != '' && find_cmd != 'references'
+        let symbol_found = s:view_tag(tagname, open_position)
     endif
     " searchall
-    if found_symbol == 0
+    if symbol_found == 0
         if get(g:, 'searchall', '') != ''
             if open_position == 'list'
                 execute g:searchall . ' ' . tagname

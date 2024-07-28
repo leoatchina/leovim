@@ -16,23 +16,10 @@ require("neoconf").setup({
   }
 })
 local opts_neoconf = { noremap = true, silent = true }
-map("n", "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
-map("n", "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
-map("n", "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
-map("n", "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
------------------------
--- fzf_lsp
------------------------
-vim.lsp.handlers["textDocument/codeAction"] = require 'fzf_lsp'.code_action_handler
-vim.lsp.handlers["textDocument/definition"] = require 'fzf_lsp'.definition_handler
-vim.lsp.handlers["textDocument/declaration"] = require 'fzf_lsp'.declaration_handler
-vim.lsp.handlers["textDocument/typeDefinition"] = require 'fzf_lsp'.type_definition_handler
-vim.lsp.handlers["textDocument/implementation"] = require 'fzf_lsp'.implementation_handler
-vim.lsp.handlers["textDocument/references"] = require 'fzf_lsp'.references_handler
-vim.lsp.handlers["textDocument/documentSymbol"] = require 'fzf_lsp'.document_symbol_handler
-vim.lsp.handlers["callHierarchy/incomingCalls"] = require 'fzf_lsp'.incoming_calls_handler
-vim.lsp.handlers["callHierarchy/outgoingCalls"] = require 'fzf_lsp'.outgoing_calls_handler
-vim.lsp.handlers["workspace/symbol"] = require 'fzf_lsp'.workspace_symbol_handler
+map('n', "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
+map('n', "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
+map('n', "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
+map('n', "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
 -----------------------
 -- symbol usage
 -----------------------
@@ -151,21 +138,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
     end
     -- signatureHelp
-    map("i", "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
+    map('i', "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
     -- format
-    map({ "n", "x" }, "<C-q>", vim.lsp.buf.format, opts_silent)
+    map({ 'n', 'x' }, "<C-q>", vim.lsp.buf.format, opts_silent)
     -- Rename
-    map({ "n", "x" }, "<F2>", vim.lsp.buf.rename, opts_echo)
-    -- fzf-lsp
-    map("n", "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
-    map("n", "<leader>S", [[<Cmd>WorkspaceSymbols<Cr>]], opts_silent)
-    map("n", "gl", [[<Cmd>OutgoingCalls<Cr>]], opts_silent)
-    map("n", "gh", [[<Cmd>IncomingCalls<Cr>]], opts_silent)
+    map({ 'n', 'x' }, "<F2>", vim.lsp.buf.rename, opts_echo)
+    -- lsp
+    map('n', "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
+    -- native lsp
+    map('n', "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
+    map('n', "gl", vim.lsp.buf.outgoing_calls, opts_silent)
+    map('n', "gh", vim.lsp.buf.incoming_calls, opts_silent)
     -- list workspace folder && omnifunc
-    map("n", "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
+    map('n', "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
     -- lsp info/restart
-    map("n", "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
-    map("n", "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
+    map('n', "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
+    map('n', "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
     -- diagnostic error
     map('n', '[d', vim.diagnostic.goto_prev, opts_silent)
     map('n', ']d', vim.diagnostic.goto_next, opts_silent)
@@ -177,8 +165,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
-      map("n", "<C-s>", require('lsp-selection-range').trigger, opts_silent)
-      map("x", "<C-s>", require('lsp-selection-range').expand, opts_silent)
+      map('n', "<C-s>", require('lsp-selection-range').trigger, opts_silent)
+      map('x', "<C-s>", require('lsp-selection-range').expand, opts_silent)
     end
     ok, _ = pcall(function()
       vim.treesitter.get_parser(bufnr)
@@ -200,7 +188,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- inlay_hint
     if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      map({ "n", "x" }, "<leader>I", function()
+      map({ 'n', 'x' }, "<leader>I", function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
       end, opts_echo)
     end
@@ -209,29 +197,28 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.lsp.codelens.refresh({ bufnr = bufnr })
     end
     -- codeaction && symbols
-    map({ "n", "x" }, "<M-a>", require("actions-preview").code_actions, opts_silent)
-    map({ "n", "x" }, "<leader>A", require("lspimport").import, opts_silent)
-    map({ "n", "x" }, "<leader>R", require('symbol-usage').refresh, opts_echo)
-    map({ "n", "x" }, "<leader>C", require('symbol-usage').toggle, opts_echo)
+    map({ 'n', 'x' }, "<M-a>", require("actions-preview").code_actions, opts_silent)
+    map({ 'n', 'x' }, "<leader>A", require("lspimport").import, opts_silent)
+    map({ 'n', 'x' }, "<leader>R", require('symbol-usage').refresh, opts_echo)
+    map({ 'n', 'x' }, "<leader>C", require('symbol-usage').toggle, opts_echo)
   end
 })
 -----------------
 -- lsp ui call
 -----------------
 if Installed('lspui.nvim') then
-  local LspUI = require('LspUI')
-  LspUI.setup()
-  function M.LspUICall()
-    LspUI.api.definition(callback == function(data)
+  require('LspUI').setup()
+  function M.LspUICall(method)
+    require('LspUI').api[method](function(data)
       if data then
-        vim.api.nvim_set_var('lsp_found', 1)
+        vim.api.nvim_set_var("lsp_found", 1)
       else
-        vim.api.nvim_set_var('lsp_found', 0)
+        vim.api.nvim_set_var("lsp_found", 0)
       end
     end)
   end
 elseif Installed('glance.nvim') then
-  function _G.CheckHandler(handler)
+  function M.CheckHandler(handler)
     local ok, res = pcall(function() return vim.lsp.buf_request_sync(0, handler, vim.lsp.util.make_position_params()) end)
     if ok then
       if res and type(res) == 'table' and next(res) then

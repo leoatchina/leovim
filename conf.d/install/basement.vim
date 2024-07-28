@@ -110,7 +110,6 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
-    PlugAdd 'gfanto/fzf-lsp.nvim'
     PlugAdd 'josa42/nvim-lightline-lsp'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'fgheng/winbar.nvim'
@@ -300,7 +299,6 @@ function! InstalledNvimLsp() abort
                 \ 'symbol-usage.nvim',
                 \ 'nvim-lspimport',
                 \ 'neoconf.nvim',
-                \ 'fzf-lsp.nvim',
                 \ 'winbar.nvim',
                 \ )
 endfunction
