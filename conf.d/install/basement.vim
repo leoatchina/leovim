@@ -119,7 +119,7 @@ elseif g:complete_engine == 'cmp'
     if Require('glance')
         PlugAdd 'DNLHC/glance.nvim'
     else
-        PlugAdd 'jinzhongjia/LspUI.nvim', {'branch': 'callback'}
+        PlugAdd 'jinzhongjia/LspUI.nvim'
     endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0
