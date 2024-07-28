@@ -116,10 +116,10 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
-    if Require('lspui')
-        PlugAdd 'jinzhongjia/LspUI.nvim', {'branch': 'callback'}
-    else
+    if Require('glance')
         PlugAdd 'DNLHC/glance.nvim'
+    else
+        PlugAdd 'jinzhongjia/LspUI.nvim', {'branch': 'callback'}
     endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0

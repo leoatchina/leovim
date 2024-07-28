@@ -122,6 +122,113 @@ require("mason-lspconfig").setup({
   }
 })
 -----------------
+-- lsp ui call
+-----------------
+if Installed('glance.nvim') then
+  function M.CheckHandler(handler)
+    local ok, res = pcall(function() return vim.lsp.buf_request_sync(0, handler, vim.lsp.util.make_position_params()) end)
+    if ok then
+      if res and type(res) == 'table' and next(res) then
+        return 1
+      else
+        return 0
+      end
+    else
+      return 0
+    end
+  end
+  local glance = require("glance")
+  local actions = glance.actions
+  glance.setup({
+    height = 40,
+    mappings = {
+      list = {
+        ["<C-b>"] = actions.preview_scroll_win(5),
+        ["<C-f>"] = actions.preview_scroll_win(-5),
+        ["<C-]>"] = actions.jump_vsplit,
+        ["<C-x>"] = actions.jump_split,
+        ["<C-t>"] = actions.jump_tab,
+        ["<M-L>"] = actions.enter_win("preview"),
+        ["q"] = actions.close,
+        ["Q"] = actions.close,
+        ["<M-q>"] = actions.close,
+        ["<leader>q"] = actions.close,
+        -- action disable
+        ["<leader>l"] = false,
+        ["<C-u>"] = false,
+        ["<C-d>"] = false,
+        ["v"] = false,
+        ["s"] = false,
+        ["t"] = false,
+        ["o"] = false,
+      },
+      preview = {
+        ["<M-q>"] = actions.close,
+        ["<leader>q"] = actions.close,
+        ["<Tab>"] = actions.next_location,
+        ["<S-Tab>"] = actions.previous_location,
+        ["q"] = actions.enter_win("list"),
+        ["Q"] = actions.enter_win("list"),
+        ["<M-H>"] = actions.enter_win("list"),
+        -- action disable
+        ["<leader>l"] = false,
+      },
+    },
+    list = {
+      position = "left",
+      width = 0.3,
+    },
+    -- Configure preview window options
+    preview_win_opts = {
+      cursorline = true,
+      number = true,
+      wrap = false,
+    },
+    border = {
+      enable = true,
+    },
+    theme = {
+      enable = true,
+      mode = "auto",
+    },
+    winbar = {
+      enable = false,
+    },
+  })
+elseif Installed('lspui.nvim') then
+  require('LspUI').setup({
+    pos_keybind = {
+      main = {
+        back = "L",
+        hide_secondary = "H",
+      },
+      secondary = {
+        jump = "o",
+        jump_split = "<C-]>",
+        jump_vsplit = "<C-v>",
+        jump_tab = "<C-t>",
+        quit = "q",
+        hide_main = "H",
+        fold_all = "X",
+        expand_all = "O",
+        enter = "L",
+      },
+    }
+  })
+  function M.LspUIApi(method)
+    if method == 'references' then
+      method = 'reference'
+    end
+    require("LspUI")["api"][method](function(data)
+      if data then
+        vim.api.nvim_set_var("lsp_found", 1)
+      else
+        vim.api.nvim_set_var("lsp_found", 0)
+      end
+    end)
+  end
+end
+-----------------
 -- lsp attach
 -----------------
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -203,113 +310,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map({ 'n', 'x' }, "<leader>C", require('symbol-usage').toggle, opts_echo)
   end
 })
------------------
--- lsp ui call
------------------
-if Installed('lspui.nvim') then
-  require('LspUI').setup({
-    pos_keybind = {
-      main = {
-        back = "L",
-        hide_secondary = "H",
-      },
-      secondary = {
-        jump = "o",
-        jump_split = "<C-]>",
-        jump_vsplit = "<C-v>",
-        jump_tab = "<C-t>",
-        quit = "q",
-        hide_main = "H",
-        fold_all = "X",
-        expand_all = "O",
-        enter = "L",
-      },
-    }
-  })
-  function M.LspUIApi(method)
-    if method == 'references' then
-      method = 'reference'
-    end
-    require("LspUI")["api"][method](function(data)
-      if data then
-        vim.api.nvim_set_var("lsp_found", 1)
-      else
-        vim.api.nvim_set_var("lsp_found", 0)
-      end
-    end)
-  end
-elseif Installed('glance.nvim') then
-  function M.CheckHandler(handler)
-    local ok, res = pcall(function() return vim.lsp.buf_request_sync(0, handler, vim.lsp.util.make_position_params()) end)
-    if ok then
-      if res and type(res) == 'table' and next(res) then
-        return 1
-      else
-        return 0
-      end
-    else
-      return 0
-    end
-  end
-  local glance = require("glance")
-  local actions = glance.actions
-  glance.setup({
-    height = 40,
-    mappings = {
-      list = {
-        ["<C-b>"] = actions.preview_scroll_win(5),
-        ["<C-f>"] = actions.preview_scroll_win(-5),
-        ["<C-]>"] = actions.jump_vsplit,
-        ["<C-x>"] = actions.jump_split,
-        ["<C-t>"] = actions.jump_tab,
-        ["<M-L>"] = actions.enter_win("preview"),
-        ["q"] = actions.close,
-        ["Q"] = actions.close,
-        ["<M-q>"] = actions.close,
-        ["<leader>q"] = actions.close,
-        -- action disable
-        ["<leader>l"] = false,
-        ["<C-u>"] = false,
-        ["<C-d>"] = false,
-        ["v"] = false,
-        ["s"] = false,
-        ["t"] = false,
-        ["o"] = false,
-      },
-      preview = {
-        ["<M-q>"] = actions.close,
-        ["<leader>q"] = actions.close,
-        ["<Tab>"] = actions.next_location,
-        ["<S-Tab>"] = actions.previous_location,
-        ["q"] = actions.enter_win("list"),
-        ["Q"] = actions.enter_win("list"),
-        ["<M-H>"] = actions.enter_win("list"),
-        -- action disable
-        ["<leader>l"] = false,
-      },
-    },
-    list = {
-      position = "left",
-      width = 0.3,
-    },
-    -- Configure preview window options
-    preview_win_opts = {
-      cursorline = true,
-      number = true,
-      wrap = false,
-    },
-    border = {
-      enable = true,
-    },
-    theme = {
-      enable = true,
-      mode = "auto",
-    },
-    winbar = {
-      enable = false,
-    },
-  })
-end
 ------------------------------
 -- winbar
 ------------------------------
