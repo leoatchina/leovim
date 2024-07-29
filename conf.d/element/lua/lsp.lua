@@ -199,8 +199,8 @@ elseif Installed('lspui.nvim') then
   require('LspUI').setup({
     pos_keybind = {
       main = {
-        back = "SH",
-        hide_secondary = "SL",
+        back = "H",
+        hide_secondary = "L",
       },
       secondary = {
         jump = "o",
@@ -208,10 +208,10 @@ elseif Installed('lspui.nvim') then
         jump_vsplit = "<C-]>",
         jump_tab = "<C-t>",
         quit = "q",
-        hide_main = "SH",
+        hide_main = "H",
         fold_all = "X",
         expand_all = "O",
-        enter = "SL",
+        enter = "L",
       },
     }
   })
