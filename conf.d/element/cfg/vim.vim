@@ -81,23 +81,21 @@ cnoremap <M-w> <ESC>
 " python_support
 " --------------------------
 function! s:get_python_exe()
-    let python = ""
     try
-        if executable('python')
-            let python = exepath('python')
-        elseif executable('python3')
+        if executable('python3')
             let python = exepath('python3')
+        elseif executable('python')
+            let python = exepath('python')
         elseif executable('python2')
             let python = exepath('python2')
+        else
+            return ""
         endif
-        return python
     catch
         return ""
     endtry
 endfunction
-if has('nvim')
-    let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_exe())
-endif
+let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_exe())
 function! s:get_python_version()
     if CYGWIN()
         return 0
@@ -123,14 +121,11 @@ function! s:get_python_version()
         catch /.*/
             let g:pygments_import = get(g:, 'pygments_import', 0)
         endtry
-        if !has('nvim')
-            let g:python3_host_prog = Trim(Execute('py3 print(sys.executable.strip())'))
-        endif
     endif
     return pyx_version
 endfunction
-let g:python_version = s:get_python_version()
 let g:python_exe = s:get_python_exe()
+let g:python_version = s:get_python_version()
 " --------------------------
 " has_terminal
 " --------------------------

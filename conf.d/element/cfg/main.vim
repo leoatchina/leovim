@@ -512,6 +512,9 @@ endif
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
+" ------------------------
+" vscode or (neo)vim
+" ------------------------
 if exists('g:vscode')
     imap <C-a> <ESC>ggVG
     xmap <C-a> <ESC>ggVG
@@ -519,7 +522,6 @@ if exists('g:vscode')
     imap <C-x> <C-o>"*
     xmap <C-x> "*x
     nmap <C-x> "*x
-    " hop for neovim-vscode only
     PlugAddOpt 'hop.nvim'
     lua require("hop_cfg")
     source $CFG_DIR/vscode.vim
