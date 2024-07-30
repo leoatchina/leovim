@@ -20,8 +20,8 @@ fi
 export NODEPATH=$HOME/.local/node
 [ -d $NODEPATH ] && export PATH=$NODEPATH/bin${PATH:+:${PATH}}
 
-export GOPATH=$HOME/go
-[ -d $GOPATH ] && export PATH=$GOPATH/bin${PATH:+:${PATH}} && export GOBIN=$GOPATH/bin
+export GOROOT=$HOME/go
+[ -d $GOROOT ] && export PATH=$GOROOT/bin${PATH:+:${PATH}} && export GOBIN=$GOROOT/bin
 
 # export PATH=$HOME/.local/ctags/bin${PATH:+:${PATH}}
 # export PATH=$HOME/.local/gtags/bin${PATH:+:${PATH}}
@@ -51,4 +51,21 @@ alias nvi='bash ~/.local/bin/nvi.sh '
 
 function envs(){
     conda activate $(conda info --env | grep -v "^#" | fzf | awk '{print $NF}')
+}
+
+function d2c(){
+    if [[ $# < 1 ]]; then
+        echo ====== please input image name =======
+        return
+    else
+        img=$1
+        if [[ $# > 1 ]]; then
+            ns=$2
+        else
+            ns=k8s.io
+        fi
+    fi
+    cmd="docker pull $img && docker save $img | ctr -n=$ns images import -"
+    echo $cmd
+    eval $cmd
 }
