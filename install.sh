@@ -80,7 +80,6 @@ setup_plug() {
 ############################ MAIN() #################################
 variable_set "$HOME"
 OS=`uname`
-mode=``
 mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
@@ -151,9 +150,9 @@ if [ $# -gt 0 ]; then
             ln -sf ~/.leotmux/tmux.conf ~/.tmux.conf
             success "leotmux installed"
         fi
-        exit 0
+    else
+        note "Install softwares"
     fi
-    note "Install softwares"
     # z.lua
     if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
         if [ -d ~/z.lua ]; then
@@ -196,7 +195,7 @@ if [ $# -gt 0 ]; then
         [ $mode == 'nodejs' ] && exit 0
     fi
     # bashrc
-    if [[ $mode == 'all' || $mode == 'bashrc' ]]; then
+    if [[ $mode == 'all' || $mode == 'bashrc' || $mode == 'leotmux' ]]; then
         if [ -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
@@ -209,6 +208,7 @@ if [ $# -gt 0 ]; then
         fi
     fi
 else
+    mode=normal
     installplug='yes'
 fi
 
@@ -218,7 +218,10 @@ if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
     success "bashrc copied."
     source ~/.bashrc
 fi
-[[ $mode == 'bashrc' ]] && exit 0
+
+if [[ $mode == 'bashrc' || $mode == 'leotmux' ]]; then
+    exit 0
+fi
 
 # clone unix tools for (neo)vim
 note "Install/update leovim.unix"
