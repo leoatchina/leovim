@@ -214,12 +214,15 @@ fi
 
 # set bashrc config
 if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
+    bashrc_copied=1
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
-    bash
+else
+    bashrc_copied=0
 fi
 
 if [[ $mode == 'bashrc' || $mode == 'leotmux' ]]; then
+    note "You can run `bash` to make leoatchina's bash config work."
     exit 0
 fi
 
