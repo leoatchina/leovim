@@ -371,42 +371,6 @@ function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
         call execute(cmd)
         sleep 100m
         let symbol_found = get(g:, 'lsp_found', 0)
-    " --------------------------
-    " glance
-    " --------------------------
-    elseif Installed('glance.nvim') && lsp
-        let commands_dict = {
-                    \ 'definition' : ['textDocument/definition', 'Glance definitions'],
-                    \ 'references' : ['textDocument/references', 'Glance references'],
-                    \ 'type_defition' : ['textDocument/typeDefinition', 'Glance type_definitions'],
-                    \ 'implementation' : ['textDocument/implementation', 'Glance implementations'],
-                    \ 'declaration' : ['textDocument/declaration', 'lua vim.lsp.buf.declaration()'],
-                    \ }
-        let [handler, float_command] = commands_dict[find_cmd]
-        let symbol_found = luaeval(printf("lua require('lsp').ChecHandler('%s')", handler))
-        if symbol_found
-            redir => l:messages
-            if open_position == 'list'
-                call execute(float_command)
-            else
-                call s:settagstack(winnr, tagname, pos)
-                let lua_command = printf('lua vim.lsp.buf.%s()', find_cmd)
-                if open_position == 'goto'
-                    call execute(lua_command)
-                elseif open_position == 'tabe'
-                    let lua_command = 'vsplit | ' . lua_command
-                    call execute(lua_command)
-                    call feedkeys("\<C-w>T", "n")
-                else
-                    let lua_command = open_position . ' | ' . lua_command
-                    call execute(lua_command)
-                endif
-                call feedkeys("zz", "n")
-                echohl WarningMsg | echom "found by vim.lsp.buf." . find_cmd  | echohl None
-            endif
-            redir END
-            let l:messages = tolower(l:messages)
-        endif
     endif
     " 利用errormsg判断是否找到
     let messages = get(l:, 'messages', '')

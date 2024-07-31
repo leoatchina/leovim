@@ -122,111 +122,39 @@ require("mason-lspconfig").setup({
   }
 })
 -----------------
--- lsp ui call
+-- lspui
 -----------------
-if Installed('glance.nvim') then
-  function M.CheckHandler(handler)
-    local ok, res = pcall(function() return vim.lsp.buf_request_sync(0, handler, vim.lsp.util.make_position_params()) end)
-    if ok then
-      if res and type(res) == 'table' and next(res) then
-        return 1
-      else
-        return 0
-      end
+require('LspUI').setup({
+  pos_keybind = {
+    main = {
+      hide_secondary = "<leader>h",
+      back = "<leader>l",
+    },
+    secondary = {
+      jump = "<Cr>",
+      jump_split = "<C-x>",
+      jump_vsplit = "<C-]>",
+      jump_tab = "<C-t>",
+      toggle_fold = "o",
+      quit = "q",
+      fold_all = "X",
+      expand_all = "O",
+      hide_main = "<leader>h",
+      enter = "<leader>l",
+    },
+  }
+})
+function M.LspUIApi(method)
+  if method == 'references' then
+    method = 'reference'
+  end
+  require("LspUI")["api"][method](function(data)
+    if data then
+      vim.api.nvim_set_var("lsp_found", 1)
     else
-      return 0
+      vim.api.nvim_set_var("lsp_found", 0)
     end
-  end
-  local glance = require("glance")
-  local actions = glance.actions
-  glance.setup({
-    height = 40,
-    mappings = {
-      list = {
-        ["<C-b>"] = actions.preview_scroll_win(5),
-        ["<C-f>"] = actions.preview_scroll_win(-5),
-        ["<C-]>"] = actions.jump_vsplit,
-        ["<C-x>"] = actions.jump_split,
-        ["<C-t>"] = actions.jump_tab,
-        ["<M-L>"] = actions.enter_win("preview"),
-        ["q"] = actions.close,
-        ["Q"] = actions.close,
-        ["<M-q>"] = actions.close,
-        ["<leader>q"] = actions.close,
-        -- action disable
-        ["<leader>l"] = false,
-        ["<C-u>"] = false,
-        ["<C-d>"] = false,
-        ["v"] = false,
-        ["s"] = false,
-        ["t"] = false,
-        ["o"] = false,
-      },
-      preview = {
-        ["<M-q>"] = actions.close,
-        ["<leader>q"] = actions.close,
-        ["<Tab>"] = actions.next_location,
-        ["<S-Tab>"] = actions.previous_location,
-        ["q"] = actions.enter_win("list"),
-        ["Q"] = actions.enter_win("list"),
-        ["<M-H>"] = actions.enter_win("list"),
-        -- action disable
-        ["<leader>l"] = false,
-      },
-    },
-    list = {
-      position = "left",
-      width = 0.3,
-    },
-    -- Configure preview window options
-    preview_win_opts = {
-      cursorline = true,
-      number = true,
-      wrap = false,
-    },
-    border = {
-      enable = true,
-    },
-    theme = {
-      enable = true,
-      mode = "auto",
-    },
-    winbar = {
-      enable = false,
-    },
-  })
-elseif Installed('lspui.nvim') then
-  require('LspUI').setup({
-    pos_keybind = {
-      main = {
-        hide_secondary = "<leader>h",
-        back = "<leader>l",
-      },
-      secondary = {
-        jump = "o",
-        jump_split = "<C-x>",
-        jump_vsplit = "<C-]>",
-        jump_tab = "<C-t>",
-        quit = "q",
-        fold_all = "X",
-        expand_all = "O",
-        hide_main = "<leader>h",
-        enter = "<leader>l",
-      },
-    }
-  })
-  function M.LspUIApi(method)
-    if method == 'references' then
-      method = 'reference'
-    end
-    require("LspUI")["api"][method](function(data)
-      if data then
-        vim.api.nvim_set_var("lsp_found", 1)
-      else
-        vim.api.nvim_set_var("lsp_found", 0)
-      end
-    end)
-  end
+  end)
 end
 -----------------
 -- lsp attach
@@ -234,6 +162,7 @@ end
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
+    local nx = { 'n', 'x' }
     local bufnr = args.bufnr
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     local opts_silent = { noremap = true, silent = true, buffer = bufnr }
@@ -244,28 +173,34 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if lsp_capabilities and lsp_capabilities.definitionProvider then
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
     end
-    -- signatureHelp
-    map('i', "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
-    -- format
-    map({ 'n', 'x' }, "<C-q>", vim.lsp.buf.format, opts_silent)
-    -- Rename
-    map({ 'n', 'x' }, "<F2>", vim.lsp.buf.rename, opts_echo)
-    -- lsp
-    map('n', "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
-    -- native lsp
-    map('n', "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
-    map('n', "gl", vim.lsp.buf.outgoing_calls, opts_silent)
-    map('n', "gh", vim.lsp.buf.incoming_calls, opts_silent)
-    -- list workspace folder && omnifunc
-    map('n', "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
+    -- LspUI
+    map(nx, "<F2>", [[<Cmd>LspUI rename<Cr>]], opts_echo)
+    map(nx, "<M-a>", [[<Cmd>LspUI code_action<Cr>]], opts_silent)
+    map(nx, "<leader>I", [[<Cmd>LspUI inlay_hint<Cr>]], opts_echo)
     -- lsp info/restart
-    map('n', "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
-    map('n', "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
+    map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
+    map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
+    -- vista
+    map(nx, "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
     -- diagnostic error
-    map('n', '[d', vim.diagnostic.goto_prev, opts_silent)
-    map('n', ']d', vim.diagnostic.goto_next, opts_silent)
-    map('n', '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
-    map('n', ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
+    map(nx, '[d', vim.diagnostic.goto_prev, opts_silent)
+    map(nx, ']d', vim.diagnostic.goto_next, opts_silent)
+    map(nx, '[e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
+    map(nx, ']e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR})<CR>]], opts_silent)
+    -- native lsp
+    map('i', "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
+    map(nx, "gl", vim.lsp.buf.outgoing_calls, opts_silent)
+    map(nx, "gh", vim.lsp.buf.incoming_calls, opts_silent)
+    map(nx, "<C-q>", vim.lsp.buf.format, opts_silent)
+    map(nx, "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
+    map(nx, "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
+    -- codelens
+    if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
+      vim.lsp.codelens.refresh({ bufnr = bufnr })
+    end
+    map(nx, "<leader>A", require("lspimport").import, opts_silent)
+    map(nx, "<leader>R", require('symbol-usage').refresh, opts_echo)
+    map(nx, "<leader>C", require('symbol-usage').toggle, opts_echo)
     -- select range
     local ok
     ok, _ = pcall(function()
@@ -292,22 +227,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.lsp.semantic_tokens.start(bufnr, client)
       end
     end
-    -- inlay_hint
-    if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
-      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      map({ 'n', 'x' }, "<leader>I", function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-      end, opts_echo)
-    end
-    -- codelens
-    if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
-      vim.lsp.codelens.refresh({ bufnr = bufnr })
-    end
-    -- codeaction && symbols
-    map({ 'n', 'x' }, "<M-a>", require("actions-preview").code_actions, opts_silent)
-    map({ 'n', 'x' }, "<leader>A", require("lspimport").import, opts_silent)
-    map({ 'n', 'x' }, "<leader>R", require('symbol-usage').refresh, opts_echo)
-    map({ 'n', 'x' }, "<leader>C", require('symbol-usage').toggle, opts_echo)
   end
 })
 ------------------------------
