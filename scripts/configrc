@@ -40,7 +40,7 @@ alias ATT='tmux attach -t 0'
 alias RG='rg --no-heading '
 
 alias tmp='cd /tmp'
-alias disks="df -lh | head -1; df -lh | sort | grep -E '/home|/srv|/export|/data|/mnt|/$'"
+alias disks="df -lh | head -1; df -lh | sort | grep -vE '^/srv' |  grep -E '/home|/srv|/export|/data|/mnt|/work|/$'"
 # alias clash="https_proxy=http://127.0.0.1:9898 http_proxy=http://127.0.0.1:9898 all_proxy=socks5://127.0.0.1:9898 "
 
 alias v='bash ~/.local/bin/v.sh'
