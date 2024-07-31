@@ -233,13 +233,13 @@ endfunction
 function! s:view_tag(...)
     if a:0 == 0
         let tagname = expand('<cword>')
-        let open_position = 'list'
+        let action_pos = 'list'
     else
         let tagname = a:1
         if a:0 >= 2
-            let open_position = a:2
+            let action_pos = a:2
         else
-            let open_position = 'goto'
+            let action_pos = 'goto'
         endif
     endif
     try
@@ -249,14 +249,14 @@ function! s:view_tag(...)
     endtry
     if symbol_found
         silent! pclose
-        if open_position == 'list'
+        if action_pos == 'list'
             execute "copen " . g:asyncrun_open
         else
-            if open_position != 'goto'
-                if open_position == 'tabe'
+            if action_pos != 'goto'
+                if action_pos == 'tabe'
                     tabe %
                 else
-                    execute open_position
+                    execute action_pos
                 endif
             endif
             execute "tag " . tagname
@@ -268,14 +268,14 @@ endfunction
 " --------------------------
 " use lsp or tag to find
 " --------------------------
-function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
+function! SymbolOrTagOrSearchAll(method, ...) abort
     let tagname = expand('<cword>')
     if empty(tagname)
         call preview#errmsg("No symbol under cursor.")
         return
     endif
-    let find_cmd = a:find_cmd
-    if find_cmd == 'preview'
+    let method = a:method
+    if method == 'preview'
         if g:ctags_type == ''
             call preview#errmsg("Preview need ctags.")
         else
@@ -295,20 +295,20 @@ function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
         return
     else
         let symbol_found = 0
-        if index(['definition', 'references', 'type_defition', 'implementation', 'declaration', 'tags'], find_cmd) < 0
-            let find_cmd = 'definition'
+        if index(['definition', 'references', 'type_defition', 'implementation', 'declaration', 'tags'], method) < 0
+            let method = 'definition'
         endif
     endif
     " --------------------------
     " open_position
     " --------------------------
     if a:0 == 1
-        let open_position = a:1
+        let show_position = a:1
     else
-        let open_position = 'goto'
+        let show_position = 'goto'
     endif
-    if index(['tabe', 'split', 'vsplit', 'list', 'goto'], open_position) < 0
-        let open_position = 'goto'
+    if index(['tabe', 'split', 'vsplit', 'list', 'goto'], show_position) < 0
+        let show_position = 'goto'
     endif
     " --------------------------
     " variables for tagstack
@@ -319,10 +319,10 @@ function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
     " --------------------------
     " check if cfile type
     " --------------------------
-    if index(g:cfile_types, &ft) >= 0 && index(['definition', 'tags'], find_cmd) >= 0 && g:ctags_type != ''
+    if index(g:c_filetypes, &ft) >= 0 && index(['definition', 'tags'], method) >= 0 && g:ctags_type != ''
         let lsp = 0
     else
-        if find_cmd == "tags"
+        if method == "tags"
             let lsp = 0
         else
             let lsp = 1
@@ -339,7 +339,7 @@ function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
                     \ 'implementation' : ['implementations', 'jumpImplementation'],
                     \ 'declaration' : ['declarations', 'jumpDeclaration'],
                     \ }
-        let [handler, jump_command] = commands_dict[find_cmd]
+        let [handler, jump_command] = commands_dict[method]
         try
             let res = CocAction(handler)
         catch /.*/
@@ -349,14 +349,14 @@ function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
             let symbol_found = 0
         else
             let symbol_found = 1
-            if open_position == 'list'
+            if show_position == 'list'
                 call CocAction(jump_command, v:false)
             else
                 call s:settagstack(winnr, tagname, pos)
-                if open_position == 'goto'
+                if show_position == 'goto'
                     let coc_command = printf('call CocAction("%s")', jump_command)
                 else
-                    let coc_command = printf('call CocAction("%s", "%s")', jump_command, open_position)
+                    let coc_command = printf('call CocAction("%s", "%s")', jump_command, show_position)
                 endif
                 call execute(coc_command)
                 call feedkeys("zz", "n")
@@ -367,7 +367,11 @@ function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
     " LspUI
     " --------------------------
     elseif Installed('lspui.nvim') && lsp
-        let cmd = printf('lua require("lsp").LspUIApi("%s")', find_cmd)
+        if show_position == 'list'
+            let cmd = printf('lua require("lsp").LspUIApi("%s")', method)
+        else
+            let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, show_position)
+        endif
         call execute(cmd)
         sleep 100m
         let symbol_found = get(g:, 'lsp_found', 0)
@@ -378,13 +382,13 @@ function! SymbolOrTagOrSearchAll(find_cmd, ...) abort
         let symbol_found = 0
     endif
     " tags
-    if symbol_found == 0 && g:ctags_type != '' && find_cmd != 'references'
-        let symbol_found = s:view_tag(tagname, open_position)
+    if symbol_found == 0 && g:ctags_type != '' && method != 'references'
+        let symbol_found = s:view_tag(tagname, show_position)
     endif
     " searchall
     if symbol_found == 0
         if get(g:, 'searchall', '') != ''
-            if open_position == 'list'
+            if show_position == 'list'
                 execute g:searchall . ' ' . tagname
             else
                 call preview#errmsg('Not found by neither lsp nor tags, you should press <M-c> to do grep search.')

@@ -100,7 +100,7 @@ elseif Installed('coc.nvim')
     if Require('ccls') && g:ccls_exe != ''
         call coc#config('languageserver.ccls', {
                     \ "command": "ccls",
-                    \ "filetypes": g:cfile_types,
+                    \ "filetypes": g:c_filetypes,
                     \ "rootPatterns": g:root_patterns,
                     \ "initializationOptions": {
                     \ "cache": {

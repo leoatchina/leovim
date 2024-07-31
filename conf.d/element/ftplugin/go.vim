@@ -7,7 +7,6 @@ if Installed('vim-go')
     nnoremap <buffer><silent>,d :GoDeclsDir<Cr>
     nnoremap <buffer><silent>,c :GoCoverage<Cr>
     nnoremap <buffer><silent>,a :GoAlternate<Cr>
-    nnoremap <buffer><silent><M-?> :GoImpl<Cr>
     nnoremap <buffer><silent><M-M> :GoCommands<Cr>
     nnoremap <buffer><silent><leader>A :GoImports<Cr>
     if !AdvCompEngine()
@@ -27,4 +26,4 @@ if Installed('vim-floaterm') && executable('go')
     nnoremap <buffer><M-B> :call SmartRunTerm(printf("time go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "smart")<Cr>
 endif
 inoremap <buffer>:: :=
-inoremap <buffer>!! !=
+inoremap <buffer>!! !  nnoremap <buffer><silent><M-?> :GoImpl<Cr>=

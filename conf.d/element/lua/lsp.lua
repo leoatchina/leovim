@@ -156,6 +156,29 @@ function M.LspUIApi(method)
     end
   end)
 end
+function M.LspHandler(method, show_position)
+  vim.api.nvim_set_var("lsp_found", 0)
+  local handler_dict = {
+    definition = 'textDocument/definition',
+    references = 'textDocument/references',
+    type_definition = 'textDocument/typeDefinition',
+    implementation = 'textDocument/implementation',
+    declaration = 'textDocument/declaration'
+  }
+  local handler = handler_dict[method]
+  local params = vim.lsp.util.make_position_params()
+  local results = vim.lsp.buf_request_sync(0, handler, params)
+  print(vim.inspect(results))
+  if type(results) == 'table' and next(table) then
+    vim.api.nvim_set_var("lsp_found", 1)
+    if #results > 2 then
+      M.LspUIApi(method)
+    else
+      -- https://neovim.discourse.group/t/how-to-customize-lsp-actions/349/2
+      -- https://www.reddit.com/r/neovim/comments/r756ur/how_can_you_center_the_cursor_when_going_to/
+    end
+  end
+end
 -----------------
 -- lsp attach
 -----------------

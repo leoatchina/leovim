@@ -41,14 +41,14 @@ endif
 " --------------------------
 if Require('c')
     PlugAdd 'chxuan/cpp-mode'
-    PlugAdd 'leoatchina/a.vim', {'for': g:cfile_types}
+    PlugAdd 'leoatchina/a.vim', {'for': g:c_filetypes}
     if executable('cppman')
         PlugAdd 'skywind3000/vim-cppman'
     endif
 endif
 if Require('ccls') && executable(Expand(get(g:, 'ccls_exe', 'ccls')))
     let g:ccls_exe = Expand(exepath(get(g:, 'ccls_exe', 'ccls')))
-    PlugAdd 'm-pilia/vim-ccls', {'for': g:cfile_types}
+    PlugAdd 'm-pilia/vim-ccls', {'for': g:c_filetypes}
 else
     let g:ccls_exe = ''
 endif
