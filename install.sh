@@ -162,7 +162,7 @@ if [ $# -gt 0 ]; then
             git clone https://github.com/skywind3000/z.lua ~/z.lua
             success "z.lua installed"
         fi
-        [ $mode == 'z.lua' ] && exit 0
+        [[ $mode == 'z.lua' ]] && exit 0
     fi
     # neovim
     if [[ $mode == 'all' || $mode == 'neovim' ]]; then
@@ -176,7 +176,7 @@ if [ $# -gt 0 ]; then
             rm nvim-linux64.tar.gz
             success "neovim installed"
         fi
-        [ $mode == 'neovim' ] && exit 0
+        [[ $mode == 'neovim' ]] && exit 0
     fi
     # nodejs
     if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
@@ -192,9 +192,9 @@ if [ $# -gt 0 ]; then
             tar xvf $node && rm $node && ln -sf ${node%.*.*} node
             success "$node_link linked"
         fi
-        [ $mode == 'nodejs' ] && exit 0
+        [[ $mode == 'nodejs' ]] && exit 0
     fi
-    # bashrc
+    # copy bashrc 
     if [[ $mode == 'all' || $mode == 'bashrc' || $mode == 'leotmux' ]]; then
         if [ -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
@@ -216,7 +216,7 @@ fi
 if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
-    source ~/.bashrc
+    bash
 fi
 
 if [[ $mode == 'bashrc' || $mode == 'leotmux' ]]; then
