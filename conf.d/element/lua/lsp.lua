@@ -244,10 +244,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
       map('n', "<C-s>", require('lsp-selection-range').trigger, opts_silent)
       map('x', "<C-s>", require('lsp-selection-range').expand, opts_silent)
     end
+    -- semantic token highlight
     ok, _ = pcall(function()
       vim.treesitter.get_parser(bufnr)
     end, bufnr)
-    -- semantic token highlight
     if not ok then
       if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
         autocmd("TextChanged", {
