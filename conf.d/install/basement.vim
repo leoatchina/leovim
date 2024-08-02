@@ -171,11 +171,11 @@ endif
 " ------------------------------
 " debug tool
 " ------------------------------
-if has('nvim-0.9') && (Require('debug') && (Planned('nvim-cmp') || g:python_version == 0) || Require('nvim-dap'))
+if has('nvim-0.9.5') && (Require('nvim-dap') || Require('debug') && Planned('nvim-cmp') || Require('debug') && g:python_version < 3.1)
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
-elseif g:python_version > 3.08 && (v:version >= 802 || has('nvim-0.8.1')) && Require('debug')
+elseif g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8'))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
 endif
