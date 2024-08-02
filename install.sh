@@ -80,7 +80,6 @@ setup_plug() {
 ############################ MAIN() #################################
 variable_set "$HOME"
 OS=`uname`
-mode=``
 mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
@@ -151,9 +150,9 @@ if [ $# -gt 0 ]; then
             ln -sf ~/.leotmux/tmux.conf ~/.tmux.conf
             success "leotmux installed"
         fi
-        exit 0
+    else
+        note "Install softwares"
     fi
-    note "Install softwares"
     # z.lua
     if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
         if [ -d ~/z.lua ]; then
@@ -163,7 +162,7 @@ if [ $# -gt 0 ]; then
             git clone https://github.com/skywind3000/z.lua ~/z.lua
             success "z.lua installed"
         fi
-        [ $mode == 'z.lua' ] && exit 0
+        [[ $mode == 'z.lua' ]] && exit 0
     fi
     # neovim
     if [[ $mode == 'all' || $mode == 'neovim' ]]; then
@@ -177,7 +176,7 @@ if [ $# -gt 0 ]; then
             rm nvim-linux64.tar.gz
             success "neovim installed"
         fi
-        [ $mode == 'neovim' ] && exit 0
+        [[ $mode == 'neovim' ]] && exit 0
     fi
     # nodejs
     if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
@@ -193,10 +192,10 @@ if [ $# -gt 0 ]; then
             tar xvf $node && rm $node && ln -sf ${node%.*.*} node
             success "$node_link linked"
         fi
-        [ $mode == 'nodejs' ] && exit 0
+        [[ $mode == 'nodejs' ]] && exit 0
     fi
-    # bashrc
-    if [[ $mode == 'all' || $mode == 'bashrc' ]]; then
+    # copy bashrc 
+    if [[ $mode == 'all' || $mode == 'bashrc' || $mode == 'leotmux' ]]; then
         if [ -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
@@ -209,16 +208,23 @@ if [ $# -gt 0 ]; then
         fi
     fi
 else
+    mode=normal
     installplug='yes'
 fi
 
 # set bashrc config
 if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
+    bashrc_copied=1
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
-    source ~/.bashrc
+else
+    bashrc_copied=0
 fi
-[[ $mode == 'bashrc' ]] && exit 0
+
+if [[ $mode == 'bashrc' || $mode == 'leotmux' ]]; then
+    note "You can run `bash` to make leoatchina's bash config work."
+    exit 0
+fi
 
 # clone unix tools for (neo)vim
 note "Install/update leovim.unix"
