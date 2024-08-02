@@ -304,7 +304,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.lsp.codelens.refresh({ bufnr = bufnr })
     end
     -- codeaction && symbols
-    map({ 'n', 'x' }, "<M-a>", require("actions-preview").code_actions, opts_silent)
     map({ 'n', 'x' }, "<leader>A", require("lspimport").import, opts_silent)
     map({ 'n', 'x' }, "<leader>R", require('symbol-usage').refresh, opts_echo)
     map({ 'n', 'x' }, "<leader>C", require('symbol-usage').toggle, opts_echo)
