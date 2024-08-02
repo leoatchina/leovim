@@ -114,13 +114,8 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'fgheng/winbar.nvim'
     PlugAdd 'Wansmer/symbol-usage.nvim'
-    PlugAdd 'aznhe21/actions-preview.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
-    if Require('glance')
-        PlugAdd 'DNLHC/glance.nvim'
-    else
-        PlugAdd 'jinzhongjia/LspUI.nvim'
-    endif
+    PlugAdd 'jinzhongjia/LspUI.nvim'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0
         PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
@@ -176,13 +171,13 @@ endif
 " ------------------------------
 " debug tool
 " ------------------------------
-if g:python_version > 3.08 && (v:version >= 802 && (Require('debug') || Require('vimspector')) || has('nvim-0.8.1') && Require('vimspector'))
-    let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
-elseif has('nvim-0.9') && Require('debug')
+if has('nvim-0.9.5') && (Require('nvim-dap') || Require('debug') && Planned('nvim-cmp') || Require('debug') && g:python_version < 3.1)
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+elseif g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8'))
+    let vimspector_install = " ./install_gadget.py --update-gadget-config"
+    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
 endif
 " ------------------------------
 " format tools
@@ -230,7 +225,7 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
 endif
 if !Planned('nvim-treesitter') && Require('c') && Planned('coc.nvim') && Planned('nvim-cmp')
-    PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:cfile_types}
+    PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
@@ -292,9 +287,9 @@ function! InstalledNvimLsp() abort
                 \ 'nvim-lspconfig',
                 \ 'mason-lspconfig.nvim',
                 \ 'nvim-lsp-selection-range',
-                \ 'actions-preview.nvim',
                 \ 'symbol-usage.nvim',
                 \ 'nvim-lspimport',
+                \ 'lspui.nvim',
                 \ 'neoconf.nvim',
                 \ 'winbar.nvim',
                 \ )
