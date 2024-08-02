@@ -125,7 +125,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-g><M-h> :Leaderf git diff HEAD --directly<Cr>
     nnoremap <silent><M-g><M-l> :Leaderf git log<Cr>
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
-    nnoremap <silent><M-g><M-/> :Leaderf git diff --current-file --side-by-side<Cr>
+    nnoremap <silent><M-g><M-d> :Leaderf git diff --current-file --side-by-side<Cr>
 endi
 if PlannedFzf()
     command! GCommands call FzfCallCommands('GCommands', 'G', ['Glance', 'Gutentag', 'Grep', 'Get'])
