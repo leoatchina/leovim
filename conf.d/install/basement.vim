@@ -171,13 +171,13 @@ endif
 " ------------------------------
 " debug tool
 " ------------------------------
-if g:python_version > 3.08 && (v:version >= 802 && (Require('debug') || Require('vimspector')) || has('nvim-0.8.1') && Require('vimspector'))
-    let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
-elseif has('nvim-0.9') && Require('debug')
+if has('nvim-0.9') && (Require('debug') && (Planned('nvim-cmp') || g:python_version == 0) || Require('nvim-dap'))
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+elseif g:python_version > 3.08 && (v:version >= 802 || has('nvim-0.8.1')) && Require('debug')
+    let vimspector_install = " ./install_gadget.py --update-gadget-config"
+    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
 endif
 " ------------------------------
 " format tools
