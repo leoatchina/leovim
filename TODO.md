@@ -82,16 +82,16 @@
 - [x] wilder.nvim && cmp-cmdline
 - [x] lsp codelens warn bug
 - [x] tabline add nr
-- [ ] glance -> lspui
-- [ ] ~fzflsp -> fzfx.nvim or fzf-lua~
-- [ ] tabline show current tab's all buffers
-- [ ] grep replace bug
-- [ ] vim's registers unamed
-- [ ] fzf-project 
+- [x] glance -> lspui
+- [x] ~fzflsp -> fzfx.nvim or fzf-lua~
+- [ ] grep command replace bug
+- [ ] vim's unamed registers
+- [ ] show current tab's all buffers in tabline
+- [ ] fzf-project
 - [ ] run in qf and show in statusline
 - [ ] floaterm drop command
 - [ ] ====== My plugins ======
-- [x] fzf-registers 
+- [x] fzf-registers
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky

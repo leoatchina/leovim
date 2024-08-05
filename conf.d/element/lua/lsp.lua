@@ -171,20 +171,29 @@ function M.LspHandler(method, show_position)
     local results = results[1]
     local values = results['result']
     if values == nil then
+      vim.api.nvim_set_var("lsp_found", 0)
       local error = results['error']
       if error ~= nil then
         vim.fn['preview#errmsg'](error['message'])
       end
-      vim.api.nvim_set_var("lsp_found", 0)
+    elseif #values > 1 then
+      M.LspUIApi(method)
     else
-      -- https://neovim.discourse.group/t/how-to-customize-lsp-actions/349/2
-      -- https://www.reddit.com/r/neovim/comments/r756ur/how_can_you_center_the_cursor_when_going_to/
-      if #values > 1 then
-        M.LspUIApi(method)
-        return
-      else
-        vim.api.nvim_set_var("lsp_found", 1)
+      local value = values[1]
+      local range = value.range or value.targetRange
+      if range ~= nil then
+        local file = value.uri or value.targetUri
+        if file ~=nil then
+          local line = range.start.line + 1
+          local col  = range.start.character + 1
+          vim.api.nvim_command(show_position .. ' ' .. file)
+          vim.api.nvim_win_set_cursor(win_id, {line, col})
+          vim.api.nvim_feedkeys('zz','n', true)
+          vim.api.nvim_set_var("lsp_found", 1)
+          return
+        end
       end
+      vim.api.nvim_set_var("lsp_found", 0)
     end
   else
     vim.api.nvim_set_var("lsp_found", 0)
