@@ -168,7 +168,7 @@ function M.LspHandler(method, show_position)
   local params = vim.lsp.util.make_position_params()
   local results = vim.lsp.buf_request_sync(0, handler, params)
   if type(results) == 'table' and next(table) then
-    local results = results[1]
+    results = results[1]
     if results == nil then
       vim.api.nvim_set_var("lsp_found", 0)
       return
@@ -198,9 +198,7 @@ function M.LspHandler(method, show_position)
               return
             end
           end
-          vim.api.nvim_set_var("lsp_found", 0)
         end
-        return
       end
     end
     vim.api.nvim_set_var("lsp_found", 0)
