@@ -314,7 +314,7 @@ function! InstalledCmp() abort
                 \ )
 endfunction
 function! AdvCompEngine() abort
-    return PlannedCoc() || InstalledNvimLsp()
+    return PlannedCoc() || Planned('nvim-cmp')
 endfunction
 function! PrefFzf()
     return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())

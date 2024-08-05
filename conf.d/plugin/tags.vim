@@ -376,13 +376,13 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
         sleep 100m
         let symbol_found = get(g:, 'lsp_found', 0)
     endif
-    " 利用errormsg判断是否找到
+    " 利用errormsg判断是否找到,
     let messages = get(l:, 'messages', '')
     if messages =~ '^no ' || messages =~ 'not ' || messages =~ 'error'
         let symbol_found = 0
     endif
     " tags
-    if symbol_found == 0 && g:ctags_type != '' && method != 'references'
+    if symbol_found == 0 && g:ctags_type != '' && method != 'references' && method != 'implementation'
         let symbol_found = s:view_tag(tagname, show_position)
     endif
     " searchall
