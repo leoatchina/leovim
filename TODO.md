@@ -84,7 +84,7 @@
 - [x] tabline add nr
 - [x] glance -> lspui
 - [x] ~fzflsp -> fzfx.nvim or fzf-lua~
-- [ ] grep command replace bug
+- [x] grep command replace bug, using g:grepper_word
 - [ ] vim's unamed registers
 - [ ] show current tab's all buffers in tabline
 - [ ] fzf-project

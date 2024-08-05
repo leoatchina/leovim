@@ -21,18 +21,18 @@ endif
 function! s:search_cur(...)
     try
         if a:0 == 0
-            let t:grepper = expand('<cword>')
+            let g:grepper_word = expand('<cword>')
         else
-            let t:grepper = a:1
+            let g:grepper_word = a:1
         endif
     catch /.*/
-        let t:grepper = ""
+        let g:grepper_word = ""
     endtry
-    if empty(t:grepper)
+    if empty(g:grepper_word)
         call preview#errmsg("No search word offered")
     else
         try
-            execute 'vimgrep /' . t:grepper . "/j %"
+            execute 'vimgrep /' . g:grepper_word . "/j %"
             copen
         catch /.*/
             call preview#errmsg("vimgrep errors")
@@ -104,21 +104,27 @@ function! s:grep(...)
         return
     endif
     if a:0 == 1
+        if a:1 < 1
+            return
+        endif
         if a:1 == 1
-            let t:grepper = get(g:, 'grepper_last', '')
+            let g:grepper_word = get(g:, 'grepper_last', '')
         else
-            let t:grepper = get(g:, 'grepper_all_last', '')
+            let g:grepper_word = get(g:, 'grepper_all_last', '')
         endif
     elseif a:0 == 2
-        let t:grepper = Escape(a:2)
+        if a:1 < 1
+            return
+        endif
+        let g:grepper_word = Escape(a:2)
         if a:1 == 1
-            let g:grepper_last = t:grepper
+            let g:grepper_last = g:grepper_word
         else
-            let g:grepper_all_last = t:grepper
+            let g:grepper_all_last = g:grepper_word
         endif
     endif
     " do the search
-    if t:grepper == ''
+    if g:grepper_word == ''
         if a:0 == 1
             echo 'grep search last is empty'
         else
@@ -127,15 +133,15 @@ function! s:grep(...)
     else
         if a:1 == 1
             if executable('rg')
-                let cmd = printf('silent! grep %s', t:grepper)
+                let cmd = printf('silent! grep %s', g:grepper_word)
             else
-                let cmd = printf('vimgrep /%s/j **/*', t:grepper)
+                let cmd = printf('vimgrep /%s/j **/*', g:grepper_word)
             endif
         else
             if executable('rg')
-                let cmd = printf('silent! grep %s %s', t:grepper, GetRootDir())
+                let cmd = printf('silent! grep %s %s', g:grepper_word, GetRootDir())
             else
-                let cmd = printf('vimgrep /%s/j %s/**/*', t:grepper, GetRootDir())
+                let cmd = printf('vimgrep /%s/j %s/**/*', g:grepper_word, GetRootDir())
             endif
         endif
         execute cmd
@@ -158,8 +164,8 @@ nnoremap s] :Grep <C-r><C-w><Cr>
 xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection(1)<Cr>
 nnoremap s[ :GrepLast<Cr>
 nnoremap s? :Grep<Space>
-au FileType qf nnoremap <buffer>r :cdo s/<C-r>=get(t:, 'grepper', '')<Cr>//gc<Left><Left><Left>
-au FileType qf nnoremap <buffer><M-r> :cdo s/<C-r>=get(t:, 'grepper', '')<Cr>//gc<Left><Left><Left>
+au FileType qf nnoremap <buffer>r :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
+au FileType qf nnoremap <buffer><M-r> :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
 au FileType qf nnoremap <buffer><M-S> :cfdo up
 cnoremap <M-S> cfdo up
 " --------------------------
