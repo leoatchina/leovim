@@ -115,7 +115,11 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'fgheng/winbar.nvim'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
-    PlugAdd 'jinzhongjia/LspUI.nvim'
+    if Require('lspui')
+        PlugAdd 'jinzhongjia/LspUI.nvim'
+    else
+        PlugAdd 'DNLHC/glance.nvim'
+    endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0) == 0
         PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}

@@ -120,8 +120,6 @@ map <F9>  <Nop>
 map <F10> <Nop>
 map <F11> <Nop>
 map <F12> <Nop>
-map <C-q> <Nop>
-map <C-s> <Nop>
 map <C-i> <Nop>
 map <C-z> <Nop>
 nnoremap s <Nop>
