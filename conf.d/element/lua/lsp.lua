@@ -272,8 +272,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
-      map('n', "<C-s>", require('lsp-selection-range').trigger, opts_silent)
-      map('x', "<C-s>", require('lsp-selection-range').expand, opts_silent)
+      map('n', "<M-s>", require('lsp-selection-range').trigger, opts_silent)
+      map('x', "<M-s>", require('lsp-selection-range').expand, opts_silent)
     end
     ok, _ = pcall(function()
       vim.treesitter.get_parser(bufnr)
