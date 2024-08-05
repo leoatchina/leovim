@@ -283,7 +283,9 @@ if PlannedFzf()
     xnoremap <silent><nowait><C-f>] :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
     nnoremap <silent><nowait><C-f>[ :FzfSearchLast<Cr>
     nnoremap <silent><nowait><C-f>? :FzfSearch<Space>
-    if !PlannedLeaderf()
+    if PlannedLeaderf()
+        let g:searchall = 'LeaderfSearch'
+    else
         let g:searchall = 'FzfSearchAll'
         " searchall
         nnoremap <silent><nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
@@ -291,6 +293,8 @@ if PlannedFzf()
         nnoremap <silent><nowait><C-f>. :FzfSearchAllLast<Cr>
         nnoremap <silent><nowait><C-f>/ :FzfSearchAll<Space>
     endif
+else
+    let g:searchall = 'GrepAll'
 endif
 " flygrep
 if PlannedFzf()
