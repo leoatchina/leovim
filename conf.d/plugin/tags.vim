@@ -377,6 +377,7 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
         sleep 100m
         let symbol_found = get(g:, 'lsp_found', 0)
         if symbol_found == 1
+            call s:settagstack(winnr, tagname, pos)
             echohl WarningMsg | echom "found by lsp " . method | echohl None
         endif
     endif
