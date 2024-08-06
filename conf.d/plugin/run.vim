@@ -327,7 +327,7 @@ if has('nvim') || v:version >= 801
         echom "asynctasks_profile is " . g:asynctasks_profile
     endfunction
     command! AsyncTaskProfileLoop call AsyncTaskProfileLoop()
-    nnoremap <leader>rp :<C-u>AsyncTaskProfileLoop<CR>
+    nnoremap <leader>rL :<C-u>AsyncTaskProfileLoop<CR>
     nnoremap <leader>rf :<C-u>AsyncTaskProfile<CR>
     if PlannedFzf()
         function! s:fzf_sink(what)
