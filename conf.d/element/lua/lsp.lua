@@ -181,23 +181,40 @@ function M.LspHandler(method, show_position)
       elseif key == 'result' then
         if values == nil then
           vim.api.nvim_set_var("lsp_found", 0)
+          return
         elseif #values > 1 then
           M.LspUIApi(method)
+          return
         else
+          -- value
           local value = values[1]
-          local range = value.range or value.targetRange
-          if range ~= nil then
-            local file = value.uri or value.targetUri
-            if file ~=nil then
-              local line = range.start.line + 1
-              local col  = range.start.character + 1
-              vim.api.nvim_command(show_position .. ' ' .. file)
-              vim.api.nvim_win_set_cursor(win_id, {line, col})
-              vim.api.nvim_feedkeys('zz','n', true)
-              vim.api.nvim_set_var("lsp_found", 1)
-              return
-            end
+          if value == nil then
+            vim.api.nvim_set_var("lsp_found", 0)
+            return
           end
+          -- range
+          local range = value.range or value.targetRange
+          if range == nil then
+            vim.api.nvim_set_var("lsp_found", 0)
+            return
+          end
+          -- file
+          local file = value.uri or value.targetUri
+          if file == nil then
+            vim.api.nvim_set_var("lsp_found", 0)
+            return
+          end
+          --
+          local line = range.start.line + 1
+          local col = range.start.character
+          if show_position == 'goto' then
+            show_position = 'edit'
+          end
+          vim.api.nvim_command(show_position .. ' ' .. file)
+          vim.api.nvim_win_set_cursor(0, {line, col})
+          vim.api.nvim_feedkeys('zz','n', true)
+          vim.api.nvim_set_var("lsp_found", 1)
+          return
         end
       end
     end
