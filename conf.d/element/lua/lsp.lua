@@ -209,7 +209,6 @@ function M.LspHandler(method, open_action)
           local col = range.start.character
           vim.api.nvim_command(open_action .. ' ' .. file)
           vim.api.nvim_win_set_cursor(0, {line, col})
-          vim.api.nvim_feedkeys('zz','n', true)
           vim.api.nvim_set_var("lsp_found", 1)
           return
         end

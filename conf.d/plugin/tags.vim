@@ -243,11 +243,11 @@ function! s:view_tag(...)
         endif
     endif
     try
-        let symbol_found = preview#quickfix_list(tagname, 0, &filetype)
+        let tag_found = preview#quickfix_list(tagname, 0, &filetype)
     catch /.*/
-        let symbol_found = 0
+        let tag_found = 0
     endtry
-    if symbol_found
+    if tag_found
         silent! pclose
         if action_pos == 'list'
             execute "copen " . g:asyncrun_open
@@ -263,7 +263,7 @@ function! s:view_tag(...)
             call feedkeys("zz", "n")
         endif
     endif
-    return symbol_found
+    return tag_found
 endfunction
 " --------------------------
 " use lsp or tag to find
@@ -333,33 +333,24 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
     " --------------------------
     if Installed('coc.nvim') && lsp
         let commands_dict = {
-                    \ 'definition' : ['definitions', 'jumpDefinition'],
-                    \ 'references' : ['references', 'jumpReferences'],
-                    \ 'type_defition' : ['typeDefinitions', 'jumpTypeDefinition'],
-                    \ 'implementation' : ['implementations', 'jumpImplementation'],
-                    \ 'declaration' : ['declarations', 'jumpDeclaration'],
+                    \ 'definition' : 'jumpDefinition',
+                    \ 'references' : 'jumpReferences',
+                    \ 'type_defition' : 'jumpTypeDefinition',
+                    \ 'implementation' : 'jumpImplementation',
+                    \ 'declaration' : 'jumpDeclaration',
                     \ }
-        let [handler, jump_command] = commands_dict[method]
-        try
-            let res = CocAction(handler)
-        catch /.*/
-            let res = []
-        endtry
-        if empty(res)
-            let symbol_found = 0
+        let jump_command = commands_dict[method]
+        if open_action == 'list'
+            let symbol_found = CocAction(jump_command, v:false)
         else
-            let symbol_found = 1
-            if open_action == 'list'
-                call CocAction(jump_command, v:false)
+            if open_action == 'edit'
+                let symbol_found = CocAction(jump_command)
             else
+                let symbol_found = CocAction(jump_command, open_action)
+            endif
+            sleep 100m
+            if symbol_found
                 call s:settagstack(winnr, tagname, pos)
-                if open_action == 'edit'
-                    let coc_command = printf('call CocAction("%s")', jump_command)
-                else
-                    let coc_command = printf('call CocAction("%s", "%s")', jump_command, open_action)
-                endif
-                call execute(coc_command)
-                sleep 100m
                 call feedkeys("zz", "n")
                 echohl WarningMsg | echom "found by coc " . jump_command | echohl None
             endif
@@ -376,8 +367,9 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
         call execute(cmd)
         sleep 100m
         let symbol_found = get(g:, 'lsp_found', 0)
-        if symbol_found == 1
+        if symbol_found
             call s:settagstack(winnr, tagname, pos)
+            call feedkeys("zz", "n")
             echohl WarningMsg | echom "found by lsp " . method | echohl None
         endif
     endif
@@ -387,11 +379,11 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
         let symbol_found = 0
     endif
     " tags
-    if symbol_found == 0 && g:ctags_type != '' && method != 'references' && method != 'implementation'
+    if !symbol_found && g:ctags_type != '' && method != 'references' && method != 'implementation'
         let symbol_found = s:view_tag(tagname, open_action)
     endif
     " searchall
-    if symbol_found == 0
+    if !symbol_found
         if get(g:, 'searchall', '') != ''
             if open_action == 'list'
                 execute g:searchall . ' ' . tagname
