@@ -246,9 +246,12 @@ fi
 
 ############################### install plugins ##################################
 if [ $installplug != 'no' ]; then
-    note "Install (neo)vim's plugins"
-    setup_plug "vim"
-    setup_plug "$HOME/.local/bin/vi.sh"
+    note "Install (neo)vim plugins"
+    if [ -f $HOME/.vimrc.local ]; then
+        setup_plug "$HOME/.local/bin/vi.sh"
+    else
+        setup_plug "vim"
+    fi
     setup_plug "$HOME/.local/bin/nv.sh"
     setup_plug "$HOME/.local/bin/nvi.sh"
 fi
