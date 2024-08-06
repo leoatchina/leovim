@@ -204,7 +204,7 @@ function M.LspHandler(method, open_action)
             vim.api.nvim_set_var("lsp_found", 0)
             return
           end
-          --
+          -- jumpto
           local line = range.start.line + 1
           local col = range.start.character
           vim.api.nvim_command(open_action .. ' ' .. file)
