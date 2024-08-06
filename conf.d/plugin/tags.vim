@@ -307,7 +307,7 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
     else
         let open_action = 'edit'
     endif
-    if index(['tabe', 'split', 'vsplit', 'list', 'edit'], open_action) < 0
+    if index(['edit', 'tabe', 'split', 'vsplit', 'list'], open_action) < 0
         let open_action = 'edit'
     endif
     " --------------------------
@@ -359,6 +359,7 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
                     let coc_command = printf('call CocAction("%s", "%s")', jump_command, open_action)
                 endif
                 call execute(coc_command)
+                sleep 100m
                 call feedkeys("zz", "n")
                 echohl WarningMsg | echom "found by coc " . jump_command | echohl None
             endif
@@ -375,6 +376,9 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
         call execute(cmd)
         sleep 100m
         let symbol_found = get(g:, 'lsp_found', 0)
+        if symbol_found == 1
+            echohl WarningMsg | echom "found by lsp " . method | echohl None
+        endif
     endif
     " 利用errormsg判断是否找到,
     let messages = get(l:, 'messages', '')

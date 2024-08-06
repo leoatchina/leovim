@@ -87,9 +87,10 @@
 - [x] grep command replace bug, using g:grepper_word
 - [ ] cmp <C-n><C-p> problem
 - [ ] vim's unamed registers
+- [ ] cocaction  
 - [ ] show current tab's all buffers in tabline
-- [ ] fzf-project
 - [ ] run in qf and show in statusline
+- [ ] fzf-project
 - [ ] floaterm drop command
 - [ ] ====== My plugins ======
 - [x] fzf-registers
