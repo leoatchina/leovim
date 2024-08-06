@@ -32,7 +32,7 @@ function! s:search_cur(...)
         call preview#errmsg("No search word offered")
     else
         try
-            execute 'vimgrep /' . g:grepper_word . "/j %"
+            execute 'vimgrep /' . Escape(g:grepper_word) . "/j %"
             copen
         catch /.*/
             call preview#errmsg("vimgrep errors")
@@ -133,13 +133,13 @@ function! s:grep(...)
     else
         if a:1 == 1
             if executable('rg')
-                let cmd = printf('silent! grep %s', g:grepper_word)
+                let cmd = printf('silent! grep! %s', g:grepper_word)
             else
                 let cmd = printf('vimgrep /%s/j **/*', g:grepper_word)
             endif
         else
             if executable('rg')
-                let cmd = printf('silent! grep %s %s', g:grepper_word, GetRootDir())
+                let cmd = printf('silent! grep! %s %s', g:grepper_word, GetRootDir())
             else
                 let cmd = printf('vimgrep /%s/j %s/**/*', g:grepper_word, GetRootDir())
             endif
