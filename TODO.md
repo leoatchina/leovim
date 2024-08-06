@@ -83,15 +83,15 @@
 - [x] lsp codelens warn bug
 - [x] tabline add nr
 - [x] glance -> lspui
-- [x] ~fzflsp -> fzfx.nvim or fzf-lua~
 - [x] grep command replace bug, using g:grepper_word
-- [x] ~cmp <C-n><C-p> problem~
 - [x] CocAction return value
-- [ ] vim's unamed registers
+- [x] ~~fzflsp -> fzfx.nvim or fzf-lua~~
+- [x] ~~cmp <C-n><C-p> problem~~
+- [x] ~~vim's unamed registers~~
+- [ ] run script in qf and show in statusline.
 - [ ] show current tab's all buffers in tabline
-- [ ] run in qf and show in statusline
 - [ ] fzf-project
-- [ ] floaterm drop command
+- [ ] floaterm drop command, ref vim-terminal-help
 - [ ] ====== My plugins ======
 - [x] fzf-registers
 - [ ] vim-funky
