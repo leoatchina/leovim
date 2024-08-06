@@ -63,10 +63,8 @@ onoremap <C-s> :w!<Cr>
 cnoremap <C-s> w!<Cr>
 inoremap <C-s> <C-o>:w!<Cr>
 xnoremap <C-s> <ESC>:w!<Cr>
-nnoremap <M-S> :wa!<Cr>
-cnoremap <M-S> wa!<Cr>
-inoremap <M-S> <C-o>:wa!<Cr>
-xnoremap <M-S> <ESC>:wa!<Cr>
+nnoremap <leader>W :wa!<Cr>
+xnoremap <leader>W <ESC>:wa!<Cr>
 " buffers mark messages
 nnoremap <leader>b :ls<Cr>:b<Space>
 nnoremap <leader><leader> <C-^>

@@ -25,9 +25,9 @@ require("nvim-treesitter.configs").setup({
     enable = true,
     keymaps = {
       init_selection = '<M-s>',
-      scope_incremental = '<M-s>',
-      node_incremental = '<TAB>',
-      node_decremental = '<S-TAB>',
+      scope_incremental = '<Tab>',
+      node_incremental = '<M-s>',
+      node_decremental = '<M-S>',
     },
   },
   matchup = {
