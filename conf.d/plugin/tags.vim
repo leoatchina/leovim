@@ -239,7 +239,7 @@ function! s:view_tag(...)
         if a:0 >= 2
             let action_pos = a:2
         else
-            let action_pos = 'goto'
+            let action_pos = 'edit'
         endif
     endif
     try
@@ -252,7 +252,7 @@ function! s:view_tag(...)
         if action_pos == 'list'
             execute "copen " . g:asyncrun_open
         else
-            if action_pos != 'goto'
+            if action_pos != 'edit'
                 if action_pos == 'tabe'
                     tabe %
                 else
@@ -303,12 +303,12 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
     " open_position
     " --------------------------
     if a:0 == 1
-        let show_position = a:1
+        let open_action = a:1
     else
-        let show_position = 'goto'
+        let open_action = 'edit'
     endif
-    if index(['tabe', 'split', 'vsplit', 'list', 'goto'], show_position) < 0
-        let show_position = 'goto'
+    if index(['tabe', 'split', 'vsplit', 'list', 'edit'], open_action) < 0
+        let open_action = 'edit'
     endif
     " --------------------------
     " variables for tagstack
@@ -349,14 +349,14 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
             let symbol_found = 0
         else
             let symbol_found = 1
-            if show_position == 'list'
+            if open_action == 'list'
                 call CocAction(jump_command, v:false)
             else
                 call s:settagstack(winnr, tagname, pos)
-                if show_position == 'goto'
+                if open_action == 'edit'
                     let coc_command = printf('call CocAction("%s")', jump_command)
                 else
-                    let coc_command = printf('call CocAction("%s", "%s")', jump_command, show_position)
+                    let coc_command = printf('call CocAction("%s", "%s")', jump_command, open_action)
                 endif
                 call execute(coc_command)
                 call feedkeys("zz", "n")
@@ -367,10 +367,10 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
     " LspUI
     " --------------------------
     elseif Installed('lspui.nvim') && lsp
-        if show_position == 'list'
+        if open_action == 'list'
             let cmd = printf('lua require("lsp").LspUIApi("%s")', method)
         else
-            let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, show_position)
+            let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, open_action)
         endif
         call execute(cmd)
         sleep 100m
@@ -383,12 +383,12 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
     endif
     " tags
     if symbol_found == 0 && g:ctags_type != '' && method != 'references' && method != 'implementation'
-        let symbol_found = s:view_tag(tagname, show_position)
+        let symbol_found = s:view_tag(tagname, open_action)
     endif
     " searchall
     if symbol_found == 0
         if get(g:, 'searchall', '') != ''
-            if show_position == 'list'
+            if open_action == 'list'
                 execute g:searchall . ' ' . tagname
             else
                 call preview#errmsg('Not found by neither lsp nor tags, you should press <M-c> to do grep search.')

@@ -156,7 +156,7 @@ function M.LspUIApi(method)
     end
   end)
 end
-function M.LspHandler(method, show_position)
+function M.LspHandler(method, open_action)
   local handler_dict = {
     definition = 'textDocument/definition',
     references = 'textDocument/references',
@@ -207,10 +207,7 @@ function M.LspHandler(method, show_position)
           --
           local line = range.start.line + 1
           local col = range.start.character
-          if show_position == 'goto' then
-            show_position = 'edit'
-          end
-          vim.api.nvim_command(show_position .. ' ' .. file)
+          vim.api.nvim_command(open_action .. ' ' .. file)
           vim.api.nvim_win_set_cursor(0, {line, col})
           vim.api.nvim_feedkeys('zz','n', true)
           vim.api.nvim_set_var("lsp_found", 1)

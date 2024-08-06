@@ -85,6 +85,7 @@
 - [x] glance -> lspui
 - [x] ~fzflsp -> fzfx.nvim or fzf-lua~
 - [x] grep command replace bug, using g:grepper_word
+- [ ] cmp <C-n><C-p> problem
 - [ ] vim's unamed registers
 - [ ] show current tab's all buffers in tabline
 - [ ] fzf-project
