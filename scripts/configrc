@@ -69,3 +69,10 @@ function d2c(){
     echo $cmd
     eval $cmd
 }
+
+function sf() {
+    FILE=$(rg --no-heading -e "$1" | fzf | head -n 1 | cut -d ':' -f 1 )
+    if [ -n "$FILE" ]; then
+        vim "$FILE"
+    fi
+}

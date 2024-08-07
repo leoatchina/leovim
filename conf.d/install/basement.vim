@@ -223,6 +223,7 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
     PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+    PlugAdd 'gcmt/wildfire.vim'
 endif
 if !Planned('nvim-treesitter') && Require('c') && Planned('coc.nvim') && Planned('nvim-cmp')
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}

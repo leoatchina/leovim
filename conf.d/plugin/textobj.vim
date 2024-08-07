@@ -25,5 +25,8 @@ else
         nmap <M-s> <Plug>(coc-range-select)
         xmap <M-s> <Plug>(coc-range-select)
         omap <M-s> <Plug>(coc-range-select)
+    elseif Installed('wildfire.vim')
+        let g:wildfire_fuel_map = '<M-s>'
+        let g:wildfire_water_map = '<M-S>'
     endif
 endif
