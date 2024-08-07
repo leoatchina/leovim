@@ -3,11 +3,10 @@
 " ---------------------------------
 if executable('git') && get(g:, 'header_field_author', '') != '' && get(g:, 'header_field_author_email', '') != ''
     command! GitSet execute(printf(
-                \ '%s git config --global user.name "%s" && git config --global user.email "%s"',
-                \ Installed('asyncrun.vim') ? 'AsyncRun!' : '!',
+                \ '!git config --global user.name "%s" && git config --global user.email "%s"',
                 \ g:header_field_author,
                 \ g:header_field_author_email))
-    nnoremap <M-g>g :GitSet<Cr>
+    nnoremap <M-g>S :GitSet<Cr>
 endif
 "------------------------
 " git related function
