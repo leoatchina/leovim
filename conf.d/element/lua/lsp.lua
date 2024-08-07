@@ -136,7 +136,7 @@ require('LspUI').setup({
       jump_vsplit = "<C-]>",
       jump_tab = "<C-t>",
       toggle_fold = "o",
-      quit = "q",
+      quit = "<M-q>",
       fold_all = "X",
       expand_all = "O",
       hide_main = "<leader>h",
