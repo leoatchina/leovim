@@ -158,5 +158,5 @@ endif
 " ------------------------
 " pastemode toggle
 " ------------------------
-inoremap <M-I> <C-\><C-o>:set nopaste<Cr>
+inoremap <M-I> <C-\><C-o>:set nopaste \| echo "nopaste"<Cr>
 nnoremap <M-I> :set nopaste! nopaste?<CR>

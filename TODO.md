@@ -88,6 +88,7 @@
 - [x] ~~fzflsp -> fzfx.nvim or fzf-lua~~
 - [x] ~~cmp <C-n><C-p> problem~~
 - [x] ~~vim's unamed registers~~
+- [x] lightline modified
 - [ ] run script in qf and show in statusline.
 - [ ] show current tab's all buffers in tabline
 - [ ] fzf-project

@@ -182,7 +182,7 @@ let g:lightline['component_expand']['relativepath'] = 'RelativePath'
 " ------------------------
 " left part
 " ------------------------
-let g:lightline.active.left = [['mode'], ['buffers', 'relativepath', 'paste']]
+let g:lightline.active.left = [['mode', 'paste'], ['buffers'], ['relativepath', 'modified']]
 let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------
 " lightline component_type
