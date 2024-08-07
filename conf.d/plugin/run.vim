@@ -44,6 +44,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
     xnoremap ! :<C-u>AsyncRun <C-R>=GetVisualSelection()<Cr>
     nnoremap <Tab>q :AsyncStop!<CR>
     nnoremap <Tab>Q :AsyncStop<CR>
+    xnoremap <M-r> :AsyncRun -raw<Space>
     au FileType qf nnoremap <buffer><silent><C-c> :if get(g:, 'asyncrun_status', '') == 'running' \| AsyncStop! \| else \| echo 'No job running' \| endif<Cr>
 else
     let s:run_command = "!"

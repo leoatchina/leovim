@@ -89,7 +89,7 @@
 - [x] ~~cmp <C-n><C-p> problem~~
 - [x] ~~vim's unamed registers~~
 - [x] lightline modified
-- [ ] run script in qf and show in statusline.
+- [ ] run script in qf and show in statusline, refer albertomontesg/lightline-asyncrun
 - [ ] show current tab's all buffers in tabline
 - [ ] fzf-project
 - [ ] floaterm drop command, ref vim-terminal-help
