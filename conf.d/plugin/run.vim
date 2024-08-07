@@ -143,8 +143,12 @@ function! s:asyncrun(...)
                 wincmd H
                 execute "vertical resize " . float2nr(&columns * 0.6)
             else
-                wincmd p
-                execute 'copen ' . g:asyncrun_open
+                if a:0 <= 2 || a:3 < 1
+                    wincmd p
+                    execute 'copen ' . g:asyncrun_open
+                else
+                    call preview#cmdmsg("job running in background")
+                endif
             endif
         endif
     endif
