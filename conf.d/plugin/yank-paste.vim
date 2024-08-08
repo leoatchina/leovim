@@ -52,7 +52,7 @@ function! YankBorder(...) abort
 endfunction
 nnoremap <silent>,y :call YankBorder(0)<Cr>
 nnoremap <silent>,Y :call YankBorder(1)<Cr>
-nnoremap <silent>,w :call YankBorder(2)<Cr>
+nnoremap <silent>,W :call YankBorder(2)<Cr>
 " ------------------------------------
 " with/without clipboard yank
 " ------------------------------------
