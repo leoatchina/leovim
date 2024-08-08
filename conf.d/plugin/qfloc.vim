@@ -82,7 +82,7 @@ if PlannedLeaderf()
     nnoremap <silent>ZO :LeaderfQfLoc<Cr>
 endif
 " ----------------------------
-" bqf && quickui
+" bqf
 " ----------------------------
 if Installed('nvim-bqf')
     hi default link BqfPreviewFloat Normal
@@ -93,4 +93,30 @@ if Installed('nvim-bqf')
     hi default BqfSign ctermfg=14 guifg=Cyan
     hi BqfPreviewBorder guifg=#50a14f ctermfg=71
     lua require("bqf_cfg")
+endif
+" ----------------------------
+" quicker
+" ----------------------------
+if Installed('quicker.nvim')
+    lua << EOF
+    require("quicker").setup({
+    keys = {
+        {
+                ">",
+                function()
+
+                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+                end,
+                desc = "Expand quickfix context",
+        },
+        {
+                "<",
+                function()
+                require("quicker").collapse()
+                end,
+                desc = "Collapse quickfix context",
+        },
+    },
+    })
+EOF
 endif
