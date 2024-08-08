@@ -73,8 +73,9 @@ function d2c() {
 }
 
 function sf() {
-    FILE=$(rg --no-heading -e "$1" | fzf | head -n 1 | cut -d ':' -f 1 )
+    FILE=$(rg --column --no-heading -e "$1" | fzf | awk -F : '{print $1,"+"$2}')
     if [ -n "$FILE" ]; then
-        vim "$FILE"
+        cmd="vim $FILE"
+        exec $cmd
     fi
 }
