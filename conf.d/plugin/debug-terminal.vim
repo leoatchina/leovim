@@ -248,9 +248,10 @@ if Planned('vimspector')
     nnoremap <M-d>V :call vimspector#
     " watch
     nnoremap + :VimspectorWatch <C-r>=expand('<cword>')<Cr>
+    au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
+    " Eval && disassemble
     nnoremap _ :VimspectorDisassemble<Cr>
     nnoremap = :VimspectorEval <C-r>=expand('<cword>')<Cr>
-    au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
     " breakpoint
     nnoremap <silent><M-d>c :call vimspector#ClearBreakpoints()<Cr>
     nnoremap <silent><M-d>f :call vimspector#AddFunctionBreakpoint('')<left><left>
@@ -485,7 +486,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent>J :DapUIEval<Cr>
     nnoremap <silent><M-'> :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :FloatHoverOrFloatermSpecial<Cr>
+    nnoremap <silent><M-=> :FloatElementOrFloatermKill<Cr>
     nnoremap <silent><M-_> :FloatermKill<Cr>
 else
     if v:version >= 801 && !has('nvim') && Require('termdebug')
@@ -541,9 +542,9 @@ function! s:bind_keymap(mapvar, command) abort
 endfunction
 call s:bind_keymap('<M-{>', 'FloatermPrev')
 call s:bind_keymap('<M-}>', 'FloatermNext')
-call s:bind_keymap('<M-_>', 'FloatermKill')
 call s:bind_keymap('<M-->', 'FloatermToggle')
 call s:bind_keymap('<M-=>', 'FloatermSpecial')
+call s:bind_keymap('<M-_>', 'FloatermKill')
 " ---------------------------------------
 " using vim-floaterm to do repl
 " ---------------------------------------

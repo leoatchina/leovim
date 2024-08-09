@@ -14,8 +14,9 @@ fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl
 local layouts = {
   {
     elements = {
-      { id = "scopes",  size = 0.5 },
-      { id = "stacks",  size = 0.5 },
+      { id = "scopes",  size = 0.4 },
+      { id = "watches", size = 0.3 },
+      { id = "stacks",  size = 0.3 },
     },
     size = 0.2,
     position = "top",
@@ -23,7 +24,8 @@ local layouts = {
   {
     elements = {
       { id = "scopes",  size = 0.5 },
-      { id = "stacks",  size = 0.5 },
+      { id = "watches", size = 0.3 },
+      { id = "stacks",  size = 0.2 },
     },
     size = 0.25,
     position = "left",
@@ -66,7 +68,7 @@ local function dapui_toggle(open)
     end
   end
 end
-vim.keymap.set("n", "<M-m><M-m>",
+vim.keymap.set("n", "-",
   function()
     dapui_toggle()
   end, { noremap = true, silent = true }
