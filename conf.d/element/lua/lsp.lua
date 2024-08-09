@@ -101,15 +101,15 @@ require("mason-lspconfig").setup({
           enable = true,
         },
         codeLens = {
-          enable = false,
+          enable = true,
         },
         settings = {
           gopls = {
             analyses = {
               unusedparams = true,
             },
-            staticcheck = vim.g.go_exe_version > 1.1913,
-            gofumpt = vim.g.go_exe_version > 1.1913,
+            staticcheck = vim.g.go_exe_version ~= nil and vim.g.go_exe_version > 1.1913,
+            gofumpt = vim.g.go_exe_version ~= nil and vim.g.go_exe_version > 1.1913,
           },
         },
       })
@@ -292,12 +292,19 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
     -- codelens
     if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
-      vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-        buffer = bufnr,
-        callback = vim.lsp.codelens.refresh,
-      })
       vim.api.nvim_set_hl(0, 'LspCodeLens', { fg = '#888888', bg = '#432345', italic = false })
-      -- map(nx, "<leader>C", vim.ls.refresh, opts_echo)
+      function M.codelens_toggle()
+        if vim.b.codelens_enable == nil or vim.b.codelens_enable == false then
+          vim.lsp.codelens.refresh({bufnr = bufnr})
+          vim.b.codelens_enable = true
+        else
+          vim.lsp.codelens.clear(nil, 0)
+          vim.b.codelens_enable = false
+        end
+      end
+      M.codelens_toggle()
+      map(nx, "<leader>C", require("lsp").codelens_toggle, opts_echo)
+      map(nx, "<leader>a", vim.lsp.codelens.run, opts_echo)
     end
     map(nx, "<leader>A", require("lspimport").import, opts_silent)
     map(nx, "<leader>R", require('symbol-usage').toggle, opts_echo)

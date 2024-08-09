@@ -40,15 +40,26 @@ function _G.UNIX()
   return false
 end
 
-function _G.CheckHandler(handler)
-  local ok, res = pcall(function() return vim.lsp.buf_request_sync(0, handler, vim.lsp.util.make_position_params()) end)
+vim.ui.select = function(items, opts, on_choice)
+  vim.validate({
+    items = { items, 'table', false },
+    on_choice = { on_choice, 'function', false },
+  })
+  opts = opts or {}
+  local choices = { opts.prompt or 'Select one of:' }
+  local format_item = opts.format_item or tostring
+  for i, item in ipairs(items) do
+    table.insert(choices, string.format('%d: %s', i, format_item(item)))
+  end
+  local ok, choice = pcall(vim.fn.inputlist, choices)
   if ok then
-    if res and type(res) == 'table' and next(res) then
-      return 1
+    if choice < 1 or choice > #items then
+      on_choice(nil, nil)
     else
-      return 0
+      on_choice(items[choice], choice)
     end
   else
-    return 0
+    vim.api.nvim_feedkeys("\n", "n", true)
   end
 end
+
