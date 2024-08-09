@@ -89,6 +89,7 @@
 - [x] ~~cmp <C-n><C-p> problem~~
 - [x] ~~vim's unamed registers~~
 - [x] lightline modified
+- [ ] nvim-dap funtions wrap to suppress error messages
 - [ ] run script in qf and show in statusline, refer albertomontesg/lightline-asyncrun
 - [ ] show current tab's all buffers in tabline
 - [ ] fzf-project
