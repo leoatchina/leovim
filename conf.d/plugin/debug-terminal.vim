@@ -458,13 +458,13 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         if s:dapui_opened()
             if a:0 == 0
                 lua require("dapui").eval()<Cr>
-            elseif a:1 == '-'
+            elseif a:1 == "-"
                 call GoToDAPWindows("DAP Breakpoints")
-            elseif a:1 == '_'
+            elseif a:1 == "_"
                 lua require("dapui").float_element()<Cr>
-            elseif a:1 == '='
+            elseif a:1 == "="
                 lua require("dapui").float_element('repl')
-            elseif a:1 == 'F'
+            else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
             endif
@@ -483,10 +483,10 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         endif
     endfunction
     command! DapUIEval call s:dap_or_floaterm()
-    command! FocusCode call s:dap_or_floaterm('F')
-    command! ConsoleOrFloatermToggle call s:dap_or_floaterm('-')
-    command! FloatElementOrFloatermKill call s:dap_or_floaterm('_')
-    command! ReplFloatermOrFloatermSpecial call s:dap_or_floaterm('=')
+    command! FocusCode call s:dap_or_floaterm("'")
+    command! ConsoleOrFloatermToggle call s:dap_or_floaterm("-")
+    command! FloatElementOrFloatermKill call s:dap_or_floaterm("_")
+    command! ReplFloatermOrFloatermSpecial call s:dap_or_floaterm("=")
     nnoremap <silent>J :DapUIEval<Cr>
     nnoremap <silent><M-'> :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
