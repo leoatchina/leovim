@@ -28,6 +28,6 @@ else
     elseif Installed('wildfire.vim')
         let g:wildfire_fuel_map = '<M-s>'
         let g:wildfire_water_map = '<M-S>'
-        let g:wildfire_objects = get(g:, "wildfire_objects", split("iw is as ia aa il ii i) i] i}"))
+        let g:wildfire_objects = get(g:, "wildfire_objects", split("iw i' i\" i] i) il ii i}"))
     endif
 endif
