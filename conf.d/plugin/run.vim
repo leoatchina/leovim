@@ -263,7 +263,7 @@ function SmartRunTerm(cmd, pos)
     endif
 endfunction
 " disable <M-> map
-autocmd BufRead,BufNewFile * if &ft == '' | setlocal nocompatible nolist nowrap | nnoremap <M-B> <Nop> | nnoremap <M-R> <Nop> | nnoremap <M-T> <Nop> | nnoremap <M-F> <Nop> | nnoremap <M-'> <Nop> | nnoremap <M-"> <Nop> | endif
+autocmd BufRead,BufNewFile * if &ft == '' | setlocal nocompatible nolist nowrap | nnoremap <M-B> <Nop> | nnoremap <M-R> <Nop> | nnoremap <M-T> <Nop> | nnoremap <M-F> <Nop> | nnoremap <M-"> <Nop> | endif
 " ----------------
 " asynctasks
 " ----------------
