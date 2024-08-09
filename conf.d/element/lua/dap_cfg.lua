@@ -71,7 +71,7 @@ end
 vim.keymap.set({"n", "x"}, "_",
   function()
     dapui_toggle()
-  end, { noremap = true, silent = true }
+  end, { noremap = true, silent = false }
 )
 ---------------------
 -- dapui
@@ -106,7 +106,7 @@ if Installed('nvim-dap-virtual-text') then
   require("nvim-dap-virtual-text").setup()
   vim.keymap.set({"n", "x"}, "+",
     [[<Cmd>DapVirtualTextToggle<Cr>]],
-    { noremap = true, silent = true }
+    { noremap = true, silent = false }
   )
 end
 -------------------------------------
