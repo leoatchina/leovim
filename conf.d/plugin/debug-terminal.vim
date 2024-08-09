@@ -463,7 +463,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
             elseif a:1 == "_"
                 lua require("dapui").float_element()<Cr>
             elseif a:1 == "="
-                lua require("dapui").float_element('repl')
+                lua require("dapui").float_element('repl')<Cr>
             else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
@@ -486,12 +486,12 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     command! FocusCode call s:dap_or_floaterm("'")
     command! ConsoleOrFloatermToggle call s:dap_or_floaterm("-")
     command! FloatElementOrFloatermKill call s:dap_or_floaterm("_")
-    command! ReplFloatermOrFloatermSpecial call s:dap_or_floaterm("=")
+    command! FloatReplOrFloatermSpecial call s:dap_or_floaterm("=")
     nnoremap <silent>J :DapUIEval<Cr>
     nnoremap <silent><M-'> :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-_> :FloatElementOrFloatermKill<Cr>
-    nnoremap <silent><M-=> :ReplFloatermOrFloatermSpecial<Cr>
+    nnoremap <silent><M-=> :FloatReplOrFloatermSpecial<Cr>
 else
     if v:version >= 801 && !has('nvim') && Require('termdebug')
         let g:debug_tool = 'termdebug'
