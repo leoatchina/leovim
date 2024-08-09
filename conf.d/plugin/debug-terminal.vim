@@ -342,8 +342,8 @@ if Planned('vimspector')
     command! BalloonEval call s:vimspector_or_floaterm()
     command! FocusCode call s:vimspector_or_floaterm("code")
     command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
-    command! ErrOrFloatermKill call s:vimspector_or_floaterm('stderr')
     command! TerminalOrFloatermSpecial call s:vimspector_or_floaterm('terminal')
+    command! ErrOrFloatermKill call s:vimspector_or_floaterm('stderr')
     nnoremap <silent>J :BalloonEval<Cr>
     nnoremap <silent><M-'> :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
