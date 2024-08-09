@@ -457,7 +457,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     function! s:dap_or_floaterm(...)
         if s:dapui_opened()
             if a:0 == 0
-                lua require("dapui").eval()
+                lua require('dap.ui.widgets').hover()
             elseif a:1 == "-"
                 call GoToDAPWindows("DAP Breakpoints")
             elseif a:1 == "_"
@@ -469,11 +469,11 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
                 wincmd k
             endif
         elseif a:0
-            if a:1 == '-'
+            if a:1 == "-"
                 FloatermToggle
-            elseif a:1 == '_'
+            elseif a:1 == "_"
                 FloatermKill
-            elseif a:1 == '='
+            elseif a:1 == "="
                 FloatermSpecial
             else
                 FloatermList
