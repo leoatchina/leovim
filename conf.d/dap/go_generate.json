@@ -1,0 +1,7 @@
+{
+  "name": "Go Generate",
+  "type": "delve",
+  "request": "launch",
+  "program": "${workspaceFolder}",
+  "args": ["generate"]
+}

@@ -1,6 +1,6 @@
 {
   "name": "Kratos debug",
-  "type": "go",
+  "type": "delve",
   "request": "launch",
   "mode": "auto",
   "program": "${workspaceFolder}/cmd/demo/main.go",
