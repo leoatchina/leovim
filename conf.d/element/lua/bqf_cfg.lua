@@ -29,8 +29,12 @@ require('bqf').setup({
     pscrolldown = '<C-f>',
     split       = '<C-x>',
     vsplit      = '<C-]>',
+    tab     = '<C-t>',
+    tabc    = 't',
+    tabb    = 'T',
+    tabdrop = 'O',
+    open  = '<Cr>',
     openc = 'o',
     drop  = 'e',
-    tabdrop = 't'
   },
 })
