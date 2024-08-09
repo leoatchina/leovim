@@ -168,48 +168,6 @@ if g:check_tool == 'ale'
     PlugAdd 'dense-analysis/ale'
     PlugAdd 'maximbaz/lightline-ale'
 endif
-" ------------------------------
-" debug tool
-" ------------------------------
-if has('nvim-0.9.5') && (Require('nvim-dap') || Require('debug') && Planned('nvim-cmp') || Require('debug') && g:python_version < 3.1)
-    PlugAdd 'mfussenegger/nvim-dap'
-    PlugAdd 'rcarriga/nvim-dap-ui'
-    PlugAdd 'jay-babu/mason-nvim-dap.nvim'
-elseif g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8'))
-    let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
-endif
-" ------------------------------
-" format tools
-" ------------------------------
-PlugAdd 'sbdchd/neoformat'
-" ------------------------------
-" CVS
-" ------------------------------
-if executable('git') && v:version >= 800 && g:git_version >= 1.85
-    PlugAdd 'tpope/vim-fugitive'
-    PlugAdd 'junegunn/gv.vim'
-endif
-" ------------------------------
-" fuzzy_finder
-" ------------------------------
-if exists('*systemlist') && has('patch-7.4.1304')
-    PlugAdd 'junegunn/fzf.vim'
-    if WINDOWS()
-        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
-    else
-        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
-    endif
-endif
-if has('nvim') || has('patch-7.4.1126')
-    if g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
-        PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
-    endif
-endif
-if has('nvim')
-    PlugAdd 'kevinhwang91/nvim-bqf'
-    PlugAdd 'stevearc/quicker.nvim'
-endif
 " ----------------------------
 " schemes && textobj
 " ----------------------------
@@ -239,38 +197,53 @@ if g:has_truecolor
         PlugAdd 'folke/tokyonight.nvim'
     endif
 endif
-" ----------------------------
-" addtional plugins
-" ----------------------------
-if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('CopilotChat.nvim')
-    PlugAdd 'williamboman/mason.nvim'
-    PlugAdd 'MunifTanjim/nui.nvim'
-    PlugAdd 'nvim-lua/plenary.nvim'
-    PlugAdd 'nvim-neotest/nvim-nio'
+" ------------------------------
+" debug tool
+" ------------------------------
+if has('nvim-0.9.5') && (Require('nvim-dap') || Require('debug') && Planned('nvim-cmp') || Require('debug') && g:python_version < 3.1)
+    PlugAdd 'mfussenegger/nvim-dap'
+    PlugAdd 'rcarriga/nvim-dap-ui'
+    PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+    if Planned('nvim-treesitter')
+        PlugAdd 'theHamsta/nvim-dap-virtual-text'
+    endif
+elseif g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8'))
+    let vimspector_install = " ./install_gadget.py --update-gadget-config"
+    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 endif
-" ----------------------------
-" wilder
-" ----------------------------
-if !Planned('nvim-cmp')
-    if g:python_version > 3 && has('nvim') && UNIX()
-        function! UpdateRemotePlugins(...)
-            " Needed to refresh runtime files
-            let &rtp=&rtp
-            UpdateRemotePlugins
-        endfunction
-        Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
-    elseif !has('nvim') && v:version >= 801 || has('nvim') && !WINDOWS()
-        PlugAdd 'gelguy/wilder.nvim'
+" ------------------------------
+" fuzzy_finder
+" ------------------------------
+if exists('*systemlist') && has('patch-7.4.1304')
+    PlugAdd 'junegunn/fzf.vim'
+    if WINDOWS()
+        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
+    else
+        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
     endif
 endif
-" ----------------------------
-" helpful
-" ----------------------------
-if Require('helpful')
-    PlugAdd 'tweekmonster/helpful.vim'
+if has('nvim') || has('patch-7.4.1126')
+    if g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
+        PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
+    endif
+endif
+if has('nvim')
+    PlugAdd 'kevinhwang91/nvim-bqf'
+    PlugAdd 'stevearc/quicker.nvim'
+endif
+" ------------------------------
+" format tools
+" ------------------------------
+PlugAdd 'sbdchd/neoformat'
+" ------------------------------
+" Git
+" ------------------------------
+if executable('git') && v:version >= 800 && g:git_version >= 1.85
+    PlugAdd 'tpope/vim-fugitive'
+    PlugAdd 'junegunn/gv.vim'
 endif
 " ----------------------------
 " extend Planned function

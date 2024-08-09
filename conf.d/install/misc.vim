@@ -1,3 +1,33 @@
+" ----------------------------
+" nvim plugins
+" ----------------------------
+if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('CopilotChat.nvim')
+    PlugAdd 'williamboman/mason.nvim'
+    PlugAdd 'MunifTanjim/nui.nvim'
+    PlugAdd 'nvim-lua/plenary.nvim'
+    PlugAdd 'nvim-neotest/nvim-nio'
+endif
+" ----------------------------
+" wilder
+" ----------------------------
+if !Planned('nvim-cmp')
+    if g:python_version > 3 && has('nvim') && UNIX()
+        function! UpdateRemotePlugins(...)
+            " Needed to refresh runtime files
+            let &rtp=&rtp
+            UpdateRemotePlugins
+        endfunction
+        Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+    elseif !has('nvim') && v:version >= 801 || has('nvim') && !WINDOWS()
+        PlugAdd 'gelguy/wilder.nvim'
+    endif
+endif
+" ----------------------------
+" helpful
+" ----------------------------
+if Require('helpful')
+    PlugAdd 'tweekmonster/helpful.vim'
+endif
 " ------------------------------
 " pairs
 " ------------------------------

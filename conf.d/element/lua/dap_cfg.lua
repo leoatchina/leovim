@@ -74,7 +74,7 @@ vim.keymap.set("n", "-",
   end, { noremap = true, silent = true }
 )
 ---------------------
--- setup
+-- dapui
 ---------------------
 dapui.setup({
   -- Expand lines larger than the window
@@ -99,6 +99,12 @@ dapui.setup({
     },
   },
 })
+---------------------
+-- dap-virtual-text
+---------------------
+if Installed('nvim-dap-virtual-text') then
+  require("nvim-dap-virtual-text").setup()
+end
 -------------------------------------
 -- function get_mason_adapter
 -------------------------------------
