@@ -221,7 +221,7 @@ if Planned('vimspector')
     nmap <M-d>I :VimspectorInstall<Space>
     nmap <silent><M-d><Space> <Plug>VimspectorToggleBreakpoint
     nmap <silent><M-d><M-d> <Plug>VimspectorRunToCursor
-    nmap <silent><M-d><Cr> <Plug>VimspectorContinue
+    nmap <silent><M-d><M-e> <Plug>VimspectorContinue
     nmap <silent><M-d>n <Plug>VimspectorStepOver
     nmap <silent><M-d>i <Plug>VimspectorStepInto
     nmap <silent><M-d>o <Plug>VimspectorStepOut
@@ -239,7 +239,7 @@ if Planned('vimspector')
     nnoremap <M-d><M-l> :VimspectorLoadSession
     nnoremap <M-d><M-m> :VimspectorMkSession<Cr>
     nnoremap <M-d><M-n> :VimspectorNewSession<Space>
-    nnoremap <M-d><M-e> :VimspectorDestroySession<Space>
+    nnoremap <M-d><M-q> :VimspectorDestroySession<Space>
     nnoremap <M-d><M-r> :VimspectorRenameSession<Space>
     nnoremap <M-d><M-s> :VimspectorSwitchToSession<Space>
     " core shortcuts
@@ -374,7 +374,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     " core keymaps
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><M-d><M-d> <cmd>lua require"dap".run_to_cursor()<Cr>
-    nnoremap <silent><M-d><Cr> <cmd>lua require"dap".continue()<Cr>
+    nnoremap <silent><M-d><M-e> <cmd>lua require"dap".continue()<Cr>
     nnoremap <silent><M-d>n <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><M-d>N <cmd>lua require"dap".step_back()<Cr>
     nnoremap <silent><M-d>i <cmd>lua require"dap".step_into()<Cr>
@@ -502,7 +502,7 @@ else
         nnoremap <M-d><Space> :Break<Space>
         nnoremap <M-d><M-d> :Until<Cr>
         nnoremap <M-d><Tab> :Run<Space>
-        nnoremap <M-d><Cr> :Continue<Cr>
+        nnoremap <M-d><M-e> :Continue<Cr>
         nnoremap <M-d>c :Clear<Space>
         nnoremap <M-d>n :Over<Cr>
         nnoremap <M-d>i :Step<Cr>
