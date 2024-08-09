@@ -386,7 +386,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><F9> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><F10> <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><F11> <cmd>lua require"dap".step_into()<Cr>
-    nnoremap <silent><F12> <cmd>lua require"dap".step_into()<Cr>
+    nnoremap <silent><F12> <cmd>lua require"dap".step_out()<Cr>
     " view, NOTE: preview is like eval in vimspector
     nnoremap <silent>= <cmd>lua require("dap.ui.widgets").preview()<Cr>
     nnoremap <silent><M-d>s <cmd>lua require("dap.ui.widgets").centered_float(widgets.scopes)<Cr>
