@@ -457,7 +457,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     function! s:dap_or_floaterm(...)
         if s:dapui_opened()
             if a:0 == 0
-                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.2), height=math.floor(vim.o.lines*0.2), enter=false})
+                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
             elseif a:1 == "-"
                 call GoToDAPWindows("DAP Breakpoints")
             elseif a:1 == "_"
