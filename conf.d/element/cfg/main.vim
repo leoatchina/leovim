@@ -313,6 +313,7 @@ if exists('*search') && exists('*getpos')
     " -------------------
     PlugAddOpt 'vim-textobj-user'
     PlugAddOpt 'vim-textobj-uri'
+    PlugAddOpt 'vim-textobj-line'
     PlugAddOpt 'vim-textobj-syntax'
     PlugAddOpt 'vim-textobj-function'
     nmap <leader>vf vafo

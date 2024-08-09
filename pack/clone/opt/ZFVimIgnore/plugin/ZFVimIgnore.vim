@@ -40,6 +40,10 @@ endif
 "   //   'file_filtered' : [],
 "   //   'dir_filtered' : [],
 "   // }
+"   // return: {
+"   //   'file_filters' : [],
+"   //   'dir_filters' : [],
+"   // }
 "   'module1' : 'function(ignore)',
 "
 "   // or, supply pattern for each module
@@ -84,8 +88,8 @@ function! ZFIgnoreGet(...)
         return s:ZFIgnoreCache[cacheKey]
     endif
 
-    doautocmd User ZFIgnoreOnSetup
-    let ret = ZFIgnoreFilterApply(s:ZFIgnoreGet(option), option)
+    let ret = s:ZFIgnoreGet(option)
+    call ZFIgnoreFilterApply(ret, option)
 
     if !exists('s:ZFIgnoreCache')
         let s:ZFIgnoreCache = {}
@@ -96,19 +100,32 @@ endfunction
 
 function! ZFIgnoreGetNoCache(...)
     let option = get(a:, 1, {})
-
-    doautocmd User ZFIgnoreOnSetup
-    let ret = ZFIgnoreFilterApply(s:ZFIgnoreGet(option), option)
-
+    let ret = s:ZFIgnoreGet(option)
+    call ZFIgnoreFilterApply(ret, option)
     return ret
 endfunction
+function! ZFIgnoreGetNoFilter(...)
+    let option = get(a:, 1, {})
+    return s:ZFIgnoreGet(option)
+endfunction
 
+" return: {
+"   'file_filters' : [],
+"   'dir_filters' : [],
+" }
 function! ZFIgnoreFilterApply(ignore, ...)
     let option = extend(copy(g:ZFIgnoreOptionDefault), get(a:, 1, {}))
+    let ret = {
+                \   'func_filters' : [],
+                \   'file_filters' : [],
+                \   'dir_filters' : [],
+                \ }
     for module in keys(g:ZFIgnoreFilter)
         let Fn = g:ZFIgnoreFilter[module]
         if type(Fn) == type(function('function'))
-            call Fn(a:ignore)
+            let tmp = Fn(a:ignore)
+            call extend(ret['file_filters'], tmp['file_filters'])
+            call extend(ret['dir_filters'], tmp['dir_filters'])
         else
             for filterModuleName in keys(Fn)
                 if !get(option, filterModuleName, 1)
@@ -125,6 +142,7 @@ function! ZFIgnoreFilterApply(ignore, ...)
                                 if match(pattern, ZFIgnorePatternToRegexp(filterPattern)) >= 0
                                     call remove(a:ignore[type], i)
                                     call add(a:ignore[type . '_filtered'], pattern)
+                                    call add(ret[type . '_filters'], filterPattern)
                                     break
                                 endif
                             endif
@@ -136,7 +154,7 @@ function! ZFIgnoreFilterApply(ignore, ...)
             endfor
         endif
     endfor
-    return a:ignore
+    return ret
 endfunction
 
 " return: [
@@ -238,24 +256,37 @@ endfunction
 command! -nargs=0 ZFIgnoreToggle :call ZFIgnoreToggle() | echo '[ZFIgnore] ' . (g:ZFIgnoreOn ? 'on' : 'off')
 
 " param: {
-"   'option' : {...}, // optional, ZFIgnoreGet option
+"   'option' : {...}, // optional, ZFIgnoreGet option if ignoreData not supply
 "   'ignoreData' : {...}, // optional, use specified ignoreData
 "   'fileRuleOnDir' : 1, // optional, whether apply 'file' rules on dir
 " }
 " return: {
-"   'type' : 'file / dir', // what type of the rule matched
-"   'rule' : 'some_ignore_rule', // what ignore rule matched
-"   'filtered' : 'some_text', // what part of the text matched the rule
 "   'text' : 'some_text', // original text used to match
+"   'list' : [ // empty if no match
+"     {
+"       'type' : 'file / dir', // what type of the rule matched
+"       'rule' : 'some_ignore_rule', // what ignore rule matched
+"       'matched' : 'some_text', // what part of the text matched the rule
+"       'filtered' : 'some_text', // what filter rule cause the ignroe being filtered, empty if not filtered
+"     },
+"     ...
+"   ],
 " }
 function! ZFIgnoreCheck(text, ...)
     let param = get(a:, 1, {})
 
+    let option = get(param, 'option', {})
     let ignoreData = get(param, 'ignoreData', {})
     if empty(ignoreData)
-        let ignoreData = ZFIgnoreGet(get(param, 'option', {}))
+        let ignoreData = ZFIgnoreGetNoFilter(option)
     endif
+    let fileRuleOnDir = get(param, 'fileRuleOnDir', 1)
     let text = fnamemodify(a:text, ':p')
+    let list = []
+    let ret = {
+                \   'text' : text,
+                \   'list' : list,
+                \ }
 
     let filePath = fnamemodify(text, ':h')
     let filePath = substitute(filePath, '\', '/', 'g')
@@ -264,61 +295,81 @@ function! ZFIgnoreCheck(text, ...)
         for item in ignoreData['dir']
             let pattern = ZFIgnorePatternToRegexp(item)
             if match(filePathItem, pattern) >= 0
-                return {
+                call add(list, {
                             \   'type' : 'dir',
                             \   'rule' : item,
-                            \   'filtered' : filePathItem,
-                            \   'text' : text,
-                            \ }
+                            \   'matched' : filePathItem,
+                            \   'filtered' : '',
+                            \ })
             endif
         endfor
-        for item in ignoreData['file']
-            let pattern = ZFIgnorePatternToRegexp(item)
-            if match(filePathItem, pattern) >= 0
-                return {
-                            \   'type' : 'file',
-                            \   'rule' : item,
-                            \   'filtered' : filePathItem,
-                            \   'text' : text,
-                            \ }
-            endif
-        endfor
+        if fileRuleOnDir
+            for item in ignoreData['file']
+                let pattern = ZFIgnorePatternToRegexp(item)
+                if match(filePathItem, pattern) >= 0
+                    call add(list, {
+                                \   'type' : 'file',
+                                \   'rule' : item,
+                                \   'matched' : filePathItem,
+                                \   'filtered' : '',
+                                \ })
+                endif
+            endfor
+        endif
     endfor
 
     let fileName = fnamemodify(text, ':t')
     for item in ignoreData['dir']
         let pattern = ZFIgnorePatternToRegexp(item)
         if match(fileName, pattern) >= 0
-            return {
+            call add(list, {
                         \   'type' : 'dir',
                         \   'rule' : item,
-                        \   'filtered' : fileName,
-                        \   'text' : text,
-                        \ }
+                        \   'matched' : fileName,
+                        \   'filtered' : '',
+                        \ })
         endif
     endfor
     for item in ignoreData['file']
         let pattern = ZFIgnorePatternToRegexp(item)
         if match(fileName, pattern) >= 0
-            return {
+            call add(list, {
                         \   'type' : 'file',
                         \   'rule' : item,
-                        \   'filtered' : fileName,
-                        \   'text' : text,
-                        \ }
+                        \   'matched' : fileName,
+                        \   'filtered' : '',
+                        \ })
         endif
     endfor
 
-    return {
-                \   'type' : '',
-                \   'rule' : '',
-                \   'filtered' : '',
-                \   'text' : text,
+    for item in ret['list']
+        call s:ZFIgnoreCheckFilter(item, option)
+    endfor
+    return ret
+endfunction
+function! s:ZFIgnoreCheckFilter(item, option)
+    let ignore = {
+                \   'file' : [],
+                \   'dir' : [],
+                \   'file_filtered' : [],
+                \   'dir_filtered' : [],
                 \ }
+    if a:item['type'] == 'file'
+        call add(ignore['file'], a:item['rule'])
+    elseif a:item['type'] == 'dir'
+        call add(ignore['dir'], a:item['rule'])
+    endif
+    let filters = ZFIgnoreFilterApply(ignore, a:option)
+    if !empty(filters['file_filters'])
+        let a:item['filtered'] = filters['file_filters'][0]
+    elseif !empty(filters['dir_filters'])
+        let a:item['filtered'] = filters['dir_filters'][0]
+    endif
 endfunction
 
 " ============================================================
 function! s:ZFIgnoreGet(option)
+    doautocmd User ZFIgnoreOnSetup
     if !g:ZFIgnoreOn
         return {
                     \   'file' : [],

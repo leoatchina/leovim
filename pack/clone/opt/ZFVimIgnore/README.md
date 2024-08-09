@@ -228,15 +228,21 @@ let ignore = ZFIgnoreGet()
 
     ```
     " param: {
-    "   'option' : {...}, // optional, ZFIgnoreGet option
+    "   'option' : {...}, // optional, ZFIgnoreGet option if ignoreData not supply
     "   'ignoreData' : {...}, // optional, use specified ignoreData
     "   'fileRuleOnDir' : 1, // optional, whether apply 'file' rules on dir
     " }
     " return: {
-    "   'type' : 'file / dir', // what type of the rule matched
-    "   'rule' : 'some_ignore_rule', // what ignore rule matched
-    "   'filtered' : 'some_text', // what part of the text matched the rule
     "   'text' : 'some_text', // original text used to match
+    "   'list' : [ // empty if no match
+    "     {
+    "       'type' : 'file / dir', // what type of the rule matched
+    "       'rule' : 'some_ignore_rule', // what ignore rule matched
+    "       'matched' : 'some_text', // what part of the text matched the rule
+    "       'filtered' : 'some_text', // what filter rule cause the ignroe being filtered, empty if not filtered
+    "     },
+    "     ...
+    "   ],
     " }
     ```
 

@@ -10,6 +10,10 @@ endif
 " * vim's rtp is ignored
 
 function! ZFIgnore_filter_common(ignore)
+    let ret = {
+                \   'file_filters' : [],
+                \   'dir_filters' : [],
+                \ }
     let filterMap = {}
     let filterMap['~'] = 1
     let filterMap['.'] = 1
@@ -38,9 +42,8 @@ function! ZFIgnore_filter_common(ignore)
             if filterIndex >= 0
                 let pattern = remove(a:ignore[type], i)
                 call add(a:ignore[type . '_filtered'], pattern)
-            elseif 0
-                        \ || match(a:ignore[type][i], '\(^\|,\)\*\+,') >= 0 " (^|,)\*+,
-                        \ || match(a:ignore[type][i], ',\*\+\($\|,\)') >= 0 " ,\*+($|,)
+                call add(ret[type . '_filters'], filter[filterIndex])
+            elseif match(a:ignore[type][i], '\(^\|,\)\*\+,\|,\*\+\($\|,\)') >= 0 " (^|,)\*+,|,\*+($|,)
                 " filter out:
                 "   xxx,*,yyy
                 "   xxx,*
@@ -49,10 +52,12 @@ function! ZFIgnore_filter_common(ignore)
                 " typically for typo of `xxx.*` to `xxx,*`
                 let pattern = remove(a:ignore[type], i)
                 call add(a:ignore[type . '_filtered'], pattern)
+                call add(ret[type . '_filters'], '(^|,)\*+,|,\*+($|,)')
             endif
             let i -= 1
         endwhile
     endfor
+    return ret
 endfunction
 
 if !exists('g:ZFIgnoreFilter')

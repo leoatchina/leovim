@@ -1,4 +1,4 @@
-let $FZF_DEFAULT_OPTS = ' --reverse --info=inline --bind ctrl-b:preview-up,ctrl-f:preview-down'
+let $FZF_DEFAULT_OPTS = ' --reverse --info=inline --bind ctrl-b:preview-up,ctrl-f:preview-down,ctrl-a:select-all'
 let g:fzf_vim = {}
 au FileType fzf tnoremap <buffer> <C-j> <Down>
 au FileType fzf tnoremap <buffer> <C-k> <Up>
@@ -11,7 +11,6 @@ let g:fzf_buffers_jump = 1
 function! s:build_quickfix_list(lines)
     call setqflist(map(copy(a:lines), '{ "filename": v:val, "lnum": 1 }'))
     copen
-    cc
 endfunction
 let g:fzf_action = {
             \ 'enter':  'edit',
