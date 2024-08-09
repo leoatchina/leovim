@@ -1,33 +1,4 @@
-function! s:diag_or_errmsg(diagnostic)
-    if a:diagnostic
-        if Planned('ale')
-            ALEDetail
-        elseif PlannedCoc()
-            call CocActionAsync('diagnosticInfo')
-        elseif InstalledNvimLsp()
-            lua vim.diagnostic.open_float()
-        else
-            call preview#errmsg('Please select lines to merge!')
-        endif
-    else
-        call preview#errmsg('Please select lines to merge!')
-    endif
-endfunction
-function! s:j(line1, line2, diagnostic) range abort
-    let pos = getpos('.')
-    if a:line1 != a:line2
-        execute a:line1 . "," . a:line2 . "join"
-    else
-        call s:diag_or_errmsg(a:diagnostic)
-        call setpos('.', pos)
-    endif
-endfunction
-command! -range J call s:j(<line1>, <line2>, 0)
-command! -range JDiag call s:j(<line1>, <line2>, 1)
-xnoremap <silent>J :J<Cr>
-" NOTE
 if g:has_terminal == 0
-    nnoremap <silent>J :JDiag<Cr>
     finish
 endif
 " --------------------------
@@ -141,9 +112,10 @@ function! s:floaterm_list() abort
 endfunc
 command! FloatermList call s:floaterm_list()
 tnoremap <silent><C-\><C-f> <C-\><C-n>:FloatermList<Cr>
+inoremap <silent><C-\><C-f> <C-o>:FloatermList<Cr>
 nnoremap <silent><C-\><C-f> :FloatermList<Cr>
 " ---------------------------------
-" debug
+" debug: load_json
 " ---------------------------------
 if PlannedFzf()
     function! s:load_json(dap, ...)
@@ -194,6 +166,9 @@ if PlannedFzf()
         endif
     endfunction
 endif
+" -----------------
+" vimspector
+" -----------------
 if Planned('vimspector')
     let g:debug_tool = "vimspector"
     let g:vimspector_base_dir = $DEPLOY_DIR . "/vimspector"
@@ -246,12 +221,6 @@ if Planned('vimspector')
     command! VimspectorCommands call FzfCallCommands('VimspectorCommands', 'Vimspector')
     nnoremap <M-d>v :VimspectorCommands<Cr>
     nnoremap <M-d>V :call vimspector#
-    " watch
-    nnoremap + :VimspectorWatch <C-r>=expand('<cword>')<Cr>
-    au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
-    " Eval && disassemble
-    nnoremap _ :VimspectorDisassemble<Cr>
-    nnoremap = :VimspectorEval <C-r>=expand('<cword>')<Cr>
     " breakpoint
     nnoremap <silent><M-d>c :call vimspector#ClearBreakpoints()<Cr>
     nnoremap <silent><M-d>f :call vimspector#AddFunctionBreakpoint('')<left><left>
@@ -309,46 +278,36 @@ if Planned('vimspector')
     " --------------------------------------
     " special map
     " ---------------------------------------
-    function! s:vimspector_or_floaterm(...)
+    function! s:vimspector_or_floaterm(type)
         if s:vimspector_opened()
-            if a:0
-                if a:1 ==# 'code'
-                    try
-                        let windowNr = bufwinnr(winbufnr(g:vimspector_session_windows['code']))
-                        execute windowNr . 'wincmd w'
-                    catch /.*/
-                        call preview#errmsg('No code window')
-                    endtry
-                else
-                    call vimspector#ShowOutput(a:1)
-                endif
+            if a:type ==# 'code'
+                try
+                    let windowNr = bufwinnr(winbufnr(g:vimspector_session_windows['code']))
+                    execute windowNr . 'wincmd w'
+                catch /.*/
+                    call preview#errmsg('No code window')
+                endtry
             else
-                execute  "normal \<Plug>VimspectorBalloonEval"
+                call vimspector#ShowOutput(a:type)
             endif
-        elseif a:0
-            if a:1 ==# 'Console'
-                FloatermToggle
-            elseif a:1 ==# 'terminal'
-                FloatermSpecial
-            elseif a:1 ==# 'stderr'
-                FloatermKill
-            else
-                FloatermList
-            endif
-        else
-            call s:diag_or_errmsg(1)
+        elseif a:type ==# 'Console'
+            FloatermToggle
+        elseif a:type ==# 'terminal'
+            FloatermSpecial
         endif
     endfunction
-    command! BalloonEval call s:vimspector_or_floaterm()
     command! FocusCode call s:vimspector_or_floaterm("code")
     command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
     command! TerminalOrFloatermSpecial call s:vimspector_or_floaterm('terminal')
-    command! ErrOrFloatermKill call s:vimspector_or_floaterm('stderr')
-    nnoremap <silent>J :BalloonEval<Cr>
     nnoremap <silent><M-'> :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
-    nnoremap <silent><M-_> :ErrOrFloatermKill<Cr>
+    " view variables
+    nnoremap = <Plug>VimspectorBalloonEval
+    nnoremap + :VimspectorWatch <C-r>=expand('<cword>')<Cr>
+    nnoremap - :VimspectorEval <C-r>=expand('<cword>')<Cr>
+    nnoremap _ :VimspectorDisassemble<Cr>
+    au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
     lua require("dap_cfg")
@@ -388,9 +347,6 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><F10> <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><F11> <cmd>lua require"dap".step_into()<Cr>
     nnoremap <silent><F12> <cmd>lua require"dap".step_out()<Cr>
-    " view, NOTE: preview is like eval in vimspector
-    nnoremap <silent>= <cmd>lua require("dap.ui.widgets").preview()<Cr>
-    nnoremap <silent><M-d>s <cmd>lua require("dap.ui.widgets").centered_float(widgets.scopes)<Cr>
     " basic <M-d> map
     nnoremap <M-d>l :lua require"dap".
     nnoremap <M-d>I :DapInstall<Space>
@@ -402,7 +358,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-d>a <cmd>lua require"dap".attach(vim.fn.input('Attatch to: '))<Cr>
     " breakpoints
     nnoremap <silent><M-d>c <cmd>lua require"dap".clear_breakpoints()<Cr>
-    nnoremap <silent><M-d>e <cmd>lua require"dap".set_exception_breakpoints("")<left><left>
+    nnoremap <silent><M-d>s <cmd>lua require"dap".set_exception_breakpoints("")<left><left>
     " debug
     nnoremap <silent><M-d>u <cmd>lua require"dap".up()<Cr>
     nnoremap <silent><M-d>d <cmd>lua require"dap".down()<Cr>
@@ -413,9 +369,10 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     " ---------------------------------------
     nnoremap <M-m>l :lua require("dapui").
     " watch
-    nnoremap <silent><M-m>s <cmd>lua require("dapui").float_element('stacks')<Cr>
-    nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
+    nnoremap <silent><M-m>s <cmd>lua require("dapui").float_element('scopes')<Cr>
     nnoremap <silent><M-m>w <cmd>lua require("dapui").float_element('watches')<Cr>
+    nnoremap <silent><M-m>t <cmd>lua require("dapui").float_element('stacks')<Cr>
+    nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
     " jump to windows in dapui
     au BufEnter * if s:dapui_opened() | SignifyDisable | endif
     function! s:dapui_opened()
@@ -455,39 +412,32 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     " --------------------------------------
     " special map
     " ---------------------------------------
-    function! s:dap_or_floaterm(...)
+    function! s:dap_or_floaterm(type)
         if s:dapui_opened()
-            if a:0 == 0
-                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
-            elseif a:1 == "-"
+            if a:type == "-"
                 lua require("dapui").float_element('console')
-            elseif a:1 == "="
+            elseif a:type == "="
                 lua require("dapui").float_element()
             else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
             endif
-        elseif a:0
-            if a:1 == "-"
-                FloatermToggle
-            elseif a:1 == "="
-                FloatermSpecial
-            else
-                FloatermList
-            endif
+        elseif a:type == "-"
+            FloatermToggle
+        elseif a:type == "="
+            FloatermSpecial
         else
-            call s:diag_or_errmsg(1)
+            call preview#errmsg("DapUi is not opened.")
         endif
     endfunction
-    command! DapUIEval call s:dap_or_floaterm()
     command! FocusCode call s:dap_or_floaterm("'")
     command! ConsoleOrFloatermToggle call s:dap_or_floaterm("-")
     command! FloatElementOrFloatermKill call s:dap_or_floaterm("=")
-    nnoremap <silent>J :DapUIEval<Cr>
     nnoremap <silent><M-'> :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :FloatElementOrFloatermKill<Cr>
-    nnoremap <silent><M-_> :FloatermKill<Cr>
+    nnoremap <silent>= :lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})<Cr>
+    nnoremap <silent>- <cmd>lua require("dap.ui.widgets").preview()<Cr>
 else
     if v:version >= 801 && !has('nvim') && Require('termdebug')
         let g:debug_tool = 'termdebug'
@@ -525,11 +475,7 @@ else
         nnoremap <silent><M-m>s :Source<Cr>
         nnoremap <silent><M-m>g :Gdb<Cr>
     endif
-    nnoremap <silent>J :JDiag<Cr>
-    nnoremap <silent><M-'> :FloatermList<Cr>
 endif
-inoremap <silent><M-'> <C-o>:FloatermList<Cr>
-tnoremap <silent><M-'> <C-\><C-n>:FloatermList<Cr>
 " -------------------------------------
 " map Floaterm keys
 " -------------------------------------

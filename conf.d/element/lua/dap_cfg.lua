@@ -68,7 +68,7 @@ local function dapui_toggle(open)
     end
   end
 end
-vim.keymap.set("n", "-",
+vim.keymap.set({"n", "x"}, "_",
   function()
     dapui_toggle()
   end, { noremap = true, silent = true }
@@ -81,7 +81,7 @@ dapui.setup({
   expand_lines = true,
   mappings = {
     -- Use a table to apply multiple mappings
-    expand = { "<Space>", "<2-LeftMouse>" },
+    expand = { "<Space>" },
     open = "<Cr>",
     remove = "x",
     edit = "e",
@@ -104,6 +104,10 @@ dapui.setup({
 ---------------------
 if Installed('nvim-dap-virtual-text') then
   require("nvim-dap-virtual-text").setup()
+  vim.keymap.set({"n", "x"}, "+",
+    require("nvim-dap-virtual-text").toggle,
+    { noremap = true, silent = true }
+  )
 end
 -------------------------------------
 -- function get_mason_adapter
