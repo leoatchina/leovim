@@ -68,9 +68,6 @@ git clone --depth 1 https://github.com/wellle/targets.vim
 rm -rf vim-tmux-navigator
 git clone --depth 1 https://github.com/christoomey/vim-tmux-navigator.git
 
-rm -rf vimux
-git clone --depth 1 https://github.com/preservim/vimux.git
-
 rm -rf vim-tmux-clipboard
 git clone --depth 1 https://github.com/roxma/vim-tmux-clipboard.git
 
