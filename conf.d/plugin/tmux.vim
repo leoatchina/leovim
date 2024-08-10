@@ -1,6 +1,5 @@
 if UNIX() && HAS_GUI() == 0 && executable('tmux') && v:version >= 800
     let g:tmux_navigator_no_mappings = 1
-    PlugAddOpt 'vimux'
     PlugAddOpt 'vim-tmux-navigator'
     PlugAddOpt 'vim-tmux-clipboard'
     nnoremap <silent><M-H> :TmuxNavigateLeft<cr>
