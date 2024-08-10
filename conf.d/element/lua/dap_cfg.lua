@@ -104,7 +104,7 @@ dapui.setup({
 ---------------------
 if Installed('nvim-dap-virtual-text') then
   require("nvim-dap-virtual-text").setup()
-  vim.keymap.set({"n", "x"}, "+",
+  vim.keymap.set({"n", "x"}, "=",
     [[<Cmd>DapVirtualTextToggle<Cr>]],
     { noremap = true, silent = false }
   )
