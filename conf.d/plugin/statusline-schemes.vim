@@ -133,6 +133,11 @@ elseif PlannedCoc()
     let g:lightline.component_function.coc_diag = 'CocDiagnostic'
     let g:lightline.active.right += [['coc_diag']]
 endif
+if !has("nvim")
+    PlugAddOpt 'lightline-asyncrun'
+    let g:lightline.component_expand.asyncrun_status = 'lightline#asyncrun#status'
+    let g:lightline.active.right += [['asyncrun_status']]
+endif
 " ---------------------------------------
 " show buffers and current file path
 " ---------------------------------------

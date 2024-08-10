@@ -32,22 +32,16 @@ function! s:open_close_qfloc(buftype, type) abort
             let qflist = getqflist()
             if len(qflist) == 0
                 echom "No Quickfix"
-                return
-            elseif qflist[0].bufnr <= 0
-                echom "Quickfix is not valid"
-                return
+            else
+                copen
             endif
-            execute "belowright cw " . g:asyncrun_open
         else
             let loclist = getloclist(0)
             if len(loclist) == 0
                 echom "No LocList"
-                return
-            elseif loclist[0].bufnr <= 0
-                echom "LocList is not valid"
-                return
+            else
+                lopen
             endif
-            execute "belowright lw " . g:asyncrun_open
         endif
         execute curr_win . 'wincmd w'
         sleep 100m

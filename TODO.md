@@ -89,11 +89,11 @@
 - [x] ~~cmp <C-n><C-p> problem~~
 - [x] ~~vim's unamed registers~~
 - [x] lightline modified
-- [ ] nvim-dap funtions wrap to suppress error messages
-- [ ] run script in qf and show in statusline, refer albertomontesg/lightline-asyncrun
+- [x] run script in qf and show in lightline, refer albertomontesg/lightline-asyncrun
+- [x] suppress <C-c> E5108 error messages
+- [ ] floaterm drop command, ref vim-terminal-help
 - [ ] show current tab's all buffers in tabline
 - [ ] fzf-project
-- [ ] floaterm drop command, ref vim-terminal-help
 - [ ] ====== My plugins ======
 - [x] fzf-registers
 - [ ] vim-funky

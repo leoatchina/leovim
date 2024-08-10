@@ -53,21 +53,22 @@ else
 endif
 function! s:asyncrun(...)
     w!
-    if a:0 >= 2
-        let pos = a:1
-        let type = a:2
+    if !has('nvim') && v:version < 801
+        let type = 'qf'
+        if a:0
+            let pos = a:1
+        else
+            let pos = 'bottom'
+        endif
     elseif a:0 == 1
         let pos = a:1
         let type = 'term'
+    elseif a:0 >= 2
+        let pos = a:1
+        let type = a:2
     else
-        let pos = ''
+        let pos = 'bottom'
         let type = 'qf'
-    endif
-    if !has('nvim') && v:version < 801
-        let type = 'qf'
-        if pos != ''
-            let pos = 'right'
-        endif
     endif
     if s:run_command == "!"
         let params = " "
@@ -137,22 +138,29 @@ function! s:asyncrun(...)
             call preview#errmsg('FileType ' . &ft . ' could not be runned.')
         endif
     else
-        exec run_cmd
         if type == 'qf'
-            if pos == 'right'
-                wincmd H
-                execute "vertical resize " . float2nr(&columns * 0.6)
+            if a:0 >= 3 || a:3
+                let asyncrun_open = g:asyncrun_open
+                let g:asyncrun_open = 0
+                exec run_cmd
+                let g:asyncrun_open = asyncrun_open
             else
-                if a:0 <= 2 || a:3 < 1
-                    wincmd p
-                    execute 'copen ' . g:asyncrun_open
+                exec run_cmd
+                if pos == 'right'
+                    wincmd H
+                    execute "vertical resize " . float2nr(&columns * 0.6)
                 else
-                    call preview#cmdmsg("job running in background")
+                    wincmd p
                 endif
             endif
+        else
+            exec run_cmd
         endif
     endif
 endfunction
+command! RunQfSilent call s:asyncrun('bottom', 'qf', 1)
+command! RunQfBottom call s:asyncrun('bottom', 'qf')
+command! RunQfRight call s:asyncrun('right', 'qf')
 " -------------------------
 " run in floterm
 " -------------------------
@@ -230,15 +238,17 @@ if has('nvim') || v:version >= 801
     command! RunFloatermFloat call s:asyncrun('floaterm_float', 'term')
     command! RunFloatermBottom call s:asyncrun('floaterm_bottom', 'term')
     nnoremap <silent><M-R> :RunFloatermRight<CR>
-    nnoremap <silent><M-F> :RunFloatermFloat<CR>
     nnoremap <silent><M-B> :RunFloatermBottom<CR>
+    if has('nvim')
+        nnoremap <silent><M-F> :RunFloatermFloat<CR>
+    else
+        nnoremap <silent><M-F> :RunQfSilent<CR>
+    endif
 else
     nnoremap <M-T> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
-    nnoremap <M-F> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
-    command! RunQfBottom call s:asyncrun('', 'qf')
     nnoremap <silent><M-B> :RunQfBottom<CR>
-    command! RunQfRight call s:asyncrun('right', 'qf')
     nnoremap <silent><M-R> :RunQfRight<CR>
+    nnoremap <silent><M-F> :RunQfSilent<CR>
 endif
 if WINDOWS() || executable('gnome-terminal') && HAS_GUI()
     command! RunExternal call s:asyncrun('external')
