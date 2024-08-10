@@ -298,7 +298,7 @@ if Planned('vimspector')
         endif
         return windowNr
     endfunction
-    nnoremap <silent><M-:>  :call vimspector#ListBreakpoints()<Cr>
+    nnoremap <silent><M-'>  :call vimspector#ListBreakpoints()<Cr>
     nnoremap <silent><M-m>i :call GoToVimspectorWindow('important')<Cr>
     nnoremap <silent><M-m>s :call GoToVimspectorWindow('server')<Cr>
     nnoremap <silent><M-m>v :call GoToVimspectorWindow('Vimspector')<Cr>
@@ -335,13 +335,13 @@ if Planned('vimspector')
     command! FocusCode call s:vimspector_or_floaterm("code")
     command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
     command! TerminalOrFloatermSpecial call s:vimspector_or_floaterm('terminal')
-    nnoremap <silent><M-'> :FocusCode<Cr>
-    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
+    nnoremap <silent><M-m>0 :FocusCode<Cr>
+    nnoremap <silent><M-->  :ConsoleOrFloatermToggle<Cr>
+    nnoremap <silent><M-=>  :TerminalOrFloatermSpecial<Cr>
     " view variables
-    nnoremap J :BalloonEval<Cr>
+    nnoremap <silent>J :BalloonEval<Cr>
+    nnoremap <silent>_ :VimspectorDisassemble<Cr>
     nnoremap = :VimspectorWatch <C-r>=expand('<cword>')<Cr>
-    nnoremap _ :VimspectorDisassemble<Cr>
     nnoremap - :VimspectorEval <C-r>=expand('<cword>')<Cr>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
@@ -414,7 +414,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     function! s:dapui_opened()
         return bufwinnr("DAP Scopes") >= 0 && bufwinnr("DAP Watches") >= 0 && bufwinnr("DAP Stacks") >= 0
     endfunction
-    nnoremap <silent><M-:>  <cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
+    nnoremap <silent><M-'>  <cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
     nnoremap <silent><M-m>1 <Cmd>call GoToDAPWindows("DAP Scopes")<Cr>
     nnoremap <silent><M-m>2 <Cmd>call GoToDAPWindows("DAP Watches")<Cr>
     nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
@@ -472,11 +472,11 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     command! FocusCode call s:dap_or_floaterm("focus")
     command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
     command! FloatElementOrFloatermKill call s:dap_or_floaterm("element")
-    nnoremap J     :DapUIEval<Cr>
-    nnoremap <M-'> :FocusCode<Cr>
-    nnoremap <M--> :ConsoleOrFloatermToggle<Cr>
-    nnoremap <M-=> :FloatElementOrFloatermKill<Cr>
-    nnoremap - <cmd>lua require("dap.ui.widgets").preview()<Cr>
+    nnoremap <silent>J     :DapUIEval<Cr>
+    nnoremap <silent><M-m>0 :FocusCode<Cr>
+    nnoremap <silent><M-->  :ConsoleOrFloatermToggle<Cr>
+    nnoremap <silent><M-=>  :FloatElementOrFloatermKill<Cr>
+    nnoremap <silent>- <cmd>lua require("dap.ui.widgets").preview()<Cr>
 else
     if v:version >= 801 && !has('nvim') && Require('termdebug')
         let g:debug_tool = 'termdebug'

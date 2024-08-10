@@ -52,6 +52,11 @@ nnoremap <C-m> <Tab>
 nnoremap gQ gw
 xnoremap gQ gw
 nnoremap <M-A> ggVG
+nnoremap <M-:> :
+inoremap <M-:> <ESC>:
+xnoremap <M-:> <ESC>:
+snoremap <M-:> <ESC>:
+cnoremap <M-:> <C-u>
 " remap for cusor move insert mode
 inoremap <M-l> <Right>
 inoremap <M-h> <Left>

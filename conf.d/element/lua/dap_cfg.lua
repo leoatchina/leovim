@@ -71,7 +71,7 @@ end
 vim.keymap.set({"n", "x"}, "_",
   function()
     dapui_toggle()
-  end, { noremap = true, silent = false }
+  end, { noremap = true, silent = true }
 )
 ---------------------
 -- dapui
