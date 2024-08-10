@@ -135,6 +135,7 @@ elseif PlannedCoc()
 endif
 if !has("nvim")
     PlugAddOpt 'lightline-asyncrun'
+    let g:lightline#asyncrun#indicator_none = ''
     let g:lightline.component_expand.asyncrun_status = 'lightline#asyncrun#status'
     let g:lightline.active.right += [['asyncrun_status']]
 endif
