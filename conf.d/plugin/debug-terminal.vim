@@ -28,8 +28,8 @@ endfunction
 command! -range J call s:j(<line1>, <line2>, 0)
 command! -range JDiag call s:j(<line1>, <line2>, 1)
 xnoremap <silent>J :J<Cr>
-nnoremap <silent>J :JDiag<Cr>
 if g:has_terminal == 0
+    nnoremap <silent>J :JDiag<Cr>
     finish
 endif
 " --------------------------
