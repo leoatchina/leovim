@@ -449,13 +449,13 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     " special map
     " ---------------------------------------
     function! s:dap_or_floaterm(type)
-        if s:dapui_opened()
+        if a:type == "eval" && luaeval('require"dap".session() ~= nil')
+            lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
+        elseif s:dapui_opened()
             if a:type == "console"
                 lua require("dapui").float_element('console')
             elseif a:type == "element"
                 lua require("dapui").float_element()
-            elseif a:type == "eval"
-                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
             else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
