@@ -575,6 +575,11 @@
     "when": "editorFocus"
   },
   {
+    "key": "ctrl+n",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
+  {
     "key": "ctrl+alt+n",
     "command": "welcome.showNewFileEntries"
   },
