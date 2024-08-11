@@ -449,8 +449,12 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     " special map
     " ---------------------------------------
     function! s:dap_or_floaterm(type)
-        if a:type == "eval" && luaeval('require"dap".session() ~= nil')
-            lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
+        if a:type == "eval"
+            if luaeval('require"dap".session() ~= nil')
+                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
+            else
+                call s:diag_or_errmsg(1)
+            endif
         elseif s:dapui_opened()
             if a:type == "console"
                 lua require("dapui").float_element('console')
@@ -464,8 +468,6 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
             FloatermToggle
         elseif a:type == "element"
             FloatermSpecial
-        elseif a:type == "eval"
-            call s:diag_or_errmsg(1)
         endif
     endfunction
     command! DapUIEval call s:dap_or_floaterm("eval")
