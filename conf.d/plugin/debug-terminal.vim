@@ -471,11 +471,11 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     command! DapUIEval call s:dap_or_floaterm("eval")
     command! FocusCode call s:dap_or_floaterm("focus")
     command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
-    command! FloatElementOrFloatermKill call s:dap_or_floaterm("element")
+    command! FloatElementOrFloatermSpecial call s:dap_or_floaterm("element")
     nnoremap <silent>J     :DapUIEval<Cr>
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M-->  :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=>  :FloatElementOrFloatermKill<Cr>
+    nnoremap <silent><M-=>  :FloatElementOrFloatermSpecial<Cr>
     nnoremap <silent>- <cmd>lua require("dap.ui.widgets").preview()<Cr>
 else
     if v:version >= 801 && !has('nvim') && Require('termdebug')
