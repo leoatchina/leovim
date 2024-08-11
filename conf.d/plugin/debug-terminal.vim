@@ -455,7 +455,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
             elseif a:type == "element"
                 lua require("dapui").float_element()
             elseif a:type == "eval"
-                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})<Cr>
+                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
             else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
