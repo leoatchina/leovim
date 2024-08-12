@@ -35,7 +35,7 @@ elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
 " f<Cr>
-if Planned('fzf') && g:complete_engine != 'cmp'
+if Planned('fzf') && (g:complete_engine != 'cmp' || g:symbol_tool !~ 'ctags' || Require('funky'))
     PlugAddOpt 'vim-funky'
     command! FzfFunky call funky#fzf#show()
     nnoremap <silent>f<Cr> :FzfFunky<Cr>
