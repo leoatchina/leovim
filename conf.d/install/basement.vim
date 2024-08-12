@@ -244,6 +244,9 @@ PlugAdd 'sbdchd/neoformat'
 if executable('git') && v:version >= 800 && g:git_version >= 1.85
     PlugAdd 'tpope/vim-fugitive'
     PlugAdd 'junegunn/gv.vim'
+    if g:has_popup_floating && UNIX() && (!Planned('leaderf') || !has('nvim') && !has('patch-9.0.200'))
+        PlugAdd 'APZelos/blamer.nvim'
+    endif
 endif
 " ----------------------------
 " extend Planned function
