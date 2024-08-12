@@ -116,7 +116,7 @@ function! s:grep(...)
         if a:1 < 1
             return
         endif
-        let g:grepper_word = Escape(a:2)
+        let g:grepper_word = a:2
         if a:1 == 1
             let g:grepper_last = g:grepper_word
         else
@@ -135,13 +135,13 @@ function! s:grep(...)
             if executable('rg')
                 let cmd = printf('silent! grep! %s', g:grepper_word)
             else
-                let cmd = printf('vimgrep /%s/j **/*', g:grepper_word)
+                let cmd = printf('vimgrep /%s/j **/*', Escape(g:grepper_word))
             endif
         else
             if executable('rg')
                 let cmd = printf('silent! grep! %s %s', g:grepper_word, GetRootDir())
             else
-                let cmd = printf('vimgrep /%s/j %s/**/*', g:grepper_word, GetRootDir())
+                let cmd = printf('vimgrep /%s/j %s/**/*', Escape(g:grepper_word), GetRootDir())
             endif
         endif
         execute cmd
@@ -156,12 +156,12 @@ command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(2, <q-args>)
 " searchall
 nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection(1)<Cr>
+xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
 nnoremap s. :GrepAllLast<Cr>
 nnoremap s/ :GrepAll<Space>
 " search
 nnoremap s] :Grep <C-r><C-w><Cr>
-xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection(1)<Cr>
+xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
 nnoremap s[ :GrepLast<Cr>
 nnoremap s? :Grep<Space>
 au FileType qf nnoremap <buffer>r :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>

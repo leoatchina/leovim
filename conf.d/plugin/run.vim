@@ -52,6 +52,9 @@ else
     xnoremap ! :<C-u>!<C-R>=GetVisualSelection()<Cr>
 endif
 function! s:asyncrun(...)
+    if !ft == ''
+        call preview#errmsg("file of nofiletype could not be runned.")
+    endif
     w!
     if !has('nvim') && v:version < 801
         let type = 'qf'
