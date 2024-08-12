@@ -72,8 +72,6 @@ if Planned('vim-fugitive')
     " git diff
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
     nnoremap <silent><M-g>[ :Gdiffsplit!<Cr>
-    " gitblame
-    nnoremap <silent>,<Tab> :Git blame<Cr>
     " GV
     if Planned('GV.vim')
         nnoremap <silent><M-g>c :GV!<Cr>
@@ -119,7 +117,10 @@ if PlannedLeaderf()
     nnoremap <silent><M-g><M-l> :Leaderf git log<Cr>
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
     nnoremap <silent><M-g><M-d> :Leaderf git diff --current-file --side-by-side<Cr>
+    nnoremap <silent>,<Tab> :Leaderf git blame<Cr>
     nnoremap <silent>,<Cr> :LeaderfGitInlineBlameToggle<Cr>
+elseif Installed('vim-fugitive')
+    nnoremap <silent>,<Tab> :Git blame<Cr>
 endif
 if PlannedFzf()
     command! GCommands call FzfCallCommands('GCommands', 'G', 'LeaderfGit', ['Glance', 'Gutentag', 'Grep', 'Get'])
