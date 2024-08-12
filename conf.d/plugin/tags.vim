@@ -35,10 +35,10 @@ elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
 " f<Cr>
-if Planned('fzf') && (g:complete_engine != 'cmp' || g:symbol_tool !~ 'tags' || Require('funky'))
+if Planned('fzf')
     PlugAddOpt 'vim-funky'
     command! FzfFunky call funky#fzf#show()
-    nnoremap <silent>f<Cr> :FzfFunky<Cr>
+    nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
 elseif g:symbol_tool =~ 'leaderftags' && PlannedLeaderf()
     nnoremap <silent>f<Cr> :LeaderfFunction<Cr>
 elseif Installed('vim-quickui') && g:symbol_tool =~ 'tags'
