@@ -111,6 +111,12 @@ else
         nnoremap <M-g>U :!git push<Space>
     endif
 endif
+if Installed('blamer.nvim')
+    let g:blamer_date_format = '%Y/%m/%d %H:%M'
+    let g:blamer_show_in_insert_modes = 0
+    let g:blamer_prefix = ' >> '
+    nnoremap <silent>,<Cr> :BlamerToggle<Cr>
+endif
 if PlannedLeaderf()
     nnoremap <silent><M-g><M-i> :Leaderf git<Cr>
     nnoremap <silent><M-g><M-h> :Leaderf git diff HEAD --directly<Cr>
@@ -118,12 +124,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
     nnoremap <silent><M-g><M-d> :Leaderf git diff --current-file --side-by-side<Cr>
     nnoremap <silent>,<Tab> :Leaderf git blame<Cr>
-    if Installed('blamer.nvim')
-        let g:blamer_date_format = '%Y/%m/%d %H:%M'
-        let g:blamer_show_in_insert_modes = 0
-        let g:blamer_prefix = ' >> '
-        nnoremap <silent>,<Cr> :LeaderfGitInlineBlameToggle<Cr>
-    elseif has('path-9.0.200') || has('nvim')
+    if has('path-9.0.200') || has('nvim')
         nnoremap <silent>,<Cr> :LeaderfGitInlineBlameToggle<Cr>
     endif
 elseif Installed('vim-fugitive')
