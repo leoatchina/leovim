@@ -5,8 +5,8 @@ let &termencoding=&enc
 " ------------------------------------
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
 if has('nvim') || HAS_GUI()
-    for c in s:metacode_group
-        let mkey = "<M-" . a:key . ">"
+    for k in s:metacode_group
+        let mkey = "<M-" . k . ">"
         exec printf("map %s <Nop>", mkey)
     endfor
 endif
