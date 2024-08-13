@@ -323,7 +323,7 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " ===============================================================================================================
 let $DEPLOY_DIR = Expand("~/.leovim.d")
 call plug#begin(Expand("$DEPLOY_DIR/pack/add/opt"))
-if filereadable(expand("$DEPLOY_DIR/pack.vim"))
+if filereadable(Expand("$DEPLOY_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
 for vim in split(glob("$INSTALL_DIR/*.vim"), "\n")
