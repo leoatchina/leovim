@@ -1,15 +1,35 @@
 set rtp^=$CONF_D_DIR
 let &termencoding=&enc
+" ------------------------------------
+" Meta key
+" ------------------------------------
+let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
+if has('nvim') || HAS_GUI()
+    for c in s:metacode_group
+        let mkey = "<M-" . a:key . ">"
+        exec printf("map %s <Nop>", mkey)
+    endfor
+endif
+" NOTE: add metacode_group must be execute after map to nop
+for i in range(10)
+    " 48 is ascii of 0
+    call add(s:metacode_group, nr2char(48 + i))
+endfor
+for i in range(26)
+    " 65 is ascii of A
+    call add(s:metacode_group, nr2char(65 + i))
+    " 97 is ascii of a
+    call add(s:metacode_group, nr2char(97 + i))
+endfor
+" ------------------------
+" basic toggle keymap
+" ------------------------
+nnoremap <M-k>f :set nofoldenable! nofoldenable?<Cr>
+nnoremap <M-k>w :set nowrap! nowrap?<Cr>
 nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
 if has('nvim')
     nnoremap <M-k>U :UpdateRemotePlugins<Cr>
 endif
-" ------------------------
-" toggle_modify
-" ------------------------
-nnoremap <M-k>f :set nofoldenable! nofoldenable?<Cr>
-nnoremap <M-k>w :set nowrap! nowrap?<Cr>
-" toggle modifiable
 function! s:toggle_modify() abort
     if &modifiable
         setl nomodifiable
@@ -21,30 +41,6 @@ function! s:toggle_modify() abort
 endfunction
 command! ToggleModity call s:toggle_modify()
 nnoremap <M-k><space> :ToggleModity<Cr>
-" ------------------------------------
-" Meta key
-" ------------------------------------
-" NOTE: add metacode_group must be execute after map_metacode_nop
-let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
-if has('nvim') || HAS_GUI()
-    function! s:map_metacode_nop(key)
-        let mkey = "<M-" . a:key . ">"
-        exec printf("map %s <Nop>", mkey)
-    endfunction
-    for c in s:metacode_group
-        call s:map_metacode_nop(c)
-    endfor
-endif
-for i in range(26)
-    " 65 is ascii of A
-    call add(s:metacode_group, nr2char(65 + i))
-    " 97 is ascii of a
-    call add(s:metacode_group, nr2char(97 + i))
-endfor
-for i in range(10)
-    " 48 is ascii of 0
-    call add(s:metacode_group, nr2char(48 + i))
-endfor
 " ------------------------------------
 " map adjust
 " ------------------------------------
@@ -71,7 +67,6 @@ xnoremap <C-s> <ESC>:w!<Cr>
 nnoremap <leader>W :wa!<Cr>
 xnoremap <leader>W <ESC>:wa!<Cr>
 " buffers mark messages
-nnoremap <leader>b :ls<Cr>:b<Space>
 nnoremap <leader><leader> <C-^>
 " map to <esc>
 inoremap <M-q> <ESC>
