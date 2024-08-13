@@ -112,9 +112,10 @@ else
     endif
 endif
 if Installed('blamer.nvim')
-    let g:blamer_date_format = '%Y/%m/%d %H:%M'
+    let g:blamer_date_format = '%Y/%m/%d'
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '
+    let g:blamer_delay = 500
     nnoremap <silent>,<Cr> :BlamerToggle<Cr>
 endif
 if PlannedLeaderf()
@@ -124,7 +125,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
     nnoremap <silent><M-g><M-d> :Leaderf git diff --current-file --side-by-side<Cr>
     nnoremap <silent>,<Tab> :Leaderf git blame<Cr>
-    if has('path-9.0.200') || has('nvim')
+    if has('patch-9.0.200') || has('nvim')
         nnoremap <silent>,<Cr> :LeaderfGitInlineBlameToggle<Cr>
     endif
 elseif Installed('vim-fugitive')
