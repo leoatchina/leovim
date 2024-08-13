@@ -91,10 +91,11 @@
 - [x] lightline modified
 - [x] run script in qf and show in lightline, refer albertomontesg/lightline-asyncrun
 - [x] suppress <C-c> E5108 error messages
+- [ ] vista_markdown bug
 - [ ] floaterm drop command, ref vim-terminal-help
 - [ ] show current tab's all buffers in tabline
 - [ ] fzf-project
-- [ ] ====== My plugins ======
+# LATER:
 - [x] fzf-registers
 - [ ] vim-funky
   - [x] open bug
