@@ -340,6 +340,15 @@ command! PlugOptUpdate call s:plug_update()
 noremap <silent><leader>U :PlugOptUpdate<Cr>
 call plug#end()
 " ------------------------------
+" set installed
+" ------------------------------
+for [plug, value] in items(g:plugs)
+    let dir = value['dir']
+    if isdirectory(dir)
+        let g:leovim_installed[tolower(plug)] = 1
+    endif
+endfor
+" ------------------------------
 " set $PATH
 " ------------------------------
 let mason_bin = Expand('~/.leovim.d/mason/bin')
@@ -350,15 +359,6 @@ if g:complete_engine != 'cmp' && isdirectory(mason_bin) && $PATH !~ 'mason/bin'
         let $PATH = mason_bin . ':' . $PATH
     endif
 endif
-" ------------------------------
-" set installed
-" ------------------------------
-for [plug, value] in items(g:plugs)
-    let dir = value['dir']
-    if isdirectory(dir)
-        let g:leovim_installed[tolower(plug)] = 1
-    endif
-endfor
 " ===============================================================================================================
 " <M-Key> map for vim
 " ===============================================================================================================
