@@ -83,7 +83,6 @@ cnoremap <M-w> <ESC>
 " --------------------------
 " python_support
 " --------------------------
-let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_exe())
 function! s:get_python_exe()
     try
         if executable('python3')
@@ -99,6 +98,7 @@ function! s:get_python_exe()
         return ""
     endtry
 endfunction
+let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_exe())
 function! s:get_python_version()
     if CYGWIN()
         return 0
