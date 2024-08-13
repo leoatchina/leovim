@@ -73,14 +73,14 @@ if get(s:, 'smart_engine_select', 0)
         else
             let g:complete_engine = 'mcm'
         endif
-    elseif g:node_version >= 16.18 && has('nvim-0.8.1')
-        let g:complete_engine = 'coc'
     elseif has('nvim-0.10')
         if UNIX() || WINDOWS() && HAS_GUI() == 0
             let g:complete_engine = 'cmp'
         else
             let g:complete_engine = 'mcm'
         endif
+    elseif g:node_version >= 16.18 && has('nvim-0.8.1')
+        let g:complete_engine = 'coc'
     elseif UNIX()
         let g:complete_engine = 'mcm'
     elseif v:version >= 800
