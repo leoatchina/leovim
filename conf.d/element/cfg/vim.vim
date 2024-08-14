@@ -41,40 +41,6 @@ function! s:toggle_modify() abort
 endfunction
 command! ToggleModity call s:toggle_modify()
 nnoremap <M-k><space> :ToggleModity<Cr>
-" ------------------------------------
-" map adjust
-" ------------------------------------
-nnoremap <C-m> <Tab>
-nnoremap gQ gw
-xnoremap gQ gw
-nnoremap <M-A> ggVG
-nnoremap <M-:> :
-inoremap <M-:> <ESC>:
-xnoremap <M-:> <ESC>:
-snoremap <M-:> <ESC>:
-cnoremap <M-:> <C-u>
-" remap for cusor move insert mode
-inoremap <M-l> <Right>
-inoremap <M-h> <Left>
-inoremap <M-j> <Down>
-inoremap <M-k> <Up>
-" save
-nnoremap <C-s> :w!<Cr>
-onoremap <C-s> :w!<Cr>
-cnoremap <C-s> w!<Cr>
-inoremap <C-s> <C-o>:w!<Cr>
-xnoremap <C-s> <ESC>:w!<Cr>
-nnoremap <leader>W :wa!<Cr>
-xnoremap <leader>W <ESC>:wa!<Cr>
-" buffers mark messages
-nnoremap <leader><leader> <C-^>
-" map to <esc>
-inoremap <M-q> <ESC>
-xnoremap <M-q> <ESC>
-cnoremap <M-q> <ESC>
-inoremap <M-w> <ESC>
-xnoremap <M-w> <ESC>
-cnoremap <M-w> <ESC>
 " --------------------------
 " python_support
 " --------------------------

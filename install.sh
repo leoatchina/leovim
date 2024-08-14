@@ -103,7 +103,6 @@ else
     success "leovim has been linked to $HOME/.leovim"
 fi
 create_symlinks "$APP_PATH/clean.sh" "$HOME/.leovim.clean"
-create_symlinks "$APP_PATH/jetbrains/idea.vim" "$HOME/.ideavimrc"
 
 # create config
 create_vimrc "$HOME/.vimrc"

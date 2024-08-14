@@ -37,8 +37,6 @@ IF NOT EXIST "%HOME%\.gvimrc" (
 REM mklink
 call del    "%HOME%\_leovim.clean.cmd"
 call mklink "%HOME%\_leovim.clean.cmd" "%APP_PATH%\clean.cmd"
-call del    "%HOME%\_ideavimrc"
-call mklink "%HOME%\_ideavimrc" "%APP_PATH%\jetbrains\idea.vim"
 
 REM mkdir for install
 IF NOT EXIST "%HOME%\.leovim.d" (

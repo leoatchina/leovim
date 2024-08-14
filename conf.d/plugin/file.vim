@@ -375,11 +375,6 @@ if get(g:, 'leovim_openmap', 1)
         endif
     endif
     " --------------------------
-    " open other ides config
-    " --------------------------
-    nnoremap <silent><M-h>V :call TabeOpen("$LEOVIM_DIR/msvc/vs.vim")<Cr>
-    nnoremap <silent><M-h>I :call TabeOpen("$LEOVIM_DIR/jetbrains/idea.vim")<Cr>
-    " --------------------------
     " addtional vim config
     " --------------------------
     if filereadable(expand("~/.leovim.d/after.vim"))
