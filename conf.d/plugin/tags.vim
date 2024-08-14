@@ -24,32 +24,24 @@ if get(g:, 'ctags_type', '') != ''
     endif
     let g:fzf_tags_command = s:fzf_tags_command . ' -R --exclude=' . join(lst, " --exclude=")
 endif
-" T<Cr>
+" F/T<Cr>
 if g:symbol_tool =~ 'leaderftags'
     let g:Lf_Ctags = g:fzf_tags_command
     nnoremap <silent><leader>T :LeaderfTag<Cr>
     nnoremap <silent>T<Cr> :LeaderfBufTagAll<Cr>
+    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
 elseif g:symbol_tool =~ 'fzftags' && executable('perl')
     nnoremap <silent><leader>T :FzfTags<Cr>
 elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
 " f<Cr>
-if Planned('fzf')
+if Installed('fzf', 'fzf.vim')
     PlugAddOpt 'vim-funky'
     command! FzfFunky call funky#fzf#show()
     nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
 elseif g:symbol_tool =~ 'leaderftags' && PlannedLeaderf()
     nnoremap <silent>f<Cr> :LeaderfFunction<Cr>
-elseif Installed('vim-quickui') && g:symbol_tool =~ 'tags'
-    nnoremap <silent>f<Cr> :call quickui#tools#list_function()<Cr>
-endif
-" F<Cr>
-if g:symbol_tool =~ 'leaderftags'
-    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
-elseif Planned('fzf')
-    command! FzfFunkyAll call funky#fzf#show(1)
-    nnoremap <silent>F<Cr> :FzfFunkyAll<Cr>
 endif
 " t<Cr> for tags
 if g:complete_engine == 'coc' && UNIX() && g:ctags_type != ''
@@ -62,35 +54,6 @@ elseif g:symbol_tool =~ 'fzftags'
     nnoremap <silent>t<Cr> :FzfBTags<Cr>
 elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent>t<Cr> :CtrlPBufTag<Cr>
-endif
-" siderbar tag config
-if Installed('vista.vim')
-    let g:vista_update_on_text_changed = 1
-    let g:vista_sidebar_position = 'vertical topleft'
-    let g:vista_sidebar_width = 35
-    let g:vista_echo_cursor   = 0
-    let g:vista_stay_on_open  = 0
-    let g:vista_icon_indent   = ["╰─▸ ", "├─▸ "]
-    let g:vista_executive_for = {
-                \ 'vimwiki': 'markdown',
-                \ 'pandoc': 'markdown',
-                \ 'markdown': 'toc',
-                \ }
-    if g:ctags_type != ''
-        let g:vista_executive_for.go = 'ctags'
-    endif
-elseif Installed('tagbar')
-    let g:tagbar_position = 'leftabove vertical'
-    let g:tagbar_sort  = 0
-    let g:tagbar_width = 35
-    let g:tagbar_autoclose_netrw = 1
-    let g:tagbar_type_css = {
-                \ 'ctagstype' : 'css',
-                \ 'kinds' : [
-                    \ 'c:classes',
-                    \ 's:selectors',
-                    \ 'i:identities'
-                    \ ]}
 endif
 " -------------------------------
 " vim-gutentags
