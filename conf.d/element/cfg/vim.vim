@@ -21,9 +21,40 @@ for i in range(26)
     " 97 is ascii of a
     call add(s:metacode_group, nr2char(97 + i))
 endfor
-" ------------------------
-" basic toggle keymap
-" ------------------------
+" ------------------------------------
+" map enhance
+" ------------------------------------
+nnoremap <M-A> ggVG
+nnoremap gQ gw
+xnoremap gQ gw
+nnoremap <M-:> :
+inoremap <M-:> <ESC>:
+xnoremap <M-:> <ESC>:
+snoremap <M-:> <ESC>:
+cnoremap <M-:> <C-u>
+" remap for cusor move insert mode
+inoremap <M-l> <Right>
+inoremap <M-h> <Left>
+inoremap <M-j> <Down>
+inoremap <M-k> <Up>
+" save
+nnoremap <C-s> :w!<Cr>
+onoremap <C-s> :w!<Cr>
+cnoremap <C-s> w!<Cr>
+inoremap <C-s> <C-o>:w!<Cr>
+xnoremap <C-s> <ESC>:w!<Cr>
+nnoremap <leader>W :wa!<Cr>
+xnoremap <leader>W <ESC>:wa!<Cr>
+" buffers mark messages
+nnoremap <leader><leader> <C-^>
+" map to <esc>
+inoremap <M-q> <ESC>
+xnoremap <M-q> <ESC>
+cnoremap <M-q> <ESC>
+inoremap <M-w> <ESC>
+xnoremap <M-w> <ESC>
+cnoremap <M-w> <ESC>
+" basic set
 nnoremap <M-k>f :set nofoldenable! nofoldenable?<Cr>
 nnoremap <M-k>w :set nowrap! nowrap?<Cr>
 nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
