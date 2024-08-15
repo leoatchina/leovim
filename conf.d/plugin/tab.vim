@@ -34,6 +34,7 @@ function! Vim_NeatBuffer(bufnr, fullname)
         if l:name == ''
             return '[No Name]'
         else
+            " TODO:  short table name
             if a:fullname
                 return fnamemodify(l:name, ':p')
             else
@@ -90,6 +91,7 @@ function! Vim_NeatTabLine()
     endif
     return s
 endfunction
+set tabline=%!Vim_NeatTabLine()
 " get a single tab label in gui
 function! Vim_NeatGuiTabLabel()
     let l:num = v:lnum
@@ -98,9 +100,7 @@ function! Vim_NeatGuiTabLabel()
     let l:bufnr = l:buflist[l:winnr - 1]
     return Vim_NeatBuffer(l:bufnr, 0)
 endfunc
-" set label && tabline
 set guitablabel=%{Vim_NeatGuiTabLabel()}
-set tabline=%!Vim_NeatTabLine()
 " --------------------------
 " TabSwitch / close
 " --------------------------
