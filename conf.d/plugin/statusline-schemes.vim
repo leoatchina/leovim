@@ -315,6 +315,8 @@ function! UpdateLightline() abort
         else
             let g:lightline.colorscheme = 'gruvboxdark'
         endif
+    elseif colors_name =~ 'catppuccin'
+        let g:lightline.colorscheme = "catppuccin"
     elseif colors_name =~ 'tokyonight'
         let g:lightline.colorscheme = "tokyonight"
     elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest' || colors_name =~ 'fox'
