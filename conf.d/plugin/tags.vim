@@ -306,7 +306,11 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
         if open_action == 'list'
             let symbol_found = CocAction(jump_command, v:false)
         else
-            let symbol_found = CocAction(jump_command)
+            if open_action == 'edit'
+                let symbol_found = CocAction(jump_command)
+            else
+                let symbol_found = CocAction(jump_command, open_action)
+            endif
             sleep 200m
             if symbol_found
                 call s:settagstack(winnr, tagname, pos)
