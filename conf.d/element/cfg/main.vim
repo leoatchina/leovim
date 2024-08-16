@@ -1,4 +1,5 @@
 nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
+nnoremap <C-m> <C-i>
 " ----------------------------
 " functions
 " ----------------------------

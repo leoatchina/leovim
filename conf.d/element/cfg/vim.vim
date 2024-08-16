@@ -37,8 +37,6 @@ inoremap <M-l> <Right>
 inoremap <M-h> <Left>
 inoremap <M-j> <Down>
 inoremap <M-k> <Up>
-" <C-o>/<C-m>
-nnoremap <C-m> <C-i>
 " save
 nnoremap <C-s> :w!<Cr>
 onoremap <C-s> :w!<Cr>

@@ -2,7 +2,7 @@ let g:require_group = get(g:, 'preset_group', [])
 
 let g:leovim_osc52_yank = 1
 let g:leovim_whichkey = 1
-let g:leovim_openmap = 0
+let g:leovim_openmap = 1
 let g:nvim_treesitter_install = 0
 
 " if v:version < 800
@@ -21,8 +21,9 @@ let g:nvim_treesitter_install = 0
 
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
 " let g:vscode_user_dir = 'C:\Scoop\persist\vscode\data\user-data\User'
+" let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
 
-let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'query', 'c', 'cpp', 'go', 'rust', 'java']
+let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'c', 'cpp', 'go', 'rust', 'java']
 
 if has('nvim') && HAS_GUI()
     " set guifont=Cascadia\ Code:h10.5

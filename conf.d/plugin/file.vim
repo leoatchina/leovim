@@ -388,36 +388,42 @@ endif
 " ------------------
 if WINDOWS()
     let s:vscode_user_dir = substitute(fnameescape(get(g:, "vscode_user_dir", "")), '/', '\', 'g')
+    let s:cursor_user_dir = substitute(fnameescape(get(g:, "cursor_user_dir", "")), '/', '\', 'g')
 else
     let s:vscode_user_dir = fnameescape(get(g:, "vscode_user_dir", ""))
+    let s:cursor_user_dir = fnameescape(get(g:, "cursor_user_dir", ""))
 endif
 let s:theia_user_dir = Expand('~/.theia-ide')
 silent! call mkdir(s:theia_user_dir, 'p')
 function! s:link_keybindings() abort
     if WINDOWS()
-        if isdirectory(s:vscode_user_dir)
-            let delete_cmd = printf('!del /Q /S %s\keybindings.json', s:vscode_user_dir)
-            execute(delete_cmd)
-            let rmdir_cmd = printf('!rmdir /Q /S %s\snippets', s:vscode_user_dir)
-            execute(rmdir_cmd)
-            " create keybindings.json link
-            let mklink_cmd = printf('!mklink %s %s', s:vscode_user_dir . '\keybindings.json', $CFG_DIR . '\keybindings.json')
-            execute(mklink_cmd)
-            " create snippets link
-            let mklink_cmd = printf('!mklink /d %s %s', s:vscode_user_dir . '\snippets', $LEOVIM_DIR . '\snippets')
-            execute(mklink_cmd)
-        endif
+        for dir in [s:cursor_user_dir, s:vscode_user_dir]
+            if isdirectory(dir)
+                let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
+                execute(delete_cmd)
+                let rmdir_cmd = printf('!rmdir /Q /S %s\snippets', dir)
+                execute(rmdir_cmd)
+                " create keybindings.json link
+                let mklink_cmd = printf('!mklink %s %s', dir . '\keybindings.json', $CFG_DIR . '\keybindings.json')
+                execute(mklink_cmd)
+                " create snippets link
+                let mklink_cmd = printf('!mklink /d %s %s', dir . '\snippets', $LEOVIM_DIR . '\snippets')
+                execute(mklink_cmd)
+            endif
+        endfor
         let delete_cmd = printf('!del /Q /S %s\keymaps.json', s:theia_user_dir)
         execute(delete_cmd)
         let mklink_cmd = printf('!mklink %s %s', s:theia_user_dir . '\keymaps.json', $CFG_DIR . '\keymaps.json')
         execute(mklink_cmd)
     else
-        if isdirectory(s:vscode_user_dir)
-            let ln_cmd = printf('!ln -sf %s %s', $CFG_DIR . '/keybindings.json', s:vscode_user_dir . '/keybindings.json')
-            execute(ln_cmd)
-            let ln_cmd = printf('!ln -sf %s %s', $LEOVIM_DIR . '/snippets', s:vscode_user_dir . '/snippets')
-            execute(ln_cmd)
-        endif
+        for dir in [s:cursor_user_dir, s:vscode_user_dir]
+            if isdirectory(dir)
+                let ln_cmd = printf('!ln -sf %s %s', $CFG_DIR . '/keybindings.json', dir . '/keybindings.json')
+                execute(ln_cmd)
+                let ln_cmd = printf('!ln -sf %s %s', $LEOVIM_DIR . '/snippets', dir . '/snippets')
+                execute(ln_cmd)
+            endif
+        endfor
         let ln_cmd = printf('!ln -sf %s %s', $CFG_DIR . '/keymaps.json', s:theia_user_dir . '/keymaps.json')
         execute(ln_cmd)
     endif

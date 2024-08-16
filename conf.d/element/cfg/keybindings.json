@@ -595,6 +595,10 @@
   {
     "key": "ctrl+alt+r",
     "command": "code-runner.run"
-  }
-  // last
+},
+  // last, open keybindings
+{
+    "key": "ctrl+shift+alt+k",
+    "command": "workbench.action.openGlobalKeybindingsFile"
+}
 ]
