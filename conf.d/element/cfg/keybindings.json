@@ -596,9 +596,43 @@
     "command": "-inlineChat.holdForSpeech",
     "when": "hasSpeechProvider && inlineChatHasProvider && inlineChatVisible && textInputFocus"
   },
+  // cursor ai 
+  {
+    "key": "ctrl+k",
+    "command": "-aipopup.action.modal.generate",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+shift+k",
+    "command": "-aipopup.action.modal.generate",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+.",
+    "command": "-cursor.aichat.toggleChatMode",
+    "when": "(arbitrary function) && (arbitrary function)"
+  },
+  {
+    "key": "ctrl+alt+'",
+    "command": "cursor.aichat.toggleChatMode",
+    "when": "(arbitrary function) && (arbitrary function)"
+  },
+  {
+    "key": "alt+'",
+    "command": "aipopup.action.modal.generate",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+shift+'",
+    "command": "aichat.focus"
+  },
+  {
+    "key": "shift+alt+'",
+    "command": "aichat.open-ai-chat-editor"
+  },
   // last, open keybindings
   {
-      "key": "ctrl+shift+alt+k",
-      "command": "workbench.action.openGlobalKeybindingsFile"
+    "key": "ctrl+shift+alt+,",
+    "command": "workbench.action.openGlobalKeybindingsFile"
   }
 ]
