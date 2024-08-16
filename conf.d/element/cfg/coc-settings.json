@@ -5,6 +5,7 @@
     "codeLens.separator": "//"
   },
   "coc.preferences": {
+    "timeout": 500,
     "useQuickfixForLocations": false,
     "colorSupport": false,
     "extensionUpdateCheck": "daily",
