@@ -91,6 +91,7 @@
 - [x] lightline modified
 - [x] run script in qf and show in lightline, refer albertomontesg/lightline-asyncrun
 - [x] suppress <C-c> E5108 error messages
+- [ ] FunkyQF
 - [ ] vista_markdown bug
 - [ ] floaterm drop command, ref vim-terminal-help
 - [ ] show current tab's all buffers in tabline
@@ -102,8 +103,8 @@
   - [x] preview funky
   - [x] multi buffers
   - [x] jump to another window bug
-  - [ ] FunkyAll not show buffer modified bug
-  - [ ] ctrlp intergrated
+  - [x] ~~FunkyAll not show buffer modified bug~~, actually should do w! before funky functions
+  - [x] ~~ctrlp intergrated~~, using funky#qf#show() instead
   - [ ] README
   - [ ] deploy to github
 - [ ] REPLFloaterm updates.
