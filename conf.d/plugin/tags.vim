@@ -311,7 +311,7 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
             else
                 let symbol_found = CocAction(jump_command, open_action)
             endif
-            sleep 500m
+            sleep 512m
             if symbol_found
                 call s:settagstack(winnr, tagname, pos)
                 call feedkeys("zz", "n")
@@ -328,7 +328,7 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
             let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, open_action)
         endif
         call execute(cmd)
-        sleep 500m
+        sleep 512m
         let symbol_found = get(g:, 'lsp_found', 0)
         if symbol_found
             call s:settagstack(winnr, tagname, pos)
