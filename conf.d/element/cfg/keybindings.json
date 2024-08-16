@@ -457,6 +457,38 @@
     "key": "ctrl+alt+x",
     "command": "-glassit.minimize"
   },
+  // run
+  {
+    "key": "ctrl+alt+r",
+    "command": "code-runner.run"
+  },
+  // ctrl n
+  {
+    "key": "ctrl+n",
+    "command": "-workbench.action.files.newUntitledFile"
+  },
+  {
+    "key": "ctrl+d",
+    "command": "-editor.action.addSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+n",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+alt+n",
+    "command": "welcome.showNewFileEntries"
+  },
+  {
+    "key": "ctrl+alt+meta+n",
+    "command": "-welcome.showNewFileEntries"
+  },
+  {
+    "key": "ctrl+alt+n",
+    "command": "-code-runner.run"
+  },
   // copilot
   {
     "key": "ctrl+alt+\\",
@@ -564,41 +596,9 @@
     "command": "-inlineChat.holdForSpeech",
     "when": "hasSpeechProvider && inlineChatHasProvider && inlineChatVisible && textInputFocus"
   },
-  // ctrl n
-  {
-    "key": "ctrl+n",
-    "command": "-workbench.action.files.newUntitledFile"
-  },
-  {
-    "key": "ctrl+d",
-    "command": "-editor.action.addSelectionToNextFindMatch",
-    "when": "editorFocus"
-  },
-  {
-    "key": "ctrl+n",
-    "command": "editor.action.addSelectionToNextFindMatch",
-    "when": "editorFocus"
-  },
-  {
-    "key": "ctrl+alt+n",
-    "command": "welcome.showNewFileEntries"
-  },
-  {
-    "key": "ctrl+alt+meta+n",
-    "command": "-welcome.showNewFileEntries"
-  },
-  {
-    "key": "ctrl+alt+n",
-    "command": "-code-runner.run"
-  },
-  // run
-  {
-    "key": "ctrl+alt+r",
-    "command": "code-runner.run"
-},
   // last, open keybindings
-{
-    "key": "ctrl+shift+alt+k",
-    "command": "workbench.action.openGlobalKeybindingsFile"
-}
+  {
+      "key": "ctrl+shift+alt+k",
+      "command": "workbench.action.openGlobalKeybindingsFile"
+  }
 ]
