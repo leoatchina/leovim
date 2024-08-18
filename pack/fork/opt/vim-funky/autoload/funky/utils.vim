@@ -41,6 +41,19 @@ function! funky#utils#new()
     return deepcopy(s:fu)
 endfunction
 
+function! funky#utils#buffers()
+    redir => ilist
+    silent! ls
+    redir END
+    let lst = split(ilist, "\n")
+    let buffers = {}
+    for each in lst
+        let sp = split(each)[:2]
+        let buffers[sp[0]] = sp[2][1:-2]
+    endfor
+    return buffers
+endfunction
+
 function! s:fu.build_path(...)
     if a:0 == 0 | return '' | endif
     let sp = '/'
