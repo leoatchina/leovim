@@ -38,7 +38,7 @@ endif
 " f<Cr>
 if g:complete_engine == 'cmp'
     PlugAddOpt 'vim-funky'
-    command! Funky call funky#qf#show(0)
+    command! Funky call funky#qf#show()
     nnoremap <silent>f<Cr> :w!<Cr>:Funky<Cr>
 elseif Installed('fzf', 'fzf.vim')
     PlugAddOpt 'vim-funky'

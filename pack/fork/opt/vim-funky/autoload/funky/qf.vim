@@ -1,4 +1,4 @@
-function! funky#qf#show(type) abort
+function! funky#qf#show(...) abort
     let buffers = funky#utils#buffers()
     if a:0 && a:1 > 0
         let funkies = funky#funky(1)
