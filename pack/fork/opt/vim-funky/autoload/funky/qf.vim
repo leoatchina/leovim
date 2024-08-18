@@ -1,6 +1,10 @@
 function! funky#qf#show(type) abort
     let buffers = funky#utils#buffers()
-    let funkies = funky#funky(a:type)
+    if a:0 && a:1 > 0
+        let funkies = funky#funky(1)
+    else
+        let funkies = funky#funky(0)
+    endif
     let candicates = []
     for each in funkies
         let sp = split(each, "\t")
