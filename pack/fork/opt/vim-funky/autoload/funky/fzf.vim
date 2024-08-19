@@ -52,15 +52,7 @@ function! s:fzf_accept(item) abort
 endfunction
 
 function! funky#fzf#funky(funkies)
-    redir => ilist
-    silent! ls
-    redir END
-    let lst = split(ilist, "\n")
-    let buffers = {}
-    for each in lst
-        let sp = split(each)[:2]
-        let buffers[sp[0]] = sp[2][1:-2]
-    endfor
+    let buffers = funky#utils#buffers()
     let candicates = []
     for each in a:funkies
         let bufnr = matchstr(each, ':\zs\d\+\ze:')
