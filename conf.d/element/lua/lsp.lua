@@ -240,7 +240,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- LspUI
     map(nx, "<F2>", [[<Cmd>LspUI rename<Cr>]], opts_echo)
     map(nx, "<M-a>", [[<Cmd>LspUI code_action<Cr>]], opts_silent)
-    map(nx, "<leader>I", [[<Cmd>LspUI inlay_hint<Cr>]], opts_echo)
     -- lsp info/restart
     map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
     map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
@@ -287,9 +286,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- inlay_hint
     if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      map({ 'n', 'x' }, "<leader>I", function()
-        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-      end, opts_echo)
+      map(nx, "<leader>I", [[<Cmd>LspUI inlay_hint<Cr>]], opts_echo)
     end
     -- codelens
     if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
