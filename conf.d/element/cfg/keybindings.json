@@ -608,16 +608,6 @@
     "when": "editorFocus"
   },
   {
-    "key": "ctrl+.",
-    "command": "-cursor.aichat.toggleChatMode",
-    "when": "(arbitrary function) && (arbitrary function)"
-  },
-  {
-    "key": "ctrl+alt+'",
-    "command": "cursor.aichat.toggleChatMode",
-    "when": "(arbitrary function) && (arbitrary function)"
-  },
-  {
     "key": "alt+'",
     "command": "aipopup.action.modal.generate",
     "when": "editorFocus"
@@ -629,6 +619,14 @@
   {
     "key": "shift+alt+'",
     "command": "aichat.open-ai-chat-editor"
+  },
+  {
+    "key": "ctrl+alt+'",
+    "command": "aichat.open-ai-chat-side-pane"
+  },
+  {
+    "key": "ctrl+shift+alt+'",
+    "command": "aichat.close-sidebar"
   },
   // last, open keybindings
   {
