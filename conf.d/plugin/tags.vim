@@ -36,16 +36,14 @@ elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
 " f<Cr>
-if g:complete_engine == 'cmp'
-    PlugAddOpt 'vim-funky'
-    command! Funky call funky#qf#show()
-    nnoremap <silent>f<Cr> :w!<Cr>:Funky<Cr>
-elseif Installed('fzf', 'fzf.vim')
+if Installed('fzf', 'fzf.vim') && g:complete_engine != 'cmp'
     PlugAddOpt 'vim-funky'
     command! FzfFunky call funky#fzf#show()
     nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
-elseif g:symbol_tool =~ 'leaderftags' && PlannedLeaderf()
-    nnoremap <silent>f<Cr> :LeaderfFunction<Cr>
+else
+    PlugAddOpt 'vim-funky'
+    command! QfFunky call funky#qf#show()
+    nnoremap <silent>f<Cr> :w!<Cr>:QfFunky<Cr>
 endif
 " t<Cr> for tags
 if g:complete_engine == 'coc' && UNIX() && g:ctags_type != ''

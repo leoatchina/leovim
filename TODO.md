@@ -91,9 +91,8 @@
 - [x] lightline modified
 - [x] run script in qf and show in lightline, refer albertomontesg/lightline-asyncrun
 - [x] suppress <C-c> E5108 error messages
-- [x] FunkyQF
 - [ ] vista_markdown bug
-- [ ] ~show current tab's all buffers in tabline~, may using smart tab line width
+- [ ] ~~show current tab's all buffers in tabline~~, may using smart tab line width
 - [ ] floaterm drop command, ref vim-terminal-help
 - [ ] fzf-project
 # LATER:
