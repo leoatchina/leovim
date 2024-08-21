@@ -154,32 +154,33 @@ if Planned('vim-vsnip')
         imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
     endif
-    function! MapTabCr(istab) abort
-        let istab = a:istab
-        if pumvisible()
-            if istab
-                if empty(get(v:, 'completed_item', {}))
-                    return "\<C-n>"
-                elseif vsnip#available(1)
-                    return "\<Plug>(vsnip-expand-or-jump)"
+    if !AdvCompEngine()
+        function! MapTabCr(tab) abort
+            if pumvisible()
+                if a:tab
+                    if empty(get(v:, 'completed_item', {}))
+                        return "\<C-n>"
+                    elseif vsnip#available(1)
+                        return "\<Plug>(vsnip-expand-or-jump)"
+                    else
+                        return "\<C-y>"
+                    endif
                 else
                     return "\<C-y>"
                 endif
             else
-                return "\<C-y>"
+                if a:tab
+                    return "\<Tab>"
+                else
+                    return "\<Cr>"
+                endif
             endif
-        else
-            if istab
-                return "\<Tab>"
-            else
-                return "\<Cr>"
-            endif
+        endfunction
+        au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
+        au WinEnter,BufEnter * imap <silent><Cr> <C-R>=MapTabCr(0)<Cr>
+        if g:complete_engine == 'mcm'
+            au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
         endif
-    endfunction
-    au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
-    au WinEnter,BufEnter * imap <silent><Cr> <C-R>=MapTabCr(0)<Cr>
-    if g:complete_engine == 'mcm'
-        au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
     endif
 else
     imap <silent><C-b> <C-o>I
