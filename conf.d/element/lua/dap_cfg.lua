@@ -107,7 +107,7 @@ if Installed('nvim-dap-virtual-text') then
     virt_lines = true,
     commented = true
   })
-  vim.keymap.set({"n", "x"}, "=",
+  vim.keymap.set("n", "=",
     [[<Cmd>DapVirtualTextToggle<Cr>]],
     { noremap = true, silent = false }
   )
