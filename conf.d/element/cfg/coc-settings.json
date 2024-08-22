@@ -8,7 +8,7 @@
     "timeout": 500,
     "useQuickfixForLocations": false,
     "colorSupport": false,
-    "extensionUpdateCheck": "daily",
+    "extensionUpdateCheck": "weekly",
     "messageLevel": "error",
     "listOfWorkspaceEdit": "location",
     "hoverTarget": "float",
