@@ -321,16 +321,19 @@ if has('nvim') || v:version >= 801
     nnoremap <leader>r<Tab> :AsyncTaskTemplate<Cr>
     nnoremap <leader>r<Space> :AsyncTaskCommon<Cr>
     " asynctask shortcuts
-    nnoremap <leader>ra :AsyncTask
+    command! AsyncTaskCommands call FzfCallCommands('AsyncTaskCommands', 'AsyncTask')
+    nnoremap <leader>ro :AsyncTaskCommands<Cr>
     nnoremap <leader>rm :AsyncTaskMacro<Cr>
     nnoremap <leader>re :AsyncTaskEdit<Space>
     " run shortcuts
-    nnoremap <leader>rr :AsyncTask project-run<Cr>
     nnoremap <leader>ri :AsyncTask project-init<Cr>
+    nnoremap <leader>rr :AsyncTask project-run<Cr>
+    nnoremap <leader>rt :AsyncTask project-test<Cr>
     nnoremap <leader>rb :AsyncTask project-build<Cr>
     nnoremap <leader>rc :AsyncTask project-compile<Cr>
     nnoremap <leader>rd :AsyncTask project-debug<Cr>
-    nnoremap <leader>rt :AsyncTask project-test<Cr>
+    nnoremap <leader>ru :AsyncTask project-push<Cr>
+    nnoremap <leader>rp :AsyncTask project-pull<Cr>
     function! AsyncTaskProfileLoop() abort
         if get(g:, 'asynctasks_profile', '') == ''
             let g:asynctasks_profile = 'debug'
