@@ -598,35 +598,12 @@
   },
   // cursor ai 
   {
-    "key": "ctrl+k",
-    "command": "-aipopup.action.modal.generate",
-    "when": "editorFocus"
-  },
-  {
     "key": "ctrl+shift+k",
-    "command": "-aipopup.action.modal.generate",
-    "when": "editorFocus"
-  },
-  {
-    "key": "alt+'",
-    "command": "aipopup.action.modal.generate",
-    "when": "editorFocus"
-  },
-  {
-    "key": "ctrl+shift+'",
-    "command": "aichat.focus"
-  },
-  {
-    "key": "shift+alt+'",
-    "command": "aichat.open-ai-chat-editor"
-  },
-  {
-    "key": "ctrl+alt+'",
     "command": "aichat.open-ai-chat-side-pane"
   },
   {
-    "key": "ctrl+shift+alt+'",
-    "command": "aichat.close-sidebar"
+    "key": "ctrl+alt+k",
+    "command": "aichat.open-ai-chat-editor"
   },
   // last, open keybindings
   {
