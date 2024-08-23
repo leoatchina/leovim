@@ -317,7 +317,7 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
             if symbol_found
                 call s:settagstack(winnr, tagname, pos)
                 call feedkeys("zz", "n")
-                call preview#cmdmsg("found by coc " . jump_command, 1)
+                echo "found by coc " . jump_command | sleep 2
             endif
         endif
     " --------------------------
@@ -335,7 +335,7 @@ function! SymbolOrTagOrSearchAll(method, ...) abort
         if symbol_found
             call s:settagstack(winnr, tagname, pos)
             call feedkeys("zz", "n")
-            call preview#cmdmsg("found by lspui " . method, 1)
+            echo "found by lspui " . method | sleep 2
         endif
     endif
     " 利用errormsg判断是否找到,
