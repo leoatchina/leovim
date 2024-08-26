@@ -162,17 +162,6 @@ function! VIW()
 endfunction
 nnoremap SS :call VIW()<Cr>
 " ------------------------
-" surround
-" ------------------------
-nmap SW viw<Plug>VSurround
-nmap SL v$<Plug>VSurround
-nmap SH v^<Plug>VSurround
-nmap SJ vt<Space><Plug>VSurround
-nmap SK vT<Space><Plug>VSurround
-nnoremap S) va)hol
-nnoremap S} va}hol
-nnoremap S] va]hol
-" ------------------------
 " case change
 " ------------------------
 nnoremap ZU m1gUiw`1
@@ -292,6 +281,8 @@ let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim-0.8')
     PlugAddOpt 'flash.nvim'
     lua require("flash_cfg")
+    nmap SJ vt<Space><Cr>S
+    nmap SK vT<Space><Cr>S
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
@@ -300,7 +291,18 @@ else
     nmap ,, <Plug>(clever-f-repeat-back)
     xmap ,, <Plug>(clever-f-repeat-back)
     PlugAddOpt 'clever-f.vim'
+    nmap SJ vt<Space>S
+    nmap SK vT<Space>S
 endif
+" ------------------------
+" surround
+" ------------------------
+nmap SW viw<Plug>VSurround
+nmap SL v$<Plug>VSurround
+nmap SH v^<Plug>VSurround
+nnoremap S) va)hol
+nnoremap S} va}hol
+nnoremap S] va]hol
 " --------------------------
 " textobj
 " --------------------------
