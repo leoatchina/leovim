@@ -52,7 +52,7 @@ alias nvi='bash ~/.local/bin/nvi.sh'
 
 
 function envs() {
-    conda activate $(conda info --env | grep -v "^#" | fzf | awk '{print $NF}')
+    conda activate $(conda info --env | grep -v "^#" | fzf --reverse | awk '{print $NF}')
 }
 
 function d2c() {
@@ -73,7 +73,7 @@ function d2c() {
 }
 
 function sf() {
-    FILE=$(rg --column --no-heading -e "$1" | fzf | awk -F : '{print $1,"+"$2}')
+    FILE=$(rg --no-heading -e "$1" | fzf --reverse | awk -F : '{print $1,"+"$2}')
     if [ -n "$FILE" ]; then
         vim $FILE
     fi
