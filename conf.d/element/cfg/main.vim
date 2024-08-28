@@ -515,7 +515,7 @@ if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
 " ------------------------
-" vscode or (neo)vim
+" open_in_other
 " ------------------------
 function! s:open_in_other()
     if exists('g:vscode') && executable(get(g:, 'open_vim', ''))
@@ -530,6 +530,57 @@ function! s:open_in_other()
 endfunction
 command! OpenInOther call s:open_in_other()
 nnoremap <silent>gO :OpenInOther<Cr>
+" ------------------------
+" open url/file under cursor
+" ------------------------
+function! s:get_cursor_pos(text, col)
+    " Find the start location
+    let col = a:col
+    while col >= 0 && a:text[col] =~ '\f'
+        let col = col - 1
+    endwhile
+    let col = col + 1
+    " Match file name and position
+    let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
+    if len(m) > 0
+        return [m[1], m[2], m[3]]
+    endif
+    return []
+endfunc
+function! s:open_file_in_editor(text, col)
+    let l:url = textobj#uri#open_uri()
+    redraw!
+    if exists('l:url') && len(l:url)
+        echom 'Opening "' . l:url . '"'
+        return
+    endif
+    if executable(get(g:, 'open_edior', 'code'))
+        let editor = get(g:, 'open_edior', 'code') . ' --goto'
+    else
+        echom "No URL found, and no editor executable"
+        return
+    endif
+    " location 0: file, 1: row, 2: column
+    let location = s:get_cursor_pos(a:text, a:col)
+    if location[0] != '' && filereadable(location[0])
+        if location[1] != ''
+            if location[2] != ''
+                exec "! " . editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
+            else
+                exec "! " . editor . " " . location[0] . ":" . str2nr(location[1])
+            endif
+        else
+            exec "! " . editor . " " . location[0]
+        endif
+    else
+        echo "Not URL found, and not a valid file path."
+    endif
+endfunc
+command! OpenLink call s:open_file_in_editor(getline("."), col("."))
+nnoremap <silent>go :OpenLink<cr>
+" --------------------------------------------
+" vscode or (neo)vim 's differnt config
+" --------------------------------------------
 if exists('g:vscode')
     imap <C-a> <ESC>ggVG
     xmap <C-a> <ESC>ggVG

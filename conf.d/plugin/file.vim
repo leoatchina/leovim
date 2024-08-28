@@ -430,66 +430,6 @@ function! s:link_keybindings() abort
 endfunction
 command! LinkKeyBindings call s:link_keybindings()
 nnoremap <M-h>K :LinkKeyBindings<Cr>
-" open file under cursor
-function! s:get_cursor_pos(text, col)
-    " Find the start location
-    let col = a:col
-    while col >= 0 && a:text[col] =~ '\f'
-        let col = col - 1
-    endwhile
-    let col = col + 1
-    " Match file name and position
-    let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
-    if len(m) > 0
-        return [m[1], m[2], m[3]]
-    endif
-    return []
-endfunc
-function! s:open_file_in_editor(editor, text, col)
-    let location = s:get_cursor_pos(a:text, a:col)
-    if a:editor == 'code'
-        let editor = 'code --goto'
-    else
-        let editor = a:editor
-    endif
-    " location 0: file, 1: row, 2: column
-    if location[0] != ''
-        if location[1] != ''
-            if location[2] != ''
-                if editor =~ 'code'
-                    let command = editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
-                else
-                    let command = editor . " --column " . str2nr(location[2]) . " " . location[0] . ":" . str2nr(location[1])
-                endif
-                if Installed('asyncrun.vim')
-                    exec "AsyncRun -silent " . command
-                else
-                    exec "! " . command
-                endif
-            else
-                let command = editor . " " . location[0] . ":" . str2nr(location[1])
-                if Installed('asyncrun.vim')
-                    exec "AsyncRun -silent " . command
-                else
-                    exec "! " . command
-                endif
-            endif
-        else
-            let command = editor . " " . location[0]
-            if Installed('asyncrun.vim')
-                exec "AsyncRun -silent " . command
-            else
-                exec "! " . command
-            endif
-        endif
-    else
-        echo "Not a valid file path"
-    endif
-endfunc
-if executable('code')
-    command! OpenFileLinkInVSCode call s:open_file_in_editor(get(g:, 'editor_command', 'code'), getline("."), col("."))
-    nnoremap <silent>go :OpenFileLinkInVSCode<cr>
-endif
 " ------------------
 " delete tmp files
 " ------------------
