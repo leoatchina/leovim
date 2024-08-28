@@ -17,7 +17,7 @@ let g:nvim_treesitter_install = 0
 
 " call AddRequire('c', 'rust', 'go', 'java')
 
-" let g:vim_path="nvim.exe"
+" let g:open_vim="nvim.exe"
 
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
 " let g:vscode_user_dir = 'C:\Scoop\persist\vscode\data\user-data\User'

@@ -518,10 +518,14 @@ endif
 " vscode or (neo)vim
 " ------------------------
 function! s:open_in_other()
-    if executable(get(g:, 'vim_path', '')) && exists('g:vscode')
+    if exists('g:vscode') && executable(get(g:, 'open_vim', ''))
         call VSCodeNotify('copyFilePath')
-        let p = fnameescape(@*)
-        execute printf('!%s +%d "%s"', g:vim_path, line('.'), p)
+        execute printf('!%s +%d "%s"', g:open_vim, line('.'), fnameescape(@*))
+    elseif !exists('g:vscode') && executable(get(g:, 'open_editor', 'code'))
+        let editor = get(g:, 'open_editor', 'code')
+        silent! exec printf("!%s --goto %s:%d", editor, Expand("%:p"), line("."))
+    else
+        echom "Cannot open current file in other editor."
     endif
 endfunction
 command! OpenInOther call s:open_in_other()
