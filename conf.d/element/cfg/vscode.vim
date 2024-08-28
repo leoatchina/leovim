@@ -1,16 +1,4 @@
 " ------------------------
-" open in (neo)vim
-" ------------------------
-if executable(get(g:, 'vim_path', ''))
-    function! s:open_in_vim()
-        call VSCodeNotify('copyFilePath')
-        let p = fnameescape(@*)
-        execute printf('!%s +%d "%s"', g:vim_path, line('.'), p)
-    endfunction
-    command! OpenInVim call s:open_in_vim()
-    nnoremap <silent><Tab> :OpenInVim<Cr>
-endif
-" ------------------------
 " basic enhanced shortcut
 " ------------------------
 nnoremap <Cr> <Cmd>lua require('vscode-neovim').action("workbench.action.navigateForward")<CR>

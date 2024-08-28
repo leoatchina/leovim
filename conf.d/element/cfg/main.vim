@@ -517,6 +517,15 @@ endif
 " ------------------------
 " vscode or (neo)vim
 " ------------------------
+function! s:open_in_other()
+    if executable(get(g:, 'vim_path', '')) && exists('g:vscode')
+        call VSCodeNotify('copyFilePath')
+        let p = fnameescape(@*)
+        execute printf('!%s +%d "%s"', g:vim_path, line('.'), p)
+    endif
+endfunction
+command! OpenInOther call s:open_in_other()
+nnoremap <silent>gO :OpenInOther<Cr>
 if exists('g:vscode')
     imap <C-a> <ESC>ggVG
     xmap <C-a> <ESC>ggVG

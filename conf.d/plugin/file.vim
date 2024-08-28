@@ -430,6 +430,7 @@ function! s:link_keybindings() abort
 endfunction
 command! LinkKeyBindings call s:link_keybindings()
 nnoremap <M-h>K :LinkKeyBindings<Cr>
+" open file under cursor
 function! s:get_cursor_pos(text, col)
     " Find the start location
     let col = a:col
@@ -486,19 +487,8 @@ function! s:open_file_in_editor(editor, text, col)
     endif
 endfunc
 if executable('code')
-    function! s:open_in_vscode()
-        if Installed('asyncrun.vim')
-            let cmd = printf("AsyncRun code --goto %s:%d", Expand("%:p"), line("."))
-        else
-            let cmd = printf("!code --goto %s:%d", Expand("%:p"), line("."))
-        endif
-        silent! exec cmd
-    endfunction
-    command! OpenInVSCode call s:open_in_vscode()
-    nnoremap <silent><M-j>o :OpenInVSCode<Cr>
-    " NOTE: open file under line in vscode
-    command! OpenFileLinkInVSCode call s:open_file_in_editor("code", getline("."), col("."))
-    nnoremap <silent><M-j>f :OpenFileLinkInVSCode<cr>
+    command! OpenFileLinkInVSCode call s:open_file_in_editor(get(g:, 'editor_command', 'code'), getline("."), col("."))
+    nnoremap <silent>go :OpenFileLinkInVSCode<cr>
 endif
 " ------------------
 " delete tmp files
