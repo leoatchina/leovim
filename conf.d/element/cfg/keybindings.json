@@ -186,10 +186,6 @@
     "key": "alt+.",
     "command": "references-view.findImplementations"
   },
-  {
-    "key": "ctrl+alt+.",
-    "command": "references-view.showCallHierarchy"
-  },
   // references
   {
     "key": "alt+/",
@@ -200,25 +196,6 @@
     "key": "shift+alt+f12",
     "command": "-references-view.findReferences",
     "when": "editorHasReferenceProvider"
-  },
-  // incoming outgoing calls
-  {
-    "key": "shift+alt+h",
-    "command": "-editor.showCallHierarchy",
-    "when": "editorHasCallHierarchyProvider && editorTextFocus && !inReferenceSearchEditor"
-  },
-  {
-    "key": "shift+alt+h",
-    "command": "-references-view.showCallHierarchy",
-    "when": "editorHasCallHierarchyProvider"
-  },
-  {
-    "key": "alt+l",
-    "command": "references-view.showIncomingCalls"
-  },
-  {
-    "key": "alt+h",
-    "command": "references-view.showOutgoingCalls"
   },
   // insert mode up/down
   {

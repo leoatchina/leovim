@@ -27,11 +27,14 @@ nnoremap <leader>a <Cmd>lua require('vscode-neovim').action("editor.action.sourc
 " symbol
 nnoremap <leader>t <Cmd>lua require('vscode-neovim').action("workbench.action.gotoSymbol")<Cr>
 nnoremap <leader>e <Cmd>lua require('vscode-neovim').action("editor.action.accessibleViewGoToSymbol")<Cr>
+" incoming/outgoing calls
+nnoremap gl <Cmd>lua require('vscode-neovim').action("references-view.showOutgoingCalls")<Cr>
+nnoremap gh <Cmd>lua require('vscode-neovim').action("references-view.showIncomingCalls")<Cr>
 " ------------------------
 " format
 " ------------------------
-xnoremap Q <Cmd>lua require('vscode-neovim').call('editor.action.formatSelection')<CR>
-nnoremap Q <Cmd>lua require('vscode-neovim').call('editor.action.formatDocument.multiple')<CR>
+xnoremap Q <Cmd>lua require('vscode-neovim').action('editor.action.formatSelection')<CR>
+nnoremap Q <Cmd>lua require('vscode-neovim').action('editor.action.formatDocument.multiple')<CR>
 " ------------------------
 " vscode speicially mapping
 " ------------------------
