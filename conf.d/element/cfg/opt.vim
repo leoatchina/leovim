@@ -12,12 +12,14 @@ let g:nvim_treesitter_install = 0
 " call AddRequire('r')
 " call AddRequire('web')
 " call AddRequire('wubi')
+" call AddRequire('debug')
 " call AddRequire('query')
 " call AddRequire('markdown')
 
 " call AddRequire('c', 'rust', 'go', 'java')
 
 " let g:open_vim="nvim.exe"
+" let g:open_editor="code.exe"
 
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
 " let g:vscode_user_dir = 'C:\Scoop\persist\vscode\data\user-data\User'
