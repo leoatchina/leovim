@@ -28,8 +28,8 @@ nnoremap <leader>a <Cmd>lua require('vscode-neovim').action("editor.action.sourc
 nnoremap <leader>t <Cmd>lua require('vscode-neovim').action("workbench.action.gotoSymbol")<Cr>
 nnoremap <leader>e <Cmd>lua require('vscode-neovim').action("editor.action.accessibleViewGoToSymbol")<Cr>
 " incoming/outgoing calls
-nnoremap gl <Cmd>lua require('vscode-neovim').action("references-view.showOutgoingCalls")<Cr>
-nnoremap gh <Cmd>lua require('vscode-neovim').action("references-view.showIncomingCalls")<Cr>
+nnoremap <leader>l <Cmd>lua require('vscode-neovim').action("references-view.showOutgoingCalls")<Cr>
+nnoremap <leader>h <Cmd>lua require('vscode-neovim').action("references-view.showIncomingCalls")<Cr>
 " ------------------------
 " format
 " ------------------------
