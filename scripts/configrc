@@ -73,7 +73,10 @@ function d2c() {
 }
 
 function sf() {
-    FILE=$(rg --no-heading -e "$1" | fzf --reverse | awk -F : '{print $1,"+"$2}')
+    FILE=$(rg --column --no-heading -e "$1" -g "$2" | fzf -d':' --reverse \
+        --bind 'ctrl-]:execute(tmux split-window -h "/root/.local/nvim-linux64/bin/nvim +{2} {1}")' \
+        --bind 'ctrl-x:execute(tmux split-window -v "/root/.local/nvim-linux64/bin/nvim +{2} {1}")' \
+        | awk -F : '{print $1,"+"$2}')
     if [ -n "$FILE" ]; then
         vim $FILE
     fi
