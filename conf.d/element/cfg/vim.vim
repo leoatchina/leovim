@@ -95,7 +95,7 @@ function! s:get_python_exe()
 endfunction
 let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_exe())
 function! s:get_python_version()
-    if CYGWIN()
+    if WIN32UNIX()
         return 0
     endif
     try

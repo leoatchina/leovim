@@ -171,7 +171,7 @@ endif
 " ----------------------------
 " schemes && textobj
 " ----------------------------
-if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX() && !CYGWIN())
+if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', LINUX() || MACOS())
     PlugAdd 'kevinhwang91/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 if Planned('nvim-treesitter')

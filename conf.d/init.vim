@@ -16,7 +16,7 @@ endfunction
 function! MACOS()
     return has('macunix')
 endfunction
-function! CYGWIN()
+function! WIN32UNIX()
     return has('win32unix') && !has('macunix')
 endfunction
 function! LINUX()
