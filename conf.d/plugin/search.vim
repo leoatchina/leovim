@@ -251,7 +251,7 @@ if exists(":LeaderfSearchAll")
     xnoremap <C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
     nnoremap <C-f>/ :LeaderfSearchAll<Space>
     nnoremap <C-f><C-f> :LeaderfSearch<Space>
-    xnoremap <C-f><C-f> :LeaderfSearch <C-r>=GetVisualSelection()<Cr>
+    xnoremap <C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
     " recall previous next recall
     nnoremap <silent><nowait><C-f>; :Leaderf rg --next<Cr>
     nnoremap <silent><nowait><C-f>, :Leaderf rg --previous<Cr>
