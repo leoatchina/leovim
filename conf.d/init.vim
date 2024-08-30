@@ -10,27 +10,24 @@ endif
 " --------------------------
 " system check functions
 " --------------------------
-function! CYGWIN()
-    return has('win32unix') && !has('macunix')
-endfunction
 function! WINDOWS()
     return has('win32') || has('win64')
 endfunction
-function! LINUX()
-    return has('unix') && !has('macunix') && !has('win32unix')
-endfunction
 function! MACOS()
     return has('macunix')
+endfunction
+function! CYGWIN()
+    return has('win32unix') && !has('macunix')
+endfunction
+function! LINUX()
+    return has('unix') && !has('macunix') && !has('win32unix')
 endfunction
 function! UNIX()
     return has('unix') && !has('win32unix')
 endfunction
 function! MACVIM()
-    return has('gui_running') && MACOS()
+    return has('gui_running') && has('macunix')
 endfunction
-if MACVIM()
-    set macmeta
-endif
 " --------------------------
 " gui_running && OS
 " --------------------------

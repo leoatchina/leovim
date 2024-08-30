@@ -3,6 +3,9 @@ let &termencoding=&enc
 " ------------------------------------
 " Meta key
 " ------------------------------------
+if MACVIM()
+    set macmeta
+endif
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
 if has('nvim') || HAS_GUI()
     for k in s:metacode_group
