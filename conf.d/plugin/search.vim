@@ -1,9 +1,9 @@
-if PrefFzf()
-    nnoremap <silent><nowait><M-l><M-l> :FzfBLines<Cr>
-    nnoremap <silent><nowait><M-l><M-a> :FzfLines<Cr>
-elseif PlannedLeaderf()
+if PlannedLeaderf()
     nnoremap <silent><nowait><M-l><M-l> :Leaderf line --no-sort<Cr>
     nnoremap <silent><nowait><M-l><M-a> :Leaderf line --all --no-sort<Cr>
+elseif PlannedFzf()
+    nnoremap <silent><nowait><M-l><M-l> :FzfBLines<Cr>
+    nnoremap <silent><nowait><M-l><M-a> :FzfLines<Cr>
 else
     nnoremap <silent><nowait><M-l><M-l> :CtrlPLine<Cr>
 endif
