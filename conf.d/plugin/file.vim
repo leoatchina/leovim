@@ -211,7 +211,7 @@ if has('nvim') && PlannedCoc()
     endfunction
     command! CocFile call s:coc_file()
     nnoremap <silent><nowait><leader>e :CocFile<Cr>
-elseif executable('yazi') && g:has_popup_floating
+elseif executable('yazi') && g:has_popup_floating && (UNIX() || WINDOWS() && has('nvim'))
     command! FloatermYazi call s:floaterm('yazi')
     nnoremap <silent><nowait><leader>e :FloatermYazi<Cr>
 elseif executable('ranger') && g:has_popup_floating
