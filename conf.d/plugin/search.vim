@@ -174,7 +174,7 @@ cnoremap <M-S> cfdo up
 if PlannedFzf()
     if executable('rg')
         command! -bang -nargs=* FzfRG call fzf#vim#grep(
-                    \ 'rg --vimgrep --no-heading --smart-case --color=always ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' ' . FindRootDir(),
+                    \ 'rg --vimgrep --no-heading --smart-case --color=always ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' ' . GetRootDir(),
                     \ fzf#vim#with_preview(),
                     \ <bang>0)
     endif

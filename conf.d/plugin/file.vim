@@ -183,21 +183,6 @@ endif
 nnoremap <leader><Cr> :e!<Cr>
 nnoremap <leader>E :e<Space>
 " ---------------------------------
-" file browser
-" ---------------------------------
-if has('patch-8.1.2269') || has('nvim')
-    source $CFG_DIR/fern.vim
-endif
-if has('nvim') && PlannedCoc()
-    function! s:coc_file() abort
-        exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
-    endfunction
-    command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><leader>e :CocFile<Cr>
-elseif Installed('fern.vim')
-    nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
-endif
-" ---------------------------------
 " Floaterm
 " ---------------------------------
 if Installed('vim-floaterm')
@@ -213,13 +198,27 @@ if Installed('vim-floaterm')
             endif
         endif
     endfunction
-    if executable('yazi')
-        command! FloatermYazi call s:floaterm('yazi')
-        nnoremap <silent><leader>` :FloatermYazi<Cr>
-    elseif executable('ranger')
-        command! FloatermRanger call s:floaterm('ranger')
-        nnoremap <silent><leader>` :FloatermRanger<Cr>
-    endif
+endif
+" ---------------------------------
+" file browser
+" ---------------------------------
+if has('patch-8.1.2269') || has('nvim')
+    source $CFG_DIR/fern.vim
+endif
+if has('nvim') && PlannedCoc()
+    function! s:coc_file() abort
+        exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
+    endfunction
+    command! CocFile call s:coc_file()
+    nnoremap <silent><nowait><leader>e :CocFile<Cr>
+elseif executable('yazi') && g:has_popup_floating
+    command! FloatermYazi call s:floaterm('yazi')
+    nnoremap <silent><nowait><leader>e :FloatermYazi<Cr>
+elseif executable('ranger') && g:has_popup_floating
+    command! FloatermRanger call s:floaterm('ranger')
+    nnoremap <silent><nowait><leader>e :FloatermRanger<Cr>
+elseif Installed('fern.vim')
+    nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
 endif
 " -----------------------------------
 " using system file explorer
