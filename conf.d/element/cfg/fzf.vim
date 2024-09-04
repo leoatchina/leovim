@@ -44,6 +44,33 @@ endif
 " ---------------
 " fzf_commands
 " ---------------
+if executable('rg')
+    command! -bang -nargs=* FzfBLines
+                \ call fzf#vim#grep(
+                \   'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%:p')), 1,
+                \   fzf#vim#with_preview({'options': '--layout reverse --query '.shellescape(<q-args>).' --with-nth=4.. --delimiter=":"'}))
+    command! -bang -nargs=* FzfRG call fzf#vim#grep(
+                \ 'rg --vimgrep --no-heading --smart-case --color=always ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' ' . GetRootDir(),
+                \ fzf#vim#with_preview(),
+                \ <bang>0)
+endif
+if executable('git')
+    command! -bang -nargs=* FzfGGrep call fzf#vim#grep(
+                \ 'git grep -I -n --color=always ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' -- ' . GitRootDir(),
+                \ fzf#vim#with_preview(),
+                \ <bang>0)
+endif
+if UNIX()
+    command! -bang -nargs=* FzfGrep call fzf#vim#grep(
+                \ 'grep -I --line-number --color=always -r -- ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' . ',
+                \ fzf#vim#with_preview(),
+                \ <bang>0)
+elseif executable('findstr')
+    command! -bang -nargs=* FzfGrep call fzf#vim#grep(
+                \ 'findstr /N /S /I ' . shellescape(empty(<q-args>) ? '""' : <q-args>) . ' *.*',
+                \ fzf#vim#with_preview(),
+                \ <bang>0)
+endif
 function FzfCallCommands(prompt, ...)
     let prompt = a:prompt
     if a:0 == 0

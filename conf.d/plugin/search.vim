@@ -1,8 +1,11 @@
-if PlannedLeaderf()
-    nnoremap <silent><nowait><M-l><M-l> :Leaderf line --no-sort<Cr>
-    nnoremap <silent><nowait><M-l><M-a> :Leaderf line --all --no-sort<Cr>
-elseif PlannedFzf()
+if PlannedFzf() && executable('rg')
     nnoremap <silent><nowait><M-l><M-l> :FzfBLines<Cr>
+elseif PlannedLeaderf()
+    nnoremap <silent><nowait><M-l><M-l> :Leaderf line --fuzzy --no-sort<Cr>
+endif
+if PlannedLeaderf()
+    nnoremap <silent><nowait><M-l><M-a> :Leaderf line --fuzy --all --no-sort<Cr>
+elseif PlannedFzf()
     nnoremap <silent><nowait><M-l><M-a> :FzfLines<Cr>
 else
     nnoremap <silent><nowait><M-l><M-l> :CtrlPLine<Cr>
