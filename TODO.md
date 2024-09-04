@@ -1,4 +1,5 @@
 # TODO:
+## config:
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
 - [x] better lightline schemes
@@ -91,12 +92,12 @@
 - [x] lightline modified
 - [x] run script in qf and show in lightline, refer albertomontesg/lightline-asyncrun
 - [x] suppress <C-c> E5108 error messages
-- [ ] fzfrg put files affter line
+- [ ] fzfrg put files side by side with lines
 - [ ] vista_markdown bug
 - [ ] ~~show current tab's all buffers in tabline~~, may using smart tab line width
 - [ ] floaterm drop command, ref vim-terminal-help
 - [ ] fzf-project
-# LATER:
+## MyPlugins:
 - [x] fzf-registers
 - [ ] vim-funky
   - [x] open bug
@@ -119,7 +120,7 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [ ] README
   - [ ] deploy to github
-- [ ] ====== Below need plenty of works ======
+## Plenty of works
 - [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
