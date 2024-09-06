@@ -206,12 +206,6 @@ function! MoveToEndAndAddSemicolon(...) abort
 endfunction
 inoremap <C-j> <C-\><C-n>:call MoveToEndAndAddSemicolon(1)<CR>
 inoremap <C-k> <C-\><C-n>:call MoveToEndAndAddSemicolon(0)<CR>
-" ------------------------
-" yank
-" ------------------------
-nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
-xnoremap zp "_c<ESC>p"
-xnoremap zP "_c<ESC>P"
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------
@@ -482,8 +476,14 @@ function! EnhancedSearch() range
 endfunction
 xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------
-" osc52 yankpost
+" yankpost
 " ------------------------
+nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+xnoremap zp "_c<ESC>p"
+xnoremap zP "_c<ESC>P"
+if exists('g:vscode')
+    set clipboard+=unnamedplus
+endif
 if exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc52_yank', 1)
     function! s:raw_echo(str)
         if filewritable('/dev/fd/2')
