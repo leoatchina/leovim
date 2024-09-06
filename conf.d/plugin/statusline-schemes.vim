@@ -346,7 +346,11 @@ let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 let g:everforest_better_performance = 1
 let g:gruvbox_material_better_performance = 1
-if g:complete_engine == 'apm'
+if Installed('catppuccin') && Require('catppuccin')
+    call SetScheme('catppuccin')
+elseif Installed('tokyonight.nvim') && Require('tokyonight')
+    call SetScheme('tokyonight')
+elseif g:complete_engine == 'apm'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'mcm'
     call SetScheme('sonokai', 'sublime')
