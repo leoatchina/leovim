@@ -231,6 +231,7 @@ if Planned('vimspector')
     nmap <silent><M-d>n <Plug>VimspectorStepOver
     nmap <silent><M-d>i <Plug>VimspectorStepInto
     nmap <silent><M-d>o <Plug>VimspectorStepOut
+    nmap <silent><F1> :VimspectorDisassemble<Cr>
     nmap <silent><F3> :VimspectorReset<Cr>
     nmap <silent><F4> <Plug>VimspectorRunToCursor
     nmap <silent><F5> <Plug>VimspectorContinue
@@ -336,11 +337,10 @@ if Planned('vimspector')
     command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
     command! TerminalOrFloatermSpecial call s:vimspector_or_floaterm('terminal')
     nnoremap <silent><M-m>0 :FocusCode<Cr>
-    nnoremap <silent><M-->  :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=>  :TerminalOrFloatermSpecial<Cr>
+    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
+    nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
-    nnoremap <silent>_ :VimspectorDisassemble<Cr>
     nnoremap = :VimspectorWatch <C-r>=expand('<cword>')<Cr>
     nnoremap - :VimspectorEval <C-r>=expand('<cword>')<Cr>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
@@ -474,10 +474,10 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     command! FocusCode call s:dap_or_floaterm("focus")
     command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
     command! FloatElementOrFloatermSpecial call s:dap_or_floaterm("element")
-    nnoremap <silent>J     :DapUIEval<Cr>
+    nnoremap <silent>J :DapUIEval<Cr>
     nnoremap <silent><M-m>0 :FocusCode<Cr>
-    nnoremap <silent><M-->  :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=>  :FloatElementOrFloatermSpecial<Cr>
+    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
+    nnoremap <silent><M-=> :FloatElementOrFloatermSpecial<Cr>
     nnoremap <silent>- <cmd>lua require("dap.ui.widgets").preview()<Cr>
 else
     if v:version >= 801 && !has('nvim') && Require('termdebug')
@@ -506,7 +506,7 @@ else
         nnoremap <F11> :Step<Cr>
         nnoremap <F12> :Finish<Cr>
         " debug
-        nnoremap = :Evaluate <C-r><C-w>
+        nnoremap - :Evaluate <C-r><C-w>
         " other
         nnoremap <M-m>d :Termdebug<Space>
         nnoremap <M-m>c :TermdebugCommand<Space>
