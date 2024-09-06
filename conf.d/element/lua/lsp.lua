@@ -131,6 +131,8 @@ require('LspUI').setup({
       back = "<leader>l",
     },
     secondary = {
+      next_file_entry = "J",
+      prev_file_entry = "K",
       jump = "<Cr>",
       jump_split = "<C-x>",
       jump_vsplit = "<C-]>",
@@ -378,5 +380,4 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
   border = "single",
   close_events = { "BufHidden", "InsertLeave" },
 })
-
 return M
