@@ -68,7 +68,7 @@ local function dapui_toggle(open)
     end
   end
 end
-vim.keymap.set({"n", "x"}, "<M-m><M-m>",
+vim.keymap.set({"n", "x"}, "<F1>",
   function()
     dapui_toggle()
   end, { noremap = true, silent = true }

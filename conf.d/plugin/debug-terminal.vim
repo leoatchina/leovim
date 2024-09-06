@@ -258,7 +258,7 @@ if Planned('vimspector')
     nnoremap <silent><M-d>f :call vimspector#AddFunctionBreakpoint('')<left><left>
     nnoremap <silent><M-d>b :call vimspector#ToggleAllBreakpointsViewBreakpoint()<Cr>
     " start / stop
-    nnoremap <silent><M-d><Tab> :call vimspector#Launch()<Cr>
+    nnoremap <silent>_ :call vimspector#Launch()<Cr>
     nnoremap <silent><M-d>r :call vimspector#Restart()<Cr>
     nnoremap <silent><M-d>q :call vimspector#Reset()<Cr>
     nnoremap <silent><M-d>Q :call vimspector#Stop({'interactive': v:true})<Cr>
@@ -387,7 +387,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <M-d>l :lua require"dap".
     nnoremap <M-d>I :DapInstall<Space>
     nnoremap <M-d>U :DapUninstall<Space>
-    nnoremap <silent><M-d><Tab> <cmd>lua DapLaunch()<Cr>
+    nnoremap <silent>_ <cmd>lua DapLaunch()<Cr>
     nnoremap <silent><M-d>q <cmd>lua DapClose()<Cr>
     nnoremap <silent><M-d>p <cmd>lua require"dap".pause()<Cr>
     nnoremap <silent><M-d>r <cmd>lua require"dap".run_last()<Cr>
@@ -488,7 +488,7 @@ else
         " coremap
         nnoremap <M-d><Space> :Break<Space>
         nnoremap <M-d><M-d> :Until<Cr>
-        nnoremap <M-d><Tab> :Run<Space>
+        nnoremap _ :Run<Space>
         nnoremap <M-d><M-e> :Continue<Cr>
         nnoremap <M-d>c :Clear<Space>
         nnoremap <M-d>n :Over<Cr>
