@@ -69,17 +69,17 @@ endif
 function! HAS_GUI()
     return s:gui_running
 endfunction
-if WINDOWS()
-    if s:gui_running == 0 && !has('nvim') && v:version < 900
-        echoe "In windows, please update to vim9.0+ if without gui."
-        finish
-    elseif v:version < 800 && !has('nvim')
-        echoe 'vim 8.0 or neovim 0.8 is at least required when uing leovim in windows.'
-        finish
-    endif
-elseif exists('g:vscode') && !has('nvim-0.9')
+if exists('g:vscode') && !has('nvim-0.9')
     echoe "vscode-neovm required nvim-0.9+!"
     finish
+elseif WINDOWS()
+    if !has('nvim') && v:version < 900
+        echoe "In windows, please update to vim9.0+."
+        finish
+    elseif has('nvim') && !has('nvim-0.8')
+        echoe 'neovim 0.8 is at least required when uing leovim in windows.'
+        finish
+    endif
 endif
 " --------------------------
 " set dirs
