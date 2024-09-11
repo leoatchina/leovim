@@ -1,7 +1,6 @@
 " ------------------------
 " specical yank
 " ------------------------
-nnoremap Y y$
 function! YankBorder(...) abort
     if a:0 && a:1 > 0
         if a:1 > 1
@@ -53,6 +52,27 @@ endfunction
 nnoremap <silent>,y :call YankBorder(0)<Cr>
 nnoremap <silent>,Y :call YankBorder(1)<Cr>
 nnoremap <silent>+  :call YankBorder(2)<Cr>
+" ------------------------------------
+" with/without clipboard yank
+" ------------------------------------
+if has('clipboard')
+    if UNIX()
+        nnoremap <Tab>y :0,-"+y<Cr>
+        nnoremap <Tab>Y vG"+y
+        nnoremap <leader>Y :%"+y<Cr>
+        xnoremap + "+y
+    else
+        nnoremap <Tab>y :0,-"*y<Cr>
+        nnoremap <Tab>Y vG"*y
+        nnoremap <leader>Y :%"*y<Cr>
+        xnoremap + "*y
+    endif
+else
+    nnoremap <Tab>y :0,-y<Cr>
+    nnoremap <Tab>Y vGy
+    nnoremap <leader>Y :%y<Cr>
+    xnoremap + y
+endif
 " ------------------------------------
 " M-x/BS
 " ------------------------------------
