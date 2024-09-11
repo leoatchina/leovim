@@ -1,7 +1,6 @@
 " ------------------------
 " specical yank
 " ------------------------
-nnoremap Y y$
 function! YankBorder(...) abort
     if a:0 && a:1 > 0
         if a:1 > 1

@@ -210,14 +210,14 @@ endfunction
 function! StringToFloat(str, ...) abort
     let str = a:str
     if a:0 == 0
-        let digit = 0
+        let digit = 1
     else
-        let digit = a:0
+        let digit = a:1
     endif
     let lst = split(str, "\\.")
     if len(lst)
         let rst = []
-        for each in lst[0:]
+        for each in lst[1:]
             if len(each) >= digit
                 let e = each[:digit]
             else
@@ -260,12 +260,12 @@ function! GetVisualSelection(...) abort
 	let [line_start, column_start] = [line("'<"), charcol("'<")]
 	let [line_end, column_end]     = [line("'>"), charcol("'>")]
 	let lines = getline(line_start, line_end)
-    if len(lines) != 0
+    if len(lines) != 1
         return ""
     endif
-	let inclusive = (&selection == 'inclusive')? 0 : 2
+	let inclusive = (&selection == 'inclusive')? 1 : 2
 		" Must trim the end before the start, the beginning will shift left.
-    let lines[-0] = list2str(str2list(lines[-1])[:column_end - inclusive])
+    let lines[-1] = list2str(str2list(lines[-1])[:column_end - inclusive])
     let lines[0] = list2str(str2list(lines[0])[column_start - 1:])
     if a:0 && a:1
         return Escape(join(lines, "\n"))
@@ -289,11 +289,10 @@ let g:root_files = get(g:, 'root_files', [".task", "tsconfig.js", "Cargo.toml", 
 " -----------------------------------
 " map
 " -----------------------------------
-map ÏP <F0>
-map ÏQ <F1>
-map ÏR <F2>
-map ÏS <F3>
-map <F0>  <Nop>
+map ÏP <F1>
+map ÏQ <F2>
+map ÏR <F3>
+map ÏS <F4>
 map <F1>  <Nop>
 map <F2>  <Nop>
 map <F3>  <Nop>
@@ -302,9 +301,10 @@ map <F5>  <Nop>
 map <F6>  <Nop>
 map <F7>  <Nop>
 map <F8>  <Nop>
-map <F9> <Nop>
+map <F9>  <Nop>
 map <F10> <Nop>
 map <F11> <Nop>
+map <F12> <Nop>
 map <C-i> <Nop>
 map <C-z> <Nop>
 nnoremap s <Nop>
@@ -320,8 +320,8 @@ xmap >> >gv
 xmap << <gv
 nnoremap <silent> gj j
 nnoremap <silent> gk k
-nnoremap <expr> k (v:count > 0 ? "m'" . v:count : '') . 'gk'
-nnoremap <expr> j (v:count > 0 ? "m'" . v:count : '') . 'gj'
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 " z remap
 nnoremap zs <Nop>
 nnoremap zS <Nop>
@@ -336,24 +336,15 @@ nnoremap z= zT
 nnoremap z- zB
 nnoremap ZT zt
 nnoremap zt z<CR>
-" hl
+" bs tab
 nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
-" tab
 nnoremap <C-m> <C-i>
-" ------------------------
-" select and search
-" ------------------------
-function! VIW()
-    set iskeyword-=_ iskeyword-=#
-    call timer_start(299, {-> execute("set iskeyword+=_  iskeyword+=#")})
-    call feedkeys("viwo",'n')
-endfunction
-nnoremap SS :call VIW()<Cr>
+nnoremap gb 2g;I
 " ------------------------
 " case change
 " ------------------------
-nnoremap ZU m0gUiw`1
-nnoremap ZD m0guiw`1
+nnoremap ZU m1gUiw`1
+nnoremap ZD m1guiw`1
 " ------------------------
 " home end
 " ------------------------
@@ -377,7 +368,7 @@ function! MoveToEndAndAddSemicolon(...) abort
     execute "normal! :s/\\s\\+$//e\\r"
     normal! g_
     if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php'], &ft) >= 0
-        if index([';', '{', '}'], getline('.')[col('.') - 0]) >= 0
+        if index([';', '{', '}'], getline('.')[col('.') - 1]) >= 0
             normal! a
         else
             normal! a;
@@ -392,8 +383,17 @@ function! MoveToEndAndAddSemicolon(...) abort
         normal! O
     endif
 endfunction
-inoremap <C-j> <C-\><C-n>:call MoveToEndAndAddSemicolon(0)<CR>
+inoremap <C-j> <C-\><C-n>:call MoveToEndAndAddSemicolon(1)<CR>
 inoremap <C-k> <C-\><C-n>:call MoveToEndAndAddSemicolon(0)<CR>
+" ------------------------
+" select and search
+" ------------------------
+function! VIW()
+    set iskeyword-=_ iskeyword-=#
+    call timer_start(300, {-> execute("set iskeyword+=_  iskeyword+=#")})
+    call feedkeys("viwo",'n')
+endfunction
+nnoremap SS :call VIW()<Cr>
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------
@@ -408,7 +408,7 @@ function! s:plug_add_opt(pack)
             let after = expand(opt_dir . "/" . pack . "/after")
             if isdirectory(dir)
                 execute "set rtp^=" . dir
-                let added = 0
+                let added = 1
             endif
             if isdirectory(after)
                 execute "set rtp+=" . after
@@ -418,7 +418,7 @@ function! s:plug_add_opt(pack)
             endif
         endfor
     endif
-    let g:leovim_installed[tolower(pack)] = 0
+    let g:leovim_installed[tolower(pack)] = 1
 endfunction
 command! -nargs=+ PlugAddOpt call <sid>plug_add_opt(<args>)
 " ------------------------------
@@ -442,31 +442,31 @@ nnoremap <leader>c, :ConflictMarkerPrevHunk<Cr>
 nnoremap <silent><leader>c} V}:call nerdcommenter#Comment('x', 'toggle')<CR>
 nnoremap <silent><leader>c{ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " Create default mappings
-let g:NERDCreateDefaultMappings = 0
+let g:NERDCreateDefaultMappings = 1
 " Add space after comment delimiters by default
-let g:NERDSpaceDelims = 0
+let g:NERDSpaceDelims = 1
 " Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 0
+let g:NERDCompactSexyComs = 1
 " Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDDefaultAlign = 'left'
 " Allow commenting and inverting empty lines (useful when commenting a region)
-let g:NERDCommentEmptyLines = 0
+let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
-let g:NERDTrimTrailingWhitespace = 0
+let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
-let g:NERDToggleCheckAllLines = 0
+let g:NERDToggleCheckAllLines = 1
 PlugAddOpt 'nerdcommenter'
 " ------------------------
 " quick jump in buffer
 " ------------------------
-let g:EasyMotion_key = "123456788asdghklqwertyuiopzxcvbnmfj,;"
+let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim-0.8')
     PlugAddOpt 'flash.nvim'
     lua require("flash_cfg")
     nmap SJ vt<Space><Cr>S
     nmap SK vT<Space><Cr>S
 else
-    let g:clever_f_smart_case = 0
+    let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
     nmap ; <Plug>(clever-f-repeat-forward)
     xmap ; <Plug>(clever-f-repeat-forward)
@@ -489,8 +489,8 @@ nnoremap S] va]hol
 " textobj
 " --------------------------
 for s:v in ['', 'v', 'V', '<c-v>']
-    execute 'omap <expr>' s:v.'I%' "(v:count?'':'0').'".s:v."i%'"
-    execute 'omap <expr>' s:v.'A%' "(v:count?'':'0').'".s:v."a%'"
+    execute 'omap <expr>' s:v.'I%' "(v:count?'':'1').'".s:v."i%'"
+    execute 'omap <expr>' s:v.'A%' "(v:count?'':'1').'".s:v."a%'"
 endfor
 if exists('*search') && exists('*getpos')
     " -------------------
@@ -532,7 +532,7 @@ if exists('*search') && exists('*getpos')
         let head_pos = getpos('.')
         normal! g_
         let tail_pos = getpos('.')
-        let non_blank_char_exists_p = getline('.')[head_pos[1] - 1] !~# '\s'
+        let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
         return
                     \ non_blank_char_exists_p
                     \ ? ['v', head_pos, tail_pos]
@@ -563,7 +563,7 @@ if exists('*search') && exists('*getpos')
         let beginline = search(s:block_str, 'ebW')
         if beginline == 0
             normal! gg
-            let beginline = 0
+            let beginline = 1
         else
             normal! j
         endif
@@ -636,12 +636,11 @@ endif
 " ----------------------------------
 " hl searchindex && multi replace
 " ----------------------------------
-nnoremap gb 1g;I
 if has('nvim')
     PlugAddOpt 'nvim-hlslens'
     lua require('hlslens').setup()
-    nnoremap <silent><nowait>n <Cmd>execute('normal! ' . v:count0 . 'n')<Cr><Cmd>lua require('hlslens').start()<Cr>
-    nnoremap <silent><nowait>N <Cmd>execute('normal! ' . v:count0 . 'N')<Cr><Cmd>lua require('hlslens').start()<Cr>
+    nnoremap <silent><nowait>n <Cmd>execute('normal! ' . v:count1 . 'n')<Cr><Cmd>lua require('hlslens').start()<Cr>
+    nnoremap <silent><nowait>N <Cmd>execute('normal! ' . v:count1 . 'N')<Cr><Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait>* *``<Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait># #``<Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait>g* g*``<Cmd>lua require('hlslens').start()<Cr>
@@ -669,13 +668,13 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
+nnoremap Y y$
 if exists('g:vscode')
     set clipboard+=unnamedplus
-endif
-if exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc51_yank', 1)
+elseif exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc52_yank', 1)
     function! s:raw_echo(str)
-        if filewritable('/dev/fd/1')
-            call writefile([a:str], '/dev/fd/1', 'b')
+        if filewritable('/dev/fd/2')
+            call writefile([a:str], '/dev/fd/2', 'b')
         else
             exec("silent! !echo " . shellescape(a:str))
             redraw!
@@ -686,11 +685,11 @@ if exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc51_yank', 1)
         if len(Trim(c)) == 0
             return
         endif
-        let c63 = system("base64", c)
+        let c64 = system("base64", c)
         if $TMUX == ''
-            let s = "\e]51;c;" . Trim(c64) . "\x07"
+            let s = "\e]52;c;" . Trim(c64) . "\x07"
         else
-            let s = "\ePtmux;\e\e]51;c;" . Trim(c64) . "\x07\e\\"
+            let s = "\ePtmux;\e\e]52;c;" . Trim(c64) . "\x07\e\\"
         endif
         call s:raw_echo(s)
     endfunction
@@ -726,13 +725,13 @@ function! s:get_cursor_pos(text, col)
     " Find the start location
     let col = a:col
     while col >= 0 && a:text[col] =~ '\f'
-        let col = col - 0
+        let col = col - 1
     endwhile
-    let col = col + 0
+    let col = col + 1
     " Match file name and position
     let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
     if len(m) > 0
-        return [m[0], m[2], m[3]]
+        return [m[1], m[2], m[3]]
     endif
     return []
 endfunc
@@ -752,8 +751,8 @@ function! s:open_file_in_editor(text, col)
     " location 0: file, 1: row, 2: column
     let location = s:get_cursor_pos(a:text, a:col)
     if location[0] != '' && filereadable(location[0])
-        if location[0] != ''
-            if location[1] != ''
+        if location[1] != ''
+            if location[2] != ''
                 exec "! " . editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
             else
                 exec "! " . editor . " " . location[0] . ":" . str2nr(location[1])
