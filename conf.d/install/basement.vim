@@ -140,15 +140,15 @@ if has('patch-9.0.0185') || has('nvim')
         PlugAdd 'Exafunction/codeium.vim'
     elseif Require('copilot') && g:node_version > 18
         if has('nvim-0.9.5')
-            PlugAdd 'stevearc/dressing.nvim'
             PlugAdd 'zbirenbaum/copilot.lua'
             PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
             if UNIX()
                 PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
-            else
+            elseif WINDOWS()
                 PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
             endif
             if Planned('avante.nvim')
+                PlugAdd 'stevearc/dressing.nvim'
                 PlugAdd 'MeanderingProgrammer/render-markdown.nvim', { 'for': ['markdown', 'Avante'] }
             endif
         else

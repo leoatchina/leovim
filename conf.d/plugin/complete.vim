@@ -216,7 +216,7 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-,> <Plug>(copilot-previous)
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
-elseif Installed('CopilotChat.nvim', 'copilot.lua')
+elseif Installed('copilotchat.nvim', 'copilot.lua')
     lua require("copilotchat")
     command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
     nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
