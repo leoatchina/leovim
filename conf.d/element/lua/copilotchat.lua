@@ -50,8 +50,8 @@ if Installed('avante.nvim') then
         all_theirs = "ca",
         both = "cb",
         cursor = "cc",
-        next = "]x",
-        prev = "[x",
+        next = "]c",
+        prev = "[c",
       },
       suggestion = {
         accept = "<M-i>",
