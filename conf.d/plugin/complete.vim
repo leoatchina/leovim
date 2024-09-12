@@ -216,28 +216,14 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-,> <Plug>(copilot-previous)
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
-    if Installed('CopilotChat.nvim')
-        lua require("copilotchat")
-        command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
-        nnoremap <silent><M-i>g :CopilotChatCommands<Cr>
-        nnoremap <M-i>c :CopliotChat<Space>
-        nnoremap <M-i>s :CopliotChatSave<Space>
-        nnoremap <M-i>l :CopliotChatLoad<Space>
-        lua require("copilotchat")
-    endif
 endif
-if Installed('gp.nvim')
-    lua require("gp_cfg")
-    function! s:gp_toggle()
-        if &columns > &lines * 3
-            GpChatToggle vsplit
-        else
-            GpChatToggle split
-        endif
-    endfunction
-    command! GpChatToggleSmartPosition call s:gp_toggle()
-    command! GpCommands call FzfCallCommands('GpCommands', 'Gp')
-    nnoremap <silent><M-i><M-g> :GpCommands<Cr>
+if Installed('CopilotChat.nvim')
+    lua require("copilotchat")
+    command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
+    nnoremap <silent><M-i>g :CopilotChatCommands<Cr>
+    nnoremap <M-i>c :CopliotChat<Space>
+    nnoremap <M-i>s :CopliotChatSave<Space>
+    nnoremap <M-i>l :CopliotChatLoad<Space>
 endif
 " ------------------------------
 " wilder.nvim

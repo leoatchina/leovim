@@ -139,14 +139,20 @@ if has('patch-9.0.0185') || has('nvim')
     if Require('codeium')
         PlugAdd 'Exafunction/codeium.vim'
     elseif Require('copilot') && g:node_version >= 16.18
-        PlugAdd 'github/copilot.vim'
         if has('nvim-0.9.5')
+            PlugAdd 'stevearc/dressing.nvim'
+            PlugAdd 'zbirenbaum/copilot.lua'
             PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+            PlugAdd 'MeanderingProgrammer/render-markdown.nvim', { 'for': ['markdown', 'Avante'] }
+            if UNIX()
+                PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+            else
+                PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
+            endif
+        else
+            PlugAdd 'github/copilot.vim'
         endif
     endif
-endif
-if has('nvim') && UNIX() && filereadable(Expand("~/.gp.key"))
-    PlugAdd 'Robitx/gp.nvim'
 endif
 " ------------------------------
 " check tool
