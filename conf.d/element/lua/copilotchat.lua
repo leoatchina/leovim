@@ -22,12 +22,12 @@ require('copilot').setup({
   },
   suggestion = {
     keymap = {
-      accept = "<M-i>",
+      accept = "<M-.>",
       accept_word = "<M-}>",
       accept_line = "<M-{>",
       next = "<M-;>",
       prev = "<M-,>",
-      dismiss = "<M-/>",
+      dismiss = "<M-?>",
     },
   },
 })
@@ -63,10 +63,10 @@ if Installed('avante.nvim') then
         prev = "c[",
       },
       suggestion = {
-        accept = "<M-i>",
+        accept = "<M-.>",
         next = "<M-;>",
         prev = "<M-,>",
-        dismiss = "<M-/>",
+        dismiss = "<M-?>",
       },
       jump = {
         next = "]]",
