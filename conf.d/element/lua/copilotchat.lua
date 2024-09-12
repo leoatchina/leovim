@@ -8,12 +8,12 @@ chat.setup({
     layout = 'float'
   }
 })
-map(modes, "<M-i><M-c>", [[<Cmd>CopilotChatToggle<Cr>]], opts)
+map(modes, "<M-i><M-l>", [[<Cmd>CopilotChatToggle<Cr>]], opts)
 map(modes, "<M-i>e", [[<Cmd>CopilotChatExplain<Cr>]], opts)
 map(modes, "<M-i>o", [[<Cmd>CopilotChatOptimize<Cr>]], opts)
 map(modes, "<M-i>t", [[<Cmd>CopilotChatTest<Cr>]], opts)
 map(modes, "<M-i>f", [[<Cmd>CopilotChatFix<Cr>]], opts)
-map(modes, "<M-i>F", [[<Cmd>CopilotChatFixDiagnostic<Cr>]], opts)
+map(modes, "<M-i>d", [[<Cmd>CopilotChatFixDiagnostic<Cr>]], opts)
 map(modes, "<M-i>C", [[<Cmd>CopilotChatCommit<Cr>]], opts)
 map(modes, "<M-i>S", [[<Cmd>CopilotChatCommitStaged<Cr>]], opts)
 require('copilot').setup({
@@ -42,6 +42,15 @@ if Installed('avante.nvim') then
       auto_apply_diff_after_generation = false,
       support_paste_from_clipboard = false,
     },
+    copilot = {
+      endpoint = "https://api.githubcopilot.com",
+      model = "gpt-4o-2024-05-13",
+      proxy = nil,
+      allow_insecure = true,
+      timeout = 30000,
+      temperature = 0,
+      max_tokens = 4096 * 16,
+    },
     mappings = {
       --- @class AvanteConflictMappings
       diff = {
@@ -50,8 +59,8 @@ if Installed('avante.nvim') then
         all_theirs = "ca",
         both = "cb",
         cursor = "cc",
-        next = "]c",
-        prev = "[c",
+        next = "c]",
+        prev = "c[",
       },
       suggestion = {
         accept = "<M-i>",
