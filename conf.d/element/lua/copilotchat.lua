@@ -65,7 +65,7 @@ require('avante').setup({
     },
     submit = {
       normal = "<CR>",
-      insert = "<M-s>",
+      insert = "<C-s>",
     },
     ask = "<M-i><M-a>",
     edit = "<M-i><M-e>",
