@@ -55,10 +55,9 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap <M-l> :WhichKey "\<M-l\>"<Cr>
     nnoremap <M-y> :WhichKey "\<M-y\>"<Cr>
     inoremap <M-y> <C-o>:WhichKey "\<M-y\>"<Cr>
-    if Installed("copilotchat.nvim") || Installed("gp.nvim")
+    if Installed("copilotchat.nvim")
         nnoremap <M-i> :WhichKey "\<M-i\>"<Cr>
         xnoremap <M-i> :WhichKeyVisual "\<M-i\>"<Cr>
-        inoremap <M-i> <C-o>:WhichKey "\<M-i\>"<Cr>
     endif
     if Planned("vim-table-mode")
         nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
