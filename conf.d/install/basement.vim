@@ -143,14 +143,10 @@ if has('patch-9.0.0185') || has('nvim')
             PlugAdd 'stevearc/dressing.nvim'
             PlugAdd 'zbirenbaum/copilot.lua'
             PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
-            if MACOS()
+            if UNIX()
                 PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
-            elseif executable('cargo')
-                if LINUX()
-                    PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
-                else
-                    PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource true' }
-                endif
+            else
+                PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
             endif
             if Planned('avante.nvim')
                 PlugAdd 'MeanderingProgrammer/render-markdown.nvim', { 'for': ['markdown', 'Avante'] }
