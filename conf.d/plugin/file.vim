@@ -262,7 +262,7 @@ if HAS_GUI() || WINDOWS()
         call s:filter_push("Php", "*.php")
         call s:filter_push("Vim Script", "*.vim")
         command! UseSystemBrowser call s:use_system_browser()
-        nnoremap <silent><M-\> :UseSystemBrowser<Cr>
+        nnoremap <silent><M-"> :UseSystemBrowser<Cr>
     endif
 endif
 " --------------------------
