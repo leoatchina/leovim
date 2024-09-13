@@ -143,7 +143,7 @@ if has('patch-9.0.0185') || has('nvim')
             PlugAdd 'zbirenbaum/copilot.lua'
             PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
             PlugAdd 'zbirenbaum/copilot-cmp'
-            if g:complete_engine == 'cmp'
+            if g:complete_engine == 'cmp' && has('nvim-0.10.1')
                 if executable('cargo')
                     if UNIX()
                         PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
@@ -157,10 +157,6 @@ if has('patch-9.0.0185') || has('nvim')
                         PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
                     endif
                 endif
-            endif
-            if Planned('avante.nvim')
-                PlugAdd 'stevearc/dressing.nvim'
-                PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
             endif
         else
             PlugAdd 'github/copilot.vim'
@@ -253,6 +249,7 @@ endif
 if has('nvim')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'stevearc/quicker.nvim'
+    PlugAdd 'stevearc/dressing.nvim'
 endif
 " ------------------------------
 " format tools
