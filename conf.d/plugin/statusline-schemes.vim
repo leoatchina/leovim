@@ -337,7 +337,6 @@ augroup UpdateLightline
     endif
 augroup END
 nnoremap <silent><C-l> <C-l>:call lightline#update()<Cr>
-inoremap <silent><C-l> <C-o>:call lightline#update()<Cr>
 " --------------------------
 " schemes need truecolor
 " --------------------------

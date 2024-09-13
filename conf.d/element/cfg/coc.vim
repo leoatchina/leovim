@@ -74,8 +74,7 @@ inoremap <silent><expr> <TAB> coc#pum#visible() == v:false ? "\<Tab>" :
             \ HasBackSpace() ? coc#refresh() :
             \ coc#_select_confirm()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent> <C-space> coc#refresh()
-inoremap <silent> <C-@> coc#refresh()
+inoremap <silent> <C-l> coc#refresh()
 " c-e/c-y
 imap <expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
 imap <expr> <C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"

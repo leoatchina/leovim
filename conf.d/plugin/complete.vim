@@ -26,7 +26,8 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-,> <Plug>(copilot-previous)
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
-elseif Installed('copilotchat.nvim', 'copilot.lua')
+endif
+if Installed('copilotchat.nvim')
     lua require("aichat")
     command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
@@ -156,8 +157,8 @@ elseif Installed('coc.nvim')
     if Require('writing')
         let g:coc_global_extensions += ['coc-vimtex']
     endif
-    if Installed('copliot.vim')
-        let g:coc_global_extensions += ['coc-copilot']
+    if Installed('copilot.vim')
+        let g:coc_global_extensions += ['@hexuhua/coc-copilot']
     endif
 elseif Planned('vista.vim')
     let g:vista_default_executive = 'ctags'
