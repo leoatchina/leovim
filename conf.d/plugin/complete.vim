@@ -156,6 +156,9 @@ elseif Installed('coc.nvim')
     if Require('writing')
         let g:coc_global_extensions += ['coc-vimtex']
     endif
+    if Installed('copliot.vim')
+        let g:coc_global_extensions += ['coc-copilot']
+    endif
 elseif Planned('vista.vim')
     let g:vista_default_executive = 'ctags'
 endif
