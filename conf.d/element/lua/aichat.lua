@@ -17,10 +17,9 @@ map(modes, "<M-i>d", [[<Cmd>CopilotChatFixDiagnostic<Cr>]], opts)
 map(modes, "<M-i>C", [[<Cmd>CopilotChatCommit<Cr>]], opts)
 map(modes, "<M-i>S", [[<Cmd>CopilotChatCommitStaged<Cr>]], opts)
 require('copilot').setup({
-  panel = {
-    enabled = false,
-  },
+  panel = { enabled = false },
   suggestion = {
+    enabled = false,
     keymap = {
       accept = "<M-.>",
       accept_word = "<M-}>",

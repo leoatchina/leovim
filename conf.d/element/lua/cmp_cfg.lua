@@ -1,3 +1,13 @@
+-- core setup
+local MAX_LABEL_WIDTH = 32
+local ELLIPSIS_CHAR = '...'
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+local get_ws = function(max, len)
+  return (" "):rep(max - len)
+end
 -----------------
 -- cmp config
 -----------------
@@ -17,15 +27,18 @@ local sources = {
 if Installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 64})
 end
--- core setup
-local MAX_LABEL_WIDTH = 32
-local ELLIPSIS_CHAR = '...'
-local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-local get_ws = function(max, len)
-  return (" "):rep(max - len)
+-----------------
+-- copilot
+-----------------
+if Installed('copilot-cmp') then
+  require("copilot_cmp").setup()
+  table.insert(sources, 1, { name = 'copilot', priority = 128})
+  lspkind.init({
+    symbol_map = {
+      Copilot = "",
+    },
+  })
+  vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
 end
 cmp.setup({
   sources = sources,
@@ -253,18 +266,6 @@ cmp.setup.filetype('gitcommit', {
     { name = 'buffer' },
   })
 })
-----------------------------------
--- copilot
-----------------------------------
-if Installed('copilot.lua') then
-  cmp.event:on("menu_opened", function()
-    vim.b.copilot_suggestion_hidden = true
-  end)
-
-  cmp.event:on("menu_closed", function()
-    vim.b.copilot_suggestion_hidden = false
-  end)
-end
 ---------------------------
 -- autopairs
 ---------------------------

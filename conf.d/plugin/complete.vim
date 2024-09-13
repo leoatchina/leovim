@@ -5,6 +5,37 @@ endfunction
 if Installed('mason.nvim')
     lua require("mason_cfg")
 endif
+" ------------------------------
+" AI complete
+" ------------------------------
+if Planned('codeium.vim')
+    let g:codeium_disable_bindings = 1
+    let g:codeium_manual = v:true
+    imap <silent><nowait><script><expr><M-.> codeium#Accept()
+    imap <silent><nowait><script><expr><M-/> codeium#Complete()
+    imap <silent><nowait><script><expr><M-?> codeium#Clear()
+    imap <silent><nowait><script><expr><M-;> codeium#CycleCompletions(1)
+    imap <silent><nowait><script><expr><M-,> codeium#CycleCompletions(-1)
+elseif Planned('copilot.vim')
+    au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
+    let g:copilot_no_tab_map = v:true
+    imap <silent><nowait><script><expr><M-.> copilot#Accept("\<CR>")
+    imap <silent><nowait><M-/> <Plug>(copilot-suggest)
+    imap <silent><nowait><M-?> <Plug>(copilot-dismiss)
+    imap <silent><nowait><M-;> <Plug>(copilot-next)
+    imap <silent><nowait><M-,> <Plug>(copilot-previous)
+    imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
+    imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
+elseif Installed('copilotchat.nvim', 'copilot.lua')
+    lua require("aichat")
+    command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
+    nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
+    nnoremap <M-i>s :CopliotChatSave<Space>
+    nnoremap <M-i>l :CopliotChatLoad<Space>
+endif
+" ------------------------------
+" normal complete_engine
+" ------------------------------
 if Installed('vimcomplete')
     source $CFG_DIR/vcm.vim
 elseif InstalledCmp()
@@ -194,34 +225,6 @@ if PlannedFzf()
     if UNIX()
         imap <c-x><c-f> <plug>(fzf-complete-path)
     endif
-endif
-" ------------------------------
-" AI complete
-" ------------------------------
-if Planned('codeium.vim')
-    let g:codeium_disable_bindings = 1
-    let g:codeium_manual = v:true
-    imap <silent><nowait><script><expr><M-.> codeium#Accept()
-    imap <silent><nowait><script><expr><M-/> codeium#Complete()
-    imap <silent><nowait><script><expr><M-?> codeium#Clear()
-    imap <silent><nowait><script><expr><M-;> codeium#CycleCompletions(1)
-    imap <silent><nowait><script><expr><M-,> codeium#CycleCompletions(-1)
-elseif Planned('copilot.vim')
-    au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
-    let g:copilot_no_tab_map = v:true
-    imap <silent><nowait><script><expr><M-.> copilot#Accept("\<CR>")
-    imap <silent><nowait><M-/> <Plug>(copilot-suggest)
-    imap <silent><nowait><M-?> <Plug>(copilot-dismiss)
-    imap <silent><nowait><M-;> <Plug>(copilot-next)
-    imap <silent><nowait><M-,> <Plug>(copilot-previous)
-    imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
-    imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
-elseif Installed('copilotchat.nvim', 'copilot.lua')
-    lua require("copilotchat")
-    command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
-    nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
-    nnoremap <M-i>s :CopliotChatSave<Space>
-    nnoremap <M-i>l :CopliotChatLoad<Space>
 endif
 " ------------------------------
 " wilder.nvim

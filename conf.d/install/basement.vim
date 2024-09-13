@@ -142,6 +142,7 @@ if has('patch-9.0.0185') || has('nvim')
         if has('nvim-0.9.5')
             PlugAdd 'zbirenbaum/copilot.lua'
             PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+            PlugAdd 'zbirenbaum/copilot-cmp'
             if g:complete_engine == 'cmp'
                 if executable('cargo')
                     if UNIX()
