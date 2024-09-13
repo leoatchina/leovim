@@ -363,25 +363,25 @@ endfunction
 " lsp or tag
 " ---------------
 " tags
-nnoremap <silent>g/ :call s:lsp_tags_searchall("tags", "list")<Cr>
+nnoremap <silent>g/ :call <SID>lsp_tags_searchall("tags", "list")<Cr>
 " preview
-nnoremap <silent><C-h> :call s:lsp_tags_searchall("preview")<Cr>
+nnoremap <silent><C-h> :call <SID>lsp_tags_searchall("preview")<Cr>
 " definition
 au FileType help,vimdoc nnoremap <C-]> <C-]>
-nnoremap <silent><C-g> :call s:lsp_tags_searchall("definition")<Cr>
-nnoremap <silent><C-]> :call s:lsp_tags_searchall("definition", "vsplit")<Cr>
-nnoremap <silent><M-c> :call s:lsp_tags_searchall("definition", "list")<Cr>
-nnoremap <silent><C-w>g :call s:lsp_tags_searchall("definition", "tabe")<Cr>
-nnoremap <silent><C-w>] :call s:lsp_tags_searchall("definition", "split")<Cr>
-nnoremap <silent><C-w><C-g> :call s:lsp_tags_searchall("definition", "tabe")<Cr>
-nnoremap <silent><C-w><C-]> :call s:lsp_tags_searchall("definition", "split")<Cr>
+nnoremap <silent><C-g> :call <SID>lsp_tags_searchall("definition")<Cr>
+nnoremap <silent><C-]> :call <SID>lsp_tags_searchall("definition", "vsplit")<Cr>
+nnoremap <silent><M-c> :call <SID>lsp_tags_searchall("definition", "list")<Cr>
+nnoremap <silent><C-w>g :call <SID>lsp_tags_searchall("definition", "tabe")<Cr>
+nnoremap <silent><C-w>] :call <SID>lsp_tags_searchall("definition", "split")<Cr>
+nnoremap <silent><C-w><C-g> :call <SID>lsp_tags_searchall("definition", "tabe")<Cr>
+nnoremap <silent><C-w><C-]> :call <SID>lsp_tags_searchall("definition", "split")<Cr>
 " references
-nnoremap <silent><M-/> :call s:lsp_tags_searchall("references", "list")<Cr>
+nnoremap <silent><M-/> :call <SID>lsp_tags_searchall("references", "list")<Cr>
 if AdvCompEngine()
     " declaration
-    nnoremap <silent><M-C> :call s:lsp_tags_searchall("declaration", "list")<Cr>
+    nnoremap <silent><M-C> :call <SID>lsp_tags_searchall("declaration", "list")<Cr>
     " implementation
-    nnoremap <silent><M-.> :call s:lsp_tags_searchall("implementation", "list")<Cr>
+    nnoremap <silent><M-.> :call <SID>lsp_tags_searchall("implementation", "list")<Cr>
     " typeDefinition
-    nnoremap <silent><M-?> :call s:lsp_tags_searchall("type_definition", "list")<Cr>
+    nnoremap <silent><M-?> :call <SID>lsp_tags_searchall("type_definition", "list")<Cr>
 endif

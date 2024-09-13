@@ -125,7 +125,7 @@ _z() {
             -*) opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) fnd="^$PWD $fnd";;
                     e) echo=1;;
-                    h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
+                    h) echo "${_Z_CMD:-Z} [-cehlrtx] args" >&2; return;;
                     l) list=1;;
                     r) typ="rank";;
                     t) typ="recent";;
@@ -225,7 +225,7 @@ _z() {
     fi
 }
 
-alias ${_Z_CMD:-z}='_z 2>&1'
+alias ${_Z_CMD:-Z}='_z 2>&1'
 
 [ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
 
@@ -258,7 +258,7 @@ if type compctl >/dev/null 2>&1; then
 elif type complete >/dev/null 2>&1; then
     # bash
     # tab completion
-    complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
+    complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-Z}
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {

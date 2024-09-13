@@ -70,18 +70,5 @@ xterm*|rxvt*)
     ;;
 esac
 
-if command_exists "lua" && [ -f ~/z.lua/z.lua ]; then
-    eval "$(lua ~/z.lua/z.lua  --init bash once enhanced)"
-    alias zz='z -c' # 严格匹配当前路径的子路径
-    alias zr='z -r' # 跳转到包含关键字并且访问次数最高的路径
-    alias zt='z -t' # 跳转到包含关键字并且最近访问过的路径
-    alias zl='z -l' # 不跳转，只是列出所有匹配的路径
-    alias ze='z -e' # 不跳转，只是打印出匹配并且权重最高的路径
-    alias zi='z -i' # 使用交互式选择模式
-    alias zf='z -I' # 使用 fzf 对多个结果进行选择
-    alias zb='z -b' # 快速回到父目录
-elif [ -f ~/.local/bin/z.sh ]; then
-    source ~/.local/bin/z.sh
-fi
 
 [ -f ~/.configrc ] && source ~/.configrc
