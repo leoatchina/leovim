@@ -252,6 +252,15 @@ if has('nvim')
     PlugAdd 'stevearc/dressing.nvim'
 endif
 " ------------------------------
+" markdown
+" ------------------------------
+if executable('mdr') && (has('nvim') || has('patch-8.1.1401'))
+    PlugAddOpt 'preview-markdown.vim'
+endif
+if has('nvim-0.10')
+    PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
+endif
+" ------------------------------
 " format tools
 " ------------------------------
 PlugAdd 'sbdchd/neoformat'
