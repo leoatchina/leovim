@@ -151,7 +151,7 @@ if has('patch-9.0.0185') || has('nvim')
             endif
             if Planned('avante.nvim')
                 PlugAdd 'stevearc/dressing.nvim'
-                PlugAdd 'MeanderingProgrammer/render-markdown.nvim', { 'for': ['markdown', 'Avante'] }
+                PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
             endif
         else
             PlugAdd 'github/copilot.vim'

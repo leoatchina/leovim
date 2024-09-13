@@ -373,3 +373,9 @@ endif
 if Installed('nvim-web-devicons')
     lua require('nvim-web-devicons').setup({})
 endif
+" --------------------------
+" render-markdown
+" --------------------------
+if Installed('render-markdown.nvim')
+    lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
+endif

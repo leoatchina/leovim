@@ -49,7 +49,7 @@ if Installed('avante.nvim') then
       allow_insecure = true,
       timeout = 30000,
       temperature = 0,
-      max_tokens = 4096 * 16,
+      max_tokens = 4096 * 128,
     },
     mappings = {
       --- @class AvanteConflictMappings
