@@ -143,10 +143,18 @@ if has('patch-9.0.0185') || has('nvim')
             PlugAdd 'zbirenbaum/copilot.lua'
             PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
             if g:complete_engine == 'cmp'
-                if UNIX()
-                    PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+                if executable('cargo')
+                    if UNIX()
+                        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
+                    else
+                        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource true' }
+                    endif
                 else
-                    PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
+                    if UNIX()
+                        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+                    else
+                        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
+                    endif
                 endif
             endif
             if Planned('avante.nvim')
