@@ -18,17 +18,7 @@ map(modes, "<M-i>C", [[<Cmd>CopilotChatCommit<Cr>]], opts)
 map(modes, "<M-i>S", [[<Cmd>CopilotChatCommitStaged<Cr>]], opts)
 require('copilot').setup({
   panel = { enabled = false },
-  suggestion = {
-    enabled = false,
-    keymap = {
-      accept = "<M-.>",
-      accept_word = "<M-}>",
-      accept_line = "<M-{>",
-      next = "<M-;>",
-      prev = "<M-,>",
-      dismiss = "<M-?>",
-    },
-  },
+  suggestion = { enabled = false},
 })
 if Installed('avante.nvim') then
   require('avante').setup({
@@ -75,14 +65,14 @@ if Installed('avante.nvim') then
         normal = "<CR>",
         insert = "<C-s>",
       },
-      ask = "<M-i><M-a>",
+      ask = "<M-i><M-i>",
       edit = "<M-i><M-e>",
       refresh = "<M-i><M-r>",
       toggle = {
-        default = "<M-i><M-i>",
+        default = "<M-i><M-t>",
         debug = "<M-i><M-d>",
         hint = "<M-i><M-h>",
-        suggestion = "<Nop>",
+        suggestion = "<M-i><M-s>",
       }
     },
     hints = { enabled = true },
