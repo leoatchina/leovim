@@ -21,6 +21,8 @@ require('copilot').setup({
   suggestion = { enabled = false},
 })
 if Installed('avante.nvim') then
+  map(modes, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], opts)
+  map(modes, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], opts)
   require('avante').setup({
     ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
     provider = "copilot", -- Recommend using Claude
