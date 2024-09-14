@@ -124,6 +124,10 @@ elseif g:complete_engine == 'coc'
     endif
     PlugAddOpt 'coc-fzf'
 endif
+" ------------------------------
+" dict && snippets
+" ------------------------------
+PlugAddOpt 'vim-dict'
 if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'hrsh7th/vim-vsnip'
     PlugAdd 'rafamadriz/friendly-snippets'
@@ -131,16 +135,14 @@ if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##Te
         PlugAdd 'hrsh7th/vim-vsnip-integ'
     endif
 endif
-PlugAddOpt 'vim-dict'
 " ------------------------------
-" AI completion
+" AI completion engine
 " ------------------------------
 if has('patch-9.0.0185') || has('nvim')
     if Require('codeium')
         PlugAdd 'Exafunction/codeium.vim'
     elseif Require('copilot') && g:node_version > 18
         if has('nvim-0.9.5')
-            PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
             if g:complete_engine == 'cmp' && has('nvim-0.10.1')
                 PlugAdd 'zbirenbaum/copilot-cmp'
                 PlugAdd 'zbirenbaum/copilot.lua'
@@ -160,6 +162,7 @@ if has('patch-9.0.0185') || has('nvim')
             else
                 PlugAdd 'github/copilot.vim'
             endif
+            PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
         else
             PlugAdd 'github/copilot.vim'
         endif
