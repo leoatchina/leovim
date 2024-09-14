@@ -79,8 +79,8 @@ inoremap <silent><expr><c-l> coc#refresh()
 imap <expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
 imap <expr> <C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
 " scroll
-imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<C-\><C-n>:call MoveToEndAndAddSemicolon(1)\<CR>"
-imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-\><C-n>:call MoveToEndAndAddSemicolon(0)\<CR>"
+imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<C-\><C-n>:call MoveToEndAndAddSemicolon()\<CR>"
+imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-k>"
 xmap <silent><expr><C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\%"
 xmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\g%"
 " call hierarchy
