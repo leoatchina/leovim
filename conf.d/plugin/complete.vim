@@ -35,21 +35,9 @@ if Installed('copilotchat.nvim')
     nnoremap <M-i>s :CopliotChatSave<Space>
     nnoremap <M-i>l :CopliotChatLoad<Space>
 endif
-" ------------------------------
-" normal complete_engine
-" ------------------------------
-if Installed('vimcomplete')
-    source $CFG_DIR/vcm.vim
-elseif InstalledCmp()
-    lua require("cmp_cfg")
-elseif Installed('coc.nvim')
-    source $CFG_DIR/coc.vim
-elseif g:complete_engine == 'apm'
-    source $CFG_DIR/apm.vim
-elseif g:complete_engine != ''
-    let g:complete_engine = 'mcm'
-    source $CFG_DIR/mcm.vim
-endif
+" -----------------------------
+" vista_default_executive
+" -----------------------------
 if InstalledNvimLsp()
     let g:vista_default_executive = 'nvim_lsp'
     if g:node_version > 14
@@ -91,77 +79,23 @@ if InstalledNvimLsp()
     lua require("lsp")
 elseif Installed('coc.nvim')
     let g:vista_default_executive = 'coc'
-    let g:coc_global_extensions = [
-                \ 'coc-lists',
-                \ 'coc-marketplace',
-                \ 'coc-snippets',
-                \ 'coc-yank',
-                \ 'coc-highlight',
-                \ 'coc-git',
-                \ 'coc-json',
-                \ 'coc-sql',
-                \ 'coc-xml',
-                \ 'coc-sh',
-                \ 'coc-vimlsp',
-                \ 'coc-pyright',
-                \ ]
-    if UNIX()
-        let g:coc_global_extensions += ['coc-lua']
-    elseif WINDOWS()
-        let g:coc_global_extensions += ['coc-powershell']
-    endif
-    if has('nvim')
-        let g:coc_global_extensions += ['coc-explorer', 'coc-symbol-line']
-    endif
-    if Require('web')
-        let g:coc_global_extensions += [
-                    \ 'coc-html',
-                    \ 'coc-css',
-                    \ 'coc-yaml',
-                    \ 'coc-phpls',
-                    \ 'coc-tsserver',
-                    \ 'coc-angular',
-                    \ 'coc-vetur',
-                    \ ]
-    endif
-    if Require('c')
-        let g:coc_global_extensions += ['coc-cmake']
-        if g:clangd_exe != ''
-            let g:coc_global_extensions += ['coc-clangd']
-        endif
-    endif
-    if Require('ccls') && g:ccls_exe != ''
-        call coc#config('languageserver.ccls', {
-                    \ "command": "ccls",
-                    \ "filetypes": g:c_filetypes,
-                    \ "rootPatterns": g:root_patterns,
-                    \ "initializationOptions": {
-                    \ "cache": {
-                    \ "directory": $HOME . "/.leovim.d/ccls"
-                    \ }
-                    \ }
-                    \ })
-    endif
-    if Require('R') && g:R_exe != ''
-        let g:coc_global_extensions += ['coc-r-lsp']
-    endif
-    if Require('rust') && g:cargo_exe != ''
-        let g:coc_global_extensions += ['coc-rust-analyzer']
-    endif
-    if Require('java') && executable('java')
-        let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
-    endif
-    if Require('go') && g:go_exe != ''
-        let g:coc_global_extensions += ['coc-go']
-    endif
-    if Require('writing')
-        let g:coc_global_extensions += ['coc-vimtex']
-    endif
-    if Installed('copilot.vim')
-        let g:coc_global_extensions += ['@hexuhua/coc-copilot']
-    endif
 elseif Planned('vista.vim')
     let g:vista_default_executive = 'ctags'
+endif
+" ------------------------------
+" normal complete_engine
+" ------------------------------
+if Installed('vimcomplete')
+    source $CFG_DIR/vcm.vim
+elseif InstalledCmp()
+    lua require("cmp_cfg")
+elseif Installed('coc.nvim')
+    source $CFG_DIR/coc.vim
+elseif g:complete_engine == 'apm'
+    source $CFG_DIR/apm.vim
+elseif g:complete_engine != ''
+    let g:complete_engine = 'mcm'
+    source $CFG_DIR/mcm.vim
 endif
 " ------------------------------
 " vsnip

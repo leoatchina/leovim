@@ -18,6 +18,75 @@ else
     let g:coc_data_home = $DEPLOY_DIR . "/coc"
 endif
 " ------------------------
+" coc-global-extensions
+" ------------------------
+let g:coc_global_extensions = [
+            \ 'coc-lists',
+            \ 'coc-marketplace',
+            \ 'coc-snippets',
+            \ 'coc-yank',
+            \ 'coc-highlight',
+            \ 'coc-git',
+            \ 'coc-json',
+            \ 'coc-sql',
+            \ 'coc-xml',
+            \ 'coc-sh',
+            \ 'coc-vimlsp',
+            \ 'coc-pyright',
+            \ ]
+if UNIX()
+    let g:coc_global_extensions += ['coc-lua']
+elseif WINDOWS()
+    let g:coc_global_extensions += ['coc-powershell']
+endif
+if has('nvim')
+    let g:coc_global_extensions += ['coc-explorer', 'coc-symbol-line']
+endif
+if Require('web')
+    let g:coc_global_extensions += [
+                \ 'coc-html',
+                \ 'coc-css',
+                \ 'coc-yaml',
+                \ 'coc-phpls',
+                \ 'coc-tsserver',
+                \ 'coc-angular',
+                \ 'coc-vetur',
+                \ ]
+endif
+if Require('c')
+    let g:coc_global_extensions += ['coc-cmake']
+    if g:clangd_exe != ''
+        let g:coc_global_extensions += ['coc-clangd']
+    endif
+endif
+if Require('ccls') && g:ccls_exe != ''
+    call coc#config('languageserver.ccls', {
+                \ "command": "ccls",
+                \ "filetypes": g:c_filetypes,
+                \ "rootPatterns": g:root_patterns,
+                \ "initializationOptions": {
+                \ "cache": {
+                \ "directory": $HOME . "/.leovim.d/ccls"
+                \ }
+                \ }
+                \ })
+endif
+if Require('R') && g:R_exe != ''
+    let g:coc_global_extensions += ['coc-r-lsp']
+endif
+if Require('rust') && g:cargo_exe != ''
+    let g:coc_global_extensions += ['coc-rust-analyzer']
+endif
+if Require('java') && executable('java')
+    let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
+endif
+if Require('go') && g:go_exe != ''
+    let g:coc_global_extensions += ['coc-go']
+endif
+if Require('writing')
+    let g:coc_global_extensions += ['coc-vimtex']
+endif
+" ------------------------
 " coc root_patterns
 " ------------------------
 autocmd FileType css,html let b:coc_additional_keywords = ["-"] + g:root_patterns
