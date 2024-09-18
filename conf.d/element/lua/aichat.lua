@@ -35,7 +35,7 @@ if Installed('avante.nvim') then
     auto_suggestions_provider = provider,
     claude = {
       endpoint = "https://api.anthropic.com",
-      model = "claude-3-5-sonnet-20240620",
+      model = vim.g.claude_model or "claude-3-sonnet-20240229",
       temperature = 0,
       max_tokens =  max_tokens
     },
