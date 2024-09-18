@@ -146,25 +146,27 @@ if has('patch-9.0.0185') || has('nvim')
             if g:complete_engine == 'cmp' && has('nvim-0.10.1')
                 PlugAdd 'zbirenbaum/copilot-cmp'
                 PlugAdd 'zbirenbaum/copilot.lua'
-                if executable('cargo')
-                    if UNIX()
-                        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
-                    else
-                        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource true' }
-                    endif
-                else
-                    if UNIX()
-                        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
-                    else
-                        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
-                    endif
-                endif
             else
                 PlugAdd 'github/copilot.vim'
             endif
             PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
         else
             PlugAdd 'github/copilot.vim'
+        endif
+    endif
+endif
+if exists('$ANTHROPIC_API_KEY') || Planned('copilot.lua')
+    if executable('cargo')
+        if UNIX()
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
+        else
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource true' }
+        endif
+    else
+        if UNIX()
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+        else
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
 endif

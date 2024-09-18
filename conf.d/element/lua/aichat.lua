@@ -27,15 +27,17 @@ end
 if Installed('avante.nvim') then
   map(modes, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], opts)
   map(modes, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], opts)
+  local max_tokens = 4096 * 32
+  local provider = vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude' or 'copilot'
   require('avante').setup({
     ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
-    provider = "copilot", -- Recommend using Claude
-    behaviour = {
-      auto_suggestions = false, -- Experimental stage
-      auto_set_highlight_group = true,
-      auto_set_keymaps = true,
-      auto_apply_diff_after_generation = false,
-      support_paste_from_clipboard = false,
+    provider = provider,
+    auto_suggestions_provider = provider,
+    claude = {
+      endpoint = "https://api.anthropic.com",
+      model = "claude-3-5-sonnet-20240620",
+      temperature = 0,
+      max_tokens =  max_tokens
     },
     copilot = {
       endpoint = "https://api.githubcopilot.com",
@@ -44,7 +46,14 @@ if Installed('avante.nvim') then
       allow_insecure = true,
       timeout = 30000,
       temperature = 0,
-      max_tokens = 4096 * 128,
+      max_tokens =  max_tokens
+    },
+    behaviour = {
+      auto_suggestions = provider ~= 'copilot', -- Experimental stage
+      auto_set_highlight_group = true,
+      auto_set_keymaps = true,
+      auto_apply_diff_after_generation = false,
+      support_paste_from_clipboard = false,
     },
     mappings = {
       --- @class AvanteConflictMappings
