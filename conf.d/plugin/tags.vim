@@ -285,12 +285,10 @@ function! s:lsp_tags_searchall(method, ...) abort
     " --------------------------
     if index(g:c_filetypes, &ft) >= 0 && index(['definition', 'tags'], method) >= 0 && g:ctags_type != ''
         let lsp = 0
+    elseif method == "tags"
+        let lsp = 0
     else
-        if method == "tags"
-            let lsp = 0
-        else
-            let lsp = 1
-        endif
+        let lsp = 1
     endif
     " --------------------------
     " coc
@@ -312,7 +310,6 @@ function! s:lsp_tags_searchall(method, ...) abort
             else
                 let symbol_found = CocAction(jump_command, open_action)
             endif
-            sleep 512m
             if symbol_found
                 call s:settagstack(winnr, tagname, pos)
                 call feedkeys("zz", "n")
@@ -329,7 +326,6 @@ function! s:lsp_tags_searchall(method, ...) abort
             let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, open_action)
         endif
         call execute(cmd)
-        sleep 512m
         let symbol_found = get(g:, 'lsp_found', 0)
         if symbol_found
             call s:settagstack(winnr, tagname, pos)
