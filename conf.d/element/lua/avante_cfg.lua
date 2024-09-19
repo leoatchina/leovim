@@ -1,5 +1,5 @@
-map(modes, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], opts)
-map(modes, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], opts)
+vim.keymap.set({ "n", "v", "x" }, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
 local max_tokens = vim.g.max_tokens or 4096 * 32
 local provider = vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude' or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai' or 'copilot'
 require('avante').setup({

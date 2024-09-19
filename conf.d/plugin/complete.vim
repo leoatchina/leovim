@@ -28,13 +28,13 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
 endif
 if Installed('copilotchat.nvim')
-    lua require("aichat")
+    lua require("copilotchat")
     command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
     nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
     nnoremap <M-i>s :CopliotChatSave<Space>
     nnoremap <M-i>l :CopliotChatLoad<Space>
 endif
-if Installed('avantte.nvim')
+if Installed('avante.nvim')
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
 elseif !Installed('copilotchat.nvim')
