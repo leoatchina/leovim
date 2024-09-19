@@ -104,6 +104,8 @@ function! s:asyncrun(...)
         let run_cmd = s:run_command . params. ' time %'
     elseif &ft ==# 'sh' && executable('bash')
         let run_cmd = s:run_command . params . ' time bash %'
+    elseif &ft ==# 'python' && executable('python3')
+        let run_cmd = s:run_command . params . ' time python3 %'
     elseif &ft ==# 'python' && executable('python')
         let run_cmd = s:run_command . params . ' time python %'
     elseif &ft ==# 'r' && executable('Rscript')
