@@ -34,6 +34,9 @@ if Installed('copilotchat.nvim')
     nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
     nnoremap <M-i>s :CopliotChatSave<Space>
     nnoremap <M-i>l :CopliotChatLoad<Space>
+else
+    nnoremap <M-i> <Nop>
+    xnoremap <M-i> <Nop>
 endif
 " -----------------------------
 " vista_default_executive
