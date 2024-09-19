@@ -155,7 +155,7 @@ if has('patch-9.0.0185') || has('nvim')
         endif
     endif
 endif
-if exists('$ANTHROPIC_API_KEY') || exists('$OPENAI_API_KEY') || Planned('copilot.lua')
+if has('nvim-0.10') && (exists('$ANTHROPIC_API_KEY') || exists('$OPENAI_API_KEY') || Planned('copilot.lua'))
     if executable('cargo')
         if UNIX()
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
