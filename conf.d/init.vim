@@ -367,7 +367,7 @@ onoremap g_ $
 function! MoveToEndAndAddSemicolon() abort
     execute "normal! :s/\\s\\+$//e\\r"
     normal! g_
-    if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php'], &ft) >= 0
+    if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php', 'javascript', 'typescript'], &ft) >= 0
         if index([';', '{', '}'], getline('.')[col('.') - 1]) >= 0
             normal! a
         else
