@@ -11,17 +11,17 @@ endif
 if Planned('codeium.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
-    imap <silent><nowait><script><expr><M-.> codeium#Accept()
-    imap <silent><nowait><script><expr><M-/> codeium#Complete()
-    imap <silent><nowait><script><expr><M-?> codeium#Clear()
+    imap <silent><nowait><script><expr><M-i> codeium#Accept()
+    imap <silent><nowait><script><expr><M-.> codeium#Complete()
+    imap <silent><nowait><script><expr><M-/> codeium#Clear()
     imap <silent><nowait><script><expr><M-;> codeium#CycleCompletions(1)
     imap <silent><nowait><script><expr><M-,> codeium#CycleCompletions(-1)
 elseif Planned('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
     let g:copilot_no_tab_map = v:true
-    imap <silent><nowait><script><expr><M-.> copilot#Accept("\<CR>")
-    imap <silent><nowait><M-/> <Plug>(copilot-suggest)
-    imap <silent><nowait><M-?> <Plug>(copilot-dismiss)
+    imap <silent><nowait><script><expr><M-i> copilot#Accept("\<CR>")
+    imap <silent><nowait><M-.> <Plug>(copilot-suggest)
+    imap <silent><nowait><M-/> <Plug>(copilot-dismiss)
     imap <silent><nowait><M-;> <Plug>(copilot-next)
     imap <silent><nowait><M-,> <Plug>(copilot-previous)
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
@@ -32,13 +32,14 @@ elseif Installed('copilotchat.nvim') && Installed('copilot.lua')
     nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
     nnoremap <M-i>s :CopliotChatSave<Space>
     nnoremap <M-i>l :CopliotChatLoad<Space>
+else
+    nnoremap <M-i> <Nop>
+    xnoremap <M-i> <Nop>
+    inoremap <M-i> <Nop>
 endif
 if Installed('avante.nvim')
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
-elseif !Installed('copilotchat.nvim')
-    nnoremap <M-i> <Nop>
-    xnoremap <M-i> <Nop>
 endif
 " -----------------------------
 " vista_default_executive

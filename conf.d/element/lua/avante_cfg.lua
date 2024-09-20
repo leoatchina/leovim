@@ -37,10 +37,10 @@ require('avante').setup({
       prev = "c[",
     },
     suggestion = {
-      accept = "<M-.>",
+      accept = "<M-i>",
       next = "<M-;>",
       prev = "<M-,>",
-      dismiss = "<M-?>",
+      dismiss = "<M-/>",
     },
     jump = {
       next = "]]",
