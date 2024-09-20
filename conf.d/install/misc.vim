@@ -1,11 +1,13 @@
 " ----------------------------
 " nvim plugins
 " ----------------------------
-if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('CopilotChat.nvim')
+if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('CopilotChat.nvim') || Planned('avante.nvim')
     PlugAdd 'williamboman/mason.nvim'
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
-    PlugAdd 'nvim-neotest/nvim-nio'
+    if Planned('nvim-dap')
+        PlugAdd 'nvim-neotest/nvim-nio'
+    endif
 endif
 " ----------------------------
 " wilder

@@ -16,9 +16,7 @@ map(mode, "<M-i>d", [[<Cmd>CopilotChatFixDiagnostic<Cr>]], opts)
 map(mode, "<M-i>C", [[<Cmd>CopilotChatCommit<Cr>]], opts)
 map(mode, "<M-i>S", [[<Cmd>CopilotChatCommitStaged<Cr>]], opts)
 -- copilot
-if Installed('copilot.lua') then
-  require('copilot').setup({
-    panel = { enabled = false },
-    suggestion = { enabled = false},
-  })
-end
+require('copilot').setup({
+  panel = { enabled = false },
+  suggestion = { enabled = vim.fn.Installed('cmp-copilot') == 0 },
+})

@@ -145,10 +145,8 @@ if has('patch-9.0.0185') || has('nvim')
         if has('nvim-0.9.5')
             if g:complete_engine == 'cmp' && has('nvim-0.10.1')
                 PlugAdd 'zbirenbaum/copilot-cmp'
-                PlugAdd 'zbirenbaum/copilot.lua'
-            else
-                PlugAdd 'github/copilot.vim'
             endif
+            PlugAdd 'zbirenbaum/copilot.lua'
             PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
         else
             PlugAdd 'github/copilot.vim'
