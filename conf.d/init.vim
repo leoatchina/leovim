@@ -69,8 +69,8 @@ endif
 function! HAS_GUI()
     return s:gui_running
 endfunction
-if exists('g:vscode') && !has('nvim-0.9')
-    echoe "vscode-neovm required nvim-0.9+!"
+if exists('g:vscode') && !has('nvim-0.10')
+    echoe "vscode-neovm required nvim-0.10+!"
     finish
 elseif WINDOWS()
     if !has('nvim') && v:version < 900

@@ -1,7 +1,3 @@
-function! HasBackSpace() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1] =~ '\s'
-endfunction
 if Installed('mason.nvim')
     lua require("mason_cfg")
 endif
