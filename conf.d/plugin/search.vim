@@ -250,7 +250,7 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
         endif
         exec cmd
     endfunction
-    command! -nargs=* LeaderfSearch call s:leaderf_search(<f-args>, 1)
+    command! -nargs=* -complete=dir LeaderfSearch call s:leaderf_search(<f-args>, 1)
     command! -nargs=* LeaderfSearchAll call s:leaderf_search(<f-args>)
 endif
 " ------------------------------
@@ -285,21 +285,21 @@ if PlannedFzf()
     nnoremap <silent><nowait><C-f>] :FzfSearch <C-r><C-w><Cr>
     xnoremap <silent><nowait><C-f>] :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
     nnoremap <silent><nowait><C-f>[ :FzfSearchLast<Cr>
-    nnoremap <silent><nowait><C-f>? :FzfSearch<Space>
+    nnoremap <nowait><C-f>? :FzfSearch<Space>
     if exists(":LeaderfSearchAll")
         let g:searchall = 'LeaderfSearchAll'
         nnoremap <silent><nowait><C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
         xnoremap <silent><nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
-        nnoremap <silent><nowait><C-f>/ :LeaderfSearchAll<Space>
-        nnoremap <silent><nowait><C-f><C-f> :LeaderfSearch<Space>
-        xnoremap <silent><nowait><C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
+        nnoremap <nowait><C-f>/ :LeaderfSearchAll<Space>
+        nnoremap <nowait><C-f><C-f> :LeaderfSearch<Space>
+        xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
     else
         let g:searchall = 'FzfSearchAll'
         " searchall
         nnoremap <silent><nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
         xnoremap <silent><nowait><C-f><Cr> :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
         nnoremap <silent><nowait><C-f>. :FzfSearchAllLast<Cr>
-        nnoremap <silent><nowait><C-f>/ :FzfSearchAll<Space>
+        nnoremap <nowait><C-f>/ :FzfSearchAll<Space>
     endif
 else
     let g:searchall = 'GrepAll'
