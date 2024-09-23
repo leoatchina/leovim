@@ -41,13 +41,16 @@ inoremap <M-h> <Left>
 inoremap <M-j> <Down>
 inoremap <M-k> <Up>
 " save
-nnoremap <C-s> :w!<Cr>
-onoremap <C-s> :w!<Cr>
-cnoremap <C-s> w!<Cr>
-inoremap <C-s> <C-o>:w!<Cr>
-xnoremap <C-s> <ESC>:w!<Cr>
-nnoremap <leader>W :wa!<Cr>
-xnoremap <leader>W <ESC>:wa!<Cr>
+nnoremap <M-s> :w!<Cr>
+onoremap <M-s> :w!<Cr>
+cnoremap <M-s> w!<Cr>
+inoremap <M-s> <C-o>:w!<Cr>
+xnoremap <M-s> <ESC>:w!<Cr>
+nnoremap <M-S> :wa!<Cr>
+onoremap <M-S> :wa!<Cr>
+cnoremap <M-S> wa!<Cr>
+inoremap <M-S> <C-o>:wa!<Cr>
+xnoremap <M-S> <ESC>:wa!<Cr>
 " buffers mark messages
 nnoremap <leader><leader> <C-^>
 " map to <esc>
