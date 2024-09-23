@@ -22,12 +22,12 @@ else
     nmap <silent>}] ]M
     nmap <silent>{[ [M
     if PlannedCoc()
-        nmap <C-s> <Plug>(coc-range-select)
-        xmap <C-s> <Plug>(coc-range-select)
-        omap <C-s> <Plug>(coc-range-select)
+        nmap <M-s> <Plug>(coc-range-select)
+        xmap <M-s> <Plug>(coc-range-select)
+        omap <M-s> <Plug>(coc-range-select)
     elseif Installed('wildfire.vim')
-        let g:wildfire_fuel_map = '<C-s>'
-        let g:wildfire_water_map = '<S-Tab>'
+        let g:wildfire_fuel_map = '<M-s>'
+        let g:wildfire_water_map = '<M-S>'
         let g:wildfire_objects = get(g:, "wildfire_objects", split("iw i' i\" i] i) iL ii i}"))
     endif
 endif

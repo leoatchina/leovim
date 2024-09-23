@@ -24,10 +24,10 @@ require("nvim-treesitter.configs").setup({
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = '<C-s>',
-      scope_incremental = '<Tab>',
+      init_selection = '<M-s>',
+      scope_incremental = '<M-s>',
       node_incremental = '<Tab>',
-      node_decremental = '<S-Tab>',
+      node_decremental = '<M-S>',
     },
   },
   matchup = {
