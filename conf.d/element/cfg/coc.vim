@@ -136,11 +136,15 @@ if has('nvim')
     nnoremap <silent><leader>S :CocFzfList symbols<Cr>
 endif
 " completion map
-inoremap <silent><expr> <Cr>  coc#pum#visible() ? coc#pum#stop() : "\<C-g>u\<Cr>\<C-r>=coc#on_enter()\<Cr>"
+function! s:has_backspace() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1] =~ '\s'
+endfunction
+inoremap <silent><expr> <Cr> coc#pum#visible() ? coc#pum#stop() : "\<C-g>u\<Cr>\<C-r>=coc#on_enter()\<Cr>"
 inoremap <silent><expr> <TAB> coc#pum#visible() == v:false ? "\<Tab>" :
             \ coc#pum#info()['index'] < 0 ? coc#pum#next(1) :
             \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<Cr>" :
-            \ HasBackSpace() ? coc#refresh() :
+            \ <SID>has_backspace() ? coc#refresh() :
             \ coc#_select_confirm()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr><c-l> coc#refresh()
@@ -156,7 +160,7 @@ xmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\g%"
 nnoremap <silent>gh :call CocAction('showIncomingCalls')<Cr>
 nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>
 nnoremap <silent>gs :call CocAction('showSubTypes')<Cr>
-nnoremap <silent>gS :call CocAction('showSuperTypes')<Cr>
+nnoremap <silent>gt :call CocAction('showSuperTypes')<Cr>
 " refactor
 nmap <silent><leader>R <Plug>(coc-refactor)
 " ----------------------------
