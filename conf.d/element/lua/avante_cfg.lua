@@ -27,7 +27,7 @@ require('avante').setup({
     max_tokens = max_tokens
   },
   behaviour = {
-    auto_suggestions = provider ~= 'copilot', -- Experimental stage
+    auto_suggestions = provider ~= 'copilot' or Installed('copilot-cmp') == false,
     auto_set_highlight_group = true,
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
