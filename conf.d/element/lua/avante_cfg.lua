@@ -1,11 +1,19 @@
 vim.keymap.set({ "n", "v", "x" }, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
 vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
-local max_tokens = vim.g.max_tokens and vim.g.max_tokens < 8192 and vim.g.max_tokens or 8192
-local provider = vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude' or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai' or 'copilot'
+local max_tokens = vim.g.max_tokens
+  and type(vim.g.max_tokens) == 'number'
+  and vim.g.max_tokens > 0
+  and vim.g.max_tokens < 8192
+  and vim.g.max_tokens
+  or 8192
+local provider = vim.g.avante_provider
+  or vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude'
+  or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai'
+  or 'copilot'
 require('avante').setup({
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
   provider = provider,
-  auto_suggestions_provider = provider,
+  auto_suggestions_provider = vim.g.avante_suggestions_provider or provider,
   claude = {
     model = vim.g.claude_model or "claude-3-5-sonnet-20240620",
     max_tokens =  max_tokens
