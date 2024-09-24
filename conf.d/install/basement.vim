@@ -136,39 +136,6 @@ if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##Te
     endif
 endif
 " ------------------------------
-" AI completion engine
-" ------------------------------
-if has('patch-9.0.0185') || has('nvim')
-    if Require('codeium')
-        PlugAdd 'Exafunction/codeium.vim'
-    elseif Require('copilot') && g:node_version > 18
-        if has('nvim-0.9.5')
-            if g:complete_engine == 'cmp' && has('nvim-0.10.1')
-                PlugAdd 'zbirenbaum/copilot-cmp'
-            endif
-            PlugAdd 'zbirenbaum/copilot.lua'
-            PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
-        else
-            PlugAdd 'github/copilot.vim'
-        endif
-    endif
-endif
-if has('nvim-0.10') && (exists('$ANTHROPIC_API_KEY') || exists('$OPENAI_API_KEY') || Planned('copilot.lua'))
-    if executable('cargo')
-        if UNIX()
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
-        else
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource true' }
-        endif
-    else
-        if UNIX()
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
-        else
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
-        endif
-    endif
-endif
-" ------------------------------
 " check tool
 " ------------------------------
 if g:complete_engine == 'cmp'
@@ -277,6 +244,39 @@ if executable('git') && v:version >= 800 && g:git_version >= 1.85
     PlugAdd 'junegunn/gv.vim'
     if g:has_popup_floating && UNIX() && (!Planned('leaderf') || !has('nvim') && !has('patch-9.0.200'))
         PlugAdd 'APZelos/blamer.nvim'
+    endif
+endif
+" ------------------------------
+" AI completion engine
+" ------------------------------
+if has('patch-9.0.0185') || has('nvim')
+    if Require('codeium')
+        PlugAdd 'Exafunction/codeium.vim'
+    elseif Require('copilot') && g:node_version > 18
+        if has('nvim-0.9.5')
+            if g:complete_engine == 'cmp' && has('nvim-0.10.1')
+                PlugAdd 'zbirenbaum/copilot-cmp'
+            endif
+            PlugAdd 'zbirenbaum/copilot.lua'
+            PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+        else
+            PlugAdd 'github/copilot.vim'
+        endif
+    endif
+endif
+if has('nvim-0.10') && Planned('nvim-treesitter') && (exists('$ANTHROPIC_API_KEY') || exists('$OPENAI_API_KEY') || Planned('copilot.lua'))
+    if executable('cargo')
+        if UNIX()
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
+        else
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource true' }
+        endif
+    else
+        if UNIX()
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+        else
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
+        endif
     endif
 endif
 " ----------------------------

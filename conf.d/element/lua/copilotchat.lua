@@ -18,5 +18,5 @@ map(mode, "<M-i>S", [[<Cmd>CopilotChatCommitStaged<Cr>]], opts)
 -- copilot
 require('copilot').setup({
   panel = { enabled = false },
-  suggestion = { enabled = vim.fn.Installed('cmp-copilot') == 0 },
+  suggestion = { enabled = not Installed('cmp-copilot') },
 })
