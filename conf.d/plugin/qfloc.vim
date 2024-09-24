@@ -69,11 +69,11 @@ if PlannedLeaderf()
             cclose
             LeaderfQuickFix
         else
-            call preview#errmsg("No quickfix No loclist opened.")
+            call preview#errmsg("Neigher quickfix nor loclist opened!")
         endif
     endfunction
     command! LeaderfQfLoc call s:leaderf_qf_loc()
-    nnoremap <silent>ZO :LeaderfQfLoc<Cr>
+    nnoremap <silent>Z? :LeaderfQfLoc<Cr>
 endif
 " ----------------------------
 " bqf

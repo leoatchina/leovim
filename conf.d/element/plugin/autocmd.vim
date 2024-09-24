@@ -29,14 +29,6 @@ endif
 " --------------------------
 autocmd BufReadPost * silent! normal g`"
 " --------------------------
-" FOLDS
-" --------------------------
-augroup FOLDS
-    autocmd!
-    autocmd FileType tex setl foldlevel=0 foldnestmax=1
-    autocmd BufRead,BufNewFile *.c,*.cpp,*.cc setl foldlevel=0 foldnestmax=1
-augroup END
-" --------------------------
 " number
 " --------------------------
 set number
