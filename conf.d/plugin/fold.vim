@@ -13,13 +13,15 @@ nmap <leader>zb zfiB
 nmap ,zb    zfaB
 " ufo
 if Installed('nvim-ufo')
-    if AdvCompEngine()
-        lua require('ufo').setup()
-    elseif Installed('nvim-treesitter')
+    if Installed('nvim-treesitter')
         lua require('ufo').setup({provider_selector = function(bufnr, filetype, buftype) return {'treesitter', 'indent'} end })
+    elseif AdvCompEngine()
+        lua require('ufo').setup()
     else
         lua require('ufo').setup({provider_selector = function(bufnr, filetype, buftype) return {''} end })
     endif
+    lua vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+    lua vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 endif
 nmap <leader>zm zm
 nmap ,zm zM
