@@ -6,7 +6,6 @@ set nospell
 set noeb
 set nocursorcolumn
 set nowrap
-set nofoldenable
 set nolist
 set nobackup
 set nowritebackup
