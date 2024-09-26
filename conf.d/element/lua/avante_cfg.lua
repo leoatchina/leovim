@@ -14,7 +14,7 @@ require('avante').setup({
   provider = provider,
   auto_suggestions_provider = vim.g.avante_suggestions_provider or provider,
   claude = {
-    model = vim.g.claude_model or "claude-3-sonnet-20240229",
+    model = vim.g.claude_model or "claude-3-haiku-20240229",
     max_tokens =  max_tokens
   },
   copilot = {
