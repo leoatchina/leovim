@@ -132,14 +132,15 @@ if PlannedFzf()
                     \ call fzf#vim#grep(
                     \ 'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%:p')), 1,
                     \ fzf#vim#with_preview({'options': '--layout reverse --query '.shellescape(<q-args>).' --with-nth=4.. --delimiter=":"'}))
-        command! -bang -nargs=* FzfRoot call fzf#vim#grep(
-                    \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>) . ' ' . GetRootDir(),
-                    \ fzf#vim#with_preview({'options': ' --nth 4..  --delimiter=":"'}),
-                    \ <bang>0)
         command! -bang -nargs=* FzfRg call fzf#vim#grep(
                     \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>),
                     \ fzf#vim#with_preview({'options': ' --nth 4..  --delimiter=":"'}),
                     \ <bang>0)
+        command! -bang -nargs=* FzfRoot call fzf#vim#grep(
+                    \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>) . ' ' . GetRootDir(),
+                    \ fzf#vim#with_preview({'options': ' --nth 4..  --delimiter=":"'}),
+                    \ <bang>0)
+        nnoremap <nowait><C-f>/ :FzfRoot<Space>
     endif
     if executable('git')
         command! -bang -nargs=* FzfGGrep call fzf#vim#grep(
@@ -295,21 +296,19 @@ if PlannedFzf()
     nnoremap <nowait><C-f>] :FzfSearch <C-r><C-w><Cr>
     xnoremap <nowait><C-f>] :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
     nnoremap <nowait><C-f>[ :FzfSearchLast<Cr>
-    nnoremap <nowait><C-f>? :FzfSearch<Space>
     if exists(":LeaderfSearchAll")
         let g:searchall = 'LeaderfSearchAll'
         nnoremap <nowait><C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
         xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
-        nnoremap <nowait><C-f>/ :LeaderfSearchAll<Space>
         nnoremap <nowait><C-f><C-f> :LeaderfSearch <C-r><C-w><Space>
         xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
+        nnoremap <nowait><C-f>? :LeaderfSearchAll<Space>
     else
         let g:searchall = 'FzfSearchAll'
         " searchall
         nnoremap <nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
         xnoremap <nowait><C-f><Cr> :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
         nnoremap <nowait><C-f>. :FzfSearchAllLast<Cr>
-        nnoremap <nowait><C-f>/ :FzfSearchAll<Space>
     endif
 else
     let g:searchall = 'GrepAll'
