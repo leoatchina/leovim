@@ -23,23 +23,23 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-,> <Plug>(copilot-previous)
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
-    let g:ai_complete_engine = 'copliot'
-elseif Installed('copilotchat.nvim') && Installed('copilot.lua')
+    let g:ai_complete_engine = 'copliot.vim'
+elseif Installed('copilotchat.nvim', 'copilot.lua')
     lua require("copilotchat")
     command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
     nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
     nnoremap <M-i>s :CopliotChatSave<Space>
     nnoremap <M-i>l :CopliotChatLoad<Space>
-    let g:ai_complete_engine = 'copliot'
-else
-    nnoremap <M-i> <Nop>
-    xnoremap <M-i> <Nop>
-    inoremap <M-i> <Nop>
+    let g:ai_complete_engine = 'copliot.lua'
 endif
 if Installed('avante.nvim')
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
     let g:ai_complete_engine = empty(get(g:, 'ai_complete_engine', ""))  ? 'avante' : g:ai_complete_engine . '-' . 'avante'
+elseif !exists("g:ai_complete_engine")
+    nnoremap <M-i> <Nop>
+    xnoremap <M-i> <Nop>
+    inoremap <M-i> <Nop>
 endif
 " -----------------------------
 " vista_default_executive
