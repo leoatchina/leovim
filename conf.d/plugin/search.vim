@@ -141,6 +141,7 @@ if PlannedFzf()
                     \ fzf#vim#with_preview({'options': ' --nth 4..  --delimiter=":"'}),
                     \ <bang>0)
         nnoremap <nowait><C-f>/ :FzfRoot<Space>
+        xnoremap <nowait><C-f>/ :<C-u>FzfRoot <C-r>=GetVisualSelection()<Cr>
     endif
     if executable('git')
         command! -bang -nargs=* FzfGGrep call fzf#vim#grep(
@@ -263,11 +264,6 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
     endfunction
     command! -nargs=* -complete=dir LeaderfSearch call s:leaderf_search(<f-args>, 1)
     command! -nargs=* LeaderfSearchAll call s:leaderf_search(<f-args>)
-endif
-" ------------------------------
-" maps
-" ------------------------------
-if exists(":LeaderfSearchAll")
     nnoremap <nowait><C-f>; :Leaderf rg --next<Cr>
     nnoremap <nowait><C-f>, :Leaderf rg --previous<Cr>
     nnoremap <nowait><C-f>. :Leaderf rg --recal<Cr>
@@ -291,6 +287,9 @@ if exists(":LeaderfSearchAll")
     nnoremap <nowait>,\  :Leaderf rg --no-ignore --fuzzy -L -S --wd-mode=f --cword<Cr>
     nnoremap <nowait>,\| :Leaderf rg --no-ignore --fuzzy -L -S --cword<Cr>
 endif
+" ---------------------------------
+" maps make full use of fzf leaderf
+" ---------------------------------
 if PlannedFzf()
     " search
     nnoremap <nowait><C-f>] :FzfSearch <C-r><C-w><Cr>
@@ -312,22 +311,6 @@ if PlannedFzf()
     endif
 else
     let g:searchall = 'GrepAll'
-endif
-" search path && dir
-if PlannedLeaderf()
-    if PlannedFzf()
-        let g:search_tool = "leaderf-fzf"
-    else
-        let g:search_tool = "leaderf"
-    endif
-    nnoremap <nowait><C-f>p :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><C-f>d :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
-elseif PlannedFzf()
-    let g:search_tool = "fzf"
-    nnoremap <nowait><C-f>p :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><C-f>d :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
-else
-    let g:search_tool = "grep"
 endif
 " flygrep
 if PlannedFzf()
@@ -352,4 +335,22 @@ elseif exists(":LeaderfSearch")
     nnoremap <nowait><leader>\| :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
     xnoremap <nowait><leader>\  :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
     xnoremap <nowait><leader>\| :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
+endif
+" --------------------------------------
+" search path && dir, ans set search-tool
+" --------------------------------------
+if PlannedLeaderf()
+    if PlannedFzf()
+        let g:search_tool = "leaderf-fzf-grep"
+    else
+        let g:search_tool = "leaderf-grep"
+    endif
+    nnoremap <nowait><C-f>p :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <nowait><C-f>d :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+elseif PlannedFzf()
+    let g:search_tool = "fzf-grep"
+    nnoremap <nowait><C-f>p :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <nowait><C-f>d :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+else
+    let g:search_tool = "grep"
 endif
