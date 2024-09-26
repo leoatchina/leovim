@@ -128,26 +128,34 @@ cnoremap <M-S> cfdo up
 " --------------------------
 if PlannedFzf()
     if executable('rg')
-        command! -bang -nargs=* FzfRG call fzf#vim#grep(
-                    \ 'rg --vimgrep --no-heading --smart-case --color=always ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' ' . GetRootDir(),
-                    \ fzf#vim#with_preview(),
+        command! -bang -nargs=* FzfBLines
+                    \ call fzf#vim#grep(
+                    \ 'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%:p')), 1,
+                    \ fzf#vim#with_preview({'options': '--layout reverse --query '.shellescape(<q-args>).' --with-nth=4.. --delimiter=":"'}))
+        command! -bang -nargs=* FzfRoot call fzf#vim#grep(
+                    \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>) . ' ' . GetRootDir(),
+                    \ fzf#vim#with_preview({'options': ' --nth 4..  --delimiter=":"'}),
+                    \ <bang>0)
+        command! -bang -nargs=* FzfRg call fzf#vim#grep(
+                    \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>),
+                    \ fzf#vim#with_preview({'options': ' --nth 4..  --delimiter=":"'}),
                     \ <bang>0)
     endif
     if executable('git')
         command! -bang -nargs=* FzfGGrep call fzf#vim#grep(
-                    \ 'git grep -I -n --color=always ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' -- ' . GitRootDir(),
-                    \ fzf#vim#with_preview(),
+                    \ 'git grep -I -n --color=always ' . fzf#shellescape(<q-args>) . ' -- ' . GitRootDir(),
+                    \ fzf#vim#with_preview({'options': ' --nth 3..  --delimiter=":"'}),
                     \ <bang>0)
     endif
     if UNIX()
         command! -bang -nargs=* FzfGrep call fzf#vim#grep(
-                    \ 'grep -I --line-number --color=always -r -- ' . shellescape(empty(<q-args>) ? '^' : <q-args>) . ' . ',
-                    \ fzf#vim#with_preview(),
+                    \ 'grep -I --line-number --color=always -r -- ' . fzf#shellescape(<q-args>) . ' . ',
+                    \ fzf#vim#with_preview({'options': ' --nth 3..  --delimiter=":"'}),
                     \ <bang>0)
     elseif executable('findstr')
         command! -bang -nargs=* FzfGrep call fzf#vim#grep(
-                    \ 'findstr /N /S /I ' . shellescape(empty(<q-args>) ? '""' : <q-args>) . ' *.*',
-                    \ fzf#vim#with_preview(),
+                    \ 'findstr /N /S /I ' . fzf#shellescape(<q-args>) . ' *.*',
+                    \ fzf#vim#with_preview({'options': ' --nth 3..  --delimiter=":"'}),
                     \ <bang>0)
     endif
     function! s:fzf_search(...)
@@ -157,6 +165,8 @@ if PlannedFzf()
         endif
         if a:1 == 2 && GitBranch() != ''
             let fzf_cmd = 'FzfGGrep'
+        elseif a:1 == 2 && executable('rg')
+            let fzf_cmd = 'FzfRoot'
         elseif executable('rg')
             let fzf_cmd = 'FzfRg'
         elseif exists(":FzfGrep")
