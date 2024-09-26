@@ -92,7 +92,8 @@
 - [x] lightline modified
 - [x] run script in qf and show in lightline, refer albertomontesg/lightline-asyncrun
 - [x] suppress <C-c> E5108 error messages
-- [ ] LeaderfSeach with as optinal second parameter
+- [x] LeaderfSeach with as optinal second parameter
+- [ ] Grepp command update, able to find in dir or regress
 - [ ] fzfrg put files side by side with lines
 - [ ] vista_markdown bug
 - [ ] ~~show current tab's all buffers in tabline~~, may using smart tab line width
