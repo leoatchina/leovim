@@ -498,6 +498,10 @@
     "when": "hasSpeechProvider && inlineChatHasProvider && inlineChatVisible && textInputFocus"
   },
   {
+    "key": "alt+backspace",
+    "command": "-workbench.action.chat.cancel"
+  },
+  {
     "key": "ctrl+alt+'",
     "command": "workbench.action.openQuickChat"
   },
@@ -547,6 +551,10 @@
     "key": "alt+'",
     "command": "inlineChat.holdForSpeech",
     "when": "hasSpeechProvider && inlineChatHasProvider && inlineChatVisible && textInputFocus"
+  },
+  {
+    "key": "ctrl+backspace",
+    "command": "workbench.action.chat.cancel"
   },
   // cursor ai 
   {
