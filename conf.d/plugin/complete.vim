@@ -12,6 +12,7 @@ if Planned('codeium.vim')
     imap <silent><nowait><script><expr><M-/> codeium#Clear()
     imap <silent><nowait><script><expr><M-;> codeium#CycleCompletions(1)
     imap <silent><nowait><script><expr><M-,> codeium#CycleCompletions(-1)
+    let g:ai_complete_engine = 'codeium'
 elseif Planned('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
     let g:copilot_no_tab_map = v:true
@@ -22,12 +23,14 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-,> <Plug>(copilot-previous)
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
+    let g:ai_complete_engine = 'copliot'
 elseif Installed('copilotchat.nvim') && Installed('copilot.lua')
     lua require("copilotchat")
     command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
     nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
     nnoremap <M-i>s :CopliotChatSave<Space>
     nnoremap <M-i>l :CopliotChatLoad<Space>
+    let g:ai_complete_engine = 'copliot'
 else
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>
@@ -36,6 +39,7 @@ endif
 if Installed('avante.nvim')
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
+    let g:ai_complete_engine = empty(get(g:, 'ai_complete_engine', ""))  ? 'avante' : g:ai_complete_engine . '-' . 'avante'
 endif
 " -----------------------------
 " vista_default_executive

@@ -18,5 +18,15 @@ map(mode, "<M-i>S", [[<Cmd>CopilotChatCommitStaged<Cr>]], opts)
 -- copilot
 require('copilot').setup({
   panel = { enabled = false },
-  suggestion = { enabled = not Installed('cmp-copilot') },
+  suggestion = {
+    enabled = false,
+    keymap = {
+      accept = "<M-i>",
+      accept_word = "<M-}>",
+      accept_line = "<M-{>",
+      next = "<M-;>",
+      prev = "<M-,>",
+      dismiss = "<M-/>",
+    },
+  },
 })

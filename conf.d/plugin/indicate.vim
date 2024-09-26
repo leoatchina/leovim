@@ -115,6 +115,9 @@ function! Version()
                 \ 'colors_name':     g:colors_name,
                 \ 'complete_engine': g:complete_engine
                 \ }
+    if get(g:, 'ai_complete_engine', '') != ''
+        let params_dict['ai_complete_engine'] = g:ai_complete_engine
+    endif
     if get(g:, 'python3_host_prog', '') != ''
         let params_dict['python3_host_prog'] = g:python3_host_prog
     endif
