@@ -91,8 +91,13 @@ function d2c() {
 
 function sf() {
     FILE=$(rg --column --no-heading -e "$1" -g "$2" | fzf -d':' --reverse \
-        --preview 'bat --style=numbers --color=always --line-range :500 {1}' \
-        --preview-window 'right:50%' \
+        --preview 'bat --style=numbers --color=always {1}' \
+        --preview-window 'right:45%' \
+        --bind 'ctrl-y:preview-up,ctrl-e:preview-down' \
+        --bind 'ctrl-b:preview-page-up,ctrl-f:preview-page-down' \
+        --bind 'ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down' \
+        --bind 'shift-up:preview-top,shift-down:preview-bottom' \
+        --bind 'alt-up:half-page-up,alt-down:half-page-down' \
         --bind 'ctrl-]:execute(tmux split-window -h "/root/.local/nvim-linux64/bin/nvim +{2} {1}")' \
         --bind 'ctrl-x:execute(tmux split-window -v "/root/.local/nvim-linux64/bin/nvim +{2} {1}")' \
         | awk -F : '{print $1,"+"$2}')
