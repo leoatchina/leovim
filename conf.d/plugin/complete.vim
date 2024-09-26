@@ -35,7 +35,7 @@ endif
 if Installed('avante.nvim')
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
-    let g:ai_complete_engine = empty(get(g:, 'ai_complete_engine', ""))  ? 'avante' : g:ai_complete_engine . '-' . 'avante'
+    let g:ai_complete_engine = exists('g:ai_complete_engine') ? 'avante-' . g:ai_complete_engine : 'avante'
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>
