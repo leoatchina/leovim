@@ -2,9 +2,9 @@ vim.keymap.set({ "n", "v", "x" }, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], { n
 vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
 local max_tokens = type(vim.g.max_tokens) == 'number'
   and vim.g.max_tokens > 0
-  and vim.g.max_tokens < 8192
+  and vim.g.max_tokens < 2048
   and vim.g.max_tokens
-  or 8192
+  or 2048
 local provider = vim.g.avante_provider
   or vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude'
   or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai'
