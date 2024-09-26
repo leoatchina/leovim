@@ -162,7 +162,7 @@ nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>
 nnoremap <silent>gs :call CocAction('showSubTypes')<Cr>
 nnoremap <silent>gt :call CocAction('showSuperTypes')<Cr>
 " refactor
-nmap <silent><leader>R <Plug>(coc-refactor)
+nmap <silent>gr <Plug>(coc-refactor)
 " ----------------------------
 " actions
 " ----------------------------
@@ -196,13 +196,13 @@ endif
 nmap <silent><F2> <Plug>(coc-rename)
 xmap <silent><leader>X <Plug>(coc-fix-current)
 nmap <silent><leader>X <Plug>(coc-fix-current)
-nmap <silent><leader>ae <Plug>(coc-codeaction-refactor)
-nmap <silent><leader>ao <Plug>(coc-codeaction-source)
-nmap <silent><leader>as <Plug>(coc-codeaction-selected)
-xmap <silent><leader>as <Plug>(coc-codeaction-selected)
-nmap <silent><leader>ar <Plug>(coc-codeaction-refactor-selected)
-xmap <silent><leader>ar <Plug>(coc-codeaction-refactor-selected)
-nmap <silent><leader>A <Plug>(coc-codeaction-cursor)
+nmap <silent><leader>a <Plug>(coc-codeaction-selected)
+xmap <silent><leader>a <Plug>(coc-codeaction-selected)
+nmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
+xmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
+nmap <silent><leader>ar <Plug>(coc-codeaction-refactor)
+nmap <silent><leader>as <Plug>(coc-codeaction-source)
+nmap <silent><leader>ac <Plug>(coc-codeaction-cursor)
 nmap <silent><M-a> <Plug>(coc-codelens-action)
 " ------------------------
 " coc git
