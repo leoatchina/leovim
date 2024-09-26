@@ -91,6 +91,8 @@ function d2c() {
 
 function sf() {
     FILE=$(rg --column --no-heading -e "$1" -g "$2" | fzf -d':' --reverse \
+        --preview 'bat --style=numbers --color=always --line-range :500 {1}' \
+        --preview-window 'right:50%' \
         --bind 'ctrl-]:execute(tmux split-window -h "/root/.local/nvim-linux64/bin/nvim +{2} {1}")' \
         --bind 'ctrl-x:execute(tmux split-window -v "/root/.local/nvim-linux64/bin/nvim +{2} {1}")' \
         | awk -F : '{print $1,"+"$2}')
@@ -98,3 +100,11 @@ function sf() {
         vim $FILE
     fi
 }
+
+if [ -f /usr/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
+    mkdir -p $HOME/.local/bin
+    ln -sf /usr/bin/batcat $HOME/.local/bin/bat
+elif [ -f /usr/loca/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
+    mkdir -p $HOME/.local/bin
+    ln -sf /usr/local/bin/batcat $HOME/.local/bin/bat
+fi
