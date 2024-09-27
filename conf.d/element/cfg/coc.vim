@@ -149,13 +149,11 @@ inoremap <silent><expr> <TAB> coc#pum#visible() == v:false ? "\<Tab>" :
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr><c-l> coc#refresh()
 " c-e/c-y
-imap <expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
-imap <expr> <C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
+imap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
+imap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
 " scroll
 imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<C-\><C-n>:call MoveToEndAndAddSemicolon()\<CR>"
 imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-k>"
-xmap <silent><expr><C-j> coc#float#has_scroll() ? coc#float#scroll(1) : "\%"
-xmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : "\g%"
 " call hierarchy
 nnoremap <silent>gh :call CocAction('showIncomingCalls')<Cr>
 nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>

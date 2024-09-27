@@ -46,10 +46,10 @@ else
     nnoremap <Tab>o :PreviewFile
     nnoremap <silent><M-k>m :messages<Cr>
     nmap <C-j> %
-    xmap <C-j> %
     nmap <C-k> g%
-    xmap <C-k> g%
 endif
+xmap <C-j> %
+xmap <C-k> g%
 " Choose one from a list
 function! s:get_char_form_lst(lst, cmd) abort
     let lst = a:lst
