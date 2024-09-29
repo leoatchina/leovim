@@ -90,7 +90,7 @@ function d2c() {
 }
 
 function sf() {
-    FILE=$(rg --column --no-heading -e "$1" -g "$2" | fzf -d':' --reverse \
+    FILE=$(rg --column --no-heading -e "$1" -g "$2" | fzf -d':' --reverse --no-sort \
         --preview 'bat --style=full --color=always --highlight-line {2} {1}' \
         --preview-window '~3:+{2}+3/2,right:50%' \
         --bind 'ctrl-y:preview-up,ctrl-e:preview-down' \
