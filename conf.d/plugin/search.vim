@@ -160,57 +160,44 @@ if PlannedFzf()
                     \ fzf#vim#with_preview({'options': ' --no-sort --nth 3..  --delimiter=":"'}),
                     \ <bang>0)
     endif
+    " TODO: update fzf search
     function! s:fzf_search(...)
-        " a:0 代表参数数量, a1 代表 第一个参数
+        let repeat = 0
         if a:0 == 0
-            return
-        endif
-        if a:1 == 2 && GitBranch() != ''
-            let fzf_cmd = 'FzfGGrep'
-        elseif a:1 == 2 && executable('rg')
-            let fzf_cmd = 'FzfRoot'
-        elseif executable('rg')
             let fzf_cmd = 'FzfRg'
-        elseif exists(":FzfGrep")
-            let fzf_cmd = 'FzfGrep'
+        elseif a:000[-1] == 1
+            let fzf_cmd = 'FzfRg'
+            if len(a:000) == 1
+                let search_str = get(g:, 'fzf_search_last', '')
+            else
+                let search_str = Escape(a:1)
+                let g:fzf_search_last = search_str
+            endif
+        elseif a:000[-1] >= 2
+            if GitRootDir() != ''
+                let fzf_cmd = 'FzfGGrep'
+            else
+                let fzf_cmd = 'FzfRoot'
+            endif
+            if len(a:000) == 1
+                let search_str = get(g:, 'fzf_searchall_last', '')
+            else
+                let search_str = Escape(a:1)
+                let g:fzf_searchall_last = search_str
+            endif
         else
             return
         endif
-        if a:1 == 0
-            " FzfFlyGrep
+        if a:0 == 0
             execute fzf_cmd
         else
-            if a:0 == 1
-                if a:1 == 1
-                    let search_str = get(g:, 'fzf_search_last', '')
-                else
-                    let search_str = get(g:, 'fzf_searchall_last', '')
-                endif
-            elseif a:0 == 2
-                let search_str = Escape(a:2)
-                if a:1 == 1
-                    let g:fzf_search_last = search_str
-                else
-                    let g:fzf_searchall_last = search_str
-                endif
-            endif
-            " do the search
-            if search_str == ''
-                if a:0 == 1
-                    echo 'fzf search last is empty'
-                else
-                    echo 'fzf search str is empty'
-                endif
-            else
-                execute fzf_cmd . ' ' . search_str
-            endif
+            execute fzf_cmd . ' ' . search_str
         endif
     endfunction
-    command! FzfFlyGrep call s:fzf_search(0)
-    command! FzfSearchLast call s:fzf_search(1)
-    command! -nargs=1 FzfSearch call s:fzf_search(1, <q-args>)
-    command! FzfSearchAllLast call s:fzf_search(2)
-    command! -nargs=1 FzfSearchAll call s:fzf_search(2, <q-args>)
+    command! -nargs=0 FzfSearchLast call s:fzf_search(1)
+    command! -nargs=? FzfSearch call s:fzf_search(<q-args>, 1)
+    command! -nargs=0 FzfSearchAllLast call s:fzf_search(2)
+    command! -nargs=? FzfSearchAll call s:fzf_search(<q-args>, 2)
 endif
 " ----------------------------
 " leaderf search commands
@@ -293,7 +280,7 @@ endif
 if PlannedFzf()
     " search
     nnoremap <nowait><C-f>] :FzfSearch <C-r><C-w><Cr>
-    xnoremap <nowait><C-f>] :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
+    xnoremap <nowait><C-f>] :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr><Cr>
     nnoremap <nowait><C-f>[ :FzfSearchLast<Cr>
     if exists(":LeaderfSearchAll")
         let g:searchall = 'LeaderfSearchAll'
@@ -314,12 +301,12 @@ else
 endif
 " flygrep
 if PlannedFzf()
-    nnoremap <nowait><leader>/  :FzfRg<Cr>
-    nnoremap <nowait><leader>?  :FzfGGrep<Cr>
-    nnoremap <nowait><leader>\  :FzfRg <C-r><C-w><Cr>
-    nnoremap <nowait><leader>\| :FzfGGrep <C-r><C-w><Cr>
-    xnoremap <nowait><leader>\  :<C-u>FzfRg "<C-r>=GetVisualSelection()<Cr>"<Cr>
-    xnoremap <nowait><leader>\| :<C-u>FzfGGrep "<C-r>=GetVisualSelection()<Cr>"<Cr>
+    nnoremap <nowait><leader>/  :FzfSearch<Cr>
+    nnoremap <nowait><leader>?  :FzfSearchAll<Cr>
+    nnoremap <nowait><leader>\  :FzfSearch <C-r><C-w>
+    nnoremap <nowait><leader>\| :FzfSearchAll <C-r><C-w>
+    xnoremap <nowait><leader>\  :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
+    xnoremap <nowait><leader>\| :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
     if exists(":LeaderfSearch")
         nnoremap <nowait><Tab>/  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
         nnoremap <nowait><Tab>?  :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
