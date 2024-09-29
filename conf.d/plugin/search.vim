@@ -24,18 +24,18 @@ endif
 function! s:search_cur(...)
     try
         if a:0 == 0
-            let g:grepper_word = expand('<cword>')
+            let search_word = expand('<cword>')
         else
-            let g:grepper_word = a:1
+            let search_word = a:1
         endif
     catch /.*/
-        let g:grepper_word = ""
+        let search_word = ""
     endtry
-    if empty(g:grepper_word)
+    if empty(search_word)
         call preview#errmsg("No search word offered")
     else
         try
-            execute 'vimgrep /' . Escape(g:grepper_word) . "/j %"
+            execute 'vimgrep /' . Escape(search_word) . "/j %"
             copen
         catch /.*/
             call preview#errmsg("vimgrep errors")
@@ -57,58 +57,42 @@ endif
 function! s:grep(...)
     if a:0 == 0
         return
-    endif
-    if a:0 == 1
-        if a:1 < 1
-            return
-        endif
-        if a:1 == 1
-            let g:grepper_word = get(g:, 'grepper_last', '')
-        else
-            let g:grepper_word = get(g:, 'grepper_all_last', '')
-        endif
-    elseif a:0 == 2
-        if a:1 < 1
-            return
-        endif
-        let g:grepper_word = a:2
-        if a:1 == 1
-            let g:grepper_last = g:grepper_word
-        else
-            let g:grepper_all_last = g:grepper_word
-        endif
-    endif
-    " do the search
-    if g:grepper_word == ''
+    elseif a:000[-1] == 1
         if a:0 == 1
-            echo 'grep search last is empty'
+            let search_word = get(g:, 'grep_last', '')
         else
-            echo 'grep search str is empty'
+            let search_word = Escape(a:1)
+            let g:grep_last = search_word
+        endif
+        if executable('rg')
+            let cmd = printf('silent! grep! %s', search_word)
+        else
+            let cmd = printf('vimgrep /%s/j **/*', search_word)
+        endif
+    elseif a:000[-1] == 2
+        if a:0 == 1
+            let search_word = get(g:, 'grepall_last', '')
+        else
+            let search_word = Escape(a:1)
+            let g:grepall_last = search_word
+        endif
+        if executable('rg')
+            let cmd = printf('silent! grep! %s %s', search_word, GetRootDir())
+        else
+            let cmd = printf('vimgrep /%s/j %s/**/*', search_word, GetRootDir())
         endif
     else
-        if a:1 == 1
-            if executable('rg')
-                let cmd = printf('silent! grep! %s', g:grepper_word)
-            else
-                let cmd = printf('vimgrep /%s/j **/*', Escape(g:grepper_word))
-            endif
-        else
-            if executable('rg')
-                let cmd = printf('silent! grep! %s %s', g:grepper_word, GetRootDir())
-            else
-                let cmd = printf('vimgrep /%s/j %s/**/*', Escape(g:grepper_word), GetRootDir())
-            endif
-        endif
-        execute cmd
-        if len(getqflist())
-            copen
-        endif
+        return
+    endif
+    execute cmd
+    if len(getqflist())
+        copen
     endif
 endfunction
 command! GrepLast call s:grep(1)
-command! -nargs=1 Grep call s:grep(1, <q-args>)
+command! -nargs=1 Grep call s:grep(<q-args>, 1)
 command! GrepAllLast call s:grep(2)
-command! -nargs=1 GrepAll call s:grep(2, <q-args>)
+command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
 " searchall
 nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
 xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
@@ -162,12 +146,11 @@ if PlannedFzf()
     endif
     " TODO: update fzf search
     function! s:fzf_search(...)
-        let repeat = 0
         if a:0 == 0
             let fzf_cmd = 'FzfRg'
         elseif a:000[-1] == 1
             let fzf_cmd = 'FzfRg'
-            if len(a:000) == 1
+            if a:0 == 1
                 let search_str = get(g:, 'fzf_search_last', '')
             else
                 let search_str = Escape(a:1)
@@ -179,7 +162,7 @@ if PlannedFzf()
             else
                 let fzf_cmd = 'FzfRoot'
             endif
-            if len(a:000) == 1
+            if a:0 == 1
                 let search_str = get(g:, 'fzf_searchall_last', '')
             else
                 let search_str = Escape(a:1)
