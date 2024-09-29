@@ -15,11 +15,11 @@ require('avante').setup({
   auto_suggestions_provider = vim.g.avante_suggestions_provider or provider,
   claude = {
     model = vim.g.claude_model or "claude-3-haiku-20240229",
-    max_tokens =  max_tokens
+    max_tokens = max_tokens
   },
   copilot = {
     model = vim.g.copilot_model or "gpt-4o-2024-05-13",
-    max_tokens =  max_tokens
+    max_tokens = max_tokens
   },
   openai = {
     model = vim.g.openai_model or "gpt-4o",
