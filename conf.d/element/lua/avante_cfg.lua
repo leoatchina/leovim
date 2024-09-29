@@ -2,27 +2,33 @@ vim.keymap.set({ "n", "v", "x" }, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], { n
 vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
 local max_tokens = type(vim.g.max_tokens) == 'number'
   and vim.g.max_tokens > 0
-  and vim.g.max_tokens < 2048
+  and vim.g.max_tokens < 4096
   and vim.g.max_tokens
-  or 2048
+  or 4096
 local provider = vim.g.avante_provider
   or vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude'
   or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai'
   or 'copilot'
+vim.g.claude_model = vim.g.claude_model or "claude-3-haiku-20240229"
+vim.g.openai_model = vim.g.openai_model or "gpt-4o"
+vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-05-13"
+vim.g.avante_model = string.find(provider, 'claude') and vim.g.claude_model
+  or string.find(provider, 'openai') and vim.g.openai_model
+  or vim.g.copilot_model
 require('avante').setup({
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
   provider = provider,
   auto_suggestions_provider = vim.g.avante_suggestions_provider or provider,
   claude = {
-    model = vim.g.claude_model or "claude-3-haiku-20240229",
-    max_tokens = max_tokens
-  },
-  copilot = {
-    model = vim.g.copilot_model or "gpt-4o-2024-05-13",
+    model = vim.g.claude_model,
     max_tokens = max_tokens
   },
   openai = {
-    model = vim.g.openai_model or "gpt-4o",
+    model = vim.g.openai_model,
+    max_tokens = max_tokens
+  },
+  copilot = {
+    model = vim.g.copilot_model,
     max_tokens = max_tokens
   },
   behaviour = {

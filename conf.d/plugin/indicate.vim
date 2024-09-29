@@ -118,6 +118,9 @@ function! Version()
     if get(g:, 'ai_complete_engine', '') != ''
         let params_dict['ai_complete_engine'] = g:ai_complete_engine
     endif
+    if get(g:, 'avante_model', '') != ''
+        let params_dict['avante_model'] = g:avante_model
+    endif
     if get(g:, 'python3_host_prog', '') != ''
         let params_dict['python3_host_prog'] = g:python3_host_prog
     endif
