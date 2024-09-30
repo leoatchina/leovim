@@ -285,10 +285,11 @@ if exists(":FzfSearch")
     if exists(":LeaderfSearchAll")
         let g:searchall = 'LeaderfSearchAll'
         nnoremap <nowait><C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
-        xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
+        xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr><Cr>
         nnoremap <nowait><C-f><C-f> :LeaderfSearch <C-r><C-w>
         xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
-        nnoremap <nowait><C-f>? :LeaderfSearchAll<Space>
+        nnoremap <nowait><C-f>? :LeaderfSearchAll <C-r><C-w>
+        xnoremap <nowait><C-f>? :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
     else
         let g:searchall = 'FzfSearchAll'
         " searchall
