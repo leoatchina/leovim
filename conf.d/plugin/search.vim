@@ -143,10 +143,14 @@ if PlannedFzf()
                     \ <bang>0)
     endif
     function! s:fzf_search(...)
+        if exists(':FzfRg')
+            let fzf_cmd = 'FzfRg'
+        else
+            let fzf_cmd = 'FzfGrep'
+        endif
         if a:0 == 0
-            let fzf_cmd = 'FzfRg'
+            execute fzf_cmd
         elseif a:000[-1] == 1
-            let fzf_cmd = 'FzfRg'
             if a:0 == 1
                 let search_str = get(g:, 'fzf_search_last', '')
             else
@@ -154,9 +158,7 @@ if PlannedFzf()
                 let g:fzf_search_last = search_str
             endif
         elseif a:000[-1] == 2
-            if GitRootDir() != ''
-                let fzf_cmd = 'FzfGGrep'
-            else
+            if exists(':FzfRoot')
                 let fzf_cmd = 'FzfRoot'
             endif
             if a:0 == 1
@@ -168,8 +170,6 @@ if PlannedFzf()
         elseif a:000[-1] == 3
             if GitRootDir() != ''
                 let fzf_cmd = 'FzfGGrep'
-            else
-                let fzf_cmd = 'FzfRg'
             endif
             if a:0 == 1
                 let search_str = get(g:, 'fzf_searchgit_last', '')
@@ -180,11 +180,7 @@ if PlannedFzf()
         else
             return
         endif
-        if a:0 == 0
-            execute fzf_cmd
-        else
-            execute fzf_cmd . ' ' . search_str
-        endif
+        execute fzf_cmd . ' ' . search_str
     endfunction
     command! -nargs=0 FzfSearchLast call s:fzf_search(1)
     command! -nargs=? FzfSearch call s:fzf_search(<q-args>, 1)
@@ -217,8 +213,8 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
         call map(lst, 'v:val . ":"')
         call map(lst, '"\"" . v:val . "\""')
         let cmd = "Leaderf rg -e " . join(lst, " -e ")
-        " NOTE: a:1 == 'local only'
-        if a:0 && a:1 > 0
+        " NOTE:  --wd-mode=F means 'local only'
+        if a:0 && a:1
             let cmd .= ' --wd-mode=F'
         endif
         execute cmd
@@ -261,13 +257,13 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
     nnoremap <nowait><C-f>a :Leaderf rg --bottom --no-ignore --append --cword
     xnoremap <nowait><C-f>a :<C-u>Leaderf rg --bottom --no-ignore --append "<C-r>=GetVisualSelection()<Cr>"
     nnoremap <nowait><C-f>i :LeaderfRgInteractive<Cr>
+    " LeaderfLast
+    nnoremap <nowait><C-f>L :Leaderf rg --recal<Cr>
     " flygrep fuzzy mode
     nnoremap <nowait>,/  :Leaderf rg --no-ignore --fuzzy -L -S --wd-mode=f<Cr>
     nnoremap <nowait>,?  :Leaderf rg --no-ignore --fuzzy -L -S<Cr>
     nnoremap <nowait>,\  :Leaderf rg --no-ignore --fuzzy -L -S --wd-mode=f --cword<Cr>
     nnoremap <nowait>,\| :Leaderf rg --no-ignore --fuzzy -L -S --cword<Cr>
-    " rg recal
-    nnoremap <nowait><leader>. :Leaderf rg --recal<Cr>
 endif
 " ---------------------------------
 " maps make full use of fzf leaderf
@@ -295,7 +291,6 @@ if exists(":FzfSearch")
         " searchall
         nnoremap <nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
         xnoremap <nowait><C-f><Cr> :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
-        nnoremap <nowait><leader>. :FzfSearchAllLast<Cr>
     endif
 else
     let g:searchall = 'GrepAll'
@@ -308,6 +303,7 @@ if PlannedFzf()
     nnoremap <nowait><leader>\| :FzfSearchAll <C-r><C-w>
     xnoremap <nowait><leader>\  :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
     xnoremap <nowait><leader>\| :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><leader>. :FzfSearchAllLast<Cr>
     if exists(":LeaderfSearch")
         nnoremap <nowait><Tab>/  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
         nnoremap <nowait><Tab>?  :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
