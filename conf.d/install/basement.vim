@@ -95,7 +95,7 @@ endif
 if g:complete_engine == 'vcm'
     PlugAdd 'girishji/vimcomplete'
 elseif g:complete_engine == 'cmp'
-    PlugAdd 'hrsh7th/nvim-cmp'
+    PlugAdd 'yioneko/nvim-cmp', {'branch': 'perf-up'}
     PlugAdd 'hrsh7th/cmp-nvim-lsp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
     PlugAdd 'hrsh7th/cmp-buffer'
