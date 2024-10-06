@@ -100,10 +100,14 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
     PlugAdd 'hrsh7th/cmp-buffer'
     PlugAdd 'hrsh7th/cmp-cmdline'
-    PlugAdd 'hrsh7th/cmp-path'
     PlugAdd 'petertriho/cmp-git'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
     PlugAdd 'onsails/lspkind-nvim'
+    if WINDOWS()
+        PlugAdd 'hrsh7th/cmp-path'
+    else
+        PlugAdd 'FelipeLema/cmp-async-path'
+    endif
     " snippet
     PlugAdd 'hrsh7th/cmp-vsnip'
     " lsp related
@@ -308,7 +312,6 @@ function! InstalledCmp() abort
                 \ 'cmp-cmdline',
                 \ 'cmp-nvim-lsp',
                 \ 'cmp-nvim-lua',
-                \ 'cmp-path',
                 \ 'cmp-git',
                 \ 'cmp-nvim-lsp-signature-help',
                 \ 'cmp-vsnip',
