@@ -12,7 +12,7 @@ endif
 " ----------------------------
 " wilder
 " ----------------------------
-if !Planned('nvim-cmp')
+if !Planned('magazine.nvim')
     if g:python_version > 3 && has('nvim') && UNIX()
         function! UpdateRemotePlugins(...)
             " Needed to refresh runtime files
