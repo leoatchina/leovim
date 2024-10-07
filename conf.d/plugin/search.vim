@@ -24,18 +24,18 @@ endif
 function! s:search_cur(...)
     try
         if a:0 == 0
-            let search_word = expand('<cword>')
+            let g:grepper_word = expand('<cword>')
         else
-            let search_word = a:1
+            let g:grepper_word = a:1
         endif
     catch /.*/
-        let search_word = ""
+        let g:grepper_word = ""
     endtry
-    if empty(search_word)
+    if empty(g:grepper_word)
         call preview#errmsg("No search word offered")
     else
         try
-            execute 'vimgrep /' . Escape(search_word) . "/j %"
+            execute 'vimgrep /' . Escape(g:grepper_word) . "/j %"
             copen
         catch /.*/
             call preview#errmsg("vimgrep errors")
@@ -59,27 +59,27 @@ function! s:grep(...)
         return
     elseif a:000[-1] == 1
         if a:0 == 1
-            let search_word = get(g:, 'grep_last', '')
+            let g:grepper_word = get(g:, 'grep_last', '')
         else
-            let search_word = Escape(a:1)
-            let g:grep_last = search_word
+            let g:grepper_word = Escape(a:1)
+            let g:grep_last = g:grepper_word
         endif
         if executable('rg')
-            let cmd = printf('silent! grep! %s', search_word)
+            let cmd = printf('silent! grep! %s', g:grepper_word)
         else
-            let cmd = printf('vimgrep /%s/j **/*', search_word)
+            let cmd = printf('vimgrep /%s/j **/*', g:grepper_word)
         endif
     elseif a:000[-1] == 2
         if a:0 == 1
-            let search_word = get(g:, 'grepall_last', '')
+            let g:grepper_word = get(g:, 'grepall_last', '')
         else
-            let search_word = Escape(a:1)
-            let g:grepall_last = search_word
+            let g:grepper_word = Escape(a:1)
+            let g:grepall_last = g:grepper_word
         endif
         if executable('rg')
-            let cmd = printf('silent! grep! %s %s', search_word, GetRootDir())
+            let cmd = printf('silent! grep! %s %s', g:grepper_word, GetRootDir())
         else
-            let cmd = printf('vimgrep /%s/j %s/**/*', search_word, GetRootDir())
+            let cmd = printf('vimgrep /%s/j %s/**/*', g:grepper_word, GetRootDir())
         endif
     else
         return
@@ -103,10 +103,6 @@ nnoremap s] :Grep <C-r><C-w><Cr>
 xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
 nnoremap s[ :GrepLast<Cr>
 nnoremap s? :Grep<Space>
-au FileType qf nnoremap <buffer>r :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
-au FileType qf nnoremap <buffer><M-r> :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
-au FileType qf nnoremap <buffer><M-S> :cfdo up
-cnoremap <M-S> cfdo up
 " --------------------------
 " FzfSearch
 " --------------------------
