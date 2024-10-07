@@ -2,6 +2,7 @@ local map = vim.keymap.set
 require("hlargs").setup({
   hl_priority = 1024 * 16
 })
+vim.opt.runtimepath:prepend(vim.fn.expand("~/.leovim.d/treesitter"))
 require("nvim-treesitter.install").prefer_git = true
 require("nvim-treesitter.configs").setup({
   ensure_installed = vim.g.highlight_filetypes,
@@ -34,11 +35,12 @@ require("nvim-treesitter.configs").setup({
     enable = true,
   },
   fold = {
-    enable = false,
+    enable = true,
   },
   indent = {
     enable = false,
   },
+  parser_install_dir = vim.fn.expand("~/.leovim.d/treesitter")
 })
 map("n", "<M-l>t", ":TSUpdate ", { noremap = true, silent = false })
 map("n", "<M-l>I", ":TSInstall ", { noremap = true, silent = false })
@@ -135,4 +137,17 @@ if Installed("nvim-treesitter-refactor") then
       },
     },
   }
+end
+-------------------------
+-- treesitter-context
+-------------------------
+if Installed("nvim-treesitter-context") then
+  -- 在 Neovim 的 Lua 配置文件中添加以下内容
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = {"toml", "json", "yaml"},
+    callback = function()
+      require'treesitter-context'.setup({})
+    end,
+    once = true,
+  })
 end

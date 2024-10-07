@@ -376,5 +376,10 @@ endif
 " render-markdown
 " --------------------------
 if Installed('render-markdown.nvim')
-    lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
+    " 在 Vim 配置文件中添加以下内容
+    augroup SetupOnce
+        autocmd!
+        autocmd User avante.nvim ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
+        autocmd FileType markdown,Avante,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
+    augroup END
 endif

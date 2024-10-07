@@ -166,6 +166,7 @@ if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', LINUX() || MACOS())
     PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
     PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
+    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
     PlugAdd 'm-demare/hlargs.nvim'
 elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
