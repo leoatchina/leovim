@@ -57,6 +57,9 @@ if InstalledNvimLsp()
 elseif Installed('coc.nvim')
     let g:vista_default_executive = 'coc'
 else
+    if g:complete_engine != ''
+        PlugAddOpt 'vim-dict'
+    endif
     let g:vista_default_executive = 'ctags'
 endif
 " ------------------------------

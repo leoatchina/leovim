@@ -131,7 +131,6 @@ endif
 " ------------------------------
 " dict && snippets
 " ------------------------------
-PlugAddOpt 'vim-dict'
 if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'hrsh7th/vim-vsnip'
     PlugAdd 'rafamadriz/friendly-snippets'
