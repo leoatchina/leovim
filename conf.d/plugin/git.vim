@@ -140,7 +140,8 @@ if PlannedFzf()
     nnoremap <silent><M-g><M-g> :GCommands<Cr>
 endif
 if Installed('fzf-project')
-    nnoremap <silent><leader>P :FzfSwitchProject<Cr>
+    nnoremap <silent><leader>S :FzfSwitchProject<Cr>
+    nnoremap <silent><leader>P :FzfChooseProjectFile<Cr>
 endif
 " ---------------------------------
 " tig lazygit intergrated
