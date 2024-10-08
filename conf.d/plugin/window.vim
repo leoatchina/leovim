@@ -1,12 +1,4 @@
 " ------------------------
-" Choose windows
-" ------------------------
-if PlannedLeaderf()
-    nnoremap <silent><leader>w :LeaderfWindow<Cr>
-elseif PlannedFzf()
-    nnoremap <silent><leader>w :FzfWindow<Cr>
-endif
-" ------------------------
 " Previous Window Control
 " ------------------------
 function! PreviousCursor(mode)

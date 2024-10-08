@@ -139,6 +139,9 @@ if PlannedFzf()
     endif
     nnoremap <silent><M-g><M-g> :GCommands<Cr>
 endif
+if Installed('fzf-project')
+    nnoremap <silent><leader>P :FzfSwitchProject<Cr>
+endif
 " ---------------------------------
 " tig lazygit intergrated
 " ---------------------------------

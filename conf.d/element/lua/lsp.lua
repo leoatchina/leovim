@@ -257,7 +257,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "gl", vim.lsp.buf.outgoing_calls, opts_silent)
     map(nx, "gh", vim.lsp.buf.incoming_calls, opts_silent)
     map(nx, "<C-q>", vim.lsp.buf.format, opts_silent)
-    map(nx, "<leader>S", vim.lsp.buf.workspace_symbol, opts_silent)
+    map(nx, "<leader>W", vim.lsp.buf.workspace_symbol, opts_silent)
     map(nx, "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
     -- select range
     local ok

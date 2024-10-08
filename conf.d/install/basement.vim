@@ -1,6 +1,51 @@
-" ------------------------
-" shortmess
-" ------------------------
+" ----------------------------
+" extend Planned function
+" ----------------------------
+function! PlannedFzf() abort
+    return Planned('fzf', 'fzf.vim')
+endfunction
+function! PlannedLeaderf() abort
+    return Planned('leaderf')
+endfunction
+function! PlannedCoc() abort
+    return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
+endfunction
+function! InstalledNvimLsp() abort
+    return Installed(
+                \ 'nvim-lspconfig',
+                \ 'mason-lspconfig.nvim',
+                \ 'nvim-lsp-selection-range',
+                \ 'symbol-usage.nvim',
+                \ 'nvim-lspimport',
+                \ 'lspui.nvim',
+                \ 'neoconf.nvim',
+                \ 'winbar.nvim',
+                \ )
+endfunction
+function! InstalledCmp() abort
+    return Installed(
+                \ 'magazine.nvim',
+                \ 'cmp-buffer',
+                \ 'cmp-cmdline',
+                \ 'cmp-nvim-lsp',
+                \ 'cmp-nvim-lua',
+                \ 'cmp-git',
+                \ 'cmp-nvim-lsp-signature-help',
+                \ 'cmp-vsnip',
+                \ 'friendly-snippets',
+                \ 'lspkind-nvim',
+                \ )
+endfunction
+function! AdvCompEngine() abort
+    return PlannedCoc() || Planned('magazine.nvim')
+endfunction
+function! PrefFzf()
+    return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
+endfunction
+" --------------------------
+" complete engine
+" --------------------------
+set completeopt=menu,menuone
 if has('patch-9.0.1568')
     set sms
 endif
@@ -11,10 +56,6 @@ if has('patch-7.4.1829')
     set shortmess+=a
     set shortmess+=c
 endif
-" --------------------------
-" complete engine
-" --------------------------
-set completeopt=menu,menuone
 try
     set completeopt+=noinsert
     set completeopt+=noselect
@@ -226,19 +267,6 @@ if has('nvim')
     PlugAdd 'stevearc/dressing.nvim'
 endif
 " ------------------------------
-" markdown
-" ------------------------------
-if executable('mdr') && (has('nvim') || has('patch-8.1.1401'))
-    PlugAddOpt 'preview-markdown.vim'
-endif
-if has('nvim-0.10')
-    PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
-endif
-" ------------------------------
-" format tools
-" ------------------------------
-PlugAdd 'sbdchd/neoformat'
-" ------------------------------
 " Git
 " ------------------------------
 if executable('git') && v:version >= 800 && g:git_version >= 1.85
@@ -281,47 +309,13 @@ if has('nvim-0.10') && Planned('nvim-treesitter') && (exists('$ANTHROPIC_API_KEY
         endif
     endif
 endif
-" ----------------------------
-" extend Planned function
-" ----------------------------
-function! PlannedFzf() abort
-    return Planned('fzf', 'fzf.vim')
-endfunction
-function! PlannedLeaderf() abort
-    return Planned('leaderf')
-endfunction
-function! PlannedCoc() abort
-    return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
-endfunction
-function! InstalledNvimLsp() abort
-    return Installed(
-                \ 'nvim-lspconfig',
-                \ 'mason-lspconfig.nvim',
-                \ 'nvim-lsp-selection-range',
-                \ 'symbol-usage.nvim',
-                \ 'nvim-lspimport',
-                \ 'lspui.nvim',
-                \ 'neoconf.nvim',
-                \ 'winbar.nvim',
-                \ )
-endfunction
-function! InstalledCmp() abort
-    return Installed(
-                \ 'magazine.nvim',
-                \ 'cmp-buffer',
-                \ 'cmp-cmdline',
-                \ 'cmp-nvim-lsp',
-                \ 'cmp-nvim-lua',
-                \ 'cmp-git',
-                \ 'cmp-nvim-lsp-signature-help',
-                \ 'cmp-vsnip',
-                \ 'friendly-snippets',
-                \ 'lspkind-nvim',
-                \ )
-endfunction
-function! AdvCompEngine() abort
-    return PlannedCoc() || Planned('magazine.nvim')
-endfunction
-function! PrefFzf()
-    return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
-endfunction
+" ------------------------------
+" format tools
+" ------------------------------
+PlugAdd 'sbdchd/neoformat'
+" ------------------------------
+" project
+" ------------------------------
+if PlannedFzf() && Planned('vim-fugitive')
+    PlugAdd 'benwainwright/fzf-project'
+endif
