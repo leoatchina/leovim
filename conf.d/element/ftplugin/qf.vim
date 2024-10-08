@@ -3,6 +3,9 @@ setlocal norelativenumber
 setlocal foldcolumn=0 colorcolumn= cursorline
 nnoremap <silent><buffer>q :q!<Cr>
 nnoremap <silent><buffer>Q :q!<Cr>
+nnoremap <silent><buffer>p <Nop>
+nnoremap <silent><buffer>P <Nop>
+nnoremap <silent><buffer>J <Nop>
 nnoremap <silent><buffer><C-h> <Nop>
 nnoremap <silent><buffer><M-c> <Nop>
 nnoremap <silent><buffer><M-C> <Nop>
@@ -23,9 +26,9 @@ else
     nnoremap <silent><buffer><C-x> :PreviewQuickfix split<Cr>
     nnoremap <silent><buffer><C-t> :PreviewQuickfix tabe<Cr>
     if Installed('vim-quickui')
-        nnoremap <silent><buffer>n j:call quickui#tools#preview_quickfix()<Cr>
-        nnoremap <silent><buffer>p k:call quickui#tools#preview_quickfix()<Cr>
-        nnoremap <silent><buffer>K :call  quickui#tools#preview_quickfix()<Cr>
+        nnoremap <silent><buffer>K :call quickui#tools#preview_quickfix()<Cr>
+        nnoremap <silent><buffer><C-j> j:call quickui#tools#preview_quickfix()<Cr>
+        nnoremap <silent><buffer><C-k> k:call quickui#tools#preview_quickfix()<Cr>
     else
         nnoremap <buffer>K <Nop>
     endif
