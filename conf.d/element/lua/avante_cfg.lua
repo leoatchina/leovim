@@ -1,5 +1,11 @@
 vim.keymap.set({ "n", "v", "x" }, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
 vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "AvanteInput",
+  callback = function()
+    vim.keymap.set("i", "<C-s>", "<ESC><Cr><Cr>", { noremap = false, silent = true, buffer = true })
+  end,
+})
 local max_tokens = type(vim.g.max_tokens) == 'number'
   and vim.g.max_tokens > 0
   and vim.g.max_tokens < 4096
