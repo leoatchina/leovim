@@ -32,6 +32,7 @@ function! InstalledCmp() abort
                 \ 'cmp-git',
                 \ 'cmp-nvim-lsp-signature-help',
                 \ 'cmp-vsnip',
+                \ 'cmp-dictionary',
                 \ 'friendly-snippets',
                 \ 'lspkind-nvim',
                 \ )
@@ -141,8 +142,9 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
     PlugAdd 'hrsh7th/cmp-buffer'
     PlugAdd 'hrsh7th/cmp-cmdline'
-    PlugAdd 'petertriho/cmp-git'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
+    PlugAdd 'petertriho/cmp-git'
+    PlugAdd 'uga-rosa/cmp-dictionary'
     PlugAdd 'onsails/lspkind-nvim'
     if WINDOWS()
         PlugAdd 'hrsh7th/cmp-path'
@@ -308,6 +310,9 @@ if has('nvim-0.10') && Planned('nvim-treesitter') && (exists('$ANTHROPIC_API_KEY
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
+endif
+if g:complete_engine != ''
+    PlugAddOpt 'vim-dict'
 endif
 " ------------------------------
 " format tools

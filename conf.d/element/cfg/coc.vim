@@ -32,6 +32,7 @@ let g:coc_global_extensions = [
             \ 'coc-xml',
             \ 'coc-sh',
             \ 'coc-vimlsp',
+            \ 'coc-dictionary',
             \ 'coc-pyright',
             \ ]
 if UNIX()
