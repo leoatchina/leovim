@@ -1,5 +1,5 @@
 if v:version <= 703 || v:version == 704 && !has('patch399')
-    echoe 'vim 7.4.399 is at least required when uing leovim.'
+    echoe 'vim 7.4.399 is at least required when using leovim.'
     finish
 elseif !has('nvim-0.7.2') && has('nvim')
     echoe 'neovim 0.7.2 is at least required when using leovim.'
@@ -70,7 +70,7 @@ function! HAS_GUI()
     return s:gui_running
 endfunction
 if exists('g:vscode') && !has('nvim-0.10')
-    echoe "vscode-neovm required nvim-0.10+!"
+    echoe "vscode-neovim required nvim-0.10+!"
     finish
 elseif WINDOWS()
     if !has('nvim') && v:version < 900
