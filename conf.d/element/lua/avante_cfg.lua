@@ -71,7 +71,11 @@ require('avante').setup({
       debug = "<M-i><M-d>",
       hint = "<M-i><M-h>",
       suggestion = "<M-i><M-s>",
-    }
+    },
+    sidebar = {
+      switch_windows = "<C-j>",
+      reverse_switch_windows = "<C-k>",
+    },
   },
   hints = { enabled = true },
   windows = {
