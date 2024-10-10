@@ -33,6 +33,7 @@ function! InstalledCmp() abort
                 \ 'cmp-nvim-lsp-signature-help',
                 \ 'cmp-vsnip',
                 \ 'cmp-dictionary',
+                \ 'cmp-async-path',
                 \ 'friendly-snippets',
                 \ 'lspkind-nvim',
                 \ )
@@ -147,11 +148,8 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'petertriho/cmp-git'
     PlugAdd 'uga-rosa/cmp-dictionary'
     PlugAdd 'onsails/lspkind-nvim'
-    if WINDOWS()
-        PlugAdd 'hrsh7th/cmp-path'
-    else
-        PlugAdd 'FelipeLema/cmp-async-path'
-    endif
+    " async-path
+    PlugAdd 'https://codeberg.org/fcying/cmp-async-path'
     " snippet
     PlugAdd 'hrsh7th/cmp-vsnip'
     " lsp related

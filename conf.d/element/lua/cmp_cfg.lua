@@ -17,14 +17,13 @@ local cmp = require('cmp')
 local compare = cmp.config.compare
 local keymap = require('cmp.utils.keymap')
 local lspkind = require('lspkind')
-local path_source = Installed('cmp-path') and 'path' or Installed('cmp-async-path') and 'async_path' or ''
 local sources = {
   { name = 'nvim_lua', priority = 32 },
   { name = 'dictionary', priority = 16 },
   { name = 'vsnip', priority = 8 },
   { name = 'nvim_lsp', priority = 4 },
   { name = 'buffer', priority = 2 },
-  { name = path_source, priority = 1 },
+  { name = 'async-path', priority = 1 },
 }
 if Installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 64})
