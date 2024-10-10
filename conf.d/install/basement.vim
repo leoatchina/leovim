@@ -131,6 +131,7 @@ if get(s:, 'smart_engine_select', 0)
         let g:complete_engine = ''
     endif
 endif
+PlugAddOpt 'vim-dict'
 " ------------------------------
 " complete_engine
 " ------------------------------
@@ -297,12 +298,8 @@ if has('patch-9.0.0185') || has('nvim')
     endif
 endif
 if has('nvim-0.10') && Planned('nvim-treesitter') && (exists('$ANTHROPIC_API_KEY') || exists('$OPENAI_API_KEY') || Planned('copilot.lua'))
-    if executable('cargo')
-        if UNIX()
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
-        else
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource true' }
-        endif
+    if executable('cargo') && UNIX()
+        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
     else
         if UNIX()
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
@@ -310,9 +307,6 @@ if has('nvim-0.10') && Planned('nvim-treesitter') && (exists('$ANTHROPIC_API_KEY
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
-endif
-if g:complete_engine != ''
-    PlugAddOpt 'vim-dict'
 endif
 " ------------------------------
 " format tools
