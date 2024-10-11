@@ -23,17 +23,28 @@ local layouts = {
   },
   {
     elements = {
-      { id = "scopes",  size = 0.5 },
-      { id = "watches", size = 0.3 },
-      { id = "stacks",  size = 0.2 },
+      -- repl on left top
+      { id = "repl",    size = 0.05 },
+      { id = "scopes",  size = 0.45 },
+      { id = "watches", size = 0.3  },
+      { id = "stacks",  size = 0.2  },
     },
     size = 0.25,
     position = "left",
   },
+  --  repl on top
   {
     elements = {
-      { id = "repl",        size = 0.75 },
-      { id = "breakpoints", size = 0.25 },
+      { id = "repl"},
+    },
+    size = 0.05,
+    position = "top",
+  },
+  --  console / breakpoints on bottom
+  {
+    elements = {
+      { id = "console",     size = 0.7 },
+      { id = "breakpoints", size = 0.3 },
     },
     size = 0.25,
     position = "bottom",
@@ -52,19 +63,21 @@ local function dapui_toggle(open)
     if windows.layouts[1]:is_open() or open then
       dapui.close()
       dapui.open(2)
-      dapui.open(3)
+      dapui.open(4)
     else
       dapui.toggle(2)
-      dapui.toggle(3)
+      dapui.toggle(4)
     end
   else
     if windows.layouts[2]:is_open() or open then
       dapui.close()
       dapui.open(1)
       dapui.open(3)
+      dapui.open(4)
     else
       dapui.toggle(1)
       dapui.toggle(3)
+      dapui.toggle(4)
     end
   end
 end
