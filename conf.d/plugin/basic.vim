@@ -141,11 +141,11 @@ if PlannedFzf()
 endif
 if PlannedLeaderf()
     nnoremap <leader>F :Leaderf
-    source $CFG_DIR/leaderf.vim
-    nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
+    nnoremap <silent><leader>L :Leaderf --recall<Cr>
     nnoremap <silent><leader>; :Leaderf --next<Cr>
     nnoremap <silent><leader>, :Leaderf --previous<Cr>
-    nnoremap <silent><leader>. :Leaderf --recall<Cr>
+    nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
+    source $CFG_DIR/leaderf.vim
 endif
 if !PlannedLeaderf() && !PlannedFzf()
     source $CFG_DIR/ctrlp.vim
