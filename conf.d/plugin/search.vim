@@ -108,12 +108,12 @@ nnoremap s? :Grep<Space>
 " --------------------------
 if PlannedFzf()
     if executable('rg')
-        command! -bang -nargs=* FzfBLines
-                    \ call fzf#vim#grep(
-                    \ 'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%:p')), 1,
-                    \ fzf#vim#with_preview({'options': ' --no-sort --layout reverse --query '.shellescape(<q-args>).' --with-nth=4.. --delimiter=":"'}))
+        command! -bang -nargs=* FzfBLines call fzf#vim#grep(
+                    \ 'rg --with-filename --column --line-number --no-heading --smart-case . ' . fnameescape(expand('%:p')),
+                    \ fzf#vim#with_preview({'options': ' --no-sort --layout reverse --query '.shellescape(<q-args>).' --with-nth=4.. --delimiter=":"'}),
+                    \ 1)
         command! -bang -nargs=* FzfRg call fzf#vim#grep(
-                    \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>),
+                    \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>) . ' ./',
                     \ fzf#vim#with_preview({'options': ' --no-sort --nth 4.. --delimiter=":"'}),
                     \ <bang>0)
         command! -bang -nargs=* FzfRoot call fzf#vim#grep(
