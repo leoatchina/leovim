@@ -3,7 +3,7 @@ vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { nore
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "AvanteInput",
   callback = function()
-    vim.keymap.set("i", "<C-s>", "<ESC><Cr><Cr>", { noremap = false, silent = true, buffer = true })
+    vim.keymap.set("i", "<C-s>", "<ESC>", { noremap = false, silent = true, buffer = true })
   end,
 })
 local max_tokens = type(vim.g.max_tokens) == 'number'
@@ -71,16 +71,17 @@ require('avante').setup({
     },
     ask = "<M-i><M-i>",
     edit = "<M-i><M-e>",
+    focus = "<M-i><M-f>",
     refresh = "<M-i><M-r>",
     toggle = {
-      default = "<M-i><M-t>",
-      debug = "<M-i><M-d>",
       hint = "<M-i><M-h>",
+      debug = "<M-i><M-d>",
+      default = "<M-i><M-t>",
       suggestion = "<M-i><M-s>",
     },
     sidebar = {
-      switch_windows = "<C-j>",
-      reverse_switch_windows = "<C-k>",
+      switch_windows = "<Tab>",
+      reverse_switch_windows = "<S-Tab>",
     },
   },
   hints = { enabled = true },
