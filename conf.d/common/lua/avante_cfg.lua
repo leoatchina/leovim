@@ -82,7 +82,7 @@ require('avante').setup({
       suggestion = "<M-i><M-s>",
     },
     sidebar = {
-      switch_windows = "<Nop>",
+      switch_windows = "<S-Tab>",
       reverse_switch_windows = "<Nop>",
     },
   },
