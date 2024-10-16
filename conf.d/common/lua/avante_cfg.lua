@@ -15,16 +15,18 @@ local provider = vim.g.avante_provider
   or vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude'
   or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai'
   or 'copilot'
-vim.g.claude_model = vim.g.claude_model or "claude-3-haiku-20240229"
+local suggestions_provider = vim.g.avante_suggestions_provider or provider
+vim.g.claude_model = vim.g.claude_model or "claude-3-haiku-20240307"
 vim.g.openai_model = vim.g.openai_model or "gpt-4o"
 vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-05-13"
 vim.g.avante_model = string.find(provider, 'claude') and vim.g.claude_model
   or string.find(provider, 'openai') and vim.g.openai_model
   or vim.g.copilot_model
+-- setup
 require('avante').setup({
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
   provider = provider,
-  auto_suggestions_provider = vim.g.avante_suggestions_provider or provider,
+  auto_suggestions_provider = suggestions_provider,
   claude = {
     model = vim.g.claude_model,
     max_tokens = max_tokens
@@ -38,7 +40,7 @@ require('avante').setup({
     max_tokens = max_tokens
   },
   behaviour = {
-    auto_suggestions = provider ~= 'copilot' or Installed('copilot-cmp') == false,
+    auto_suggestions = suggestions_provider ~= 'copilot' or not Installed('copilot-cmp'),
     auto_set_highlight_group = true,
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
