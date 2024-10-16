@@ -1,4 +1,4 @@
-vim.keymap.set({ "n", "v", "x" }, "<M-i><M-a>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "<M-i>a", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
 vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "AvanteInput",
@@ -71,19 +71,19 @@ require('avante').setup({
       normal = "<CR>",
       insert = "<C-s>",
     },
-    ask = "<M-i><M-i>",
+    ask = "<M-i><M-a>",
     edit = "<M-i><M-e>",
     focus = "<M-i><M-f>",
     refresh = "<M-i><M-r>",
     toggle = {
       hint = "<M-i><M-h>",
       debug = "<M-i><M-d>",
-      default = "<M-i><M-t>",
+      default = "<M-i><M-i>",
       suggestion = "<M-i><M-s>",
     },
     sidebar = {
-      switch_windows = "<Tab>",
-      reverse_switch_windows = "<S-Tab>",
+      switch_windows = "<Nop>",
+      reverse_switch_windows = "<Nop>",
     },
   },
   hints = { enabled = true },
