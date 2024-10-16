@@ -320,7 +320,7 @@ function! s:open_or_create_file(file, ...) abort
     endif
 endfunction
 " ssh/config
-nnoremap <M-h>c :call <SID>open_or_create_file("~/.ssh/config")<Cr>
+nnoremap <M-h>S :call <SID>open_or_create_file("~/.ssh/config")<Cr>
 " gitconfig
 nnoremap <M-h>G :call <SID>open_or_create_file("~/.gitconfig")<Cr>
 " bashrc
@@ -365,7 +365,7 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>f :call TabeOpen("$CONF_D_DIR/plugin/file.vim")<Cr>
     if PlannedLeaderf()
         nnoremap <silent><M-h>a :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/autoload<Cr>
-        nnoremap <silent><M-h>e :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/element<Cr>
+        nnoremap <silent><M-h>c :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/common<Cr>
         nnoremap <silent><M-h>p :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --fuzzy --no-sort ~/.leovim<Cr>
@@ -374,7 +374,7 @@ if get(g:, 'leovim_openmap', 1)
         endif
     elseif PlannedFzf()
         nnoremap <silent><M-h>a :FzfFiles ~/.leovim/conf.d/autoload<Cr>
-        nnoremap <silent><M-h>e :FzfFiles ~/.leovim/conf.d/element<Cr>
+        nnoremap <silent><M-h>c :FzfFiles ~/.leovim/conf.d/common<Cr>
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
