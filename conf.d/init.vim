@@ -98,11 +98,10 @@ let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
 " --------------------------
 if WINDOWS()
     set rtp^=$LEOVIM_DIR\pack
-    set rtp^=$CONF_D_DIR\element
 else
     set rtp^=$LEOVIM_DIR/pack
-    set rtp^=$CONF_D_DIR/element
 endif
+set rtp^=$COMMON_DIR
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
