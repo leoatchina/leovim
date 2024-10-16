@@ -7,21 +7,21 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 local max_tokens = type(vim.g.max_tokens) == 'number'
-  and vim.g.max_tokens > 0
-  and vim.g.max_tokens < 4096
-  and vim.g.max_tokens
-  or 4096
+and vim.g.max_tokens > 0
+and vim.g.max_tokens < 4096
+and vim.g.max_tokens
+or 4096
 local provider = vim.g.avante_provider
-  or vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude'
-  or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai'
-  or 'copilot'
+or vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude'
+or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai'
+or 'copilot'
 local suggestions_provider = vim.g.avante_suggestions_provider or provider
 vim.g.claude_model = vim.g.claude_model or "claude-3-haiku-20240307"
 vim.g.openai_model = vim.g.openai_model or "gpt-4o"
 vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-05-13"
 vim.g.avante_model = string.find(provider, 'claude') and vim.g.claude_model
-  or string.find(provider, 'openai') and vim.g.openai_model
-  or vim.g.copilot_model
+or string.find(provider, 'openai') and vim.g.openai_model
+or vim.g.copilot_model
 -- setup
 require('avante').setup({
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
@@ -91,24 +91,37 @@ require('avante').setup({
     ---@type "right" | "left" | "top" | "bottom" | "smart"
     position = "smart", -- the position of the sidebar
     wrap = true, -- similar to vim.o.wrap
-    width = 30, -- default % based on available width
+    width = 30, -- default % based on available width in vertical layout
+    height = 30, -- default % based on available height in horizontal layout
     sidebar_header = {
       align = "center", -- left, center, right for title
       rounded = true,
     },
-  },
-  highlights = {
-    ---@type AvanteConflictHighlights
-    diff = {
-      current = "DiffText",
-      incoming = "DiffAdd",
+    input = {
+      prefix = "> ",
     },
-  },
-  --- @class AvanteConflictUserConfig
-  diff = {
-    autojump = true,
-    ---@type string | fun(): any
-    list_opener = "copen",
-  },
+    edit = {
+      border = "rounded",
+      start_insert = true, -- Start insert mode when opening the edit window
+    },
+    ask = {
+      border = "rounded",
+      floating = true, -- Open the 'AvanteAsk' prompt in a floating window
+      start_insert = true, -- Start insert mode when opening the ask window
+    },
+    highlights = {
+      ---@type AvanteConflictHighlights
+      diff = {
+        current = "DiffText",
+        incoming = "DiffAdd",
+      },
+    },
+    --- @class AvanteConflictUserConfig
+    diff = {
+      autojump = true,
+      ---@type string | fun(): any
+      list_opener = "copen",
+    },
+  }
 })
 require('avante_lib').load()
