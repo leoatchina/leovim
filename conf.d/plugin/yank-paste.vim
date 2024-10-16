@@ -62,6 +62,16 @@ if has('clipboard')
         nnoremap <leader>Y :%"+y<Cr>
         xnoremap + "+y
     else
+        if WINDOWS()
+            try
+                set clipboard^=unnamedplus
+            catch
+                try
+                    set clipboard^=unnamed
+                catch
+                endtry
+            endtry
+        endif
         nnoremap <Tab>y :0,-"*y<Cr>
         nnoremap <Tab>Y vG"*y
         nnoremap <leader>Y :%"*y<Cr>
