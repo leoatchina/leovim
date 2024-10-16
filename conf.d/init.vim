@@ -87,8 +87,8 @@ endif
 let $LEOVIM_DIR = expand('~/.leovim')
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
 let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
-let $ELEMENT_DIR = expand($CONF_D_DIR . '/element')
-let $CFG_DIR = expand($ELEMENT_DIR . '/cfg')
+let $COMMON_DIR = expand($CONF_D_DIR . '/common')
+let $CFG_DIR = expand($COMMON_DIR . '/cfg')
 " opt dirs
 let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
 let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
