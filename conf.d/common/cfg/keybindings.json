@@ -563,7 +563,7 @@
     "when": "(arbitrary function)"
   },
   {
-    "key": "ctrl+alt+\.",
+    "key": "ctrl+alt+.",
     "command": "aichat.fixerrormessage",
     "when": "(arbitrary function)"
   },
