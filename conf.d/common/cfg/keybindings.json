@@ -558,6 +558,16 @@
   },
   // cursor ai 
   {
+    "key": "ctrl+shift+e",
+    "command": "-aichat.fixerrormessage",
+    "when": "(arbitrary function)"
+  },
+  {
+    "key": "ctrl+alt+e",
+    "command": "aichat.fixerrormessage",
+    "when": "(arbitrary function)"
+  },
+  {
     "key": "ctrl+shift+k",
     "command": "aichat.open-ai-chat-side-pane"
   },
