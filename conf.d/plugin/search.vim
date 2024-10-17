@@ -97,12 +97,12 @@ command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
 nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
 xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
 nnoremap s. :GrepAllLast<Cr>
-nnoremap s/ :GrepAll
+nnoremap s/ :GrepAll <C-r><C-w>
 " search
 nnoremap s\ :Grep <C-r><C-w><Cr>
 xnoremap s\ :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
 nnoremap s[ :GrepLast<Cr>
-nnoremap s] :Grep<Space>
+nnoremap s] :Grep <C-r><C-w>
 " --------------------------
 " FzfSearch
 " --------------------------
@@ -205,7 +205,7 @@ if LINUX()
 elseif MACOS()
     let g:Lf_Rg = expand('~/.leovim.unix/macox/rg')
 elseif WINDOWS()
-    let g:Lf_Rg = expand('~/.leovim.windows/tools/rg')
+    let g:Lf_Rg = expand('~/.leovim.windows/tools/rg.exe')
 endif
 if PlannedLeaderf() && filereadable(g:Lf_Rg)
     " LeaderfLast
@@ -259,7 +259,7 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
         let cmd = 'Leaderf rg --no-ignore --bottom -L -S '
         " NOTE: a:1 == 'local only'
         if a:0 >= 2 && a:000[-1] == 1
-            let cmd = cmd . ' --wd-mode=F'
+            let cmd = cmd . ' --wd-mode=f'
             let cmd = cmd . ' ' . join(a:000[:-2])
         elseif a:0
             let cmd = cmd . ' ' . join(a:000)
@@ -274,16 +274,14 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
     xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr><Cr>
     nnoremap <nowait><C-f><C-f> :LeaderfSearchAll <C-r><C-w>
     xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><C-f>\ :LeaderfSearch <C-r><C-w>
-    xnoremap <nowait><C-f>\ :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><C-f>] :LeaderfSearch <C-r><C-w><Cr>
-    xnoremap <nowait><C-f>] :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr><Cr>
+    nnoremap <nowait><C-f>\ :LeaderfSearch <C-r><C-w><Cr>
+    xnoremap <nowait><C-f>\ :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr><Cr>
+    nnoremap <nowait><C-f>] :LeaderfSearch <C-r><C-w>
+    xnoremap <nowait><C-f>] :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
     " flygrep
     nnoremap <nowait><C-f>/  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
     nnoremap <nowait><C-f>?  :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
-    nnoremap <nowait><C-f>\  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
-    nnoremap <nowait><C-f>\| :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
-    xnoremap <nowait><C-f>\  :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
+    nnoremap <nowait><C-f>\| :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
     xnoremap <nowait><C-f>\| :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
 elseif exists(":FzfSearchAll")
     let g:searchall = 'FzfSearchAll'
@@ -309,4 +307,6 @@ elseif PlannedFzf()
     nnoremap <nowait><C-f>d :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 else
     let g:search_tool = "grep"
+    nnoremap <nowait><C-f>p :GrepAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <nowait><C-f>d :GrepAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 endif
