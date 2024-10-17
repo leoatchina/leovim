@@ -188,10 +188,10 @@ if PlannedFzf()
     nnoremap <nowait><leader>. :FzfSearchLast<Cr>
     nnoremap <nowait><leader>\ :FzfSearch <C-r><C-w>
     xnoremap <nowait><leader>\ :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><Tab>/ :FzfSearchGitAll<Cr>
-    nnoremap <nowait><Tab>. :FzfSearchGitAllLast<Cr>
-    nnoremap <nowait><Tab>\ :FzfSearchGitAll <C-r><C-w>
-    xnoremap <nowait><Tab>\ :<C-u>FzfSearchGitAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><Tab>/ :FzfSearchGit<Cr>
+    nnoremap <nowait><Tab>. :FzfSearchGitLast<Cr>
+    nnoremap <nowait><Tab>\ :FzfSearchGit <C-r><C-w>
+    xnoremap <nowait><Tab>\ :<C-u>FzfSearchGit <C-r>=GetVisualSelection()<Cr>
     nnoremap <nowait>,/ :FzfSearchAll<Cr>
     nnoremap <nowait>,. :FzfSearchAllLast<Cr>
     nnoremap <nowait>,\ :FzfSearchAll <C-r><C-w>
