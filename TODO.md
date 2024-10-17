@@ -94,9 +94,10 @@
 - [x] suppress <C-c> E5108 error messages
 - [x] LeaderfSeach with as optinal second parameter
 - [x] ~~fzfrg put files side by side with lines~~, using fzf --nth
+- [x] ~~show current tab's all buffers in tabline~~, may using smart tab line width
+- [ ] search using 3 different entries: <leader>/, <c-f>, s
 - [ ] vista_markdown bug
 - [ ] fork fzf-project and rewrite
-- [ ] ~~show current tab's all buffers in tabline~~, may using smart tab line width
 - [ ] floaterm drop command, ref vim-terminal-help
 ## MyPlugins:
 - [x] fzf-registers
