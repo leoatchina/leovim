@@ -246,14 +246,14 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
         endif
         execute cmd
     endfunction
-    command! TODO call s:todo_note(g:todo_patterns, 0)
-    command! NOTE call s:todo_note(g:note_patterns, 0)
-    command! Todo call s:todo_note(g:todo_patterns, 1)
-    command! Note call s:todo_note(g:note_patterns, 1)
-    nnoremap <nowait><C-f>t :TODO<Cr>
-    nnoremap <nowait><C-f>n :NOTE<Cr>
-    nnoremap <nowait><C-f>T :Todo<Cr>
-    nnoremap <nowait><C-f>N :Note<Cr>
+    command! LeaderfTODO call s:todo_note(g:todo_patterns, 0)
+    command! LeaderfNOTE call s:todo_note(g:note_patterns, 0)
+    command! LeaderfTodo call s:todo_note(g:todo_patterns, 1)
+    command! LeaderfNote call s:todo_note(g:note_patterns, 1)
+    nnoremap <nowait><C-f>t :LeaderfTODO<Cr>
+    nnoremap <nowait><C-f>n :LeaderfNOTE<Cr>
+    nnoremap <nowait><C-f>T :LeaderfTodo<Cr>
+    nnoremap <nowait><C-f>N :LeaderfNote<Cr>
     " leaderf_search
     function! s:leaderf_search(...) abort
         let cmd = 'Leaderf rg --no-ignore --bottom -L -S '

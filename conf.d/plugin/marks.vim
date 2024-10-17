@@ -27,9 +27,9 @@ if Planned('vim-signature')
                 \ }
 endif
 if PlannedFzf()
-    nnoremap <silent><C-f>m :FzfMarks<CR>
+    nnoremap <silent><leader>M :FzfMarks<CR>
 else
-    nnoremap <silent><C-f>m :marks<Cr>
+    nnoremap <silent><leader>M :marks<Cr>
 endif
 " -----------------------------------------------------
 " vim-signify
