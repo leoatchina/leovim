@@ -341,8 +341,8 @@ if Planned('vimspector')
     nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
-    nnoremap = :VimspectorWatch <C-r>=expand('<cword>')<Cr>
-    nnoremap - :VimspectorEval <C-r>=expand('<cword>')<Cr>
+    nnoremap - :VimspectorWatch <C-r>=expand('<cword>')<Cr>
+    nnoremap _ :VimspectorEval <C-r>=expand('<cword>')<Cr>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'

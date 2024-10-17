@@ -71,7 +71,7 @@ local function dapui_toggle(open)
     end
   end
 end
-vim.keymap.set({"n", "x"}, "<F1>",
+vim.keymap.set({"n", "x"}, "<M-m><M-m>",
   function()
     dapui_toggle()
   end, { noremap = true, silent = true }
@@ -110,7 +110,7 @@ if Installed('nvim-dap-virtual-text') then
     virt_lines = true,
     commented = true
   })
-  vim.keymap.set("n", "=",
+  vim.keymap.set("n", "<F1>",
     [[<Cmd>DapVirtualTextToggle<Cr>]],
     { noremap = true, silent = false }
   )

@@ -5,10 +5,7 @@ let g:Lf_ReverseOrder = 0
 let g:Lf_NoChdir      = 1
 let g:Lf_QuickSelect  = 0
 let g:Lf_PythonVersion = get(g:, 'Lf_PythonVersion', float2nr(g:python_version))
-let g:Lf_DefaultExternalTool = "rg"
 let g:Lf_WorkingDirectoryMode = 'AF'
-" border
-highlight Lf_hl_popupBorder guifg=#ffffff guibg=#021316
 " icons
 if Installed('nvim-web-devicons') || Installed('vim-devicons')
     let g:Lf_ShowDevIcons = 1
@@ -16,11 +13,12 @@ else
     let g:Lf_ShowDevIcons = 0
 endif
 " popup
-let g:Lf_PopupColorscheme = 'default'
-let g:Lf_PopupShowBorder = 1
-let g:Lf_PopupBorders = ["─","│","─","│","┌","┐","┘","└"]
 if g:has_popup_floating
+    highlight Lf_hl_popupBorder guifg=#ffffff guibg=#021316
     let g:Lf_WindowPosition = 'popup'
+    let g:Lf_PopupColorscheme = 'default'
+    let g:Lf_PopupShowBorder = 1
+    let g:Lf_PopupBorders = ["─","│","─","│","┌","┐","┘","└"]
     let g:Lf_PopupHeight    = 0.7
     let g:Lf_PreviewInPopup = 1
     function s:Lf_Preview_Position()

@@ -208,6 +208,7 @@ elseif WINDOWS()
     let g:Lf_Rg = expand('~/.leovim.windows/tools/rg.exe')
 endif
 if PlannedLeaderf() && filereadable(g:Lf_Rg)
+    let g:Lf_DefaultExternalTool = "rg"
     " LeaderfLast
     nnoremap <nowait><C-f>. :Leaderf rg --recal<Cr>
     " next/previous
