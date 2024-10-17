@@ -27,17 +27,17 @@ if has('nvim') || has('timers') && has('channel') && has('job')
     if UNIX()
         silent! call mkdir(Expand("$HOME/.cache/build"), "p")
         if executable('gcc')
-            let g:gcc_cmd = 'time gcc -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && time ~/.cache/build/$(VIM_FILENOEXT)'
+            let g:gcc_cmd = 'gcc -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
         if executable('g++')
-            let g:gpp_cmd = 'time g++ -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && time ~/.cache/build/$(VIM_FILENOEXT)'
+            let g:gpp_cmd = 'g++ -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
     elseif WINDOWS()
         if executable('gcc')
-            let g:gcc_cmd = 'time gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & time ..\target\test\$(VIM_FILENOEXT).exe'
+            let g:gcc_cmd = 'gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
         if executable('g++')
-            let g:gpp_cmd = 'time g++ $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & time ..\target\test\$(VIM_FILENOEXT).exe'
+            let g:gpp_cmd = 'g++ $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
     endif
     nnoremap ! :AsyncRun<Space>
@@ -101,27 +101,27 @@ function! s:asyncrun(...)
         endif
     endif
     if &ft ==# 'dosbatch' && WINDOWS()
-        let run_cmd = s:run_command . params. ' time %'
+        let run_cmd = s:run_command . params. ' %'
     elseif &ft ==# 'sh' && executable('bash')
-        let run_cmd = s:run_command . params . ' time bash %'
+        let run_cmd = s:run_command . params . ' bash %'
     elseif &ft ==# 'python' && executable('python3')
-        let run_cmd = s:run_command . params . ' time python3 %'
+        let run_cmd = s:run_command . params . ' python3 %'
     elseif &ft ==# 'python' && executable('python')
-        let run_cmd = s:run_command . params . ' time python %'
+        let run_cmd = s:run_command . params . ' python %'
     elseif &ft ==# 'r' && executable('Rscript')
-        let run_cmd = s:run_command . params . ' time Rscript %'
+        let run_cmd = s:run_command . params . ' Rscript %'
     elseif &ft ==# 'go' && executable('go')
-        let run_cmd = s:run_command . params . ' time go run %'
+        let run_cmd = s:run_command . params . ' go run %'
     elseif &ft ==# 'perl' && executable('perl')
-        let run_cmd = s:run_command . params . ' time perl %'
+        let run_cmd = s:run_command . params . ' perl %'
     elseif &ft ==# 'javascript' && executable('node')
-        let run_cmd = s:run_command . params . ' time node %'
+        let run_cmd = s:run_command . params . ' node %'
     elseif &ft ==# 'vue' && executable('npm')
-        let run_cmd = s:run_command . params . ' time npm run %'
+        let run_cmd = s:run_command . params . ' npm run %'
     elseif &ft ==# 'typescript' && executable('ts-node')
-        let run_cmd = s:run_command . params . ' time ts-node %'
+        let run_cmd = s:run_command . params . ' ts-node %'
     elseif &ft ==# 'javascript' && executable('node')
-        let run_cmd = s:run_command . params . ' time node %'
+        let run_cmd = s:run_command . params . ' node %'
     " c && cpp
     elseif &ft ==# 'c' && get(g:, 'gcc_cmd', '') != ''
         if WINDOWS()
