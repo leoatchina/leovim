@@ -45,8 +45,8 @@ endfunction
 command! -nargs=? SearchCurrBuf call s:search_cur(<f-args>)
 nnoremap \| :SearchCurrBuf <C-r><C-w><Cr>
 xnoremap \| :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
-nnoremap s\ :SearchCurrBuf <C-r><C-w>
-xnoremap s\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
+nnoremap <leader>\| :SearchCurrBuf <C-r><C-w>
+xnoremap <leader>\| :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
 " ----------------------------
 " grepsearch search
 " ----------------------------
@@ -95,14 +95,14 @@ command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
 " searchall
 nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
+xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
 nnoremap s. :GrepAllLast<Cr>
-nnoremap s/ :GrepAll<Space>
+nnoremap s/ :GrepAll
 " search
-nnoremap s] :Grep <C-r><C-w><Cr>
-xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
+nnoremap s\ :Grep <C-r><C-w><Cr>
+xnoremap s\ :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
 nnoremap s[ :GrepLast<Cr>
-nnoremap s? :Grep<Space>
+nnoremap s] :Grep<Space>
 " --------------------------
 " FzfSearch
 " --------------------------
@@ -184,6 +184,18 @@ if PlannedFzf()
     command! -nargs=? FzfSearchAll call s:fzf_search(<q-args>, 2)
     command! -nargs=0 FzfSearchGitLast call s:fzf_search(3)
     command! -nargs=? FzfSearchGit call s:fzf_search(<q-args>, 3)
+    nnoremap <nowait><leader>/ :FzfSearch<Cr>
+    nnoremap <nowait><leader>. :FzfSearchLast<Cr>
+    nnoremap <nowait><leader>\ :FzfSearch <C-r><C-w>
+    xnoremap <nowait><leader>\ :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><Tab>/ :FzfSearchGitAll<Cr>
+    nnoremap <nowait><Tab>. :FzfSearchGitAllLast<Cr>
+    nnoremap <nowait><Tab>\ :FzfSearchGitAll <C-r><C-w>
+    xnoremap <nowait><Tab>\ :<C-u>FzfSearchGitAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait>,/ :FzfSearchAll<Cr>
+    nnoremap <nowait>,. :FzfSearchAllLast<Cr>
+    nnoremap <nowait>,\ :FzfSearchAll <C-r><C-w>
+    xnoremap <nowait>,\ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
 endif
 " ----------------------------
 " leaderf search commands
@@ -196,6 +208,25 @@ elseif WINDOWS()
     let g:Lf_Rg = expand('~/.leovim.windows/tools/rg')
 endif
 if PlannedLeaderf() && filereadable(g:Lf_Rg)
+    " LeaderfLast
+    nnoremap <nowait><C-f>. :Leaderf rg --recal<Cr>
+    " next/previous
+    nnoremap <nowait><C-f>; :Leaderf rg --next<Cr>
+    nnoremap <nowait><C-f>, :Leaderf rg --previous<Cr>
+    " C-f map in bottom
+    nnoremap <nowait><C-f>e :Leaderf rg --bottom --no-ignore -L -S -e --cword
+    xnoremap <nowait><C-f>e :<C-u>Leaderf rg --bottom --no-ignore -L -S -e "<C-r>=GetVisualSelection()<Cr>"
+    nnoremap <nowait><C-f>b :Leaderf rg --bottom --no-ignore -L -S --all-buffers --cword
+    xnoremap <nowait><C-f>b :<C-u>Leaderf rg --bottom --no-ignore -L -S --all-buffers "<C-r>=GetVisualSelection()<Cr>"
+    nnoremap <nowait><C-f>w :Leaderf rg --bottom --no-ignore -L -S -w --cword
+    xnoremap <nowait><C-f>w :<C-u>Leaderf rg --bottom --no-ignore -L -S -w "<C-r>=GetVisualSelection()<Cr>"
+    nnoremap <nowait><C-f>f :Leaderf rg --bottom --no-ignore -L -S -F --cword
+    xnoremap <nowait><C-f>f :<C-u>Leaderf rg --bottom --no-ignore -L -S -F "<C-r>=GetVisualSelection()<Cr>"
+    nnoremap <nowait><C-f>x :Leaderf rg --bottom --no-ignore -L -S -x --cword
+    xnoremap <nowait><C-f>x :<C-u>Leaderf rg --bottom --no-ignore -L -S -x "<C-r>=GetVisualSelection()<Cr>"
+    nnoremap <nowait><C-f>a :Leaderf rg --bottom --no-ignore --append --cword
+    xnoremap <nowait><C-f>a :<C-u>Leaderf rg --bottom --no-ignore --append "<C-r>=GetVisualSelection()<Cr>"
+    nnoremap <nowait><C-f>i :LeaderfRgInteractive<Cr>
     let g:Lf_RgConfig = [
                 \ "--max-columns=10000",
                 \ "--glob=!{.git,.svn,.hg,.project}",
@@ -237,84 +268,29 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
     endfunction
     command! -nargs=* -complete=dir LeaderfSearch call s:leaderf_search(<f-args>, 1)
     command! -nargs=* LeaderfSearchAll call s:leaderf_search(<f-args>)
-    nnoremap <nowait><C-f>; :Leaderf rg --next<Cr>
-    nnoremap <nowait><C-f>, :Leaderf rg --previous<Cr>
-    " C-f map in bottom
-    nnoremap <nowait><C-f>e :Leaderf rg --bottom --no-ignore -L -S -e --cword
-    xnoremap <nowait><C-f>e :<C-u>Leaderf rg --bottom --no-ignore -L -S -e "<C-r>=GetVisualSelection()<Cr>"
-    nnoremap <nowait><C-f>b :Leaderf rg --bottom --no-ignore -L -S --all-buffers --cword
-    xnoremap <nowait><C-f>b :<C-u>Leaderf rg --bottom --no-ignore -L -S --all-buffers "<C-r>=GetVisualSelection()<Cr>"
-    nnoremap <nowait><C-f>w :Leaderf rg --bottom --no-ignore -L -S -w --cword
-    xnoremap <nowait><C-f>w :<C-u>Leaderf rg --bottom --no-ignore -L -S -w "<C-r>=GetVisualSelection()<Cr>"
-    nnoremap <nowait><C-f>f :Leaderf rg --bottom --no-ignore -L -S -F --cword
-    xnoremap <nowait><C-f>f :<C-u>Leaderf rg --bottom --no-ignore -L -S -F "<C-r>=GetVisualSelection()<Cr>"
-    nnoremap <nowait><C-f>x :Leaderf rg --bottom --no-ignore -L -S -x --cword
-    xnoremap <nowait><C-f>x :<C-u>Leaderf rg --bottom --no-ignore -L -S -x "<C-r>=GetVisualSelection()<Cr>"
-    nnoremap <nowait><C-f>a :Leaderf rg --bottom --no-ignore --append --cword
-    xnoremap <nowait><C-f>a :<C-u>Leaderf rg --bottom --no-ignore --append "<C-r>=GetVisualSelection()<Cr>"
-    nnoremap <nowait><C-f>i :LeaderfRgInteractive<Cr>
-    " LeaderfLast
-    nnoremap <nowait><C-f>L :Leaderf rg --recal<Cr>
-    " flygrep fuzzy mode
-    nnoremap <nowait>,/  :Leaderf rg --no-ignore --fuzzy -L -S --wd-mode=f<Cr>
-    nnoremap <nowait>,?  :Leaderf rg --no-ignore --fuzzy -L -S<Cr>
-    nnoremap <nowait>,\  :Leaderf rg --no-ignore --fuzzy -L -S --wd-mode=f --cword<Cr>
-    nnoremap <nowait>,\| :Leaderf rg --no-ignore --fuzzy -L -S --cword<Cr>
-endif
-" ---------------------------------
-" maps make full use of fzf leaderf
-" ---------------------------------
-if exists(":FzfSearch")
-    " search
-    nnoremap <nowait><C-f>] :FzfSearch <C-r><C-w><Cr>
-    xnoremap <nowait><C-f>] :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr><Cr>
-    nnoremap <nowait><C-f>[ :FzfSearchLast<Cr>
-    if exists(':FzfGGrep')
-        nnoremap <nowait><C-f>/ :FzfSearchGit <C-r><C-w>
-        xnoremap <nowait><C-f>/ :<C-u>FzfSearchGit <C-r>=GetVisualSelection()<Cr>
-        nnoremap <nowait><C-f>. :<C-u>FzfSearchGitLast<Cr>
-    endif
-    if exists(":LeaderfSearchAll")
-        let g:searchall = 'LeaderfSearchAll'
-        nnoremap <nowait><C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
-        xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr><Cr>
-        nnoremap <nowait><C-f><C-f> :LeaderfSearch <C-r><C-w>
-        xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
-        nnoremap <nowait><C-f>? :LeaderfSearchAll <C-r><C-w>
-        xnoremap <nowait><C-f>? :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
-    else
-        let g:searchall = 'FzfSearchAll'
-        " searchall
-        nnoremap <nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
-        xnoremap <nowait><C-f><Cr> :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
-    endif
+    " map LeaderfSearch
+    let g:searchall = 'LeaderfSearchAll'
+    nnoremap <nowait><C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
+    xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr><Cr>
+    nnoremap <nowait><C-f><C-f> :LeaderfSearchAll <C-r><C-w>
+    xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><C-f>\ :LeaderfSearch <C-r><C-w>
+    xnoremap <nowait><C-f>\ :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><C-f>] :LeaderfSearch <C-r><C-w><Cr>
+    xnoremap <nowait><C-f>] :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr><Cr>
+    " flygrep
+    nnoremap <nowait><C-f>/  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
+    nnoremap <nowait><C-f>?  :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
+    nnoremap <nowait><C-f>\  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
+    nnoremap <nowait><C-f>\| :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
+    xnoremap <nowait><C-f>\  :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
+    xnoremap <nowait><C-f>\| :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
+elseif exists(":FzfSearchAll")
+    let g:searchall = 'FzfSearchAll'
+    nnoremap <nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
+    xnoremap <nowait><C-f><Cr> :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
 else
     let g:searchall = 'GrepAll'
-endif
-" flygrep
-if PlannedFzf()
-    nnoremap <nowait><leader>/  :FzfSearch<Cr>
-    nnoremap <nowait><leader>?  :FzfSearchAll<Cr>
-    nnoremap <nowait><leader>\  :FzfSearch <C-r><C-w>
-    nnoremap <nowait><leader>\| :FzfSearchAll <C-r><C-w>
-    xnoremap <nowait><leader>\  :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
-    xnoremap <nowait><leader>\| :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><leader>. :FzfSearchAllLast<Cr>
-    if exists(":LeaderfSearch")
-        nnoremap <nowait><Tab>/  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
-        nnoremap <nowait><Tab>?  :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
-        nnoremap <nowait><Tab>\  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
-        nnoremap <nowait><Tab>\| :Leaderf rg --no-ignore --auto-preview -L -S --cword<Cr>
-        xnoremap <nowait><Tab>\  :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
-        xnoremap <nowait><Tab>\| :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
-    endif
-elseif exists(":LeaderfSearch")
-    nnoremap <nowait><leader>/  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
-    nnoremap <nowait><leader>?  :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
-    nnoremap <nowait><leader>\  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
-    nnoremap <nowait><leader>\| :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
-    xnoremap <nowait><leader>\  :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
-    xnoremap <nowait><leader>\| :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
 endif
 " --------------------------------------
 " search path && dir, ans set search-tool
