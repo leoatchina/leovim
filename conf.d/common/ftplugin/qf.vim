@@ -27,8 +27,8 @@ else
     nnoremap <silent><buffer><C-t> :PreviewQuickfix tabe<Cr>
     if Installed('vim-quickui')
         nnoremap <silent><buffer>K :call quickui#tools#preview_quickfix()<Cr>
-        nnoremap <silent><buffer><C-j> j:call quickui#tools#preview_quickfix()<Cr>
-        nnoremap <silent><buffer><C-k> k:call quickui#tools#preview_quickfix()<Cr>
+        nnoremap <silent><buffer>n j:call quickui#tools#preview_quickfix()<Cr>
+        nnoremap <silent><buffer>p k:call quickui#tools#preview_quickfix()<Cr>
     else
         nnoremap <buffer>K <Nop>
     endif
