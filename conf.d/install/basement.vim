@@ -149,7 +149,7 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'uga-rosa/cmp-dictionary'
     PlugAdd 'onsails/lspkind-nvim'
     " async-path
-    PlugAdd 'https://codeberg.org/fcying/cmp-async-path'
+    PlugAdd 'leoatchina/cmp-async-path'
     " snippet
     PlugAdd 'hrsh7th/cmp-vsnip'
     " lsp related
