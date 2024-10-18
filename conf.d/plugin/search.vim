@@ -273,17 +273,19 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
     let g:searchall = 'LeaderfSearchAll'
     nnoremap <nowait><C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
     xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr><Cr>
-    nnoremap <nowait><C-f><C-f> :LeaderfSearchAll <C-r><C-w>
-    xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><C-f>\ :LeaderfSearch <C-r><C-w><Cr>
-    xnoremap <nowait><C-f>\ :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr><Cr>
-    nnoremap <nowait><C-f>] :LeaderfSearch <C-r><C-w>
-    xnoremap <nowait><C-f>] :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><C-f><Space> :LeaderfSearchAll <C-r><C-w>
+    xnoremap <nowait><C-f><Space> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><C-f><C-f> :LeaderfSearch <C-r><C-w><Cr>
+    xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr><Cr>
+    nnoremap <nowait><C-f><C-]> :LeaderfSearch <C-r><C-w>
+    xnoremap <nowait><C-f><C-]> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
     " flygrep
-    nnoremap <nowait><C-f>/  :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
-    nnoremap <nowait><C-f>?  :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
-    nnoremap <nowait><C-f>\| :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
-    xnoremap <nowait><C-f>\| :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
+    nnoremap <nowait><C-f>/     :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
+    nnoremap <nowait><C-f>?     :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
+    nnoremap <nowait><C-f><C-\> :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
+    xnoremap <nowait><C-f><C-\> :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
+    nnoremap <nowait><C-f>\     :Leaderf rg --no-ignore --auto-preview -L -S --cword<Cr>
+    xnoremap <nowait><C-f>\     :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
 elseif exists(":FzfSearchAll")
     let g:searchall = 'FzfSearchAll'
     nnoremap <nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
