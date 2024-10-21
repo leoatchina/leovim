@@ -24,7 +24,7 @@ function! InstalledNvimLsp() abort
 endfunction
 function! InstalledCmp() abort
     return Installed(
-                \ 'magazine.nvim',
+                \ 'nvim-cmp',
                 \ 'cmp-buffer',
                 \ 'cmp-cmdline',
                 \ 'cmp-nvim-lsp',
@@ -39,7 +39,7 @@ function! InstalledCmp() abort
                 \ )
 endfunction
 function! AdvCompEngine() abort
-    return PlannedCoc() || Planned('magazine.nvim')
+    return PlannedCoc() || Planned('nvim-cmp')
 endfunction
 function! PrefFzf()
     return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
@@ -139,7 +139,7 @@ PlugAddOpt 'vim-dict'
 if g:complete_engine == 'vcm'
     PlugAdd 'girishji/vimcomplete'
 elseif g:complete_engine == 'cmp'
-    PlugAdd 'iguanacucumber/magazine.nvim'
+    PlugAdd 'hrsh7th/nvim-cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lsp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
     PlugAdd 'hrsh7th/cmp-buffer'
@@ -215,7 +215,7 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
     PlugAdd 'gcmt/wildfire.vim'
 endif
-if !Planned('nvim-treesitter') && Require('c') && Planned('coc.nvim') && Planned('magazine.nvim')
+if !Planned('nvim-treesitter') && Require('c') && Planned('coc.nvim') && Planned('nvim-cmp')
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
@@ -232,7 +232,7 @@ endif
 " ------------------------------
 " debug tool
 " ------------------------------
-if has('nvim-0.9.5') && (Require('nvim-dap') || Require('debug') && Planned('magazine.nvim') || Require('debug') && g:python_version < 3.1)
+if has('nvim-0.9.5') && (Require('nvim-dap') || Require('debug') && Planned('nvim-cmp') || Require('debug') && g:python_version < 3.1)
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'

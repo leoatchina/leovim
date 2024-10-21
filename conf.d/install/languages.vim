@@ -72,7 +72,7 @@ endif
 if Require('rust') && executable(Expand(get(g:, 'cargo_exe', 'cargo'))) && v:version >= 800
     let g:cargo_exe = Expand(exepath(get(g:, 'cargo_exe', 'cargo')))
     PlugAdd 'rust-lang/rust.vim', {'for': 'rust'}
-    if Planned('magazine.nvim')
+    if Planned('nvim-cmp')
         PlugAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
 else
