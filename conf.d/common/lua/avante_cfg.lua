@@ -79,6 +79,7 @@ require('avante').setup({
       hint = "<M-i><M-h>",
       debug = "<M-i><M-d>",
       default = "<M-i><M-i>",
+      repo_map = "<M-i><M-m>",
       suggestion = "<M-i><M-s>",
     },
     sidebar = {
@@ -94,8 +95,7 @@ require('avante').setup({
     width = 30, -- default % based on available width in vertical layout
     height = 30, -- default % based on available height in horizontal layout
     sidebar_header = {
-      align = "center", -- left, center, right for title
-      rounded = true,
+      enabled = false
     },
     input = {
       prefix = "> ",
