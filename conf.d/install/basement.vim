@@ -145,13 +145,11 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-buffer'
     PlugAdd 'hrsh7th/cmp-cmdline'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
-    PlugAdd 'petertriho/cmp-git'
-    PlugAdd 'uga-rosa/cmp-dictionary'
-    PlugAdd 'onsails/lspkind-nvim'
-    " async-path
-    PlugAdd 'leoatchina/cmp-async-path'
-    " snippet
     PlugAdd 'hrsh7th/cmp-vsnip'
+    PlugAdd 'petertriho/cmp-git'
+    PlugAdd 'onsails/lspkind-nvim'
+    PlugAdd 'fcying/cmp-async-path'
+    PlugAdd 'uga-rosa/cmp-dictionary'
     " lsp related
     PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
