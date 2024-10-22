@@ -81,11 +81,11 @@ endif
 " --------------------------
 " go
 " --------------------------
-if Require('go') && (has('patch-8.1.2269') || has('nvim')) && executable(Expand(get(g:, 'go_exe', 'go')))
-    let g:go_exe = Expand(exepath(get(g:, 'go_exe', 'go')))
+if Require('go') && (has('patch-8.1.2269') || has('nvim')) && executable(Expand(get(g:, 'gobin_exe', 'go')))
+    let g:gobin_exe = Expand(exepath(get(g:, 'gobin_exe', 'go')))
     PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 else
-    let g:go_exe = ''
+    let g:gobin_exe = ''
 endif
 " ------------------------------
 " nvim-java

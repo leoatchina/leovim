@@ -23,9 +23,9 @@ endif
 if Require('rust') && g:cargo_exe != ''
     let g:ensure_installed += ['rust_analyzer']
 endif
-if Require('go') && g:go_exe != ''
-    let g:go_exe_version = matchstr(execute(printf('!%s version', g:go_exe)), '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
-    let g:go_exe_version = StringToFloat(go_exe_version, 2)
+if Require('go') && g:gobin_exe != ''
+    let g:gobin_exe_version = matchstr(execute(printf('!%s version', g:gobin_exe)), '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
+    let g:gobin_exe_version = StringToFloat(gobin_exe_version, 2)
     let g:ensure_installed += ['gopls']
 endif
 if Installed('spring-boot.nvim')

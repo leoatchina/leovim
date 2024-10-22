@@ -108,8 +108,8 @@ require("mason-lspconfig").setup({
             analyses = {
               unusedparams = true,
             },
-            staticcheck = vim.g.go_exe_version ~= nil and vim.g.go_exe_version > 1.1913,
-            gofumpt = vim.g.go_exe_version ~= nil and vim.g.go_exe_version > 1.1913,
+            staticcheck = vim.g.gobin_exe_version ~= nil and vim.g.gobin_exe_version > 1.1913,
+            gofumpt = vim.g.gobin_exe_version ~= nil and vim.g.gobin_exe_version > 1.1913,
           },
         },
       })
