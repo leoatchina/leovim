@@ -81,7 +81,7 @@ endif
 if Require('java') && executable('java')
     let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
 endif
-if Require('go') && g:go_exe != ''
+if Require('go') && g:gobin_exe != ''
     let g:coc_global_extensions += ['coc-go']
 endif
 if Require('writing')
