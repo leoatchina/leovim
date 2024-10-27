@@ -44,6 +44,10 @@ endfunction
 function! PrefFzf()
     return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
 endfunction
+" ------------------------------
+" format tools
+" ------------------------------
+PlugAdd 'sbdchd/neoformat'
 " --------------------------
 " complete engine
 " --------------------------
@@ -303,14 +307,4 @@ if has('nvim-0.10') && Planned('nvim-treesitter') && (exists('$ANTHROPIC_API_KEY
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
-endif
-" ------------------------------
-" format tools
-" ------------------------------
-PlugAdd 'sbdchd/neoformat'
-" ------------------------------
-" project
-" ------------------------------
-if PlannedFzf() && Planned('vim-fugitive')
-    PlugAdd 'benwainwright/fzf-project'
 endif

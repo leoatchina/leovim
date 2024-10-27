@@ -95,7 +95,7 @@
 - [x] LeaderfSeach with as optinal second parameter
 - [x] ~~fzfrg put files side by side with lines~~, using fzf --nth
 - [x] ~~show current tab's all buffers in tabline~~, may using smart tab line width
-- [ ] search using 3 different entries: <leader>/, <c-f>, s
+- [x] search using 3 different entries: <leader>/, <c-f>, s
 - [ ] vista_markdown bug
 - [ ] fork fzf-project and rewrite
 - [ ] floaterm drop command, ref vim-terminal-help

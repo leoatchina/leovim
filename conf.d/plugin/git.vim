@@ -132,16 +132,12 @@ elseif Installed('vim-fugitive')
     nnoremap <silent>,<Tab> :Git blame<Cr>
 endif
 if PlannedFzf()
-    if Installed('blamer.nvim') || Planned('leaderf') && !has('patch-9.0.200')
+    if Installed('blamer.nvim') || PlannedLeaderf() && !has('patch-9.0.200')
         command! GCommands call FzfCallCommands('GCommands', 'G', ['Glance', 'Gutentag', 'Grep', 'Get'])
     else
         command! GCommands call FzfCallCommands('GCommands', 'G', 'LeaderfGit', ['Glance', 'Gutentag', 'Grep', 'Get'])
     endif
     nnoremap <silent><M-g><M-g> :GCommands<Cr>
-endif
-if Installed('fzf-project')
-    nnoremap <silent><leader>S :FzfSwitchProject<Cr>
-    nnoremap <silent><leader>P :FzfChooseProjectFile<Cr>
 endif
 " ---------------------------------
 " tig lazygit intergrated
