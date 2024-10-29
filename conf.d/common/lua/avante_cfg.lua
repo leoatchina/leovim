@@ -7,14 +7,14 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 local max_tokens = type(vim.g.max_tokens) == 'number'
-and vim.g.max_tokens > 0
-and vim.g.max_tokens < 4096
-and vim.g.max_tokens
-or 4096
+  and vim.g.max_tokens > 0
+  and vim.g.max_tokens < 4096
+  and vim.g.max_tokens
+  or 4096
 local provider = vim.g.avante_provider
-or vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude'
-or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai'
-or 'copilot'
+  or vim.fn.exists('$ANTHROPIC_API_KEY') > 0 and 'claude'
+  or vim.fn.exists('$OPENAI_API_KEY') > 0 and 'openai'
+  or 'copilot'
 local suggestions_provider = vim.g.avante_suggestions_provider or provider
 vim.g.claude_model = vim.g.claude_model or "claude-3-haiku-20240307"
 vim.g.openai_model = vim.g.openai_model or "gpt-4o"
