@@ -51,37 +51,31 @@ function! YankBorder(...) abort
 endfunction
 nnoremap <silent>,y :call YankBorder(0)<Cr>
 nnoremap <silent>,Y :call YankBorder(1)<Cr>
-nnoremap <silent>+  :call YankBorder(2)<Cr>
+nnoremap <silent><leader>Y  :call YankBorder(2)<Cr>
 " ------------------------------------
 " with/without clipboard yank
 " ------------------------------------
 if has('clipboard')
+    if WINDOWS()
+        try
+            set clipboard^=unnamedplus
+        catch
+            set clipboard^=unnamed
+        endtry
+    endif
     if UNIX()
-        nnoremap <Tab>y :0,-"+y<Cr>
+        nnoremap <Tab>y :0,-"+y
         nnoremap <Tab>Y vG"+y
-        nnoremap <leader>Y :%"+y<Cr>
-        xnoremap + "+y
+        xnoremap Y "+y
     else
-        if WINDOWS()
-            try
-                set clipboard^=unnamedplus
-            catch
-                try
-                    set clipboard^=unnamed
-                catch
-                endtry
-            endtry
-        endif
-        nnoremap <Tab>y :0,-"*y<Cr>
+        nnoremap <Tab>y :0,-"*y
         nnoremap <Tab>Y vG"*y
-        nnoremap <leader>Y :%"*y<Cr>
-        xnoremap + "*y
+        xnoremap Y "*y
     endif
 else
-    nnoremap <Tab>y :0,-y<Cr>
+    nnoremap <Tab>y :0,-y
     nnoremap <Tab>Y vGy
-    nnoremap <leader>Y :%y<Cr>
-    xnoremap + y
+    xnoremap Y y
 endif
 " ------------------------------------
 " M-x/BS
