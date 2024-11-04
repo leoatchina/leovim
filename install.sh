@@ -107,7 +107,7 @@ create_symlinks "$APP_PATH/clean.sh" "$HOME/.leovim.clean"
 # create config
 create_vimrc "$HOME/.vimrc"
 create_vimrc "$HOME/.config/nvim/init.vim"
-[ ! -f $HOME/.gvimrc ] && echo '" set guifont=CascadiaCode\ Code:h11' > $HOME/.gvimrc && echo '" set guifont=CascadiaCode\ Nerd\ Font:h11.5' >> $HOME/.gvimrc 
+[ ! -f $HOME/.gvimrc ] && echo '" set guifont=CascadiaCode\ Code:h11' > $HOME/.gvimrc && echo '" set guifont=CascadiaCode\ Nerd\ Font:h11.5' >> $HOME/.gvimrc
 
 # vim run scripts
 cp -n $APP_PATH/scripts/v.sh $HOME/.local/bin
@@ -193,7 +193,7 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'nodejs' ]] && exit 0
     fi
-    # copy bashrc 
+    # copy bashrc
     if [[ $mode == 'all' || $mode == 'bashrc' || $mode == 'leotmux' ]]; then
         if [ -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
