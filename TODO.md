@@ -96,9 +96,9 @@
 - [x] ~~fzfrg put files side by side with lines~~, using fzf --nth
 - [x] ~~show current tab's all buffers in tabline~~, may using smart tab line width
 - [x] search using 3 different entries: <leader>/, <c-f>, s
-- [ ] yank from file begin to current cursor postion
+- [x] yank from file begin to current cursor postion
 - [ ] vista_markdown bug
-- [ ] fork fzf-project and rewrite
+- [ ] rewrite fzf-project
 - [ ] floaterm drop command, ref vim-terminal-help
 ## MyPlugins:
 - [x] fzf-registers

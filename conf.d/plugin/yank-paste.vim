@@ -64,16 +64,16 @@ if has('clipboard')
         endtry
     endif
     if UNIX()
-        nnoremap <Tab>y :0,-"+y
+        nnoremap <Tab>y gg"+yG`'zz
         nnoremap <Tab>Y vG"+y
         xnoremap Y "+y
     else
-        nnoremap <Tab>y :0,-"*y
+        nnoremap <Tab>y gg"*yG`'zz
         nnoremap <Tab>Y vG"*y
         xnoremap Y "*y
     endif
 else
-    nnoremap <Tab>y :0,-y
+    nnoremap <Tab>y ggyG`'zz
     nnoremap <Tab>Y vGy
     xnoremap Y y
 endif
