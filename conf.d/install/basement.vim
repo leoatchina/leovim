@@ -30,6 +30,7 @@ function! InstalledNvimLsp() abort
 endfunction
 function! InstalledCmp() abort
     return Installed(
+                \ 'nvim-cmp',
                 \ 'cmp-buffer',
                 \ 'cmp-cmdline',
                 \ 'cmp-nvim-lsp',
@@ -41,7 +42,7 @@ function! InstalledCmp() abort
                 \ 'cmp-async-path',
                 \ 'friendly-snippets',
                 \ 'lspkind-nvim',
-                \ ) && (Installed('nvim-cmp') || Installed('magazine.nvim'))
+                \ )
 endfunction
 " ------------------------------
 " format tools
