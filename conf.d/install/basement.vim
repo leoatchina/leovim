@@ -10,6 +10,12 @@ endfunction
 function! PlannedCoc() abort
     return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
+function! AdvCompEngine() abort
+    return PlannedCoc() || Planned('nvim-cmp')
+endfunction
+function! PrefFzf()
+    return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
+endfunction
 function! InstalledNvimLsp() abort
     return Installed(
                 \ 'nvim-lspconfig',
@@ -24,7 +30,6 @@ function! InstalledNvimLsp() abort
 endfunction
 function! InstalledCmp() abort
     return Installed(
-                \ 'nvim-cmp',
                 \ 'cmp-buffer',
                 \ 'cmp-cmdline',
                 \ 'cmp-nvim-lsp',
@@ -36,13 +41,7 @@ function! InstalledCmp() abort
                 \ 'cmp-async-path',
                 \ 'friendly-snippets',
                 \ 'lspkind-nvim',
-                \ )
-endfunction
-function! AdvCompEngine() abort
-    return PlannedCoc() || Planned('nvim-cmp')
-endfunction
-function! PrefFzf()
-    return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
+                \ ) && (Installed('nvim-cmp') || Installed('magazine.nvim'))
 endfunction
 " ------------------------------
 " format tools
