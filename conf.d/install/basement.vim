@@ -30,19 +30,26 @@ function! InstalledNvimLsp() abort
 endfunction
 function! InstalledCmp() abort
     return Installed(
-                \ 'nvim-cmp',
-                \ 'cmp-buffer',
-                \ 'cmp-cmdline',
-                \ 'cmp-nvim-lsp',
-                \ 'cmp-nvim-lua',
                 \ 'cmp-git',
-                \ 'cmp-nvim-lsp-signature-help',
                 \ 'cmp-vsnip',
+                \ 'cmp-nvim-lsp-signature-help',
                 \ 'cmp-dictionary',
                 \ 'cmp-async-path',
                 \ 'friendly-snippets',
                 \ 'lspkind-nvim',
-                \ )
+                \ ) && (Installed(
+                    \ 'nvim-cmp',
+                    \ 'cmp-nvim-lsp',
+                    \ 'cmp-nvim-lua',
+                    \ 'cmp-buffer',
+                    \ 'cmp-cmdline',
+                \ ) || Installed(
+                    \ 'magazine.nvim',
+                    \ 'mag-nvim-lsp',
+                    \ 'mag-nvim-lua',
+                    \ 'mag-buffer',
+                    \ 'mag-cmdline',
+                \ ))
 endfunction
 " ------------------------------
 " format tools
@@ -100,7 +107,7 @@ elseif Require('coc')
     else
         let s:smart_engine_select = 1
     endif
-elseif Require('cmp')
+elseif Require('cmp') || Require('magazine')
     if has('nvim-0.10')
         if UNIX() || WINDOWS() && HAS_GUI() == 0
             let g:complete_engine = 'cmp'
@@ -143,13 +150,21 @@ PlugAddOpt 'vim-dict'
 if g:complete_engine == 'vcm'
     PlugAdd 'girishji/vimcomplete'
 elseif g:complete_engine == 'cmp'
-    PlugAdd 'hrsh7th/nvim-cmp'
-    PlugAdd 'hrsh7th/cmp-nvim-lsp'
-    PlugAdd 'hrsh7th/cmp-nvim-lua'
-    PlugAdd 'hrsh7th/cmp-buffer'
-    PlugAdd 'hrsh7th/cmp-cmdline'
-    PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
+    if Require('magazine')
+        PlugAdd 'iguanacucumber/magazine', {'as': 'nvim-cmp'}
+        PlugAdd 'iguanacucumber/mag-nvim-lsp', {'as': 'cmp-nvim-lsp'}
+        PlugAdd 'iguanacucumber/mag-nvim-lua', {'as': 'cmp-nvim-lua'}
+        PlugAdd 'iguanacucumber/mag-buffer', {'as': 'cmp-buffer'}
+        PlugAdd 'iguanacucumber/mag-cmdline', {'as': 'cmp-cmdline'}
+    else
+        PlugAdd 'hrsh7th/nvim-cmp'
+        PlugAdd 'hrsh7th/cmp-nvim-lsp'
+        PlugAdd 'hrsh7th/cmp-nvim-lua'
+        PlugAdd 'hrsh7th/cmp-buffer'
+        PlugAdd 'hrsh7th/cmp-cmdline'
+    endif
     PlugAdd 'hrsh7th/cmp-vsnip'
+    PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
     PlugAdd 'petertriho/cmp-git'
     PlugAdd 'onsails/lspkind-nvim'
     PlugAdd 'fcying/cmp-async-path'
