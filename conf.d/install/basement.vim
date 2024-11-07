@@ -151,11 +151,11 @@ if g:complete_engine == 'vcm'
     PlugAdd 'girishji/vimcomplete'
 elseif g:complete_engine == 'cmp'
     if Require('magazine')
-        PlugAdd 'iguanacucumber/magazine.nvim', {'as': 'nvim-cmp'}
-        PlugAdd 'iguanacucumber/mag-nvim-lsp', {'as': 'cmp-nvim-lsp'}
-        PlugAdd 'iguanacucumber/mag-nvim-lua', {'as': 'cmp-nvim-lua'}
-        PlugAdd 'iguanacucumber/mag-buffer', {'as': 'cmp-buffer'}
-        PlugAdd 'iguanacucumber/mag-cmdline', {'as': 'cmp-cmdline'}
+        PlugAdd 'iguanacucumber/magazine.nvim'
+        PlugAdd 'iguanacucumber/mag-nvim-lsp'
+        PlugAdd 'iguanacucumber/mag-nvim-lua'
+        PlugAdd 'iguanacucumber/mag-buffer'
+        PlugAdd 'iguanacucumber/mag-cmdline'
     else
         PlugAdd 'hrsh7th/nvim-cmp'
         PlugAdd 'hrsh7th/cmp-nvim-lsp'
