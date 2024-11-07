@@ -55,37 +55,41 @@ if Require('c')
         PlugAdd 'skywind3000/vim-cppman'
     endif
 endif
+if Require('clangd') && executable(Expand(get(g:, 'clangd_exe', 'clangd')))
+    let g:clangd_exe = Expand(exepath(get(g:, 'clangd_exe', 'clangd')))
+else
+    let g:clangd_exe = ''
+endif
 if Require('ccls') && executable(Expand(get(g:, 'ccls_exe', 'ccls')))
     let g:ccls_exe = Expand(exepath(get(g:, 'ccls_exe', 'ccls')))
     PlugAdd 'm-pilia/vim-ccls', {'for': g:c_filetypes}
 else
     let g:ccls_exe = ''
 endif
-if Require('clangd') && executable(Expand(get(g:, 'clangd_exe', 'clangd')))
-    let g:clangd_exe = Expand(exepath(get(g:, 'clangd_exe', 'clangd')))
-else
-    let g:clangd_exe = ''
-endif
 " --------------------------
 " rust
 " --------------------------
-if Require('rust') && executable(Expand(get(g:, 'cargo_exe', 'cargo'))) && v:version >= 800
+if executable(Expand(get(g:, 'cargo_exe', 'cargo')))
     let g:cargo_exe = Expand(exepath(get(g:, 'cargo_exe', 'cargo')))
+else
+    let g:cargo_exe = ''
+endif
+if get(g:, 'cargo_exe', '') != '' && Require('rust') && v:version >= 800
     PlugAdd 'rust-lang/rust.vim', {'for': 'rust'}
     if Planned('nvim-cmp')
         PlugAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
-else
-    let g:cargo_exe = ''
 endif
 " --------------------------
 " go
 " --------------------------
-if Require('go') && (has('patch-8.1.2269') || has('nvim')) && executable(Expand(get(g:, 'gobin_exe', 'go')))
+if executable(Expand(get(g:, 'gobin_exe', 'go')))
     let g:gobin_exe = Expand(exepath(get(g:, 'gobin_exe', 'go')))
-    PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 else
     let g:gobin_exe = ''
+endif
+if get(g:, 'gobin_exe', '') != '' && Require('go') && (has('patch-8.1.2269') || has('nvim'))
+    PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 endif
 " ------------------------------
 " nvim-java

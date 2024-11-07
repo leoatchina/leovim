@@ -11,7 +11,7 @@ function! PlannedCoc() abort
     return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
 function! AdvCompEngine() abort
-    return PlannedCoc() || Planned('nvim-cmp')
+    return PlannedCoc() || Planned('nvim-cmp') || Planned('magazine.nvim')
 endfunction
 function! PrefFzf()
     return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
