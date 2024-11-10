@@ -25,7 +25,7 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 elseif Installed('copilotchat.nvim', 'copilot.lua')
-    lua require("copilotchat")
+    lua require("copilotchat_cfg")
     command! CopilotChatCommands call FzfCallCommands('CopilotChatCommands', 'CopilotChat')
     nnoremap <silent><M-i>c :CopilotChatCommands<Cr>
     nnoremap <M-i>s :CopliotChatSave<Space>
