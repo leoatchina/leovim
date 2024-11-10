@@ -397,11 +397,12 @@ endif
 if WINDOWS()
     let s:vscode_user_dir = substitute(fnameescape(get(g:, "vscode_user_dir", "")), '/', '\', 'g')
     let s:cursor_user_dir = substitute(fnameescape(get(g:, "cursor_user_dir", "")), '/', '\', 'g')
+    let s:positron_user_dir = substitute(fnameescape(get(g:, "positron_user_dir", "")), '/', '\', 'g')
 else
     let s:vscode_user_dir = fnameescape(get(g:, "vscode_user_dir", ""))
     let s:cursor_user_dir = fnameescape(get(g:, "cursor_user_dir", ""))
+    let s:positron_user_dir = fnameescape(get(g:, "positron_user_dir", ""))
 endif
-let s:positron_user_dir = Expand("~/.positron")
 function! s:link_keybindings() abort
     if WINDOWS()
         for dir in [s:cursor_user_dir, s:vscode_user_dir, s:positron_user_dir]
