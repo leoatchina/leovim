@@ -202,6 +202,7 @@ endif
 " -----------------
 if Planned('vimspector')
     let g:debug_tool = "vimspector"
+    let g:vimspector_enable_auto_hover = 0
     let g:vimspector_base_dir = $DEPLOY_DIR . "/vimspector"
     " load template
     if PlannedFzf()
@@ -225,6 +226,7 @@ if Planned('vimspector')
     endif
     " core keymaps
     nmap <M-d>I :VimspectorInstall<Space>
+    nmap <silent>_ :VimspectorReset<Cr>
     nmap <silent><M-d><Space> <Plug>VimspectorToggleBreakpoint
     nmap <silent><M-d><M-d> <Plug>VimspectorRunToCursor
     nmap <silent><M-d><M-e> <Plug>VimspectorContinue
@@ -232,7 +234,7 @@ if Planned('vimspector')
     nmap <silent><M-d>i <Plug>VimspectorStepInto
     nmap <silent><M-d>o <Plug>VimspectorStepOut
     nmap <silent><F1> :VimspectorDisassemble<Cr>
-    nmap <silent><F3> :VimspectorReset<Cr>
+    nmap <silent><F3> :call vimspector#Launch()<Cr>
     nmap <silent><F4> <Plug>VimspectorRunToCursor
     nmap <silent><F5> <Plug>VimspectorContinue
     nmap <silent><F6> <Plug>VimspectorPause
@@ -258,7 +260,6 @@ if Planned('vimspector')
     nnoremap <silent><M-d>f :call vimspector#AddFunctionBreakpoint('')<left><left>
     nnoremap <silent><M-d>b :call vimspector#ToggleAllBreakpointsViewBreakpoint()<Cr>
     " start / stop
-    nnoremap <silent>_ :call vimspector#Launch()<Cr>
     nnoremap <silent><M-d>r :call vimspector#Restart()<Cr>
     nnoremap <silent><M-d>q :call vimspector#Reset()<Cr>
     nnoremap <silent><M-d>Q :call vimspector#Stop({'interactive': v:true})<Cr>
@@ -336,13 +337,14 @@ if Planned('vimspector')
     command! FocusCode call s:vimspector_or_floaterm("code")
     command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
     command! TerminalOrFloatermSpecial call s:vimspector_or_floaterm('terminal')
-    nnoremap <silent><M-m>0 :FocusCode<Cr>
-    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
     nnoremap <silent>- :VimspectorWatch <C-r>=expand('<cword>')<Cr>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
+    " other important map
+    nnoremap <silent><M-m>0 :FocusCode<Cr>
+    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
+    nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
     lua require("dap_cfg")
@@ -367,6 +369,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/dap/
     endif
     " core keymaps
+    nnoremap <silent>_ <cmd>lua DapReset()<Cr>
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><M-d><M-d> <cmd>lua require"dap".run_to_cursor()<Cr>
     nnoremap <silent><M-d><M-e> <cmd>lua require"dap".continue()<Cr>
@@ -374,7 +377,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-d>N <cmd>lua require"dap".step_back()<Cr>
     nnoremap <silent><M-d>i <cmd>lua require"dap".step_into()<Cr>
     nnoremap <silent><M-d>o <cmd>lua require"dap".step_out()<Cr>
-    nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
+    nnoremap <silent><F3> <cmd>lua DapLaunch()<Cr>
     nnoremap <silent><F4> <cmd>lua require"dap".run_to_cursor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapLaunch()<Cr>
     nnoremap <silent><F6> <cmd>lua require"dap".pause()<Cr>
@@ -386,7 +389,6 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <M-d>l :lua require"dap".
     nnoremap <M-d>I :DapInstall<Space>
     nnoremap <M-d>U :DapUninstall<Space>
-    nnoremap <silent>_ <cmd>lua DapLaunch()<Cr>
     nnoremap <silent><M-d>q <cmd>lua DapClose()<Cr>
     nnoremap <silent><M-d>p <cmd>lua require"dap".pause()<Cr>
     nnoremap <silent><M-d>r <cmd>lua require"dap".run_last()<Cr>
@@ -473,11 +475,13 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     command! FocusCode call s:dap_or_floaterm("focus")
     command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
     command! FloatElementOrFloatermSpecial call s:dap_or_floaterm("element")
+    " variables view
     nnoremap <silent>J :DapUIEval<Cr>
+    nnoremap <silent>- :lua require("dap.ui.widgets").preview()<Cr>
+    " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :FloatElementOrFloatermSpecial<Cr>
-    nnoremap <silent>- <cmd>lua require("dap.ui.widgets").preview()<Cr>
 elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     let g:debug_tool = 'termdebug'
     let g:termdebug_map_K = 1
@@ -486,14 +490,14 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     " coremap
     nnoremap <M-d><Space> :Break<Space>
     nnoremap <M-d><M-d> :Until<Cr>
-    nnoremap <silent>_ :Run<Space>
     nnoremap <M-d><M-e> :Continue<Cr>
     nnoremap <M-d>c :Clear<Space>
     nnoremap <M-d>n :Over<Cr>
     nnoremap <M-d>i :Step<Cr>
     nnoremap <M-d>o :Finish<Cr>
     nnoremap <M-d>a :Arguments<Space>
-    nnoremap <F3> :Stop<Cr>
+    nnoremap _ :Stop<Cr>
+    nnoremap <F3> :Run<Space>
     nnoremap <F4> :Until<Cr>
     nnoremap <F5> :Continue<Cr>
     nnoremap <F6> :Pause<Cr>
