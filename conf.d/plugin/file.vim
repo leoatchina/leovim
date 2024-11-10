@@ -401,11 +401,10 @@ else
     let s:vscode_user_dir = fnameescape(get(g:, "vscode_user_dir", ""))
     let s:cursor_user_dir = fnameescape(get(g:, "cursor_user_dir", ""))
 endif
-let s:theia_user_dir = Expand('~/.theia-ide')
-silent! call mkdir(s:theia_user_dir, 'p')
+let s:positron_user_dir = Expand("~/.positron")
 function! s:link_keybindings() abort
     if WINDOWS()
-        for dir in [s:cursor_user_dir, s:vscode_user_dir]
+        for dir in [s:cursor_user_dir, s:vscode_user_dir, s:positron_user_dir]
             if isdirectory(dir)
                 let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
                 execute(delete_cmd)
@@ -419,12 +418,8 @@ function! s:link_keybindings() abort
                 execute(mklink_cmd)
             endif
         endfor
-        let delete_cmd = printf('!del /Q /S %s\keymaps.json', s:theia_user_dir)
-        execute(delete_cmd)
-        let mklink_cmd = printf('!mklink %s %s', s:theia_user_dir . '\keymaps.json', $CFG_DIR . '\keymaps.json')
-        execute(mklink_cmd)
     else
-        for dir in [s:cursor_user_dir, s:vscode_user_dir]
+        for dir in [s:cursor_user_dir, s:vscode_user_dir, s:positron_user_dir]
             if isdirectory(dir)
                 let ln_cmd = printf('!ln -sf %s %s', $CFG_DIR . '/keybindings.json', dir . '/keybindings.json')
                 execute(ln_cmd)
@@ -432,8 +427,6 @@ function! s:link_keybindings() abort
                 execute(ln_cmd)
             endif
         endfor
-        let ln_cmd = printf('!ln -sf %s %s', $CFG_DIR . '/keymaps.json', s:theia_user_dir . '/keymaps.json')
-        execute(ln_cmd)
     endif
 endfunction
 command! LinkKeyBindings call s:link_keybindings()
