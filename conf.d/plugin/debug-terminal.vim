@@ -612,7 +612,7 @@ if Installed('jupynium.nvim')
     function! s:map() abort
         nnoremap <buffer><silent><C-\><Space> <Cmd>JupyniumKernelHover<Cr>
         nnoremap <buffer><silent><C-\><C-Space> <Cmd>JupyniumKernelHover<Cr>
-        nnoremap <buffer><silent><C-\><Cr>  <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
+        nnoremap <buffer><silent><C-\><Cr> <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
         nnoremap <buffer><silent><C-\><C-r> <Cmd>JupyniumRun<Cr>
         nnoremap <buffer><silent><C-\><C-t> <Cmd>JupyniumRunInTerminal<Cr>
         nnoremap <buffer><silent><C-\><C-q> <Cmd>JupyniumStopSync<Cr>
