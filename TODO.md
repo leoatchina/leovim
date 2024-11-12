@@ -97,7 +97,8 @@
 - [x] ~~show current tab's all buffers in tabline~~, may using smart tab line width
 - [x] search using 3 different entries: <leader>/, <c-f>, s
 - [x] yank from file begin to current cursor postion
-- [ ] config gopls in cmp || coc 
+- [ ] merge <M-m> into <M-d> map in debug mode
+- [ ] config gopls in cmp || coc
 - [ ] vista_markdown bug
 - [ ] rewrite fzf-project
 - [ ] floaterm drop command, ref vim-terminal-help
