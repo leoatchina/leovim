@@ -239,7 +239,7 @@ fi
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
 else
-    cp $APP_PATH/conf.d/element/cfg/opt.vim $HOME/.vimrc.opt
+    cp $APP_PATH/conf.d/common/cfg/opt.vim $HOME/.vimrc.opt
     success "$HOME/.vimrc.opt copied."
 fi
 
