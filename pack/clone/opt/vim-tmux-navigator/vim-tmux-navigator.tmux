@@ -4,17 +4,21 @@ get_tmux_option() {
   local option value default
   option="$1"
   default="$2"
-  value=$(tmux show-option -gqv "$option")
+  # NOTE: Older tmux versions (eg. 3.2a on Ubuntu 22.04) do not exit with an
+  #       error code when an option is not defined. Therefore we need to first
+  #       test if the option exists, and only then try to get its value or fall
+  #       back to the default.
+  value="$([[ -n $(tmux show-options -gq "$option") ]] \
+      && tmux show-option -gqv "$option" \
+      || echo "$default")"
 
-  if [ -n "$value" ]; then
-    if [ "$value" = "null" ]; then
+  # Deprecated, for backward compatibility
+  if [[ $value == 'null' ]]; then
       echo ""
-    else
-      echo "$value"
-    fi
-  else
-    echo "$default"
+      return
   fi
+
+  echo "$value"
 }
 
 bind_key_vim() {
@@ -42,5 +46,6 @@ for k in $(echo "$move_right"); do bind_key_vim "$k" "select-pane -R"; done
 for k in $(echo "$move_prev");  do bind_key_vim "$k" "select-pane -l"; done
 
 # Restoring clear screen
-tmux bind C-l send-keys 'C-l'
+clear_screen="$(get_tmux_option "@vim_navigator_prefix_mapping_clear_screen" 'C-l')"
+for k in $(echo "$clear_screen"); do tmux bind "$k" send-keys 'C-l'; done
 
