@@ -1,23 +1,21 @@
-PlugAddOpt 'fern.vim'
+PlugAddOpt 'vim-fern'
 nnoremap <leader>fn :Fern
 nnoremap <leader>fr :Fern . -drawer -reveal=%<Cr>
 nnoremap <leader>fo :Fern . -opener=tabedit<Cr>
 " icons
 let g:fern#renderer = "nerdfont"
-PlugAddOpt 'nerdfont.vim'
-PlugAddOpt 'glyph-palette.vim'
-PlugAddOpt 'fern-renderer-nerdfont.vim'
+PlugAddOpt 'vim-nerdfont'
+PlugAddOpt 'vim-glyph-palette'
+PlugAddOpt 'vim-fern-renderer-nerdfont'
 augroup my-glyph-palette
     autocmd! *
     autocmd FileType fern,startify call glyph_palette#apply()
 augroup END
 " enhance
-PlugAddOpt 'fern-git-status.vim'
-PlugAddOpt 'fern-mapping-git.vim'
-PlugAddOpt 'fern-hijack.vim'
-PlugAddOpt 'fern-preview.vim'
+PlugAddOpt 'vim-fern-git-status'
+PlugAddOpt 'vim-fern-hijack'
 " ---------------
-" fzf-fern
+" 3rd plugins
 " ---------------
 function! Fern_mapping_fzf_customize_option(spec)
     let a:spec.options .= ' --multi'
@@ -41,3 +39,4 @@ endfunction
 let g:Fern_mapping_fzf_file_sink = function('s:reveal')
 let g:Fern_mapping_fzf_dir_sink = function('s:reveal')
 PlugAddOpt 'fern-mapping-fzf.vim'
+PlugAddOpt 'fern-preview.vim'

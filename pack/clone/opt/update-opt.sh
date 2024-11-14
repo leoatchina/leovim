@@ -103,17 +103,16 @@ git clone --depth 1 https://github.com/ZSaberLv0/ZFVimBackup.git
 git clone --depth 1 https://github.com/ZSaberLv0/ZFVimDirDiff.git
 
 # fern
-rm -rf fern*.vim
-rm -rf nerdfont.vim glyph-palette.vim
-git clone --depth 1 https://github.com/lambdalisue/fern.vim
-git clone --depth 1 https://github.com/lambdalisue/fern-git-status.vim
-git clone --depth 1 https://github.com/lambdalisue/fern-mapping-git.vim
-git clone --depth 1 https://github.com/lambdalisue/fern-renderer-nerdfont.vim
-git clone --depth 1 https://github.com/lambdalisue/fern-hijack.vim
+rm -rf vim-fern* fern-*
+rm -rf vim-nerdfont vim-glyph-palette
+git clone --depth 1 https://github.com/lambdalisue/vim-fern
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-git-status
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-hijack
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-renderer-nerdfont
+git clone --depth 1 https://github.com/lambdalisue/vim-nerdfont
+git clone --depth 1 https://github.com/lambdalisue/vim-glyph-palette
 git clone --depth 1 https://github.com/LumaKernel/fern-mapping-fzf.vim
 git clone --depth 1 https://github.com/yuki-yano/fern-preview.vim
-git clone --depth 1 https://github.com/lambdalisue/nerdfont.vim
-git clone --depth 1 https://github.com/lambdalisue/glyph-palette.vim
 
 # delete files
 find . -type f | grep -i \.jpg$ | xargs rm -f
