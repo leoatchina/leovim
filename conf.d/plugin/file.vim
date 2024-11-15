@@ -211,7 +211,7 @@ endif
 " ---------------------------------
 " file browser
 " ---------------------------------
-if has('patch-8.1.2269') || has('nvim')
+if has('patch-8.2.5136') || has('nvim')
     source $CFG_DIR/fern.vim
 endif
 if has('nvim') && PlannedCoc()
@@ -226,7 +226,7 @@ elseif executable('yazi') && g:has_popup_floating && (UNIX() || WINDOWS() && has
 elseif executable('ranger') && g:has_popup_floating
     command! FloatermRanger call s:floaterm('ranger')
     nnoremap <silent><nowait><leader>e :FloatermRanger<Cr>
-elseif Installed('fern.vim')
+elseif Installed('vim-fern')
     nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
 endif
 " -----------------------------------
