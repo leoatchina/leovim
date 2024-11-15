@@ -24,6 +24,7 @@ let g:nvim_treesitter_install = UNIX()
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
 " let g:vscode_user_dir = 'C:\Scoop\persist\vscode\data\user-data\User'
 " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
+" let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
 " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
 
 let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'c', 'cpp', 'go', 'rust', 'java']

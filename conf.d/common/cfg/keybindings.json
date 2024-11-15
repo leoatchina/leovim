@@ -1,4 +1,21 @@
 [
+  // split
+  {
+    "key": "ctrl+alt+s",
+    "command": "workbench.action.splitEditor"
+  },
+  {
+    "key": "ctrl+\\",
+    "command": "-workbench.action.splitEditor"
+  },
+  {
+    "key": "shift+alt+s",
+    "command": "workbench.action.splitEditorDown"
+  },
+  {
+    "key": "ctrl+k ctrl+\\",
+    "command": "-workbench.action.splitEditorDown"
+  },
   // some disable
   {
     "key": "alt+n",
@@ -14,31 +31,6 @@
     "key": "shift+alt+m",
     "command": "editor.action.showContextMenu",
     "when": "editorFocus"
-  },
-  // open keybindings
-  {
-    "key": "ctrl+alt+,",
-    "command": "workbench.action.openGlobalKeybindings"
-  },
-  {
-    "key": "ctrl+shift+alt+,",
-    "command": "breadcrumbs.focusAndSelect",
-    "when": "breadcrumbsPossible && breadcrumbsVisible"
-  },
-  {
-    "key": "ctrl+shift+.",
-    "command": "-breadcrumbs.focusAndSelect",
-    "when": "breadcrumbsPossible && breadcrumbsVisible"
-  },
-  {
-    "key": "ctrl+shift+alt+,",
-    "command": "editor.action.accessibleViewGoToSymbol",
-    "when": "accessibilityHelpIsShown && accessibleViewGoToSymbolSupported || accessibleViewGoToSymbolSupported && accessibleViewIsShown"
-  },
-  {
-    "key": "ctrl+shift+.",
-    "command": "-editor.action.accessibleViewGoToSymbol",
-    "when": "accessibilityHelpIsShown && accessibleViewGoToSymbolSupported || accessibleViewGoToSymbolSupported && accessibleViewIsShown"
   },
   // fullScreen && Zen mode
   {
@@ -70,7 +62,7 @@
     "key": "shift+alt+down",
     "command": "workbench.action.focusBelowGroupWithoutWrap"
   },
-  // outline focus
+  // open file/folder, outline, symbol 
   {
     "key": "ctrl+shift+t",
     "command": "-workbench.action.reopenClosedEditor"
@@ -103,6 +95,16 @@
   {
     "key": "ctrl+alt+t",
     "command": "timeline.focus"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-workbench.view.scm",
+    "when": "workbench.scm.active"
+  },
+  {
+    "key": "ctrl+shift+,",
+    "command": "workbench.view.scm",
+    "when": "workbench.scm.active"
   },
   // ctrl o
   {
@@ -404,7 +406,7 @@
     "when": "editorLangId == 'markdown'"
   },
   {
-    "key": "ctrl+alt+s",
+    "key": "ctrl+shift+alt+s",
     "command": "markdown-preview-enhanced.syncPreview",
     "when": "editorLangId == 'markdown'"
   },
@@ -576,6 +578,10 @@
     "command": "aichat.open-ai-chat-editor"
   },
   // last, open keybindings
+  {
+    "key": "ctrl+alt+,",
+    "command": "workbench.action.openGlobalKeybindings"
+  },
   {
     "key": "ctrl+shift+alt+,",
     "command": "workbench.action.openGlobalKeybindingsFile"
