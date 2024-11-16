@@ -470,105 +470,14 @@
   },
   // copilot
   {
-    "key": "ctrl+i",
-    "command": "-workbench.action.chat.startVoiceChat",
-    "when": "chatIsEnabled && hasSpeechProvider && inChatInput && !chatSessionRequestInProgress && !editorFocus && !notebookEditorFocused && !scopedVoiceChatGettingReady && !speechToTextInProgress && !terminalChatActiveRequest || chatIsEnabled && hasSpeechProvider && inlineChatFocused && !chatSessionRequestInProgress && !editorFocus && !notebookEditorFocused && !scopedVoiceChatGettingReady && !speechToTextInProgress && !terminalChatActiveRequest"
-  },
-  {
-    "key": "ctrl+i",
-    "command": "-workbench.action.chat.stopListeningAndSubmit",
-    "when": "inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'editor' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'inline' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'quick' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'terminal' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'view' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'editor' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'inline' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'quick' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'terminal' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'view'"
-  },
-  {
-    "key": "ctrl+i",
-    "command": "-workbench.action.terminal.chat.focusInput",
-    "when": "terminalChatFocus && !inlineChatFocused"
-  },
-  {
-    "key": "ctrl+i",
-    "command": "-inlineChat.start",
-    "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
-  },
-  {
-    "key": "ctrl+i",
-    "command": "-workbench.action.terminal.chat.start",
-    "when": "inlineChatHasProvider && terminalFocusInAny && terminalHasBeenCreated || inlineChatHasProvider && terminalFocusInAny && terminalProcessSupported"
-  },
-  {
-    "key": "ctrl+i",
-    "command": "-inlineChat.holdForSpeech",
-    "when": "hasSpeechProvider && inlineChatHasProvider && inlineChatVisible && textInputFocus"
-  },
-  {
     "key": "alt+backspace",
     "command": "-workbench.action.chat.cancel"
-  },
-  {
-    "key": "ctrl+alt+'",
-    "command": "workbench.action.openQuickChat"
-  },
-  {
-    "key": "ctrl+shift+'",
-    "command": "workbench.panel.chat.view.copilot.focus"
-  },
-  {
-    "key": "shift+alt+'",
-    "command": "workbench.action.chat.openInEditor"
-  },
-  {
-    "key": "ctrl+shift+alt+'",
-    "command": "workbench.action.chat.openInNewWindow"
-  },
-  {
-    "key": "alt+'",
-    "command": "workbench.action.chat.startVoiceChat",
-    "when": "chatIsEnabled && hasSpeechProvider && inChatInput && !chatSessionRequestInProgress && !editorFocus && !notebookEditorFocused && !scopedVoiceChatGettingReady && !speechToTextInProgress && !terminalChatActiveRequest || chatIsEnabled && hasSpeechProvider && inlineChatFocused && !chatSessionRequestInProgress && !editorFocus && !notebookEditorFocused && !scopedVoiceChatGettingReady && !speechToTextInProgress && !terminalChatActiveRequest"
-  },
-  {
-    "key": "alt+'",
-    "command": "workbench.action.chat.stopListeningAndSubmit",
-    "when": "inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'editor' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'inline' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'quick' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'terminal' || inChatInput && voiceChatInProgress && scopedVoiceChatInProgress == 'view' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'editor' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'inline' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'quick' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'terminal' || inlineChatFocused && voiceChatInProgress && scopedVoiceChatInProgress == 'view'"
-  },
-  {
-    "key": "alt+'",
-    "command": "workbench.action.terminal.chat.focusInput",
-    "when": "terminalChatFocus && !inlineChatFocused"
-  },
-  {
-    "key": "alt+'",
-    "command": "inlineChat.start",
-    "when": "editorFocus && inlineChatHasProvider && !editorReadonly"
-  },
-  {
-    "key": "alt+'",
-    "command": "workbench.action.terminal.chat.start",
-    "when": "inlineChatHasProvider && terminalFocusInAny && terminalHasBeenCreated || inlineChatHasProvider && terminalFocusInAny && terminalProcessSupported"
-  },
-  {
-    "key": "alt+'",
-    "command": "focusSuggestion",
-    "when": "suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
-  },
-  {
-    "key": "alt+'",
-    "command": "inlineChat.holdForSpeech",
-    "when": "hasSpeechProvider && inlineChatHasProvider && inlineChatVisible && textInputFocus"
   },
   {
     "key": "ctrl+backspace",
     "command": "workbench.action.chat.cancel"
   },
   // cursor ai 
-  {
-    "key": "ctrl+shift+e",
-    "command": "-aichat.fixerrormessage",
-    "when": "(arbitrary function)"
-  },
-  {
-    "key": "ctrl+alt+.",
-    "command": "aichat.fixerrormessage",
-    "when": "(arbitrary function)"
-  },
   {
     "key": "ctrl+shift+k",
     "command": "aichat.open-ai-chat-side-pane"
