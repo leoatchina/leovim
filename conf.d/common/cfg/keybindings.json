@@ -1,20 +1,20 @@
 [
   // split
   {
-    "key": "ctrl+alt+s",
-    "command": "workbench.action.splitEditor"
-  },
-  {
     "key": "ctrl+\\",
     "command": "-workbench.action.splitEditor"
   },
   {
-    "key": "shift+alt+s",
+    "key": "ctrl+k ctrl+\\",
+    "command": "-workbench.action.splitEditorDown"
+  },
+  {
+    "key": "ctrl+alt+s",
     "command": "workbench.action.splitEditorDown"
   },
   {
-    "key": "ctrl+k ctrl+\\",
-    "command": "-workbench.action.splitEditorDown"
+    "key": "shift+alt+s",
+    "command": "workbench.action.splitEditor"
   },
   // some disable
   {
@@ -375,6 +375,11 @@
     "command": "-workbench.action.togglePanel"
   },
   {
+    "key": "ctrl+shift+\\",
+    "command": "-editor.action.jumpToBracket",
+    "when": "editorTextFocus"
+  },
+  {
     "key": "ctrl+j",
     "command": "editor.action.jumpToBracket",
     "when": "editorTextFocus"
@@ -479,11 +484,11 @@
   },
   // cursor ai 
   {
-    "key": "ctrl+shift+k",
+    "key": "ctrl+shift+\\",
     "command": "aichat.open-ai-chat-side-pane"
   },
   {
-    "key": "ctrl+alt+k",
+    "key": "ctrl+alt+\\",
     "command": "aichat.open-ai-chat-editor"
   },
   // cline ai
@@ -494,6 +499,17 @@
   {
     "key": "ctrl+shift+'",
     "command": "claude-dev.SidebarProvider.focus"
+  },
+  // tongyi ai
+  {
+    "key": "ctrl+\\",
+    "command": "tongyi.show.panel",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+l",
+    "command": "-tongyi.show.panel",
+    "when": "TongyiLingMa.Chat.active"
   },
   // last, open keybindings
   {
