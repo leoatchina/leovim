@@ -486,6 +486,15 @@
     "key": "ctrl+alt+k",
     "command": "aichat.open-ai-chat-editor"
   },
+  // cline ai
+  {
+    "key": "ctrl+'",
+    "command": "cline.openInNewTab"
+  },
+  {
+    "key": "ctrl+shift+'",
+    "command": "claude-dev.SidebarProvider.focus"
+  },
   // last, open keybindings
   {
     "key": "ctrl+alt+,",
