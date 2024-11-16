@@ -482,14 +482,25 @@
     "key": "ctrl+backspace",
     "command": "workbench.action.chat.cancel"
   },
-  // cursor ai 
+  // tongyi 
   {
     "key": "ctrl+\\",
-    "command": "aichat.open-ai-chat-side-pane"
+    "command": "tongyi.show.panel",
+    "when": "TongyiLingMa.Chat.active"
   },
+  {
+    "key": "ctrl+shift+l",
+    "command": "-tongyi.show.panel",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  // cursor ai 
   {
     "key": "ctrl+shift+\\",
     "command": "aichat.open-ai-chat-editor"
+  },
+  {
+    "key": "ctrl+alt+\\",
+    "command": "aichat.open-ai-chat-side-pane"
   },
   // cline ai
   {
