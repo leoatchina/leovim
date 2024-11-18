@@ -12,6 +12,10 @@ function _G.executable(name)
   return false
 end
 
+function _G.exists(name)
+   return fn.exists(name) > 0
+end
+
 function _G.Installed(name)
   if fn['Installed'](name) > 0 then
     return true
