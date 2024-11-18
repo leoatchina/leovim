@@ -1,21 +1,4 @@
 [
-  // split
-  {
-    "key": "ctrl+\\",
-    "command": "-workbench.action.splitEditor"
-  },
-  {
-    "key": "ctrl+k ctrl+\\",
-    "command": "-workbench.action.splitEditorDown"
-  },
-  {
-    "key": "ctrl+alt+s",
-    "command": "workbench.action.splitEditorDown"
-  },
-  {
-    "key": "shift+alt+s",
-    "command": "workbench.action.splitEditor"
-  },
   // some disable
   {
     "key": "alt+n",
@@ -473,14 +456,22 @@
     "key": "ctrl+alt+n",
     "command": "-code-runner.run"
   },
-  // copilot
+  // split
   {
-    "key": "alt+backspace",
-    "command": "-workbench.action.chat.cancel"
+    "key": "ctrl+\\",
+    "command": "-workbench.action.splitEditor"
   },
   {
-    "key": "ctrl+backspace",
-    "command": "workbench.action.chat.cancel"
+    "key": "ctrl+k ctrl+\\",
+    "command": "-workbench.action.splitEditorDown"
+  },
+  {
+    "key": "ctrl+alt+s",
+    "command": "workbench.action.splitEditorDown"
+  },
+  {
+    "key": "shift+alt+s",
+    "command": "workbench.action.splitEditor"
   },
   // tongyi 
   {
@@ -508,10 +499,43 @@
     "command": "cline.openInNewTab"
   },
   {
-    "key": "ctrl+shift+'",
+    "key": "ctrl+alt+'",
     "command": "claude-dev.SidebarProvider.focus"
   },
+  // codeium
+  {
+    "key": "ctrl+shift+'",
+    "command": "codeium.openChatView"
+  },
+  {
+    "key": "ctrl+shift+a",
+    "command": "-codeium.openChatView",
+    "when": "true"
+  },
+  {
+    "key": "ctrl+alt+a",
+    "command": "-codeium.openChatView",
+    "when": "false"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "-codeium.openCodeiumCommand",
+    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
+  },
+  // copilot
+  {
+    "key": "alt+backspace",
+    "command": "-workbench.action.chat.cancel"
+  },
+  {
+    "key": "ctrl+backspace",
+    "command": "workbench.action.chat.cancel"
+  },
   // last, open keybindings
+  {
+    "key": "ctrl+k ctrl+s",
+    "command": "-workbench.action.openGlobalKeybindings"
+  },
   {
     "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
