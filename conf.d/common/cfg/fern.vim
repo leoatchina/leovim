@@ -1,3 +1,4 @@
+let g:fern_disable_startup_warnings = 1
 PlugAddOpt 'vim-fern'
 nnoremap <leader>fn :Fern
 nnoremap <leader>fr :Fern . -drawer -reveal=%<Cr>
