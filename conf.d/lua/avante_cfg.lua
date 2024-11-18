@@ -19,7 +19,7 @@ local provider = vim.g.avante_provider
   or 'copilot'
 local suggestions_provider = vim.g.avante_suggestions_provider or provider
 if exists("$OPENROUTE_API_KEY") then
-  vim.env.OPENROUTE_API_KEY = vim.env.OPENROUTE_API_KEY
+  vim.env.OPENAI_API_KEY = vim.env.OPENROUTE_API_KEY
 end
 -- set each model
 vim.g.openroute_model = vim.g.openroute_model or "openai/gpt-4o"
