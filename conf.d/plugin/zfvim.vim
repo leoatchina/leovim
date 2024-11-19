@@ -52,38 +52,6 @@ endfunction
 nnoremap <silent><M-j><M-b> :call <SID>zfbackup_savedir()<Cr>
 PlugAddOpt 'ZFVimBackup'
 " --------------------
-" ZFVimDirDiff
-" --------------------
-let g:ZFDirDiff_ignoreEmptyDir = 1
-let g:ZFDirDiffKeymap_update = ['DL', '<C-l>']
-let g:ZFDirDiffKeymap_updateParent = ['DH', '<C-h>']
-let g:ZFDirDiffKeymap_open = ['<Cr>', 'o']
-let g:ZFDirDiffKeymap_foldOpenAll = ['O']
-let g:ZFDirDiffKeymap_foldOpenAllDiff = ['A']
-let g:ZFDirDiffKeymap_foldClose = ['x']
-let g:ZFDirDiffKeymap_foldCloseAll = ['X']
-let g:ZFDirDiffKeymap_goParent = ['U', '<BS>']
-let g:ZFDirDiffKeymap_diffThisDir = ['DF']
-let g:ZFDirDiffKeymap_diffParentDir = ['DU']
-let g:ZFDirDiffKeymap_markToDiff = ['DM']
-let g:ZFDirDiffKeymap_markToSync = ['DS']
-let g:ZFDirDiffKeymap_quit = ['q', '<leader>q', 'Q']
-let g:ZFDirDiffKeymap_diffNext = [']c', 'DN']
-let g:ZFDirDiffKeymap_diffPrev = ['[c', 'DP']
-let g:ZFDirDiffKeymap_diffNextFile = ['DJ']
-let g:ZFDirDiffKeymap_diffPrevFile = ['DK']
-let g:ZFDirDiffKeymap_syncToHere = ['DO']
-let g:ZFDirDiffKeymap_syncToThere = ['DT']
-let g:ZFDirDiffKeymap_add = ['a', '+']
-let g:ZFDirDiffKeymap_delete = ['DD']
-let g:ZFDirDiffKeymap_getPath = ['y']
-let g:ZFDirDiffKeymap_getFullPath = ['Y']
-nnoremap <Leader>fd :ZFDirDiff<Space>
-nnoremap <Leader>fm :ZFDirDiffMark<Cr>
-nnoremap <Leader>fu :ZFDirDiffUnmark<Cr>
-PlugAddOpt 'ZFVimDirDiff'
-au FileType ZFDirDiff nnoremap M :tabe $HOME/.leovim/conf.d/plugin/zfvim.vim<Cr>/ZFVimDirDiff<Cr>zz
-" --------------------
 " ZFVimIM
 " --------------------
 if !Installed('ZFVimIM')
