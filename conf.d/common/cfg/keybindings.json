@@ -473,7 +473,18 @@
     "key": "shift+alt+s",
     "command": "workbench.action.splitEditor"
   },
-  // tongyi 
+  //[1] windsurf ai
+  //[2] cursor ai 
+  {
+    "key": "ctrl+shift+\\",
+    "command": "aichat.open-ai-chat-editor"
+  },
+  {
+    "key": "ctrl+alt+\\",
+    "command": "aichat.open-ai-chat-side-pane"
+  },
+  //[3] positron
+  //-- tongyi ai
   {
     "key": "ctrl+\\",
     "command": "tongyi.show.panel",
@@ -484,33 +495,14 @@
     "command": "-tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
   },
-  // cursor ai 
-  {
-    "key": "ctrl+shift+\\",
-    "command": "aichat.open-ai-chat-editor"
-  },
-  {
-    "key": "ctrl+alt+\\",
-    "command": "aichat.open-ai-chat-side-pane"
-  },
-  // cline ai
+  //-- codeium
   {
     "key": "ctrl+'",
-    "command": "cline.openInNewTab"
-  },
-  {
-    "key": "ctrl+shift+alt+'",
-    "command": "claude-dev.SidebarProvider.focus"
-  },
-  // codeium
-  {
-    "key": "ctrl+shift+'",
     "command": "codeium.openChatView"
   },
   {
-    "key": "ctrl+alt+'",
-    "command": "codeium.cancelCodeiumCommand",
-    "when": "codeium.commandEnabled && editorTextFocus"
+    "key": "ctrl+alt+backspace",
+    "command": "codeium.cancelCodeiumCommand"
   },
   {
     "key": "alt+c",
@@ -532,7 +524,7 @@
     "command": "-codeium.openCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
   },
-  // copilot
+  //[4] copilot
   {
     "key": "alt+backspace",
     "command": "-workbench.action.chat.cancel"
@@ -540,6 +532,21 @@
   {
     "key": "ctrl+backspace",
     "command": "workbench.action.chat.cancel"
+  },
+  //-- supermaven
+  //-- continue ai
+  {
+    "key": "ctrl+alt+'",
+    "command": "continue.continueGUIView.focus"
+  },
+  //-- cline ai
+  {
+    "key": "ctrl+shift+'",
+    "command": "cline.openInNewTab"
+  },
+  {
+    "key": "ctrl+shift+alt+'",
+    "command": "claude-dev.SidebarProvider.focus"
   },
   // last, open keybindings
   {
