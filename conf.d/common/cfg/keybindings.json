@@ -456,25 +456,8 @@
     "key": "ctrl+alt+n",
     "command": "-code-runner.run"
   },
-  // split
-  {
-    "key": "ctrl+\\",
-    "command": "-workbench.action.splitEditor"
-  },
-  {
-    "key": "ctrl+k ctrl+\\",
-    "command": "-workbench.action.splitEditorDown"
-  },
-  {
-    "key": "ctrl+alt+s",
-    "command": "workbench.action.splitEditorDown"
-  },
-  {
-    "key": "shift+alt+s",
-    "command": "workbench.action.splitEditor"
-  },
-  //[1] windsurf ai
-  //[2] cursor ai 
+  //----------------------- windsurf ai --------------------
+  //----------------------- cursor ai ----------------------
   {
     "key": "ctrl+shift+\\",
     "command": "aichat.open-ai-chat-editor"
@@ -483,8 +466,8 @@
     "key": "ctrl+alt+\\",
     "command": "aichat.open-ai-chat-side-pane"
   },
-  //[3] positron
-  //-- tongyi ai
+  //------------------------ positron ----------------------
+  //tongyi ai
   {
     "key": "ctrl+\\",
     "command": "tongyi.show.panel",
@@ -495,7 +478,7 @@
     "command": "-tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
   },
-  //-- codeium
+  //codeium
   {
     "key": "ctrl+'",
     "command": "codeium.openChatView"
@@ -524,7 +507,7 @@
     "command": "-codeium.openCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
   },
-  //[4] copilot
+  //----------------------- vscode ---------------------------------------
   {
     "key": "alt+backspace",
     "command": "-workbench.action.chat.cancel"
@@ -533,22 +516,39 @@
     "key": "ctrl+backspace",
     "command": "workbench.action.chat.cancel"
   },
-  //-- supermaven
-  //-- continue ai
+  //supermaven
+  //continue ai
   {
-    "key": "ctrl+alt+'",
+    "key": "ctrl+shift+alt+'",
     "command": "continue.continueGUIView.focus"
   },
-  //-- cline ai
+  //cline ai
   {
     "key": "ctrl+shift+'",
     "command": "cline.openInNewTab"
   },
   {
-    "key": "ctrl+shift+alt+'",
+    "key": "ctrl+alt+'",
     "command": "claude-dev.SidebarProvider.focus"
   },
-  // last, open keybindings
+  //------------------------------ split -------------------------------------
+  {
+    "key": "ctrl+\\",
+    "command": "-workbench.action.splitEditor"
+  },
+  {
+    "key": "ctrl+k ctrl+\\",
+    "command": "-workbench.action.splitEditorDown"
+  },
+  {
+    "key": "ctrl+alt+s",
+    "command": "workbench.action.splitEditorDown"
+  },
+  {
+    "key": "shift+alt+s",
+    "command": "workbench.action.splitEditor"
+  },
+  //-------------------------- last, open keybindings ---------------------------
   {
     "key": "ctrl+k ctrl+s",
     "command": "-workbench.action.openGlobalKeybindings"
