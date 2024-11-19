@@ -499,13 +499,23 @@
     "command": "cline.openInNewTab"
   },
   {
-    "key": "ctrl+alt+'",
+    "key": "ctrl+shift+alt+'",
     "command": "claude-dev.SidebarProvider.focus"
   },
   // codeium
   {
     "key": "ctrl+shift+'",
     "command": "codeium.openChatView"
+  },
+  {
+    "key": "ctrl+alt+'",
+    "command": "codeium.cancelCodeiumCommand",
+    "when": "codeium.commandEnabled && editorTextFocus"
+  },
+  {
+    "key": "alt+c",
+    "command": "-codeium.cancelCodeiumCommand",
+    "when": "codeium.commandEnabled && editorTextFocus"
   },
   {
     "key": "ctrl+shift+a",
