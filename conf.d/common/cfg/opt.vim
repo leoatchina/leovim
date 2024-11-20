@@ -35,10 +35,6 @@ let g:nvim_treesitter_install = UNIX()
 
 let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'c', 'cpp', 'go', 'rust', 'java']
 
-" let $ANTHROPIC_API_KEY=
-" let $GEMINI_API_KEY=
-" let $OPENAI_API_KEY=
-
 if has('nvim') && HAS_GUI()
     " set guifont=Cascadia\ Code:h10.5
     " set guifont=CascadiaCode\ Nerd\ Font:h11.5
