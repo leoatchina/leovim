@@ -313,7 +313,7 @@ if has('patch-9.0.0185') || has('nvim')
     endif
 endif
 if has('nvim-0.10') && Planned('nvim-treesitter') && (Planned('copilot.lua') ||
-            \ exists('$HYPERBOLIC_API_KEY') || ('$OPENROUTE_API_KEY') || exists('$ANTHROPIC_API_KEY') || exists('$GEMINI_API_KEY') || exists('$OPENAI_API_KEY'))
+            \ exists('$HYPERBOLIC_API_KEY') || exists('$OPENROUTE_API_KEY') || exists('$ANTHROPIC_API_KEY') || exists('$GEMINI_API_KEY') || exists('$OPENAI_API_KEY'))
     if executable('cargo') && UNIX()
         PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
     else
