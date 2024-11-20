@@ -459,6 +459,10 @@
   //----------------------- windsurf ai --------------------
   //----------------------- cursor ai ----------------------
   {
+    "key": "ctrl+shift+l",
+    "command": "-aichat.open-ai-chat-editor"
+  },
+  {
     "key": "ctrl+shift+\\",
     "command": "aichat.open-ai-chat-editor"
   },
