@@ -426,6 +426,10 @@
   },
   // run
   {
+    "key": "ctrl+alt+n",
+    "command": "-code-runner.run"
+  },
+  {
     "key": "ctrl+alt+r",
     "command": "code-runner.run"
   },
@@ -452,12 +456,43 @@
     "key": "ctrl+alt+meta+n",
     "command": "-welcome.showNewFileEntries"
   },
+  //----------- Cancel chat --------------------
+  //copilot
   {
-    "key": "ctrl+alt+n",
-    "command": "-code-runner.run"
+    "key": "alt+backspace",
+    "command": "-workbench.action.chat.cancel"
   },
-  //----------------------- windsurf ai --------------------
-  //----------------------- cursor ai ----------------------
+  {
+    "key": "ctrl+backspace",
+    "command": "workbench.action.chat.cancel",
+    "when": "chatIsEnabled"
+  },
+  // windsurf
+  {
+    "key": "ctrl+backspace",
+    "command": "windsurf.command.reject",
+    "when": "editorTextFocus && windsurf.canAcceptOrRejectCommand && !editorHasSelection"
+  },
+  // cursor
+  {
+    "key": "ctrl+backspace",
+    "command": "aichat.cancelchat",
+    "when": "activeAIChatEditor || view == 'workbench.panel.aichat.view' && (arbitrary function)"
+  },
+  // tongyi
+  {
+    "key": "ctrl+backspace",
+    "command": "tongyi.command.abort.generateCommitMessage",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  // codeium
+  {
+    "key": "ctrl+backspace",
+    "command": "codeium.cancelCodeiumCommand",
+    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
+  },
+  //----------------------- windsurf  --------------------
+  //----------------------- cursor ----------------------
   {
     "key": "ctrl+shift+l",
     "command": "-aichat.open-ai-chat-editor"
@@ -488,10 +523,6 @@
     "command": "codeium.openChatView"
   },
   {
-    "key": "ctrl+alt+backspace",
-    "command": "codeium.cancelCodeiumCommand"
-  },
-  {
     "key": "alt+c",
     "command": "-codeium.cancelCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus"
@@ -511,15 +542,7 @@
     "command": "-codeium.openCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
   },
-  //----------------------- vscode ---------------------------------------
-  {
-    "key": "alt+backspace",
-    "command": "-workbench.action.chat.cancel"
-  },
-  {
-    "key": "ctrl+backspace",
-    "command": "workbench.action.chat.cancel"
-  },
+  //----------------------- vscode -------------------------------------
   //supermaven
   //continue ai
   {
