@@ -186,22 +186,22 @@
   {
     "key": "ctrl+n",
     "command": "selectNextSuggestion",
-    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible"
   },
   {
     "key": "down",
     "command": "-selectNextSuggestion",
-    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible"
   },
   {
     "key": "ctrl+p",
     "command": "selectPrevSuggestion",
-    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible"
   },
   {
     "key": "up",
     "command": "-selectPrevSuggestion",
-    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible"
   },
   // sidebartoggle
   {
@@ -541,6 +541,16 @@
     "key": "ctrl+shift+i",
     "command": "-codeium.openCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
+  },
+  {
+    "key": "ctrl+shift+alt+\\",
+    "command": "marscode.switchChat",
+    "when": "marscode.enableChatCommand && !editorReadonly"
+  },
+  {
+    "key": "ctrl+u",
+    "command": "-marscode.switchChat",
+    "when": "marscode.enableChatCommand && !editorReadonly"
   },
   //----------------------- vscode -------------------------------------
   //supermaven
