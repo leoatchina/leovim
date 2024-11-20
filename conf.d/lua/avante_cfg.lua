@@ -13,27 +13,31 @@ local max_tokens = type(vim.g.max_tokens) == 'number'
   or 4096
 -- openroute specially handled
 local openroute_exists = exists("$OPENROUTE_API_KEY")
+local hyperbolic_exists = exists("$HYPERBOLIC_API_KEY")
 if openroute_exists then
   vim.env.OPENAI_API_KEY = vim.env.OPENROUTE_API_KEY
+elseif hyperbolic_exists then
+  vim.env.OPENAI_API_KEY = vim.env.HYPERBOLIC_API_KEY
 end
 -- set provider
-local provider = openroute_exists and 'openai'
+local provider = (openroute_exists or hyperbolic_exists or exists('$OPENAI_API_KEY')) and 'openai'
   or exists('$ANTHROPIC_API_KEY') and 'claude'
   or exists('$GEMINI_API_KEY') and 'gemini'
-  or exists('$OPENAI_API_KEY') and 'openai'
   or 'copilot'
 local suggestions_provider = vim.g.avante_suggestions_provider or provider
 -- set each model
-vim.g.openroute_model = vim.g.openroute_model or "openai/gpt-4o"
 vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
 vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-flash"
 vim.g.openai_model = vim.g.openai_model or "gpt-4o"
 vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-05-13"
+vim.g.openroute_model = vim.g.openroute_model or "openai/gpt-4o"
+vim.g.hyperbolic_model = vim.g.hyperbolic_model or "Qwen/Qwen2.5-72B-Instruct"
 -- set avante model
 vim.g.avante_model = openroute_exists and vim.g.openroute_model
   or string.find(provider, 'claude') and vim.g.claude_model
   or string.find(provider, 'gemini') and vim.g.gemini_model
   or string.find(provider, 'openai') and vim.g.openai_model
+  or hyperbolic_exists and vim.g.hyperbolic_model
   or vim.g.copilot_model
 -- setup
 require('avante').setup({
@@ -49,8 +53,8 @@ require('avante').setup({
     max_tokens = max_tokens
   },
   openai = {
-    endpoint = openroute_exists and "https://openrouter.ai/api/v1" or "https://api.openai.com/v1",
-    model = openroute_exists and vim.g.openroute_model or vim.g.openai_model,
+    endpoint = openroute_exists and "https://openrouter.ai/api/v1" or hyperbolic_exists and "https://api.hyperbolic.xyz/v1" or "https://api.openai.com/v1",
+    model = openroute_exists and vim.g.openroute_model or hyperbolic_exists and vim.g.hyperbolic_model or vim.g.openai_model,
     max_tokens = max_tokens
   },
   copilot = {
