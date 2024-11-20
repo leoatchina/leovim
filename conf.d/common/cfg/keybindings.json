@@ -491,7 +491,7 @@
     "command": "codeium.cancelCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
   },
-  //----------------------- windsurf  --------------------
+  //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
   {
     "key": "ctrl+shift+l",
@@ -505,7 +505,7 @@
     "key": "ctrl+alt+\\",
     "command": "aichat.open-ai-chat-side-pane"
   },
-  //------------------------ positron ----------------------
+  //----------------------- positron ----------------------
   //tongyi ai
   {
     "key": "ctrl+'",
@@ -552,7 +552,7 @@
     "command": "-marscode.switchChat",
     "when": "marscode.enableChatCommand && !editorReadonly"
   },
-  //----------------------- vscode -------------------------------------
+  //----------------------- vscode -----------------------
   //supermaven
   //continue ai
   {
