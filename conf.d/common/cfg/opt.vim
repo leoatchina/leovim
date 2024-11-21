@@ -29,7 +29,7 @@ let g:nvim_treesitter_install = UNIX()
 
 " let $GEMINI_API_KEY=''
 " let $OPENAI_API_KEY=''
-" let $OPENROUTE_API_KEY=''
+" let $OPENROUTER_API_KEY=''
 " let $ANTHROPIC_API_KEY=''
 " let $HYPERBOLIC_API_KEY=''
 
