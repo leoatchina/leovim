@@ -491,7 +491,7 @@
     "command": "codeium.cancelCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
   },
-  //----------------------- windsurf  --------------------
+  //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
   {
     "key": "ctrl+shift+l",
@@ -505,7 +505,7 @@
     "key": "ctrl+alt+\\",
     "command": "aichat.open-ai-chat-side-pane"
   },
-  //------------------------ positron ----------------------
+  //----------------------- positron ----------------------
   //tongyi ai
   {
     "key": "ctrl+'",
@@ -552,20 +552,20 @@
     "command": "-marscode.switchChat",
     "when": "marscode.enableChatCommand && !editorReadonly"
   },
-  //----------------------- vscode -------------------------------------
+  //----------------------- vscode -----------------------
   //supermaven
   //continue ai
   {
-    "key": "ctrl+shift+alt+'",
+    "key": "ctrl+shift+'",
     "command": "continue.continueGUIView.focus"
   },
   //cline ai
   {
-    "key": "ctrl+shift+'",
+    "key": "ctrl+alt+'",
     "command": "cline.openInNewTab"
   },
   {
-    "key": "ctrl+alt+'",
+    "key": "ctrl+shift+alt+'",
     "command": "claude-dev.SidebarProvider.focus"
   },
   //------------------------------ split -------------------------------------

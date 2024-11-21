@@ -733,6 +733,9 @@ function! s:open_file_in_editor(text, col)
     if exists('l:url') && len(l:url)
         echom 'Opening "' . l:url . '"'
         return
+    elseif a:text == ''
+        echom "No file under cursor"
+        return
     endif
     if executable(get(g:, 'open_edior', 'code'))
         let editor = get(g:, 'open_edior', 'code') . ' --goto'
