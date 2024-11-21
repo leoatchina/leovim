@@ -726,7 +726,7 @@ function! s:get_cursor_pos(text, col)
         return [m[1], m[2], m[3]]
     endif
     return []
-endfunc
+endfunction
 function! s:open_file_in_editor(text, col)
     let l:url = textobj#uri#open_uri()
     redraw!
@@ -740,7 +740,7 @@ function! s:open_file_in_editor(text, col)
     if executable(get(g:, 'open_edior', 'code'))
         let editor = get(g:, 'open_edior', 'code') . ' --goto'
     else
-        echom "No URL found, and no editor executable"
+        echom "Neither URL nor file found, and no editor executable"
         return
     endif
     " location 0: file, 1: row, 2: column
@@ -758,7 +758,7 @@ function! s:open_file_in_editor(text, col)
     else
         echo "Not URL found, and not a valid file path."
     endif
-endfunc
+endfunction
 command! OpenLink call s:open_file_in_editor(getline("."), col("."))
 nnoremap <silent>go :OpenLink<cr>
 " --------------------------------------------
