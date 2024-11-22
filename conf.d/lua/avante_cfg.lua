@@ -8,37 +8,51 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 local max_tokens = type(vim.g.max_tokens) == 'number'
   and vim.g.max_tokens > 0
-  and vim.g.max_tokens < 4096
+  and vim.g.max_tokens < 8192
   and vim.g.max_tokens
-  or 4096
+  or 8192
 -- openrouter specially handled
-local openrouter_exists = exists("$OPENROUTER_API_KEY")
 local hyperbolic_exists = exists("$HYPERBOLIC_API_KEY")
-if openrouter_exists then
-  vim.env.OPENAI_API_KEY = vim.env.OPENROUTER_API_KEY
-elseif hyperbolic_exists then
+local deepseek_exists = exists("$DEEPSEEK_API_KEY")
+local openrouter_exists = exists("$OPENROUTER_API_KEY")
+if hyperbolic_exists then
   vim.env.OPENAI_API_KEY = vim.env.HYPERBOLIC_API_KEY
+elseif deepseek_exists then
+  vim.env.OPENAI_API_KEY = vim.env.DEEPSEEK_API_KEY
+elseif openrouter_exists then
+  vim.env.OPENAI_API_KEY = vim.env.OPENROUTER_API_KEY
 end
 -- set provider
-local provider = (openrouter_exists or hyperbolic_exists or exists('$OPENAI_API_KEY')) and 'openai'
+local provider = (hyperbolic_exists or deepseek_exists or openrouter_exists or exists('$OPENAI_API_KEY')) and 'openai'
   or exists('$ANTHROPIC_API_KEY') and 'claude'
   or exists('$GEMINI_API_KEY') and 'gemini'
   or 'copilot'
 local suggestions_provider = vim.g.avante_suggestions_provider or provider
 -- set each model
+vim.g.hyperbolic_model = vim.g.hyperbolic_model or "Qwen/Qwen2.5-72B-Instruct"
+vim.g.deepseek_model = vim.g.deepseek_model or "deepseek-coder"
+vim.g.openrouter_model = vim.g.openrouter_model or "openai/gpt-4o"
 vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
 vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-flash"
 vim.g.openai_model = vim.g.openai_model or "gpt-4o"
-vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-05-13"
-vim.g.openrouter_model = vim.g.openrouter_model or "openai/gpt-4o"
-vim.g.hyperbolic_model = vim.g.hyperbolic_model or "Qwen/Qwen2.5-72B-Instruct"
+vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-08-06"
 -- set avante model
-vim.g.avante_model = openrouter_exists and vim.g.openrouter_model
-  or hyperbolic_exists and vim.g.hyperbolic_model
-  or string.find(provider, 'openai') and vim.g.openai_model
+vim.g.avante_model = hyperbolic_exists and vim.g.hyperbolic_model
+  or deepseek_exists and vim.g.deepseek_model
+  or openrouter_exists and vim.g.openrouter_model
   or string.find(provider, 'claude') and vim.g.claude_model
   or string.find(provider, 'gemini') and vim.g.gemini_model
+  or string.find(provider, 'openai') and vim.g.openai_model
   or vim.g.copilot_model
+-- openai
+local openai_endpoint = hyperbolic_exists and "https://api.hyperbolic.xyz/v1"
+  or deepseek_exists and "https://api.deepseek.com"
+  or openrouter_exists and "https://openrouter.ai/api/v1"
+  or "https://api.openai.com/v1"
+local openai_model = hyperbolic_exists and vim.g.hyperbolic_model
+  or deepseek_exists and vim.g.deepseek_model
+  or openrouter_exists and vim.g.openrouter_model
+  or vim.g.openai_model
 -- setup
 require('avante').setup({
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
@@ -53,8 +67,8 @@ require('avante').setup({
     max_tokens = max_tokens
   },
   openai = {
-    endpoint = openrouter_exists and "https://openrouter.ai/api/v1" or hyperbolic_exists and "https://api.hyperbolic.xyz/v1" or "https://api.openai.com/v1",
-    model = openrouter_exists and vim.g.openrouter_model or hyperbolic_exists and vim.g.hyperbolic_model or vim.g.openai_model,
+    endpoint = openai_endpoint,
+    model = openai_model,
     max_tokens = max_tokens
   },
   copilot = {

@@ -35,10 +35,12 @@ endif
 if Installed('avante.nvim')
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
-    if exists('$OPENROUTER_API_KEY')
-        let avante = 'avante@openroute/openai'
-    elseif exists('$HYPERBOLIC_API_KEY')
+    if exists('$HYPERBOLIC_API_KEY')
         let avante = 'avante@hyperbolic/qwen'
+    elseif exists('$DEEPSEEK_API_KEY')
+        let avante = 'avante@deepseek'
+    elseif exists('$OPENROUTER_API_KEY')
+        let avante = 'avante@openroute/openai'
     elseif exists('$OPENAI_API_KEY')
         let avante = 'avante@openai'
     elseif exists('$ANTHROPIC_API_KEY')
