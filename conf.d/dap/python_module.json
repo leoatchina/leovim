@@ -1,11 +1,14 @@
 {
-  "name": "Python Debugger: Module",
   "type": "python",
-  "python": "~/miniconda3/bin/python",
-  "console": "integratedTerminal",
-  "cwd": "",
   "request": "launch",
-  "module":"",
-  "args":[],
-  "justMyCode": true
+  "name": "Python Debugger: Module",
+  "python": "~/miniconda3/bin/python",
+  "cwd": "./",
+  "module":"scrapy",
+  "args":[
+    "crawl",
+    "test"
+  ],
+  "justMyCode": true,
+  "console": "integratedTerminal"
 }
