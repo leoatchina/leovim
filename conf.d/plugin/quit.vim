@@ -2,7 +2,7 @@ let g:autoclose_ft_buf = [
             \ 'netrw', 'coc-explorer', 'neo-tree', 'fern',
             \ 'qf', 'preview', 'loclist',
             \ 'vista', 'tagbar', 'leaderf',
-            \ 'help', 'gitcommit', 'man', 'fugitive',
+            \ 'help', 'gitcommit', 'man', 'fugitive', 'fugtiveblame', 'gitcommit',
             \ 'terminal', 'floaterm', 'popup'
             \ ]
 function! s:autoclose(check_last) abort
@@ -17,7 +17,11 @@ autocmd WinEnter * if s:autoclose(1) | q! | endif
 " confirem quit
 function! s:confirm_quit(all) abort
     let all = a:all
-    if Expand('%') == '' && all == 0
+    if &ft == 'floaterm'
+        FloatermKill
+    elseif &ft == '' && all == 0
+        q!
+    elseif Expand('%') == '' && all == 0
         q!
     elseif s:autoclose(0) && all == 0
         q!
@@ -28,13 +32,7 @@ function! s:confirm_quit(all) abort
         else
             let title .= "?"
         endif
-        if &ft == 'floaterm'
-            FloatermKill
-        elseif &buftype == 'terminal'
-            q!
-        elseif index(['', 'fugitiveblame', 'gitcommit'], &ft) >= 0
-            q!
-        elseif &modified && all == 0
+        if &modified && all == 0
             let choices = ['Save And Quit', 'Quit']
             let confirmed = ChooseOne(choices, title, 0, 'Cancel')
             if confirmed =~# '^Save'
