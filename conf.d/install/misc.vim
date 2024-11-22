@@ -31,16 +31,6 @@ if Require('helpful')
     PlugAdd 'tweekmonster/helpful.vim'
 endif
 " ------------------------------
-" pairs
-" ------------------------------
-if g:complete_engine == 'cmp'
-    PlugAdd 'windwp/nvim-autopairs'
-elseif v:version >= 800
-    PlugAdd 'tmsvg/pear-tree'
-elseif has('patch-7.4.849')
-    PlugAdd 'jiangmiao/auto-pairs'
-endif
-" ------------------------------
 " fullscreen
 " ------------------------------
 if LINUX() && HAS_GUI() && executable('wmctrl')

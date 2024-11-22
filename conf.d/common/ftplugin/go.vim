@@ -2,8 +2,6 @@ setlocal commentstring=//\ %s
 command! GoCommands call FzfCallCommands('GoCommands', 'Go')
 nnoremap <buffer><silent><M-M> :GoCommands<Cr>
 if Installed('vim-go')
-    let g:go_doc_balloon = 0
-    let g:go_def_mapping_enabled = 0
     nnoremap <buffer><silent>gl :GoDefPop<Cr>
     nnoremap <buffer><silent>,d :GoDeclsDir<Cr>
     nnoremap <buffer><silent>,c :GoCoverage<Cr>

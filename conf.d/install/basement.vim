@@ -10,9 +10,6 @@ endfunction
 function! PlannedCoc() abort
     return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
-function! AdvCompEngine() abort
-    return PlannedCoc() || Planned('nvim-cmp')
-endfunction
 function! PrefFzf()
     return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
 endfunction
@@ -35,19 +32,18 @@ function! InstalledCmp() abort
                 \ 'cmp-nvim-lua',
                 \ 'cmp-buffer',
                 \ 'cmp-cmdline',
-                \ 'cmp-git',
                 \ 'cmp-vsnip',
                 \ 'cmp-nvim-lsp-signature-help',
+                \ 'cmp-git',
                 \ 'cmp-dictionary',
                 \ 'cmp-async-path',
-                \ 'friendly-snippets',
                 \ 'lspkind-nvim',
+                \ 'friendly-snippets',
                 \ )
 endfunction
-" ------------------------------
-" format tools
-" ------------------------------
-PlugAdd 'sbdchd/neoformat'
+function! AdvCompEngine() abort
+     return Installed('coc.nvim') || InstalledNvimLsp()
+endfunction
 " --------------------------
 " complete engine
 " --------------------------
@@ -151,9 +147,9 @@ elseif g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-vsnip'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
     PlugAdd 'petertriho/cmp-git'
-    PlugAdd 'onsails/lspkind-nvim'
-    PlugAdd 'fcying/cmp-async-path'
     PlugAdd 'uga-rosa/cmp-dictionary'
+    PlugAdd 'fcying/cmp-async-path'
+    PlugAdd 'onsails/lspkind-nvim'
     " lsp related
     PlugAdd 'folke/neoconf.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
@@ -249,37 +245,6 @@ if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 endif
 " ------------------------------
-" fuzzy_finder
-" ------------------------------
-if exists('*systemlist') && has('patch-7.4.1304')
-    PlugAdd 'junegunn/fzf.vim'
-    if WINDOWS()
-        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
-    else
-        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
-    endif
-endif
-if has('nvim') || has('patch-7.4.1126')
-    if g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
-        PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
-    endif
-endif
-if has('nvim')
-    PlugAdd 'kevinhwang91/nvim-bqf'
-    PlugAdd 'stevearc/quicker.nvim'
-    PlugAdd 'stevearc/dressing.nvim'
-endif
-" ------------------------------
-" Git
-" ------------------------------
-if executable('git') && v:version >= 800 && g:git_version >= 1.85
-    PlugAdd 'tpope/vim-fugitive'
-    PlugAdd 'junegunn/gv.vim'
-    if g:has_popup_floating && UNIX() && (!Planned('leaderf') || !has('nvim') && !has('patch-9.0.200'))
-        PlugAdd 'APZelos/blamer.nvim'
-    endif
-endif
-" ------------------------------
 " AI completion engine
 " ------------------------------
 if has('patch-9.0.0185') || has('nvim')
@@ -309,3 +274,48 @@ if has('nvim-0.10') && Planned('nvim-treesitter') && (Planned('copilot.lua') ||
         endif
     endif
 endif
+" ------------------------------
+" Git
+" ------------------------------
+if executable('git') && v:version >= 800 && g:git_version >= 1.85
+    PlugAdd 'tpope/vim-fugitive'
+    PlugAdd 'junegunn/gv.vim'
+    if g:has_popup_floating && UNIX() && (!Planned('leaderf') || !has('nvim') && !has('patch-9.0.200'))
+        PlugAdd 'APZelos/blamer.nvim'
+    endif
+endif
+" ------------------------------
+" pairs
+" ------------------------------
+if g:complete_engine == 'cmp'
+    PlugAdd 'windwp/nvim-autopairs'
+elseif v:version >= 800
+    PlugAdd 'tmsvg/pear-tree'
+elseif has('patch-7.4.849')
+    PlugAdd 'jiangmiao/auto-pairs'
+endif
+" ------------------------------
+" fuzzy_finder
+" ------------------------------
+if exists('*systemlist') && has('patch-7.4.1304')
+    PlugAdd 'junegunn/fzf.vim'
+    if WINDOWS()
+        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
+    else
+        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
+    endif
+endif
+if has('nvim') || has('patch-7.4.1126')
+    if g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
+        PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
+    endif
+endif
+if has('nvim')
+    PlugAdd 'kevinhwang91/nvim-bqf'
+    PlugAdd 'stevearc/quicker.nvim'
+    PlugAdd 'stevearc/dressing.nvim'
+endif
+" ------------------------------
+" format tools
+" ------------------------------
+PlugAdd 'sbdchd/neoformat'
