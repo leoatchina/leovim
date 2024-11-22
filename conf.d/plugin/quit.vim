@@ -26,14 +26,13 @@ function! s:confirm_quit(all) abort
     elseif s:autoclose(0) && all == 0
         q!
     else
-        let title = 'Want to quit'
         if all
-            let title .= " all?"
+            let title = "Do you want to quit all?"
         else
-            let title .= "?"
+            let title = "Do you want to quit?"
         endif
         if &modified && all == 0
-            let choices = ['Save And Quit', 'Quit']
+            let choices = ['Save And Quit', 'Quit Only']
             let confirmed = ChooseOne(choices, title, 0, 'Cancel')
             if confirmed =~# '^Save'
                 wq!
@@ -41,9 +40,13 @@ function! s:confirm_quit(all) abort
                 q!
             endif
         else
-            let choices = ['Quit']
+            if all
+                let choices = ['Quit All']
+            else
+                let choices = ['Quit']
+            endif
             let confirmed = ChooseOne(choices, title, 0, 'Cancel')
-            if confirmed ==# 'Quit'
+            if confirmed =~# '^Quit'
                 if all
                     qall!
                 else
