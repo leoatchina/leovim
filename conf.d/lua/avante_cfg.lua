@@ -1,63 +1,62 @@
-vim.keymap.set({ "n", "v", "x" }, "<M-i>a", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
-vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "AvanteInput",
-  callback = function()
-    vim.keymap.set("i", "<C-s>", "<ESC>", { noremap = false, silent = true, buffer = true })
-  end,
-})
+require('avante_lib').load()
 local max_tokens = type(vim.g.max_tokens) == 'number'
   and vim.g.max_tokens > 0
   and vim.g.max_tokens < 8192
   and vim.g.max_tokens
   or 8192
--- openrouter specially handled
-local hyperbolic_exists = exists("$HYPERBOLIC_API_KEY")
-local deepseek_exists = exists("$DEEPSEEK_API_KEY")
-local openrouter_exists = exists("$OPENROUTER_API_KEY")
-if hyperbolic_exists then
-  vim.env.OPENAI_API_KEY = vim.env.HYPERBOLIC_API_KEY
-elseif deepseek_exists then
-  vim.env.OPENAI_API_KEY = vim.env.DEEPSEEK_API_KEY
-elseif openrouter_exists then
-  vim.env.OPENAI_API_KEY = vim.env.OPENROUTER_API_KEY
-end
--- set provider
-local provider = (hyperbolic_exists or deepseek_exists or openrouter_exists or exists('$OPENAI_API_KEY')) and 'openai'
-  or exists('$ANTHROPIC_API_KEY') and 'claude'
-  or exists('$GEMINI_API_KEY') and 'gemini'
-  or 'copilot'
-local suggestions_provider = vim.g.avante_suggestions_provider or provider
--- set each model
-vim.g.hyperbolic_model = vim.g.hyperbolic_model or "Qwen/Qwen2.5-72B-Instruct"
-vim.g.deepseek_model = vim.g.deepseek_model or "deepseek-coder"
-vim.g.openrouter_model = vim.g.openrouter_model or "openai/gpt-4o"
+-- base models
 vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
 vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-flash"
 vim.g.openai_model = vim.g.openai_model or "gpt-4o"
 vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-08-06"
--- set avante model
-vim.g.avante_model = hyperbolic_exists and vim.g.hyperbolic_model
-  or deepseek_exists and vim.g.deepseek_model
-  or openrouter_exists and vim.g.openrouter_model
-  or string.find(provider, 'claude') and vim.g.claude_model
-  or string.find(provider, 'gemini') and vim.g.gemini_model
-  or string.find(provider, 'openai') and vim.g.openai_model
-  or vim.g.copilot_model
--- openai
-local openai_endpoint = hyperbolic_exists and "https://api.hyperbolic.xyz/v1"
-  or deepseek_exists and "https://api.deepseek.com"
-  or openrouter_exists and "https://openrouter.ai/api/v1"
-  or "https://api.openai.com/v1"
-local openai_model = hyperbolic_exists and vim.g.hyperbolic_model
-  or deepseek_exists and vim.g.deepseek_model
-  or openrouter_exists and vim.g.openrouter_model
-  or vim.g.openai_model
--- setup
+-- provider
+local provider = ''
+local endpoint = ''
+if vim.env.DASHSCOPE_API_KEY then
+  vim.env.OPENAI_API_KEY = vim.env.DASHSCOPE_API_KEY
+  vim.g.avante_model = vim.g.qwen_model or "qwen-coder-plus-latest"
+  provider = 'openai'
+  endpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+elseif vim.env.HYPERBOLIC_API_KEY then
+  vim.env.OPENAI_API_KEY = vim.env.HYPERBOLIC_API_KEY
+  vim.g.avante_model = vim.g.hyperbolic_model or "Qwen/Qwen2.5-72B-Instruct"
+  provider = 'openai'
+  endpoint = "https://api.hyperbolic.xyz/v1"
+elseif vim.env.DEEPSEEK_API_KEY then
+  vim.env.OPENAI_API_KEY = vim.env.DEEPSEEK_API_KEY
+  vim.g.avante_model = vim.g.deepseek_model or "deepseek-coder"
+  provider = 'openai'
+  endpoint = "https://api.deepseek.com"
+elseif vim.env.OPENROUTER_API_KEY then
+  vim.env.OPENAI_API_KEY = vim.env.OPENROUTER_API_KEY
+  vim.g.avante_model = vim.g.openrouter_model or "openai/gpt-4o"
+  provider = 'openai'
+  endpoint = "https://openrouter.ai/api/v1"
+elseif vim.env.OPENAI_API_KEY then
+  vim.g.avante_model = vim.g.openai_model
+  provider = 'openai'
+  endpoint = "https://api.openai.com/v1"
+elseif vim.env.ANTHROPIC_API_KEY then
+  vim.g.avante_model = vim.claude_model
+  provider = 'claude'
+elseif vim.env.GEMINI_API_KEY then
+  vim.g.avante_model = vim.gemini_model
+  provider = 'gemini'
+else
+  vim.g.avante_model = vim.copilot_model
+  provider = 'copilot'
+end
 require('avante').setup({
-  ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
+  debug = false,
   provider = provider,
-  auto_suggestions_provider = suggestions_provider,
+  auto_suggestions_provider = provider,
+  -- openai is specifically configed
+  openai = {
+    model = vim.g.avante_model,
+    endpoint = endpoint,
+    max_tokens = max_tokens
+  },
+  -- other model
   claude = {
     model = vim.g.claude_model,
     max_tokens = max_tokens
@@ -66,17 +65,13 @@ require('avante').setup({
     model = vim.g.gemini_model,
     max_tokens = max_tokens
   },
-  openai = {
-    endpoint = openai_endpoint,
-    model = openai_model,
-    max_tokens = max_tokens
-  },
   copilot = {
     model = vim.g.copilot_model,
     max_tokens = max_tokens
   },
+  -- basic config
   behaviour = {
-    auto_suggestions = suggestions_provider ~= 'copilot' or not Installed('copilot-cmp'),
+    auto_suggestions = provider ~= 'copilot' or not Installed('copilot-cmp'),
     auto_set_highlight_group = true,
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
@@ -123,9 +118,7 @@ require('avante').setup({
       reverse_switch_windows = "<Nop>",
     },
   },
-  hints = { enabled = true },
   windows = {
-    ---@type "right" | "left" | "top" | "bottom" | "smart"
     position = "smart", -- the position of the sidebar
     wrap = true, -- similar to vim.o.wrap
     width = 30, -- default % based on available width in vertical layout
@@ -146,13 +139,11 @@ require('avante').setup({
       start_insert = true, -- Start insert mode when opening the ask window
     },
     highlights = {
-      ---@type AvanteConflictHighlights
       diff = {
         current = "DiffText",
         incoming = "DiffAdd",
       },
     },
-    --- @class AvanteConflictUserConfig
     diff = {
       autojump = true,
       ---@type string | fun(): any
@@ -160,4 +151,3 @@ require('avante').setup({
     },
   }
 })
-require('avante_lib').load()

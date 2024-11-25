@@ -35,22 +35,11 @@ endif
 if Installed('avante.nvim')
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
-    if exists('$HYPERBOLIC_API_KEY')
-        let avante = 'avante@hyperbolic/qwen'
-    elseif exists('$DEEPSEEK_API_KEY')
-        let avante = 'avante@deepseek'
-    elseif exists('$OPENROUTER_API_KEY')
-        let avante = 'avante@openroute/openai'
-    elseif exists('$OPENAI_API_KEY')
-        let avante = 'avante@openai'
-    elseif exists('$ANTHROPIC_API_KEY')
-        let avante = 'avante@claude'
-    elseif exists('$GEMINI_API_KEY')
-        let avante = 'avante@gemini'
-    else
-        let avante = 'avante'
-    endif
-    let g:ai_complete_engine = exists('g:ai_complete_engine') ? avante. '-' . g:ai_complete_engine : avante
+    lua vim.keymap.set({ "n", "v", "x" }, "<M-i>a", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
+    lua vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
+    let g:ai_complete_engine = get(g:, 'avante_model', 'copilot') == 'copilot' ?
+                \ 'copilot' : Installed('copilot.lua') ?
+                    \ g:avante_model . '-copilot' : g:avante_model
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>
