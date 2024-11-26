@@ -1,5 +1,5 @@
 {
-  "type": "debugpy",
+  "type": "python",
   "request": "launch",
   "name": "Python Debugger: Module",
   "python": "~/miniconda3/bin/python",

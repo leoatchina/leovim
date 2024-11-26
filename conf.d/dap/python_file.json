@@ -1,6 +1,6 @@
 {
-  "name": "Python : Current File",
   "type": "python",
+  "name": "Python : Current File",
   "request": "launch",
   "console": "integratedTerminal",
   "cwd": "",

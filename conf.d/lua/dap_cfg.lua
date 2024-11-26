@@ -157,7 +157,7 @@ local function load_json_run(dap_json, run)
   end
   return ok
 end
-function _G.DapLaunch(json)
+function _G.DapContinue(json)
   local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
   return load_json_run(dap_json, true)
 end
