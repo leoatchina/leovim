@@ -1,9 +1,13 @@
 require('avante_lib').load()
+-- keymaps
+vim.keymap.set({ "n", "v", "x" }, "<M-i>a", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
+-- tokens
 local max_tokens = type(vim.g.max_tokens) == 'number'
   and vim.g.max_tokens > 0
-  and vim.g.max_tokens < 8192
+  and vim.g.max_tokens < 1024 * 16
   and vim.g.max_tokens
-  or 8192
+  or 1024 * 16
 -- base models
 vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
 vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-flash"

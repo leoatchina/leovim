@@ -35,8 +35,6 @@ endif
 if Installed('avante.nvim')
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
-    lua vim.keymap.set({ "n", "v", "x" }, "<M-i>a", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
-    lua vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
     let g:ai_complete_engine = get(g:, 'avante_model', 'copilot') == 'copilot' ?
                 \ 'copilot' : Installed('copilot.lua') ?
                     \ g:avante_model . '-copilot' : g:avante_model
