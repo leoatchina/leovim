@@ -1,5 +1,5 @@
 {
-  "name": "Python Debugger: Current File",
+  "name": "Python : Current File",
   "type": "python",
   "request": "launch",
   "console": "integratedTerminal",

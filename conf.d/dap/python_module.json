@@ -1,5 +1,5 @@
 {
-  "type": "python",
+  "type": "debugpy",
   "request": "launch",
   "name": "Python Debugger: Module",
   "python": "~/miniconda3/bin/python",
@@ -7,7 +7,7 @@
   "module":"scrapy",
   "args":[
     "crawl",
-    "test"
+    "scrap"
   ],
   "justMyCode": true,
   "console": "integratedTerminal"
