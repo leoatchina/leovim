@@ -16,26 +16,26 @@ if vim.env.DASHSCOPE_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.DASHSCOPE_API_KEY
   vim.g.avante_model = vim.g.qwen_model or "qwen-coder-plus-latest"
   provider = 'openai'
-  endpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  openai_endpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 elseif vim.env.HYPERBOLIC_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.HYPERBOLIC_API_KEY
   vim.g.avante_model = vim.g.hyperbolic_model or "Qwen/Qwen2.5-72B-Instruct"
   provider = 'openai'
-  endpoint = "https://api.hyperbolic.xyz/v1"
+  openai_endpoint = "https://api.hyperbolic.xyz/v1"
 elseif vim.env.DEEPSEEK_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.DEEPSEEK_API_KEY
   vim.g.avante_model = vim.g.deepseek_model or "deepseek-coder"
   provider = 'openai'
-  endpoint = "https://api.deepseek.com"
+  openai_endpoint = "https://api.deepseek.com"
 elseif vim.env.OPENROUTER_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.OPENROUTER_API_KEY
   vim.g.avante_model = vim.g.openrouter_model or "openai/gpt-4o"
   provider = 'openai'
-  endpoint = "https://openrouter.ai/api/v1"
+  openai_endpoint = "https://openrouter.ai/api/v1"
 elseif vim.env.OPENAI_API_KEY then
   vim.g.avante_model = vim.g.openai_model
   provider = 'openai'
-  endpoint = "https://api.openai.com/v1"
+  openai_endpoint = "https://api.openai.com/v1"
 elseif vim.env.ANTHROPIC_API_KEY then
   vim.g.avante_model = vim.claude_model
   provider = 'claude'
@@ -47,16 +47,15 @@ else
   provider = 'copilot'
 end
 require('avante').setup({
-  debug = false,
   provider = provider,
   auto_suggestions_provider = provider,
   -- openai is specifically configed
   openai = {
     model = vim.g.avante_model,
-    endpoint = endpoint,
+    endpoint = openai_endpoint,
     max_tokens = max_tokens
   },
-  -- other model
+  -- other models
   claude = {
     model = vim.g.claude_model,
     max_tokens = max_tokens
