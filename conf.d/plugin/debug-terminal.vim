@@ -381,6 +381,8 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><F4> <cmd>lua require"dap".run_to_cursor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
     nnoremap <silent><F6> <cmd>lua require"dap".pause()<Cr>
+    nnoremap <silent><F7> <cmd>lua DapBreakpointNext()<Cr>
+    nnoremap <silent><F8> <cmd>lua DapBreakpointPrev()<Cr>
     nnoremap <silent><F9> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><F10> <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><F11> <cmd>lua require"dap".step_into()<Cr>
@@ -419,33 +421,6 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-m>1 <Cmd>call GoToDAPWindows("DAP Scopes")<Cr>
     nnoremap <silent><M-m>2 <Cmd>call GoToDAPWindows("DAP Watches")<Cr>
     nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
-    function! GoToDAPWindows(name) abort
-        if !s:dapui_opened()
-            return
-        endif
-        try
-            let windowNr = bufwinnr(a:name)
-        catch
-            let windowNr = -1
-        endtry
-        if windowNr > 0
-            execute windowNr . 'wincmd w'
-        endif
-        return windowNr
-    endfunction
-    function! s:dap_breakpoint(...)
-        if GoToDAPWindows('DAP Breakpoints') > 0
-            if a:0 && a:1 > 0
-                normal j^
-            else
-                normal k^
-            endif
-        endif
-    endfunction
-    command! DapBreakpointPrev call s:dap_breakpoint(0)
-    command! DapBreakpointNext call s:dap_breakpoint(1)
-    nnoremap <silent><F7> <Cmd>DapBreakpointPrev<Cr>
-    nnoremap <silent><F8> <Cmd>DapBreakpointNext<Cr>
     " --------------------------------------
     " special map
     " ---------------------------------------
