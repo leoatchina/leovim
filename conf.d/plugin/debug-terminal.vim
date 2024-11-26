@@ -369,7 +369,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/dap/
     endif
     " core keymaps
-    nnoremap <silent>_ <cmd>lua DapLaunch("")<Left><Left>
+    nnoremap <silent>_ :lua DapLaunch("")<Left><Left>
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><M-d><M-d> <cmd>lua require"dap".run_to_cursor()<Cr>
     nnoremap <silent><M-d><M-e> <cmd>lua require"dap".continue()<Cr>
