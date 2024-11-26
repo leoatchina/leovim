@@ -30,6 +30,7 @@ elseif vim.env.DEEPSEEK_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.DEEPSEEK_API_KEY
   vim.g.avante_model = vim.g.deepseek_model or "deepseek-coder"
   provider = 'openai'
+  max_tokens = 1024 * 4
   openai_endpoint = "https://api.deepseek.com"
 elseif vim.env.OPENROUTER_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.OPENROUTER_API_KEY
@@ -53,8 +54,9 @@ end
 require('avante').setup({
   provider = provider,
   auto_suggestions_provider = provider,
-  -- openai is specifically configed
+  -- openai is specifically configured
   openai = {
+    -- NOTE: using avante_model here
     model = vim.g.avante_model,
     endpoint = openai_endpoint,
     max_tokens = max_tokens
