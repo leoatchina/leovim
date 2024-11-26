@@ -130,16 +130,16 @@ require("mason-nvim-dap").setup({
 -------------------------------------
 -- load launchjs
 -------------------------------------
-local function load_dap(dap_json)
+local function load_json(dap_json)
   local ok, _ = pcall(require "dap.ext.vscode".load_launchjs, dap_json)
   return ok
 end
-local function launch_dap(dap_json, run)
+local function load_json_run(dap_json, run)
   local ok = false
   run = run or false
   if run then
     if nil == dap.session() then
-      ok = load_dap(dap_json)
+      ok = load_json(dap_json)
       if ok then
         vim.notify(dap_json .. ' loaded.')
         ok, _ = pcall(dap.continue)
@@ -150,7 +150,7 @@ local function launch_dap(dap_json, run)
       ok, _ = pcall(dap.continue)
     end
   else
-    ok = load_dap(dap_json)
+    ok = load_json(dap_json)
     if not ok then
       vim.notify(dap_json .. ' not loaded.')
     end
@@ -159,11 +159,11 @@ local function launch_dap(dap_json, run)
 end
 function _G.DapLaunch(json)
   local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return launch_dap(dap_json, true)
+  return load_json_run(dap_json, true)
 end
 function _G.DapLoad(json)
   local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return launch_dap(dap_json, false)
+  return load_json_run(dap_json, false)
 end
 ---------------------------------
 -- daptab, auto open/close/load dapui in tab
