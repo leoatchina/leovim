@@ -23,7 +23,6 @@ local layouts = {
   },
   {
     elements = {
-      -- repl on left top
       { id = "scopes",  size = 0.5 },
       { id = "watches", size = 0.3 },
       { id = "stacks",  size = 0.2 },
@@ -34,9 +33,8 @@ local layouts = {
   --  console / breakpoints on bottom
   {
     elements = {
-      { id = "console",     size = 0.6 },
-      { id = "repl",        size = 0.2 },
-      { id = "breakpoints", size = 0.2 },
+      { id = "console",     size = 0.7 },
+      { id = "breakpoints", size = 0.3 },
     },
     size = 0.25,
     position = "bottom",
