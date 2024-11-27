@@ -512,28 +512,29 @@ call s:bind_keymap('<M-_>', 'FloatermKill')
 " using vim-floaterm to do repl
 " ---------------------------------------
 PlugAddOpt 'vim-floaterm-repl'
-" basic send, NOTE: bang! means stay
+" NOTE: below bang[!] means cursor not move
+" basic send
 nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
 nnoremap <silent><M-e>n :FloatermReplSend<Cr>
 nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
 xnoremap <silent><M-e>n :FloatermReplSendVisual<Cr>
 xnoremap <silent><M-e>l :FloatermReplSendVisual!<Cr>
 nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
-nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
 nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
-" block send, NOTE: bang! means stay
+nnoremap <silent><M-e><M-c> :FloatermReplSendClear<Cr>
+" block send
 xnoremap <silent><M-e><M-e>   :FloatermReplSendVisual<Cr>
 xnoremap <silent><M-e><Space> :FloatermReplSendVisual!<Cr>
 nnoremap <silent><M-e><M-e>   :FloatermReplSendBlock<Cr>
 nnoremap <silent><M-e><Space> :FloatermReplSendBlock!<Cr>
-" send above, below, all lines, NOTE: bang! means stay
+" send above, below, all lines
 nnoremap <silent><M-e>b :FloatermReplSendFromBegin!<Cr>
 nnoremap <silent><M-e>e :FloatermReplSendToEnd!<Cr>
 nnoremap <silent><M-e>s :FloatermReplSendAll!<Cr>
-" send word, NOTE: bang! means visual
+" send word
 nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
 xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
-" mark print send, NOTE: bang! means visual
+" mark print send
 nnoremap <silent><M-e><M-m> :FloatermReplMark<Cr>
 xnoremap <silent><M-e><M-m> :FloatermReplMark!<Cr>
 nnoremap <silent><M-e><M-l> :FloatermReplSendMark<Cr>
