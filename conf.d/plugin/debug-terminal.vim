@@ -381,8 +381,8 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><F4> <cmd>lua require"dap".run_to_cursor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
     nnoremap <silent><F6> <cmd>lua require"dap".pause()<Cr>
-    nnoremap <silent><F7> <cmd>lua DapBreakpointNext()<Cr>
-    nnoremap <silent><F8> <cmd>lua DapBreakpointPrev()<Cr>
+    nnoremap <silent><F7> <cmd>lua DapBreakpointPrev()<Cr>
+    nnoremap <silent><F8> <cmd>lua DapBreakpointNext()<Cr>
     nnoremap <silent><F9> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><F10> <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><F11> <cmd>lua require"dap".step_into()<Cr>
