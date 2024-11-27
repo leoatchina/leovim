@@ -14,16 +14,17 @@ fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl
 local layouts = {
   {
     elements = {
-      { id = "scopes",  size = 0.4 },
+      { id = "scopes",  size = 0.5 },
       { id = "watches", size = 0.3 },
-      { id = "stacks",  size = 0.3 },
+      { id = "stacks",  size = 0.2 },
     },
     size = 0.2,
     position = "top",
   },
   {
     elements = {
-      { id = "scopes",  size = 0.5 },
+      { id = "repl",    size = 0.1 },
+      { id = "scopes",  size = 0.4 },
       { id = "watches", size = 0.3 },
       { id = "stacks",  size = 0.2 },
     },
