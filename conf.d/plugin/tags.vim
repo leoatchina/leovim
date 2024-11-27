@@ -37,7 +37,7 @@ elseif g:symbol_tool =~ 'ctrlptags'
 endif
 " f<Cr>
 PlugAddOpt 'vim-funky'
-if Installed('fzf', 'fzf.vim') && (WINDOWS() || g:complete_engine != 'cmp')
+if Installed('fzf', 'fzf.vim')
     command! FzfFunky call funky#fzf#show()
     nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
 else
