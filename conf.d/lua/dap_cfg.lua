@@ -23,8 +23,8 @@ local layouts = {
   },
   {
     elements = {
-      { id = "repl",    size = 0.05 },
-      { id = "scopes",  size = 0.45 },
+      { id = "repl",    size = 1 },
+      { id = "scopes",  size = 0.5 },
       { id = "watches", size = 0.3 },
       { id = "stacks",  size = 0.2 },
     },
