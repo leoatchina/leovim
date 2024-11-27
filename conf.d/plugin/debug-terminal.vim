@@ -546,10 +546,10 @@ if Installed('jupynium.nvim')
     let g:jupynium_ip = get(g:, 'jupynium_ip', 'localhost')
     let g:jupynium_port = get(g:, 'jupynium_port', 9999)
     let g:jupynium_protocal = get(g:, 'jupynium_protocal', 'http')
-    let jupynium_url = printf("%s://%s:%d/nbclassic", g:jupynium_protocal, g:jupynium_ip, g:jupynium_port)
-    let g:jupynium_url = get(g:, 'jupynium_url', jupynium_url)
+    let g:jupynium_url = get(g:, 'jupynium_url', printf("%s://%s:%d/nbclassic", g:jupynium_protocal, g:jupynium_ip, g:jupynium_port))
     " setup
     lua require("jupynium").setup({ default_notebook_URL = vim.g.jupynium_url, use_default_keybindings = false })
+    " self defined function
     function! s:jupynium_run(...)
         let jupynium_urls = get(g:, 'jupynium_urls', [g:jupynium_url])
         if len(jupynium_urls) == 1
@@ -586,21 +586,21 @@ if Installed('jupynium.nvim')
     command JupyniumExecuteSelectedCellsForword call s:execute_and_forword()
     function! s:map() abort
         nnoremap <buffer><silent><C-\><Space> <Cmd>JupyniumKernelHover<Cr>
-        nnoremap <buffer><silent><C-\><C-Space> <Cmd>JupyniumKernelHover<Cr>
-        nnoremap <buffer><silent><C-\><Cr> <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
-        nnoremap <buffer><silent><C-\><C-r> <Cmd>JupyniumRun<Cr>
-        nnoremap <buffer><silent><C-\><C-t> <Cmd>JupyniumRunInTerminal<Cr>
-        nnoremap <buffer><silent><C-\><C-q> <Cmd>JupyniumStopSync<Cr>
-        nnoremap <buffer><silent><C-\><C-s> <Cmd>JupyniumKernelSelect<Cr>
-        nnoremap <buffer><silent><C-\><C-b> <Cmd>JupyniumScrollToCell<Cr>
-        nnoremap <buffer><silent><C-\><C-k> <Cmd>JupyniumScrollUp<Cr>
-        nnoremap <buffer><silent><C-\><C-j> <Cmd>JupyniumScrollDown<Cr>
-        nnoremap <buffer><silent><C-\><C-c> <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        xnoremap <buffer><silent><C-\><C-c> <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        nnoremap <buffer><silent><C-\><C-l> <Cmd>JupyniumExecuteSelectedCells<Cr>
-        xnoremap <buffer><silent><C-\><C-l> <Cmd>JupyniumExecuteSelectedCells<Cr>
-        nnoremap <buffer><silent><C-\><C-\> <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
-        nnoremap <buffer><silent><M-M> <Cmd>JupyniumCommands<Cr>
+        nnoremap <buffer><silent><C-\><C-h>   <Cmd>JupyniumKernelHover<Cr>
+        nnoremap <buffer><silent><C-\><C-m>   <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
+        nnoremap <buffer><silent><C-\><C-r>   <Cmd>JupyniumRun<Cr>
+        nnoremap <buffer><silent><C-\><C-t>   <Cmd>JupyniumRunInTerminal<Cr>
+        nnoremap <buffer><silent><C-\><C-q>   <Cmd>JupyniumStopSync<Cr>
+        nnoremap <buffer><silent><C-\><C-s>   <Cmd>JupyniumKernelSelect<Cr>
+        nnoremap <buffer><silent><C-\><C-b>   <Cmd>JupyniumScrollToCell<Cr>
+        nnoremap <buffer><silent><C-\><C-k>   <Cmd>JupyniumScrollUp<Cr>
+        nnoremap <buffer><silent><C-\><C-j>   <Cmd>JupyniumScrollDown<Cr>
+        nnoremap <buffer><silent><C-\><C-c>   <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        xnoremap <buffer><silent><C-\><C-c>   <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        nnoremap <buffer><silent><C-\><C-l>   <Cmd>JupyniumExecuteSelectedCells<Cr>
+        xnoremap <buffer><silent><C-\><C-l>   <Cmd>JupyniumExecuteSelectedCells<Cr>
+        nnoremap <buffer><silent><C-\><C-\>   <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
+        nnoremap <buffer><silent><M-M>        <Cmd>JupyniumCommands<Cr>
     endfunction
     au FileType python,r call s:map()
 endif
