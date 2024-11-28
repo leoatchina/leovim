@@ -8,6 +8,18 @@ local fn = vim.fn
 dap.defaults.fallback.exception_breakpoints = { 'default' }
 dap.defaults.python.exception_breakpoints = { 'uncaught' }
 fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
+-------------------------------------
+-- function get_mason_adapter
+-------------------------------------
+require("mason-nvim-dap").setup({
+  ensure_installed = { "python" },
+  automatic_installation = true,
+  handlers = {
+    function(config)
+      require('mason-nvim-dap').default_setup(config)
+    end
+  }
+})
 ---------------------
 -- layouts
 ---------------------
@@ -37,7 +49,7 @@ local layouts = {
       { id = "console",     size = 0.7 },
       { id = "breakpoints", size = 0.3 },
     },
-    size = 0.25,
+    size = 0.2,
     position = "bottom",
   },
 }
@@ -109,52 +121,37 @@ if Installed('nvim-dap-virtual-text') then
     virt_lines = true,
     commented = true
   })
-  vim.keymap.set("n", "<F1>",
+  vim.keymap.set({"n", "x"}, "<F1>",
     [[<Cmd>DapVirtualTextToggle<Cr>]],
-    { noremap = true, silent = false }
+    { noremap = true, silent = true }
   )
 end
 -------------------------------------
--- function get_mason_adapter
--------------------------------------
-require("mason-nvim-dap").setup({
-  ensure_installed = { "python" },
-  automatic_installation = true,
-  handlers = {
-    function(config)
-      require('mason-nvim-dap').default_setup(config)
-    end
-  }
-})
--------------------------------------
--- load dap_json
+-- load dap_json, modified from dap.ext.vscode.lauchjs
 -------------------------------------
 local function load_json(dap_json)
   local vscode = require "dap.ext.vscode"
   local type_to_filetypes = vscode.type_to_filetypes
   local configurations = vscode.getconfigs(dap_json)
+  -- init dap_configurations
+  local dap_config_inited = false
   assert(configurations, "launch.json must have a 'configurations' key")
   for _, config in ipairs(configurations) do
     assert(config.type, "Configuration in launch.json must have a 'type' key")
     assert(config.name, "Configuration in launch.json must have a 'name' key")
     local filetypes = type_to_filetypes[config.type] or { config.type, }
-    local dap_config_inited = false
     for _, filetype in pairs(filetypes) do
-      local dap_configurations
       if not dap_config_inited then
-        dap_configurations = {}
+        dap.configurations[filetype] = {}
         dap_config_inited = true
-      else
-        dap_configurations = dap.configurations[filetype] or {}
       end
-      for i, dap_config in pairs(dap_configurations) do
+      -- remove old value
+      for i, dap_config in pairs(dap.configurations[filetype] ) do
         if dap_config.name == config.name then
-          -- remove old value
-          table.remove(dap_configurations, i)
+          table.remove(dap.configurations[filetype] , i)
         end
       end
-      table.insert(dap_configurations, config)
-      dap.configurations[filetype] = dap_configurations
+      table.insert(dap.configurations[filetype], config)
     end
   end
 end
@@ -179,7 +176,7 @@ local function dap_run(dap_json, run, run_to_cursor)
       end
     end
   else
-    ok = load_json(dap_json)
+    ok, _ = pcall(load_json, dap_json)
   end
   return ok
 end
