@@ -237,7 +237,7 @@ if Planned('vimspector')
     nmap <silent><M-d>i <Plug>VimspectorStepInto
     nmap <silent><M-d>o <Plug>VimspectorStepOut
     nmap <silent><M-d>p <Plug>VimspectorPause
-    nmap <silent><M-d>q :VimspectorReset<Cr>
+    nmap <silent><M-d>q :call vimspector#Reset()<Cr>
     nmap <silent><M-d>L :call vimspector#Launch()<Cr>
     nmap <silent><F1> <Plug>VimspectorDisassemble
     nmap <silent><F3> :VimspectorReset<Cr>
@@ -378,12 +378,12 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><M-d><M-d> <cmd>lua DapRunToCusor()<Cr>
     nnoremap <silent><M-d><Cr> <cmd>lua DapContinue()<Cr>
-    nnoremap <silent><M-d>q <cmd>lua DapReset()<Cr>
     nnoremap <silent><M-d>n <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><M-d>N <cmd>lua require"dap".step_back()<Cr>
     nnoremap <silent><M-d>i <cmd>lua require"dap".step_into()<Cr>
     nnoremap <silent><M-d>o <cmd>lua require"dap".step_out()<Cr>
     nnoremap <silent><M-d>p <cmd>lua require"dap".pause()<Cr>
+    nnoremap <silent><M-d>q <cmd>lua DapReset()<Cr>
     nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
     nnoremap <silent><F4> <cmd>lua DapRunToCusor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
