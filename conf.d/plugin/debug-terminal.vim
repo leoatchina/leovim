@@ -417,7 +417,21 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     function! s:dapui_opened()
         return bufwinnr("DAP Scopes") >= 0 && bufwinnr("DAP Watches") >= 0 && bufwinnr("DAP Stacks") >= 0
     endfunction
-    nnoremap <silent><M-'>  <cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
+    function! GoToDAPWindows(name) abort
+        if !s:dapui_opened()
+            return
+        endif
+        try
+            let windowNr = bufwinnr(a:name)
+        catch
+            let windowNr = -1
+        endtry
+        if windowNr > 0
+            execute windowNr . 'wincmd w'
+        endif
+        return windowNr
+    endfunction
+    nnoremap <silent><M-'>  <Cmd>lua DapListBreakpoints()<Cr>
     nnoremap <silent><M-m>1 <Cmd>call GoToDAPWindows("DAP Scopes")<Cr>
     nnoremap <silent><M-m>2 <Cmd>call GoToDAPWindows("DAP Watches")<Cr>
     nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
