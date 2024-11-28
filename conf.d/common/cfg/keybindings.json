@@ -508,7 +508,7 @@
   //----------------------- positron && vscode ----------------------
   //tongyi ai
   {
-    "key": "ctrl+'",
+    "key": "ctrl+\\",
     "command": "tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
   },
@@ -519,7 +519,7 @@
   },
   //codeium
   {
-    "key": "ctrl+\\",
+    "key": "ctrl+'",
     "command": "codeium.openChatView"
   },
   {
