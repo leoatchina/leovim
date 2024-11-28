@@ -131,38 +131,49 @@ require("mason-nvim-dap").setup({
 -------------------------------------
 local function load_json(dap_json)
   local ok, _ = pcall(require "dap.ext.vscode".load_launchjs, dap_json)
+  if ok then
+    vim.notify(dap_json .. ' loaded.')
+  else
+    vim.notify(dap_json .. ' not loaded.')
+  end
   return ok
 end
-local function load_json_run(dap_json, run)
+local function dap_run(dap_json, run, run_to_cursor)
   local ok = false
   run = run or false
+  run_to_cursor = run_to_cursor or false
   if run then
-    if nil == dap.session() then
-      ok = load_json(dap_json)
-      if ok then
-        vim.notify(dap_json .. ' loaded.')
-        ok, _ = pcall(dap.continue)
+    if dap.session() then
+      if run_to_cursor then
+        ok, _ = pcall(dap.run_to_cursor)
       else
-        vim.notify(dap_json .. ' not loaded.')
+        ok, _ = pcall(dap.continue)
       end
     else
-      ok, _ = pcall(dap.continue)
+      ok = load_json(dap_json)
+      if ok then
+        if run_to_cursor then
+          dap.set_breakpoint()
+        end
+        ok, _ = pcall(dap.continue)
+      end
     end
   else
     ok = load_json(dap_json)
-    if not ok then
-      vim.notify(dap_json .. ' not loaded.')
-    end
   end
   return ok
 end
 function _G.DapContinue(json)
   local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return load_json_run(dap_json, true)
+  return dap_run(dap_json, true, false)
 end
-function _G.DapLoad(json)
+function _G.DapRunToCusor(json)
   local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return load_json_run(dap_json, false)
+  return dap_run(dap_json, true, true)
+end
+function _G.DapLoadConfig(json)
+  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
+  return dap_run(dap_json, false, false)
 end
 ---------------------------------
 -- jump between break point
