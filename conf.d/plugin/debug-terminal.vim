@@ -381,8 +381,8 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><F4> <cmd>lua require"dap".run_to_cursor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
     nnoremap <silent><F6> <cmd>lua require"dap".pause()<Cr>
-    nnoremap <silent><F7> <cmd>lua DapBreakpointNext()<Cr>
-    nnoremap <silent><F8> <cmd>lua DapBreakpointPrev()<Cr>
+    nnoremap <silent><F7> <cmd>lua DapBreakpointPrev()<Cr>
+    nnoremap <silent><F8> <cmd>lua DapBreakpointNext()<Cr>
     nnoremap <silent><F9> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><F10> <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><F11> <cmd>lua require"dap".step_into()<Cr>
@@ -512,28 +512,29 @@ call s:bind_keymap('<M-_>', 'FloatermKill')
 " using vim-floaterm to do repl
 " ---------------------------------------
 PlugAddOpt 'vim-floaterm-repl'
-" basic send, NOTE: bang! means stay
+" NOTE: below bang[!] means cursor not move
+" basic send
 nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
 nnoremap <silent><M-e>n :FloatermReplSend<Cr>
 nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
 xnoremap <silent><M-e>n :FloatermReplSendVisual<Cr>
 xnoremap <silent><M-e>l :FloatermReplSendVisual!<Cr>
 nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
-nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
 nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
-" block send, NOTE: bang! means stay
+nnoremap <silent><M-e><M-c> :FloatermReplSendClear<Cr>
+" block send
 xnoremap <silent><M-e><M-e>   :FloatermReplSendVisual<Cr>
 xnoremap <silent><M-e><Space> :FloatermReplSendVisual!<Cr>
 nnoremap <silent><M-e><M-e>   :FloatermReplSendBlock<Cr>
 nnoremap <silent><M-e><Space> :FloatermReplSendBlock!<Cr>
-" send above, below, all lines, NOTE: bang! means stay
+" send above, below, all lines
 nnoremap <silent><M-e>b :FloatermReplSendFromBegin!<Cr>
 nnoremap <silent><M-e>e :FloatermReplSendToEnd!<Cr>
 nnoremap <silent><M-e>s :FloatermReplSendAll!<Cr>
-" send word, NOTE: bang! means visual
+" send word
 nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
 xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
-" mark print send, NOTE: bang! means visual
+" mark print send
 nnoremap <silent><M-e><M-m> :FloatermReplMark<Cr>
 xnoremap <silent><M-e><M-m> :FloatermReplMark!<Cr>
 nnoremap <silent><M-e><M-l> :FloatermReplSendMark<Cr>
@@ -546,10 +547,10 @@ if Installed('jupynium.nvim')
     let g:jupynium_ip = get(g:, 'jupynium_ip', 'localhost')
     let g:jupynium_port = get(g:, 'jupynium_port', 9999)
     let g:jupynium_protocal = get(g:, 'jupynium_protocal', 'http')
-    let jupynium_url = printf("%s://%s:%d/nbclassic", g:jupynium_protocal, g:jupynium_ip, g:jupynium_port)
-    let g:jupynium_url = get(g:, 'jupynium_url', jupynium_url)
+    let g:jupynium_url = get(g:, 'jupynium_url', printf("%s://%s:%d/nbclassic", g:jupynium_protocal, g:jupynium_ip, g:jupynium_port))
     " setup
     lua require("jupynium").setup({ default_notebook_URL = vim.g.jupynium_url, use_default_keybindings = false })
+    " self defined function
     function! s:jupynium_run(...)
         let jupynium_urls = get(g:, 'jupynium_urls', [g:jupynium_url])
         if len(jupynium_urls) == 1
@@ -586,21 +587,21 @@ if Installed('jupynium.nvim')
     command JupyniumExecuteSelectedCellsForword call s:execute_and_forword()
     function! s:map() abort
         nnoremap <buffer><silent><C-\><Space> <Cmd>JupyniumKernelHover<Cr>
-        nnoremap <buffer><silent><C-\><C-Space> <Cmd>JupyniumKernelHover<Cr>
-        nnoremap <buffer><silent><C-\><Cr> <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
-        nnoremap <buffer><silent><C-\><C-r> <Cmd>JupyniumRun<Cr>
-        nnoremap <buffer><silent><C-\><C-t> <Cmd>JupyniumRunInTerminal<Cr>
-        nnoremap <buffer><silent><C-\><C-q> <Cmd>JupyniumStopSync<Cr>
-        nnoremap <buffer><silent><C-\><C-s> <Cmd>JupyniumKernelSelect<Cr>
-        nnoremap <buffer><silent><C-\><C-b> <Cmd>JupyniumScrollToCell<Cr>
-        nnoremap <buffer><silent><C-\><C-k> <Cmd>JupyniumScrollUp<Cr>
-        nnoremap <buffer><silent><C-\><C-j> <Cmd>JupyniumScrollDown<Cr>
-        nnoremap <buffer><silent><C-\><C-c> <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        xnoremap <buffer><silent><C-\><C-c> <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        nnoremap <buffer><silent><C-\><C-l> <Cmd>JupyniumExecuteSelectedCells<Cr>
-        xnoremap <buffer><silent><C-\><C-l> <Cmd>JupyniumExecuteSelectedCells<Cr>
-        nnoremap <buffer><silent><C-\><C-\> <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
-        nnoremap <buffer><silent><M-M> <Cmd>JupyniumCommands<Cr>
+        nnoremap <buffer><silent><C-\><C-h>   <Cmd>JupyniumKernelHover<Cr>
+        nnoremap <buffer><silent><C-\><C-m>   <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
+        nnoremap <buffer><silent><C-\><C-r>   <Cmd>JupyniumRun<Cr>
+        nnoremap <buffer><silent><C-\><C-t>   <Cmd>JupyniumRunInTerminal<Cr>
+        nnoremap <buffer><silent><C-\><C-q>   <Cmd>JupyniumStopSync<Cr>
+        nnoremap <buffer><silent><C-\><C-s>   <Cmd>JupyniumKernelSelect<Cr>
+        nnoremap <buffer><silent><C-\><C-b>   <Cmd>JupyniumScrollToCell<Cr>
+        nnoremap <buffer><silent><C-\><C-k>   <Cmd>JupyniumScrollUp<Cr>
+        nnoremap <buffer><silent><C-\><C-j>   <Cmd>JupyniumScrollDown<Cr>
+        nnoremap <buffer><silent><C-\><C-c>   <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        xnoremap <buffer><silent><C-\><C-c>   <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        nnoremap <buffer><silent><C-\><C-l>   <Cmd>JupyniumExecuteSelectedCells<Cr>
+        xnoremap <buffer><silent><C-\><C-l>   <Cmd>JupyniumExecuteSelectedCells<Cr>
+        nnoremap <buffer><silent><C-\><C-\>   <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
+        nnoremap <buffer><silent><M-M>        <Cmd>JupyniumCommands<Cr>
     endfunction
     au FileType python,r call s:map()
 endif
