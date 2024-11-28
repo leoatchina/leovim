@@ -233,22 +233,8 @@ function _G.DapBreakpointPrev()
   goto_breakpoint('prev')
 end
 -- list_breakpoints
-local function list_breakpoints()
-  dap.list_breakpoints()
-  local qflist = vim.fn.getqflist()  -- 获取当前的快速修复列表
-  if #qflist > 0 then
-    vim.cmd('copen')
-  else
-    local loclist = vim.fn.getloclist(0)  -- 获取当前窗口的位置信息列表
-    if #loclist > 0 then
-      vim.cmd('lopen')
-    else
-      vim.notify("No breakpoints..")
-    end
-  end
-end
 function _G.DapListBreakpoints()
-  list_breakpoints()
+  dap.list_breakpoints(true)
 end
 ---------------------------------
 -- daptab, auto open/close/load dapui in tab
