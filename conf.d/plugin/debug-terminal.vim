@@ -226,14 +226,20 @@ if Planned('vimspector')
     endif
     " core keymaps
     nmap <M-d>I :VimspectorInstall<Space>
-    nmap <silent>_ :call vimspector#Launch()
+    nmap <silent>_ :call vimspector#GetConfigurations()<Left>
+    nmap <silent><M-d>, <Plug>VimspectorJumpToPreviousBreakpoint
+    nmap <silent><M-d>; <Plug>VimspectorJumpToNextBreakpoint
     nmap <silent><M-d><Space> <Plug>VimspectorToggleBreakpoint
     nmap <silent><M-d><M-d> <Plug>VimspectorRunToCursor
-    nmap <silent><M-d><M-e> <Plug>VimspectorContinue
+    nmap <silent><M-d><Tab> <Plug>VimspectorDisassemble
+    nmap <silent><M-d><Cr> <Plug>VimspectorContinue
     nmap <silent><M-d>n <Plug>VimspectorStepOver
     nmap <silent><M-d>i <Plug>VimspectorStepInto
     nmap <silent><M-d>o <Plug>VimspectorStepOut
-    nmap <silent><F1> :VimspectorDisassemble<Cr>
+    nmap <silent><M-d>p <Plug>VimspectorPause
+    nmap <silent><M-d>q :VimspectorReset<Cr>
+    nmap <silent><M-d>L :call vimspector#Launch()<Cr>
+    nmap <silent><F1> <Plug>VimspectorDisassemble
     nmap <silent><F3> :VimspectorReset<Cr>
     nmap <silent><F4> <Plug>VimspectorRunToCursor
     nmap <silent><F5> <Plug>VimspectorContinue
@@ -261,13 +267,10 @@ if Planned('vimspector')
     nnoremap <silent><M-d>b :call vimspector#ToggleAllBreakpointsViewBreakpoint()<Cr>
     " start / stop
     nnoremap <silent><M-d>r :call vimspector#Restart()<Cr>
-    nnoremap <silent><M-d>q :call vimspector#Reset()<Cr>
     nnoremap <silent><M-d>Q :call vimspector#Stop({'interactive': v:true})<Cr>
     " function
     nnoremap <silent><M-d>u :call vimspector#UpFrame()<Cr>
     nnoremap <silent><M-d>d :call vimspector#DownFrame()<Cr>
-    " other commands
-    nnoremap <silent><M-d>g :call vimspector#GetConfigurations()<Cr>
     " --------------------------------------
     " jump/show windows in vimspector
     " --------------------------------------
@@ -369,14 +372,18 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/dap/
     endif
     " core keymaps
-    nnoremap <silent>_ :lua DapLoadConfig("")<Left><Left>
+    nnoremap <silent>_ :lua DapLoadConfig()<Left>
+    nnoremap <silent><M-d>, <cmd>lua DapBreakpointPrev()<Cr>
+    nnoremap <silent><M-d>; <cmd>lua DapBreakpointNext()<Cr>
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
-    nnoremap <silent><M-d><M-d> <cmd>lua require"dap".run_to_cursor()<Cr>
-    nnoremap <silent><M-d><M-e> <cmd>lua require"dap".continue()<Cr>
+    nnoremap <silent><M-d><M-d> <cmd>lua DapRunToCusor()<Cr>
+    nnoremap <silent><M-d><Cr> <cmd>lua DapContinue()<Cr>
+    nnoremap <silent><M-d>q <cmd>lua DapReset()<Cr>
     nnoremap <silent><M-d>n <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><M-d>N <cmd>lua require"dap".step_back()<Cr>
     nnoremap <silent><M-d>i <cmd>lua require"dap".step_into()<Cr>
     nnoremap <silent><M-d>o <cmd>lua require"dap".step_out()<Cr>
+    nnoremap <silent><M-d>p <cmd>lua require"dap".pause()<Cr>
     nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
     nnoremap <silent><F4> <cmd>lua DapRunToCusor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
@@ -391,13 +398,12 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <M-d>l :lua require"dap".
     nnoremap <M-d>I :DapInstall<Space>
     nnoremap <M-d>U :DapUninstall<Space>
-    nnoremap <silent><M-d>q <cmd>lua DapClose()<Cr>
-    nnoremap <silent><M-d>p <cmd>lua require"dap".pause()<Cr>
     nnoremap <silent><M-d>r <cmd>lua require"dap".run_last()<Cr>
     nnoremap <silent><M-d>a <cmd>lua require"dap".attach(vim.fn.input('Attatch to: '))<Cr>
     " breakpoints
     nnoremap <silent><M-d>c <cmd>lua require"dap".clear_breakpoints()<Cr>
-    nnoremap <silent><M-d>s <cmd>lua require"dap".set_exception_breakpoints("")<left><left>
+    nnoremap <silent><M-d>e <cmd>lua require"dap".set_exception_breakpoints("")<left><left>
+    nnoremap <silent><M-d>s <cmd>lua require"dap".set_breakpoint()<left>
     " debug
     nnoremap <silent><M-d>u <cmd>lua require"dap".up()<Cr>
     nnoremap <silent><M-d>d <cmd>lua require"dap".down()<Cr>
