@@ -519,6 +519,16 @@
     "command": "codeium.openChatView"
   },
   {
+    "key": "ctrl+shift+l",
+    "command": "codeium.openCodeiumCommand",
+    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "-codeium.openCodeiumCommand",
+    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
+  },
+  {
     "key": "alt+c",
     "command": "-codeium.cancelCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus"
