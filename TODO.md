@@ -98,7 +98,7 @@
 - [x] search using 3 different entries: <leader>/, <c-f>, s
 - [x] yank from file begin to current cursor postion
 - [x] config gopls in cmp || coc
-- [ ] nvim-dap run to current
+- [x] nvim-dap run to cursor 
 - [ ] quit all bug
 - [ ] merge <M-m> into <M-d> map in debug mode
 - [ ] vista_markdown bug

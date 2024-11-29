@@ -8,6 +8,18 @@ local fn = vim.fn
 dap.defaults.fallback.exception_breakpoints = { 'default' }
 dap.defaults.python.exception_breakpoints = { 'uncaught' }
 fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
+-------------------------------------
+-- function get_mason_adapter
+-------------------------------------
+require("mason-nvim-dap").setup({
+  ensure_installed = { "python" },
+  automatic_installation = true,
+  handlers = {
+    function(config)
+      require('mason-nvim-dap').default_setup(config)
+    end
+  }
+})
 ---------------------
 -- layouts
 ---------------------
@@ -37,7 +49,7 @@ local layouts = {
       { id = "console",     size = 0.7 },
       { id = "breakpoints", size = 0.3 },
     },
-    size = 0.25,
+    size = 0.2,
     position = "bottom",
   },
 }
@@ -109,66 +121,82 @@ if Installed('nvim-dap-virtual-text') then
     virt_lines = true,
     commented = true
   })
-  vim.keymap.set("n", "<F1>",
+  vim.keymap.set({"n", "x"}, "<F1>",
     [[<Cmd>DapVirtualTextToggle<Cr>]],
-    { noremap = true, silent = false }
+    { noremap = true, silent = true }
   )
 end
 -------------------------------------
--- function get_mason_adapter
--------------------------------------
-require("mason-nvim-dap").setup({
-  ensure_installed = { "python" },
-  automatic_installation = true,
-  handlers = {
-    function(config)
-      require('mason-nvim-dap').default_setup(config)
-    end
-  }
-})
--------------------------------------
--- load launchjs
+-- load dap_json, modified from dap.ext.vscode.lauchjs
 -------------------------------------
 local function load_json(dap_json)
-  local ok, _ = pcall(require "dap.ext.vscode".load_launchjs, dap_json)
-  return ok
+  local vscode = require "dap.ext.vscode"
+  local type_to_filetypes = vscode.type_to_filetypes
+  local configurations = vscode.getconfigs(dap_json)
+  -- init dap_configurations
+  local dap_config_inited = false
+  assert(configurations, "launch.json must have a 'configurations' key")
+  for _, config in ipairs(configurations) do
+    assert(config.type, "Configuration in launch.json must have a 'type' key")
+    assert(config.name, "Configuration in launch.json must have a 'name' key")
+    local filetypes = type_to_filetypes[config.type] or { config.type, }
+    for _, filetype in pairs(filetypes) do
+      if not dap_config_inited then
+        dap.configurations[filetype] = {}
+        dap_config_inited = true
+      end
+      -- remove old value
+      for i, dap_config in pairs(dap.configurations[filetype] ) do
+        if dap_config.name == config.name then
+          table.remove(dap.configurations[filetype] , i)
+        end
+      end
+      table.insert(dap.configurations[filetype], config)
+    end
+  end
 end
-local function load_json_run(dap_json, run)
+local function dap_run(dap_json, run, run_to_cursor)
   local ok = false
   run = run or false
+  run_to_cursor = run_to_cursor or false
   if run then
-    if nil == dap.session() then
-      ok = load_json(dap_json)
-      if ok then
-        vim.notify(dap_json .. ' loaded.')
-        ok, _ = pcall(dap.continue)
+    if dap.session() ~= nil then
+      if run_to_cursor then
+        ok, _ = pcall(dap.run_to_cursor)
       else
-        vim.notify(dap_json .. ' not loaded.')
+        ok, _ = pcall(dap.continue)
       end
     else
-      ok, _ = pcall(dap.continue)
+      ok, _ = pcall(load_json, dap_json)
+      if ok then
+        if run_to_cursor then
+          dap.set_breakpoint()
+        end
+        ok, _ = pcall(dap.continue)
+      end
     end
   else
-    ok = load_json(dap_json)
-    if not ok then
-      vim.notify(dap_json .. ' not loaded.')
-    end
+    ok, _ = pcall(load_json, dap_json)
   end
   return ok
 end
 function _G.DapContinue(json)
   local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return load_json_run(dap_json, true)
+  return dap_run(dap_json, true, false)
 end
-function _G.DapLoad(json)
+function _G.DapRunToCusor(json)
   local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return load_json_run(dap_json, false)
+  return dap_run(dap_json, true, true)
+end
+function _G.DapLoadConfig(json)
+  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
+  return dap_run(dap_json, false, false)
 end
 ---------------------------------
--- jump between break point
+-- breakpoints
 ---------------------------------
 ---@param dir "next"|"prev"
-local function gotoBreakpoint(dir)
+local function goto_breakpoint(dir)
 	local breakpoints = require("dap.breakpoints").get()
 	if #breakpoints == 0 then
 		vim.notify("No breakpoints set", vim.log.levels.WARN)
@@ -199,10 +227,14 @@ local function gotoBreakpoint(dir)
 	vim.cmd(("buffer +%s %s"):format(nextPoint.line, nextPoint.bufnr))
 end
 function _G.DapBreakpointNext()
-  gotoBreakpoint('next')
+  goto_breakpoint('next')
 end
 function _G.DapBreakpointPrev()
-  gotoBreakpoint('prev')
+  goto_breakpoint('prev')
+end
+-- list_breakpoints
+function _G.DapListBreakpoints()
+  dap.list_breakpoints(true)
 end
 ---------------------------------
 -- daptab, auto open/close/load dapui in tab

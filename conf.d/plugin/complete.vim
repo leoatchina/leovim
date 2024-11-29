@@ -33,11 +33,9 @@ elseif Installed('copilotchat.nvim', 'copilot.lua')
     let g:ai_complete_engine = 'copliot'
 endif
 if Installed('avante.nvim')
+    let g:avante_model = ''
     lua require("avante_cfg")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
-    let g:ai_complete_engine = get(g:, 'avante_model', 'copilot') == 'copilot' ?
-                \ 'copilot' : Installed('copilot.lua') ?
-                    \ g:avante_model . '-copilot' : g:avante_model
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>

@@ -15,7 +15,7 @@ vim.g.openai_model = vim.g.openai_model or "gpt-4o"
 vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-08-06"
 -- provider
 local provider = ''
-local endpoint = ''
+local openai_endpoint = ''
 if vim.env.DASHSCOPE_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.DASHSCOPE_API_KEY
   vim.g.avante_model = vim.g.qwen_model or "qwen-coder-plus-latest"
@@ -42,15 +42,18 @@ elseif vim.env.OPENAI_API_KEY then
   provider = 'openai'
   openai_endpoint = "https://api.openai.com/v1"
 elseif vim.env.ANTHROPIC_API_KEY then
-  vim.g.avante_model = vim.claude_model
+  vim.g.avante_model = vim.g.claude_model
   provider = 'claude'
 elseif vim.env.GEMINI_API_KEY then
-  vim.g.avante_model = vim.gemini_model
+  vim.g.avante_model = vim.g.gemini_model
   provider = 'gemini'
 else
-  vim.g.avante_model = vim.copilot_model
+  vim.g.avante_model = vim.g.copilot_model
   provider = 'copilot'
 end
+vim.g.ai_complete_engine = vim.g.avante_model == 'copilot' and 'copilot'
+  or vim.g.ai_complete_engine and vim.g.avante_model .. '&&' .. vim.g.ai_complete_engine
+  or vim.g.avante_model
 require('avante').setup({
   provider = provider,
   auto_suggestions_provider = provider,
@@ -74,7 +77,7 @@ require('avante').setup({
     model = vim.g.copilot_model,
     max_tokens = max_tokens
   },
-  -- basic config
+  -- behaviour
   behaviour = {
     auto_suggestions = provider ~= 'copilot' or not Installed('copilot-cmp'),
     auto_set_highlight_group = true,
@@ -82,6 +85,7 @@ require('avante').setup({
     auto_apply_diff_after_generation = false,
     support_paste_from_clipboard = true,
   },
+  -- basic config
   mappings = {
     --- @class AvanteConflictMappings
     diff = {
