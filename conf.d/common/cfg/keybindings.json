@@ -494,19 +494,15 @@
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
   {
-    "key": "ctrl+shift+l",
-    "command": "-aichat.open-ai-chat-editor"
+    "key": "ctrl+alt+\\",
+    "command": "workbench.panel.composerViewPane2.view.focus"
   },
   {
     "key": "ctrl+shift+\\",
-    "command": "aichat.open-ai-chat-editor"
+    "command": "workbench.panel.aichat.view.focus"
   },
-  {
-    "key": "ctrl+alt+\\",
-    "command": "aichat.open-ai-chat-side-pane"
-  },
-  //----------------------- positron && vscode ----------------------
-  //tongyi ai
+  //----------------------- vscode positron ----------------------
+  //tongyi
   {
     "key": "ctrl+\\",
     "command": "tongyi.show.panel",
