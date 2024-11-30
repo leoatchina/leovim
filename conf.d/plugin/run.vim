@@ -168,7 +168,7 @@ command! RunQfSilent call s:asyncrun('bottom', 'qf', 1)
 command! RunQfBottom call s:asyncrun('bottom', 'qf')
 command! RunQfRight call s:asyncrun('right', 'qf')
 " -------------------------
-" run in floterm
+" run in floaterm
 " -------------------------
 if has('nvim') || v:version >= 801
     " run in tabterm
@@ -330,13 +330,12 @@ if has('nvim') || v:version >= 801
     " run shortcuts
     nnoremap <leader>ri :AsyncTask project-init<Cr>
     nnoremap <leader>rr :AsyncTask project-run<Cr>
+    nnoremap <leader>rR :AsyncTask project-release<Cr>
     nnoremap <leader>rt :AsyncTask project-test<Cr>
     nnoremap <leader>rb :AsyncTask project-build<Cr>
     nnoremap <leader>rc :AsyncTask project-compile<Cr>
     nnoremap <leader>rd :AsyncTask project-debug<Cr>
-    nnoremap <leader>ru :AsyncTask project-push<Cr>
-    nnoremap <leader>rp :AsyncTask project-pull<Cr>
-    function! AsyncTaskProfileLoop() abort
+    function! asynctasks_profile_loop() abort
         if get(g:, 'asynctasks_profile', '') == ''
             let g:asynctasks_profile = 'debug'
         elseif g:asynctasks_profile == 'debug'
@@ -348,8 +347,8 @@ if has('nvim') || v:version >= 801
         endif
         echom "asynctasks_profile is " . g:asynctasks_profile
     endfunction
-    command! AsyncTaskProfileLoop call AsyncTaskProfileLoop()
-    nnoremap <leader>rL :<C-u>AsyncTaskProfileLoop<CR>
+    command! AsyncTaskProfileLoop call asynctasks_profile_loop()
+    nnoremap <leader>rl :<C-u>AsyncTaskProfileLoop<CR>
     nnoremap <leader>rf :<C-u>AsyncTaskProfile<CR>
     if PlannedFzf()
         function! s:fzf_sink(what)
