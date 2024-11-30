@@ -335,6 +335,7 @@ if has('nvim') || v:version >= 801
     nnoremap <leader>rb :AsyncTask project-build<Cr>
     nnoremap <leader>rc :AsyncTask project-compile<Cr>
     nnoremap <leader>rd :AsyncTask project-debug<Cr>
+    nnoremap <leader>r. :AsyncTaskLast<Cr>
     function! s:asynctasks_profile_loop() abort
         if get(g:, 'asynctasks_profile', '') == ''
             let g:asynctasks_profile = 'debug'
@@ -349,7 +350,7 @@ if has('nvim') || v:version >= 801
     endfunction
     command! AsyncTaskProfileLoop call s:asynctasks_profile_loop()
     nnoremap <leader>rl :<C-u>AsyncTaskProfileLoop<CR>
-    nnoremap <leader>rf :<C-u>AsyncTaskProfile<CR>
+    nnoremap <leader>rp :<C-u>AsyncTaskProfile<CR>
     if PlannedFzf()
         function! s:fzf_sink(what)
             let p1 = stridx(a:what, '<')
