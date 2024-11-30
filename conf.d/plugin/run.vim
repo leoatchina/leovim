@@ -335,7 +335,7 @@ if has('nvim') || v:version >= 801
     nnoremap <leader>rb :AsyncTask project-build<Cr>
     nnoremap <leader>rc :AsyncTask project-compile<Cr>
     nnoremap <leader>rd :AsyncTask project-debug<Cr>
-    function! asynctasks_profile_loop() abort
+    function! s:asynctasks_profile_loop() abort
         if get(g:, 'asynctasks_profile', '') == ''
             let g:asynctasks_profile = 'debug'
         elseif g:asynctasks_profile == 'debug'
@@ -347,7 +347,7 @@ if has('nvim') || v:version >= 801
         endif
         echom "asynctasks_profile is " . g:asynctasks_profile
     endfunction
-    command! AsyncTaskProfileLoop call asynctasks_profile_loop()
+    command! AsyncTaskProfileLoop call s:asynctasks_profile_loop()
     nnoremap <leader>rl :<C-u>AsyncTaskProfileLoop<CR>
     nnoremap <leader>rf :<C-u>AsyncTaskProfile<CR>
     if PlannedFzf()
