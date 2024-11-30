@@ -173,8 +173,6 @@ command! RunQfRight call s:asyncrun('right', 'qf')
 if has('nvim') || v:version >= 801
     " run in tabterm
     let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
-    command! RunTermTab call s:asyncrun('tab', 'term')
-    nnoremap <silent><M-T> :RunTermTab<CR>
     " run in floaterm right/bottom
     function! s:floaterm(opts, wintype, position)
         if !g:has_popup_floating && a:wintype == 'float'
@@ -240,9 +238,29 @@ if has('nvim') || v:version >= 801
     let g:asyncrun_runner.floaterm_right = function('s:floaterm_right')
     let g:asyncrun_runner.floaterm_float = function('s:floaterm_float')
     let g:asyncrun_runner.floaterm_bottom = function('s:floaterm_bottom')
+    " get asynctasks#source
+    function! s:task_dict()
+        let tasks = asynctasks#list('')
+        let maxsize = -1
+        let source = []
+        let results = {}
+        if len(tasks) == 0
+            return []
+        endif
+        let n1 = []
+        let n2 = []
+        for task in tasks
+            let results[trim(task[0])] = 1
+        endfor
+        return results
+    endfunc
+    " TODO, check project task exists
+    " set commands
     command! RunFloatermRight call s:asyncrun('floaterm_right', 'term')
     command! RunFloatermFloat call s:asyncrun('floaterm_float', 'term')
     command! RunFloatermBottom call s:asyncrun('floaterm_bottom', 'term')
+    command! RunTermTab call s:asyncrun('tab', 'term')
+    " map
     nnoremap <silent><M-R> :RunFloatermRight<CR>
     nnoremap <silent><M-B> :RunFloatermBottom<CR>
     if has('nvim')
@@ -250,6 +268,7 @@ if has('nvim') || v:version >= 801
     else
         nnoremap <silent><M-F> :RunQfSilent<CR>
     endif
+    nnoremap <silent><M-T> :RunTermTab<CR>
 else
     nnoremap <M-T> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
     nnoremap <silent><M-B> :RunQfBottom<CR>
