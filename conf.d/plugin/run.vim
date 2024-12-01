@@ -238,37 +238,65 @@ if has('nvim') || v:version >= 801
     let g:asyncrun_runner.floaterm_right = function('s:floaterm_right')
     let g:asyncrun_runner.floaterm_float = function('s:floaterm_float')
     let g:asyncrun_runner.floaterm_bottom = function('s:floaterm_bottom')
-    " get asynctasks#source
-    function! s:task_dict()
+    " ------------------ Taske check firstly, if not, run in special position
+    function s:task_check(task_name)
         let tasks = asynctasks#list('')
-        let maxsize = -1
-        let source = []
-        let results = {}
         if len(tasks) == 0
-            return []
+            return 0
         endif
-        let n1 = []
-        let n2 = []
         for task in tasks
-            let results[trim(task[0])] = 1
+            if trim(task['name']) == a:task_name
+                return 1
+            endif
         endfor
-        return results
+        return 0
     endfunc
-    " TODO, check project task exists
+    function s:task_run_or_pos(task_name, pos)
+        let task_name = a:task_name
+        let pos = a:pos
+        if s:task_check(task_name)
+            execute('AsyncTask ' . task_name)
+        else
+            if !has('nvim') && pos == 'floaterm_float' || pos == 'qf'
+                RunQfSilent
+            else
+                call s:asyncrun(pos, 'term')
+            endif
+        endif
+    endfunction
     " set commands
-    command! RunFloatermRight call s:asyncrun('floaterm_right', 'term')
-    command! RunFloatermFloat call s:asyncrun('floaterm_float', 'term')
-    command! RunFloatermBottom call s:asyncrun('floaterm_bottom', 'term')
-    command! RunTermTab call s:asyncrun('tab', 'term')
+    command! TaskTestOrTab call s:task_run_or_pos('task-test', 'tab')
+    command! TaskRunOrRight call s:task_run_or_pos('task-run', 'floaterm_right')
+    command! TaskBuildOrBottom call s:task_run_or_pos('task-build', 'floaterm_bottom')
+    command! TaskFinalizeOrFloat call s:task_run_or_pos('task-finalize', 'floaterm_float')
+    command! TaskFinalizeOrQf call s:task_run_or_pos('task-finalize', 'qf')
     " map
-    nnoremap <silent><M-R> :RunFloatermRight<CR>
-    nnoremap <silent><M-B> :RunFloatermBottom<CR>
+    nnoremap <silent><M-T> :TaskTestOrTab<CR>
+    nnoremap <silent><M-R> :TaskRunOrRight<CR>
+    nnoremap <silent><M-B> :TaskBuildOrBottom<CR>
     if has('nvim')
-        nnoremap <silent><M-F> :RunFloatermFloat<CR>
+        nnoremap <silent><M-F> :TaskFinalizeOrFloat<CR>
     else
-        nnoremap <silent><M-F> :RunQfSilent<CR>
+        nnoremap <silent><M-F> :TaskFinalizeOrQf<CR>
     endif
-    nnoremap <silent><M-T> :RunTermTab<CR>
+    " SmartRunTerm is for different filetypes
+    function SmartRunTerm(cmd, pos)
+        if a:pos ==# 'smart'
+            if &columns > &lines * 3
+                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_right -width=0.45 " .  a:cmd
+            else
+                if has("nvim")
+                    execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_float -width=0.9 -height=0.4 " .  a:cmd
+                else
+                    execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_bottom -height=0.4 " .  a:cmd
+                endif
+            endif
+        elseif a:pos ==# "external"
+            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=external " . a:cmd
+        else
+            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=" . a:pos . " " . a:cmd
+        endif
+    endfunction
 else
     nnoremap <M-T> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
     nnoremap <silent><M-B> :RunQfBottom<CR>
@@ -279,24 +307,6 @@ if WINDOWS() || executable('gnome-terminal') && HAS_GUI()
     command! RunExternal call s:asyncrun('external')
     nnoremap <silent><M-"> :RunExternal<CR>
 endif
-" SmartRunTerm is for different filetypes
-function SmartRunTerm(cmd, pos)
-    if a:pos ==# 'smart'
-        if &columns > &lines * 3
-            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_right -width=0.45 " .  a:cmd
-        else
-            if has("nvim")
-                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_float -width=0.9 -height=0.4 " .  a:cmd
-            else
-                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_bottom -height=0.4 " .  a:cmd
-            endif
-        endif
-    elseif a:pos ==# "external"
-        execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=external " . a:cmd
-    else
-        execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=" . a:pos . " " . a:cmd
-    endif
-endfunction
 " ----------------
 " asynctasks
 " ----------------
