@@ -32,12 +32,18 @@ if has('nvim') || has('timers') && has('channel') && has('job')
         if executable('g++')
             let g:gpp_cmd = 'g++ -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
+        if executable('rustc')
+            let g:rustc_cmd = 'rustc -o ~/.cache/build/$(VIM_FILENOEXT) $(VIM_FILEPATH) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
+        endif
     elseif WINDOWS()
         if executable('gcc')
             let g:gcc_cmd = 'gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
         if executable('g++')
             let g:gpp_cmd = 'g++ $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
+        endif
+        if executable('rustc')
+            let g:rustc_cmd = 'rustc -o ..\target\test\$(VIM_FILENOEXT).exe $(VIM_FILEPATH) & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
     endif
     nnoremap ! :AsyncRun<Space>
@@ -133,6 +139,11 @@ function! s:asyncrun(...)
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:gpp_cmd
+    elseif &ft ==# 'rust' && get(g:, 'rustc_cmd', '') != ''
+        if WINDOWS()
+            silent! call mkdir("../target/test", "p")
+        endif
+        let run_cmd = s:run_command . params . ' '. g:rustc_cmd
     else
         let run_cmd = ''
     endif
