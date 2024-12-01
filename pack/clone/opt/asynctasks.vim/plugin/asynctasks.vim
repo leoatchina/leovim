@@ -958,7 +958,7 @@ function! s:api_input(msg, ...)
 		call inputsave()
 		try
 			if a:0 < 3
-				let hr = input(a:msg, text)
+				let hr = input(a:msg, text) 
 			else
 				let hr = input(a:msg, text, a:3)
 			endif
@@ -1460,7 +1460,7 @@ function! s:command_check(command, cwd)
 					call s:warning(t . ' in current buffer')
 					return 4
 				endif
-			endfor
+			endfor	
 		endfor
 	endif
 	if g:asynctasks_strict != 0
@@ -1898,15 +1898,15 @@ endfunc
 
 
 "----------------------------------------------------------------------
-" macro help
+" macro help 
 "----------------------------------------------------------------------
-let s:macros = {
+let s:macros = { 
 			\ 'VIM_FILEPATH': 'File name of current buffer with full path',
 			\ 'VIM_FILENAME': 'File name of current buffer without path',
 			\ 'VIM_FILEDIR': 'Full path of current buffer without the file name',
 			\ 'VIM_FILEEXT': 'File extension of current buffer',
 			\ 'VIM_FILETYPE': 'File type (value of &ft in vim)',
-			\ 'VIM_FILENOEXT':
+			\ 'VIM_FILENOEXT': 
 			\ 'File name of current buffer without path and extension',
 			\ 'VIM_PATHNOEXT':
 			\ 'Current file name with full path but without extension',
@@ -1923,15 +1923,15 @@ let s:macros = {
 			\ 'VIM_GUI': 'Is running under gui ?',
 			\ 'VIM_VERSION': 'Value of v:version',
 			\ 'VIM_COLUMNS': "How many columns in vim's screen",
-			\ 'VIM_LINES': "How many lines in vim's screen",
+			\ 'VIM_LINES': "How many lines in vim's screen", 
 			\ 'VIM_SVRNAME': 'Value of v:servername for +clientserver usage',
 			\ 'VIM_PROFILE': 'Current building profile (debug/release/...)',
 			\ 'WSL_FILEPATH': '(WSL) File name of current buffer with full path',
 			\ 'WSL_FILENAME': '(WSL) File name of current buffer without path',
-			\ 'WSL_FILEDIR':
+			\ 'WSL_FILEDIR': 
 			\ '(WSL) Full path of current buffer without the file name',
 			\ 'WSL_FILEEXT': '(WSL) File extension of current buffer',
-			\ 'WSL_FILENOEXT':
+			\ 'WSL_FILENOEXT': 
 			\ '(WSL) File name of current buffer without path and extension',
 			\ 'WSL_PATHNOEXT':
 			\ '(WSL) Current file name with full path but without extension',
@@ -2170,7 +2170,7 @@ function! asynctasks#finish(what)
 		let t .= ((g:asyncrun_code != 0)? 'failure' : 'success')
 		call s:api_notify(t, ((g:asyncrun_code == 0)? 'info' : 'error'))
 	elseif a:what =~ '^sound:'
-		let previous = get(s:, 'sound_id', '')
+		let previous = get(s:, 'sound_id', '')	
 		if previous
 			call s:api_sound_stop(previous)
 		endif
@@ -2263,11 +2263,11 @@ command! -bang -nargs=* -range=0 -complete=customlist,s:complete AsyncTask
 "----------------------------------------------------------------------
 " help commands
 "----------------------------------------------------------------------
-command! -bang -nargs=? -complete=customlist,s:complete_edit AsyncTaskEdit
-			\ call asynctasks#cmd('',
+command! -bang -nargs=? -complete=customlist,s:complete_edit AsyncTaskEdit 
+			\ call asynctasks#cmd('', 
 			\ (('<bang>' == '')? '-e' : '-E') . ' ' . <q-args>)
 
-command! -bang -nargs=0 AsyncTaskList
+command! -bang -nargs=0 AsyncTaskList 
 			\ call asynctasks#cmd('', ('<bang>' == '')? '-l' : '-L')
 
 command! -bang -nargs=0 AsyncTaskMacro
@@ -2335,7 +2335,7 @@ endfunc
 
 
 "----------------------------------------------------------------------
-" return ini content
+" return ini content 
 "----------------------------------------------------------------------
 function! asynctasks#content(path, name)
 	let task = asynctasks#inspect(a:path, a:name)
@@ -2461,7 +2461,7 @@ endfunc
 
 
 "----------------------------------------------------------------------
-" AsyncTaskEnviron
+" AsyncTaskEnviron 
 "----------------------------------------------------------------------
 function! s:task_environ(bang, ...)
 	let args = a:000
@@ -2599,7 +2599,7 @@ function! s:complete_environ(ArgLead, CmdLine, CursorPos)
 	return candidate
 endfunc
 
-command! -bang -nargs=* -complete=customlist,s:complete_environ
+command! -bang -nargs=* -complete=customlist,s:complete_environ 
 		\ AsyncTaskEnviron  call s:task_environ('<bang>', <f-args>)
 
 
