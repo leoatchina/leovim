@@ -1,7 +1,7 @@
 require('avante_lib').load()
 -- keymaps
-vim.keymap.set({ "n", "v", "x" }, "<M-i>a", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
-vim.keymap.set({ "n", "v", "x" }, "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i>a", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
 -- tokens
 local max_tokens = type(vim.g.max_tokens) == 'number'
   and vim.g.max_tokens > 0
@@ -111,8 +111,8 @@ require('avante').setup({
       normal = "<CR>",
       insert = "<C-s>",
     },
-    ask = "<M-i><M-a>",
-    edit = "<M-i><M-e>",
+    ask = "<M-a>",
+    edit = "<M-i>",
     focus = "<M-i><M-f>",
     refresh = "<M-i><M-r>",
     toggle = {

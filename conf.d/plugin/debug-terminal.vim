@@ -477,7 +477,7 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     " coremap
     nnoremap <M-d><Space> :Break<Space>
     nnoremap <M-d><M-d> :Until<Cr>
-    nnoremap <M-d><M-e> :Continue<Cr>
+    nnoremap <M-d><Cr> :Continue<Cr>
     nnoremap <M-d>c :Clear<Space>
     nnoremap <M-d>r :Run<Space>
     nnoremap <M-d>n :Over<Cr>
@@ -496,7 +496,8 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     nnoremap <F11> :Step<Cr>
     nnoremap <F12> :Finish<Cr>
     " debug
-    nnoremap - :Evaluate <C-r><C-w>
+    nnoremap - :Evaluate<Space>
+    nnoremap J :Evaluate <C-r><C-w><Cr>
     " other
     nnoremap <M-m>d :Termdebug<Space>
     nnoremap <M-m>c :TermdebugCommand<Space>
