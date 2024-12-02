@@ -185,7 +185,7 @@ if has('nvim') || v:version >= 801
     " run in tabterm
     let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
     " run in floaterm right/bottom
-    function! s:floaterm(opts, wintype, position)
+    function! s:floaterm_run(opts, wintype, position)
         if !g:has_popup_floating && a:wintype == 'float'
             call preview#errmsg("Please update to vim8.1+/nvim0.6+ to run script in floating or popup window.")
             return
@@ -238,13 +238,13 @@ if has('nvim') || v:version >= 801
         endif
     endfunction
     function! s:floaterm_right(opts)
-        call s:floaterm(a:opts, 'vsplit', 'right')
+        call s:floaterm_run(a:opts, 'vsplit', 'right')
     endfunc
     function! s:floaterm_float(opts)
-        call s:floaterm(a:opts, 'float', 'bottomright')
+        call s:floaterm_run(a:opts, 'float', 'bottomright')
     endfunc
     function! s:floaterm_bottom(opts)
-        call s:floaterm(a:opts, 'split', 'botright')
+        call s:floaterm_run(a:opts, 'split', 'botright')
     endfunc
     let g:asyncrun_runner.floaterm_right = function('s:floaterm_right')
     let g:asyncrun_runner.floaterm_float = function('s:floaterm_float')

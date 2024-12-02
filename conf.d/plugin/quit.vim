@@ -48,7 +48,11 @@ function! s:confirm_quit(all) abort
             let confirmed = ChooseOne(choices, title, 0, 'Cancel')
             if confirmed =~# '^Quit'
                 if all
-                    qall!
+                    if exists(':cquit')
+                        cquit
+                    else
+                        qall!
+                    endif
                 else
                     q!
                 endif
