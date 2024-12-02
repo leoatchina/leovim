@@ -65,8 +65,8 @@ if Installed('nvim-r')
     " view variable
     nnoremap <buffer><silent>J :call RAction('print')<CR>
     nnoremap <buffer><silent>- :call RAction('viewobj')<CR>
-    " send
     nnoremap <buffer><silent>_ :call SendLineToRAndInsertOutput()<CR>^
+    " send
     nnoremap <buffer><silent>,B :call SendAboveLinesToR()<CR>
     nnoremap <buffer><silent>,E VG:call SendLineToR('down')<CR>
     nnoremap <buffer><silent>,A ggVG:call SendLineToR('down')<CR>
@@ -75,10 +75,10 @@ if Installed('nvim-r')
     nnoremap <buffer><silent><M-e>j :call SendLineToR("down")<CR>
     nnoremap <buffer><silent><M-e>J viB:call SendLineToR("down")<CR>
     " clear
-    nnoremap <buffer>_ :call RClearConsole()<Cr>
-    nnoremap <buffer><M-_> :call RClearAll()<Cr>
+    nnoremap <buffer><M-e>c :call RClearConsole()<Cr>
+    nnoremap <buffer><M-e>C :call RClearAll()<Cr>
     " run
-    nnoremap <buffer><M-R> :call StartR('R')<Cr>
+    nnoremap <buffer><M-R>  :call StartR('R')<Cr>
     nnoremap <buffer><Tab>q :call RQuit('nosave')<Cr>
     nnoremap <buffer><Tab>Q :call RQuit('save')<Cr>
 else
