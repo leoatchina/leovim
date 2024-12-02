@@ -274,14 +274,7 @@ if Planned('vimspector')
     " --------------------------------------
     " jump/show windows in vimspector
     " --------------------------------------
-    au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
-    function! s:vimspector_opened()
-        return bufwinnr('vimspector.Variables') >= 0 && bufwinnr('vimspector.Watches') >= 0 && bufwinnr('vimspector.StackTrace') >= 0
-    endfunction
     function! GoToVimspectorWindow(name) abort
-        if !s:vimspector_opened()
-            return
-        endif
         try
             if name ==# 'variables'
                 let windowNr = bufwinnr('vimspector.Variables')
@@ -298,10 +291,9 @@ if Planned('vimspector')
             call preview#errmsg('Wrong input name.')
             let windowNr = -1
         endtry
-        if windowNr > 0
+        if windowNr >= 0
             execute windowNr . 'wincmd w'
         endif
-        return windowNr
     endfunction
     nnoremap <silent><M-'>  :call vimspector#ListBreakpoints()<Cr>
     nnoremap <silent><M-m>i :call GoToVimspectorWindow('important')<Cr>
@@ -314,6 +306,10 @@ if Planned('vimspector')
     " --------------------------------------
     " special map
     " ---------------------------------------
+    au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
+    function! s:vimspector_opened()
+        return bufwinnr('vimspector.Variables') >= 0 && bufwinnr('vimspector.Watches') >= 0 && bufwinnr('vimspector.StackTrace') >= 0
+    endfunction
     function! s:vimspector_or_floaterm(type)
         if s:vimspector_opened()
             if a:type ==# 'code'
@@ -418,29 +414,25 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-m>w <cmd>lua require("dapui").float_element('watches')<Cr>
     nnoremap <silent><M-m>t <cmd>lua require("dapui").float_element('stacks')<Cr>
     nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
-    " jump to windows in dapui
-    au BufEnter * if s:dapui_opened() | SignifyDisable | endif
-    function! s:dapui_opened()
-        return bufwinnr("DAP Scopes") >= 0 && bufwinnr("DAP Watches") >= 0 && bufwinnr("DAP Stacks") >= 0
-    endfunction
     function! GoToDAPWindows(name) abort
-        if !s:dapui_opened()
-            return
-        endif
         try
             let windowNr = bufwinnr(a:name)
-        catch
-            let windowNr = -1
-        endtry
-        if windowNr > 0
             execute windowNr . 'wincmd w'
-        endif
-        return windowNr
+        catch
+            if a:name == 'DAP Breakpoints'
+                lua require"dap".list_breakpoints(true)
+            endif
+        endtry
     endfunction
-    nnoremap <silent><M-'>  <Cmd>lua DapListBreakpoints()<Cr>
+    nnoremap <silent><M-'>  <Cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
     nnoremap <silent><M-m>1 <Cmd>call GoToDAPWindows("DAP Scopes")<Cr>
     nnoremap <silent><M-m>2 <Cmd>call GoToDAPWindows("DAP Watches")<Cr>
     nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
+    " check dapui openned
+    function! s:dapui_opened()
+        return bufwinnr("DAP Scopes") >= 0 && bufwinnr("DAP Watches") >= 0 && bufwinnr("DAP Stacks") >= 0
+    endfunction
+    au BufEnter * if s:dapui_opened() | SignifyDisable | endif
     " --------------------------------------
     " special map
     " ---------------------------------------
