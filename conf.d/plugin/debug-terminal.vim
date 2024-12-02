@@ -479,12 +479,13 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     nnoremap <M-d><M-d> :Until<Cr>
     nnoremap <M-d><M-e> :Continue<Cr>
     nnoremap <M-d>c :Clear<Space>
+    nnoremap <M-d>r :Run<Space>
     nnoremap <M-d>n :Over<Cr>
     nnoremap <M-d>i :Step<Cr>
     nnoremap <M-d>o :Finish<Cr>
     nnoremap <M-d>a :Arguments<Space>
-    nnoremap _ :Stop<Cr>
-    nnoremap <F3> :Run<Space>
+    nnoremap <F1> :Run<Space>
+    nnoremap <F3> :Stop<Space>
     nnoremap <F4> :Until<Cr>
     nnoremap <F5> :Continue<Cr>
     nnoremap <F6> :Pause<Cr>
