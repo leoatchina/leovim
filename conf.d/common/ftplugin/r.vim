@@ -64,16 +64,16 @@ if Installed('nvim-r')
     au FileType rbrowser nnoremap <silent><M-M> :call ToggleEnvLib()<Cr>
     " view variable
     nnoremap <buffer><silent>J :call RAction('print')<CR>
-    nnoremap <buffer><silent>= :call RAction('viewobj')<CR>
+    nnoremap <buffer><silent>- :call RAction('viewobj')<CR>
     " send
-    nnoremap <buffer><silent>- :call SendLineToRAndInsertOutput()<CR>^
-    nnoremap <buffer><silent>+ viB:call SendLineToR("down")<CR>
+    nnoremap <buffer><silent>_ :call SendLineToRAndInsertOutput()<CR>^
     nnoremap <buffer><silent>,B :call SendAboveLinesToR()<CR>
     nnoremap <buffer><silent>,E VG:call SendLineToR('down')<CR>
-    nnoremap <buffer><silent>,S ggVG:call SendLineToR('down')<CR>
+    nnoremap <buffer><silent>,A ggVG:call SendLineToR('down')<CR>
     nnoremap <buffer><silent><M-e>f :call SendFunctionToR('echo', "down")<CR>
     nnoremap <buffer><silent><M-e>h :call SendLineToR("stay")<CR>
     nnoremap <buffer><silent><M-e>j :call SendLineToR("down")<CR>
+    nnoremap <buffer><silent><M-e>J viB:call SendLineToR("down")<CR>
     " clear
     nnoremap <buffer>_ :call RClearConsole()<Cr>
     nnoremap <buffer><M-_> :call RClearAll()<Cr>

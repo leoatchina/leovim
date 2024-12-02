@@ -542,7 +542,7 @@ nnoremap <silent><M-e><Space> :FloatermReplSendBlock!<Cr>
 " send above/below/all lines
 nnoremap <silent><M-e>b :FloatermReplSendFromBegin!<Cr>
 nnoremap <silent><M-e>e :FloatermReplSendToEnd!<Cr>
-nnoremap <silent><M-e>s :FloatermReplSendAll!<Cr>
+nnoremap <silent><M-e>a :FloatermReplSendAll!<Cr>
 " send word
 nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
 xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
