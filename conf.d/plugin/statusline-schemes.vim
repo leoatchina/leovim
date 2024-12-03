@@ -350,11 +350,11 @@ if Installed('catppuccin') && Require('catppuccin')
 elseif Installed('tokyonight.nvim') && Require('tokyonight')
     call SetScheme('tokyonight')
 elseif g:complete_engine == 'apm'
-    call SetScheme('edge', 'one')
-elseif g:complete_engine == 'mcm'
     call SetScheme('everforest', 'deus')
-elseif g:complete_engine == 'vcm'
+elseif g:complete_engine == 'mcm'
     call SetScheme('gruvbox-material', 'gruvbox')
+elseif g:complete_engine == 'vcm'
+    call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
     call SetScheme('nightfox', 'space-vim-dark')
 elseif g:complete_engine == 'coc'
