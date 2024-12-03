@@ -519,6 +519,10 @@
     "command": "codeium.openChatView"
   },
   {
+    "key": "shift+alt+'",
+    "command": "codeium.openChatInPanel"
+  },
+  {
     "key": "ctrl+shift+l",
     "command": "codeium.openCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
@@ -548,12 +552,11 @@
     "command": "-codeium.openCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
   },
-  //Ai toolkit
-  {
-    "key": "ctrl+shift+alt+\\",
-    "command": "aiToolkitTools.focus"
-  },
   //continue ai
+  {
+    "key": "ctrl+shift+l",
+    "command": "-continue.focusContinueInputWithoutClear"
+  },
   {
     "key": "ctrl+shift+'",
     "command": "continue.continueGUIView.focus"
@@ -566,6 +569,11 @@
   {
     "key": "ctrl+shift+alt+'",
     "command": "claude-dev.SidebarProvider.focus"
+  },
+  //Ai toolkit
+  {
+    "key": "ctrl+shift+alt+\\",
+    "command": "aiToolkitTools.focus"
   },
   //------------------------------ split -------------------------------------
   {
