@@ -32,12 +32,18 @@ if has('nvim') || has('timers') && has('channel') && has('job')
         if executable('g++')
             let g:gpp_cmd = 'g++ -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
+        if executable('rustc')
+            let g:rustc_cmd = 'rustc -o ~/.cache/build/$(VIM_FILENOEXT) $(VIM_FILEPATH) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
+        endif
     elseif WINDOWS()
         if executable('gcc')
             let g:gcc_cmd = 'gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
         if executable('g++')
             let g:gpp_cmd = 'g++ $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
+        endif
+        if executable('rustc')
+            let g:rustc_cmd = 'rustc -o ..\target\test\$(VIM_FILENOEXT).exe $(VIM_FILEPATH) & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
     endif
     nnoremap ! :AsyncRun<Space>
@@ -105,7 +111,11 @@ function! s:asyncrun(...)
     elseif &ft ==# 'sh' && executable('bash')
         let run_cmd = s:run_command . params . ' bash %'
     elseif &ft ==# 'python' && executable('python3')
-        let run_cmd = s:run_command . params . ' python3 %'
+        if get(g:, 'pretty_errors_import', 0)
+            let run_cmd = s:run_command . params . ' python3 -m pretty_errors %'
+        else
+            let run_cmd = s:run_command . params . ' python3 %'
+        endif
     elseif &ft ==# 'python' && executable('python')
         let run_cmd = s:run_command . params . ' python %'
     elseif &ft ==# 'r' && executable('Rscript')
@@ -133,6 +143,11 @@ function! s:asyncrun(...)
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:gpp_cmd
+    elseif &ft ==# 'rust' && get(g:, 'rustc_cmd', '') != ''
+        if WINDOWS()
+            silent! call mkdir("../target/test", "p")
+        endif
+        let run_cmd = s:run_command . params . ' '. g:rustc_cmd
     else
         let run_cmd = ''
     endif
@@ -168,15 +183,13 @@ command! RunQfSilent call s:asyncrun('bottom', 'qf', 1)
 command! RunQfBottom call s:asyncrun('bottom', 'qf')
 command! RunQfRight call s:asyncrun('right', 'qf')
 " -------------------------
-" run in floterm
+" run in floaterm
 " -------------------------
 if has('nvim') || v:version >= 801
     " run in tabterm
     let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
-    command! RunTermTab call s:asyncrun('tab', 'term')
-    nnoremap <silent><M-T> :RunTermTab<CR>
     " run in floaterm right/bottom
-    function! s:floaterm(opts, wintype, position)
+    function! s:floaterm_run(opts, wintype, position)
         if !g:has_popup_floating && a:wintype == 'float'
             call preview#errmsg("Please update to vim8.1+/nvim0.6+ to run script in floating or popup window.")
             return
@@ -229,27 +242,76 @@ if has('nvim') || v:version >= 801
         endif
     endfunction
     function! s:floaterm_right(opts)
-        call s:floaterm(a:opts, 'vsplit', 'right')
+        call s:floaterm_run(a:opts, 'vsplit', 'right')
     endfunc
     function! s:floaterm_float(opts)
-        call s:floaterm(a:opts, 'float', 'bottomright')
+        call s:floaterm_run(a:opts, 'float', 'bottomright')
     endfunc
     function! s:floaterm_bottom(opts)
-        call s:floaterm(a:opts, 'split', 'botright')
+        call s:floaterm_run(a:opts, 'split', 'botright')
     endfunc
     let g:asyncrun_runner.floaterm_right = function('s:floaterm_right')
     let g:asyncrun_runner.floaterm_float = function('s:floaterm_float')
     let g:asyncrun_runner.floaterm_bottom = function('s:floaterm_bottom')
-    command! RunFloatermRight call s:asyncrun('floaterm_right', 'term')
-    command! RunFloatermFloat call s:asyncrun('floaterm_float', 'term')
-    command! RunFloatermBottom call s:asyncrun('floaterm_bottom', 'term')
-    nnoremap <silent><M-R> :RunFloatermRight<CR>
-    nnoremap <silent><M-B> :RunFloatermBottom<CR>
+    " ------------------ Taske check firstly, if not, run in special position
+    function s:task_check(task_name)
+        let tasks = asynctasks#list('')
+        if len(tasks) == 0
+            return 0
+        endif
+        for task in tasks
+            if trim(task['name']) == a:task_name
+                return 1
+            endif
+        endfor
+        return 0
+    endfunc
+    function s:task_run_or_pos(task_name, pos)
+        let task_name = a:task_name
+        let pos = a:pos
+        if s:task_check(task_name)
+            execute('AsyncTask ' . task_name)
+        else
+            if !has('nvim') && pos == 'floaterm_float' || pos == 'qf'
+                RunQfSilent
+            else
+                call s:asyncrun(pos, 'term')
+            endif
+        endif
+    endfunction
+    " set commands
+    command! TaskTestOrTab call s:task_run_or_pos('task-test', 'tab')
+    command! TaskRunOrRight call s:task_run_or_pos('task-run', 'floaterm_right')
+    command! TaskBuildOrBottom call s:task_run_or_pos('task-build', 'floaterm_bottom')
+    command! TaskFinalizeOrFloat call s:task_run_or_pos('task-finalize', 'floaterm_float')
+    command! TaskFinalizeOrQf call s:task_run_or_pos('task-finalize', 'qf')
+    " map
+    nnoremap <silent><M-T> :TaskTestOrTab<CR>
+    nnoremap <silent><M-R> :TaskRunOrRight<CR>
+    nnoremap <silent><M-B> :TaskBuildOrBottom<CR>
     if has('nvim')
-        nnoremap <silent><M-F> :RunFloatermFloat<CR>
+        nnoremap <silent><M-F> :TaskFinalizeOrFloat<CR>
     else
-        nnoremap <silent><M-F> :RunQfSilent<CR>
+        nnoremap <silent><M-F> :TaskFinalizeOrQf<CR>
     endif
+    " SmartRunTerm is for different filetypes
+    function SmartRunTerm(cmd, pos)
+        if a:pos ==# 'smart'
+            if &columns > &lines * 3
+                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_right -width=0.45 " .  a:cmd
+            else
+                if has("nvim")
+                    execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_float -width=0.9 -height=0.4 " .  a:cmd
+                else
+                    execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_bottom -height=0.4 " .  a:cmd
+                endif
+            endif
+        elseif a:pos ==# "external"
+            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=external " . a:cmd
+        else
+            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=" . a:pos . " " . a:cmd
+        endif
+    endfunction
 else
     nnoremap <M-T> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
     nnoremap <silent><M-B> :RunQfBottom<CR>
@@ -260,24 +322,6 @@ if WINDOWS() || executable('gnome-terminal') && HAS_GUI()
     command! RunExternal call s:asyncrun('external')
     nnoremap <silent><M-"> :RunExternal<CR>
 endif
-" SmartRunTerm is for different filetypes
-function SmartRunTerm(cmd, pos)
-    if a:pos ==# 'smart'
-        if &columns > &lines * 3
-            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_right -width=0.45 " .  a:cmd
-        else
-            if has("nvim")
-                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_float -width=0.9 -height=0.4 " .  a:cmd
-            else
-                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_bottom -height=0.4 " .  a:cmd
-            endif
-        endif
-    elseif a:pos ==# "external"
-        execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=external " . a:cmd
-    else
-        execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=" . a:pos . " " . a:cmd
-    endif
-endfunction
 " ----------------
 " asynctasks
 " ----------------
@@ -330,13 +374,13 @@ if has('nvim') || v:version >= 801
     " run shortcuts
     nnoremap <leader>ri :AsyncTask project-init<Cr>
     nnoremap <leader>rr :AsyncTask project-run<Cr>
+    nnoremap <leader>rR :AsyncTask project-release<Cr>
     nnoremap <leader>rt :AsyncTask project-test<Cr>
     nnoremap <leader>rb :AsyncTask project-build<Cr>
     nnoremap <leader>rc :AsyncTask project-compile<Cr>
     nnoremap <leader>rd :AsyncTask project-debug<Cr>
-    nnoremap <leader>ru :AsyncTask project-push<Cr>
-    nnoremap <leader>rp :AsyncTask project-pull<Cr>
-    function! AsyncTaskProfileLoop() abort
+    nnoremap <leader>r. :AsyncTaskLast<Cr>
+    function! s:asynctasks_profile_loop() abort
         if get(g:, 'asynctasks_profile', '') == ''
             let g:asynctasks_profile = 'debug'
         elseif g:asynctasks_profile == 'debug'
@@ -348,9 +392,9 @@ if has('nvim') || v:version >= 801
         endif
         echom "asynctasks_profile is " . g:asynctasks_profile
     endfunction
-    command! AsyncTaskProfileLoop call AsyncTaskProfileLoop()
-    nnoremap <leader>rL :<C-u>AsyncTaskProfileLoop<CR>
-    nnoremap <leader>rf :<C-u>AsyncTaskProfile<CR>
+    command! AsyncTaskProfileLoop call s:asynctasks_profile_loop()
+    nnoremap <leader>rl :<C-u>AsyncTaskProfileLoop<CR>
+    nnoremap <leader>rp :<C-u>AsyncTaskProfile<CR>
     if PlannedFzf()
         function! s:fzf_sink(what)
             let p1 = stridx(a:what, '<')

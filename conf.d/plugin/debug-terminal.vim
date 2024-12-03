@@ -238,7 +238,7 @@ if Planned('vimspector')
     nmap <silent><M-d>o <Plug>VimspectorStepOut
     nmap <silent><M-d>p <Plug>VimspectorPause
     nmap <silent><M-d>q :call vimspector#Reset()<Cr>
-    nmap <silent><M-d>L :call vimspector#Launch()<Cr>
+    nmap <silent><M-d>r :call vimspector#Launch()<Cr>
     nmap <silent><F1> <Plug>VimspectorDisassemble
     nmap <silent><F3> :VimspectorReset<Cr>
     nmap <silent><F4> <Plug>VimspectorRunToCursor
@@ -266,7 +266,7 @@ if Planned('vimspector')
     nnoremap <silent><M-d>f :call vimspector#AddFunctionBreakpoint('')<left><left>
     nnoremap <silent><M-d>b :call vimspector#ToggleAllBreakpointsViewBreakpoint()<Cr>
     " start / stop
-    nnoremap <silent><M-d>r :call vimspector#Restart()<Cr>
+    nnoremap <silent><M-d>. :call .()<Cr>
     nnoremap <silent><M-d>Q :call vimspector#Stop({'interactive': v:true})<Cr>
     " function
     nnoremap <silent><M-d>u :call vimspector#UpFrame()<Cr>
@@ -274,14 +274,7 @@ if Planned('vimspector')
     " --------------------------------------
     " jump/show windows in vimspector
     " --------------------------------------
-    au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
-    function! s:vimspector_opened()
-        return bufwinnr('vimspector.Variables') >= 0 && bufwinnr('vimspector.Watches') >= 0 && bufwinnr('vimspector.StackTrace') >= 0
-    endfunction
     function! GoToVimspectorWindow(name) abort
-        if !s:vimspector_opened()
-            return
-        endif
         try
             if name ==# 'variables'
                 let windowNr = bufwinnr('vimspector.Variables')
@@ -298,10 +291,9 @@ if Planned('vimspector')
             call preview#errmsg('Wrong input name.')
             let windowNr = -1
         endtry
-        if windowNr > 0
+        if windowNr >= 0
             execute windowNr . 'wincmd w'
         endif
-        return windowNr
     endfunction
     nnoremap <silent><M-'>  :call vimspector#ListBreakpoints()<Cr>
     nnoremap <silent><M-m>i :call GoToVimspectorWindow('important')<Cr>
@@ -314,6 +306,10 @@ if Planned('vimspector')
     " --------------------------------------
     " special map
     " ---------------------------------------
+    au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
+    function! s:vimspector_opened()
+        return bufwinnr('vimspector.Variables') >= 0 && bufwinnr('vimspector.Watches') >= 0 && bufwinnr('vimspector.StackTrace') >= 0
+    endfunction
     function! s:vimspector_or_floaterm(type)
         if s:vimspector_opened()
             if a:type ==# 'code'
@@ -398,7 +394,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <M-d>l :lua require"dap".
     nnoremap <M-d>I :DapInstall<Space>
     nnoremap <M-d>U :DapUninstall<Space>
-    nnoremap <silent><M-d>r <cmd>lua require"dap".run_last()<Cr>
+    nnoremap <silent><M-d>. <cmd>lua require"dap".run_last()<Cr>
     nnoremap <silent><M-d>a <cmd>lua require"dap".attach(vim.fn.input('Attatch to: '))<Cr>
     " breakpoints
     nnoremap <silent><M-d>c <cmd>lua require"dap".clear_breakpoints()<Cr>
@@ -418,29 +414,25 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-m>w <cmd>lua require("dapui").float_element('watches')<Cr>
     nnoremap <silent><M-m>t <cmd>lua require("dapui").float_element('stacks')<Cr>
     nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
-    " jump to windows in dapui
-    au BufEnter * if s:dapui_opened() | SignifyDisable | endif
-    function! s:dapui_opened()
-        return bufwinnr("DAP Scopes") >= 0 && bufwinnr("DAP Watches") >= 0 && bufwinnr("DAP Stacks") >= 0
-    endfunction
     function! GoToDAPWindows(name) abort
-        if !s:dapui_opened()
-            return
-        endif
         try
             let windowNr = bufwinnr(a:name)
-        catch
-            let windowNr = -1
-        endtry
-        if windowNr > 0
             execute windowNr . 'wincmd w'
-        endif
-        return windowNr
+        catch
+            if a:name == 'DAP Breakpoints'
+                lua require"dap".list_breakpoints(true)
+            endif
+        endtry
     endfunction
-    nnoremap <silent><M-'>  <Cmd>lua DapListBreakpoints()<Cr>
+    nnoremap <silent><M-'>  <Cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
     nnoremap <silent><M-m>1 <Cmd>call GoToDAPWindows("DAP Scopes")<Cr>
     nnoremap <silent><M-m>2 <Cmd>call GoToDAPWindows("DAP Watches")<Cr>
     nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
+    " check dapui openned
+    function! s:dapui_opened()
+        return bufwinnr("DAP Scopes") >= 0 && bufwinnr("DAP Watches") >= 0 && bufwinnr("DAP Stacks") >= 0
+    endfunction
+    au BufEnter * if s:dapui_opened() | SignifyDisable | endif
     " --------------------------------------
     " special map
     " ---------------------------------------
@@ -485,14 +477,15 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     " coremap
     nnoremap <M-d><Space> :Break<Space>
     nnoremap <M-d><M-d> :Until<Cr>
-    nnoremap <M-d><M-e> :Continue<Cr>
+    nnoremap <M-d><Cr> :Continue<Cr>
     nnoremap <M-d>c :Clear<Space>
+    nnoremap <M-d>r :Run<Space>
     nnoremap <M-d>n :Over<Cr>
     nnoremap <M-d>i :Step<Cr>
     nnoremap <M-d>o :Finish<Cr>
     nnoremap <M-d>a :Arguments<Space>
-    nnoremap _ :Stop<Cr>
-    nnoremap <F3> :Run<Space>
+    nnoremap <F1> :Run<Space>
+    nnoremap <F3> :Stop<Space>
     nnoremap <F4> :Until<Cr>
     nnoremap <F5> :Continue<Cr>
     nnoremap <F6> :Pause<Cr>
@@ -503,7 +496,8 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     nnoremap <F11> :Step<Cr>
     nnoremap <F12> :Finish<Cr>
     " debug
-    nnoremap - :Evaluate <C-r><C-w>
+    nnoremap - :Evaluate<Space>
+    nnoremap J :Evaluate <C-r><C-w><Cr>
     " other
     nnoremap <M-m>d :Termdebug<Space>
     nnoremap <M-m>c :TermdebugCommand<Space>
@@ -533,24 +527,24 @@ call s:bind_keymap('<M-_>', 'FloatermKill')
 " ---------------------------------------
 PlugAddOpt 'vim-floaterm-repl'
 " NOTE: below bang[!] means cursor not move
-" basic send
+" start
 nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
+nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
+" basic send
 nnoremap <silent><M-e>n :FloatermReplSend<Cr>
 nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
 xnoremap <silent><M-e>n :FloatermReplSendVisual<Cr>
 xnoremap <silent><M-e>l :FloatermReplSendVisual!<Cr>
 nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
-nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
-nnoremap <silent><M-e><M-c> :FloatermReplSendClear<Cr>
 " block send
 xnoremap <silent><M-e><M-e>   :FloatermReplSendVisual<Cr>
 xnoremap <silent><M-e><Space> :FloatermReplSendVisual!<Cr>
 nnoremap <silent><M-e><M-e>   :FloatermReplSendBlock<Cr>
 nnoremap <silent><M-e><Space> :FloatermReplSendBlock!<Cr>
-" send above, below, all lines
+" send above/below/all lines
 nnoremap <silent><M-e>b :FloatermReplSendFromBegin!<Cr>
 nnoremap <silent><M-e>e :FloatermReplSendToEnd!<Cr>
-nnoremap <silent><M-e>s :FloatermReplSendAll!<Cr>
+nnoremap <silent><M-e>a :FloatermReplSendAll!<Cr>
 " send word
 nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
 xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
@@ -559,6 +553,8 @@ nnoremap <silent><M-e><M-m> :FloatermReplMark<Cr>
 xnoremap <silent><M-e><M-m> :FloatermReplMark!<Cr>
 nnoremap <silent><M-e><M-l> :FloatermReplSendMark<Cr>
 nnoremap <silent><M-e><M-r> :FloatermReplQuickuiMark<Cr>
+" clear
+nnoremap <silent><M-e><M-c> :FloatermReplSendClear<Cr>
 " ---------------------------------------
 " jupynvim
 " ---------------------------------------

@@ -230,16 +230,16 @@ endif
 " ------------------------------
 " debug tool
 " ------------------------------
-if has('nvim-0.9.5') && (Require('nvim-dap') || Require('debug') && Planned('nvim-cmp') || Require('debug') && g:python_version < 3.1)
+if g:python_version >= 3.1 && (Require('debug') && has('patch-8.2.4797') || Require('vimspector') && has('nvim-0.8'))
+    let vimspector_install = " ./install_gadget.py --update-gadget-config"
+    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
+elseif has('nvim-0.9.5') && Require('debug')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
     if Planned('nvim-treesitter')
         PlugAdd 'theHamsta/nvim-dap-virtual-text'
     endif
-elseif g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8'))
-    let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
@@ -262,7 +262,7 @@ if has('patch-9.0.0185') || has('nvim')
         endif
     endif
 endif
-if has('nvim-0.10') && Planned('nvim-treesitter') && (
+if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
             \ exists('$DASHSCOPE_API_KEY') ||
             \ exists('$HYPERBOLIC_API_KEY') ||
             \ exists('$DEEPSEEK_API_KEY') ||

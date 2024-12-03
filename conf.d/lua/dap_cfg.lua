@@ -232,10 +232,6 @@ end
 function _G.DapBreakpointPrev()
   goto_breakpoint('prev')
 end
--- list_breakpoints
-function _G.DapListBreakpoints()
-  dap.list_breakpoints(true)
-end
 ---------------------------------
 -- daptab, auto open/close/load dapui in tab
 -- https://github.com/przepompownia/nvim-dap-tab/blob/master/lua/dap-tab/init.lua

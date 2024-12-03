@@ -111,6 +111,12 @@ function! s:get_python_version()
         catch /.*/
             let g:pygments_import = get(g:, 'pygments_import', 0)
         endtry
+        try
+            execute("py3 import pretty_errors")
+            let g:pretty_errors_import = get(g:, 'pretty_errors_import', 1)
+        catch /.*/
+            let g:pretty_errors_import = get(g:, 'pretty_errors_import', 0)
+        endtry
     endif
     return pyx_version
 endfunction

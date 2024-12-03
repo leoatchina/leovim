@@ -2,6 +2,15 @@ if Installed('mason.nvim')
     lua require("mason_cfg")
 endif
 " ------------------------------
+" vim-header
+" ------------------------------
+let g:header_auto_add_header = 0
+let g:header_auto_update_header = 0
+let g:header_field_timestamp_format = '%Y.%m.%d'
+PlugAddOpt 'vim-header'
+nnoremap <M-k>a :AddHeader<Cr>
+nnoremap <M-k>h :AddBangHeader<Cr>
+" ------------------------------
 " AI complete
 " ------------------------------
 if Planned('codeium.vim')

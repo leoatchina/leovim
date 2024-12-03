@@ -311,9 +311,7 @@ nnoremap S <Nop>
 nnoremap , <Nop>
 xnoremap , <Nop>
 nnoremap - <Nop>
-nnoremap = <Nop>
 nnoremap _ <Nop>
-nnoremap + <Nop>
 " enhanced remap
 xmap >> >gv
 xmap << <gv

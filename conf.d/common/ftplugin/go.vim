@@ -20,8 +20,5 @@ if Installed('coc.nvim')
     nmap <buffer>,ty :CocCommand go.tags.add yaml<cr>
     nmap <buffer>,tx :CocCommand go.tags.clear<cr>
 endif
-if Installed('vim-floaterm') && executable('go')
-    nnoremap <buffer><M-B> :call SmartRunTerm(printf("time go build -o %s/build/ %s", GetRootDir(), GetRootDir()), "smart")<Cr>
-endif
 inoremap <buffer>:: :=
-inoremap <buffer>!! !  nnoremap <buffer><silent><M-?> :GoImpl<Cr>=
+inoremap <buffer>!! ! nnoremap <buffer><silent><M-?> :GoImpl<Cr>=

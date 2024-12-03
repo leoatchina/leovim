@@ -240,8 +240,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
     end
     -- LspUI
-    map(nx, "<F2>", [[<Cmd>LspUI rename<Cr>]], opts_echo)
-    map(nx, "<M-a>", [[<Cmd>LspUI code_action<Cr>]], opts_silent)
+    map('n', "<F2>", [[<Cmd>LspUI rename<Cr>]], opts_echo)
+    map('n', "<M-a>", [[<Cmd>LspUI code_action<Cr>]], opts_silent)
     -- lsp info/restart
     map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
     map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
