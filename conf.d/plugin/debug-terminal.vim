@@ -158,7 +158,7 @@ if PlannedFzf()
         endif
         if dap
             let json_file = fnamemodify(GetRootDir() . '/.vim/dap.json', ':p')
-            let json_dir = fnamemodify(GetRootDir() . '/.vim')
+            let json_dir = fnamemodify(GetRootDir() . '/.vim', ':p')
             if !isdirectory(json_dir)
                 try
                     call mkdir(json_dir, 'p')

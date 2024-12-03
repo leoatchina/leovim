@@ -659,9 +659,17 @@ nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 nnoremap Y y$
-if exists('g:vscode')
-    set clipboard+=unnamedplus
-elseif exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc52_yank', 1)
+if exists('g:vscode') || WINDOWS() || HAS_GUI()
+    try
+        set clipboard+=unnamedplus
+    catch /.*/
+        try
+            set clipboard+=unnamedplus
+        catch /.*/
+            " pass
+        endtry
+    endtry
+elseif exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)
         if filewritable('/dev/fd/2')
             call writefile([a:str], '/dev/fd/2', 'b')
@@ -684,17 +692,6 @@ elseif exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc52_yank', 1)
         call s:raw_echo(s)
     endfunction
     autocmd TextYankPost * call s:copy()
-    if !has('nvim')
-        try
-            set clipboard+=unnamedplus
-        catch /.*/
-            try
-                set clipboard+=unnamed
-            catch /.*/
-                " pass
-            endtry
-        endtry
-    endif
 endif
 " ------------------------
 " set optional
