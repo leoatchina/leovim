@@ -352,16 +352,16 @@ elseif Installed('tokyonight.nvim') && Require('tokyonight')
 elseif g:complete_engine == 'apm'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'mcm'
-    call SetScheme('sonokai', 'sublime')
-elseif g:complete_engine == 'vcm'
     call SetScheme('everforest', 'deus')
+elseif g:complete_engine == 'vcm'
+    call SetScheme('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'cmp'
     call SetScheme('nightfox', 'space-vim-dark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
         call SetScheme('terafox', 'hybrid')
     else
-        call SetScheme('gruvbox-material', 'gruvbox')
+        call SetScheme('sonokai', 'sublime')
     endif
 else
     colorscheme hybrid
