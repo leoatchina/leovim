@@ -295,7 +295,7 @@ function! SetScheme(scheme, ...) abort
         try
             execute('colorscheme '. defaultscheme)
         catch
-            colorscheme hybrid
+            colorscheme wildcharm
         endtry
     endtry
 endfunction
@@ -354,14 +354,14 @@ elseif g:complete_engine == 'apm'
 elseif g:complete_engine == 'mcm'
     call SetScheme('sonokai', 'sublime')
 elseif g:complete_engine == 'vcm'
-    call SetScheme('gruvbox-material', 'gruvbox')
+    call SetScheme('everforest', 'deus')
 elseif g:complete_engine == 'cmp'
     call SetScheme('nightfox', 'space-vim-dark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('terafox', 'deus')
+        call SetScheme('terafox', 'hybrid')
     else
-        call SetScheme('everforest', 'deus')
+        call SetScheme('gruvbox-material', 'gruvbox')
     endif
 else
     colorscheme hybrid
