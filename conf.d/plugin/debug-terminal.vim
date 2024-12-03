@@ -158,7 +158,7 @@ if PlannedFzf()
         endif
         if dap
             let json_file = fnamemodify(GetRootDir() . '/.vim/dap.json', ':p')
-            let json_dir = fnamemodify(json_file, ':h')
+            let json_dir = fnamemodify(GetRootDir() . '/.vim')
             if !isdirectory(json_dir)
                 try
                     call mkdir(json_dir, 'p')
@@ -225,8 +225,8 @@ if Planned('vimspector')
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/vimspector/
     endif
     " core keymaps
+    nmap _ :call vimspector#GetConfigurations()<Left>
     nmap <M-d>I :VimspectorInstall<Space>
-    nmap <silent>_ :call vimspector#GetConfigurations()<Left>
     nmap <silent><M-d>, <Plug>VimspectorJumpToPreviousBreakpoint
     nmap <silent><M-d>; <Plug>VimspectorJumpToNextBreakpoint
     nmap <silent><M-d><Space> <Plug>VimspectorToggleBreakpoint

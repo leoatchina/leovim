@@ -393,8 +393,8 @@ if has('nvim') || v:version >= 801
         echom "asynctasks_profile is " . g:asynctasks_profile
     endfunction
     command! AsyncTaskProfileLoop call s:asynctasks_profile_loop()
-    nnoremap <leader>rl :<C-u>AsyncTaskProfileLoop<CR>
-    nnoremap <leader>rp :<C-u>AsyncTaskProfile<CR>
+    nnoremap <leader>rp :<C-u>AsyncTaskProfileLoop<CR>
+    nnoremap <leader>rP :<C-u>AsyncTaskProfile<CR>
     if PlannedFzf()
         function! s:fzf_sink(what)
             let p1 = stridx(a:what, '<')

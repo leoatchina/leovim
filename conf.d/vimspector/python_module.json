@@ -1,9 +1,7 @@
 {
   "python-module": {
     "adapter": "debugpy",
-    "filetypes": [
-      "python"
-    ],
+    "filetypes": [ "python" ],
     "breakpoints": {
       "exception": {
         "raised": "",
