@@ -684,6 +684,17 @@ elseif exists("##TextYankPost") && UNIX() && get(g:, 'leovim_osc52_yank', 1)
         call s:raw_echo(s)
     endfunction
     autocmd TextYankPost * call s:copy()
+    if !has('nvim')
+        try
+            set clipboard+=unnamedplus
+        catch /.*/
+            try
+                set clipboard+=unnamed
+            catch /.*/
+                " pass
+            endtry
+        endtry
+    endif
 endif
 " ------------------------
 " set optional
