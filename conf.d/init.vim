@@ -677,14 +677,14 @@ if has('clipboard')
             nnoremap <Tab>Y vG"+y
         endif
         xnoremap Y "+y
-        nnoremap Y "+yy
+        nnoremap yy "+yy
     else
         if !exists('g:vscode')
             nnoremap <Tab>y gg"*yG`'zz
             nnoremap <Tab>Y vG"*y
         endif
         xnoremap Y "*y
-        nnoremap Y "*yy
+        nnoremap yy "*yy
     endif
 else
     if !exists('g:vscode')
@@ -692,7 +692,6 @@ else
         nnoremap <Tab>Y vGy
     endif
     xnoremap Y y
-    nnoremap Y yy
 endif
 function! YankBorder(...) abort
     if a:0 && a:1 > 0
@@ -742,8 +741,10 @@ function! YankBorder(...) abort
     endif
     call setpos('.', original_cursor_position)
 endfunction
-nnoremap <silent>,y :call YankBorder(0)<Cr>
-nnoremap <silent>,Y :call YankBorder(1)<Cr>
+if !exists('g:vscode')
+    nnoremap <silent>,Y :call YankBorder(0)<Cr>
+endif
+nnoremap <silent>Y :call YankBorder(1)<Cr>
 nnoremap <silent><leader>Y :call YankBorder(2)<Cr>
 if exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)

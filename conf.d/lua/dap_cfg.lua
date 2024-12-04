@@ -170,6 +170,7 @@ local function dap_run(dap_json, run, run_to_cursor)
       ok, _ = pcall(load_json, dap_json)
       if ok then
         if run_to_cursor then
+          dap.clear_breakpoints()
           dap.set_breakpoint()
         end
         ok, _ = pcall(dap.continue)
