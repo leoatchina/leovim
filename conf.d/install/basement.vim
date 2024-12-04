@@ -110,13 +110,7 @@ else
     let s:smart_engine_select = 1
 endif
 if get(s:, 'smart_engine_select', 0)
-    if v:version >= 901
-        if UNIX()
-            let g:complete_engine = 'vcm'
-        else
-            let g:complete_engine = 'mcm'
-        endif
-    elseif has('nvim-0.10')
+    if has('nvim-0.10')
         if UNIX() || WINDOWS() && HAS_GUI() == 0
             let g:complete_engine = 'cmp'
         else
