@@ -84,12 +84,6 @@ elseif Require('apm')
     else
         let s:smart_engine_select = 1
     endif
-elseif Require('vcm')
-    if v:version >= 901
-        let g:complete_engine = 'vcm'
-    else
-        let s:smart_engine_select = 1
-    endif
 elseif Require('coc')
     if g:node_version >= 16.18 && (has('nvim-0.8.1') || has('patch-9.0.0438'))
         let g:complete_engine = 'coc'
@@ -130,9 +124,7 @@ PlugAddOpt 'vim-dict'
 " ------------------------------
 " complete_engine
 " ------------------------------
-if g:complete_engine == 'vcm'
-    PlugAdd 'girishji/vimcomplete'
-elseif g:complete_engine == 'cmp'
+if g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/nvim-cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lsp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
@@ -168,7 +160,7 @@ endif
 if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'hrsh7th/vim-vsnip'
     PlugAdd 'rafamadriz/friendly-snippets'
-    if index(['vcm', 'mcm'], g:complete_engine) >= 0
+    if g:complete_engine == 'mcm'
         PlugAdd 'hrsh7th/vim-vsnip-integ'
     endif
 endif
@@ -213,7 +205,6 @@ endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
     PlugAdd 'sainnhe/sonokai'
-    PlugAdd 'sainnhe/everforest'
     PlugAdd 'sainnhe/gruvbox-material'
     if has('nvim-0.8.1')
         PlugAdd 'EdenEast/nightfox.nvim'

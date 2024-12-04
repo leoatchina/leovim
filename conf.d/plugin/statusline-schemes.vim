@@ -315,12 +315,12 @@ function! UpdateLightline() abort
         else
             let g:lightline.colorscheme = 'gruvboxdark'
         endif
+    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name =~ 'fox'
+        let g:lightline.colorscheme = g:colors_name
     elseif colors_name =~ 'catppuccin'
         let g:lightline.colorscheme = "catppuccin"
     elseif colors_name =~ 'tokyonight'
         let g:lightline.colorscheme = "tokyonight"
-    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name == 'everforest' || colors_name =~ 'fox'
-        let g:lightline.colorscheme = g:colors_name
     else
         let g:lightline.colorscheme = 'default'
     endif
@@ -343,15 +343,12 @@ nnoremap <silent><C-l> <C-l>:call lightline#update()<Cr>
 let g:terminal_color_13 = '#000000'
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
-let g:everforest_better_performance = 1
 let g:gruvbox_material_better_performance = 1
 if Installed('catppuccin') && Require('catppuccin')
     call SetScheme('catppuccin')
 elseif Installed('tokyonight.nvim') && Require('tokyonight')
     call SetScheme('tokyonight')
 elseif g:complete_engine == 'apm'
-    call SetScheme('everforest', 'deus')
-elseif g:complete_engine == 'vcm'
     call SetScheme('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'mcm'
     call SetScheme('edge', 'one')
