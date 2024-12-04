@@ -658,8 +658,10 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
-nnoremap Y y$
-if exists('g:vscode') || WINDOWS() || HAS_GUI()
+" ------------------------------------
+" with/without clipboard yank
+" ------------------------------------
+if has('clipboard')
     try
         set clipboard+=unnamedplus
     catch /.*/
@@ -669,7 +671,30 @@ if exists('g:vscode') || WINDOWS() || HAS_GUI()
             " pass
         endtry
     endtry
-elseif exists("##TextYankPost") && UNIX()
+    if UNIX()
+        if !exists('g:vscode')
+            nnoremap <Tab>y gg"+yG`'zz
+            nnoremap <Tab>Y vG"+y
+        endif
+        xnoremap Y "+y
+        nnoremap Y "+y$
+    else
+        if !exists('g:vscode')
+            nnoremap <Tab>y gg"*yG`'zz
+            nnoremap <Tab>Y vG"*y
+        endif
+        xnoremap Y "*y
+        nnoremap Y "*y$
+    endif
+else
+    if !exists('g:vscode')
+        nnoremap <Tab>y ggyG`'zz
+        nnoremap <Tab>Y vGy
+    endif
+    xnoremap Y y
+    nnoremap Y y$
+endif
+if exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)
         if filewritable('/dev/fd/2')
             call writefile([a:str], '/dev/fd/2', 'b')

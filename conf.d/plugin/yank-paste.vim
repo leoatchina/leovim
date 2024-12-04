@@ -51,33 +51,7 @@ function! YankBorder(...) abort
 endfunction
 nnoremap <silent>,y :call YankBorder(0)<Cr>
 nnoremap <silent>,Y :call YankBorder(1)<Cr>
-nnoremap <silent>+  :call YankBorder(2)<Cr>
-" ------------------------------------
-" with/without clipboard yank
-" ------------------------------------
-if has('clipboard')
-    if WINDOWS()
-        try
-            set clipboard^=unnamedplus
-        catch
-            set clipboard^=unnamed
-        endtry
-    endif
-    if UNIX()
-        nnoremap <Tab>y gg"+yG`'zz
-        nnoremap <Tab>Y vG"+y
-        xnoremap + "+y
-    else
-        nnoremap <Tab>y gg"*yG`'zz
-        nnoremap <Tab>Y vG"*y
-        xnoremap + "*y
-    endif
-else
-    nnoremap <Tab>y ggyG`'zz
-    nnoremap <Tab>Y vGy
-    xnoremap + y
-endif
-xnoremap Y "yy:echo "Yank selection to y register"<Cr>
+nnoremap <silent><leader>Y  :call YankBorder(2)<Cr>
 " ------------------------------------
 " M-x/BS
 " ------------------------------------
