@@ -310,11 +310,7 @@ function! UpdateLightline() abort
     elseif colors_name == 'hybrid'
         let g:lightline.colorscheme = 'nord'
     elseif colors_name =~ 'gruvbox'
-        if colors_name == 'gruvbox-material'
-            let g:lightline.colorscheme = 'gruvbox_material'
-        else
-            let g:lightline.colorscheme = 'gruvboxdark'
-        endif
+        let g:lightline.colorscheme = 'gruvboxdark'
     elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name =~ 'fox'
         let g:lightline.colorscheme = g:colors_name
     elseif colors_name =~ 'catppuccin'
