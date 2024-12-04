@@ -659,7 +659,7 @@ nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 " ------------------------------------
-" with/without clipboard yank
+" clipboard yank
 " ------------------------------------
 if has('clipboard')
     try
@@ -677,14 +677,14 @@ if has('clipboard')
             nnoremap <Tab>Y vG"+y
         endif
         xnoremap Y "+y
-        nnoremap Y "+y$
+        nnoremap Y "+yy
     else
         if !exists('g:vscode')
             nnoremap <Tab>y gg"*yG`'zz
             nnoremap <Tab>Y vG"*y
         endif
         xnoremap Y "*y
-        nnoremap Y "*y$
+        nnoremap Y "*yy
     endif
 else
     if !exists('g:vscode')
@@ -692,8 +692,59 @@ else
         nnoremap <Tab>Y vGy
     endif
     xnoremap Y y
-    nnoremap Y y$
+    nnoremap Y yy
 endif
+function! YankBorder(...) abort
+    if a:0 && a:1 > 0
+        if a:1 > 1
+            let yankmode = 2
+        else
+            let yankmode = 1
+        endif
+    else
+        let yankmode = 0
+    endif
+    let original_cursor_position = getpos('.')
+    if has('clipboard')
+        if yankmode == 2
+            if UNIX()
+                exec('normal! viw"+y')
+            else
+                exec('normal! viw"*y')
+            endif
+            echo "Yanked word to clipboard."
+        elseif yankmode == 1
+            if UNIX()
+                exec('normal! v$"+y')
+            else
+                exec('normal! v$"*y')
+            endif
+            echo "Yanked to line end to clipboard."
+        else
+            if UNIX()
+                exec('normal! v^"+y')
+            else
+                exec('normal! v^"*y')
+            endif
+            echo "Yanked from line beginning to clipboard."
+        endif
+    else
+        if yankmode == 2
+            exec('normal! viwy')
+            echo "Yanked word."
+        elseif yankmode == 1
+            exec('normal! v$y')
+            echo "Yanked to line end."
+        else
+            exec('normal! v^y')
+            echo "Yanked from line beginning."
+        endif
+    endif
+    call setpos('.', original_cursor_position)
+endfunction
+nnoremap <silent>,y :call YankBorder(0)<Cr>
+nnoremap <silent>,Y :call YankBorder(1)<Cr>
+nnoremap <silent><leader>Y :call YankBorder(2)<Cr>
 if exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)
         if filewritable('/dev/fd/2')
