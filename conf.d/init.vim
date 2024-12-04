@@ -676,15 +676,15 @@ if has('clipboard')
             nnoremap <Tab>y gg"+yG`'zz
             nnoremap <Tab>Y vG"+y
         endif
-        xnoremap Y "+y
-        nnoremap yy "+yy
+        xnoremap Y "+y:echo "Yank selection to clipboard"<Cr>
+        nnoremap yy "+yy:echo "Yank line to clipboard"<Cr>
     else
         if !exists('g:vscode')
             nnoremap <Tab>y gg"*yG`'zz
             nnoremap <Tab>Y vG"*y
         endif
-        xnoremap Y "*y
-        nnoremap yy "*yy
+        xnoremap Y "*y:echo "Yank selection to clipboard"<Cr>
+        nnoremap yy "*yy:echo "Yank line to clipboard"<Cr>
     endif
 else
     if !exists('g:vscode')
@@ -693,7 +693,7 @@ else
     endif
     xnoremap Y y
 endif
-function! YankBorder(...) abort
+function! s:yank_border(...) abort
     if a:0 && a:1 > 0
         if a:1 > 1
             let yankmode = 2
@@ -711,41 +711,45 @@ function! YankBorder(...) abort
             else
                 exec('normal! viw"*y')
             endif
-            echo "Yanked word to clipboard."
+            echo "Yank word to clipboard."
         elseif yankmode == 1
             if UNIX()
                 exec('normal! v$"+y')
             else
                 exec('normal! v$"*y')
             endif
-            echo "Yanked to line end to clipboard."
+            echo "Yank to line end to clipboard."
         else
             if UNIX()
                 exec('normal! v^"+y')
             else
                 exec('normal! v^"*y')
             endif
-            echo "Yanked from line beginning to clipboard."
+            echo "Yank from line beginning to clipboard."
         endif
     else
         if yankmode == 2
             exec('normal! viwy')
-            echo "Yanked word."
+            echo "Yank word."
         elseif yankmode == 1
             exec('normal! v$y')
-            echo "Yanked to line end."
+            echo "Yank to line end."
         else
             exec('normal! v^y')
-            echo "Yanked from line beginning."
+            echo "Yank from line beginning."
         endif
     endif
     call setpos('.', original_cursor_position)
 endfunction
 if !exists('g:vscode')
-    nnoremap <silent>,Y :call YankBorder(0)<Cr>
+    command! YankFromBegin call s:yank_border(0)
+    nnoremap <silent>,Y :YankFromBegin<Cr>
 endif
-nnoremap <silent>Y :call YankBorder(1)<Cr>
-nnoremap <silent><leader>Y :call YankBorder(2)<Cr>
+command! YankToEnd call s:yank_border(1)
+command! YankWord call s:yank_border(2)
+nnoremap <silent>Y :YankToEnd<Cr>
+nnoremap <silent><leader>Y :YankWord<Cr>
+" clipboard from remote to local
 if exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)
         if filewritable('/dev/fd/2')
