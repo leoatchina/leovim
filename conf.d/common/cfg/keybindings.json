@@ -51,20 +51,20 @@
     "command": "-workbench.action.reopenClosedEditor"
   },
   {
-    "key": "ctrl+shift+t",
-    "command": "workbench.action.showAllSymbols"
-  },
-  {
     "key": "ctrl+t",
     "command": "-workbench.action.showAllSymbols"
   },
   {
-    "key": "ctrl+t",
-    "command": "outline.focus"
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.gotoSymbol"
   },
   {
-    "key": "ctrl+shift+,",
-    "command": "-editor.action.inPlaceReplace.up"
+    "key": "ctrl+shift+alt+t",
+    "command": "workbench.action.showAllSymbols"
+  },
+  {
+    "key": "ctrl+t",
+    "command": "outline.focus"
   },
   // git
   {
@@ -83,6 +83,10 @@
     "key": "ctrl+shift+g",
     "command": "-workbench.view.scm",
     "when": "workbench.scm.active"
+  },
+  {
+    "key": "ctrl+shift+,",
+    "command": "-editor.action.inPlaceReplace.up"
   },
   {
     "key": "ctrl+shift+,",
@@ -118,7 +122,7 @@
     "command": "workbench.action.closeActiveEditor"
   },
   {
-    "key": "shift+alt+q",
+    "key": "ctrl+shift+alt+e",
     "command": "workbench.action.reopenClosedEditor"
   },
   {
@@ -324,14 +328,9 @@
     "command": "workbench.action.tasks.runTask"
   },
   {
-    "key": "ctrl+shift+alt+t",
+    "key": "ctrl+shift+alt+b",
     "command": "workbench.action.tasks.configureTaskRunner"
   },
-  {
-    "key": "ctrl+shift+alt+b",
-    "command": "workbench.action.tasks.configureDefaultBuildTask"
-  },
-  // breakpoint
   {
     "key": "shift+alt+.",
     "command": "jupyter.openVariableView",
