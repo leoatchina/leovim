@@ -40,15 +40,6 @@ if PlannedFzf()
     endfor
 else
     nnoremap <silent><M-v> :registers<Cr>
-    if has('clipboard')
-        if UNIX()
-            nnoremap <M-y> "+y:echo "Yanked to clipboard"<C>
-            xnoremap <M-y> "+y:echo "Yanked to clipboard"<C>
-        else
-            nnoremap <M-y> "*y:echo "Yanked to clipboard"<C>
-            xnoremap <M-y> "*y:echo "Yanked to clipboard"<C>
-        endif
-    endif
 endif
 " ------------------------
 " paste
