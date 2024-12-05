@@ -662,87 +662,63 @@ xnoremap zP "_c<ESC>P"
 " clipboard yank
 " ------------------------------------
 if has('clipboard')
-    if !has('nvim')
-        try
-            set clipboard+=unnamedplus
-        catch /.*/
-            try
-                set clipboard+=unnamed
-            catch /.*/
-                " pass
-            endtry
-        endtry
+    if WINDOWS() || MACOS
+        set clipboard=unnamed
+    elseif !has('nvim')
+        set clipboard=unnamed
+    elseif exists('g:vscode')
+        set clipboard=unnamed,unnamedplus
     endif
-    if &clipboard =~ 'plus' || has('nvim-0.10') && UNIX()
-        nnoremap <Tab>y gg"+yG`'zz
-        nnoremap <Tab>Y vG"+y
-        xnoremap Y "+y:echo "Yank selection to clipboard"<Cr>
-        nnoremap yy "+yy:echo "Yank line to clipboard"<Cr>
-    elseif has('nvim') && UNIX() || WINDOWS() || exists('g:vscode')
-        nnoremap <Tab>y gg"*yG`'zz
-        nnoremap <Tab>Y vG"*y
-        xnoremap Y "*y:echo "Yank selection to clipboard"<Cr>
-        nnoremap yy "*yy:echo "Yank line to clipboard"<Cr>
-    endif
-else
-    nnoremap <Tab>y ggyG`'zz
-    nnoremap <Tab>Y vGy
-    xnoremap Y y
 endif
 function! s:yank_border(...) abort
-    if a:0 && a:1 > 0
-        if a:1 > 1
-            let yankmode = 2
-        else
-            let yankmode = 1
-        endif
+    if a:0
+        let yankmode = a:1
     else
         let yankmode = 0
     endif
     let original_cursor_position = getpos('.')
-    if has('clipboard')
-        if yankmode == 2
-            if UNIX()
-                exec('normal! viw"+y')
-            else
-                exec('normal! viw"*y')
-            endif
-            echo "Yank word to clipboard."
-        elseif yankmode == 1
-            if UNIX()
-                exec('normal! v$"+y')
-            else
-                exec('normal! v$"*y')
-            endif
-            echo "Yank to line end to clipboard."
-        else
-            if UNIX()
-                exec('normal! v^"+y')
-            else
-                exec('normal! v^"*y')
-            endif
-            echo "Yank from line beginning to clipboard."
-        endif
+    if &clipboard =~ 'unnamed'
+        let yank = '"*y'
+        let tclip = 'to system clipboard.'
     else
-        if yankmode == 2
-            exec('normal! viwy')
-            echo "Yank word."
-        elseif yankmode == 1
-            exec('normal! v$y')
-            echo "Yank to line end."
-        else
-            exec('normal! v^y')
-            echo "Yank from line beginning."
-        endif
+        let yank = 'y'
+        let tclip = 'to internal clipboard.'
     endif
+    if yankmode == 5
+        let action = 'V'
+        let target = 'line'
+    elseif yankmode == 4
+        let action = 'vgg0o'
+        let target = 'from file beginning'
+    elseif yankmode == 3
+        let action = 'vG'
+        let target = 'to file ending'
+    elseif yankmode == 2
+        let action = 'v^'
+        let target = 'from line beginning'
+    elseif yankmode == 1
+        let action = 'v$'
+        let target = 'to line ending'
+    else
+        let action = 'viw'
+        let target = 'word'
+    endif
+    exec 'normal! ' . action . yank
+    echo 'Yank ' . target . ' ' . tclip
     call setpos('.', original_cursor_position)
 endfunction
-command! YankFromBegin call s:yank_border(0)
-command! YankToEnd call s:yank_border(1)
-command! YankWord call s:yank_border(2)
-nnoremap <silent><leader>Y :YankFromBegin<Cr>
-nnoremap <silent>Y :YankToEnd<Cr>
-nnoremap <silent>gY :YankWord<Cr>
+command! YankWord call s:yank_border(0)
+command! YankToLineEnd call s:yank_border(1)
+command! YankFromLineBegin call s:yank_border(2)
+command! YankToFileEnd call s:yank_border(3)
+command! YankFromFileBegin call s:yank_border(4)
+command! YankLine call s:yank_border(5)
+nnoremap <silent>gY        :YankWord<Cr>
+nnoremap <silent>Y         :YankToLineEnd<Cr>
+nnoremap <silent><leader>Y :YankFromLineBegin<Cr>
+nnoremap <silent><Tab>Y    :YankToFileEnd<Cr>
+nnoremap <silent><Tab>y    :YankFromFileBegin<Cr>
+nnoremap <silent>yy        :YankLine<Cr>
 " clipboard from remote to local
 if exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)
