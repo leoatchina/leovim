@@ -20,6 +20,7 @@ if vim.env.DASHSCOPE_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.DASHSCOPE_API_KEY
   vim.g.avante_model = vim.g.qwen_model or "qwen-coder-plus-latest"
   provider = 'openai'
+  max_tokens = 1024 * 8
   openai_endpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 elseif vim.env.HYPERBOLIC_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.HYPERBOLIC_API_KEY
