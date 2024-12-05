@@ -709,11 +709,16 @@ command! YankToLineEnd call s:yank_border(1)
 command! YankFromLineBegin call s:yank_border(2)
 command! YankToFileEnd call s:yank_border(3)
 command! YankFromFileBegin call s:yank_border(4)
-nnoremap <silent>gY        :YankWord<Cr>
-nnoremap <silent>Y         :YankToLineEnd<Cr>
-nnoremap <silent><leader>Y :YankFromLineBegin<Cr>
-nnoremap <silent><Tab>Y    :YankToFileEnd<Cr>
-nnoremap <silent><Tab>y    :YankFromFileBegin<Cr>
+nnoremap <silent>gY :YankWord<Cr>
+if exists('g:vscode')
+    nnoremap <silent>Y :YankToLineEnd<Cr>
+else
+    nnoremap Y y$:echo "Yank to line end to internal clipboard."<Cr>
+    nnoremap <silent>,Y :YankToLineEnd<Cr>
+    nnoremap <silent>,y :YankFromLineBegin<Cr>
+    nnoremap <silent><Tab>Y :YankToFileEnd<Cr>
+    nnoremap <silent><Tab>y :YankFromFileBegin<Cr>
+endif
 " ------------------------
 " special paste
 " ------------------------
