@@ -662,7 +662,7 @@ xnoremap zP "_c<ESC>P"
 " clipboard yank
 " ------------------------------------
 if has('clipboard')
-    if exists('g:vscode') || !has('nvim')
+    if !has('nvim')
         try
             set clipboard+=unnamedplus
         catch /.*/
@@ -678,7 +678,7 @@ if has('clipboard')
         nnoremap <Tab>Y vG"+y
         xnoremap Y "+y:echo "Yank selection to clipboard"<Cr>
         nnoremap yy "+yy:echo "Yank line to clipboard"<Cr>
-    elseif has('nvim') && UNIX() || WINDOWS()
+    elseif has('nvim') && UNIX() || WINDOWS() || exists('g:vscode')
         nnoremap <Tab>y gg"*yG`'zz
         nnoremap <Tab>Y vG"*y
         xnoremap Y "*y:echo "Yank selection to clipboard"<Cr>
