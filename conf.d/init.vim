@@ -652,17 +652,11 @@ function! EnhancedSearch() range
     let @" = l:saved_reg
 endfunction
 xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
-" ------------------------
-" yankpast
-" ------------------------
-nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
-xnoremap zp "_c<ESC>p"
-xnoremap zP "_c<ESC>P"
 " ------------------------------------
-" clipboard yank
+" clipboard
 " ------------------------------------
 if has('clipboard')
-    if WINDOWS() || MACOS
+    if WINDOWS() || MACOS()
         set clipboard=unnamed
     elseif !has('nvim')
         set clipboard=unnamed
@@ -673,6 +667,9 @@ if has('clipboard')
 else
     xnoremap Y y
 endif
+" ------------------------
+" special yank
+" ------------------------
 function! s:yank_border(...) abort
     if a:0
         let yankmode = a:1
@@ -680,17 +677,14 @@ function! s:yank_border(...) abort
         let yankmode = 0
     endif
     let original_cursor_position = getpos('.')
-    if &clipboard =~ 'unnamed'
+    if &clipboard =~ 'unnamed' || has('nvim')
         let yank = '"*y'
         let tclip = 'to system clipboard.'
     else
         let yank = 'y'
         let tclip = 'to internal clipboard.'
     endif
-    if yankmode == 5
-        let action = 'V'
-        let target = 'line'
-    elseif yankmode == 4
+    if yankmode == 4
         let action = 'vgg0o'
         let target = 'from file beginning'
     elseif yankmode == 3
@@ -715,14 +709,20 @@ command! YankToLineEnd call s:yank_border(1)
 command! YankFromLineBegin call s:yank_border(2)
 command! YankToFileEnd call s:yank_border(3)
 command! YankFromFileBegin call s:yank_border(4)
-command! YankLine call s:yank_border(5)
 nnoremap <silent>gY        :YankWord<Cr>
 nnoremap <silent>Y         :YankToLineEnd<Cr>
 nnoremap <silent><leader>Y :YankFromLineBegin<Cr>
 nnoremap <silent><Tab>Y    :YankToFileEnd<Cr>
 nnoremap <silent><Tab>y    :YankFromFileBegin<Cr>
-nnoremap <silent>yy        :YankLine<Cr>
+" ------------------------
+" special paste
+" ------------------------
+nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+xnoremap zp "_c<ESC>p"
+xnoremap zP "_c<ESC>P"
+" -------------------------------
 " clipboard from remote to local
+" -------------------------------
 if exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)
         if filewritable('/dev/fd/2')
