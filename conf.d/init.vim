@@ -653,7 +653,7 @@ function! EnhancedSearch() range
 endfunction
 xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------
-" yankpost
+" yankpast
 " ------------------------
 nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
@@ -662,35 +662,31 @@ xnoremap zP "_c<ESC>P"
 " clipboard yank
 " ------------------------------------
 if has('clipboard')
-    try
-        set clipboard+=unnamedplus
-    catch /.*/
+    if exists('g:vscode') || !has('nvim')
         try
             set clipboard+=unnamedplus
         catch /.*/
-            " pass
+            try
+                set clipboard+=unnamed
+            catch /.*/
+                " pass
+            endtry
         endtry
-    endtry
-    if UNIX()
-        if !exists('g:vscode')
-            nnoremap <Tab>y gg"+yG`'zz
-            nnoremap <Tab>Y vG"+y
-        endif
+    endif
+    if &clipboard =~ 'plus' || has('nvim-0.10') && UNIX()
+        nnoremap <Tab>y gg"+yG`'zz
+        nnoremap <Tab>Y vG"+y
         xnoremap Y "+y:echo "Yank selection to clipboard"<Cr>
         nnoremap yy "+yy:echo "Yank line to clipboard"<Cr>
-    else
-        if !exists('g:vscode')
-            nnoremap <Tab>y gg"*yG`'zz
-            nnoremap <Tab>Y vG"*y
-        endif
+    elseif has('nvim') && UNIX() || WINDOWS()
+        nnoremap <Tab>y gg"*yG`'zz
+        nnoremap <Tab>Y vG"*y
         xnoremap Y "*y:echo "Yank selection to clipboard"<Cr>
         nnoremap yy "*yy:echo "Yank line to clipboard"<Cr>
     endif
 else
-    if !exists('g:vscode')
-        nnoremap <Tab>y ggyG`'zz
-        nnoremap <Tab>Y vGy
-    endif
+    nnoremap <Tab>y ggyG`'zz
+    nnoremap <Tab>Y vGy
     xnoremap Y y
 endif
 function! s:yank_border(...) abort
@@ -741,12 +737,10 @@ function! s:yank_border(...) abort
     endif
     call setpos('.', original_cursor_position)
 endfunction
-if !exists('g:vscode')
-    command! YankFromBegin call s:yank_border(0)
-    nnoremap <silent><leader>Y :YankFromBegin<Cr>
-endif
+command! YankFromBegin call s:yank_border(0)
 command! YankToEnd call s:yank_border(1)
 command! YankWord call s:yank_border(2)
+nnoremap <silent><leader>Y :YankFromBegin<Cr>
 nnoremap <silent>Y :YankToEnd<Cr>
 nnoremap <silent>gY :YankWord<Cr>
 " clipboard from remote to local
