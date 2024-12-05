@@ -669,6 +669,9 @@ if has('clipboard')
     elseif exists('g:vscode')
         set clipboard=unnamed,unnamedplus
     endif
+    xnoremap Y "*y:echo 'Yank selection to system clipboard'<Cr>
+else
+    xnoremap Y y
 endif
 function! s:yank_border(...) abort
     if a:0
