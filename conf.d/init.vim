@@ -743,12 +743,12 @@ function! s:yank_border(...) abort
 endfunction
 if !exists('g:vscode')
     command! YankFromBegin call s:yank_border(0)
-    nnoremap <silent>,Y :YankFromBegin<Cr>
+    nnoremap <silent><leader>Y :YankFromBegin<Cr>
 endif
 command! YankToEnd call s:yank_border(1)
 command! YankWord call s:yank_border(2)
 nnoremap <silent>Y :YankToEnd<Cr>
-nnoremap <silent><leader>Y :YankWord<Cr>
+nnoremap <silent>gY :YankWord<Cr>
 " clipboard from remote to local
 if exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)
