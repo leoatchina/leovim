@@ -16,11 +16,13 @@ nnoremap <M-k>h :AddBangHeader<Cr>
 if Planned('codeium.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
-    imap <silent><nowait><script><expr><M-i> codeium#Accept()
-    imap <silent><nowait><script><expr><M-.> codeium#Complete()
-    imap <silent><nowait><script><expr><M-/> codeium#Clear()
-    imap <silent><nowait><script><expr><M-;> codeium#CycleCompletions(1)
-    imap <silent><nowait><script><expr><M-,> codeium#CycleCompletions(-1)
+    imap <script><silent><nowait><expr> <M-i> codeium#Accept()
+    imap <script><silent><nowait><expr> <M-}> codeium#AcceptNextWord()
+    imap <script><silent><nowait><expr> <M-{> codeium#AcceptNextLine()
+    imap <silent><script><nowait><expr> <M-/> codeium#Clear()
+    imap <M-.> <Plug>(codeium-complete)
+    imap <M-;> <Plug>(codeium-next)
+    imap <M-,> <Plug>(codeium-previous)
     let g:ai_complete_engine = 'codeium'
 elseif Planned('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
