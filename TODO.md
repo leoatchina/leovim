@@ -99,6 +99,8 @@
 - [x] yank from file begin to current cursor postion
 - [x] config gopls in cmp || coc
 - [x] nvim-dap run to cursor 
+- [ ] drop.nvim
+- [ ] zeliji
 - [ ] vim-funky only for current buffer
 - [ ] quit all bug
 - [ ] merge <M-m> into <M-d> map in debug mode

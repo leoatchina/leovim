@@ -1,8 +1,7 @@
 if g:node_version > 16
+    let g:ensure_installed = ['vimls', 'lua_ls']
     if executable('unzip')
-        let g:ensure_installed = ['vimls', 'lua_ls', 'vale_ls']
-    else
-        let g:ensure_installed = ['vimls', 'lua_ls']
+        let g:ensure_installed += ['vale_ls']
     endif
 else
     let g:ensure_installed = []
