@@ -201,7 +201,7 @@ if Planned('vim-go')
         let g:go_code_completion_enabled = 0
     else
         let g:go_doc_keywordprg_enabled = 1
-        let g:go_doc_keywordprg_enabled = 1
+        let g:go_code_completion_enabled = 1
     endif
 endif
 " ------------------------------
