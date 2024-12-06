@@ -656,16 +656,14 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 if has('clipboard')
-    if WINDOWS() || MACOS()
-        set clipboard=unnamed
-    elseif !has('nvim')
-        set clipboard=unnamed
-    elseif exists('g:vscode')
+    if exists('g:vscode')
         set clipboard=unnamed,unnamedplus
+    elseif WINDOWS() || MACOS() || !has('nvim')
+        set clipboard=unnamed
     endif
-    xnoremap Y "*y:echo 'Yank selection to system clipboard'<Cr>
+    xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
 else
-    xnoremap Y y
+    xnoremap Y y:echo 'Yank selection to internal register.'<Cr>
 endif
 " ------------------------
 " special yank
@@ -682,7 +680,7 @@ function! s:yank_border(...) abort
         let tclip = 'to system clipboard.'
     else
         let yank = 'y'
-        let tclip = 'to internal clipboard.'
+        let tclip = 'to internal register.'
     endif
     if yankmode == 5
         let action = '0v$'
@@ -704,8 +702,8 @@ function! s:yank_border(...) abort
         let target = 'word'
     endif
     exec 'normal! ' . action . yank
-    echo 'Yank ' . target . ' ' . tclip
     call setpos('.', original_cursor_position)
+    echo 'Yank ' . target . ' ' . tclip
 endfunction
 command! YankWord call s:yank_border(0)
 command! YankToLineEnd call s:yank_border(1)
