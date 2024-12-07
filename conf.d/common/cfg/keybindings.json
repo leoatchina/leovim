@@ -455,41 +455,6 @@
     "key": "ctrl+alt+meta+n",
     "command": "-welcome.showNewFileEntries"
   },
-  //----------- Cancel chat --------------------
-  //copilot
-  {
-    "key": "alt+backspace",
-    "command": "-workbench.action.chat.cancel"
-  },
-  {
-    "key": "ctrl+backspace",
-    "command": "workbench.action.chat.cancel",
-    "when": "chatIsEnabled"
-  },
-  // windsurf
-  {
-    "key": "ctrl+backspace",
-    "command": "windsurf.command.reject",
-    "when": "editorTextFocus && windsurf.canAcceptOrRejectCommand && !editorHasSelection"
-  },
-  // cursor
-  {
-    "key": "ctrl+backspace",
-    "command": "aichat.cancelchat",
-    "when": "activeAIChatEditor || view == 'workbench.panel.aichat.view' && (arbitrary function)"
-  },
-  // tongyi
-  {
-    "key": "ctrl+backspace",
-    "command": "tongyi.command.abort.generateCommitMessage",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  // codeium
-  {
-    "key": "ctrl+backspace",
-    "command": "codeium.cancelCodeiumCommand",
-    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
-  },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
   {
@@ -500,10 +465,10 @@
     "key": "ctrl+shift+\\",
     "command": "workbench.panel.aichat.view.focus"
   },
-  //----------------------- vscode positron ----------------------
+  //---------------------- vscode positron --------------
   //tongyi
   {
-    "key": "ctrl+\\",
+    "key": "ctrl+`",
     "command": "tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
   },
