@@ -186,6 +186,17 @@
     "command": "-references-view.findReferences",
     "when": "editorHasReferenceProvider"
   },
+  // comment
+  {
+    "key": "ctrl+shift+oem_2",
+    "command": "editor.action.blockComment",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+alt+a",
+    "command": "-editor.action.blockComment",
+    "when": "editorTextFocus && !editorReadonly"
+  },
   // insert mode up/down
   {
     "key": "ctrl+n",
@@ -487,7 +498,37 @@
     "command": "cline.openInNewTab"
   },
   //continue ai
+  {
+    "key": "shift+alt+a",
+    "command": "continue.applyCodeFromChat"
+  },
+  {
+    "key": "alt+a",
+    "command": "-continue.applyCodeFromChat"
+  },
   //codeium
+  {
+    "key": "ctrl+i",
+    "command": "-codeium.openCodeiumCommand"
+  },
+  {
+    "key": "ctrl+shift+a",
+    "command": "-codeium.openChatView"
+  },
+  {
+    "key": "ctrl+alt+a",
+    "command": "-codeium.openChatView"
+  },
+  {
+    "key": "alt+a",
+    "command": "-codeium.diffActionAccept",
+    "when": "editorTextFocus && !inlineSuggestionsVisible"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "-codeium.openCodeiumCommand",
+    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
+  },
   {
     "key": "ctrl+'",
     "command": "codeium.openChatView"
@@ -503,21 +544,9 @@
     "when": "codeium.commandEnabled && editorTextFocus"
   },
   {
-    "key": "ctrl+i",
-    "command": "-codeium.openCodeiumCommand"
-  },
-  {
-    "key": "ctrl+shift+a",
-    "command": "-codeium.openChatView"
-  },
-  {
-    "key": "ctrl+alt+a",
-    "command": "-codeium.openChatView"
-  },
-  {
-    "key": "ctrl+shift+i",
-    "command": "-codeium.openCodeiumCommand",
-    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
+    "key": "alt+oem_7",
+    "command": "codeium.diffActionAccept",
+    "when": "editorTextFocus && !inlineSuggestionsVisible"
   },
   //-------------------------- last, open keybindings ---------------------------
   {
