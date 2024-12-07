@@ -295,7 +295,7 @@ function! SetScheme(scheme, ...) abort
         try
             execute('colorscheme '. defaultscheme)
         catch
-            colorscheme wildcharm
+            colorscheme slate
         endtry
     endtry
 endfunction
