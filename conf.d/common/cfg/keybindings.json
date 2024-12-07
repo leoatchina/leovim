@@ -435,7 +435,7 @@
   },
   // reload current file
   {
-    "key": "ctrl+shift+alt+oem_7",
+    "key": "ctrl+shift+alt+e",
     "command": "multiCommand.reloadFile"
   },
   // transparency or glassit
@@ -531,7 +531,7 @@
   {
     "key": "alt+a",
     "command": "-codeium.diffActionAccept",
-    "when": "editorTextFocus && !inlineSuggestionsVisible"
+    "when": "editolTextFocus && !inlineSuggestionsVisible"
   },
   {
     "key": "ctrl+shift+i",
