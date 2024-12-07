@@ -415,7 +415,7 @@
   },
   // reload current file
   {
-    "key": "ctrl+shift+alt+l",
+    "key": "ctrl+shift+alt+'",
     "command": "multiCommand.reloadFile"
   },
   // transparency or glassit
@@ -477,84 +477,47 @@
     "command": "-tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
   },
+  // cline
+  {
+    "key": "ctrl+\\",
+    "command": "claude-dev.SidebarProvider.focus"
+  },
+  {
+    "key": "ctrl+shift+alt+\\",
+    "command": "cline.openInNewTab"
+  },
+  //continue ai
   //codeium
   {
     "key": "ctrl+'",
     "command": "codeium.openChatView"
   },
   {
-    "key": "shift+alt+'",
-    "command": "codeium.openChatInPanel"
-  },
-  {
-    "key": "ctrl+shift+l",
+    "key": "ctrl+shift+'",
     "command": "codeium.openCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
   },
   {
-    "key": "ctrl+i",
-    "command": "-codeium.openCodeiumCommand",
-    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
-  },
-  {
-    "key": "alt+c",
-    "command": "-codeium.cancelCodeiumCommand",
+    "key": "ctrl+alt+'",
+    "command": "codeium.openChatInPane",
     "when": "codeium.commandEnabled && editorTextFocus"
   },
   {
+    "key": "ctrl+i",
+    "command": "-codeium.openCodeiumCommand"
+  },
+  {
     "key": "ctrl+shift+a",
-    "command": "-codeium.openChatView",
-    "when": "true"
+    "command": "-codeium.openChatView"
   },
   {
     "key": "ctrl+alt+a",
-    "command": "-codeium.openChatView",
-    "when": "false"
+    "command": "-codeium.openChatView"
   },
   {
     "key": "ctrl+shift+i",
     "command": "-codeium.openCodeiumCommand",
     "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
-  },
-  //continue ai
-  {
-    "key": "ctrl+shift+l",
-    "command": "-continue.focusContinueInputWithoutClear"
-  },
-  {
-    "key": "ctrl+shift+'",
-    "command": "continue.continueGUIView.focus"
-  },
-  //cline ai
-  {
-    "key": "ctrl+alt+'",
-    "command": "cline.openInNewTab"
-  },
-  {
-    "key": "ctrl+shift+alt+'",
-    "command": "claude-dev.SidebarProvider.focus"
-  },
-  //Ai toolkit
-  {
-    "key": "ctrl+shift+alt+\\",
-    "command": "aiToolkitTools.focus"
-  },
-  //------------------------------ split -------------------------------------
-  {
-    "key": "ctrl+\\",
-    "command": "-workbench.action.splitEditor"
-  },
-  {
-    "key": "ctrl+k ctrl+\\",
-    "command": "-workbench.action.splitEditorDown"
-  },
-  {
-    "key": "ctrl+alt+s",
-    "command": "workbench.action.splitEditorDown"
-  },
-  {
-    "key": "shift+alt+s",
-    "command": "workbench.action.splitEditor"
   },
   //-------------------------- last, open keybindings ---------------------------
   {
