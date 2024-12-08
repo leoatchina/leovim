@@ -515,6 +515,10 @@
     "key": "alt+a",
     "command": "-continue.applyCodeFromChat"
   },
+  {
+    "key": "ctrl+alt+l",
+    "command": "continue.viewHistory"
+  },
   //codeium
   {
     "key": "ctrl+i",
