@@ -17,8 +17,11 @@
       "console": "integratedTerminal",
       "python": "~/miniconda3/bin/python3",
       "cwd": "${fileDirname}",
-      "module": "",
-      "args": []
+      "module": "scrapy",
+      "args": [
+        "crawl",
+        "test"
+      ]
     }
   }
 }
