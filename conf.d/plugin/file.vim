@@ -92,13 +92,13 @@ else
 endif
 if PrefFzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
-    nnoremap <silent><nowait><leader>fg :FzfGitFiles<Cr>
+    nnoremap <silent><nowait><leader>p  :FzfGitFiles<Cr>
 elseif PlannedLeaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
-    nnoremap <silent><nowait><leader>fg :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
-    nnoremap <silent><nowait><leader>fg :CtrlP <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
 endif
 nnoremap <leader><Cr> :e!<Cr>
 nnoremap <leader>E :e<Space>
