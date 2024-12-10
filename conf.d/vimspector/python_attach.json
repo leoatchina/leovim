@@ -1,9 +1,7 @@
 {
   "python-attach": {
     "adapter": "debugpy",
-    "filetypes": [
-      "python"
-    ],
+    "filetypes": [ "python" ],
     "breakpoints": {
       "exception": {
         "raised": "",

@@ -92,24 +92,24 @@ else
 endif
 if PrefFzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
-    nnoremap <silent><nowait><leader>fg :FzfGitFiles<Cr>
+    nnoremap <silent><nowait><leader>p  :FzfGitFiles<Cr>
 elseif PlannedLeaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
-    nnoremap <silent><nowait><leader>fg :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
-    nnoremap <silent><nowait><leader>fg :CtrlP <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
 endif
 nnoremap <leader><Cr> :e!<Cr>
 nnoremap <leader>E :e<Space>
 " ---------------------------------
 " file browser
 " ---------------------------------
-if has('patch-8.2.5136') || has('nvim')
+if v:version >= 802 || has('nvim')
     source $CFG_DIR/fern.vim
 endif
 if Installed('vim-floaterm')
-    function! s:floaterm(prg)
+    function! s:floaterm_float(prg)
         let prg = a:prg
         if g:has_popup_floating
             execute printf("FloatermNew --title=%s --titleposition=right --wintype=float --position=center --width=0.9 --height=0.9 %s", prg, prg)
@@ -129,10 +129,10 @@ if has('nvim') && PlannedCoc()
     command! CocFile call s:coc_file()
     nnoremap <silent><nowait><leader>e :CocFile<Cr>
 elseif executable('yazi') && g:has_popup_floating && (UNIX() || WINDOWS() && has('nvim'))
-    command! FloatermYazi call s:floaterm('yazi')
+    command! FloatermYazi call s:floaterm_float('yazi')
     nnoremap <silent><nowait><leader>e :FloatermYazi<Cr>
 elseif executable('ranger') && g:has_popup_floating
-    command! FloatermRanger call s:floaterm('ranger')
+    command! FloatermRanger call s:floaterm_float('ranger')
     nnoremap <silent><nowait><leader>e :FloatermRanger<Cr>
 elseif Installed('vim-fern')
     nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
