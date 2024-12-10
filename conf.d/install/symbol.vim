@@ -19,10 +19,12 @@ if g:complete_engine == 'cmp'
 elseif g:complete_engine == 'coc'
     call s:add_symbol('coc')
     call s:add_symbol('vista')
-elseif v:version >= 800 && get(g:, 'ctags_type', '') =~ 'Universal'
-    call s:add_symbol('vista')
-elseif get(g:, 'ctags_type', '') != ''
-    call s:add_symbol('tagbar')
+elseif g:complete_engine == 'mcm'
+    if v:version >= 800 && get(g:, 'ctags_type', '') =~ 'Universal'
+        call s:add_symbol('vista')
+    elseif get(g:, 'ctags_type', '') != ''
+        call s:add_symbol('tagbar')
+    endif
 endif
 " ------------------------------
 " tags
@@ -38,7 +40,7 @@ if get(g:, 'ctags_type', '') != ''
     else
         call s:add_symbol("ctrlptags")
     endif
-    if v:version >= 800
+    if v:version >= 800 && g:complete_engine != 'apm'
         call s:add_symbol("gutentags")
         if get(g:, 'gtags_version', 0) > 6.0606
             if executable('gtags-cscope') && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
