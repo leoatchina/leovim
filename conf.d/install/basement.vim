@@ -268,16 +268,6 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
     endif
 endif
 " ------------------------------
-" Git
-" ------------------------------
-if executable('git') && v:version >= 800 && g:git_version >= 1.85
-    PlugAdd 'tpope/vim-fugitive'
-    PlugAdd 'junegunn/gv.vim'
-    if g:has_popup_floating && UNIX() && (!Planned('leaderf') || !has('nvim') && !has('patch-9.0.200'))
-        PlugAdd 'APZelos/blamer.nvim'
-    endif
-endif
-" ------------------------------
 " pairs
 " ------------------------------
 if g:complete_engine == 'cmp'
@@ -298,10 +288,8 @@ if exists('*systemlist') && has('patch-7.4.1304')
         PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
     endif
 endif
-if has('nvim') || has('patch-7.4.1126')
-    if g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
-        PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
-    endif
+if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
+    PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
 if has('nvim')
     PlugAdd 'kevinhwang91/nvim-bqf'
@@ -309,6 +297,16 @@ if has('nvim')
     PlugAdd 'stevearc/dressing.nvim'
 endif
 " ------------------------------
-" format tools
+" Git
 " ------------------------------
+if executable('git') && v:version >= 800 && g:git_version >= 1.85
+    PlugAdd 'tpope/vim-fugitive'
+    PlugAdd 'junegunn/gv.vim'
+    if g:has_popup_floating && UNIX() && (!Planned('leaderf') || !has('nvim') && !has('patch-9.0.200'))
+        PlugAdd 'APZelos/blamer.nvim'
+    endif
+endif
+" -----------------------
+" format
+" -----------------------
 PlugAdd 'sbdchd/neoformat'
