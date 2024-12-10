@@ -309,7 +309,9 @@ function! UpdateLightline() abort
         let g:lightline.colorscheme = 'molokai'
     elseif colors_name == 'hybrid'
         let g:lightline.colorscheme = 'nord'
-    elseif colors_name =~ 'gruvbox'
+    elseif colors_name == 'gruvbox-material'
+        let g:lightline.colorscheme = 'gruvbox_material'
+    elseif colors_name == 'gruvbox'
         let g:lightline.colorscheme = 'gruvboxdark'
     elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name =~ 'fox'
         let g:lightline.colorscheme = g:colors_name
@@ -322,7 +324,6 @@ function! UpdateLightline() abort
     endif
     call lightline#init()
     call lightline#colorscheme()
-    call lightline#update()
 endfunction
 augroup UpdateLightline
     autocmd!
@@ -332,7 +333,7 @@ augroup UpdateLightline
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
 augroup END
-nnoremap <silent><C-l> <C-l>:call lightline#update()<Cr>
+nnoremap <silent><C-l> :redraw \| call lightline#update()<Cr>
 " --------------------------
 " schemes need truecolor
 " --------------------------
