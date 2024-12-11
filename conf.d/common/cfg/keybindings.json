@@ -122,7 +122,7 @@
     "command": "workbench.action.closeActiveEditor"
   },
   {
-    "key": "ctrl+shift+alt+e",
+    "key": "ctrl+shift+alt+q",
     "command": "workbench.action.reopenClosedEditor"
   },
   {
@@ -426,7 +426,7 @@
   },
   // reload current file
   {
-    "key": "ctrl+shift+alt+'",
+    "key": "ctrl+shift+alt+e",
     "command": "multiCommand.reloadFile"
   },
   // transparency or glassit
