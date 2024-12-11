@@ -126,6 +126,15 @@
     "command": "workbench.action.reopenClosedEditor"
   },
   {
+    "key": "ctrl+k e",
+    "command": "-workbench.files.action.focusOpenEditorsView",
+    "when": "workbench.explorer.openEditorsView.active"
+  },
+  {
+    "key": "ctrl+shift+alt+v",
+    "command": "workbench.action.openView"
+  },
+  {
     "key": "shift+alt+w",
     "command": "workbench.action.closeEditorsInGroup"
   },
@@ -231,12 +240,12 @@
   },
   // focus on editor && split cell
   {
-    "key": "shift+alt+f",
+    "key": "ctrl+shift+alt+l",
     "command": "workbench.action.focusPanel",
     "when": "editorFoucs"
   },
   {
-    "key": "shift+alt+f",
+    "key": "ctrl+shift+alt+l",
     "command": "workbench.action.focusActiveEditorGroup",
     "when": "!editorFoucs"
   },
@@ -506,6 +515,10 @@
     "key": "alt+a",
     "command": "-continue.applyCodeFromChat"
   },
+  {
+    "key": "ctrl+alt+l",
+    "command": "continue.viewHistory"
+  },
   //codeium
   {
     "key": "ctrl+i",
@@ -522,7 +535,7 @@
   {
     "key": "alt+a",
     "command": "-codeium.diffActionAccept",
-    "when": "editorTextFocus && !inlineSuggestionsVisible"
+    "when": "editolTextFocus && !inlineSuggestionsVisible"
   },
   {
     "key": "ctrl+shift+i",
@@ -560,5 +573,9 @@
   {
     "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
+  },
+  {
+    "key": "ctrl+shift+alt+oem_7",
+    "command": "codeium.openAutocompleteCommandPalette"
   }
 ]
