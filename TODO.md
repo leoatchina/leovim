@@ -99,6 +99,7 @@
 - [x] yank from file begin to current cursor postion
 - [x] config gopls in cmp || coc
 - [x] nvim-dap run to cursor
+- [ ] delance.nvim
 - [ ] codecompanion.nvim
 - [ ] drop.nvim
 - [ ] quit all bug
