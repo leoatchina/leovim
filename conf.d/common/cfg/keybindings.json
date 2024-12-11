@@ -519,48 +519,6 @@
     "key": "ctrl+alt+l",
     "command": "continue.viewHistory"
   },
-  //codeium
-  {
-    "key": "ctrl+i",
-    "command": "-codeium.openCodeiumCommand"
-  },
-  {
-    "key": "ctrl+shift+a",
-    "command": "-codeium.openChatView"
-  },
-  {
-    "key": "ctrl+alt+a",
-    "command": "-codeium.openChatView"
-  },
-  {
-    "key": "alt+a",
-    "command": "-codeium.diffActionAccept",
-    "when": "editolTextFocus && !inlineSuggestionsVisible"
-  },
-  {
-    "key": "ctrl+shift+i",
-    "command": "-codeium.openCodeiumCommand",
-    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
-  },
-  {
-    "key": "ctrl+'",
-    "command": "codeium.openChatView"
-  },
-  {
-    "key": "ctrl+shift+'",
-    "command": "codeium.openCodeiumCommand",
-    "when": "codeium.commandEnabled && editorTextFocus && !inlineSuggestionsVisible"
-  },
-  {
-    "key": "ctrl+alt+'",
-    "command": "codeium.openChatInPane",
-    "when": "codeium.commandEnabled && editorTextFocus"
-  },
-  {
-    "key": "alt+oem_7",
-    "command": "codeium.diffActionAccept",
-    "when": "editorTextFocus && !inlineSuggestionsVisible"
-  },
   //-------------------------- last, open keybindings ---------------------------
   {
     "key": "ctrl+k ctrl+s",
