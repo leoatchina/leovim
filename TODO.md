@@ -98,15 +98,15 @@
 - [x] search using 3 different entries: <leader>/, <c-f>, s
 - [x] yank from file begin to current cursor postion
 - [x] config gopls in cmp || coc
-- [x] nvim-dap run to cursor 
+- [x] nvim-dap run to cursor
+- [ ] codecompanion.nvim
 - [ ] drop.nvim
-- [ ] zeliji
-- [ ] vim-funky only for current buffer
 - [ ] quit all bug
 - [ ] merge <M-m> into <M-d> map in debug mode
 - [ ] vista_markdown bug
 - [ ] rewrite fzf-project
 - [ ] floaterm drop command, ref vim-terminal-help
+- [ ] blink
 ## MyPlugins:
 - [x] fzf-registers
 - [ ] vim-funky
@@ -116,6 +116,7 @@
   - [x] jump to another window bug
   - [x] ~~FunkyAll not show buffer modified bug~~, actually should do w! before funky functions
   - [x] ~~ctrlp intergrated~~, using funky#qf#show() instead
+  - [ ] only for current buffer
   - [ ] README
   - [ ] deploy to github
 - [ ] REPLFloaterm updates.
@@ -131,6 +132,8 @@
   - [ ] README
   - [ ] deploy to github
 ## Plenty of works
+- [ ] zeliji
+- [ ] zedai
 - [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
