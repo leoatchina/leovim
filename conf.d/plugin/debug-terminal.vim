@@ -414,6 +414,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-m>w <cmd>lua require("dapui").float_element('watches')<Cr>
     nnoremap <silent><M-m>t <cmd>lua require("dapui").float_element('stacks')<Cr>
     nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
+    nnoremap <silent><M-m>r <cmd>lua require("dapui").float_element('repl')<Cr>
     function! GoToDAPWindows(name) abort
         try
             let windowNr = bufwinnr(a:name)
