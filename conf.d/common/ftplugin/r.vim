@@ -81,7 +81,7 @@ if Installed('nvim-r')
     nnoremap <buffer><M-R>  :call StartR('R')<Cr>
     nnoremap <buffer><Tab>q :call RQuit('nosave')<Cr>
     nnoremap <buffer><Tab>Q :call RQuit('save')<Cr>
-else
+elseif !exists('g:vscode')
     nnoremap <buffer><M-R> :echo "Please install Nvim-R to run StartR()."<Cr>
     nnoremap <buffer><M-B> :echo "Please install Nvim-R to browser Envs."<Cr>
     nnoremap <buffer><M-M> :echo "Please install Nvim-R to toggle Envs."<Cr>
