@@ -2,7 +2,7 @@ local M = {}
 local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
-local lsp_capabilities = require("lsp-selection-range").update_capabilities({})
+local lsp_capabilities = require("lsp-selection-range").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 -----------------
 -- neoconf
 -----------------
@@ -67,7 +67,7 @@ require('symbol-usage').setup({
 local lspconfig = require("lspconfig")
 local default_setup = function(server)
   lspconfig[server].setup({
-    capabilities = lsp_capabilities,
+    capabilities = lsp_capabilities
   })
 end
 require("mason-lspconfig").setup({
@@ -120,7 +120,7 @@ require("mason-lspconfig").setup({
       })
     end,
     pyright = function()
-      if vim.fn.executable('delance-langserver') then
+      if vim.fn.executable('delance-langserver') and vim.fn.Require('delance') then
         lspconfig.pyright.setup {
           cmd = { "delance-langserver", "--stdio" },
           capabilities = lsp_capabilities,
@@ -152,7 +152,9 @@ require("mason-lspconfig").setup({
           },
         }
       else
-        lspconfig.pyright.setup()
+        lspconfig.pyright.setup({
+          capabilities = lsp_capabilities,
+        })
       end
     end
   }
