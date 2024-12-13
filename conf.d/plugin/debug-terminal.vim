@@ -10,10 +10,10 @@ function! s:diag_or_errmsg(diagnostic)
         elseif InstalledNvimLsp()
             lua vim.diagnostic.open_float()
         else
-            call preview#errmsg('Please select lines to merge!')
+            call preview#errmsg('Please select lines to merge!') | sleep 2
         endif
     else
-        call preview#errmsg('Please select lines to merge!')
+        call preview#errmsg('Please select lines to merge!') | sleep 2
     endif
 endfunction
 function! s:j(line1, line2, diagnostic) range abort
@@ -406,6 +406,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-d>o <cmd>lua require"dap".step_out()<Cr>
     nnoremap <silent><M-d>p <cmd>lua require"dap".pause()<Cr>
     nnoremap <silent><M-d>q <cmd>lua DapReset()<Cr>
+    nnoremap <silent><F1> <cmd>DapVirtualTextToggle<Cr>
     nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
     nnoremap <silent><F4> <cmd>lua DapRunToCusor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
@@ -475,6 +476,8 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
                 lua require("dapui").float_element('console')
             elseif a:type == "element"
                 lua require("dapui").float_element()
+            elseif a:type == "repl"
+                lua require("dap").repl.toggle()
             else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
@@ -483,15 +486,20 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
             FloatermToggle
         elseif a:type == "element"
             FloatermSpecial
+        else
+            call preview#errmsg('Please start dap session.') | sleep 2
         endif
     endfunction
     command! DapUIEval call s:dap_or_floaterm("eval")
     command! FocusCode call s:dap_or_floaterm("focus")
     command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
     command! FloatElementOrFloatermSpecial call s:dap_or_floaterm("element")
+    command! DapReplToggle call s:dap_or_floaterm("repl")
     " variables view
     nnoremap <silent>J :DapUIEval<Cr>
     nnoremap <silent>- :lua require("dap.ui.widgets").preview()<Cr>
+    " repl toggle
+    nnoremap <silent>+ <Cmd>DapReplToggle<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>

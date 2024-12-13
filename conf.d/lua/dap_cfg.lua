@@ -35,7 +35,6 @@ local layouts = {
   },
   {
     elements = {
-      { id = "repl",    size = 1 },
       { id = "scopes",  size = 0.5 },
       { id = "watches", size = 0.3 },
       { id = "stacks",  size = 0.2 },
@@ -121,10 +120,6 @@ if Installed('nvim-dap-virtual-text') then
     virt_lines = true,
     commented = true
   })
-  vim.keymap.set({"n", "x"}, "<F1>",
-    [[<Cmd>DapVirtualTextToggle<Cr>]],
-    { noremap = true, silent = true }
-  )
 end
 -------------------------------------
 -- load dap_json, modified from dap.ext.vscode.lauchjs
