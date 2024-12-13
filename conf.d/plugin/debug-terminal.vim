@@ -239,7 +239,6 @@ if Planned('vimspector')
     nmap <silent><M-d>p <Plug>VimspectorPause
     nmap <silent><M-d>q :call vimspector#Reset()<Cr>
     nmap <silent><M-d>r :call vimspector#Launch()<Cr>
-    nmap <silent><F1> <Plug>VimspectorDisassemble
     nmap <silent><F3> :VimspectorReset<Cr>
     nmap <silent><F4> <Plug>VimspectorRunToCursor
     nmap <silent><F5> <Plug>VimspectorContinue
@@ -370,6 +369,8 @@ if Planned('vimspector')
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
+    " VimspectorDisassemble
+    nmap <silent><F1> <Plug>VimspectorDisassemble
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
     lua require("dap_cfg")
@@ -406,7 +407,6 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-d>o <cmd>lua require"dap".step_out()<Cr>
     nnoremap <silent><M-d>p <cmd>lua require"dap".pause()<Cr>
     nnoremap <silent><M-d>q <cmd>lua DapReset()<Cr>
-    nnoremap <silent><F1> <cmd>DapVirtualTextToggle<Cr>
     nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
     nnoremap <silent><F4> <cmd>lua DapRunToCusor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
@@ -499,11 +499,13 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent>J :DapUIEval<Cr>
     nnoremap <silent>- :lua require("dap.ui.widgets").preview()<Cr>
     " repl toggle
-    nnoremap <silent>+ <Cmd>DapReplToggle<Cr>
+    nnoremap <silent>+ <cmd>DapVirtualTextToggle<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :FloatElementOrFloatermSpecial<Cr>
+    " DapReplToggle
+    nnoremap <silent><F1> <Cmd>DapReplToggle<Cr>
 elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     let g:debug_tool = 'termdebug'
     let g:termdebug_map_K = 1
