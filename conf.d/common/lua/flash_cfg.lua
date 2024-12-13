@@ -18,7 +18,8 @@ require("flash").setup({
       enabled = false
     },
     char = {
-      jump_labels = true
+      jump_labels = true,
+      keys = {'f', 'F', 't', 'T'},
     },
     treesitter = {
       labels = vim.g.EasyMotion_key

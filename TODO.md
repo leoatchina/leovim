@@ -101,7 +101,7 @@
 - [x] nvim-dap run to cursor
 - [x] delance.nvim
 - [ ] codecompanion.nvim
-- [ ] drop.nvim
+- [ ] dropbar.nvim
 - [ ] quit all bug
 - [ ] merge <M-m> into <M-d> map in debug mode
 - [ ] vista_markdown bug

@@ -449,6 +449,8 @@ PlugAddOpt 'nerdcommenter'
 " ------------------------
 " quick jump in buffer
 " ------------------------
+nnoremap ; <Nop>
+nnoremap , <Nop>
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim-0.8')
     PlugAddOpt 'flash.nvim'
@@ -458,11 +460,11 @@ if has('nvim-0.8')
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
-    nmap ; <Plug>(clever-f-repeat-forward)
-    xmap ; <Plug>(clever-f-repeat-forward)
-    nmap ,, <Plug>(clever-f-repeat-back)
-    xmap ,, <Plug>(clever-f-repeat-back)
     PlugAddOpt 'clever-f.vim'
+    nmap ;s<Plug>(clever-f-repeat-forward)
+    xmap ;s<Plug>(clever-f-repeat-forward)
+    nmap ,s <Plug>(clever-f-repeat-back)
+    xmap ,s <Plug>(clever-f-repeat-back)
     nmap SJ vt<Space>S
     nmap SK vT<Space>S
 endif
