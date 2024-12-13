@@ -1,4 +1,4 @@
-{
+745{
   "colors.enable": true,
   "codeLens.separator": "#",
   "[c][cpp][java][rust][typescript][javascript]": {
@@ -107,6 +107,7 @@
   "css.trace.server": "off",
   "java.trace.server": "off",
   "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.analysis.typeCheckingMode": "off",
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "lua.colors.enable": true,
