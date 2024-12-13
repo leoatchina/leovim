@@ -121,25 +121,9 @@ require("mason-lspconfig").setup({
     end,
     pyright = function()
       if vim.fn.executable('delance-langserver') then
-        local new_capability = {
-          -- this will remove some of the diagnostics that duplicates those from ruff, idea taken and adapted from
-          -- here: https://github.com/astral-sh/ruff-lsp/issues/384#issuecomment-1989619482
-          textDocument = {
-            publishDiagnostics = {
-              tagSupport = {
-                valueSet = { 2 }
-              }
-            },
-            hover = {
-              contentFormat = { "plaintext" },
-              dynamicRegistration = true,
-            },
-          }
-        }
-        local merged_capability = vim.tbl_deep_extend("force", lsp_capabilities, new_capability)
         lspconfig.pyright.setup {
           cmd = { "delance-langserver", "--stdio" },
-          capabilities = merged_capability,
+          capabilities = lsp_capabilities,
           settings = {
             pyright = {
               -- disable import sorting and use Ruff for this
