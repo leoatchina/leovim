@@ -3,17 +3,17 @@ set foldlevel=99
 set foldlevelstart=99
 " basic fold
 nmap <leader>za za
-nmap ,za zA
+nmap <Tab>za zA
 nmap <leader>zz zfi{
-nmap ,zz zfa{
+nmap <Tab>zz zfa{
 nmap <leader>zi zfii
-nmap ,zi zfai
+nmap <Tab>zi zfai
 nmap <leader>zc zfic
-nmap ,zc zfac
+nmap <Tab>zc zfac
 nmap <leader>zf zfif
-nmap ,zf zfaf
+nmap <Tab>zf zfaf
 nmap <leader>zb zfiB
-nmap ,zb zfaB
+nmap <Tab>zb zfaB
 " ufo
 if Installed('nvim-ufo')
     if Installed('nvim-treesitter') || AdvCompEngine()
