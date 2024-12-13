@@ -461,8 +461,8 @@ else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
     PlugAddOpt 'clever-f.vim'
-    nmap ;s<Plug>(clever-f-repeat-forward)
-    xmap ;s<Plug>(clever-f-repeat-forward)
+    nmap ;s <Plug>(clever-f-repeat-forward)
+    xmap ;s <Plug>(clever-f-repeat-forward)
     nmap ,s <Plug>(clever-f-repeat-back)
     xmap ,s <Plug>(clever-f-repeat-back)
     nmap SJ vt<Space>S
