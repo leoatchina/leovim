@@ -51,10 +51,10 @@ elseif Installed('coc.nvim')
         else
             nnoremap <silent><leader>D :CocFzfList diagnostics<CR>
         endif
-        nmap <silent>]d <Plug>(coc-diagnostic-next)
-        nmap <silent>[d <Plug>(coc-diagnostic-prev)
-        nmap <silent>]e <Plug>(coc-diagnostic-next-error)
-        nmap <silent>[e <Plug>(coc-diagnostic-prev-error)
+        nmap <silent>;d <Plug>(coc-diagnostic-next)
+        nmap <silent>,d <Plug>(coc-diagnostic-prev)
+        nmap <silent>;e <Plug>(coc-diagnostic-next-error)
+        nmap <silent>,e <Plug>(coc-diagnostic-prev-error)
         " config ignore
         call coc#config('python.linting.flake8Args', [
                     \ "--max-line-length=200",
@@ -133,8 +133,8 @@ if Planned('ale')
     nnoremap <silent><leader>d :ALELint<Cr>
     nnoremap <silent><leader>o :ALEToggle<Cr>
     nnoremap <silent><leader>O :ALECommands<Cr>
-    nmap ]d <Plug>(ale_next)
-    nmap [d <Plug>(ale_previous)
-    nmap ]e <Plug>(ale_next_error)
-    nmap [e <Plug>(ale_previous_error)
+    nmap ;d <Plug>(ale_next)
+    nmap ,d <Plug>(ale_previous)
+    nmap ;e <Plug>(ale_next_error)
+    nmap ,e <Plug>(ale_previous_error)
 endif

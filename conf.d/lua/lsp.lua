@@ -300,10 +300,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- vista
     map(nx, "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
     -- diagnostic error
-    map(nx, '[d', [[<Cmd>LspUI diagnostic prev<CR>]], opts_silent)
-    map(nx, ']d', [[<Cmd>LspUI diagnostic next<CR>]], opts_silent)
-    map(nx, '[e', [[<Cmd>LspUI diagnostic prev error<CR>]], opts_silent)
-    map(nx, ']e', [[<Cmd>LspUI diagnostic next error<CR>]], opts_silent)
+    map(nx, ';d', [[<Cmd>LspUI diagnostic next<CR>]], opts_silent)
+    map(nx, ',d', [[<Cmd>LspUI diagnostic prev<CR>]], opts_silent)
+    map(nx, ';e', [[<Cmd>LspUI diagnostic next error<CR>]], opts_silent)
+    map(nx, ',e', [[<Cmd>LspUI diagnostic prev error<CR>]], opts_silent)
     -- native lsp
     map('i', "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
     map(nx, "gl", vim.lsp.buf.outgoing_calls, opts_silent)

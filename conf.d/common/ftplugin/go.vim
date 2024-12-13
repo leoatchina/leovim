@@ -3,9 +3,6 @@ command! GoCommands call FzfCallCommands('GoCommands', 'Go')
 nnoremap <buffer><silent><M-M> :GoCommands<Cr>
 if Installed('vim-go')
     nnoremap <buffer><silent>gl :GoDefPop<Cr>
-    nnoremap <buffer><silent>,d :GoDeclsDir<Cr>
-    nnoremap <buffer><silent>,c :GoCoverage<Cr>
-    nnoremap <buffer><silent>,a :GoAlternate<Cr>
     nnoremap <buffer><silent><leader>A :GoImports<Cr>
     if !AdvCompEngine()
         nnoremap <buffer><silent><C-g> :GoDef<Cr>

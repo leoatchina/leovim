@@ -47,14 +47,14 @@ function! LightlineBufferlineFilter(buffer) abort
     return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# '' && getbufvar(a:buffer, '&filetype') !=# 'startify'
 endfunction
 let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
-nmap ]b <Plug>lightline#bufferline#go_next()
-nmap [b <Plug>lightline#bufferline#go_previous()
-nmap ]B <Plug>lightline#bufferline#go_next_category()
-nmap [B <Plug>lightline#bufferline#go_previous_category()
-nmap <Leader>]b <Plug>lightline#bufferline#move_next()
-nmap <Leader>[b <Plug>lightline#bufferline#move_previous()
-nmap <Leader>[B <Plug>lightline#bufferline#move_first()
-nmap <Leader>]B <Plug>lightline#bufferline#move_last()
+nmap ;b <Plug>lightline#bufferline#go_next()
+nmap ,b <Plug>lightline#bufferline#go_previous()
+nmap ;B <Plug>lightline#bufferline#go_next_category()
+nmap ,B <Plug>lightline#bufferline#go_previous_category()
+nmap ]b <Plug>lightline#bufferline#move_next()
+nmap [b <Plug>lightline#bufferline#move_previous()
+nmap [B <Plug>lightline#bufferline#move_first()
+nmap ]B <Plug>lightline#bufferline#move_last()
 PlugAddOpt 'lightline.vim'
 PlugAddOpt 'lightline-bufferline'
 " ------------------------

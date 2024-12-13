@@ -31,10 +31,12 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap <Tab> :WhichKey '<Tab>'<Cr>
     nnoremap <Space> :WhichKey ' '<Cr>
     nnoremap , :WhichKey ','<Cr>
+    nnoremap ; :WhichKey ';'<Cr>
     nnoremap \ :WhichKey '\'<Cr>
     nnoremap yo :WhichKey 'yo'<Cr>
     xnoremap <Space> :WhichKeyVisual ' '<Cr>
     xnoremap , :WhichKeyVisual ','<Cr>
+    xnoremap ; :WhichKeyVisual ';'<Cr>
     xnoremap \ :WhichKeyVisual '\'<Cr>
     " gmzs whichkey
     nnoremap g<Space> :WhichKey 'g'<Cr>
