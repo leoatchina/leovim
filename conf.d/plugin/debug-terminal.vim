@@ -339,6 +339,32 @@ if Planned('vimspector')
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
     nnoremap <silent>- :VimspectorWatch <C-r>=expand('<cword>')<Cr>
+    " watch Variable
+    function! s:watch() range
+        if s:vimspector_opened()
+            if visualmode() !=# ""
+                let [line_start, column_start] = getpos("'<")[1:2]
+                let [line_end, column_end] = getpos("'>")[1:2]
+                let l:lines = getline(line_start, line_end)
+                if len(l:lines) == 0
+                    return
+                endif
+                let l:lines[-1] = l:lines[-1][: column_end - 1]
+                let l:lines[0] = l:lines[0][column_start - 1:]
+                let l:selected_text = join(l:lines, "\n")
+            else
+                let l:selected_text = expand('<cword>')
+            endif
+            if l:selected_text
+                exec "VimspectorWatch " . l:selected_text
+            endif
+        else
+            call preview#errmsg("Please start vimspector session at first.")
+        endif
+    endfunction
+    command! -range WatchCword call s:watch()
+    vnoremap <silent>+ :WatchCword<CR>
+    nnoremap <silent>+ :WatchCword<CR>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
@@ -368,7 +394,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/dap/
     endif
     " core keymaps
-    nnoremap <silent>_ :lua DapLoadConfig()<Left>
+    nnoremap _ :lua DapLoadConfig()<Left>
     nnoremap <silent><M-d>, <cmd>lua DapBreakpointPrev()<Cr>
     nnoremap <silent><M-d>; <cmd>lua DapBreakpointNext()<Cr>
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
