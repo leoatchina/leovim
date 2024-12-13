@@ -8,7 +8,7 @@ if Planned('vim-signature')
                 \ 'PlaceNextMark'    : "m;",
                 \ 'PurgeMarksAtLine' : "m,",
                 \ 'PurgeMarks'       : "m<BS>",
-                \ 'PurgeMarkers'     : "m<Cr>",
+                \ 'PurgeMarkers'     : "m-",
                 \ 'DeleteMark'       : "dm",
                 \ 'ListBufferMarks'   : "m/",
                 \ 'ListBufferMarkers' : "m?",
@@ -30,7 +30,7 @@ endif
 " -----------------------------------------------------
 if has('nvim') || has('patch-8.0.902')
     let g:signify_disable_by_default = 0
-    nnoremap \\ :SignifyDiff<Cr>
+    nnoremap \<Cr> :SignifyDiff<Cr>
     nnoremap \<Space> :Signify
     nnoremap \<Tab> :SignifyToggle<Cr>
     nmap ]g <plug>(signify-next-hunk)
@@ -44,6 +44,6 @@ if has('nvim') || has('patch-8.0.902')
     PlugAddOpt 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
-    nnoremap \<Cr> :SignifyCommands<Cr>
+    nnoremap m<Cr> :SignifyCommands<Cr>
 endif
 
