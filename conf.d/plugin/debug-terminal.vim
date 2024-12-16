@@ -337,18 +337,32 @@ if Planned('vimspector')
     command! TerminalOrFloatermSpecial call s:vimspector_or_floaterm('terminal')
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
-    nnoremap <silent>- :VimspectorWatch <C-r>=expand('<cword>')<Cr>
     " watch Variable
     function! s:watch() range
         if s:vimspector_opened()
-            VimspectorWatch
+            if visualmode() !=# ""
+                let [line_start, column_start] = getpos("'<")[1:2]
+                let [line_end, column_end] = getpos("'>")[1:2]
+                let l:lines = getline(line_start, line_end)
+                if len(l:lines) == 0
+                    return
+                endif
+                let l:lines[-1] = l:lines[-1][: column_end - 1]
+                let l:lines[0] = l:lines[0][column_start - 1:]
+                let l:selected_text = join(l:lines, "\n")
+            else
+                let l:selected_text = expand('<cword>')
+            endif
+            if l:selected_text
+                exec "VimspectorWatch " . l:selected_text
+            endif
         else
             call preview#errmsg("Please start vimspector session at first.")
         endif
     endfunction
     command! -range WatchCword call s:watch()
-    xnoremap <silent>+ :WatchCword<CR>
-    nnoremap <silent>+ :WatchCword<CR>
+    xnoremap <silent>- :WatchCword<CR>
+    nnoremap <silent>- :WatchCword<CR>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
@@ -482,9 +496,8 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     command! DapReplToggle call s:dap_or_floaterm("repl")
     " variables view
     nnoremap <silent>J :DapUIEval<Cr>
-    nnoremap <silent>- :lua require("dap.ui.widgets").preview()<Cr>
     " repl toggle
-    nnoremap <silent>+ <cmd>DapVirtualTextToggle<Cr>
+    nnoremap <silent>- <cmd>DapVirtualTextToggle<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
