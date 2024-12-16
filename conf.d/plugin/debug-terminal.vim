@@ -361,8 +361,8 @@ if Planned('vimspector')
         endif
     endfunction
     command! -range WatchCword call s:watch()
-    xnoremap <silent>- :WatchCword<CR>
-    nnoremap <silent>- :WatchCword<CR>
+    xnoremap - :WatchCword<CR>
+    nnoremap - :WatchCword<CR>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
