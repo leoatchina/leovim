@@ -101,6 +101,7 @@
 - [x] nvim-dap run to cursor
 - [x] delance.nvim
 - [ ] codecompanion.nvim
+- [ ] zed.ai config according to https://github.com/zed-industries/zed/issues/4965
 - [ ] dropbar.nvim
 - [ ] quit all bug
 - [ ] merge <M-m> into <M-d> map in debug mode
