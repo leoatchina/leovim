@@ -310,8 +310,6 @@ nnoremap s <Nop>
 nnoremap S <Nop>
 nnoremap , <Nop>
 xnoremap , <Nop>
-nnoremap - <Nop>
-nnoremap _ <Nop>
 " enhanced remap
 xmap >> >gv
 xmap << <gv
@@ -336,6 +334,7 @@ nnoremap zt z<CR>
 " bs tab
 nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
 nnoremap <C-m> <C-i>
+nnoremap <Cr> <C-i>
 nnoremap gb 2g;I
 " ------------------------
 " case change

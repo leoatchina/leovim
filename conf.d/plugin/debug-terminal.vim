@@ -225,7 +225,7 @@ if Planned('vimspector')
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/vimspector/
     endif
     " core keymaps
-    nmap _ :call vimspector#GetConfigurations()<Left>
+    nmap <M-d>L :call vimspector#GetConfigurations()<Left>
     nmap <M-d>I :VimspectorInstall<Space>
     nmap <silent><M-d>, <Plug>VimspectorJumpToPreviousBreakpoint
     nmap <silent><M-d>; <Plug>VimspectorJumpToNextBreakpoint
@@ -337,7 +337,6 @@ if Planned('vimspector')
     command! TerminalOrFloatermSpecial call s:vimspector_or_floaterm('terminal')
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
-    nnoremap <silent>- :VimspectorWatch <C-r>=expand('<cword>')<Cr>
     " watch Variable
     function! s:watch() range
         if s:vimspector_opened()
@@ -346,8 +345,9 @@ if Planned('vimspector')
             call preview#errmsg("Please start vimspector session at first.")
         endif
     endfunction
-    command! WatchCword call s:watch()
-    nnoremap <silent>+ :WatchCword<CR>
+    command! -range WatchCword call s:watch()
+    xnoremap <silent>_ :WatchCword<CR>
+    nnoremap <silent>_ :WatchCword<CR>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
@@ -379,7 +379,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/dap/
     endif
     " core keymaps
-    nnoremap _ :lua DapLoadConfig()<Left>
+    nnoremap <M-d>L :lua DapLoadConfig()<Left>
     nnoremap <silent><M-d>, <cmd>lua DapBreakpointPrev()<Cr>
     nnoremap <silent><M-d>; <cmd>lua DapBreakpointNext()<Cr>
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
@@ -481,9 +481,8 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     command! DapReplToggle call s:dap_or_floaterm("repl")
     " variables view
     nnoremap <silent>J :DapUIEval<Cr>
-    nnoremap <silent>- :lua require("dap.ui.widgets").preview()<Cr>
     " repl toggle
-    nnoremap <silent>+ <cmd>DapVirtualTextToggle<Cr>
+    nnoremap <silent>_ <cmd>DapVirtualTextToggle<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
@@ -517,7 +516,6 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     nnoremap <F11> :Step<Cr>
     nnoremap <F12> :Finish<Cr>
     " debug
-    nnoremap - :Evaluate<Space>
     nnoremap J :Evaluate <C-r><C-w><Cr>
     " other
     nnoremap <M-m>d :Termdebug<Space>
