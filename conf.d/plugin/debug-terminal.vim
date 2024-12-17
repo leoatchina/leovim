@@ -1,3 +1,5 @@
+nnoremap _ -
+nnoremap <silent>- :call preview#errmsg("Please intalled debug plugin.")<Cr>
 " --------------------
 " J show diag
 " --------------------
@@ -346,8 +348,8 @@ if Planned('vimspector')
         endif
     endfunction
     command! -range WatchCword call s:watch()
-    xnoremap <silent>_ :WatchCword<CR>
-    nnoremap <silent>_ :WatchCword<CR>
+    xnoremap <silent>- :WatchCword<CR>
+    nnoremap <silent>- :WatchCword<CR>
     au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
@@ -482,7 +484,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     " variables view
     nnoremap <silent>J :DapUIEval<Cr>
     " repl toggle
-    nnoremap <silent>_ <cmd>DapVirtualTextToggle<Cr>
+    nnoremap <silent>- <cmd>DapVirtualTextToggle<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
@@ -517,6 +519,7 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     nnoremap <F12> :Finish<Cr>
     " debug
     nnoremap J :Evaluate <C-r><C-w><Cr>
+    nnoremap - :Evaluate<Space>
     " other
     nnoremap <M-m>d :Termdebug<Space>
     nnoremap <M-m>c :TermdebugCommand<Space>
