@@ -226,9 +226,8 @@ if Planned('vimspector')
         nnoremap <silent><leader>ro :OpenVimspector<Cr>
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/vimspector/
     endif
-    " core keymaps
-    nmap <M-d>L :call vimspector#GetConfigurations()<Left>
-    nmap <M-d>I :VimspectorInstall<Space>
+    nmap <leader>rI :VimspectorInstall<Space>
+    nmap <leader>rL :call vimspector#GetConfigurations()<Left>
     nmap <silent><M-d>, <Plug>VimspectorJumpToPreviousBreakpoint
     nmap <silent><M-d>; <Plug>VimspectorJumpToNextBreakpoint
     nmap <silent><M-d><Space> <Plug>VimspectorToggleBreakpoint
@@ -258,7 +257,6 @@ if Planned('vimspector')
     nnoremap <M-d><M-q> :VimspectorDestroySession<Space>
     nnoremap <M-d><M-r> :VimspectorRenameSession<Space>
     nnoremap <M-d><M-s> :VimspectorSwitchToSession<Space>
-    " core shortcuts
     command! VimspectorCommands call FzfCallCommands('VimspectorCommands', 'Vimspector')
     nnoremap <M-d>v :VimspectorCommands<Cr>
     nnoremap <M-d>V :call vimspector#
@@ -380,8 +378,9 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         nnoremap <silent><leader>ro :OpenDap<Cr>
         nnoremap <leader>rO :tabe ~/.leovim/conf.d/dap/
     endif
-    " core keymaps
-    nnoremap <M-d>L :lua DapLoadConfig()<Left>
+    nnoremap <leader>rI :DapInstall<Space>
+    nnoremap <leader>rU :DapUninstall<Space>
+    nnoremap <leader>rL :lua DapLoadConfig()<Left>
     nnoremap <silent><M-d>, <cmd>lua DapBreakpointPrev()<Cr>
     nnoremap <silent><M-d>; <cmd>lua DapBreakpointNext()<Cr>
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
@@ -405,8 +404,6 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><F12> <cmd>lua require"dap".step_out()<Cr>
     " basic <M-d> map
     nnoremap <M-d>l :lua require"dap".
-    nnoremap <M-d>I :DapInstall<Space>
-    nnoremap <M-d>U :DapUninstall<Space>
     nnoremap <silent><M-d>. <cmd>lua require"dap".run_last()<Cr>
     nnoremap <silent><M-d>a <cmd>lua require"dap".attach(vim.fn.input('Attatch to: '))<Cr>
     " breakpoints
@@ -496,7 +493,6 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     let g:termdebug_map_K = 1
     let g:termdebug_use_prompt = 1
     packadd termdebug
-    " coremap
     nnoremap <M-d><Space> :Break<Space>
     nnoremap <M-d><M-d> :Until<Cr>
     nnoremap <M-d><Cr> :Continue<Cr>
