@@ -95,8 +95,8 @@ require('avante').setup({
       all_theirs = "ca",
       both = "cb",
       cursor = "cc",
-      next = ";c",
-      prev = ",c",
+      next = "c;",
+      prev = "c,",
     },
     suggestion = {
       accept = "<M-i>",
