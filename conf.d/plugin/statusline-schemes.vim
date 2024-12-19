@@ -282,6 +282,7 @@ syntax enable
 filetype on
 filetype plugin on
 set background=dark
+nnoremap <M-k>b :if &background == "dark" \| set background=light \| else \| set background=dark \| endif  \| call preview#cmdmsg(&background, 1)<CR>
 function! SetScheme(scheme, ...) abort
     let scheme = a:scheme
     let defaultscheme = get(a:, 1, 'hybrid')
