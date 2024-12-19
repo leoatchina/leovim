@@ -229,11 +229,7 @@ if has('patch-9.0.0185') || has('nvim')
         PlugAdd 'Exafunction/codeium.vim'
     elseif Require('copilot') && g:node_version > 18
         if has('nvim-0.9.5')
-            if g:complete_engine == 'cmp' && has('nvim-0.10.1')
-                PlugAdd 'zbirenbaum/copilot-cmp'
-            endif
             PlugAdd 'zbirenbaum/copilot.lua'
-            PlugAdd 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'main' }
         else
             PlugAdd 'github/copilot.vim'
         endif
