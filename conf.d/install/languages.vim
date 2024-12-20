@@ -49,10 +49,9 @@ endif
 " C language
 " --------------------------
 if Require('c')
-    PlugAdd 'chxuan/cpp-mode'
     PlugAdd 'leoatchina/a.vim', {'for': g:c_filetypes}
     if executable('cppman')
-        PlugAdd 'skywind3000/vim-cppman'
+        PlugAdd 'skywind3000/vim-cppman', {'for': g:c_filetypes}
     endif
 endif
 if Require('clangd') && executable(Expand(get(g:, 'clangd_exe', 'clangd')))

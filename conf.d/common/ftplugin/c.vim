@@ -1,14 +1,4 @@
 setlocal commentstring=//\ %s
-" cpp mode
-if Installed('cpp-mode')
-    nnoremap <buffer>,y :CopyCode<cr>
-    nnoremap <buffer>,p :PasteCode<cr>
-    nnoremap <buffer>,i :GoToFunImpl<cr>
-    nnoremap <buffer>,f :FormatIf<cr>
-    nnoremap <buffer>,F :FormatFunParam<cr>
-    nnoremap <buffer>,g :GenTryCatch<cr>
-    xnoremap <buffer>,g d:GenTryCatch<cr>
-endif
 " for a.vim
 if Installed('a.vim')
     nnoremap <buffer>,a :A<Cr>

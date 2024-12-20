@@ -7,8 +7,8 @@ if Planned('vim-signature')
                 \ 'ToggleMarkAtLine' : "m.",
                 \ 'PlaceNextMark'    : "m;",
                 \ 'PurgeMarksAtLine' : "m,",
-                \ 'PurgeMarks'       : "m<BS>",
-                \ 'PurgeMarkers'     : "m-",
+                \ 'PurgeMarks'       : "m<Cr>",
+                \ 'PurgeMarkers'     : "m<BS>",
                 \ 'DeleteMark'       : "dm",
                 \ 'ListBufferMarks'   : "m/",
                 \ 'ListBufferMarkers' : "m?",
@@ -33,8 +33,8 @@ if has('nvim') || has('patch-8.0.902')
     nnoremap \<Cr> :SignifyDiff<Cr>
     nnoremap \<Space> :Signify
     nnoremap \<Tab> :SignifyToggle<Cr>
-    nmap ]g <plug>(signify-next-hunk)
-    nmap [g <plug>(signify-prev-hunk)
+    nmap ;g <plug>(signify-next-hunk)
+    nmap ,g <plug>(signify-prev-hunk)
     omap im <plug>(signify-motion-inner-pending)
     xmap im <plug>(signify-motion-inner-visual)
     omap am <plug>(signify-motion-outer-pending)
@@ -44,6 +44,6 @@ if has('nvim') || has('patch-8.0.902')
     PlugAddOpt 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
-    nnoremap m<Cr> :SignifyCommands<Cr>
+    nnoremap \\ :SignifyCommands<Cr>
 endif
 
