@@ -73,7 +73,7 @@ endif
 " --------------------------
 " jumpoption
 " --------------------------
-if has('nvim') || has('patch-9.0.1921')
+if has('nvim') || has('jumpoptions')
     set jumpoptions=stack,view
 endif
 " --------------------------
