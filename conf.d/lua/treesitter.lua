@@ -79,26 +79,26 @@ if Installed("nvim-treesitter-textobjects") then
         enable = true,
         set_jumps = true, -- whether to set jumps in the jumplist
         goto_next_start = {
-          [";;"] = "@function.outer",
-          ["]]"] = "@class.outer",
+          [";f"] = "@function.outer",
+          [";c"] = "@class.outer",
           [";l"] = "@loop.*",
           [";z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
         },
         -- https://tree-sitter.github.io/tree-sitter/using-parsers#pattern-matching-with-queries
         goto_previous_start = {
           ["so"] = { query = { "@block.outer", "@function.outer", "@class.outer" } },
-          [",,"] = "@function.outer",
-          ["[["] = "@class.outer",
+          [",f"] = "@function.outer",
+          [",c"] = "@class.outer",
           [",l"] = "@loop.*",
           [",z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
         },
         goto_next_end = {
-          [";f"] = "@function.outer",
-          [";c"] = "@class.outer",
+          [";F"] = "@function.outer",
+          [";C"] = "@class.outer",
         },
         goto_previous_end = {
-          [",f"] = "@function.outer",
-          [",c"] = "@class.outer",
+          [",F"] = "@function.outer",
+          [",C"] = "@class.outer",
         },
         -- Below will go to either the start or the end, whichever is closer.
         -- Use if you want more granular movements
