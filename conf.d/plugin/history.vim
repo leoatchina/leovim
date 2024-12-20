@@ -6,6 +6,14 @@ else
     nnoremap <silent><leader>m :CtrlPMRU<Cr>
 endif
 " --------------------------
+" jumpoption
+" --------------------------
+try
+    set jumpoptions=stack,view
+catch
+    " pass
+endtry
+" --------------------------
 " undo
 " --------------------------
 if Installed('nvim-fundo')

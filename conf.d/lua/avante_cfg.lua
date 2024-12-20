@@ -12,7 +12,6 @@ local max_tokens = type(vim.g.max_tokens) == 'number'
 vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
 vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-flash"
 vim.g.openai_model = vim.g.openai_model or "gpt-4o"
-vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-08-06"
 -- provider
 local provider = ''
 local openai_endpoint = ''
@@ -45,15 +44,11 @@ elseif vim.env.OPENAI_API_KEY then
 elseif vim.env.ANTHROPIC_API_KEY then
   vim.g.avante_model = vim.g.claude_model
   provider = 'claude'
-elseif vim.env.GEMINI_API_KEY then
+else
   vim.g.avante_model = vim.g.gemini_model
   provider = 'gemini'
-else
-  vim.g.avante_model = vim.g.copilot_model
-  provider = 'copilot'
 end
-vim.g.ai_complete_engine = vim.g.avante_model == 'copilot' and 'copilot'
-  or vim.g.ai_complete_engine and vim.g.avante_model .. '&&' .. vim.g.ai_complete_engine
+vim.g.ai_complete_engine = vim.g.ai_complete_engine and vim.g.avante_model .. '&' .. vim.g.ai_complete_engine
   or vim.g.avante_model
 require('avante').setup({
   provider = provider,
@@ -74,13 +69,9 @@ require('avante').setup({
     model = vim.g.gemini_model,
     max_tokens = max_tokens
   },
-  copilot = {
-    model = vim.g.copilot_model,
-    max_tokens = max_tokens
-  },
   -- behaviour
   behaviour = {
-    auto_suggestions = provider ~= 'copilot' or not Installed('copilot-cmp'),
+    auto_suggestions = not Installed('codeium.vim') and not Installed('copilot.vim'),
     auto_set_highlight_group = true,
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
@@ -88,21 +79,14 @@ require('avante').setup({
   },
   -- basic config
   mappings = {
-    --- @class AvanteConflictMappings
     diff = {
       ours = "co",
       theirs = "ct",
       all_theirs = "ca",
       both = "cb",
       cursor = "cc",
-      next = ";c",
-      prev = ",c",
-    },
-    suggestion = {
-      accept = "<M-i>",
-      next = "<M-;>",
-      prev = "<M-,>",
-      dismiss = "<M-/>",
+      next = "c;",
+      prev = "c,",
     },
     jump = {
       next = "]]",
@@ -126,6 +110,12 @@ require('avante').setup({
     sidebar = {
       switch_windows = "<S-Tab>",
       reverse_switch_windows = "<Nop>",
+    },
+    suggestion = {
+      accept = "<M-i>",
+      next = "<M-;>",
+      prev = "<M-,>",
+      dismiss = "<M-/>",
     },
   },
   windows = {

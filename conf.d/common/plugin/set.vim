@@ -41,7 +41,7 @@ set textwidth=160
 set buftype=
 set switchbuf=useopen,usetab,newtab
 " --------------------------
-" wildmenu signcolumn wildignore
+" wildmenu
 " --------------------------
 set wildmenu
 try
@@ -55,15 +55,30 @@ catch
     set wildmode=list
     set wildoptions=tagfile
 endtry
+" --------------------------
+" wildignore
+" --------------------------
+if has('wildignore')
+    set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar,*.gz,*.pyd,*.pyc,*.ipynb
+    set wildignore+=.ccls-cache/*,.idea/*,.vscode/*,__pycache__/*,.git/*,.svn/*,.hg/*,root/*
+endif
+" --------------------------
+" signcolumn
+" --------------------------
 if has('nvim')
     set signcolumn=yes:1
 elseif has('patch-7.4.2201')
     set signcolumn=yes
 endif
-if has('wildignore')
-    set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar,*.gz,*.pyd,*.pyc,*.ipynb
-    set wildignore+=.ccls-cache/*,.idea/*,.vscode/*,__pycache__/*,.git/*,.svn/*,.hg/*,root/*
+" --------------------------
+" jumpoption
+" --------------------------
+if has('nvim') || has('jumpoptions')
+    set jumpoptions=stack,view
 endif
+" --------------------------
+" splitkeep
+" --------------------------
 if has('nvim-0.9') || has('patch-9.0.0647')
     set splitkeep=screen
 endif
