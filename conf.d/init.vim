@@ -105,6 +105,10 @@ set rtp^=$COMMON_DIR
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
+if has('nvim')
+    lua require('utils')
+    set shadafile=$HOME/.vim/shada.main
+endif
 " --------------------------
 " init directories
 " --------------------------
@@ -132,10 +136,6 @@ for [settingname, dirname] in items(dir_list)
     endif
     exec "set " . settingname . "=" . dir
 endfor
-if has('nvim')
-    lua require('utils')
-    set shadafile=$HOME/.vim/shada.main
-endif
 " ------------------------
 " mapleader
 " ------------------------
