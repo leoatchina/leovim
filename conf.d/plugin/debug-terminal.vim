@@ -339,25 +339,43 @@ if Planned('vimspector')
     nnoremap <silent>J :BalloonEval<Cr>
     " watch Variable
     function! s:watch() range
-        if s:vimspector_opened()
-            if visualmode() !=# ""
-                let [line_start, column_start] = getpos("'<")[1:2]
-                let [line_end, column_end] = getpos("'>")[1:2]
-                let l:lines = getline(line_start, line_end)
-                if len(l:lines) == 0
-                    return
-                endif
-                let l:lines[-1] = l:lines[-1][: column_end - 1]
-                let l:lines[0] = l:lines[0][column_start - 1:]
-                let l:selected_text = join(l:lines, "\n")
-            else
-                let l:selected_text = expand('<cword>')
+        if !s:vimspector_opened()
+            call preview#errmsg("Please start vimspector session first.")
+            return
+        endif
+        let l:selected_text = ''
+        " Handle visual mode selection
+        if visualmode() !=# ""
+            let [line_start, column_start] = getpos("'<")[1:2]
+            let [line_end, column_end] = getpos("'>")[1:2]
+            let lines = getline(line_start, line_end)
+            if empty(lines)
+                call preview#errmsg("No text selected")
+                return
             endif
-            if l:selected_text
-                exec "VimspectorWatch " . l:selected_text
+            " Handle single line selection
+            if line_start == line_end
+                let l:selected_text = lines[0][column_start - 1 : column_end - 1]
+            else
+                " Handle multi-line selection
+                let lines[-1] = lines[-1][: column_end - 1]
+                let lines[0] = lines[0][column_start - 1:]
+                let l:selected_text = join(lines, "\n")
             endif
         else
-            call preview#errmsg("Please start vimspector session at first.")
+            " Handle normal mode (word under cursor)
+            let l:selected_text = expand('<cword>')
+        endif
+        " Trim whitespace
+        let l:selected_text = trim(l:selected_text)
+        if !empty(l:selected_text)
+            try
+                call vimspector#AddWatch(l:selected_text)
+            catch
+                call preview#errmsg("Failed to add watch: " . v:exception)
+            endtry
+        else
+            call preview#errmsg("No valid text to watch")
         endif
     endfunction
     command! -range WatchCword call s:watch()
