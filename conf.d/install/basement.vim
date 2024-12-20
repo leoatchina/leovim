@@ -228,11 +228,7 @@ if has('patch-9.0.0185') || has('nvim')
     if Require('codeium')
         PlugAdd 'Exafunction/codeium.vim'
     elseif Require('copilot') && g:node_version > 18
-        if has('nvim-0.9.5')
-            PlugAdd 'zbirenbaum/copilot.lua'
-        else
-            PlugAdd 'github/copilot.vim'
-        endif
+        PlugAdd 'github/copilot.vim'
     endif
 endif
 if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
@@ -242,8 +238,7 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
             \ exists('$OPENROUTER_API_KEY') ||
             \ exists('$OPENAI_API_KEY') ||
             \ exists('$ANTHROPIC_API_KEY') ||
-            \ exists('$GEMINI_API_KEY') ||
-            \ Planned('copilot.lua')
+            \ exists('$GEMINI_API_KEY')
             \ )
     if executable('cargo') && UNIX()
         PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
