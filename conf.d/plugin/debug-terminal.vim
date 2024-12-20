@@ -345,7 +345,7 @@ if Planned('vimspector')
         endif
         let l:selected_text = ''
         " Handle visual mode selection
-        if visualmode() !=# ""
+        if mode() =~# "[vV\<C-v>]"
             let [line_start, column_start] = getpos("'<")[1:2]
             let [line_end, column_end] = getpos("'>")[1:2]
             let lines = getline(line_start, line_end)
