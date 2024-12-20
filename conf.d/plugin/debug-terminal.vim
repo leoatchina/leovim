@@ -335,59 +335,16 @@ if Planned('vimspector')
     command! FocusCode call s:vimspector_or_floaterm("code")
     command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
     command! TerminalOrFloatermSpecial call s:vimspector_or_floaterm('terminal')
-    " view variables
-    nnoremap <silent>J :BalloonEval<Cr>
-    " watch Variable
-    function! s:watch() range
-        if !s:vimspector_opened()
-            call preview#errmsg("Please start vimspector session first.")
-            return
-        endif
-        let l:selected_text = ''
-        " Handle visual mode selection
-        if mode() =~# "[vV\<C-v>]"
-            let [line_start, column_start] = getpos("'<")[1:2]
-            let [line_end, column_end] = getpos("'>")[1:2]
-            let lines = getline(line_start, line_end)
-            if empty(lines)
-                call preview#errmsg("No text selected")
-                return
-            endif
-            " Handle single line selection
-            if line_start == line_end
-                let l:selected_text = lines[0][column_start - 1 : column_end - 1]
-            else
-                " Handle multi-line selection
-                let lines[-1] = lines[-1][: column_end - 1]
-                let lines[0] = lines[0][column_start - 1:]
-                let l:selected_text = join(lines, "\n")
-            endif
-        else
-            " Handle normal mode (word under cursor)
-            let l:selected_text = expand('<cword>')
-        endif
-        " Trim whitespace
-        let l:selected_text = trim(l:selected_text)
-        if !empty(l:selected_text)
-            try
-                call vimspector#AddWatch(l:selected_text)
-            catch
-                call preview#errmsg("Failed to add watch: " . v:exception)
-            endtry
-        else
-            call preview#errmsg("No valid text to watch")
-        endif
-    endfunction
-    command! -range WatchCword call s:watch()
-    xnoremap - :WatchCword<CR>
-    nnoremap - :WatchCword<CR>
-    au FileType VimspectorPrompt nnoremap <buffer><silent>- :call vimspector#DeleteWatch()<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
     " VimspectorDisassemble
     nmap <silent><F1> <Plug>VimspectorDisassemble
+    " ----------------------
+    " view variables
+    " ----------------------
+    nnoremap <silent>J :BalloonEval<Cr>
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
     lua require("dap_cfg")
@@ -511,16 +468,17 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
     command! FloatElementOrFloatermSpecial call s:dap_or_floaterm("element")
     command! DapReplToggle call s:dap_or_floaterm("repl")
-    " variables view
-    nnoremap <silent>J :DapUIEval<Cr>
     " repl toggle
-    nnoremap <silent>- <cmd>DapVirtualTextToggle<Cr>
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :FloatElementOrFloatermSpecial<Cr>
     " DapReplToggle
     nnoremap <silent><F1> <Cmd>DapReplToggle<Cr>
+    " ---------------------------
+    " variables view
+    " ---------------------------
+    nnoremap <silent>J :DapUIEval<Cr>
 elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     let g:debug_tool = 'termdebug'
     let g:termdebug_map_K = 1
@@ -558,6 +516,65 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     nnoremap <silent><M-m>s :Source<Cr>
     nnoremap <silent><M-m>g :Gdb<Cr>
 endif
+" watch Variable
+function! s:watch() range
+    if Installed('nvim-dap')
+        if !s:dapui_opened()
+            call preview#errmsg("Please start nvim-dap session first.")
+            return
+        endif
+    elseif Installed('vimspector')
+        if !s:vimspector_opened()
+            call preview#errmsg("Please start vimspector session first.")
+            return
+        endif
+    else
+        call preview#errmsg("Could not watch")
+    endif
+    " Handle visual mode selection
+    let l:selected_text = ''
+    if mode() =~# "[vV\<C-v>]"
+        let [line_start, column_start] = getpos("'<")[1:2]
+        let [line_end, column_end] = getpos("'>")[1:2]
+        let lines = getline(line_start, line_end)
+        if empty(lines)
+            call preview#errmsg("No text selected")
+            return
+        endif
+        " Handle single line selection
+        if line_start == line_end
+            let l:selected_text = lines[0][column_start - 1 : column_end - 1]
+        else
+            " Handle multi-line selection
+            let lines[-1] = lines[-1][: column_end - 1]
+            let lines[0] = lines[0][column_start - 1:]
+            let l:selected_text = join(lines, "\n")
+        endif
+    else
+        " Handle normal mode (word under cursor)
+        let l:selected_text = expand('<cword>')
+    endif
+    " Trim whitespace
+    let l:selected_text = trim(l:selected_text)
+    if !empty(l:selected_text)
+        try
+            if Installed('vimspector')
+                call vimspector#AddWatch(l:selected_text)
+            elseif Installed('nvim-dap')
+                let cmd = "lua require'dapui'.elements.watches.add(" .  l:selected_text . ")"
+                execute(cmd)
+            endif
+        catch
+            call preview#errmsg("Failed to add watch for reason: " . v:exception)
+        endtry
+    else
+        call preview#errmsg("No valid text to watch")
+    endif
+endfunction
+command! -range WatchCword call s:watch()
+xnoremap - :WatchCword<CR>
+nnoremap - :WatchCword<CR>
+au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteWatch()<Cr>
 " -------------------------------------
 " map Floaterm keys
 " -------------------------------------

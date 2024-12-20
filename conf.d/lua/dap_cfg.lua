@@ -112,15 +112,6 @@ dapui.setup({
     },
   },
 })
----------------------
--- dap-virtual-text
----------------------
-if Installed('nvim-dap-virtual-text') then
-  require("nvim-dap-virtual-text").setup({
-    virt_lines = true,
-    commented = true
-  })
-end
 -------------------------------------
 -- load dap_json, modified from dap.ext.vscode.lauchjs
 -------------------------------------

@@ -211,12 +211,10 @@ if g:python_version >= 3.1 && (Require('debug') && has('patch-8.2.4797') || Requ
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
 elseif has('nvim-0.9.5') && Require('debug')
+    PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
-    if Planned('nvim-treesitter')
-        PlugAdd 'theHamsta/nvim-dap-virtual-text'
-    endif
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}

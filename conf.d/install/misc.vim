@@ -5,9 +5,6 @@ if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('CopilotChat.nvim
     PlugAdd 'williamboman/mason.nvim'
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
-    if Planned('nvim-dap')
-        PlugAdd 'nvim-neotest/nvim-nio'
-    endif
 endif
 " ----------------------------
 " wilder
