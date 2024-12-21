@@ -6,7 +6,7 @@ if g:node_version > 16
 else
     let g:ensure_installed = []
 endif
-if executable('delance-server') && Require('delance') || g:node_version > 16 && (g:python_version > 3.06 && !Require('pylsp') || g:python_version <= 3.06)
+if g:node_version > 16 && (g:python_version > 3.06 && !Require('pylsp') || g:python_version <= 3.06)
     let g:ensure_installed += ['pyright']
 elseif g:python_version > 3.06
     let g:ensure_installed += ['pylsp']

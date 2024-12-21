@@ -119,44 +119,6 @@ require("mason-lspconfig").setup({
         capabilities = lsp_capabilities,
       })
     end,
-    pyright = function()
-      if vim.fn.executable('delance-langserver') and vim.fn.Require('delance') then
-        lspconfig.pyright.setup {
-          cmd = { "delance-langserver", "--stdio" },
-          capabilities = lsp_capabilities,
-          settings = {
-            pyright = {
-              -- disable import sorting and use Ruff for this
-              disableOrganizeImports = true,
-              disableTaggedHints = false,
-            },
-            python = {
-              analysis = {
-                autoSearchPaths = true,
-                diagnosticMode = "workspace",
-                typeCheckingMode = "standard",
-                useLibraryCodeForTypes = true,
-                -- we can this setting below to redefine some diagnostics
-                diagnosticSeverityOverrides = {
-                  deprecateTypingAliases = false,
-                },
-                -- inlay hint settings are provided by pylance?
-                inlayHints = {
-                  callArgumentNames = "partial",
-                  functionReturnTypes = true,
-                  pytestParameters = true,
-                  variableTypes = true,
-                },
-              },
-            },
-          },
-        }
-      else
-        lspconfig.pyright.setup({
-          capabilities = lsp_capabilities,
-        })
-      end
-    end
   }
 })
 -----------------
