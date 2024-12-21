@@ -32,7 +32,7 @@ require("nvim-treesitter.configs").setup({
     },
   },
   matchup = {
-    enable = true,
+    enable = false,
   },
   fold = {
     enable = true,

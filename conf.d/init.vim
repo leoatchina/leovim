@@ -139,8 +139,11 @@ endfor
 " ------------------------
 " mapleader
 " ------------------------
-let g:mapleader      = ' '
-let g:maplocalleader = ','
+nnoremap M q
+nnoremap q <Nop>
+nnoremap qq q
+let g:mapleader = ' '
+let g:maplocalleader = 'q'
 " ------------------------
 " set pack related variables
 " ------------------------
@@ -255,15 +258,15 @@ xnoremap s "yy:%s/<C-r>=Escape(@y)<CR>/<C-r>=Escape(@y)<CR>/gc<Left><Left><Left>
 xnoremap <Cr> "yy:%s/<C-r>=Escape(@y)<CR>//gc<Left><Left><Left>
 " GetVisualSelection only in one line
 function! GetVisualSelection(...) abort
-	" call with visualmode() as the argument
-	let [line_start, column_start] = [line("'<"), charcol("'<")]
-	let [line_end, column_end]     = [line("'>"), charcol("'>")]
-	let lines = getline(line_start, line_end)
+    " call with visualmode() as the argument
+    let [line_start, column_start] = [line("'<"), charcol("'<")]
+    let [line_end, column_end]     = [line("'>"), charcol("'>")]
+    let lines = getline(line_start, line_end)
     if len(lines) != 1
         return ""
     endif
-	let inclusive = (&selection == 'inclusive')? 1 : 2
-		" Must trim the end before the start, the beginning will shift left.
+    let inclusive = (&selection == 'inclusive')? 1 : 2
+    " Must trim the end before the start, the beginning will shift left.
     let lines[-1] = list2str(str2list(lines[-1])[:column_end - inclusive])
     let lines[0] = list2str(str2list(lines[0])[column_start - 1:])
     if a:0 && a:1
@@ -571,13 +574,13 @@ if exists('*search') && exists('*getpos')
     " select a block
     call textobj#user#plugin('block', {
                 \ 'block': {
-                    \  'select-a-function': 'BlockA',
-                    \  'select-a': 'av',
-                    \  'select-i-function': 'BlockI',
-                    \  'select-i': 'iv',
-                    \  'region-type': 'V'
-                    \ },
-                    \ })
+                \  'select-a-function': 'BlockA',
+                \  'select-a': 'av',
+                \  'select-i-function': 'BlockI',
+                \  'select-i': 'iv',
+                \  'region-type': 'V'
+                \ },
+                \ })
     nmap <leader>vv viv
     nmap <leader>vV vav
     " -------------------

@@ -13,9 +13,9 @@ if Installed('vim-go')
 endif
 " NOTE: below in order to be comparable with vscode-neovim
 if Installed('coc.nvim')
-    nmap <buffer>,tj :CocCommand go.tags.add json<cr>
-    nmap <buffer>,ty :CocCommand go.tags.add yaml<cr>
-    nmap <buffer>,tx :CocCommand go.tags.clear<cr>
+    nmap <buffer>qtj :CocCommand go.tags.add json<cr>
+    nmap <buffer>qty :CocCommand go.tags.add yaml<cr>
+    nmap <buffer>qtx :CocCommand go.tags.clear<cr>
 endif
 inoremap <buffer>:: :=
 inoremap <buffer>!! ! nnoremap <buffer><silent><M-?> :GoImpl<Cr>=

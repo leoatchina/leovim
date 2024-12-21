@@ -1,11 +1,11 @@
 setlocal commentstring=//\ %s
 " for a.vim
 if Installed('a.vim')
-    nnoremap <buffer>,a :A<Cr>
-    nnoremap <buffer>,s :AS<Cr>
-    nnoremap <buffer>,v :AV<Cr>
-    nnoremap <buffer>,t :AT<Cr>
-    nnoremap <buffer>,n :AN<Cr>
+    nnoremap <buffer>qa :A<Cr>
+    nnoremap <buffer>qs :AS<Cr>
+    nnoremap <buffer>qv :AV<Cr>
+    nnoremap <buffer>qt :AT<Cr>
+    nnoremap <buffer>qn :AN<Cr>
 endif
 " ccls
 if Installed('vim-ccls')

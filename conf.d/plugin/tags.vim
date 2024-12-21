@@ -165,16 +165,6 @@ elseif has('+cscope')
     set cscopeprg=
 endif
 " --------------------------
-" matchup
-" --------------------------
-if g:has_popup_floating
-    let g:matchup_matchparen_offscreen = {'methed': 'popup'}
-else
-    let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
-endif
-nnoremap <silent>M :MatchupWhereAmI??<Cr>
-PlugAddOpt 'vim-matchup'
-" --------------------------
 " set tagstack and view tag
 " --------------------------
 function! s:settagstack(winnr, tagname, pos)

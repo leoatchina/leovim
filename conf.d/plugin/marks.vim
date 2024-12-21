@@ -30,7 +30,7 @@ endif
 " -----------------------------------------------------
 if has('nvim') || has('patch-8.0.902')
     let g:signify_disable_by_default = 0
-    nnoremap \<Cr> :SignifyDiff<Cr>
+    nnoremap \\ :SignifyDiff<Cr>
     nnoremap \<Space> :Signify
     nnoremap \<Tab> :SignifyToggle<Cr>
     nmap ;g <plug>(signify-next-hunk)
@@ -44,6 +44,6 @@ if has('nvim') || has('patch-8.0.902')
     PlugAddOpt 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
-    nnoremap \\ :SignifyCommands<Cr>
+    nnoremap \<Cr> :SignifyCommands<Cr>
 endif
 

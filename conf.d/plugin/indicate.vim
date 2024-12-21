@@ -30,6 +30,7 @@ if get(g:, 'leovim_whichkey', 1)
     " basic keys
     nnoremap <Tab> :WhichKey '<Tab>'<Cr>
     nnoremap <Space> :WhichKey ' '<Cr>
+    nnoremap q :WhichKey 'q'<Cr>
     nnoremap , :WhichKey ','<Cr>
     nnoremap ; :WhichKey ';'<Cr>
     nnoremap \ :WhichKey '\'<Cr>

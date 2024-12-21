@@ -72,10 +72,10 @@ if Planned('neoformat')
         endif
     endfunction
     command! -bang -range ChooseFormatPrg call ChooseFormatPrg(<bang>0)
-    nnoremap Q :ChooseFormatPrg<Cr>
-    xnoremap Q :ChooseFormatPrg!<Cr>
+    nnoremap = :ChooseFormatPrg<Cr>
+    xnoremap M :ChooseFormatPrg!<Cr>
 else
-    nnoremap <silent>Q :call BuiltInFormat()<Cr>
+    nnoremap <silent>= :call BuiltInFormat()<Cr>
 endif
 " ----------------------------
 " table_mode
