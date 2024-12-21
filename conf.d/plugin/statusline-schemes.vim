@@ -83,13 +83,14 @@ let g:lightline = {
 "------------------------
 let g:lightline.active.right = [['gitbranch', 'filetype', 'fileencoding', 'lineinfo']]
 let g:lightline.inactive.right = [['gitbranch', 'filetype', 'fileencoding', 'lineinfo']]
+let s:component_type = {}
 if Installed('lightline-ale')
     let g:lightline.component_expand =  {
                 \ 'linter_checking': 'lightline#ale#checking',
                 \ 'linter_errors': 'lightline#ale#errors',
                 \ 'linter_warnings': 'lightline#ale#warnings',
                 \ }
-    let g:lightline.component_type = {
+    let s:component_type = {
                 \ 'linter_checking': 'right',
                 \ 'linter_errors': 'error',
                 \ 'linter_warnings': 'warning',
@@ -105,7 +106,7 @@ elseif Installed('nvim-lightline-lsp')
                 \ 'lsp_ok': 'lightline#lsp#ok',
                 \ }
     " Set color to the component
-    let g:lightline.component_type = {
+    let s:component_type = {
                 \ 'lsp_warnings': 'warning',
                 \ 'lsp_errors': 'error',
                 \ 'lsp_info': 'info',
@@ -193,11 +194,12 @@ let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------
 " lightline component_type
 " ------------------------
-let g:lightline.component_type = {
+let g:lightline.component_type = extend(s:component_type,
+            \ {
             \ 'gitbranch': 'info',
             \ 'buffers': 'tabsel',
             \ 'relativepath': 'info'
-            \ }
+            \ })
 " ------------------------
 " tab label
 " ------------------------
