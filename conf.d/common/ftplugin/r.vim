@@ -65,11 +65,11 @@ if Installed('nvim-r')
     " view variable
     nnoremap <buffer><silent>J :call RAction('print')<CR>
     nnoremap <buffer><silent>- :call RAction('viewobj')<CR>
-    nnoremap <buffer><silent>_ :call SendLineToRAndInsertOutput()<CR>^
     " send
-    nnoremap <buffer><silent>,B :call SendAboveLinesToR()<CR>
-    nnoremap <buffer><silent>,E VG:call SendLineToR('down')<CR>
-    nnoremap <buffer><silent>,A ggVG:call SendLineToR('down')<CR>
+    nnoremap <buffer><silent>\B :call SendAboveLinesToR()<CR>
+    nnoremap <buffer><silent>\E VG:call SendLineToR('down')<CR>
+    nnoremap <buffer><silent>\A ggVG:call SendLineToR('down')<CR>
+    nnoremap <buffer><silent><M-e>i :call SendLineToRAndInsertOutput()<CR>^
     nnoremap <buffer><silent><M-e>f :call SendFunctionToR('echo', "down")<CR>
     nnoremap <buffer><silent><M-e>h :call SendLineToR("stay")<CR>
     nnoremap <buffer><silent><M-e>j :call SendLineToR("down")<CR>
