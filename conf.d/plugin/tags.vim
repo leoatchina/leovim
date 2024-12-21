@@ -8,6 +8,16 @@ if type(g:symbol_tool) == type([])
     unlet s:symbol_tool
 endif
 " --------------------------
+" matchup
+" --------------------------
+if g:has_popup_floating
+    let g:matchup_matchparen_offscreen = {'methed': 'popup'}
+else
+    let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
+endif
+nnoremap <silent><Tab>m :MatchupWhereAmI??<Cr>
+PlugAddOpt 'vim-matchup'
+" --------------------------
 " set tags
 " --------------------------
 try
