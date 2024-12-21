@@ -100,13 +100,13 @@ else
     if Installed('asyncrun.vim') && g:has_terminal && UNIX()
         nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 add -A<Cr>
         nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
-        nnoremap <silent><M-g><Cr> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
+        nnoremap <silent><M-g><M-g> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
         nnoremap <M-G> :AsyncRun -mode=term -focus=1 git
         nnoremap <M-g>U :AsyncRun -mode=term -focus=1 git push<Space>
     else
         nnoremap <silent><M-g>a :!git add -A<Cr>
         nnoremap <silent><M-g>u :!git push<Cr>
-        nnoremap <silent><M-g><Cr> :!git commit -a -m ""<Left>
+        nnoremap <silent><M-g><M-g> :!git commit -a -m ""<Left>
         nnoremap <M-G> :!git
         nnoremap <M-g>U :!git push<Space>
     endif
@@ -116,7 +116,9 @@ if Installed('blamer.nvim')
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '
     let g:blamer_delay = 500
-    nnoremap <silent><M-g>\ :BlamerToggle<Cr>
+    nnoremap <silent>g<Tab> :BlamerToggle<Cr>
+    au FileType fugitiveblame nnoremap <buffer><silent> q :quit<Cr>
+    au FileType fugitiveblame nnoremap <buffer><silent> g<tab> :quit<Cr>
 endif
 if PlannedLeaderf()
     nnoremap <silent><M-g><M-i> :Leaderf git<Cr>
@@ -124,12 +126,12 @@ if PlannedLeaderf()
     nnoremap <silent><M-g><M-l> :Leaderf git log<Cr>
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
     nnoremap <silent><M-g><M-d> :Leaderf git diff --current-file --side-by-side<Cr>
-    nnoremap <silent><M-g><Tab> :Leaderf git blame<Cr>
+    nnoremap <silent>g<Tab> :Leaderf git blame<Cr>
     if has('patch-9.0.200') || has('nvim')
-        nnoremap <silent><M-g>\ :LeaderfGitInlineBlameToggle<Cr>
+        nnoremap <silent>g<Cr> :LeaderfGitInlineBlameToggle<Cr>
     endif
 elseif Installed('vim-fugitive')
-    nnoremap <silent><M-g><Tab> :Git blame<Cr>
+    nnoremap <silent>g<Tab> :Git blame<Cr>
 endif
 if PlannedFzf()
     if Installed('blamer.nvim') || PlannedLeaderf() && !has('patch-9.0.200')
