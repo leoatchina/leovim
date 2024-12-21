@@ -59,7 +59,7 @@ augroup END
 if Planned('vim-fugitive')
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
-    nnoremap <silent><M-g><Cr> :Git commit -av<Cr>
+    nnoremap <silent><M-g><M-g> :Git commit -av<Cr>
     nnoremap <M-G>  :Git
     nnoremap <M-g>U :Git push<Space>
     " compare with history version
@@ -116,7 +116,7 @@ if Installed('blamer.nvim')
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '
     let g:blamer_delay = 500
-    nnoremap <silent>,<Cr> :BlamerToggle<Cr>
+    nnoremap <silent><M-g>\ :BlamerToggle<Cr>
 endif
 if PlannedLeaderf()
     nnoremap <silent><M-g><M-i> :Leaderf git<Cr>
@@ -124,12 +124,12 @@ if PlannedLeaderf()
     nnoremap <silent><M-g><M-l> :Leaderf git log<Cr>
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
     nnoremap <silent><M-g><M-d> :Leaderf git diff --current-file --side-by-side<Cr>
-    nnoremap <silent>,<Tab> :Leaderf git blame<Cr>
+    nnoremap <silent><M-g><Tab> :Leaderf git blame<Cr>
     if has('patch-9.0.200') || has('nvim')
-        nnoremap <silent>,<Cr> :LeaderfGitInlineBlameToggle<Cr>
+        nnoremap <silent><M-g>\ :LeaderfGitInlineBlameToggle<Cr>
     endif
 elseif Installed('vim-fugitive')
-    nnoremap <silent>,<Tab> :Git blame<Cr>
+    nnoremap <silent><M-g><Tab> :Git blame<Cr>
 endif
 if PlannedFzf()
     if Installed('blamer.nvim') || PlannedLeaderf() && !has('patch-9.0.200')
@@ -137,7 +137,7 @@ if PlannedFzf()
     else
         command! GCommands call FzfCallCommands('GCommands', 'G', 'LeaderfGit', ['Glance', 'Gutentag', 'Grep', 'Get'])
     endif
-    nnoremap <silent><M-g><M-g> :GCommands<Cr>
+    nnoremap <silent><M-g><Cr> :GCommands<Cr>
 endif
 " ---------------------------------
 " tig lazygit intergrated
@@ -145,9 +145,9 @@ endif
 if g:has_popup_floating && g:has_terminal && executable('lazygit')
     command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
     if has('nvim')
-        nnoremap <silent>,<Space> :GLazyGit<Cr>
+        nnoremap <silent><M-g>l :GLazyGit<Cr>
     else
-        nnoremap <silent>,<Space> :GLazyGit<Cr>i
+        nnoremap <silent><M-g>l :GLazyGit<Cr>i
     endif
 endif
 "########## Merge ##########{{{

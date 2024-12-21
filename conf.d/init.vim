@@ -141,7 +141,6 @@ endfor
 " ------------------------
 nnoremap M q
 nnoremap q <Nop>
-nnoremap qq q
 let g:mapleader = ' '
 let g:maplocalleader = 'q'
 " ------------------------

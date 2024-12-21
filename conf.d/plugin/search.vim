@@ -193,10 +193,10 @@ if PlannedFzf()
     nnoremap <nowait><Tab>. :FzfSearchGitLast<Cr>
     nnoremap <nowait><Tab>\ :FzfSearchGit <C-r><C-w>
     xnoremap <nowait><Tab>\ :<C-u>FzfSearchGit <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait>,/ :FzfSearchAll<Cr>
-    nnoremap <nowait>,. :FzfSearchAllLast<Cr>
-    nnoremap <nowait>,\ :FzfSearchAll <C-r><C-w>
-    xnoremap <nowait>,\ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait>q/ :FzfSearchAll<Cr>
+    nnoremap <nowait>q. :FzfSearchAllLast<Cr>
+    nnoremap <nowait>q\ :FzfSearchAll <C-r><C-w>
+    xnoremap <nowait>q\ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
 endif
 " ----------------------------
 " leaderf search commands
