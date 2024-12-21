@@ -236,7 +236,8 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
             \ exists('$OPENROUTER_API_KEY') ||
             \ exists('$OPENAI_API_KEY') ||
             \ exists('$ANTHROPIC_API_KEY') ||
-            \ exists('$GEMINI_API_KEY')
+            \ exists('$GEMINI_API_KEY') ||
+            \ Planned('copilot.vim')
             \ )
     if executable('cargo') && UNIX()
         PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }

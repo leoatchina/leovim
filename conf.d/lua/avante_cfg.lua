@@ -44,11 +44,15 @@ elseif vim.env.OPENAI_API_KEY then
 elseif vim.env.ANTHROPIC_API_KEY then
   vim.g.avante_model = vim.g.claude_model
   provider = 'claude'
-else
+elseif vim.env.GEMINI_API_KEY then
   vim.g.avante_model = vim.g.gemini_model
   provider = 'gemini'
+else
+  vim.g.avante_model = vim.g.copilot_model
+  provider = 'copilot'
 end
-vim.g.ai_complete_engine = vim.g.ai_complete_engine and vim.g.avante_model .. '&' .. vim.g.ai_complete_engine
+vim.g.ai_complete_engine = vim.g.avante_model == 'copilot' and 'copilot'
+  or vim.g.ai_complete_engine and vim.g.avante_model .. '&&' .. vim.g.ai_complete_engine
   or vim.g.avante_model
 require('avante').setup({
   provider = provider,
