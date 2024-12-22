@@ -155,8 +155,10 @@ function! ZFVimPunctuation()
     endif
     call s:show_input()
 endfunction
-nnoremap <silent><M-Z> :call ZFVimPunctuation()<Cr>
-inoremap <silent><M-Z> <C-o>:call ZFVimPunctuation()<Cr>
+nnoremap <silent>;, :call ZFVimPunctuation()<Cr>
+nnoremap <silent>,; :call ZFVimPunctuation()<Cr>
+inoremap <silent>;, <C-o>:call ZFVimPunctuation()<Cr>
+inoremap <silent>,; <C-o>:call ZFVimPunctuation()<Cr>
 " ----------------------------
 " dbinit
 " ----------------------------
