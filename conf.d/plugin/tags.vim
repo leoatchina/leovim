@@ -15,11 +15,9 @@ if g:has_popup_floating
 else
     let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
 endif
-command! MatchupCommands call FzfCallCommands('MatchupCommands', 'Matchup')
-nnoremap <silent>m<Cr> :MatchupCommands<Cr>
-nnoremap <silent><Tab>m :MatchupWhereAmI??<Cr>
-nnoremap <silent><Tab>M :MatchupWhereAmI
 PlugAddOpt 'vim-matchup'
+command! MatchupCommands call FzfCallCommands('MatchupCommands', 'Matchup')
+nnoremap <silent>m<Cr> :MatchupWhereAmI??<Cr>
 " --------------------------
 " set tags
 " --------------------------
