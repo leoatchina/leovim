@@ -105,6 +105,15 @@ function! ZFVimIMELoop(type)
     endif
     call s:show_input()
 endfunction
+let g:ZFVimIM_keymap = 0
+inoremap <expr><silent> ;; ZFVimIME_keymap_toggle_i()
+nnoremap <silent>;; :call ZFVimIMELoop(0)<Cr>
+inoremap <silent>;; <C-o>:call ZFVimIMELoop(0)<Cr>
+nnoremap <silent>,, :call ZFVimIMELoop(1)<Cr>
+inoremap <silent>,, <C-o>:call ZFVimIMELoop(1)<Cr>
+" -------------------------
+" punctuation
+" -------------------------
 function! ZFVimPunctuation()
     if !exists('g:ZFVimIM_symbolMap') || empty(g:ZFVimIM_symbolMap)
         let g:ZFVimIM_symbolMap = {
@@ -146,10 +155,6 @@ function! ZFVimPunctuation()
     endif
     call s:show_input()
 endfunction
-let g:ZFVimIM_keymap = 0
-inoremap <expr><silent> ;; ZFVimIME_keymap_toggle_i()
-nnoremap <silent><M-z> :call ZFVimIMELoop(1)<Cr>
-inoremap <silent><M-z> <C-o>:call ZFVimIMELoop(1)<Cr>
 nnoremap <silent><M-Z> :call ZFVimPunctuation()<Cr>
 inoremap <silent><M-Z> <C-o>:call ZFVimPunctuation()<Cr>
 " ----------------------------

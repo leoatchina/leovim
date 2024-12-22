@@ -51,8 +51,8 @@ xnoremap <M-w> <ESC>
 cnoremap <M-w> <ESC>
 " basic set
 nnoremap <M-k>f :set nofoldenable! nofoldenable?<Cr>
-nnoremap <M-k>w :set nowrap! nowrap?<Cr>
 nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
+nnoremap <M-z> :set nowrap! nowrap?<Cr>
 if has('nvim')
     nnoremap <M-k>U :UpdateRemotePlugins<Cr>
 endif
