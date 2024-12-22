@@ -18,7 +18,7 @@ set tabpagemax=10
 " Tab move
 nnoremap <silent><Tab>n :tabm +1<CR>
 nnoremap <silent><Tab>p :tabm -1<CR>
-nnoremap <Tab><Space>   :tabm<Space>
+nnoremap <Tab><Space> :tabm<Space>
 " move current buffer to tab
 nnoremap <C-w><Cr> <C-w>T
 " round current buffer

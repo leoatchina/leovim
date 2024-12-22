@@ -44,13 +44,13 @@ endif
 " ------------------------
 " paste
 " ------------------------
-nnoremap ,pw viwp
+nnoremap \pw viwp
 for i in range(4)
-    execute printf('nnoremap ,p%s viw"%sp', i , i)
-    execute printf('xnoremap ,p%s "%sp', i , i)
+    execute printf('nnoremap \p%s viw"%sp', i , i)
+    execute printf('xnoremap \p%s "%sp', i , i)
 endfor
-nnoremap ,p` viw"0p
-xnoremap ,p` "0p
+nnoremap \p` viw"0p
+xnoremap \p` "0p
 " Yank a line without leading whitespaces and line break
 nnoremap <leader>yu mp_yg_`p
 " Copy a line without leading whitespaces and line break to clipboard
