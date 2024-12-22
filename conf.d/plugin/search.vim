@@ -184,7 +184,6 @@ if PlannedFzf()
     command! -nargs=? FzfSearchAll call s:fzf_search(<q-args>, 2)
     command! -nargs=0 FzfSearchGitLast call s:fzf_search(3)
     command! -nargs=? FzfSearchGit call s:fzf_search(<q-args>, 3)
-    nnoremap <nowait><leader>? :FzfSearchAll<Space>
     nnoremap <nowait><leader>/ :FzfSearch<Cr>
     nnoremap <nowait><leader>. :FzfSearchLast<Cr>
     nnoremap <nowait><leader>\ :FzfSearch <C-r><C-w>
@@ -197,6 +196,8 @@ if PlannedFzf()
     nnoremap <nowait>q. :FzfSearchAllLast<Cr>
     nnoremap <nowait>q\ :FzfSearchAll <C-r><C-w>
     xnoremap <nowait>q\ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
+    command! FzfSearchCommands call FzfCallCommands('FzfSearchCommands', 'FzfSearch')
+    nnoremap <nowait><leader>? :FzfSearchCommands<Cr>
 endif
 " ----------------------------
 " leaderf search commands
