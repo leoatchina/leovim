@@ -86,8 +86,8 @@ function! s:show_input()
     let msg = printf('%s with %s', ime_name, punctuation)
     call preview#cmdmsg(msg, 1)
 endfunction
-function! ZFVimIMELoop(type)
-    if Installed('ZFVimIM_wubi_base') && a:type
+function! ZFVimIMELoop()
+    if Installed('ZFVimIM_wubi_base') && a:0 && a:1
         if ZFVimIME_IMEName() == 'wubi'
             call ZFVimIME_keymap_next_n()
         elseif ZFVimIME_IMEName() == 'pinyin'
@@ -106,11 +106,10 @@ function! ZFVimIMELoop(type)
     call s:show_input()
 endfunction
 let g:ZFVimIM_keymap = 0
-inoremap <expr><silent> ;; ZFVimIME_keymap_toggle_i()
-nnoremap <silent>;; :call ZFVimIMELoop(0)<Cr>
-inoremap <silent>;; <C-o>:call ZFVimIMELoop(0)<Cr>
-nnoremap <silent>,, :call ZFVimIMELoop(1)<Cr>
+inoremap <expr><silent>;; ZFVimIME_keymap_toggle_i()
 inoremap <silent>,, <C-o>:call ZFVimIMELoop(1)<Cr>
+nnoremap <silent>;; :call ZFVimIMELoop()<Cr>
+nnoremap <silent>,, :call ZFVimIMELoop(1)<Cr>
 " -------------------------
 " punctuation
 " -------------------------
