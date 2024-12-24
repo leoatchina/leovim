@@ -1,7 +1,17 @@
+" ------------------------------
+" fullscreen
+" ------------------------------
+if LINUX() && HAS_GUI() && executable('wmctrl')
+    PlugAdd 'lambdalisue/vim-fullscreen'
+    if has('nvim')
+        let g:fullscreen#start_command = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 1)"
+        let g:fullscreen#stop_command  = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 0)"
+    endif
+endif
 " ----------------------------
 " nvim plugins
 " ----------------------------
-if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('CopilotChat.nvim') || Planned('avante.nvim')
+if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('avante.nvim')
     PlugAdd 'williamboman/mason.nvim'
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
@@ -12,29 +22,12 @@ endif
 if !Planned('nvim-cmp')
     if g:python_version > 3 && has('nvim') && UNIX()
         function! UpdateRemotePlugins(...)
-            " Needed to refresh runtime files
             let &rtp=&rtp
             UpdateRemotePlugins
         endfunction
         Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
     elseif !has('nvim') && v:version >= 801 || has('nvim') && !WINDOWS()
         PlugAdd 'gelguy/wilder.nvim'
-    endif
-endif
-" ----------------------------
-" helpful
-" ----------------------------
-if Require('helpful')
-    PlugAdd 'tweekmonster/helpful.vim'
-endif
-" ------------------------------
-" fullscreen
-" ------------------------------
-if LINUX() && HAS_GUI() && executable('wmctrl')
-    PlugAdd 'lambdalisue/vim-fullscreen'
-    if has('nvim')
-        let g:fullscreen#start_command = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 1)"
-        let g:fullscreen#stop_command  = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 0)"
     endif
 endif
 " ------------------------------
@@ -76,7 +69,7 @@ PlugAdd 'mbbill/undotree'
 " ------------------------------
 " zfvim
 " ------------------------------
-if (Require('wubi') || Require('pinyin')) && g:has_terminal && !Planned('vimcomplete')  " && (UNIX() || WINDOWS() && !has('nvim'))
+if (Require('wubi') || Require('pinyin')) && g:has_terminal
     PlugAdd 'ZSaberLv0/ZFVimIM'
     if Require('wubi')
         PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'
