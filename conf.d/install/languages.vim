@@ -39,8 +39,12 @@ endif
 " --------------------------
 " R language
 " --------------------------
-if (Require('R') || Require('bioinfo')) && (has('nvim-0.8') || v:version >= 802) && executable(Expand(get(g:, 'R_exe', 'R')))
+if WINDOWS()
+    let g:R_exe = Expand(exepath(get(g:, 'R_exe', 'R.exe')))
+else
     let g:R_exe = Expand(exepath(get(g:, 'R_exe', 'R')))
+endif
+if (Require('R') || Require('bioinfo')) && (has('nvim-0.8') || v:version >= 802) && executable(g:R_exe)
     PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 else
     let g:R_exe = ''
