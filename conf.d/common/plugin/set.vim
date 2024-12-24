@@ -74,7 +74,10 @@ endif
 " jumpoption
 " --------------------------
 if has('nvim') || has('jumpoptions')
-    set jumpoptions=stack,view
+    set jumpoptions=stack
+    if has('nvim-0.8')
+        set jumpoptions+=view
+    endif
 endif
 " --------------------------
 " splitkeep

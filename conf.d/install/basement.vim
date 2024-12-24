@@ -273,7 +273,7 @@ endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
-if has('nvim')
+if has('nvim-0.8')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/dressing.nvim'
