@@ -86,7 +86,7 @@ function! s:show_input()
     let msg = printf('%s with %s', ime_name, punctuation)
     call preview#cmdmsg(msg, 1)
 endfunction
-function! ZFVimIMELoop()
+function! ZFVimIMELoop(...)
     if Installed('ZFVimIM_wubi_base') && a:0 && a:1
         if ZFVimIME_IMEName() == 'wubi'
             call ZFVimIME_keymap_next_n()
