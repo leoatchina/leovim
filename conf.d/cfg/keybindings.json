@@ -435,7 +435,7 @@
   },
   // reload current file
   {
-    "key": "ctrl+shift+alt+e",
+    "key": "ctrl+shift+alt+enter",
     "command": "multiCommand.reloadFile"
   },
   // transparency or glassit
@@ -499,11 +499,11 @@
   },
   // cline
   {
-    "key": "ctrl+\\",
+    "key": "ctrl+shift+alt+\\",
     "command": "claude-dev.SidebarProvider.focus"
   },
   {
-    "key": "ctrl+shift+alt+\\",
+    "key": "ctrl+\\",
     "command": "cline.openInNewTab"
   },
   //continue ai
