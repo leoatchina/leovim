@@ -235,11 +235,7 @@ endif
 " ------------------------
 " ColorScheme
 " ------------------------
-if Planned('nvim-treesitter')
-    call coc#config('go.goplsOptions.semanticTokens', v:false)
-else
-    call coc#config('go.goplsOptions.semanticTokens', v:true)
-endif
+call coc#config('go.goplsOptions.semanticTokens', v:true)
 augroup FixCocColorScheme
     autocmd!
     autocmd ColorScheme edge,sonokai,gruvbox-material,gruvbox hi! CocExplorerIndentLine ctermbg=NONE guibg=NONE

@@ -8,14 +8,9 @@ require("nvim-treesitter.configs").setup({
   ensure_installed = vim.g.highlight_filetypes,
   sync_install = true,
   highlight = {
-    enable = true,
+    enable = not vim.fn.AdvCompEngine(),
     additional_vim_regex_highlighting = true,
     disable = function(client, bufnr)
-      -- disable if semanticTokensProvider or > maxsize
-      local caps = client.server_capabilities
-      if caps and caps.semanticTokensProvider and caps.semanticTokensProvider.full then
-        return true
-      end
       local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
       if ok and stats and stats.size > 1024 * 1024 then
         return true
@@ -32,13 +27,13 @@ require("nvim-treesitter.configs").setup({
     },
   },
   matchup = {
-    enable = false,
+    enable = true,
   },
   fold = {
     enable = true,
   },
   indent = {
-    enable = false,
+    enable = true,
   },
   parser_install_dir = vim.fn.expand("~/.leovim.d/treesitter")
 })

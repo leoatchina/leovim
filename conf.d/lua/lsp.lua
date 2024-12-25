@@ -269,21 +269,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
       map('x', "<M-s>", require('lsp-selection-range').expand, opts_silent)
     end
     -- semantic token highlight
-    ok, _ = pcall(function()
-      vim.treesitter.get_parser(bufnr)
-    end, bufnr)
-    if not ok then
-      if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
-        autocmd("TextChanged", {
-          group = vim.api.nvim_create_augroup("SemanticTokens", {}),
-          buffer = bufnr,
-          callback = function()
-            vim.lsp.semantic_tokens.force_refresh(bufnr)
-          end,
-        })
-        -- fire it first time on load as well
-        vim.lsp.semantic_tokens.start(bufnr, client)
-      end
+    if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
+      autocmd("TextChanged", {
+        group = vim.api.nvim_create_augroup("SemanticTokens", {}),
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.semantic_tokens.force_refresh(bufnr)
+        end,
+      })
+      -- fire it first time on load as well
+      vim.lsp.semantic_tokens.start(bufnr, client)
     end
     -- inlay_hint
     if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
