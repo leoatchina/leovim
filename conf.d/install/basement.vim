@@ -237,16 +237,17 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
             \ exists('$OPENAI_API_KEY') ||
             \ exists('$ANTHROPIC_API_KEY') ||
             \ exists('$GEMINI_API_KEY') ||
+            \ exists('$XAI_API_KEY') ||
             \ Planned('copilot.vim')
             \ )
-    if executable('cargo') && UNIX()
+    if executable('curl') && (exists('$XAI_API_KEY') || Require('codecompanion'))
+        PlugAdd 'olimorris/codecompanion.nvim'
+    elseif executable('cargo') && UNIX()
         PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make BUILD_FROM_SOURCE=true' }
+    elseif UNIX()
+        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
     else
-        if UNIX()
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
-        else
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
-        endif
+        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
     endif
 endif
 " ------------------------------
