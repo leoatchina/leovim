@@ -128,11 +128,13 @@ if Planned('ale')
     " map
     command! ALECommands call FzfCallCommands('ALECommands', 'ALE')
     command! -bang -nargs=* ALEDiag call s:ale_diag()
-    nnoremap <silent><leader>d :ALELint<Cr>
-    nnoremap <silent><leader>o :ALEToggle<Cr>
-    nnoremap <silent><leader>O :ALECommands<Cr>
-    nmap ;d <Plug>(ale_next)
-    nmap ,d <Plug>(ale_previous)
-    nmap ;e <Plug>(ale_next_error)
-    nmap ,e <Plug>(ale_previous_error)
+    if !Installed('coc.nvim')
+        nnoremap <silent><leader>d :ALELint<Cr>
+        nnoremap <silent><leader>o :ALEToggle<Cr>
+        nnoremap <silent><leader>O :ALECommands<Cr>
+        nmap ;d <Plug>(ale_next)
+        nmap ,d <Plug>(ale_previous)
+        nmap ;e <Plug>(ale_next_error)
+        nmap ,e <Plug>(ale_previous_error)
+    endif
 endif
