@@ -4,13 +4,7 @@ try
 catch
     finish
 endtry
-if InstalledNvimLsp()
-    lua require('diagnostic')
-    nnoremap <silent><leader>o <cmd>lua toggle_diagnostics()<CR>
-    nnoremap <silent><leader>O <cmd>lua toggle_diagnostics_highlight()<CR>
-    nnoremap <silent><leader>d <cmd>lua vim.diagnostic.setloclist({open=true})<Cr>
-    nnoremap <silent><leader>D <cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<CR>
-elseif Installed('coc.nvim')
+if Installed('coc.nvim')
     " highlight group
     highlight def link CocErrorHighlight   NONE
     highlight def link CocWarningHighlight NONE
