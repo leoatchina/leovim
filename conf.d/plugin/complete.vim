@@ -1,5 +1,5 @@
 if Installed('mason.nvim')
-    lua require("mason_cfg")
+    lua require("cfg/mason")
 endif
 " ------------------------------
 " vim-header
@@ -35,13 +35,10 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
-elseif Installed('copilot.lua')
-    lua require("copilot_cfg")
-    let g:ai_complete_engine = 'copliot'
 endif
 if Installed('avante.nvim')
     let g:avante_model = ''
-    lua require("avante_cfg")
+    lua require("cfg/avante")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
@@ -63,7 +60,7 @@ endif
 " normal complete_engine
 " ------------------------------
 if InstalledCmp()
-    lua require("cmp_cfg")
+    lua require("cfg/cmp")
 elseif Installed('coc.nvim')
     source $CFG_DIR/coc.vim
 elseif g:complete_engine == 'apm'

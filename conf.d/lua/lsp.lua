@@ -3,6 +3,43 @@ local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
 local lsp_capabilities = require("lsp-selection-range").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-------------
+-- diagnostic
+-------------
+vim.diagnostic.config({
+  virtual_text = false,
+  underline = false,
+  float = {border = "single"}
+})
+function _G.toggle_diagnostics()
+  if vim.b.diagnostics_enable then
+    print("diagnostics off")
+    vim.b.diagnostics_enable = false
+    vim.diagnostic.disable()
+  else
+    print("diagnostics on")
+    vim.b.diagnostics_enable = true
+    vim.diagnostic.enable()
+  end
+end
+-- toggle diagnostic virtual text && underline
+function _G.toggle_diagnostics_highlight()
+  if vim.b.diagnostic_virtualtext_underline then
+    print("virtualtext_underline off")
+    vim.b.diagnostic_virtualtext_underline = false
+    vim.diagnostic.config({
+      virtual_text = false,
+      underline = false,
+    })
+  else
+    print("virtualtext_underline on")
+    vim.b.diagnostic_virtualtext_underline = true
+    vim.diagnostic.config({
+      virtual_text = true,
+      underline = true,
+    })
+  end
+end
 -----------------
 -- neoconf
 -----------------
@@ -259,6 +296,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "<C-q>", vim.lsp.buf.format, opts_silent)
     map(nx, "<leader>W", vim.lsp.buf.workspace_symbol, opts_silent)
     map(nx, "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
+    -- diagnostic
+    map(nx, "<leader>o", toggle_diagnostics, opts_silent)
+    map(nx, "<leader>O", toggle_diagnostics_highlight, opts_silent)
+    map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
+    map(nx, "<leader>D", [[<Cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<Cr>]], opts_silent)
     -- select range
     local ok
     ok, _ = pcall(function()
