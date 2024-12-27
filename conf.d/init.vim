@@ -455,7 +455,7 @@ nnoremap , <Nop>
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim-0.8')
     PlugAddOpt 'flash.nvim'
-    lua require("flash_cfg")
+    lua require("cfg/flash")
     nmap SJ vt<Space><Cr>S
     nmap SK vT<Space><Cr>S
 else
@@ -843,7 +843,7 @@ if exists('g:vscode')
     xmap <C-x> "*x
     nmap <C-x> "*x
     PlugAddOpt 'hop.nvim'
-    lua require("hop_cfg")
+    lua require("cfg/hop")
     source $CFG_DIR/vscode.vim
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"

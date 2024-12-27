@@ -3,7 +3,7 @@
 " --------------------
 filetype plugin indent on
 if Installed('indent-blankline.nvim')
-    lua require("ibl_cfg")
+    lua require("cfg/ibl")
 elseif Planned('indentline')
     let g:vim_json_conceal = 0
     let g:indentLine_enabled = 0

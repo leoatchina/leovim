@@ -34,10 +34,3 @@ vim.diagnostic.config({
   underline = false,
   float = {border = "single"}
 })
--- maps
-local opts = { noremap = true, silent = true }
-local map = vim.keymap.set
-map('n', '<leader>o', '<cmd>lua toggle_diagnostics()<CR>', opts)
-map('n', '<leader>O', '<cmd>lua toggle_diagnostics_highlight()<CR>', opts)
-map('n', '<leader>d', '<cmd>lua vim.diagnostic.setloclist({open=true})<CR>', opts)
-map('n', '<leader>D', '<cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<CR>', opts)

@@ -228,7 +228,7 @@ omap ac <Plug>(coc-classobj-a)
 " ------------------------
 if has('nvim')
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
-    lua require("coc")
+    lua require("cfg/coc")
 else
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
 endif
