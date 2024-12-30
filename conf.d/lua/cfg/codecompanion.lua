@@ -1,3 +1,4 @@
+vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionCommands<Cr>]], { noremap = true, silent = true })
 require("codecompanion").setup({
   display = {
     diff = {

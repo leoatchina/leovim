@@ -1,6 +1,6 @@
 require('avante_lib').load()
 -- keymaps
-vim.keymap.set("n", "<M-i><M-o>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
 vim.keymap.set("n", "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
 -- base models
 vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
