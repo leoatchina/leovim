@@ -240,7 +240,7 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
             \ exists('$XAI_API_KEY') ||
             \ Planned('copilot.vim')
             \ )
-    if executable('curl') && (exists('$XAI_API_KEY') || Require('codecompanion'))
+    if executable('curl') && Planned('nvim-cmp') && (exists('$XAI_API_KEY') || Require('codecompanion'))
         PlugAdd 'olimorris/codecompanion.nvim'
     elseif UNIX()
         PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
