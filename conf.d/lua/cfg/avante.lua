@@ -5,9 +5,9 @@ vim.keymap.set("n", "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, si
 -- tokens
 local max_tokens = type(vim.g.max_tokens) == 'number'
   and vim.g.max_tokens > 0
-  and vim.g.max_tokens < 1024 * 16
+  and vim.g.max_tokens < 1024 * 8
   and vim.g.max_tokens
-  or 1024 * 16
+  or 1024 * 8
 -- base models
 vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
 vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-flash"
@@ -19,7 +19,6 @@ if vim.env.DASHSCOPE_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.DASHSCOPE_API_KEY
   vim.g.avante_model = vim.g.qwen_model or "qwen-coder-plus-latest"
   provider = 'openai'
-  max_tokens = 1024 * 8
   openai_endpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 elseif vim.env.HYPERBOLIC_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.HYPERBOLIC_API_KEY
@@ -28,10 +27,9 @@ elseif vim.env.HYPERBOLIC_API_KEY then
   openai_endpoint = "https://api.hyperbolic.xyz/v1"
 elseif vim.env.DEEPSEEK_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.DEEPSEEK_API_KEY
-  vim.g.avante_model = vim.g.deepseek_model or "deepseek-coder"
+  vim.g.avante_model = vim.g.deepseek_model or "deepseek-chat"
   provider = 'openai'
-  max_tokens = 1024 * 4
-  openai_endpoint = "https://api.deepseek.com"
+  openai_endpoint = "https://api.deepseek.com/v1"
 elseif vim.env.OPENROUTER_API_KEY then
   vim.env.OPENAI_API_KEY = vim.env.OPENROUTER_API_KEY
   vim.g.avante_model = vim.g.openrouter_model or "openai/gpt-4o"
