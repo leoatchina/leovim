@@ -1,13 +1,7 @@
 require('avante_lib').load()
 -- keymaps
-vim.keymap.set("n", "<M-i>a", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i><M-o>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
 vim.keymap.set("n", "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
--- tokens
-local max_tokens = type(vim.g.max_tokens) == 'number'
-  and vim.g.max_tokens > 0
-  and vim.g.max_tokens < 1024 * 8
-  and vim.g.max_tokens
-  or 1024 * 8
 -- base models
 vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
 vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-flash"
@@ -60,16 +54,16 @@ require('avante').setup({
     -- NOTE: using avante_model here
     model = vim.g.avante_model,
     endpoint = openai_endpoint,
-    max_tokens = max_tokens
+    max_tokens = vim.g.max_tokens
   },
   -- other models
   claude = {
     model = vim.g.claude_model,
-    max_tokens = max_tokens
+    max_tokens = vim.g.max_tokens
   },
   gemini = {
     model = vim.g.gemini_model,
-    max_tokens = max_tokens
+    max_tokens = vim.g.max_tokens
   },
   -- behaviour
   behaviour = {

@@ -13,6 +13,7 @@ nnoremap <M-k>h :AddBangHeader<Cr>
 " ------------------------------
 " AI complete
 " ------------------------------
+let g:max_tokens = get(g:, 'max_tokens', 8192)
 if Planned('codeium.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
@@ -39,6 +40,7 @@ endif
 if Installed('codecompanion.nvim')
     let g:codecompanion_model = ''
     lua require("cfg/codecompanion")
+    command! CodeCompanionCommands call FzfCallCommands('CodeCompanionCommands', 'CodeCompanion')
 elseif Installed('avante.nvim')
     let g:avante_model = ''
     lua require("cfg/avante")
