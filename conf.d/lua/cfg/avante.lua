@@ -67,7 +67,7 @@ require('avante').setup({
     max_tokens = vim.g.max_tokens
   },
   copilot = {
-    model = vim.g.copilot_model
+    model = vim.g.copilot_model,
     max_tokens = vim.g.max_tokens
   },
   -- behaviour
