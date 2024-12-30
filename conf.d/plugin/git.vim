@@ -59,7 +59,7 @@ augroup END
 if Planned('vim-fugitive')
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
-    nnoremap <silent><M-g><Space> :Git commit -av<Cr>
+    nnoremap <silent><M-g><Cr> :Git commit -av<Cr>
     nnoremap <M-G>  :Git
     nnoremap <M-g>U :Git push<Space>
     " compare with history version
@@ -139,7 +139,7 @@ if PlannedFzf()
     else
         command! GCommands call FzfCallCommands('GCommands', 'G', 'LeaderfGit', ['Glance', 'Gutentag', 'Grep', 'Get'])
     endif
-    nnoremap <silent><M-g><Cr> :GCommands<Cr>
+    nnoremap <silent><M-g><M-g> :GCommands<Cr>
 endif
 " ---------------------------------
 " tig lazygit intergrated
