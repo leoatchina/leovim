@@ -21,6 +21,7 @@ function! floaterm#edita#vim#client#open() abort
 endfunction
 
 function! floaterm#edita#vim#client#EDITOR() abort
+    <<<<<<< HEAD
     let args = [
                 \ shellescape(v:progpath),
                 \ '--not-a-term',
@@ -35,6 +36,23 @@ function! floaterm#edita#vim#client#EDITOR() abort
                 \]
     call map(cmds, { -> printf('-c %s', shellescape(v:val)) })
     return join(args + cmds)
+    =======
+    let args = [
+                \ shellescape(fnamemodify(v:progpath, ':t') ==# v:progname ?
+                \             v:progpath : exepath(v:progname)),
+                \ '--not-a-term',
+                \ '--clean',
+                \ '--noplugin',
+                \ '-n',
+                \ '-R',
+                \]
+    let cmds = [
+                \ printf('set runtimepath^=%s', fnameescape(s:repo)),
+                \ 'call floaterm#edita#vim#client#open()'
+                \]
+    call map(cmds, { -> printf('-c %s', shellescape(v:val)) })
+    return join(args + cmds)
+    >>>>>>> 4e28c8dd0271e10a5f55142fb6fe9b1599ee6160
 endfunction
 
 function! s:send(data) abort

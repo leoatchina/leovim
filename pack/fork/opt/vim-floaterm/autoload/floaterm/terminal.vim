@@ -156,14 +156,9 @@ function! floaterm#terminal#send(bufnr, cmds) abort
     if empty(ch) || empty(a:cmds)
         return
     endif
-    if has('win32') && bufname(a:bufnr) !~ 'ipython'
-        let newline = "\r\n"
-    else
-        let newline = "\n"
-    endif
-    let cmds = join(a:cmds, newline) . newline
     if has('nvim')
-        call chansend(ch, cmds)
+        call add(a:cmds, '')
+        call chansend(ch, a:cmds)
         let curr_winnr = winnr()
         let ch_winnr = bufwinnr(a:bufnr)
         if ch_winnr > 0
@@ -172,11 +167,11 @@ function! floaterm#terminal#send(bufnr, cmds) abort
         endif
         noautocmd execute curr_winnr . 'wincmd w'
     else
-        call ch_sendraw(ch, cmds)
-        call floaterm#terminal#open_existing(a:bufnr)
-        if winnr() > 0
-            noautocmd execute 'wincmd p'
+        let newline = "\n"
+        if has('win32') && bufname(a:bufnr) !~ 'ipython'
+            let newline = "\r\n"
         endif
+        call ch_sendraw(ch, join(a:cmds, newline) . newline)
     endif
 endfunction
 

@@ -1,9 +1,12 @@
 #!/bin/bash
 
-# vista
 rm -rf vista.vim
 git clone --depth 1 https://github.com/leoatchina/vista.vim.git
 for fl in `find ./vista.vim -type f | grep vim$` ; do echo $fl; vim -c "normal ggVG=" -c "wq!" $fl ; done
+
+rm -rf vim-floaterm
+git clone --depth 1 https://github.com/leoatchina/vim-floaterm.git
+for fl in `find ./vim-floaterm -type f | grep vim$` ; do echo $fl; vim -c "normal ggVG=" -c "wq!" $fl ; done
 
 # delete files
 find . -type f | grep -i \.jpg$ | xargs rm -f
