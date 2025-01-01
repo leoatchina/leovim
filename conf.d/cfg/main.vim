@@ -218,7 +218,11 @@ else
         if LINUX()
             let $PATH = $HOME . "/.leovim.unix/linux:" . $PATH
         elseif MACOS()
-            let $PATH = $HOME . "/.leovim.unix/macos:" . $PATH
+            if system('uname -m') =~? 'arm64'
+                let $PATH = $HOME . "/.leovim.unix/macos/arm64:" . $PATH
+            else
+                let $PATH = $HOME . "/.leovim.unix/macos/x86_64:" . $PATH
+            endif
         endif
     endif
     " --------------------------
@@ -346,7 +350,7 @@ for [plug, value] in items(g:plugs)
     endif
 endfor
 " ------------------------------
-" set $PATH
+" set mason PATH
 " ------------------------------
 let mason_bin = Expand('~/.leovim.d/mason/bin')
 if g:complete_engine != 'cmp' && isdirectory(mason_bin) && $PATH !~ 'mason/bin'
