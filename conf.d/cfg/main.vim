@@ -257,14 +257,18 @@ elseif WINDOWS() && Require('tags') || UNIX()
     if WINDOWS() && filereadable(Expand("~/.leovim.windows/tools/ctags.exe"))
         let g:ctags_type = 'Universal-json'
     elseif executable('ctags')
-        let g:ctags_type = split(system('ctags --version'), ' ')[0]
-        if g:ctags_type =~ 'Universal'
-            if system('ctags --list-features | grep json') =~ 'json'
-                let g:ctags_type = 'Universal-json'
-            else
-                let g:ctags_type = 'Universal'
+        try
+            let g:ctags_type = split(system('ctags --version'), ' ')[0]
+            if g:ctags_type =~ 'Universal'
+                if system('ctags --list-features | grep json') =~ 'json'
+                    let g:ctags_type = 'Universal-json'
+                else
+                    let g:ctags_type = 'Universal'
+                endif
             endif
-        endif
+        catch
+            let g:ctags_type = ''
+        endtry
     else
         let g:ctags_type = ''
     endif
