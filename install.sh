@@ -228,9 +228,9 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'nodejs' ]] && exit 0
     fi
-    # copy bashrc
-    if [[ $mode == 'all' || $mode == 'bashrc' || $mode == 'leotmux' ]]; then
-        if [ -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
+    # copy configrc
+    if [[ $mode == 'all' || $mode == 'configrc' || $mode == 'leotmux' ]]; then
+        if [ -f ~/.bashrc ] && [ $os == 'linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -239,6 +239,15 @@ if [ $# -gt 0 ]; then
             else
                 info "bashrc not moved."
             fi
+        elif [ -f ~/.zshrc ]; then
+            read -p "Do you want to move .zshrc? (y/n) " -n 1 -r
+            echo             
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                mv -f ~/.zshrc ~/.zshrc.bak
+                success "zshrc moved."
+            else
+                info "zshrc not moved."
+            fi
         fi
     fi
 else
@@ -246,17 +255,17 @@ else
     installplug='yes'
 fi
 
-# set bashrc config
-if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
-    bashrc_copied=1
+# set rc config
+if  [ ! -f ~/.bashrc ] && [ $os == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
-else
-    bashrc_copied=0
+elif [ ! -f ~/.zshrc ]; then
+    cp $APP_PATH/scripts/zshrc $HOME/.zshrc
+    success "zshrc copied."
 fi
 
-if [[ $mode == 'bashrc' || $mode == 'leotmux' ]]; then
-    note "You can run `bash` to make leoatchina's bash config work."
+if [[ $mode == 'configrc' || $mode == 'leotmux' ]]; then
+    note "You can run `bash` or `zsh` to make leoatchina's bash config work."
     exit 0
 fi
 

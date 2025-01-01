@@ -1,0 +1,61 @@
+#!/bin/zsh
+
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+# Terminal colors
+export CLICOLOR=1
+export LSCOLORS=GxFxBxDxCxegedabagaced
+
+# History configuration
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=2000
+setopt HIST_IGNORE_DUPS       # Don't record duplicates in history
+setopt HIST_IGNORE_SPACE      # Don't record commands starting with space
+setopt APPEND_HISTORY         # Append history instead of overwriting
+setopt SHARE_HISTORY         # Share history between sessions
+
+# Command completion
+autoload -Uz compinit
+compinit
+
+# Load bash completion if available
+[[ -f /usr/local/etc/bash_completion ]] && source /usr/local/etc/bash_completion
+
+# Check if command exists
+command_exists() {
+    command -v "$@" > /dev/null 2>&1
+}
+# Git branch function for prompt
+function git_branch() {
+    branch=$(git branch 2>/dev/null | sed -n '/\* /s///p')
+    if [[ -n "$branch" ]]; then
+        if [[ "$branch" = "(no branch)" ]]; then
+            branch="($(git rev-parse --short HEAD)...)"
+        fi
+        if [[ -n $(git status --porcelain) ]]; then
+            echo " $branch x"
+        else
+            echo " $branch o"
+        fi
+    fi
+}
+
+# Prompt configuration
+autoload -Uz colors && colors
+setopt PROMPT_SUBST
+PROMPT='%F{red}%n%f@%F{yellow}%m%f:%F{cyan}%~%f$(git_branch)
+$ '
+
+# Terminal title (for xterm, rxvt, etc)
+case $TERM in
+    xterm*|rxvt*)
+        precmd () { print -Pn "\e]0;%n@%m: %~\a" }
+        ;;
+esac
+
+# Source additional configurations
+[[ -f ~/.configrc ]] && source ~/.configrc
+
+# fzf configuration if it exists
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
