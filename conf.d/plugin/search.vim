@@ -202,14 +202,7 @@ endif
 " ----------------------------
 " leaderf search commands
 " ----------------------------
-if LINUX()
-    let g:Lf_Rg = expand('~/.leovim.unix/linux/rg')
-elseif MACOS()
-    let g:Lf_Rg = expand('~/.leovim.unix/macox/rg')
-elseif WINDOWS()
-    let g:Lf_Rg = expand('~/.leovim.windows/tools/rg.exe')
-endif
-if PlannedLeaderf() && filereadable(g:Lf_Rg)
+if PlannedLeaderf() && executable('rg')
     let g:Lf_DefaultExternalTool = "rg"
     " LeaderfLast
     nnoremap <nowait><C-f>. :Leaderf rg --recal<Cr>
@@ -232,7 +225,7 @@ if PlannedLeaderf() && filereadable(g:Lf_Rg)
     nnoremap <nowait><C-f>i :LeaderfRgInteractive<Cr>
     let g:Lf_RgConfig = [
                 \ "--max-columns=10000",
-                \ "--glob=!{.git,.svn,.hg,.project}",
+                \ "--glob=!{.git,.svn,.hg,.project,.vscode,.idea,.vim}",
                 \ "--hidden"
                 \ ]
     let g:Lf_RgStorePattern = "e"
