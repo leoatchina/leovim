@@ -181,24 +181,22 @@ if [ $# -gt 0 ]; then
         else
             cd ~/.local
             rm -rf nvim-*
-            
+            # wget according to os
             case "$os" in
                 "macos-arm64")
                     wget https://github.com/neovim/neovim/releases/download/stable/nvim-macos-arm64.tar.gz
                     tar xzf nvim-macos-arm64.tar.gz
-                    rm nvim-macos-arm64.tar.gz
                     ;;
                 "macos-x64")
                     wget https://github.com/neovim/neovim/releases/download/stable/nvim-macos-x86_64.tar.gz
                     tar xzf nvim-macos-x86_64.tar.gz
-                    rm nvim-macos-x86_64.tar.gz
                     ;;
                 *)
                     wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
                     tar xzf nvim-linux64.tar.gz
-                    rm nvim-linux64.tar.gz
                     ;;
             esac
+            rm nvim-*.tar.gz
             success "neovim installed"
         fi
         [[ $mode == 'neovim' ]] && exit 0
@@ -211,32 +209,21 @@ if [ $# -gt 0 ]; then
         else
             cd ~/.local
             rm -rf node*
-            
+            # wget according to os
             case "$os" in
                 "macos-arm64")
-                    url=`wget -qO- https://nodejs.org/dist/latest/ | grep -o 'href=".*darwin-arm64.tar.gz"' | head -1 | cut -d'"' -f2`
-                    wget "https://nodejs.org/dist/latest/$url"
-                    node="$url"
+                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*darwin-arm64.tar.gz"' | cut -d'"' -f2)
                     ;;
                 "macos-x64")
-                    url=`wget -qO- https://nodejs.org/dist/latest/ | grep -o 'href=".*darwin-x64.tar.gz"' | head -1 | cut -d'"' -f2`
-                    wget "https://nodejs.org/dist/latest/$url"
-                    node="$url"
+                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*darwin-x64.tar.gz"' | cut -d'"' -f2)
                     ;;
                 *)
-                    url=`wget -qO- https://nodejs.org/dist/latest/ | grep -o 'href=".*linux-x64.tar.xz"' | head -1 | cut -d'"' -f2`
-                    wget "https://nodejs.org/dist/latest/$url"
-                    node="$url"
+                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*linux-x64.tar.xz"' | cut -d'"' -f2)
                     ;;
             esac
-            
-            if [[ $node == *.tar.gz ]]; then
-                tar xzf $node
-            else
-                tar xf $node
-            fi
-            rm $node
-            ln -sf ${node%.*.*} node
+            wget $url
+            node="${url##*/}"
+            tar xvf $node && rm $node && ln -sf ${node%.*.*} node
             success "$node_link linked"
         fi
         [[ $mode == 'nodejs' ]] && exit 0
