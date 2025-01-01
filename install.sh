@@ -130,13 +130,18 @@ cp -n $APP_PATH/scripts/nvi.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin
 
 # leovim command
-echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovim
+if [ $os == 'linux' ]; then
+    shell=bash
+else
+    shell=zsh
+fi
+echo "#!/usr/bin/env $shell" > $HOME/.local/bin/leovim
 echo "export leovim=$HOME/.leovim" >> $HOME/.local/bin/leovim
 echo 'cd $leovim && git pull' >> $HOME/.local/bin/leovim
 echo '$SHELL' >> $HOME/.local/bin/leovim && chmod 755 $HOME/.local/bin/leovim
 
 # leovimd command
-echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovimd
+echo "#!/usr/bin/env $shell" > $HOME/.local/bin/leovimd
 echo "export LEOVIM_D=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
 echo 'cd $LEOVIM_D' >> $HOME/.local/bin/leovimd
 echo '$SHELL' >> $HOME/.local/bin/leovimd && chmod 755 $HOME/.local/bin/leovimd
@@ -259,14 +264,15 @@ fi
 if  [ ! -f ~/.bashrc ] && [ $os == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
-elif [ ! -f ~/.zshrc ]; then
+elif [ ! -f ~/.zshrc ] && program_exists zsh; then
     cp $APP_PATH/scripts/zshrc $HOME/.zshrc
     success "zshrc copied."
 fi
 
 if [[ $mode == 'configrc' || $mode == 'leotmux' ]]; then
-    note "You can run `bash` or `zsh` to make leoatchina's bash config work."
-    exit 0
+    echo "You can run `bash` or `zsh` to make leoatchina's bash config work."
+    $shell
+    exit 1
 fi
 
 # clone unix tools for (neo)vim

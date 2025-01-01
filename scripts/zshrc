@@ -26,26 +26,33 @@ compinit
 command_exists() {
     command -v "$@" > /dev/null 2>&1
 }
-# Git branch function for prompt
-function git_branch() {
-    branch=$(git branch 2>/dev/null | sed -n '/\* /s///p')
-    if [[ -n "$branch" ]]; then
-        if [[ "$branch" = "(no branch)" ]]; then
-            branch="($(git rev-parse --short HEAD)...)"
-        fi
-        if [[ -n $(git status --porcelain) ]]; then
-            echo " $branch x"
-        else
-            echo " $branch o"
-        fi
-    fi
-}
 
-# Prompt configuration
-autoload -Uz colors && colors
-setopt PROMPT_SUBST
-PROMPT='%F{red}%n%f@%F{yellow}%m%f:%F{cyan}%~%f$(git_branch)
+# Set up prompt with git information if available
+if command_exists "git"; then
+    # Git branch function for prompt
+    function git_branch() {
+        branch=$(git branch 2>/dev/null | sed -n '/\* /s///p')
+        if [[ -n "$branch" ]]; then
+            if [[ "$branch" = "(no branch)" ]]; then
+                branch="($(git rev-parse --short HEAD)...)"
+            fi
+            if [[ -n $(git status --porcelain) ]]; then
+                echo " $branch x"
+            else
+                echo " $branch o"
+            fi
+        fi
+    }
+    autoload -Uz colors && colors
+    setopt PROMPT_SUBST
+    PROMPT='%F{red}%n%f@%F{yellow}%m%f:%F{cyan}%~%f$(git_branch)
 $ '
+else
+    autoload -Uz colors && colors
+    setopt PROMPT_SUBST
+    PROMPT='%F{red}%n%f@%F{yellow}%m%f:%F{cyan}%~%f
+$ '
+fi
 
 # Terminal title (for xterm, rxvt, etc)
 case $TERM in

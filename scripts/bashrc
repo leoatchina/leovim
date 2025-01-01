@@ -70,5 +70,4 @@ xterm*|rxvt*)
     ;;
 esac
 
-
 [ -f ~/.configrc ] && source ~/.configrc
