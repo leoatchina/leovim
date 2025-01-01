@@ -79,7 +79,18 @@ setup_plug() {
 
 ############################ MAIN() #################################
 variable_set "$HOME"
-OS=`uname`
+OS=$(uname)
+ARCH=$(uname -m)
+os="linux" # default value
+
+if [ "$OS" = "Darwin" ]; then
+    if [ "$ARCH" = "arm64" ]; then
+        os="macos-arm64"
+    elif [ "$ARCH" = "x86_64" ]; then
+        os="macos-x64"
+    fi
+fi
+
 mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
@@ -169,10 +180,25 @@ if [ $# -gt 0 ]; then
             info "neovim already installed"
         else
             cd ~/.local
-            rm -rf nvim-linux64*
-            wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
-            tar xvf nvim-linux64.tar.gz
-            rm nvim-linux64.tar.gz
+            rm -rf nvim-*
+            
+            case "$os" in
+                "macos-arm64")
+                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-macos-arm64.tar.gz
+                    tar xzf nvim-macos-arm64.tar.gz
+                    rm nvim-macos-arm64.tar.gz
+                    ;;
+                "macos-x64")
+                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-macos-x86_64.tar.gz
+                    tar xzf nvim-macos-x86_64.tar.gz
+                    rm nvim-macos-x86_64.tar.gz
+                    ;;
+                *)
+                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
+                    tar xzf nvim-linux64.tar.gz
+                    rm nvim-linux64.tar.gz
+                    ;;
+            esac
             success "neovim installed"
         fi
         [[ $mode == 'neovim' ]] && exit 0
@@ -183,12 +209,34 @@ if [ $# -gt 0 ]; then
         if [ -L $node_link ] && [ $mode == 'all' ]; then
             info "$node_link already linked"
         else
-            url=`wget -qO- https://nodejs.cn/download/current | grep -oP 'href="\K[^"]*linux-x64.tar.xz' | head -n 1`
             cd ~/.local
             rm -rf node*
-            wget $url
-            node="${url##*/}"
-            tar xvf $node && rm $node && ln -sf ${node%.*.*} node
+            
+            case "$os" in
+                "macos-arm64")
+                    url=`wget -qO- https://nodejs.org/dist/latest/ | grep -o 'href=".*darwin-arm64.tar.gz"' | head -1 | cut -d'"' -f2`
+                    wget "https://nodejs.org/dist/latest/$url"
+                    node="$url"
+                    ;;
+                "macos-x64")
+                    url=`wget -qO- https://nodejs.org/dist/latest/ | grep -o 'href=".*darwin-x64.tar.gz"' | head -1 | cut -d'"' -f2`
+                    wget "https://nodejs.org/dist/latest/$url"
+                    node="$url"
+                    ;;
+                *)
+                    url=`wget -qO- https://nodejs.org/dist/latest/ | grep -o 'href=".*linux-x64.tar.xz"' | head -1 | cut -d'"' -f2`
+                    wget "https://nodejs.org/dist/latest/$url"
+                    node="$url"
+                    ;;
+            esac
+            
+            if [[ $node == *.tar.gz ]]; then
+                tar xzf $node
+            else
+                tar xf $node
+            fi
+            rm $node
+            ln -sf ${node%.*.*} node
             success "$node_link linked"
         fi
         [[ $mode == 'nodejs' ]] && exit 0
@@ -256,4 +304,4 @@ if [ $installplug != 'no' ]; then
 fi
 
 echo
-success "Thanks for installing leoatchina's vim config. ©`date +%Y` https://github.com/leoatchina/leovim"
+success "Thanks for installing leoatchina's vim config. `date +%Y` https://github.com/leoatchina/leovim"
