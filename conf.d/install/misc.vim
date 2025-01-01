@@ -39,7 +39,7 @@ PlugAdd 'kshenoy/vim-signature'
 " --------------------------
 if has('nvim-0.8')
     PlugAdd 'lukas-reineke/indent-blankline.nvim'
-else
+elseif has('conceal')
     PlugAdd 'Yggdroot/indentLine'
 endif
 " ------------------------------
