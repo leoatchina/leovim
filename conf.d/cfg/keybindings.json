@@ -525,15 +525,15 @@
     "command": "-workbench.action.openGlobalKeybindings"
   },
   {
+    "key": "ctrl+m ctrl+s",
+    "command": "-workbench.action.openGlobalKeybindings"
+  },
+  {
     "key": "ctrl+shift+alt+,",
     "command": "workbench.action.openGlobalKeybindingsFile"
   },
   {
     "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
-  },
-  {
-    "key": "ctrl+shift+alt+oem_7",
-    "command": "codeium.openAutocompleteCommandPalette"
   }
 ]
