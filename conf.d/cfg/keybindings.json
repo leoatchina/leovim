@@ -477,14 +477,6 @@
   },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
-  {
-    "key": "ctrl+alt+\\",
-    "command": "workbench.panel.composerViewPane2.view.focus"
-  },
-  {
-    "key": "ctrl+shift+\\",
-    "command": "workbench.panel.aichat.view.focus"
-  },
   //---------------------- vscode positron --------------
   //tongyi
   {
@@ -501,6 +493,14 @@
   {
     "key": "ctrl+\\",
     "command": "claude-dev.SidebarProvider.focus"
+  },
+  {
+    "key": "ctrl+shift+\\",
+    "command": "cline.popoutButtonClicked"
+  },
+  {
+    "key": "ctrl+alt+\\",
+    "command": "cline.mcpButtonClicked"
   },
   {
     "key": "ctrl+shift+alt+\\",
