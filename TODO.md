@@ -99,18 +99,18 @@
 - [x] yank from file begin to current cursor postion
 - [x] config gopls in cmp || coc
 - [x] nvim-dap run to cursor
-- [x] delance.nvim
+- [x] delance
+- [ ] R.exe exepath in windows
 - [ ] codecompanion.nvim
-- [ ] zed.ai config according to https://github.com/zed-industries/zed/issues/4965
 - [ ] dropbar.nvim
 - [ ] quit all bug
-- [ ] merge <M-m> into <M-d> map in debug mode
 - [ ] vista_markdown bug
-- [ ] rewrite fzf-project
+- [ ] fzfx.nvim
 - [ ] floaterm drop command, ref vim-terminal-help
 - [ ] blink
 ## MyPlugins:
 - [x] fzf-registers
+- [ ] rewrite fzf-project
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
@@ -131,11 +131,11 @@
   - [x] g:repl_floaterm_quit for each ft
   - [x] send current word to terminal.
   - [x] mark content, and resend/show marked content if `quickui` installed
-  - [ ] README
-  - [ ] deploy to github
+  - [x] README
+  - [x] deploy to github
 ## Plenty of works
 - [ ] zeliji
-- [ ] zedai
+- [ ] zed.ai
 - [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts

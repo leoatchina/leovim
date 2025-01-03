@@ -237,8 +237,7 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
             \ exists('$OPENAI_API_KEY') ||
             \ exists('$ANTHROPIC_API_KEY') ||
             \ exists('$GEMINI_API_KEY') ||
-            \ exists('$XAI_API_KEY') ||
-            \ Planned('copilot.vim')
+            \ exists('$XAI_API_KEY')
             \ )
     if executable('curl') && Planned('nvim-cmp') && (exists('$XAI_API_KEY') || Require('codecompanion'))
         PlugAdd 'olimorris/codecompanion.nvim'
