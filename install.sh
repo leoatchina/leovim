@@ -79,7 +79,18 @@ setup_plug() {
 
 ############################ MAIN() #################################
 variable_set "$HOME"
-OS=`uname`
+OS=$(uname)
+ARCH=$(uname -m)
+os="linux" # default value
+
+if [ "$OS" = "Darwin" ]; then
+    if [ "$ARCH" = "arm64" ]; then
+        os="macos-arm64"
+    elif [ "$ARCH" = "x86_64" ]; then
+        os="macos-x64"
+    fi
+fi
+
 mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
@@ -119,16 +130,25 @@ cp -n $APP_PATH/scripts/nvi.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin
 
 # leovim command
-echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovim
+if [ $os == 'linux' ]; then
+    if [ $SHELL == 'sh' ]; then
+        bash
+    fi
+    shell=bash
+else
+    shell=zsh
+fi
+
+echo "#!/usr/bin/env $shell" > $HOME/.local/bin/leovim
 echo "export leovim=$HOME/.leovim" >> $HOME/.local/bin/leovim
 echo 'cd $leovim && git pull' >> $HOME/.local/bin/leovim
-echo '$SHELL' >> $HOME/.local/bin/leovim && chmod 755 $HOME/.local/bin/leovim
+echo "$shell" >> $HOME/.local/bin/leovim && chmod 755 $HOME/.local/bin/leovim
 
 # leovimd command
-echo "#!/usr/bin/env bash" > $HOME/.local/bin/leovimd
-echo "export LEOVIM_D=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
-echo 'cd $LEOVIM_D' >> $HOME/.local/bin/leovimd
-echo '$SHELL' >> $HOME/.local/bin/leovimd && chmod 755 $HOME/.local/bin/leovimd
+echo "#!/usr/bin/env $shell" > $HOME/.local/bin/leovimd
+echo "export LEOVIMD=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
+echo 'cd $LEOVIMD' >> $HOME/.local/bin/leovimd
+echo "$shell" >> $HOME/.local/bin/leovimd && chmod 755 $HOME/.local/bin/leovimd
 
 ########################### install softwares #####################################
 if [ $# -gt 0 ]; then
@@ -169,10 +189,23 @@ if [ $# -gt 0 ]; then
             info "neovim already installed"
         else
             cd ~/.local
-            rm -rf nvim-linux64*
-            wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
-            tar xvf nvim-linux64.tar.gz
-            rm nvim-linux64.tar.gz
+            rm -rf nvim-*
+            # wget according to os
+            case "$os" in
+                "macos-arm64")
+                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-macos-arm64.tar.gz
+                    tar xzf nvim-macos-arm64.tar.gz
+                    ;;
+                "macos-x64")
+                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-macos-x86_64.tar.gz
+                    tar xzf nvim-macos-x86_64.tar.gz
+                    ;;
+                *)
+                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
+                    tar xzf nvim-linux64.tar.gz
+                    ;;
+            esac
+            rm nvim-*.tar.gz
             success "neovim installed"
         fi
         [[ $mode == 'neovim' ]] && exit 0
@@ -183,9 +216,20 @@ if [ $# -gt 0 ]; then
         if [ -L $node_link ] && [ $mode == 'all' ]; then
             info "$node_link already linked"
         else
-            url=`wget -qO- https://nodejs.cn/download/current | grep -oP 'href="\K[^"]*linux-x64.tar.xz' | head -n 1`
             cd ~/.local
             rm -rf node*
+            # wget according to os
+            case "$os" in
+                "macos-arm64")
+                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*darwin-arm64.tar.gz"' | cut -d'"' -f2)
+                    ;;
+                "macos-x64")
+                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*darwin-x64.tar.gz"' | cut -d'"' -f2)
+                    ;;
+                *)
+                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*linux-x64.tar.xz"' | cut -d'"' -f2)
+                    ;;
+            esac
             wget $url
             node="${url##*/}"
             tar xvf $node && rm $node && ln -sf ${node%.*.*} node
@@ -193,9 +237,9 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'nodejs' ]] && exit 0
     fi
-    # copy bashrc
-    if [[ $mode == 'all' || $mode == 'bashrc' || $mode == 'leotmux' ]]; then
-        if [ -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
+    # copy configrc
+    if [[ $mode == 'all' || $mode == 'configrc' || $mode == 'leotmux' ]]; then
+        if [ -f ~/.bashrc ] && [ $os == 'linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -204,6 +248,15 @@ if [ $# -gt 0 ]; then
             else
                 info "bashrc not moved."
             fi
+        elif [ -f ~/.zshrc ]; then
+            read -p "Do you want to move .zshrc? (y/n) " -n 1 -r
+            echo             
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                mv -f ~/.zshrc ~/.zshrc.bak
+                success "zshrc moved."
+            else
+                info "zshrc not moved."
+            fi
         fi
     fi
 else
@@ -211,18 +264,19 @@ else
     installplug='yes'
 fi
 
-# set bashrc config
-if  [ ! -f ~/.bashrc ] && [ $OS == 'Linux' ]; then
-    bashrc_copied=1
+# set rc config
+if  [ ! -f ~/.bashrc ] && [ $os == 'Linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
-else
-    bashrc_copied=0
+elif [ ! -f ~/.zshrc ] && program_exists zsh; then
+    cp $APP_PATH/scripts/zshrc $HOME/.zshrc
+    success "zshrc copied."
 fi
 
-if [[ $mode == 'bashrc' || $mode == 'leotmux' ]]; then
-    note "You can run `bash` to make leoatchina's bash config work."
-    exit 0
+if [[ $mode == 'configrc' || $mode == 'leotmux' ]]; then
+    echo "You can run `bash` or `zsh` to make leoatchina's bash config work."
+    $shell
+    exit 1
 fi
 
 # clone unix tools for (neo)vim
@@ -256,4 +310,4 @@ if [ $installplug != 'no' ]; then
 fi
 
 echo
-success "Thanks for installing leoatchina's vim config. ©`date +%Y` https://github.com/leoatchina/leovim"
+success "Thanks for installing leoatchina's vim config. `date +%Y` https://github.com/leoatchina/leovim"

@@ -477,14 +477,6 @@
   },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
-  {
-    "key": "ctrl+alt+\\",
-    "command": "workbench.panel.composerViewPane2.view.focus"
-  },
-  {
-    "key": "ctrl+shift+\\",
-    "command": "workbench.panel.aichat.view.focus"
-  },
   //---------------------- vscode positron --------------
   //tongyi
   {
@@ -501,6 +493,14 @@
   {
     "key": "ctrl+\\",
     "command": "claude-dev.SidebarProvider.focus"
+  },
+  {
+    "key": "ctrl+shift+\\",
+    "command": "cline.popoutButtonClicked"
+  },
+  {
+    "key": "ctrl+alt+\\",
+    "command": "cline.mcpButtonClicked"
   },
   {
     "key": "ctrl+shift+alt+\\",
@@ -525,15 +525,15 @@
     "command": "-workbench.action.openGlobalKeybindings"
   },
   {
+    "key": "ctrl+m ctrl+s",
+    "command": "-workbench.action.openGlobalKeybindings"
+  },
+  {
     "key": "ctrl+shift+alt+,",
     "command": "workbench.action.openGlobalKeybindingsFile"
   },
   {
     "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
-  },
-  {
-    "key": "ctrl+shift+alt+oem_7",
-    "command": "codeium.openAutocompleteCommandPalette"
   }
 ]

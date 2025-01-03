@@ -1,6 +1,7 @@
 let s:quit_expr = "\<C-\>\<C-n>iEditaquit"
 
 function! floaterm#edita#vim#editor#open(target, bufnr)
+    <<<<<<< HEAD
     call floaterm#window#hide(a:bufnr)
     let opener = floaterm#config#get(a:bufnr, 'opener', g:floaterm_opener)
     call floaterm#util#open([{'filename': fnameescape(a:target)}], opener)
@@ -21,7 +22,30 @@ function! floaterm#edita#vim#editor#open(target, bufnr)
         if !has('win32')
             call timer_start(100, {->s:BufDelete()})
         endif
-    endif
+        =======
+        call floaterm#window#hide(a:bufnr)
+        let opener = floaterm#config#get(a:bufnr, 'opener', g:floaterm_opener)
+        call floaterm#util#open([{'filename': fnameescape(a:target)}], opener)
+        let b:edita = a:bufnr
+        let filename = expand('%:t')
+        if (index([
+                    \ 'COMMIT_EDITMSG',
+                    \ 'MERGE_MSG',
+                    \ 'git-rebase-todo',
+                    \ 'git-revise-todo',
+                    \ 'addp-hunk-edit.diff',
+                    \ ], filename) > -1) || (stridx(filename, 'commit.hg.txt') > -1)
+            setlocal bufhidden=wipe
+            augroup edita_buffer
+                autocmd! * <buffer>
+                autocmd BufDelete <buffer> call s:BufDelete()
+                autocmd BufDelete <buffer> call timer_start(100, {->floaterm#curr()})
+            augroup END
+        else
+            if !has('win32')
+                call timer_start(100, {->s:BufDelete()})
+                >>>>>>> 4e28c8dd0271e10a5f55142fb6fe9b1599ee6160
+            endif
 endfunction
 
 function! s:BufDelete() abort

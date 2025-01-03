@@ -1,4 +1,5 @@
 function! floaterm#edita#neovim#editor#open(target, client)
+    <<<<<<< HEAD
     let bufnr = floaterm#buflist#curr()
     call floaterm#window#hide(bufnr)
     let opener = floaterm#config#get(bufnr, 'opener', g:floaterm_opener)
@@ -20,6 +21,31 @@ function! floaterm#edita#neovim#editor#open(target, client)
     else
         call timer_start(100, {->s:BufDelete()})
     endif
+    =======
+    let bufnr = floaterm#buflist#curr()
+    call floaterm#window#hide(bufnr)
+    let opener = floaterm#config#get(bufnr, 'opener', g:floaterm_opener)
+    call floaterm#util#open([{'filename': fnameescape(a:target)}], opener)
+    let mode = floaterm#edita#neovim#util#mode(a:client)
+    let b:edita = sockconnect(mode, a:client, { 'rpc': 1 })
+    let filename = expand('%:t')
+    if (index([
+                \ 'COMMIT_EDITMSG',
+                \ 'MERGE_MSG',
+                \ 'git-rebase-todo',
+                \ 'git-revise-todo',
+                \ 'addp-hunk-edit.diff',
+                \ ], filename) > -1) || (stridx(filename, 'commit.hg.txt') > -1)
+        setlocal bufhidden=wipe
+        augroup edita_buffer
+            autocmd! * <buffer>
+            autocmd BufDelete <buffer> call s:BufDelete()
+            autocmd BufDelete <buffer> call timer_start(100, {->floaterm#curr()})
+        augroup END
+    else
+        call timer_start(100, {->s:BufDelete()})
+    endif
+    >>>>>>> 4e28c8dd0271e10a5f55142fb6fe9b1599ee6160
 endfunction
 
 function! s:BufDelete() abort
