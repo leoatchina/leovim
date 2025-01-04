@@ -478,13 +478,13 @@
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
   {
-    "key": "ctrl+shift+alt+\\",
+    "key": "ctrl+shift+alt+l",
     "command": "workbench.panel.composerViewPane2.view.focus"
   },
   //---------------------- vscode positron --------------
   //tongyi
   {
-    "key": "ctrl+`",
+    "key": "ctrl+shift+alt+\\",
     "command": "tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
   },
