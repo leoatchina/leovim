@@ -477,6 +477,10 @@
   },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
+  {
+    "key": "ctrl+shift+alt+\\",
+    "command": "workbench.panel.composerViewPane2.view.focus"
+  },
   //---------------------- vscode positron --------------
   //tongyi
   {
@@ -500,10 +504,6 @@
   },
   {
     "key": "ctrl+alt+\\",
-    "command": "cline.mcpButtonClicked"
-  },
-  {
-    "key": "ctrl+shift+alt+\\",
     "command": "cline.openInNewTab"
   },
   //continue ai
