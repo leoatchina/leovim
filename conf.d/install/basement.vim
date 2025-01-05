@@ -139,10 +139,10 @@ if g:complete_engine == 'cmp'
     PlugAdd 'stevanmilic/nvim-lspimport'
     PlugAdd 'jinzhongjia/LspUI.nvim'
 elseif g:complete_engine == 'coc'
-    if get(g:, 'coc_install_release', 0) == 0
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
-    else
+    if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
+    else
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
     endif
     PlugAddOpt 'coc-fzf'
 endif
