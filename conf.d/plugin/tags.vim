@@ -20,6 +20,15 @@ PlugAddOpt 'vim-matchup'
 " --------------------------
 " fuzzy_finder intergrated
 " --------------------------
+if get(g:, 'ctags_type', '') != ''
+    let lst = g:root_patterns + ['lib', '.cache', 'package-lock.json']
+    if WINDOWS()
+        let s:fzf_tags_command = Expand("~/.leovim.windows/tools/ctags.exe")
+    else
+        let s:fzf_tags_command = 'ctags'
+    endif
+    let g:fzf_tags_command = s:fzf_tags_command . ' -R --exclude=' . join(lst, " --exclude=")
+endif
 " F/T<Cr>
 if g:symbol_tool =~ 'leaderftags'
     let g:Lf_Ctags = g:fzf_tags_command
@@ -60,15 +69,6 @@ try
 catch /.*/
     let &tags = './.tags;,.tags'
 endtry
-if get(g:, 'ctags_type', '') != ''
-    let lst = g:root_patterns + ['lib', '.cache', 'package-lock.json']
-    if WINDOWS()
-        let s:fzf_tags_command = Expand("~/.leovim.windows/tools/ctags.exe")
-    else
-        let s:fzf_tags_command = 'ctags'
-    endif
-    let g:fzf_tags_command = s:fzf_tags_command . ' -R --exclude=' . join(lst, " --exclude=")
-endif
 let g:Lf_CacheDirectory = Expand("~/.vim")
 let g:gutentags_cache_dir = g:Lf_CacheDirectory . '/LeaderF/gtags'
 if !isdirectory(g:gutentags_cache_dir)
