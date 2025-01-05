@@ -290,7 +290,7 @@ function! s:tooglebg()
     else
         set background=dark
     endif
-    call preview#cmdmsg(&background, 1)<CR>
+    call preview#cmdmsg(&background, 1)
 endf
 command! ToggleBackgroud call s:tooglebg()
 nnoremap <M-k>b :ToggleBackgroud<Cr>
