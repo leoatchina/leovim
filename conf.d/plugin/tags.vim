@@ -64,11 +64,7 @@ endif
 " -------------------------------
 " vim-gutentags
 " -------------------------------
-try
-    set tags=./.tags;,.tags
-catch /.*/
-    let &tags = './.tags;,.tags'
-endtry
+set tags=./tags;,tags,./.tags;,.tags
 let g:Lf_CacheDirectory = Expand("~/.vim")
 let g:gutentags_cache_dir = g:Lf_CacheDirectory . '/LeaderF/gtags'
 if !isdirectory(g:gutentags_cache_dir)

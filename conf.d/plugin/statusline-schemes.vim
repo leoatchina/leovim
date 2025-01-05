@@ -350,7 +350,6 @@ nnoremap <silent><C-l> :redraw \| call lightline#update()<Cr>
 let g:terminal_color_13 = '#000000'
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
-let g:gruvbox_material_better_performance = 1
 if Installed('catppuccin') && Require('catppuccin')
     call SetScheme('catppuccin')
 elseif g:complete_engine == 'mcm'
