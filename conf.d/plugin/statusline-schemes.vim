@@ -329,8 +329,6 @@ function! UpdateLightline() abort
         let g:lightline.colorscheme = g:colors_name
     elseif colors_name =~ 'catppuccin'
         let g:lightline.colorscheme = "catppuccin"
-    elseif colors_name =~ 'tokyonight'
-        let g:lightline.colorscheme = "tokyonight"
     else
         let g:lightline.colorscheme = 'default'
     endif
@@ -355,8 +353,6 @@ let g:sonokai_better_performance = 1
 let g:gruvbox_material_better_performance = 1
 if Installed('catppuccin') && Require('catppuccin')
     call SetScheme('catppuccin')
-elseif Installed('tokyonight.nvim') && Require('tokyonight')
-    call SetScheme('tokyonight')
 elseif g:complete_engine == 'mcm'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
