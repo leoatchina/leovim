@@ -360,7 +360,7 @@ elseif Installed('tokyonight.nvim') && Require('tokyonight')
 elseif g:complete_engine == 'mcm'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
-    call SetScheme('nightfox', 'space-vim-dark')
+    call SetScheme('nightfox', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
         call SetScheme('terafox', 'hybrid')
@@ -368,7 +368,7 @@ elseif g:complete_engine == 'coc'
         call SetScheme('sonokai', 'sublime')
     endif
 else
-    colorscheme codedark
+    colorscheme space-vim-dark
 endif
 " --------------------------
 " nvim-web-devicons
