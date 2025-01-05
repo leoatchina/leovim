@@ -197,7 +197,6 @@ endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
     PlugAdd 'sainnhe/sonokai'
-    PlugAdd 'leoatchina/gruvbox-material'
     if has('nvim-0.8.1')
         PlugAdd 'EdenEast/nightfox.nvim'
         PlugAdd 'folke/tokyonight.nvim'

@@ -313,7 +313,7 @@ function! SetScheme(scheme, ...) abort
 endfunction
 function! UpdateLightline() abort
     let colors_name = get(g:, 'colors_name', '')
-    if colors_name == 'codedark' || colors_name == 'deus' || colors_name == 'one'
+    if colors_name == 'codedark' || colors_name == 'one'
         let g:lightline.colorscheme = g:colors_name
     elseif colors_name == 'space-vim-dark'
         let g:lightline.colorscheme = 'simpleblack'
@@ -357,10 +357,8 @@ if Installed('catppuccin') && Require('catppuccin')
     call SetScheme('catppuccin')
 elseif Installed('tokyonight.nvim') && Require('tokyonight')
     call SetScheme('tokyonight')
-elseif g:complete_engine == 'apm'
-    call SetScheme('edge', 'one')
 elseif g:complete_engine == 'mcm'
-    call SetScheme('gruvbox-material', 'gruvbox')
+    call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
     call SetScheme('nightfox', 'space-vim-dark')
 elseif g:complete_engine == 'coc'
@@ -370,7 +368,7 @@ elseif g:complete_engine == 'coc'
         call SetScheme('sonokai', 'sublime')
     endif
 else
-    colorscheme hybrid
+    colorscheme codedark
 endif
 " --------------------------
 " nvim-web-devicons
