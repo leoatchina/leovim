@@ -270,6 +270,11 @@
     "when": "terminal.active"
   },
   {
+    "key": "ctrl+shift+`",
+    "command": "-workbench.action.terminal.new",
+    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+  },
+  {
     "key": "alt+=",
     "command": "workbench.action.terminal.toggleTerminal",
     "when": "terminal.active"
@@ -497,14 +502,6 @@
   {
     "key": "ctrl+\\",
     "command": "claude-dev.SidebarProvider.focus"
-  },
-  {
-    "key": "ctrl+shift+\\",
-    "command": "cline.popoutButtonClicked"
-  },
-  {
-    "key": "ctrl+alt+\\",
-    "command": "cline.openInNewTab"
   },
   //continue ai
   {
