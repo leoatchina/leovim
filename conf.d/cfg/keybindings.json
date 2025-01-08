@@ -489,11 +489,6 @@
   //---------------------- vscode positron --------------
   //tongyi
   {
-    "key": "ctrl+shift+alt+\\",
-    "command": "tongyi.show.panel",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
     "key": "ctrl+shift+l",
     "command": "-tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
@@ -532,5 +527,25 @@
   {
     "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
+  },
+  {
+    "key": "ctrl+shift+`",
+    "command": "tongyi.show.panel.developer",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "-tongyi.show.panel.developer",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "ctrl+`",
+    "command": "tongyi.show.panel.chat",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+l",
+    "command": "-tongyi.show.panel.chat",
+    "when": "TongyiLingMa.Chat.active"
   }
 ]
