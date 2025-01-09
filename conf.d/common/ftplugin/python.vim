@@ -28,17 +28,17 @@ function! s:SetPython3Host()
     if !empty(l:venv_path)
         " 根据操作系统选择正确的Python可执行文件路径
         if has('win32') || has('win64')
-            let l:python_exec = l:venv_path . '/Scripts/python.exe'
+            let l:python_exe = l:venv_path . '/Scripts/python.exe'
         else
-            let l:python_exec = l:venv_path . '/bin/python'
+            let l:python_exe = l:venv_path . '/bin/python'
         endif
         " 确认可执行文件存在
-        if filereadable(l:python_exec)
+        if filereadable(l:python_exe)
             " 设置vim的Python路径
-            let g:python3_host_prog = l:python_exec
+            let g:python3_host_prog = l:python_exe
             " 如果使用ALE等lint工具，也可以设置它们的Python路径
-            let g:ale_python_pylint_executable = l:python_exec
-            let g:ale_python_flake8_executable = l:python_exec
+            let g:ale_python_pylint_executable = l:python_exe
+            let g:ale_python_flake8_executable = l:python_exe
             call preview#cmdmsg("Set g:python3_host_prog to " . g:python3_host_prog, 1)
         endif
     elseif executable('python3')

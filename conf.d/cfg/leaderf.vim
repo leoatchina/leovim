@@ -93,4 +93,3 @@ let g:Lf_NormalCommandMap = {
 " gtags
 let g:Lf_Gtags = 'gtags'
 let g:Lf_Global = "global"
-" loclist
