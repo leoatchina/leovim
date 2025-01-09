@@ -447,10 +447,10 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
         elseif s:dapui_opened()
             if a:type == "console"
                 lua require("dapui").float_element('console')
+            elseif a:type == "repl"
+                lua require("dapui").float_element('repl')
             elseif a:type == "element"
                 lua require("dapui").float_element()
-            elseif a:type == "repl"
-                lua require("dap").repl.toggle()
             else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
@@ -465,19 +465,15 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     endfunction
     command! DapUIEval call s:dap_or_floaterm("eval")
     command! FocusCode call s:dap_or_floaterm("focus")
-    command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
+    command! ReplOrFloatermToggle call s:dap_or_floaterm("repl")
     command! FloatElementOrFloatermSpecial call s:dap_or_floaterm("element")
-    command! DapReplToggle call s:dap_or_floaterm("repl")
-    " repl toggle
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
-    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
+    nnoremap <silent><M--> :ReplOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :FloatElementOrFloatermSpecial<Cr>
-    " DapReplToggle
-    nnoremap <silent><F1> <Cmd>DapReplToggle<Cr>
-    " ---------------------------
-    " variables view
-    " ---------------------------
+    " ----------------------
+    " view variables
+    " ----------------------
     nnoremap <silent>J :DapUIEval<Cr>
 elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     let g:debug_tool = 'termdebug'
