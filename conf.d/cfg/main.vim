@@ -80,7 +80,7 @@ endif
 if WIN32UNIX()
     let g:python_version = 0
 else
-    " NOTE , 不能使用 pyxeval, py3eval, pyeval, 否则在 没有安装 neovim相关包时，执行会出错
+    " NOTE, 不能使用pyxeval/py3eval/pyeval, 否则neovimc没有pip安装相关包时，执行会出错.
     try
         let py_version = Execute('py3 print(sys.version)')
     catch
@@ -96,7 +96,7 @@ else
     else
         let g:python_version = StringToFloat(py_version_match, 2)
         if g:python_version > 3
-            " TODO: pygrments 应该对应  python3_host_prog, pretty_errors 应该对应 python_prog
+            " TODO: pygrments 应该对应 python3_host_prog, pretty_errors 应该对应 python_prog
             try
                 call py3eval('import pygments')
                 let g:pygments_import = get(g:, 'pygments_import', 1)
