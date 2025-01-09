@@ -56,21 +56,10 @@ nnoremap <M-z> :set nowrap! nowrap?<Cr>
 if has('nvim')
     nnoremap <M-k>U :UpdateRemotePlugins<Cr>
 endif
-function! s:toggle_modify() abort
-    if &modifiable
-        setl nomodifiable
-        echo 'Current buffer is now non-modifiable'
-    else
-        setl modifiable
-        echo 'Current buffer is now modifiable'
-    endif
-endfunction
-command! ToggleModity call s:toggle_modify()
-nnoremap <M-k><space> :ToggleModity<Cr>
 " --------------------------
 " python_support
 " --------------------------
-function! s:get_python_host()
+function! s:python_prog()
     try
         if executable('python3')
             return exepath('python3')
@@ -83,34 +72,39 @@ function! s:get_python_host()
         return ""
     endtry
 endfunction
-let g:python_host = get(g:, 'python_host', s:get_python_host())
-let g:python3_host_prog = get(g:, 'python3_host_prog', g:python_host)
+" NOTE: python_prog 和 python3_host_prog(neovim才有) 不是一个东西
+let g:python_prog = get(g:, 'python_prog', s:python_prog())
+if has('nvim')
+    let g:python3_host_prog = get(g:, 'python3_host_prog', g:python_prog)
+endif
 if WIN32UNIX()
     let g:python_version = 0
 else
+    " NOTE , 不能使用 pyxeval, py3eval, pyeval, 否则在 没有安装 neovim相关包时，执行会出错
     try
-        let py_version = Execute('python3 print(sys.version)')
-    catch /.*/
+        let py_version = Execute('py3 print(sys.version)')
+    catch
         try
-            let py_version = Execute('python print(sys.version)')
-        catch /.*/
-            let py_version = ''
+            let py_version = Execute('py print(sys.version)')
+        catch
+            let py_version = ""
         endtry
     endtry
-    let py_version_match = matchstr(py_version, '\v\zs\d{1,}\.\d{1,}\.\d{0,}\ze')
+    let py_version_match = matchstr(py_version, '\v\zs\d{1,}\.\d{1,}\.\d{1,}\ze')
     if py_version_match == ''
         let g:python_version = 0
     else
         let g:python_version = StringToFloat(py_version_match, 2)
         if g:python_version > 3
+            " TODO: pygrments 应该对应  python3_host_prog, pretty_errors 应该对应 python_prog
             try
-                call system(g:python3_host_prog . ' -c "import pygments')
+                call py3eval('import pygments')
                 let g:pygments_import = get(g:, 'pygments_import', 1)
             catch /.*/
                 let g:pygments_import = get(g:, 'pygments_import', 0)
             endtry
             try
-                call system(g:python3_host_prog . ' -c "import pretty_errors')
+                call py3eval('import pretty_errors')
                 let g:pretty_errors_import = get(g:, 'pretty_errors_import', 1)
             catch /.*/
                 let g:pretty_errors_import = get(g:, 'pretty_errors_import', 0)

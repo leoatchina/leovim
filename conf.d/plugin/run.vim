@@ -110,14 +110,12 @@ function! s:asyncrun(...)
         let run_cmd = s:run_command . params. ' %'
     elseif &ft ==# 'sh' && executable('bash')
         let run_cmd = s:run_command . params . ' bash %'
-    elseif &ft ==# 'python' && executable('python3')
+    elseif &ft ==# 'python' && executable(g:python_prog)
         if get(g:, 'pretty_errors_import', 0)
-            let run_cmd = s:run_command . params . ' python3 -m pretty_errors %'
+            let run_cmd = s:run_command . params . ' ' . g:python_prog . ' -m pretty_errors %'
         else
-            let run_cmd = s:run_command . params . ' python3 %'
+            let run_cmd = s:run_command . params . ' ' . g:python_prog . ' %'
         endif
-    elseif &ft ==# 'python' && executable('python')
-        let run_cmd = s:run_command . params . ' python %'
     elseif &ft ==# 'r' && executable('Rscript')
         let run_cmd = s:run_command . params . ' Rscript %'
     elseif &ft ==# 'go' && executable('go')

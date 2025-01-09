@@ -12,6 +12,17 @@ inoremap <C-s> <C-o>:w!<Cr>
 xnoremap <C-s> <ESC>:w!<Cr>gv
 nnoremap <Leader>w :wa!<Cr>
 onoremap <Leader>w :wa!<Cr>
+function! s:toggle_modify() abort
+    if &modifiable
+        setl nomodifiable
+        echo 'Current buffer is now non-modifiable'
+    else
+        setl modifiable
+        echo 'Current buffer is now modifiable'
+    endif
+endfunction
+command! ToggleModity call s:toggle_modify()
+nnoremap <M-k><space> :ToggleModity<Cr>
 "----------------------------------------------------------------------
 " Sudo
 "----------------------------------------------------------------------
