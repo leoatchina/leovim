@@ -9,6 +9,7 @@
     "crawl",
     "scrap"
   ],
+  "env": {},
   "justMyCode": true,
   "console": "integratedTerminal"
 }

@@ -4,6 +4,7 @@
   "request": "launch",
   "console": "integratedTerminal",
   "cwd": "",
+  "env": {},
   "python": "~/miniconda3/bin/python",
   "program": "${file}"
 }

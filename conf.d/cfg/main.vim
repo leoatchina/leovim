@@ -103,6 +103,12 @@ else
             catch /.*/
                 let g:pygments_import = get(g:, 'pygments_import', 0)
             endtry
+            try
+                call py3eval('import pretty_errors')
+                let g:pretty_errors_import = get(g:, 'pretty_errors_import', 1)
+            catch /.*/
+                let g:pretty_errors_import = get(g:, 'pretty_errors_import', 0)
+            endtry
         endif
     endif
 endif
