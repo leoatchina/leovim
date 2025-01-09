@@ -123,8 +123,8 @@ function! Version()
     if get(g:, 'python3_host_prog', '') != ''
         let params_dict['python3_host_prog'] = g:python3_host_prog
     endif
-    if get(g:, 'python_exe', '') != ''
-        let params_dict['python_exe'] = g:python_exe
+    if get(g:, 'python_prog', '') != ''
+        let params_dict['python_prog'] = g:python_prog
     endif
     if get(g:, 'search_tool', '') != ''
         let params_dict['search_tool'] = g:search_tool
