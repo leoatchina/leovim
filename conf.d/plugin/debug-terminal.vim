@@ -657,7 +657,7 @@ if Installed('jupynium.nvim')
     endfunction
     command! JupyniumRun call s:jupynium_run()
     command! JupyniumRunInTerminal call s:jupynium_run(1)
-    command! JupyniumCommands call FzfCallCommands('JupyniumCommands', 'Jupynium', ['JupyniumRun'])
+    command! JupyniumCommands call FzfCallCommands('JupyniumCommands', 'Jupynium', 'SetPython3Host', ['JupyniumRun'])
     function! s:execute_and_forword() abort
         JupyniumExecuteSelectedCells
         let endline = search('^# %%', 'nW')
