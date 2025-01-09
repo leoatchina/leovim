@@ -73,11 +73,9 @@ nnoremap <M-k><space> :ToggleModity<Cr>
 function! s:get_python_exe()
     try
         if executable('python3')
-            let python = exepath('python3')
+            return exepath('python3')
         elseif executable('python')
-            let python = exepath('python')
-        elseif executable('python2')
-            let python = exepath('python2')
+            return exepath('python')
         else
             return ""
         endif
@@ -85,43 +83,37 @@ function! s:get_python_exe()
         return ""
     endtry
 endfunction
-let g:python3_host_prog = get(g:, 'python3_host_prog', s:get_python_exe())
-function! s:get_python_version()
-    if WIN32UNIX()
-        return 0
-    endif
-    try
-        let py_version = Execute('py3 print(sys.version)')
-    catch /.*/
-        try
-            let py_version = Execute('py print(sys.version)')
-        catch /.*/
-            return 0
-        endtry
-    endtry
-    let pyx_version_raw = matchstr(py_version, '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
-    if pyx_version_raw == ''
-        return 0
-    endif
-    let pyx_version = StringToFloat(pyx_version_raw, 2)
-    if pyx_version > 3
-        try
-            execute("py3 import pygments")
-            let g:pygments_import = get(g:, 'pygments_import', 1)
-        catch /.*/
-            let g:pygments_import = get(g:, 'pygments_import', 0)
-        endtry
-        try
-            execute("py3 import pretty_errors")
-            let g:pretty_errors_import = get(g:, 'pretty_errors_import', 1)
-        catch /.*/
-            let g:pretty_errors_import = get(g:, 'pretty_errors_import', 0)
-        endtry
-    endif
-    return pyx_version
-endfunction
 let g:python_exe = s:get_python_exe()
-let g:python_version = s:get_python_version()
+let g:python3_host_prog = get(g:, 'python3_host_prog', g:python_exe)
+if WIN32UNIX()
+    let g:python_version = 0
+else
+    try
+        let py_version = system(g:python3_host_prog . ' -c "import sys; print(sys.version)"')
+        let pyx_version_raw = matchstr(py_version, '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
+        if pyx_version_raw == ''
+            let g:python_version = 0
+        else
+            let g:python_version = StringToFloat(pyx_version_raw, 2)
+            if g:python_version > 3
+                try
+                    call system(g:python3_host_prog . ' -c "import pygments')
+                    let g:pygments_import = get(g:, 'pygments_import', 1)
+                catch /.*/
+                    let g:pygments_import = get(g:, 'pygments_import', 0)
+                endtry
+                try
+                    call system(g:python3_host_prog . ' -c "import pretty_errors')
+                    let g:pretty_errors_import = get(g:, 'pretty_errors_import', 1)
+                catch /.*/
+                    let g:pretty_errors_import = get(g:, 'pretty_errors_import', 0)
+                endtry
+            endif
+        endif
+    catch /.*/
+        let g:python_version = 0
+    endtry
+endif
 " --------------------------
 " has_terminal
 " --------------------------

@@ -41,8 +41,10 @@ function! s:SetPython3Host()
             let g:ale_python_flake8_executable = l:python_exec
             call preview#cmdmsg("Set g:python3_host_prog to " . g:python3_host_prog, 1)
         endif
+    elseif executable('python3')
+        let g:python3_host_prog = exepath('python3')
     endif
 endfunction
 " 当打开Python文件时自动调用
 command! SetPython3Host call s:SetPython3Host()
-nnoremap <buffer><silent><M-M> SetPython3Host<Cr>
+nnoremap <buffer><silent><M-M> :SetPython3Host<Cr>
