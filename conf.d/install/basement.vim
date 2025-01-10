@@ -205,10 +205,10 @@ endif
 " ------------------------------
 " debug tool
 " ------------------------------
-if g:python_version >= 3.1 && (Require('debug') && has('patch-8.2.4797') || Require('vimspector') && has('nvim-0.8'))
+if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !Planned('nvim-lspconfig'))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_exe . vimspector_install}
-elseif has('nvim-0.9.5') && Require('debug')
+    PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
+elseif has('nvim-0.9.5') && Require('debug') && Planned('nvim-lspconfig')
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'

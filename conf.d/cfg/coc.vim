@@ -200,6 +200,7 @@ nmap <silent><leader>ar <Plug>(coc-codeaction-refactor)
 nmap <silent><leader>as <Plug>(coc-codeaction-source)
 nmap <silent><leader>ac <Plug>(coc-codeaction-cursor)
 nmap <silent><M-a> <Plug>(coc-codelens-action)
+nmap <silent><leader>A :CocFzfList actions<Cr>
 " ------------------------
 " coc git
 " ------------------------

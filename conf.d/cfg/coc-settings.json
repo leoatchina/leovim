@@ -67,6 +67,7 @@
   "diagnostic.locationlistUpdate": false,
   "diagnostic.virtualText": false,
   "diagnostic.virtualTextCurrentLineOnly": true,
+  "diagnostic.displayByVimDiagnostic": false,
   "diagnostic.floatConfig": {
     "border": true,
     "rounded": true,
