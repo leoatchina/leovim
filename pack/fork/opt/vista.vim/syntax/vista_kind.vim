@@ -3,7 +3,7 @@
 " vim: ts=2 sw=2 sts=2 et
 
 if exists('b:current_syntax') && b:current_syntax ==# 'vista_kind'
-    finish
+  finish
 endif
 
 let s:icons = join(values(g:vista#renderer#icons), '\|')
@@ -13,8 +13,8 @@ syntax match VistaBracket /\(\[\|\]\)/ contained
 syntax match VistaChildrenNr /\[\d*\]$/ contains=VistaBracket
 
 let s:prefixes = filter(
-            \ map(copy(g:vista_icon_indent), 'vista#util#Trim(v:val)'),
-            \ '!empty(v:val)')
+      \ map(copy(g:vista_icon_indent), 'vista#util#Trim(v:val)'),
+      \ '!empty(v:val)')
 let s:pattern = join(s:prefixes, '\|')
 execute 'syntax match VistaPrefix' '/\('.s:pattern.'\)/' 'contained'
 

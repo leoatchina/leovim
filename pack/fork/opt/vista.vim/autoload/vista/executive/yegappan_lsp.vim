@@ -9,7 +9,7 @@ let s:should_display = v:false
 
 let s:fetching = v:true
 
-function! s:HandleLSPResponse(results) abort
+function! s:HandleLSPResponse(server, results) abort
   let s:fetching = v:false
   if empty(a:results)
     return []
@@ -37,9 +37,6 @@ function! s:AutoUpdate(fpath) abort
 endfunction
 
 function! s:Run() abort
-  if !exists('*lsc#server#userCall')
-    return
-  endif
   call s:RunAsync()
   while s:fetching
     sleep 100m
@@ -48,27 +45,31 @@ function! s:Run() abort
 endfunction
 
 function! s:RunAsync() abort
-  if exists('*lsc#server#userCall')
-    call vista#SetProvider(s:provider)
+  call vista#SetProvider(s:provider)
 
-    " vim-lsc
-    call lsc#file#flushChanges()
-    call lsc#server#userCall('textDocument/documentSymbol',
-        \ lsc#params#textDocument(),
-        \ function('s:HandleLSPResponse'))
-  endif
+  let bufnum = bufnr('%')
+  let params = #{textDocument: #{uri: lsp#util#LspFileToUri(bufname(bufnum))}}
+  let servers = lsp#buffer#BufLspServersGet(bufnum)
+
+  for server in servers
+    if !server.isDocumentSymbolProvider
+        continue
+    endif
+
+    silent call server.rpc_a('textDocument/documentSymbol', params, function('s:HandleLSPResponse'))
+  endfor
 endfunction
 
-function! vista#executive#vim_lsc#Run(fpath) abort
+function! vista#executive#yegappan_lsp#Run(fpath) abort
   let s:fpath = a:fpath
   return s:Run()
 endfunction
 
-function! vista#executive#vim_lsc#RunAsync() abort
+function! vista#executive#yegappan_lsp#RunAsync() abort
   call s:RunAsync()
 endfunction
 
-function! vista#executive#vim_lsc#Execute(bang, should_display, ...) abort
+function! vista#executive#yegappan_lsp#Execute(bang, should_display, ...) abort
   call vista#source#Update(bufnr('%'), winnr(), expand('%'), expand('%:p'))
   let s:fpath = expand('%:p')
 
@@ -84,6 +85,6 @@ function! vista#executive#vim_lsc#Execute(bang, should_display, ...) abort
   endif
 endfunction
 
-function! vista#executive#vim_lsc#Cache() abort
+function! vista#executive#yegappan_lsp#Cache() abort
   return get(s:, 'cache', {})
 endfunction

@@ -3,7 +3,7 @@
 " vim: ts=2 sw=2 sts=2 et
 
 if exists('b:current_syntax') && b:current_syntax ==# 'vista'
-    finish
+  finish
 endif
 
 let s:icons = join(values(g:vista#renderer#icons), '\|')
@@ -40,7 +40,7 @@ hi default VistaPrivate    guifg=Red    ctermfg=Red
 " hi! link Folded Function
 
 if has('nvim')
-    call setwinvar(winnr(), '&winhl', 'Folded:Function')
+  call setwinvar(winnr(), '&winhl', 'Folded:Function')
 endif
 
 let b:current_syntax = 'vista'

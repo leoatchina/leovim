@@ -4,7 +4,7 @@
 " License:    MIT
 
 if exists('g:loaded_vista')
-    finish
+  finish
 endif
 
 let g:loaded_vista = 1
