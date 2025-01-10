@@ -5,10 +5,10 @@ require("hlargs").setup({
 vim.opt.runtimepath:prepend(vim.fn.expand("~/.leovim.d/treesitter"))
 require("nvim-treesitter.install").prefer_git = true
 require("nvim-treesitter.configs").setup({
-  ensure_installed = vim.g.highlight_filetypes,
+  ensure_installed = {'python', 'vimdoc', 'markdown', 'markdown_inline'},
   sync_install = true,
   highlight = {
-    enable = not vim.fn.AdvCompEngine(),
+    enable = true,
     additional_vim_regex_highlighting = true,
     disable = function(client, bufnr)
       local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
@@ -37,7 +37,7 @@ require("nvim-treesitter.configs").setup({
   },
   parser_install_dir = vim.fn.expand("~/.leovim.d/treesitter")
 })
-map("n", "<M-l>t", ":TSUpdate ", { noremap = true, silent = false })
+map("n", "<M-l>T", ":TSUpdate ", { noremap = true, silent = false })
 map("n", "<M-l>I", ":TSInstall ", { noremap = true, silent = false })
 map({ 'n', 'x', 'o' }, 'sv', function() require("flash").treesitter() end, { noremap = true, silent = true })
 map({ 'x', 'o' }, 'm', function() require("flash").treesitter_search() end, { noremap = true, silent = true })

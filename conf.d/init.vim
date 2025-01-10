@@ -279,7 +279,6 @@ endfunction
 " -----------------------------------
 let g:c_filetypes = get(g:, 'c_filetypes', ["c", "cpp", "objc", "objcpp", "cuda"])
 let g:web_filetypes = get(g:, 'web_filetypes', ['php', 'html', 'css', 'scss', 'wxss', 'wxml', 'xml', 'toml', 'javascript', 'typescript', 'vue'])
-let g:highlight_filetypes = get(g:, 'highlight_filetypes', ['python', 'r', 'lua', 'vim', 'vimdoc', 'markdown'])
 " -----------------------------------
 " pattern
 " -----------------------------------
