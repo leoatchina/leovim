@@ -69,7 +69,7 @@ PlugAddOpt 'vim-floaterm'
 " new floaterm
 " --------------------------
 command! FloatermCommands call FzfCallCommands('FloatermCommands', 'Floaterm')
-nnoremap <Tab>f :FloatermCommands<Cr>
+nnoremap <Tab><Cr> :FloatermCommands<Cr>
 " --------------------------
 " new floaterm
 " --------------------------

@@ -2,7 +2,7 @@
 " choosewin
 " -----------------------------------
 PlugAddOpt 'vim-choosewin'
-nmap <silent><Tab><Cr> <Plug>(choosewin)
+nmap <silent><Tab>w <Plug>(choosewin)
 " ---------------------------------------
 " choose tab using fuzzy_findeer
 " ---------------------------------------

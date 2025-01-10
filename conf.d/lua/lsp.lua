@@ -349,7 +349,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       map(nx, "<leader>a", vim.lsp.codelens.run, opts_echo)
     end
     map(nx, "<leader>A", require("lspimport").import, opts_silent)
-    map(nx, "<leader>R", require('symbol-usage').toggle, opts_echo)
+    map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
   end
 })
 ------------------------------
