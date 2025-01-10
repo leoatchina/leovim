@@ -210,32 +210,16 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'neovim' ]] && exit 0
     fi
-    # nodejs
-    if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
-        node_link=~/.local/node
-        if [ -L $node_link ] && [ $mode == 'all' ]; then
-            info "$node_link already linked"
+    # nvm
+    if [[ $mode == 'all' || $mode == 'nvm' ]]; then
+        nvm_dir=~/.nvm
+        if [ -d $nvm_dir ] && [ $mode == 'all' ] ; then
+            info "nvm already installed"
         else
-            cd ~/.local
-            rm -rf node*
-            # wget according to os
-            case "$os" in
-                "macos-arm64")
-                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*darwin-arm64.tar.gz"' | cut -d'"' -f2)
-                    ;;
-                "macos-x64")
-                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*darwin-x64.tar.gz"' | cut -d'"' -f2)
-                    ;;
-                *)
-                    url=$(curl -s https://nodejs.cn/download/current/ | grep -o 'href="[^"]*linux-x64.tar.xz"' | cut -d'"' -f2)
-                    ;;
-            esac
-            wget $url
-            node="${url##*/}"
-            tar xvf $node && rm $node && ln -sf ${node%.*.*} node
-            success "$node_link linked"
+            curl -fsSL https://gitee.com/sdq/nvm/raw/master/install.sh | bash
+            success "nvim install to $nvm_dir"
         fi
-        [[ $mode == 'nodejs' ]] && exit 0
+        [[ $mode == 'nvm' ]] && exit 0
     fi
     # copy configrc
     if [[ $mode == 'all' || $mode == 'configrc' || $mode == 'leotmux' ]]; then
