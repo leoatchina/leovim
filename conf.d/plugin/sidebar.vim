@@ -23,19 +23,19 @@ if Installed('vista.vim')
         let g:vista_executive_for.go = 'ctags'
     endif
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
-        function! s:check_vista(nr) abort
-            return s:check_buf_ft('vista', a:nr)
-        endfunction
         function! s:check_vista_kind(nr) abort
             return s:check_buf_ft('vista_kind', a:nr)
         endfunction
-        let g:sidebars.vistactags = {
+        let g:sidebars.vista_ctags = {
                     \ 'position': 'left',
                     \ 'check_win': function('s:check_vista_kind'),
                     \ 'open': 'Vista ctags',
                     \ 'close': 'Vista!!'
                     \ }
-        nnoremap <silent>t<tab> :call sidebar#toggle('vistactags')<CR>
+        nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
+        function! s:check_vista(nr) abort
+            return tolower(getwinvar(a:nr, '&filetype')) =~ 'vista'
+        endfunction
         let g:sidebars.vista = {
                     \ 'position': 'left',
                     \ 'check_win': function('s:check_vista'),
