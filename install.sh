@@ -164,11 +164,46 @@ if [ $# -gt 0 ]; then
         if [ -d ~/.leotmux ]; then
             info "leotmux already installed."
             cd ~/.leotmux && git pull
+            exit 0
         else
             git clone https://gitee.com/leoatchina/leotmux.git ~/.leotmux > /dev/null 2>&1
             ln -sf ~/.leotmux/tmux.conf ~/.tmux.conf
             success "leotmux installed"
+            exit 0
         fi
+    # copy configrc
+    elif [[ $mode == 'rc' ]]; then
+
+        if [ -f ~/.bashrc ] && [ $os == 'linux' ]; then
+            read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                mv -f ~/.bashrc ~/.bashrc.bak
+                success "~/.bashrc moved."
+            else
+                info "~/.bashrc not moved."
+            fi
+            if  [ ! -f ~/.bashrc ] && [ $os == 'linux' ]; then
+                cp $APP_PATH/scripts/bashrc $HOME/.bashrc
+                success "bashrc copied."
+                $shell
+            fi
+        elif [ -f ~/.zshrc ]; then
+            read -p "Do you want to move .zshrc? (y/n) " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                mv -f ~/.zshrc ~/.zshrc.bak
+                success "~/.zshrc moved."
+            else
+                info "~/.zshrc not moved."
+            fi
+            if [ ! -f ~/.zshrc ] && program_exists zsh; then
+                cp $APP_PATH/scripts/zshrc $HOME/.zshrc
+                success "zshrc copied."
+                $shell
+            fi
+        fi
+        exit 0
     else
         note "Install softwares"
     fi
@@ -221,47 +256,11 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'nvm' ]] && exit 0
     fi
-    # copy configrc
-    if [[ $mode == 'all' || $mode == 'configrc' || $mode == 'leotmux' ]]; then
-        if [ -f ~/.bashrc ] && [ $os == 'linux' ]; then
-            read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                mv -f ~/.bashrc ~/.bashrc.bak
-                success "bashrc moved."
-            else
-                info "bashrc not moved."
-            fi
-        elif [ -f ~/.zshrc ]; then
-            read -p "Do you want to move .zshrc? (y/n) " -n 1 -r
-            echo             
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                mv -f ~/.zshrc ~/.zshrc.bak
-                success "zshrc moved."
-            else
-                info "zshrc not moved."
-            fi
-        fi
-    fi
 else
     mode=normal
     installplug='yes'
 fi
 
-# set rc config
-if  [ ! -f ~/.bashrc ] && [ $os == 'linux' ]; then
-    cp $APP_PATH/scripts/bashrc $HOME/.bashrc
-    success "bashrc copied."
-elif [ ! -f ~/.zshrc ] && program_exists zsh; then
-    cp $APP_PATH/scripts/zshrc $HOME/.zshrc
-    success "zshrc copied."
-fi
-
-if [[ $mode == 'configrc' || $mode == 'leotmux' ]]; then
-    echo "You can run `bash` or `zsh` to make leoatchina's bash config work."
-    $shell
-    exit 1
-fi
 
 # clone unix tools for (neo)vim
 note "Install/update leovim.unix"
