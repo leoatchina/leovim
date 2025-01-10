@@ -249,7 +249,7 @@ else
 fi
 
 # set rc config
-if  [ ! -f ~/.bashrc ] && [ $os == 'Linux' ]; then
+if  [ ! -f ~/.bashrc ] && [ $os == 'linux' ]; then
     cp $APP_PATH/scripts/bashrc $HOME/.bashrc
     success "bashrc copied."
 elif [ ! -f ~/.zshrc ] && program_exists zsh; then
