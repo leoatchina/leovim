@@ -455,7 +455,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
             endif
-        elseif a:type == "console"
+        elseif a:type == "repl"
             FloatermToggle
         elseif a:type == "element"
             FloatermSpecial
