@@ -100,17 +100,14 @@
 - [x] config gopls in cmp || coc
 - [x] nvim-dap run to cursor
 - [x] delance
+- [ ] FzfSearch Command optimize.
 - [ ] R.exe exepath in windows
 - [ ] codecompanion.nvim
-- [ ] dropbar.nvim
 - [ ] quit all bug
-- [ ] vista_markdown bug
 - [ ] fzfx.nvim
-- [ ] floaterm drop command, ref vim-terminal-help
-- [ ] blink
 ## MyPlugins:
-- [x] fzf-registers
-- [ ] rewrite fzf-project
+- [ ] blink
+- [ ] write fzf-startify 
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
@@ -118,10 +115,10 @@
   - [x] jump to another window bug
   - [x] ~~FunkyAll not show buffer modified bug~~, actually should do w! before funky functions
   - [x] ~~ctrlp intergrated~~, using funky#qf#show() instead
-  - [ ] only for current buffer
+  - [ ] funky only for current buffer
   - [ ] README
   - [ ] deploy to github
-- [ ] REPLFloaterm updates.
+- [x] vim-floaterm-repl updates.
   - [x] use <M-e> as prefix key
   - [x] update repl_floaterm block send command. Updated with Find_Side
   - [x] send block, but keep cusor position, NOTE:fixed by Find_Side function
@@ -133,9 +130,9 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [x] README
   - [x] deploy to github
+- [x] fzf-registers
 ## Plenty of works
 - [ ] zeliji
-- [ ] zed.ai
 - [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
