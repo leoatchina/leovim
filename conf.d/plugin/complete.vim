@@ -161,10 +161,11 @@ if Installed('wilder.nvim')
                 \ })
     cmap <expr><C-j> wilder#in_context() ? wilder#next() : "\<C-j>"
     cmap <expr><C-k> wilder#in_context() ? wilder#previous() : "\<C-k>"
+    " using vim pipeline only
     call wilder#set_option('pipeline', [
                 \   wilder#branch(
-                \     wilder#cmdline_pipeline(),
-                \     wilder#search_pipeline(),
+                \     wilder#cmdline_pipeline({'language': 'vim'}),
+                \     wilder#vim_search_pipeline(),
                 \   ),
                 \ ])
     call wilder#set_option('renderer', wilder#popupmenu_renderer({
