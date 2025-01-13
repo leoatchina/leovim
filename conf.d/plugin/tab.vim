@@ -70,10 +70,8 @@ function! Vim_NeatTabLine()
         let nr = i + 1
         " select the highlighting
         if nr == tabpagenr()
-            let a = 1
             let s .= '%#TabLineSel#'
         else
-            let a = 0
             let s .= '%#TabLine#'
         endif
         " set the tab page number (for mouse clicks)
@@ -81,7 +79,7 @@ function! Vim_NeatTabLine()
         " set nr
         let s .= '【' . nr . '】'
         " set hl
-        let s .= '%{Vim_NeatTabLabel(' . nr . ',' . a .  ')} '
+        let s .= '%{Vim_NeatTabLabel(' . nr . ', 0)} '
     endfor
     " after the last tab fill with TabLineFill and reset tab page nr
     let s .= '%#TabLineFill#%T'
