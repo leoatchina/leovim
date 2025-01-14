@@ -391,6 +391,23 @@
     "command": "editor.action.jumpToBracket",
     "when": "editorTextFocus"
   },
+  // split
+  {
+    "key": "ctrl+\\",
+    "command": "-workbench.action.splitEditor"
+  },
+  {
+    "key": "ctrl+shift+\\",
+    "command": "workbench.action.splitEditor"
+  },
+  {
+    "key": "ctrl+k ctrl+\\",
+    "command": "-workbench.action.splitEditorDown"
+  },
+  {
+    "key": "ctrl+alt+\\",
+    "command": "workbench.action.splitEditorDown"
+  },
   // markdown
   {
     "key": "ctrl+alt+r",
