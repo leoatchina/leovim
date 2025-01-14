@@ -100,13 +100,12 @@
 - [x] config gopls in cmp || coc
 - [x] nvim-dap run to cursor
 - [x] delance
-- [ ] FzfSearch Command optimize.
+- [ ] FzfSearch Command optimize, 3 levels, Git/Project/Current.
 - [ ] R.exe exepath in windows
 - [ ] codecompanion.nvim
 - [ ] quit all bug
 - [ ] fzfx.nvim
 ## MyPlugins:
-- [ ] blink
 - [ ] write fzf-startify 
 - [ ] vim-funky
   - [x] open bug
@@ -132,7 +131,7 @@
   - [x] deploy to github
 - [x] fzf-registers
 ## Plenty of works
-- [ ] zeliji
+- [ ] blink
 - [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
