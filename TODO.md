@@ -100,7 +100,9 @@
 - [x] config gopls in cmp || coc
 - [x] nvim-dap run to cursor
 - [x] delance
-- [ ] Fzf --no-sort command
+- [ ] Fzf --no-sort option
+- [ ] use native vim.lsp command instead of LspUI.
+- [ ] show/yank currnt dir/file/path
 - [ ] FzfSearch Command optimize, 3 levels, Git/Project/Current.
 - [ ] R.exe exepath in windows
 - [ ] codecompanion.nvim
