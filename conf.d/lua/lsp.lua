@@ -161,7 +161,7 @@ require("mason-lspconfig").setup({
 -----------------
 -- lspui
 -----------------
-require('LspUI').setup({
+require('LspUI.config').setup({
   pos_keybind = {
     main = {
       hide_secondary = "<leader>h",
