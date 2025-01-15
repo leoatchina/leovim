@@ -105,6 +105,7 @@
 - [ ] use native vim.lsp command instead of LspUI.
 - [ ] show/yank currnt dir/file/path
 - [ ] FzfSearch Command optimize, 3 levels, Git/Project/Current.
+- [ ] find conflicts Git/Project/Curent.
 - [ ] R.exe exepath in windows
 - [ ] codecompanion.nvim
 - [ ] quit all bug
