@@ -73,7 +73,7 @@ if PlannedLeaderf()
         endif
     endfunction
     command! LeaderfQfLoc call s:leaderf_qf_loc()
-    nnoremap <silent>Z? :LeaderfQfLoc<Cr>
+    nnoremap <silent><M-:> :LeaderfQfLoc<Cr>
 endif
 " ----------------------------
 " bqf

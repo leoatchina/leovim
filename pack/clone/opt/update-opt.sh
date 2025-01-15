@@ -64,6 +64,10 @@ git clone --depth 1 https://github.com/machakann/vim-sandwich.git
 rm -rf targets.vim
 git clone --depth 1 https://github.com/wellle/targets.vim
 
+# vindent.vim
+rm -rf vindent.vim
+git clone --depth 1 https://github.com/jessekelighine/vindent.vim 
+
 # tmux
 rm -rf vim-tmux-navigator
 git clone --depth 1 https://github.com/christoomey/vim-tmux-navigator.git

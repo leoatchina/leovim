@@ -25,7 +25,4 @@ if Installed('nvim-ufo')
     else
         lua require('ufo').setup({provider_selector = function(bufnr, filetype, buftype) return {''} end })
     endif
-else
-    " fold search results only: FIXME: confilicts with ufo
-    nnoremap <silent>z/ :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>:set foldmethod=manual<CR>
 endif
