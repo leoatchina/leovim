@@ -101,14 +101,13 @@
 - [x] nvim-dap run to cursor
 - [x] delance
 - [x] jessekelighine/vindent.vim
-- [ ] use native vim.lsp command instead of LspUI.
-- [ ] Fzf --no-sort option
+- [x] use native vim.lsp command instead of LspUI.
+- [ ] Fzf --no-sort option for different commands
 - [ ] show/yank currnt dir/file/path
 - [ ] FzfSearch Command optimize, 3 levels, Git/Project/Current.
 - [ ] find conflicts Git/Project/Curent.
 - [ ] R.exe exepath in windows
 - [ ] codecompanion.nvim
-- [ ] quit all bug
 - [ ] fzfx.nvim
 ## MyPlugins:
 - [ ] write fzf-startify
