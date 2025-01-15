@@ -145,7 +145,7 @@ inoremap <silent><expr> <TAB> coc#pum#visible() == v:false ? "\<Tab>" :
             \ <SID>has_backspace() ? coc#refresh() :
             \ coc#_select_confirm()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr><c-l> coc#refresh()
+inoremap <silent><expr><C-l> coc#refresh()
 " c-e/c-y
 imap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
 imap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
@@ -155,10 +155,10 @@ imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<C
 " call hierarchy
 nnoremap <silent>gh :call CocAction('showIncomingCalls')<Cr>
 nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>
-nnoremap <silent>gs :call CocAction('showSubTypes')<Cr>
-nnoremap <silent>gt :call CocAction('showSuperTypes')<Cr>
+nnoremap <silent>gt :call CocAction('showSubTypes')<Cr>
+nnoremap <silent>gr :call CocAction('showSuperTypes')<Cr>
 " refactor
-nmap <silent>gr <Plug>(coc-refactor)
+nmap <silent><leader>R <Plug>(coc-refactor)
 " ----------------------------
 " actions
 " ----------------------------
