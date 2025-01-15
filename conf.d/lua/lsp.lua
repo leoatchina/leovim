@@ -162,6 +162,30 @@ require("mason-lspconfig").setup({
     end,
   }
 })
+-- LspHandler
+local function get_lsp_loc(value)
+  -- filename
+  local filename = value.uri or value.targetUri
+  if filename == nil then
+    vim.api.nvim_set_var("lsp_found", 0)
+    return nil
+  end
+  -- range
+  local range = value.range or value.targetRange
+  if range == nil then
+    vim.api.nvim_set_var("lsp_found", 0)
+    return nil
+  end
+  -- jumpto
+  local lnum = range.start.line + 1
+  local col = range.start.character
+  -- return
+  return {
+    filename = filename,
+    lnum = lnum,
+    col = col
+  }
+end
 function M.LspHandler(method, open_action)
   local handler_dict = {
     definition = 'textDocument/definition',
@@ -179,6 +203,7 @@ function M.LspHandler(method, open_action)
       vim.api.nvim_set_var("lsp_found", 0)
       return
     end
+    local qflist = {}
     for key, values in pairs(results) do
       if key == 'error' then
         vim.fn['preview#errmsg'](values['message'])
@@ -189,9 +214,19 @@ function M.LspHandler(method, open_action)
           vim.api.nvim_set_var("lsp_found", 0)
           return
         elseif #values > 1 or open_action == 'list' then
-          vim.api.nvim_set_var("lsp_found", 1)
-          M.LspUIApi(method)
-          return
+          for _, value in pairs(values) do
+            local loc = get_lsp_loc(value)
+            if loc ~= nil and loc.filename:find("^file://") then
+              local filename = loc.filename:gsub("file://", "")
+              local text = vim.fn.readfile(filename)[loc.lnum]
+              table.insert(qflist , {
+                filename = filename,
+                lnum = loc.lnum,
+                col = loc.col,
+                text = text
+              })
+            end
+          end
         else
           -- value
           local value = values[1]
@@ -199,28 +234,27 @@ function M.LspHandler(method, open_action)
             vim.api.nvim_set_var("lsp_found", 0)
             return
           end
-          -- file
-          local file = value.uri or value.targetUri
-          if file == nil then
-            vim.api.nvim_set_var("lsp_found", 0)
+          local loc = get_lsp_loc(value)
+          if loc == nil then
             return
           end
-          -- range
-          local range = value.range or value.targetRange
-          if range == nil then
-            vim.api.nvim_set_var("lsp_found", 0)
-            return
-          end
-          -- jumpto
-          local line = range.start.line + 1
-          local col = range.start.character
-          vim.api.nvim_command(open_action .. ' ' .. file)
-          vim.api.nvim_win_set_cursor(0, {line, col})
+          vim.api.nvim_command(open_action .. ' ' .. loc.filename)
+          vim.api.nvim_win_set_cursor(0, {loc.lnum, loc.col})
           vim.api.nvim_set_var("lsp_found", 1)
           return
         end
       end
     end
+    if #qflist > 0 then
+      -- Set the quickfix list
+      vim.fn.setqflist(qflist)
+      -- Open the quickfix window
+      vim.cmd('copen')
+      vim.api.nvim_set_var("lsp_found", 1)
+    else
+      vim.api.nvim_set_var("lsp_found", 0)
+    end
+    return
   else
     vim.api.nvim_set_var("lsp_found", 0)
   end

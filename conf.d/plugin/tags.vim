@@ -313,7 +313,7 @@ function! s:lsp_tags_searchall(method, ...) abort
             endif
         endif
     " --------------------------
-    " LspUI
+    " lsp
     " --------------------------
     elseif InstalledNvimLsp() && lsp
         let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, open_action)
@@ -322,7 +322,7 @@ function! s:lsp_tags_searchall(method, ...) abort
         if symbol_found
             call s:settagstack(winnr, tagname, pos)
             call feedkeys("zz", "n")
-            echo "found by lspui " . method | sleep 2
+            echo "found by vim.lsp " . method | sleep 2
         endif
     endif
     " 利用errormsg判断是否找到,
