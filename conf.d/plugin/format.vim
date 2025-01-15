@@ -7,7 +7,7 @@ let g:easy_align_delimiters['*'] = {'pattern': '*', 'ignore_groups': ['String']}
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 xmap g, ga*,
-    xmap g= ga*=
+xmap g= ga*=
 xmap g: ga*:
 xmap g<Space> ga*<Space>
 PlugAddOpt 'vim-easy-align'
@@ -23,7 +23,7 @@ function! BuiltInFormat(visual)
         silent! normal ggVG=
         call cursor(line, col)
     endif
-call preview#cmdmsg("Using vim's builtin formatprg.", 1)
+    call preview#cmdmsg("Using vim's builtin formatprg.", 1)
     call feedkeys('zz', 'n')
 endfunction
 if Planned('neoformat')
@@ -55,7 +55,9 @@ if Planned('neoformat')
         if empty(formatprgs)
             call BuiltInFormat(visual)
         else
-            let formatprgs = ['builtin'] + formatprgs
+            if !visual
+                let formatprgs = ['builtin'] + formatprgs
+            endif
             let formatprg = ChooseOne(formatprgs, "Choose a formatprg")
             if formatprg == 'builtin'
                 call BuiltInFormat(visual)
