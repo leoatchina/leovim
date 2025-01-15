@@ -208,7 +208,7 @@ function M.LspHandler(method, open_action)
   local results = vim.lsp.buf_request_sync(0, handler, params, 500)
   if type(results) == 'table' and next(table) then
     results = results[1]
-    if results == nil then
+    if results == nil or next(results) == nil then
       vim.api.nvim_set_var("lsp_found", 0)
       return
     end
@@ -232,15 +232,15 @@ function M.LspHandler(method, open_action)
             vim.api.nvim_set_var("lsp_found", 0)
             return
           end
-          -- range
-          local range = value.range or value.targetRange
-          if range == nil then
-            vim.api.nvim_set_var("lsp_found", 0)
-            return
-          end
           -- file
           local file = value.uri or value.targetUri
           if file == nil then
+            vim.api.nvim_set_var("lsp_found", 0)
+            return
+          end
+          -- range
+          local range = value.range or value.targetRange
+          if range == nil then
             vim.api.nvim_set_var("lsp_found", 0)
             return
           end
@@ -254,7 +254,6 @@ function M.LspHandler(method, open_action)
         end
       end
     end
-    vim.api.nvim_set_var("lsp_found", 0)
   else
     vim.api.nvim_set_var("lsp_found", 0)
   end
