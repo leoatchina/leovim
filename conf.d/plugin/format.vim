@@ -15,16 +15,15 @@ PlugAddOpt 'vim-easy-align'
 " neoformat
 " ----------------------------
 function! BuiltInFormat(visual)
+    let col = col('.')
+    let line = line('.')
     if a:visual
         silent! normal gv=
     else
-        let col = col('.')
-        let line = line('.')
         silent! normal ggVG=
-        call cursor(line, col)
     endif
+    call cursor(line, col)
     call preview#cmdmsg("Using vim's builtin formatprg.", 1)
-    call feedkeys('zz', 'n')
 endfunction
 if Planned('neoformat')
     " NOTE:  the two functions below is copied from neoformat.vim
@@ -69,7 +68,6 @@ if Planned('neoformat')
                 else
                     exec "Neoformat " . formatprg
                 endif
-                call feedkeys('zz', 'n')
             endif
         endif
     endfunction

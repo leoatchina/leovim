@@ -14,13 +14,6 @@ endfunction
 " lightline init, NOTE: must be set before schemes
 "-----------------------------------------------------
 set laststatus=2
-
-" FZF configuration to prevent statusline conflicts
-let g:fzf_layout = { 'down': '~40%' }
-" Prevent fzf from overriding statusline
-autocmd! FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-
 let g:modes_dict={
             \ "\<C-V>": 'V·Block',
             \ 'Rv': 'V·Replace',
