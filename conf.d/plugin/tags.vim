@@ -315,12 +315,8 @@ function! s:lsp_tags_searchall(method, ...) abort
     " --------------------------
     " LspUI
     " --------------------------
-    elseif Installed('lspui.nvim') && lsp
-        if open_action == 'list'
-            let cmd = printf('lua require("lsp").LspUIApi("%s")', method)
-        else
-            let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, open_action)
-        endif
+    elseif InstalledNvimLsp() && lsp
+        let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, open_action)
         call execute(cmd)
         let symbol_found = get(g:, 'lsp_found', 0)
         if symbol_found

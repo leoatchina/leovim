@@ -20,7 +20,6 @@ function! InstalledNvimLsp() abort
                 \ 'nvim-lsp-selection-range',
                 \ 'symbol-usage.nvim',
                 \ 'nvim-lspimport',
-                \ 'lspui.nvim',
                 \ 'neoconf.nvim',
                 \ 'winbar.nvim',
                 \ )
@@ -137,7 +136,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'fgheng/winbar.nvim'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'stevanmilic/nvim-lspimport'
-    PlugAdd 'jinzhongjia/LspUI.nvim'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}

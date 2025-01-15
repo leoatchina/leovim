@@ -100,9 +100,9 @@
 - [x] config gopls in cmp || coc
 - [x] nvim-dap run to cursor
 - [x] delance
-- [ ] jessekelighine/vindent.vim
-- [ ] Fzf --no-sort option
+- [x] jessekelighine/vindent.vim
 - [ ] use native vim.lsp command instead of LspUI.
+- [ ] Fzf --no-sort option
 - [ ] show/yank currnt dir/file/path
 - [ ] FzfSearch Command optimize, 3 levels, Git/Project/Current.
 - [ ] find conflicts Git/Project/Curent.

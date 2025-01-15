@@ -162,43 +162,6 @@ require("mason-lspconfig").setup({
     end,
   }
 })
------------------
--- lspui
------------------
-require('LspUI.config').setup({
-  pos_keybind = {
-    main = {
-      hide_secondary = "<leader>h",
-      back = "<leader>l",
-    },
-    secondary = {
-      next_file_entry = "J",
-      prev_file_entry = "K",
-      jump = "<Cr>",
-      jump_split = "<C-x>",
-      jump_vsplit = "<C-]>",
-      jump_tab = "<C-t>",
-      toggle_fold = "o",
-      quit = "<M-q>",
-      fold_all = "X",
-      expand_all = "O",
-      hide_main = "<leader>h",
-      enter = "<leader>l",
-    },
-  }
-})
-function M.LspUIApi(method)
-  if method == 'references' then
-    method = 'reference'
-  end
-  require("LspUI")["api"][method](function(data)
-    if data then
-      vim.api.nvim_set_var("lsp_found", 1)
-    else
-      vim.api.nvim_set_var("lsp_found", 0)
-    end
-  end)
-end
 function M.LspHandler(method, open_action)
   local handler_dict = {
     definition = 'textDocument/definition',
@@ -225,7 +188,7 @@ function M.LspHandler(method, open_action)
         if values == nil then
           vim.api.nvim_set_var("lsp_found", 0)
           return
-        elseif #values > 1 then
+        elseif #values > 1 or open_action == 'list' then
           vim.api.nvim_set_var("lsp_found", 1)
           M.LspUIApi(method)
           return
@@ -279,19 +242,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if lsp_capabilities and lsp_capabilities.definitionProvider then
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
     end
-    -- LspUI
-    map('n', "<F2>", [[<Cmd>LspUI rename<Cr>]], opts_echo)
-    map('n', "<M-a>", [[<Cmd>LspUI code_action<Cr>]], opts_silent)
     -- lsp info/restart
     map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
     map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
+    --
+    map('n', "<F2>", vim.lsp.buf.rename, opts_echo)
+    map('n', "<M-a>", vim.lsp.buf.code_action, opts_silent)
     -- vista
     map(nx, "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
+    --
     -- diagnostic error
-    map(nx, ';d', [[<Cmd>LspUI diagnostic next<CR>]], opts_silent)
-    map(nx, ',d', [[<Cmd>LspUI diagnostic prev<CR>]], opts_silent)
-    map(nx, ';e', [[<Cmd>LspUI diagnostic next error<CR>]], opts_silent)
-    map(nx, ',e', [[<Cmd>LspUI diagnostic prev error<CR>]], opts_silent)
+    map(nx, ';d', vim.diagnostic.get_next, opts_silent)
+    map(nx, ',d', vim.diagnostic.get_prev, opts_silent)
+    map(nx, ';e', [[<Cmd>lua vim.diagnostic.get_next({severity=vim.diagnostic.severity.ERROR, wrap=false})<CR>]], opts_silent)
+    map(nx, ',e', [[<Cmd>lua vim.diagnostic.get_prev({severity=vim.diagnostic.severity.ERROR, wrap=false})<CR>]], opts_silent)
     -- native lsp
     map('i', "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
     map(nx, "gl", vim.lsp.buf.outgoing_calls, opts_silent)
@@ -333,7 +297,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- inlay_hint
     if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      map(nx, "<leader>I", [[<Cmd>LspUI inlay_hint<Cr>]], opts_echo)
+      map(nx, "<leader>I", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
     end
     -- codelens
     if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then

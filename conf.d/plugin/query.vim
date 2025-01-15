@@ -30,7 +30,7 @@ function! s:k()
     elseif PlannedCoc() && CocAction('hasProvider', 'hover')
         call CocActionAsync('doHover')
     elseif InstalledNvimLsp()
-        execute 'LspUI hover'
+        lua vim.lsp.buf.hover()
     else
         call feedkeys('K', 'n')
     endif
