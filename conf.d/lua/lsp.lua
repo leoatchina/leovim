@@ -167,13 +167,11 @@ local function get_lsp_loc(value)
   -- filename
   local filename = value.uri or value.targetUri
   if filename == nil then
-    vim.api.nvim_set_var("lsp_found", 0)
     return nil
   end
   -- range
   local range = value.range or value.targetRange
   if range == nil then
-    vim.api.nvim_set_var("lsp_found", 0)
     return nil
   end
   -- jumpto
@@ -216,7 +214,7 @@ function M.LspHandler(method, open_action)
         elseif #values > 1 or open_action == 'list' then
           for _, value in pairs(values) do
             local loc = get_lsp_loc(value)
-            if loc ~= nil and loc.filename:find("^file://") then
+            if loc ~= nil then
               local filename = loc.filename:gsub("file://", "")
               local text = vim.fn.readfile(filename)[loc.lnum]
               table.insert(qflist , {
@@ -236,6 +234,7 @@ function M.LspHandler(method, open_action)
           end
           local loc = get_lsp_loc(value)
           if loc == nil then
+            vim.api.nvim_set_var("lsp_found", 0)
             return
           end
           vim.api.nvim_command(open_action .. ' ' .. loc.filename)
@@ -245,16 +244,15 @@ function M.LspHandler(method, open_action)
         end
       end
     end
-    if #qflist > 0 then
+    if next(qflist) then
+      vim.api.nvim_set_var("lsp_found", 1)
       -- Set the quickfix list
       vim.fn.setqflist(qflist)
       -- Open the quickfix window
       vim.cmd('copen')
-      vim.api.nvim_set_var("lsp_found", 1)
     else
       vim.api.nvim_set_var("lsp_found", 0)
     end
-    return
   else
     vim.api.nvim_set_var("lsp_found", 0)
   end
@@ -350,7 +348,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       map(nx, "<leader>a", vim.lsp.codelens.run, opts_echo)
     end
     map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
-    -- lspimport for python
+    -- lspimport for python and pyright
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'python',
       callback = function()

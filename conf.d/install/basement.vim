@@ -19,7 +19,6 @@ function! InstalledNvimLsp() abort
                 \ 'mason-lspconfig.nvim',
                 \ 'nvim-lsp-selection-range',
                 \ 'symbol-usage.nvim',
-                \ 'nvim-lspimport',
                 \ 'neoconf.nvim',
                 \ 'winbar.nvim',
                 \ )
@@ -135,6 +134,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'fgheng/winbar.nvim'
     PlugAdd 'Wansmer/symbol-usage.nvim'
+    " lspimport is only for pyright
     PlugAdd 'stevanmilic/nvim-lspimport'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
