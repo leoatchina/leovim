@@ -586,8 +586,8 @@ if exists('*search') && exists('*getpos')
     " -------------------
     nmap <leader>vi viio
     nmap <leader>vI vaio
-    noautocmd nmap <silent>si viio<C-[>^
-    noautocmd nmap <silent>sg vii<C-[>^
+    noautocmd nmap <silent>,i viio<C-[>^
+    noautocmd nmap <silent>;i vii<C-[>^
     " -------------------
     " targets.vim
     " -------------------
