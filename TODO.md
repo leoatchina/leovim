@@ -100,6 +100,7 @@
 - [x] config gopls in cmp || coc
 - [x] nvim-dap run to cursor
 - [x] delance
+- [ ] jessekelighine/vindent.vim
 - [ ] Fzf --no-sort option
 - [ ] use native vim.lsp command instead of LspUI.
 - [ ] show/yank currnt dir/file/path
@@ -109,7 +110,7 @@
 - [ ] quit all bug
 - [ ] fzfx.nvim
 ## MyPlugins:
-- [ ] write fzf-startify 
+- [ ] write fzf-startify
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
