@@ -1,3 +1,4 @@
+autocmd! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 let $FZF_DEFAULT_OPTS = ' --reverse --info=inline --bind ctrl-b:preview-up,ctrl-f:preview-down,ctrl-a:select-all'
 let g:fzf_vim = {}
 au FileType fzf tnoremap <buffer> <C-j> <Down>
@@ -21,7 +22,6 @@ let g:fzf_action = {
             \ }
 " layout
 if has('nvim') || has('patch-8.2.191')
-    autocmd! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
     let g:fzf_layout = {
                 \ 'window': {'width': 0.9, 'height': 0.9, 'border': 'rounded'}
                 \ }
