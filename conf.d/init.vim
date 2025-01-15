@@ -639,6 +639,7 @@ if has('nvim')
     nnoremap <silent><nowait>g# g#``<Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait><C-n> *``<Cmd>lua require('hlslens').start()<Cr>cgn
 else
+    PlugAddOpt 'vim-searchindex'
     nnoremap <silent><nowait>* *``
     nnoremap <silent><nowait># #``
     nnoremap <silent><nowait>g* g*``

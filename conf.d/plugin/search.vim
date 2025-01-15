@@ -10,14 +10,6 @@ elseif PlannedFzf()
 else
     nnoremap <nowait><M-l><M-l> :CtrlPLine<Cr>
 endif
-" ----------------------------------
-" ufo
-" ----------------------------------
-if Installed('nvim-ufo', 'promise-async')
-    lua require('ufo').setup()
-else
-    PlugAddOpt 'vim-searchindex'
-endif
 " ----------------------------
 " buffer search
 " ----------------------------
