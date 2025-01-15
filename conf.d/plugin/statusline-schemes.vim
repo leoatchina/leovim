@@ -14,6 +14,13 @@ endfunction
 " lightline init, NOTE: must be set before schemes
 "-----------------------------------------------------
 set laststatus=2
+
+" FZF configuration to prevent statusline conflicts
+let g:fzf_layout = { 'down': '~40%' }
+" Prevent fzf from overriding statusline
+autocmd! FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
 let g:modes_dict={
             \ "\<C-V>": 'V·Block',
             \ 'Rv': 'V·Replace',
@@ -98,7 +105,7 @@ if Installed('lightline-ale')
     let lint_info = ['linter_checking', 'linter_errors', 'linter_warnings']
     let g:lightline.active.right += [lint_info]
 elseif Installed('nvim-lightline-lsp')
-    let g:lightline.component_expand = {
+    let g:lightline.component_expand ={
                 \ 'lsp_warnings': 'lightline#lsp#warnings',
                 \ 'lsp_errors': 'lightline#lsp#errors',
                 \ 'lsp_info': 'lightline#lsp#info',
