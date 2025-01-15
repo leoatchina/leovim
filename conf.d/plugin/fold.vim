@@ -16,17 +16,15 @@ nmap <leader>zb zfiB
 nmap <Tab>zb zfaB
 " ufo
 if Installed('nvim-ufo')
-    if Installed('nvim-treesitter') || AdvCompEngine()
-        lua vim.keymap.set('n', 'ZO', require('ufo').openAllFolds)
-        lua vim.keymap.set('n', 'ZC', require('ufo').closeAllFolds)
-        if Installed('nvim-treesitter')
-            lua require('ufo').setup({provider_selector = function(bufnr, filetype, buftype) return {'treesitter', 'indent'} end })
-        else
-            lua require('ufo').setup()
-        endif
+    lua vim.keymap.set('n', 'ZO', require('ufo').openAllFolds)
+    lua vim.keymap.set('n', 'ZC', require('ufo').closeAllFolds)
+    if Installed('nvim-treesitter')
+        lua require('ufo').setup({provider_selector = function(bufnr, filetype, buftype) return {'treesitter', 'indent'} end })
+    elseif AdvCompEngine()
+        lua require('ufo').setup()
     else
         lua require('ufo').setup({provider_selector = function(bufnr, filetype, buftype) return {''} end })
     endif
 endif
-" fold search results only
-nnoremap <silent>z/ :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>:set foldmethod=manual<CR><CR0
+" fold search results only: FIXME: confilicts with ufo
+nnoremap <silent>z/ :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>:set foldmethod=manual<CR>

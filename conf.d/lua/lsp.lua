@@ -3,6 +3,10 @@ local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
 local lsp_capabilities = require("lsp-selection-range").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+lsp_capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true
+}
 -------------
 -- diagnostic
 -------------
