@@ -197,7 +197,8 @@ function M.LspAction(method, open_action)
   local handler = handler_dict[method]
   local params = vim.lsp.util.make_position_params()
   local results = vim.lsp.buf_request_sync(0, handler, params, 500)
-  if type(results) == 'table' and next(table) then
+  -- results is not empty
+  if type(results) == 'table' and next(results) then
     results = results[1]
     if results == nil or next(results) == nil then
       vim.api.nvim_set_var("lsp_found", 0)
