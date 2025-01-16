@@ -176,7 +176,7 @@ local function get_lsp_loc(value)
   if range == nil then
     return nil
   end
-  -- jumpto
+  -- jumpto position
   local lnum = range.start.line + 1
   local col = range.start.character
   -- return
@@ -186,8 +186,8 @@ local function get_lsp_loc(value)
     col = col
   }
 end
+-- TODO: pack to a vim function LspAction, like CocAction
 function M.LspAction(method, open_action)
-  -- FIXME: references bug
   local handler_dict = {
     definition = 'textDocument/definition',
     declaration = 'textDocument/declaration',
@@ -198,7 +198,6 @@ function M.LspAction(method, open_action)
   local handler = handler_dict[method]
   local params = vim.tbl_extend('force', vim.lsp.util.make_position_params(), method == 'references' and { context = { includeDeclaration = false } } or {})
   local results = vim.lsp.buf_request_sync(0, handler, params, 500)
-  -- results is not empty
   if type(results) == 'table' and next(results) then
     results = results[1]
     if results == nil or next(results) == nil then
@@ -247,9 +246,9 @@ function M.LspAction(method, open_action)
             vim.api.nvim_set_var("lsp_found", 0)
             return
           end
+          vim.api.nvim_set_var("lsp_found", 1)
           vim.api.nvim_command(open_action .. ' ' .. loc.filename)
           vim.api.nvim_win_set_cursor(0, {loc.lnum, loc.col})
-          vim.api.nvim_set_var("lsp_found", 1)
           return
         end
       end
