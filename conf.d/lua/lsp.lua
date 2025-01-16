@@ -162,7 +162,9 @@ require("mason-lspconfig").setup({
     end,
   }
 })
--- LspHandler
+---------------------
+-- LspAction
+---------------------
 local function get_lsp_loc(value)
   -- filename
   local filename = value.uri or value.targetUri
@@ -184,7 +186,7 @@ local function get_lsp_loc(value)
     col = col
   }
 end
-function M.LspHandler(method, open_action)
+function M.LspAction(method, open_action)
   local handler_dict = {
     definition = 'textDocument/definition',
     references = 'textDocument/references',
@@ -213,8 +215,13 @@ function M.LspHandler(method, open_action)
           return
         elseif #values > 1 or open_action == 'list' then
           for _, value in pairs(values) do
+            if value == nil then
+              got continue
+            end
             local loc = get_lsp_loc(value)
-            if loc ~= nil then
+            if loc == nil then
+              got continue
+            else
               local filename = loc.filename:gsub("file://", "")
               local text = vim.fn.readfile(filename)[loc.lnum]
               table.insert(qflist , {
@@ -224,6 +231,7 @@ function M.LspHandler(method, open_action)
                 text = text
               })
             end
+            ::continue::
           end
         else
           -- value

@@ -316,7 +316,7 @@ function! s:lsp_tags_searchall(method, ...) abort
     " lsp
     " --------------------------
     elseif InstalledNvimLsp() && lsp
-        let cmd = printf('lua require("lsp").LspHandler("%s", "%s")', method, open_action)
+        let cmd = printf('lua require("lsp").LspAction("%s", "%s")', method, open_action)
         call execute(cmd)
         let symbol_found = get(g:, 'lsp_found', 0)
         if symbol_found
