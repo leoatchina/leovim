@@ -216,11 +216,11 @@ function M.LspAction(method, open_action)
         elseif #values > 1 or open_action == 'list' then
           for _, value in pairs(values) do
             if value == nil then
-              got continue
+              goto continue
             end
             local loc = get_lsp_loc(value)
             if loc == nil then
-              got continue
+              goto continue
             else
               local filename = loc.filename:gsub("file://", "")
               local text = vim.fn.readfile(filename)[loc.lnum]
