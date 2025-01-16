@@ -47,9 +47,9 @@ require("codecompanion").setup({
         },
         hide = {
           modes = {
-            n = "<M-i>",
-            x = "<M-i>",
-            i = "<M-i>",
+            n = "<M-q>",
+            x = "<M-q>",
+            i = "<M-q>",
           },
           callback = function(chat)
             chat.ui:hide()
