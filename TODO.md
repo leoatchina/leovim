@@ -102,9 +102,10 @@
 - [x] delance
 - [x] jessekelighine/vindent.vim
 - [x] use native vim.lsp command instead of LspUI.
+- [x] FzfSearch Command optimize, 3 levels, Git/Project/Current.
+- [x] show/yank current dir/file/path
+- [ ] search enhanced like fzfx.nvim
 - [ ] Fzf --no-sort option for different commands
-- [ ] show/yank currnt dir/file/path
-- [ ] FzfSearch Command optimize, 3 levels, Git/Project/Current.
 - [ ] find conflicts Git/Project/Curent.
 - [ ] R.exe exepath in windows
 - [ ] codecompanion.nvim
