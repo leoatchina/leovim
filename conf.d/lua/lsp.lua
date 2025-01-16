@@ -187,15 +187,16 @@ local function get_lsp_loc(value)
   }
 end
 function M.LspAction(method, open_action)
+  -- FIXME: references bug
   local handler_dict = {
     definition = 'textDocument/definition',
-    references = 'textDocument/references',
-    type_definition = 'textDocument/typeDefinition',
+    declaration = 'textDocument/declaration',
     implementation = 'textDocument/implementation',
-    declaration = 'textDocument/declaration'
+    type_definition = 'textDocument/typeDefinition',
+    references = 'textDocument/references',
   }
   local handler = handler_dict[method]
-  local params = vim.lsp.util.make_position_params()
+  local params = vim.tbl_extend('force', vim.lsp.util.make_position_params(), method == 'references' and { context = { includeDeclaration = false } } or {})
   local results = vim.lsp.buf_request_sync(0, handler, params, 500)
   -- results is not empty
   if type(results) == 'table' and next(results) then
