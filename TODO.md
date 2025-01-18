@@ -118,7 +118,6 @@
   - [x] jump to another window bug
   - [x] ~~FunkyAll not show buffer modified bug~~, actually should do w! before funky functions
   - [x] ~~ctrlp intergrated~~, using funky#qf#show() instead
-  - [ ] funky only for current buffer
   - [ ] README
   - [ ] deploy to github
 - [x] vim-floaterm-repl updates.
