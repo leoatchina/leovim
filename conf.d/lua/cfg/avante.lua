@@ -2,9 +2,6 @@ require('avante_lib').load()
 -- keymaps
 vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
 vim.keymap.set("n", "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
-vim.g.ai_complete_engine = vim.g.llm_model == 'copilot' and 'copilot'
-  or vim.g.ai_complete_engine and vim.g.llm_model .. '&&' .. vim.g.ai_complete_engine
-  or vim.g.llm_model
 require('avante').setup({
   provider = vim.g.ai_provider,
   auto_suggestions_provider = vim.g.ai_provider,
