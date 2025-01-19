@@ -1,11 +1,6 @@
 vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
 local adapter = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.openai_custom and 'openai_compatible' or vim.g.ai_provider
 require("codecompanion").setup({
-  display = {
-    action_palette = {
-      provider = "mini_pick", -- default|telescope|mini_pick
-    },
-  },
   opts = {
     log_level = "DEBUG",
     language = vim.g.codecompanion_language or 'Chinese'
@@ -62,12 +57,12 @@ require("codecompanion").setup({
     openai_compatible = function()
       return require("codecompanion.adapters").extend("openai_compatible", {
         env = {
-          api_key = vim.g.openai_custom.api_key,
-          url = vim.g.openai_custom.url,
+          api_key = vim.g.openai_custom_api_key or "api_key",
+          url = vim.g.openai_custom_url or "url",
         },
         schema = {
           model = {
-            default = vim.g.openai_custom.model
+            default = vim.g.openai_custom_model or "model"
           },
         },
       })

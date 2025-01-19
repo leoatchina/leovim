@@ -27,12 +27,12 @@ let g:nvim_treesitter_install = UNIX()
 " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
 " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
 
-" let $HYPERBOLIC_API_KEY=''
-" let $DEEPSEEK_API_KEY=''
-" let $OPENROUTER_API_KEY=''
 " let $ANTHROPIC_API_KEY=''
 " let $GEMINI_API_KEY=''
 " let $OPENAI_API_KEY=''
+" let g:openai_custom_url = ''
+" let g:openai_custom_mode = ''
+" let g:openai_custom_api_key = ''
 
 let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'c', 'cpp', 'go', 'rust', 'java']
 
