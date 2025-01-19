@@ -86,15 +86,17 @@ command! -nargs=1 Grep call s:grep(<q-args>, 1)
 command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
 " searchall
-nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s/ :GrepAll <C-r><C-w><Cr>
+xnoremap s/ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
 nnoremap s. :GrepAllLast<Cr>
-nnoremap s/ :GrepAll <C-r><C-w>
+nnoremap s<Cr> :GrepAll <C-r><C-w>
+nnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
 " search
 nnoremap s\ :Grep <C-r><C-w><Cr>
 xnoremap s\ :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
-nnoremap s[ :GrepLast<Cr>
+nnoremap s? :GrepLast<Cr>
 nnoremap s] :Grep <C-r><C-w>
+xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
 " --------------------------
 " FzfSearch
 " --------------------------
@@ -178,22 +180,22 @@ if PlannedFzf()
     command! -nargs=? FzfSearchGit call s:fzf_search(<q-args>, 3)
     " fzfsearch
     nnoremap <nowait><leader>? :FzfSearch <C-r>=split(Expand("%:t"), '\.')[0]<Cr>
-    nnoremap <nowait><leader>/ :FzfSearch<Cr>
+    nnoremap <nowait><leader>\ :FzfSearch<Cr>
     nnoremap <nowait><leader>. :FzfSearchLast<Cr>
-    nnoremap <nowait><leader>\ :FzfSearch <C-r><C-w>
-    xnoremap <nowait><leader>\ :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><leader>/ :FzfSearch <C-r><C-w>
+    xnoremap <nowait><leader>/ :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
     " fzfsearchall
     nnoremap <nowait><Tab>? :FzfSearchGit <C-r>=split(Expand("%:t"), '\.')[0]<Cr>
-    nnoremap <nowait><Tab>/ :FzfSearchGit<Cr>
+    nnoremap <nowait><Tab>\ :FzfSearchGit<Cr>
     nnoremap <nowait><Tab>. :FzfSearchGitLast<Cr>
-    nnoremap <nowait><Tab>\ :FzfSearchGit <C-r><C-w>
-    xnoremap <nowait><Tab>\ :<C-u>FzfSearchGit <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><Tab>/ :FzfSearchGit <C-r><C-w>
+    xnoremap <nowait><Tab>/ :<C-u>FzfSearchGit <C-r>=GetVisualSelection()<Cr>
     " fzfsearchgit
     nnoremap <nowait>q? :FzfSearchGit <C-r>=split(Expand("%:t"), '\.')[0]<Cr>
-    nnoremap <nowait>q/ :FzfSearchAll<Cr>
+    nnoremap <nowait>q\ :FzfSearchAll<Cr>
     nnoremap <nowait>q. :FzfSearchAllLast<Cr>
-    nnoremap <nowait>q\ :FzfSearchAll <C-r><C-w>
-    xnoremap <nowait>q\ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait>q/ :FzfSearchAll <C-r><C-w>
+    xnoremap <nowait>q/ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
 endif
 " ----------------------------
 " leaderf search commands
