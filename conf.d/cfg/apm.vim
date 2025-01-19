@@ -153,7 +153,7 @@ function! s:complete_done()
 	let b:apm_tick = b:changedtick
 endfunc
 
-" enable apc
+" enable apm
 function! s:apm_enable()
 	call s:apm_disable()
 	augroup ApmEventGroup
@@ -191,7 +191,7 @@ function! s:apm_enable()
 	let b:apm_enable = 1
 endfunc
 
-" disable apc
+" disable apm
 function! s:apm_disable()
 	if get(b:, 'apm_init_autocmd', 0)
 		augroup ApmEventGroup
