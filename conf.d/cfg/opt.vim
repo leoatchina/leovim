@@ -31,8 +31,13 @@ let g:nvim_treesitter_install = UNIX()
 " let $GEMINI_API_KEY=''
 " let $OPENAI_API_KEY=''
 " let g:openai_custom_api_key = ''
-" let g:openai_custom_model = ''
 " let g:openai_custom_url = ''
+" let g:openai_custom_model = ''
+
+" let g:openai_model = 'gpt4o'
+" let g:claude_model = 'claude-3.5-haiku'
+" let g:gemini_model = 'gemini-1.5-pro'
+" let g:xai_model = 'grok-beta'
 
 let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'c', 'cpp', 'go', 'rust', 'java']
 
