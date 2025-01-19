@@ -1,4 +1,4 @@
-vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionCommands<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
 require("codecompanion").setup({
   display = {
     diff = {
@@ -17,7 +17,7 @@ require("codecompanion").setup({
         },
         schema = {
           model = {
-            default = "grok-beta",
+            default = vim.g.xai_model,
           },
         },
       })
@@ -29,7 +29,44 @@ require("codecompanion").setup({
         },
         schema = {
           model = {
-            default = "claude-3-opus-20240229",
+            default = vim.g.claude_model
+          },
+        },
+      })
+    end,
+    gemini = function()
+      return require("codecompanion.adapters").extend("gemini", {
+        env = {
+          api_key = vim.env.GEMINI_API_KEY
+        },
+        schema = {
+          model = {
+            default = vim.g.gemini_model_model
+          },
+        },
+      })
+    end,
+    openai = function()
+      return require("codecompanion.adapters").extend("openai", {
+        env = {
+          api_key = vim.env.OPENAI_API_KEY
+        },
+        schema = {
+          model = {
+            default = vim.g.openai_model
+          },
+        },
+      })
+    end,
+    openai_compatible = function()
+      return require("codecompanion.adapters").extend("openai_compatible", {
+        env = {
+          api_key = vim.g.openai_custom.api_key,
+          url = vim.g.openai_custom.url,
+        },
+        schema = {
+          model = {
+            default = vim.g.openai_custom.model
           },
         },
       })
@@ -57,8 +94,8 @@ require("codecompanion").setup({
           description = "Hide the chat buffer",
         },
       },
-      adapter = 'xai',
-      linine = 'xai'
+      adapter = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.openai_custom and 'openai_compatible' or vim.g.ai_provider,
+      linine = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.openai_model and 'openai_compatible' or vim.g.ai_provider
     }
   },
 })

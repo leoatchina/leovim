@@ -226,14 +226,11 @@ if has('patch-9.0.0185') || has('nvim')
     endif
 endif
 if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
-            \ exists('$DASHSCOPE_API_KEY') ||
-            \ exists('$HYPERBOLIC_API_KEY') ||
-            \ exists('$DEEPSEEK_API_KEY') ||
-            \ exists('$OPENROUTER_API_KEY') ||
             \ exists('$OPENAI_API_KEY') ||
             \ exists('$ANTHROPIC_API_KEY') ||
             \ exists('$GEMINI_API_KEY') ||
-            \ exists('$XAI_API_KEY')
+            \ exists('$XAI_API_KEY') ||
+            \ exists('g:openai_custom')
             \ )
     if executable('curl') && Planned('nvim-cmp') && (exists('$XAI_API_KEY') || Require('codecompanion'))
         PlugAdd 'olimorris/codecompanion.nvim'

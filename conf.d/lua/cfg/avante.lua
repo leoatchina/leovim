@@ -2,59 +2,17 @@ require('avante_lib').load()
 -- keymaps
 vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
 vim.keymap.set("n", "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
--- base models
-vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
-vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-pro"
-vim.g.openai_model = vim.g.openai_model or "o1-mini"
-vim.g.copilot_model = vim.g.copilot_model or "gpt-4o-2024-08-06"
--- provider
-local provider = ''
-local openai_endpoint = ''
-if vim.env.DASHSCOPE_API_KEY then
-  vim.env.OPENAI_API_KEY = vim.env.DASHSCOPE_API_KEY
-  vim.g.llm_model = vim.g.qwen_model or "qwen-coder-plus-latest"
-  provider = 'openai'
-  openai_endpoint = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-elseif vim.env.HYPERBOLIC_API_KEY then
-  vim.env.OPENAI_API_KEY = vim.env.HYPERBOLIC_API_KEY
-  vim.g.llm_model = vim.g.hyperbolic_model or "Qwen/Qwen2.5-72B-Instruct"
-  provider = 'openai'
-  openai_endpoint = "https://api.hyperbolic.xyz/v1"
-elseif vim.env.DEEPSEEK_API_KEY then
-  vim.env.OPENAI_API_KEY = vim.env.DEEPSEEK_API_KEY
-  vim.g.llm_model = vim.g.deepseek_model or "deepseek-chat"
-  provider = 'openai'
-  openai_endpoint = "https://api.deepseek.com/v1"
-elseif vim.env.OPENROUTER_API_KEY then
-  vim.env.OPENAI_API_KEY = vim.env.OPENROUTER_API_KEY
-  vim.g.llm_model = vim.g.openrouter_model or "openai/gpt-4o"
-  provider = 'openai'
-  openai_endpoint = "https://openrouter.ai/api/v1"
-elseif vim.env.OPENAI_API_KEY then
-  vim.g.llm_model = vim.g.openai_model
-  provider = 'openai'
-  openai_endpoint = "https://api.openai.com/v1"
-elseif vim.env.ANTHROPIC_API_KEY then
-  vim.g.llm_model = vim.g.claude_model
-  provider = 'claude'
-elseif vim.env.GEMINI_API_KEY then
-  vim.g.llm_model = vim.g.gemini_model
-  provider = 'gemini'
-else
-  vim.g.llm_model = vim.g.copilot_model
-  provider = 'copilot'
-end
 vim.g.ai_complete_engine = vim.g.llm_model == 'copilot' and 'copilot'
   or vim.g.ai_complete_engine and vim.g.llm_model .. '&&' .. vim.g.ai_complete_engine
   or vim.g.llm_model
 require('avante').setup({
-  provider = provider,
-  auto_suggestions_provider = provider,
+  provider = vim.g.ai_provider,
+  auto_suggestions_provider = vim.g.ai_provider,
   -- openai is specifically configured
   openai = {
     -- NOTE: using llm_model here
     model = vim.g.llm_model or vim.g.openai_model,
-    endpoint = openai_endpoint,
+    endpoint = vim.g.openai_url,
     max_tokens = vim.g.max_tokens
   },
   -- other models
@@ -64,10 +22,6 @@ require('avante').setup({
   },
   gemini = {
     model = vim.g.gemini_model,
-    max_tokens = vim.g.max_tokens
-  },
-  copilot = {
-    model = vim.g.copilot_model,
     max_tokens = vim.g.max_tokens
   },
   -- behaviour

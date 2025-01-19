@@ -38,13 +38,12 @@ elseif Planned('copilot.vim')
     let g:ai_complete_engine = 'copliot'
 endif
 if Installed('codecompanion.nvim')
-    let g:codecompanion_model = ''
+    lua require("cfg/ai")
     lua require("cfg/codecompanion")
-    command! CodeCompanionCommands call FzfCallCommands('CodeCompanionCommands', 'CodeCompanion')
 elseif Installed('avante.nvim')
-    let g:avante_model = ''
-    lua require("cfg/avante")
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
+    lua require("cfg/ai")
+    lua require("cfg/avante")
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>
