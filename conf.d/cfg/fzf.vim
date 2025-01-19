@@ -43,6 +43,10 @@ else
     let g:vista_fzf_preview = g:fzf_vim.preview_window
 endif
 " ---------------
+" FzfFiles
+" ---------------
+command! -bang -nargs=? -complete=dir FzfFiles call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ' --no-sort '}), <bang>0)
+" ---------------
 " fzf_commands
 " ---------------
 function FzfCallCommands(prompt, ...)
