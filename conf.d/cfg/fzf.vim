@@ -45,7 +45,7 @@ endif
 " ---------------
 " FzfFiles
 " ---------------
-command! -bang -nargs=? -complete=dir FzfFiles call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ' --no-sort '}), <bang>0)
+command! -bang -nargs=? -complete=dir FzfFilesNoSort call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ' --no-sort '}), <bang>0)
 " ---------------
 " fzf_commands
 " ---------------
