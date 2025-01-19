@@ -111,8 +111,12 @@ else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
 endif
-nnoremap <leader><Cr> :e!<Cr>
-nnoremap <leader>E :e<Space>
+" ---------------------------------
+" open gitroot getroot
+" ---------------------------------
+nnoremap <leader><Cr> :e<Space>
+nnoremap <leader>P :tabe <C-r>=GitRootDir()<Cr>/
+nnoremap <leader>E :tabe <C-r>=GetRootDir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------

@@ -2,7 +2,6 @@ let g:fern_disable_startup_warnings = 1
 PlugAddOpt 'vim-fern'
 nnoremap <leader>fn :Fern
 nnoremap <leader>fr :Fern . -drawer -reveal=%<Cr>
-nnoremap <leader>fo :Fern . -opener=tabedit<Cr>
 " icons
 let g:fern#renderer = "nerdfont"
 PlugAddOpt 'vim-nerdfont'
