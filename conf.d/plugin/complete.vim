@@ -37,7 +37,7 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 endif
-if Installed('codecompanion.nvim')
+if Installed('codecompanion.nvim', 'mini.pick')
     lua require("cfg/ai")
     lua require("cfg/codecompanion")
 elseif Installed('avante.nvim')

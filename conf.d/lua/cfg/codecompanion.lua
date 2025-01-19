@@ -1,8 +1,9 @@
 vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
+local adapter = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.openai_custom and 'openai_compatible' or vim.g.ai_provider
 require("codecompanion").setup({
   display = {
-    diff = {
-      provider = "mini_diff",
+    action_palette = {
+      provider = "mini_pick", -- default|telescope|mini_pick
     },
   },
   opts = {
@@ -73,8 +74,42 @@ require("codecompanion").setup({
     end,
   },
   strategies = {
+    inline = {
+      adapter = adapter,
+    },
+    cmd = {
+      adapter = adapter,
+    },
     chat = {
+      adapter = adapter,
+      slash_commands = {
+        ["buffer"] = {
+          opts = {
+            provider = 'mini_pick'
+          }
+        },
+        ["file"] = {
+          opts = {
+            provider = 'mini_pick'
+          }
+        },
+        ["help"] = {
+          opts = {
+            provider = 'mini_pick'
+          }
+        },
+        ["symbols"] = {
+          opts = {
+            provider = 'mini_pick'
+          }
+        },
+      },
       keymaps = {
+        completion = {
+          modes = {
+            i = "<M-i>",
+          },
+        },
         send = {
           modes = {
             n = "<C-s>",
@@ -82,11 +117,18 @@ require("codecompanion").setup({
             i = "<C-s>",
           },
         },
-        hide = {
+        close = {
           modes = {
             n = "<M-q>",
             x = "<M-q>",
             i = "<M-q>",
+          },
+        },
+        hide = {
+          modes = {
+            n = "<M-i>",
+            x = "<M-i>",
+            i = "<M-i>",
           },
           callback = function(chat)
             chat.ui:hide()
@@ -94,8 +136,6 @@ require("codecompanion").setup({
           description = "Hide the chat buffer",
         },
       },
-      adapter = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.openai_custom and 'openai_compatible' or vim.g.ai_provider,
-      linine = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.openai_model and 'openai_compatible' or vim.g.ai_provider
     }
   },
 })
