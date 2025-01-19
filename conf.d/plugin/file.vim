@@ -111,8 +111,13 @@ else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
 endif
-nnoremap <leader><Cr> :e!<Cr>
-nnoremap <leader>E :e<Space>
+" ---------------------------------
+" open gitroot getroot
+" ---------------------------------
+nnoremap <leader><Leader> :e<Space>
+nnoremap <leader>P :tabe <C-r>=GitRootDir()<Cr>/
+nnoremap <leader>E :tabe <C-r>=GetRootDir()<Cr>/
+nnoremap <leader>e :e <C-r>=GetRootDir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
@@ -138,15 +143,15 @@ if has('nvim') && PlannedCoc()
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
     command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><leader>e :CocFile<Cr>
+    nnoremap <silent><nowait><leader>fo :CocFile<Cr>
 elseif executable('yazi') && g:has_popup_floating && (UNIX() || WINDOWS() && has('nvim'))
     command! FloatermYazi call s:floaterm_float('yazi')
-    nnoremap <silent><nowait><leader>e :FloatermYazi<Cr>
+    nnoremap <silent><nowait><leader>fo :FloatermYazi<Cr>
 elseif executable('ranger') && g:has_popup_floating
     command! FloatermRanger call s:floaterm_float('ranger')
-    nnoremap <silent><nowait><leader>e :FloatermRanger<Cr>
+    nnoremap <silent><nowait><leader>fo :FloatermRanger<Cr>
 elseif Installed('vim-fern')
-    nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
+    nnoremap <silent><nowait><leader>fo :Fern . -reveal=%<Cr>
 endif
 " -----------------------------------
 " using system file explorer
