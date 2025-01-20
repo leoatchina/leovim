@@ -1,5 +1,4 @@
 vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
-local adapter = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.openai_custom and 'openai_compatible' or vim.g.ai_provider
 require("codecompanion").setup({
   opts = {
     log_level = "DEBUG",
@@ -70,13 +69,13 @@ require("codecompanion").setup({
   },
   strategies = {
     inline = {
-      adapter = adapter,
+      adapter = vim.g.ai_provider,
     },
     cmd = {
-      adapter = adapter,
+      adapter = vim.g.ai_provider,
     },
     chat = {
-      adapter = adapter,
+      adapter = vim.g.ai_provider,
       slash_commands = {
         ["buffer"] = {
           opts = {
