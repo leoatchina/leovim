@@ -1,5 +1,5 @@
 vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
-local adapter = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.openai_custom and 'openai_compatible' or vim.g.ai_provider
+local adapter = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.ai_provider
 require("codecompanion").setup({
   opts = {
     log_level = "DEBUG",
@@ -57,12 +57,12 @@ require("codecompanion").setup({
     openai_compatible = function()
       return require("codecompanion.adapters").extend("openai_compatible", {
         env = {
-          api_key = vim.g.openai_custom_api_key,
-          url = vim.g.openai_custom_url,
+          api_key = vim.g.openai_compatible_api_key,
+          url = vim.g.openai_compatible_url,
         },
         schema = {
           model = {
-            default = vim.g.openai_custom_model
+            default = vim.g.openai_compatible_model
           },
         },
       })

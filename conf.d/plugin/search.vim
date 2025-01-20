@@ -295,13 +295,13 @@ if PlannedLeaderf()
         let g:search_tool = "leaderf-grep"
     endif
     nnoremap <nowait><leader>f/ :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><leader>f\ :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><leader>f? :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 elseif PlannedFzf()
     let g:search_tool = "fzf-grep"
     nnoremap <nowait><leader>f/ :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><leader>f\ :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><leader>f? :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 else
     let g:search_tool = "grep"
     nnoremap <nowait><leader>f/ :GrepAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><leader>f\ :GrepAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><leader>f? :GrepAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 endif

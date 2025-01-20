@@ -230,7 +230,7 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
             \ exists('$ANTHROPIC_API_KEY') ||
             \ exists('$GEMINI_API_KEY') ||
             \ exists('$XAI_API_KEY') ||
-            \ exists('g:openai_custom_api_key') && exists('g:openai_custom_url') && exists('g:openai_custom_model')
+            \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
             \ )
     if executable('curl') && Planned('nvim-cmp') && (exists('$XAI_API_KEY') || Require('codecompanion'))
         PlugAdd 'olimorris/codecompanion.nvim'
