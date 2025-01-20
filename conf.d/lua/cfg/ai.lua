@@ -16,12 +16,12 @@ elseif vim.env.OPENAI_API_KEY then
   vim.g.openai_url = "https://api.openai.com/v1"
   ai_model = vim.g.openai_model
 elseif vim.env.ANTHROPIC_API_KEY then
-  vim.g.ai_provider = 'claude'
+  vim.g.ai_provider = if Installed('avante.nvim') and 'claude' or 'anthropic'
   ai_model = vim.g.claude_model
 elseif vim.env.GEMINI_API_KEY then
   vim.g.ai_provider = 'gemini'
   ai_model = vim.g.gemini_model
 end
--- set
+-- set ai_complete_engine
 vim.g.ai_complete_engine = vim.g.ai_complete_engine and ai_model .. '&&' .. vim.g.ai_complete_engine
   or ai_model

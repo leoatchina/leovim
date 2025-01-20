@@ -85,20 +85,20 @@ command! GrepLast call s:grep(1)
 command! -nargs=1 Grep call s:grep(<q-args>, 1)
 command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
+" search
+nnoremap s/ :Grep <C-r><C-w><Cr>
+xnoremap s/ :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s. :GrepLast<Cr>
+nnoremap s\ :Grep <C-r><C-w>
+xnoremap s\ :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
 " searchall
-nnoremap s/ :GrepAll <C-r><C-w><Cr>
-xnoremap s/ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
+xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s[ :GrepAllLast<Cr>
+nnoremap s] :GrepAll <C-r><C-w>
+xnoremap s] :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
 nnoremap s? :GrepAll <C-r>=split(Expand('%:t'), '\.')[0]<Cr>
 xnoremap s? :<C-u>GrepAll <C-r>=split(Expand('%:t'), '\.')[0]<Cr>
-nnoremap s. :GrepAllLast<Cr>
-nnoremap s\ :GrepAll <C-r><C-w>
-xnoremap s\ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
-" search
-nnoremap s<Cr> :Grep <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
-nnoremap s[ :GrepLast<Cr>
-nnoremap s] :Grep <C-r><C-w>
-xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
 " --------------------------
 " FzfSearch
 " --------------------------
