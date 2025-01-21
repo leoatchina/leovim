@@ -121,10 +121,10 @@ create_vimrc "$HOME/.config/nvim/init.vim"
 [ ! -f $HOME/.gvimrc ] && echo '" set guifont=CascadiaCode\ Code:h11' > $HOME/.gvimrc && echo '" set guifont=CascadiaCode\ Nerd\ Font:h11.5' >> $HOME/.gvimrc
 
 # vim run scripts
-cp -n $APP_PATH/scripts/v.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/v.sh  $HOME/.local/bin
 cp -n $APP_PATH/scripts/vi.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/nvi.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/ni.sh $HOME/.local/bin
 
 # dirdiff
 cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin

@@ -14,4 +14,4 @@ else
   echo "nvim not executable"
   exit 1
 fi
-$NVIMCMD --cmd "let g:preset_group=['coc']" "$@"
+$NVIMCMD --cmd "let g:preset_group=['cmp']" "$@"
