@@ -262,7 +262,7 @@ if PlannedLeaderf() && executable('rg')
     command! -nargs=* -complete=dir LeaderfSearch call s:leaderf_search(<f-args>, 1)
     command! -nargs=* LeaderfSearchAll call s:leaderf_search(<f-args>)
     " map LeaderfSearch
-    let g:searchall = 'LeaderfSearchAll'
+    let g:search_all_cmd = 'LeaderfSearchAll'
     nnoremap <nowait><C-f>] :LeaderfSearchAll <C-r><C-w>
     xnoremap <nowait><C-f>] :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
     nnoremap <nowait><C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
@@ -279,11 +279,11 @@ if PlannedLeaderf() && executable('rg')
     nnoremap <nowait><C-f><C-\> :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
     xnoremap <nowait><C-f><C-\> :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
 elseif exists(":FzfSearchAll")
-    let g:searchall = 'FzfSearchAll'
+    let g:search_all_cmd = 'FzfSearchAll'
     nnoremap <nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>
     xnoremap <nowait><C-f><Cr> :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
 else
-    let g:searchall = 'GrepAll'
+    let g:search_all_cmd = 'GrepAll'
 endif
 " --------------------------------------
 " search path && dir, ans set search-tool
@@ -295,13 +295,13 @@ if PlannedLeaderf()
         let g:search_tool = "leaderf-grep"
     endif
     nnoremap <nowait><leader>f/ :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><leader>f? :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><leader>f\ :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 elseif PlannedFzf()
     let g:search_tool = "fzf-grep"
     nnoremap <nowait><leader>f/ :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><leader>f? :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><leader>f\ :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 else
     let g:search_tool = "grep"
     nnoremap <nowait><leader>f/ :GrepAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><leader>f? :GrepAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><leader>f\ :GrepAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 endif

@@ -228,7 +228,7 @@ endfunction
 " --------------------------
 " use lsp or tag to find
 " --------------------------
-function! s:lsp_tags_searchall(method, ...) abort
+function! s:lsp_tag_search(method, ...) abort
     let tagname = expand('<cword>')
     if empty(tagname)
         call preview#errmsg("No symbol under cursor.")
@@ -334,11 +334,11 @@ function! s:lsp_tags_searchall(method, ...) abort
     if !symbol_found && g:ctags_type != '' && method != 'references' && method != 'implementation'
         let symbol_found = s:find_with_ctags(tagname, open_action)
     endif
-    " searchall
+    " search_all_cmd
     if !symbol_found
-        if get(g:, 'searchall', '') != ''
+        if get(g:, 'search_all_cmd', '') != ''
             if open_action == 'list'
-                execute g:searchall . ' ' . tagname
+                execute g:search_all_cmd . ' ' . tagname
             else
                 call preview#errmsg('Not found by neither lsp nor tags, you should press <M-c> to do grep search.')
             endif
@@ -351,25 +351,25 @@ endfunction
 " lsp or tag
 " ---------------
 " tags
-nnoremap <silent>z/ :call <SID>lsp_tags_searchall("tags", "list")<Cr>
+nnoremap <silent>z/ :call <SID>lsp_tag_search("tags", "list")<Cr>
 " preview
-nnoremap <silent><C-h> :call <SID>lsp_tags_searchall("preview")<Cr>
+nnoremap <silent><C-h> :call <SID>lsp_tag_search("preview")<Cr>
 " definition
 au FileType help,vimdoc nnoremap <C-]> <C-]>
-nnoremap <silent><C-g> :call <SID>lsp_tags_searchall("definition")<Cr>
-nnoremap <silent><C-]> :call <SID>lsp_tags_searchall("definition", "vsplit")<Cr>
-nnoremap <silent><M-c> :call <SID>lsp_tags_searchall("definition", "list")<Cr>
-nnoremap <silent><C-w>g :call <SID>lsp_tags_searchall("definition", "tabe")<Cr>
-nnoremap <silent><C-w>] :call <SID>lsp_tags_searchall("definition", "split")<Cr>
-nnoremap <silent><C-w><C-g> :call <SID>lsp_tags_searchall("definition", "tabe")<Cr>
-nnoremap <silent><C-w><C-]> :call <SID>lsp_tags_searchall("definition", "split")<Cr>
+nnoremap <silent><C-g> :call <SID>lsp_tag_search("definition")<Cr>
+nnoremap <silent><C-]> :call <SID>lsp_tag_search("definition", "vsplit")<Cr>
+nnoremap <silent><M-c> :call <SID>lsp_tag_search("definition", "list")<Cr>
+nnoremap <silent><C-w>g :call <SID>lsp_tag_search("definition", "tabe")<Cr>
+nnoremap <silent><C-w>] :call <SID>lsp_tag_search("definition", "split")<Cr>
+nnoremap <silent><C-w><C-g> :call <SID>lsp_tag_search("definition", "tabe")<Cr>
+nnoremap <silent><C-w><C-]> :call <SID>lsp_tag_search("definition", "split")<Cr>
 " references
-nnoremap <silent><M-/> :call <SID>lsp_tags_searchall("references", "list")<Cr>
+nnoremap <silent><M-/> :call <SID>lsp_tag_search("references", "list")<Cr>
 if AdvCompEngine()
     " declaration
-    nnoremap <silent><M-C> :call <SID>lsp_tags_searchall("declaration", "list")<Cr>
+    nnoremap <silent><M-C> :call <SID>lsp_tag_search("declaration", "list")<Cr>
     " implementation
-    nnoremap <silent><M-.> :call <SID>lsp_tags_searchall("implementation", "list")<Cr>
+    nnoremap <silent><M-.> :call <SID>lsp_tag_search("implementation", "list")<Cr>
     " typeDefinition
-    nnoremap <silent><M-?> :call <SID>lsp_tags_searchall("type_definition", "list")<Cr>
+    nnoremap <silent><M-?> :call <SID>lsp_tag_search("type_definition", "list")<Cr>
 endif
