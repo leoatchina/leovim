@@ -97,8 +97,7 @@ xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
 nnoremap s[ :GrepAllLast<Cr>
 nnoremap s] :GrepAll <C-r><C-w>
 xnoremap s] :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
-nnoremap s? :GrepAll <C-r>=split(Expand('%:t'), '\.')[0]<Cr>
-xnoremap s? :<C-u>GrepAll <C-r>=split(Expand('%:t'), '\.')[0]<Cr>
+nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
 " --------------------------
 " FzfSearch
 " --------------------------
@@ -184,17 +183,17 @@ if PlannedFzf()
     nnoremap <nowait><leader>. :FzfSearchLast<Cr>
     nnoremap <nowait><leader>\ :FzfSearch <C-r><C-w>
     xnoremap <nowait><leader>\ :<C-u>FzfSearch <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><leader>? :<C-u>FzfSearch <C-r>=@"<Cr><Cr>
+    nnoremap <nowait><leader>? :FzfSearch <C-r>=@"<Cr><Cr>
     nnoremap <nowait><Tab>/ :FzfSearchGit<Cr>
     nnoremap <nowait><Tab>. :FzfSearchGitLast<Cr>
     nnoremap <nowait><Tab>\ :FzfSearchGit <C-r><C-w>
     xnoremap <nowait><Tab>\ :<C-u>FzfSearchGit <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><Tab>? :<C-u>FzfSearch <C-r>=@"<Cr><Cr>
+    nnoremap <nowait><Tab>? :FzfSearchAll <C-r>=@"<Cr><Cr>
     nnoremap <nowait>q/ :FzfSearchAll<Cr>
     nnoremap <nowait>q. :FzfSearchAllLast<Cr>
     nnoremap <nowait>q\ :FzfSearchAll <C-r><C-w>
     xnoremap <nowait>q\ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait>q? :<C-u>FzfSearch <C-r>=@"<Cr><Cr>
+    nnoremap <nowait>q? :FzfSearchAll <C-r>=@"<Cr><Cr>
 endif
 " ----------------------------
 " leaderf search commands
