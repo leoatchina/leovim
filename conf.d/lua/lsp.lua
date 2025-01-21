@@ -74,20 +74,14 @@ vim.api.nvim_set_hl(0, 'SymbolUsageImpl', { fg = hl('@keyword').fg, bg = hl('Cur
 -- symbol_format
 local function text_format(symbol)
   local res = {}
-  local round_start = { '', 'SymbolUsageRounding' }
-  local round_end = { '', 'SymbolUsageRounding' }
   if symbol.references then
+    local round_start = { '', 'SymbolUsageRounding' }
+    local round_end = { '', 'SymbolUsageRounding' }
     local num = symbol.references == 0 and 'no' or symbol.references
     local usage = symbol.references <= 1 and 'usage' or 'usages'
     table.insert(res, round_start)
     table.insert(res, { '󰌹 ', 'SymbolUsageRef' })
     table.insert(res, { ('%s %s'):format(num, usage), 'SymbolUsageContent' })
-    table.insert(res, round_end)
-  end
-  if symbol.implementation then
-    table.insert(res, round_start)
-    table.insert(res, { '󰡱 ', 'SymbolUsageImpl' })
-    table.insert(res, { symbol.implementation .. ' impls', 'SymbolUsageContent' })
     table.insert(res, round_end)
   end
   return res
