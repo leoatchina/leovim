@@ -289,7 +289,7 @@ if [ $installplug != 'no' ]; then
         setup_plug "vim"
     fi
     setup_plug "$HOME/.local/bin/nv.sh"
-    setup_plug "$HOME/.local/bin/nvi.sh"
+    setup_plug "$HOME/.local/bin/ni.sh"
 fi
 
 echo
