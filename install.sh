@@ -245,7 +245,7 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'neovim' ]] && exit 0
     fi
-    # nvm
+    # nvm &&　nodejs 
     if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
         node_link=~/.local/node
         if [ -L $node_link ] && [ $mode == 'all' ]; then
