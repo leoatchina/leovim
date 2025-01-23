@@ -29,18 +29,8 @@ if Installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 64})
 end
 -----------------
--- copilot
+-- setup
 -----------------
-if Installed('copilot-cmp') then
-  require("copilot_cmp").setup()
-  table.insert(sources, 1, { name = 'copilot', priority = 128})
-  lspkind.init({
-    symbol_map = {
-      Copilot = "",
-    },
-  })
-  vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
-end
 cmp.setup({
   sources = sources,
   snippet = {
