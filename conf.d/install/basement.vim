@@ -35,6 +35,7 @@ function! InstalledCmp() abort
                 \ 'cmp-dictionary',
                 \ 'cmp-async-path',
                 \ 'lspkind-nvim',
+                \ 'colorful-menu.nvim',
                 \ 'friendly-snippets',
                 \ )
 endfunction
@@ -125,6 +126,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'uga-rosa/cmp-dictionary'
     PlugAdd 'fcying/cmp-async-path'
     PlugAdd 'onsails/lspkind-nvim'
+    PlugAdd 'xzbdmw/colorful-menu.nvim'
     " lsp related
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'

@@ -1,4 +1,4 @@
--- core setup
+-- basic setup
 local MAX_LABEL_WIDTH = 32
 local ELLIPSIS_CHAR = '...'
 local has_words_before = function()
@@ -225,19 +225,35 @@ cmp.setup({
   formatting = {
     format = lspkind.cmp_format({
       mode = 'symbol',
-      with_text = true,
-      maxwidth = MAX_LABEL_WIDTH,
+      max = {
+        -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        -- can also be a function to dynamically calculate max width such as
+        -- menu = function() return math.floor(0.45 * vim.o.columns) end,
+        menu = MAX_LABEL_WIDTH, -- leading text (labelDetails)
+        abbr = MAX_LABEL_WIDTH, -- actual suggestion item
+      },
       ellipsis_char = ELLIPSIS_CHAR,
-      before = function(entry, item)
-        -- Source 显示提示来源
-        local content = item.abbr
-        if #content > MAX_LABEL_WIDTH then
-          item.abbr = fn.strcharpart(content, 0, MAX_LABEL_WIDTH) .. ELLIPSIS_CHAR
+      show_labelDetails = true,
+      before = function(entry, vim_item)
+        -- colorful-menu
+        local highlights_info = require("colorful-menu").cmp_highlights(entry)
+        -- if highlight_info==nil, which means missing ts parser, let's fallback to use default `vim_item.abbr`.
+        -- What this plugin offers is two fields: `vim_item.abbr_hl_group` and `vim_item.abbr`.
+        local content
+        if highlights_info ~= nil then
+          vim_item.abbr_hl_group = highlights_info.highlights
+          content = highlights_info.text
         else
-          item.abbr = content .. get_ws(MAX_LABEL_WIDTH, #content)
+          content = vim_item.abbr
         end
-        item.menu = "[" .. string.upper(entry.source.name) .. "]"
-        return item
+        -- Source 显示提示来源
+        if #content > MAX_LABEL_WIDTH then
+          vim_item.abbr = fn.strcharpart(content, 0, MAX_LABEL_WIDTH) .. ELLIPSIS_CHAR
+        else
+          vim_item.abbr = content .. get_ws(MAX_LABEL_WIDTH, #content)
+        end
+        vim_item.menu = "[" .. string.upper(entry.source.name) .. "]"
+        return vim_item
       end
     })
   }
