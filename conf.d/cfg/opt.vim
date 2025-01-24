@@ -22,10 +22,15 @@ let g:nvim_treesitter_install = UNIX()
 " let g:open_editor="code.exe"
 
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
-" let g:vscode_user_dir = 'C:\Users\Admin\AppData\Roaming\Code\User'
+" let g:code_user_dir = 'C:\Users\Admin\AppData\Roaming\Code\User'
 " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
 " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
 " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
+
+" let g:code_user_dir = "$HOME/.config/Code/User"
+" let g:cursor_user_dir = "$HOME/.config/Cursor/User"
+" let g:windsurf_user_dir = "$HOME/.config/Windsurf/User"
+" let g:positron_user_dir = "$HOME/.config/Positron/User"
 
 " let $ANTHROPIC_API_KEY=''
 " let $GEMINI_API_KEY=''
@@ -38,8 +43,6 @@ let g:nvim_treesitter_install = UNIX()
 " let g:claude_model = 'claude-3.5-haiku'
 " let g:gemini_model = 'gemini-1.5-pro'
 " let g:xai_model = 'grok-beta'
-
-let g:highlight_filetypes = ['python', 'r', 'vim', 'vimdoc', 'markdown', 'lua', 'c', 'cpp', 'go', 'rust', 'java']
 
 if has('nvim') && HAS_GUI()
     " set guifont=Cascadia\ Code:h10.5
