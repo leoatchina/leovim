@@ -9,32 +9,37 @@ else
     let s:positron_user_dir = fnameescape(get(g:, "positron_user_dir", ""))
     let s:windsurf_user_dir = fnameescape(get(g:, "windsurf_user_dir", ""))
 endif
+function! s:execute(cmd) abort
+    echom a:cmd
+    execute(a:cmd)
+endfunction
 function! s:link_keybindings() abort
     if WINDOWS()
-        for dir in [s:code_user_dir, s:cursor_user_dir, s:positron_user_dir, s:windsurf_user_dir]
+        for dir in [s:code_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
             if isdirectory(dir)
                 let delete_cmd = printf('!del /Q /S %s\keybindings.json', dir)
-                execute(delete_cmd)
+                call s:execute(delete_cmd)
                 let rmdir_cmd = printf('!rmdir /Q /S %s\snippets', dir)
-                execute(rmdir_cmd)
-                " create keybindings.json link
+                call s:execute(rmdir_cmd)
+                " mklink
                 let mklink_cmd = printf('!mklink %s %s', dir . '\keybindings.json', $CFG_DIR . '\keybindings.json')
-                execute(mklink_cmd)
-                " create snippets link
+                call s:execute(mklink_cmd)
                 let mklink_cmd = printf('!mklink /d %s %s', dir . '\snippets', $LEOVIM_DIR . '\snippets')
-                execute(mklink_cmd)
+                call s:execute(mklink_cmd)
             endif
         endfor
     else
-        for dir in [s:code_user_dir, s:cursor_user_dir, s:positron_user_dir, s:windsurf_user_dir]
+        for dir in [s:code_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
             if isdirectory(dir)
-                echom printf('link to %s', dir)
+                let rm_cmd = printf('!rm %s',  dir . '/keybindings.json')
+                call s:execute(rm_cmd)
+                let rm_cmd = printf('!rm -rf %s',  dir . '/snippets')
+                call s:execute(rm_cmd)
+                " ln -sf
                 let ln_cmd = printf('!ln -sf %s %s', $CFG_DIR . '/keybindings.json', dir . '/keybindings.json')
-                execute(ln_cmd)
-                let rm_cmd = printf('!rm -rf  %s',  dir . '/snippets')
-                execute(rm_cmd)
+                call s:execute(ln_cmd)
                 let ln_cmd = printf('!ln -sf %s %s', $CONF_D_DIR . '/snippets', dir)
-                execute(ln_cmd)
+                call s:execute(ln_cmd)
             endif
         endfor
     endif
