@@ -254,7 +254,6 @@ function! s:lsp_tag_search(method, ...) abort
         endif
         return
     else
-        let symbol_found = 0
         if index(['definition', 'references', 'type_defition', 'implementation', 'declaration', 'tags'], method) < 0
             let method = 'definition'
         endif
@@ -324,10 +323,7 @@ function! s:lsp_tag_search(method, ...) abort
             call feedkeys("zz", "n")
             echo "found by vim.lsp " . method | sleep 2
         endif
-    endif
-    " 利用errormsg判断是否找到,
-    let messages = get(l:, 'messages', '')
-    if messages =~ '^no ' || messages =~ 'not ' || messages =~ 'error'
+    else
         let symbol_found = 0
     endif
     " view_tags
