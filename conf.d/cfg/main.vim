@@ -91,7 +91,6 @@ else
     else
         let g:python_version = StringToFloat(py_version_match, 2)
         if g:python_version > 3
-            " TODO: pygrments 应该对应 python3_host_prog, pretty_errors 应该对应 python_prog
             try
                 call py3eval('import pygments')
                 let g:pygments_import = get(g:, 'pygments_import', 1)
