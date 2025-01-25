@@ -182,7 +182,6 @@ local function get_lsp_loc(value)
     col = col
   }
 end
--- TODO: pack to a vim function LspAction, like CocAction
 function M.LspAction(method, open_action)
   local handler_dict = {
     definition = 'textDocument/definition',
@@ -231,7 +230,6 @@ function M.LspAction(method, open_action)
             ::continue::
           end
         else
-          -- value
           local value = values[1]
           if value == nil then
             vim.api.nvim_set_var("lsp_found", 0)
@@ -250,10 +248,9 @@ function M.LspAction(method, open_action)
       end
     end
     if next(qflist) then
+      --  NOTE: 因为要开qflist的原因, 不能return 0/1
       vim.api.nvim_set_var("lsp_found", 1)
-      -- Set the quickfix list
       vim.fn.setqflist(qflist)
-      -- Open the quickfix window
       vim.cmd('copen')
     else
       vim.api.nvim_set_var("lsp_found", 0)
