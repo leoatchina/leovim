@@ -358,12 +358,12 @@ elseif g:complete_engine == 'cmp'
     call SetScheme('nightfox', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('nightfox', 'hybrid')
+        call SetScheme('duskfox', 'space-vim-dark')
     else
         call SetScheme('sonokai', 'sublime')
     endif
 else
-    colorscheme space-vim-dark
+    colorscheme hybrid
 endif
 " --------------------------
 " nvim-web-devicons
