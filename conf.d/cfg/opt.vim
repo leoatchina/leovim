@@ -32,17 +32,21 @@ let g:nvim_treesitter_install = UNIX()
 " let g:windsurf_user_dir = expand("$HOME/.config/Windsurf/User")
 " let g:positron_user_dir = expand("$HOME/.config/Positron/User")
 
-" let $ANTHROPIC_API_KEY=''
+" let $XAI_API_KEY=''
 " let $GEMINI_API_KEY=''
 " let $OPENAI_API_KEY=''
+" let $DEEPSEEK_API_KEY=''
+" let $ANTHROPIC_API_KEY=''
+
 " let g:openai_compatible_api_key = ''
 " let g:openai_compatible_url = ''
 " let g:openai_compatible_model = ''
 
-" let g:openai_model = 'gpt4o'
-" let g:claude_model = 'claude-3.5-haiku'
-" let g:gemini_model = 'gemini-1.5-pro'
 " let g:xai_model = 'grok-beta'
+" let g:openai_model = 'gpt4o'
+" let g:claude_model = 'claude-3.5-sonnet'
+" let g:gemini_model = 'gemini-1.5-pro'
+" let g:deepseek_model = 'deepseek-chat'
 
 if has('nvim') && HAS_GUI()
     " set guifont=Cascadia\ Code:h10.5

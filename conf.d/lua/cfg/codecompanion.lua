@@ -1,5 +1,5 @@
 vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
-local adapter = vim.g.ai_provider == 'claude' and 'anthropic' or vim.g.ai_provider
+vim.keymap.set("n", "<M-i><M-i>", [[<Cmd>CodeCompanionChat<Cr>]], { noremap = true, silent = true })
 require("codecompanion").setup({
   opts = {
     log_level = "DEBUG",
@@ -54,6 +54,18 @@ require("codecompanion").setup({
         },
       })
     end,
+    deepseek = function()
+      return require("codecompanion.adapters").extend("deepseek", {
+        env = {
+          api_key = vim.env.DEEPSEEK_API_KEY
+        },
+        schema = {
+          model = {
+            default = vim.g.deepseek_model
+          },
+        },
+      })
+    end,
     openai_compatible = function()
       return require("codecompanion.adapters").extend("openai_compatible", {
         env = {
@@ -70,13 +82,13 @@ require("codecompanion").setup({
   },
   strategies = {
     inline = {
-      adapter = adapter,
+      adapter = vim.g.ai_provider,
     },
     cmd = {
-      adapter = adapter,
+      adapter = vim.g.ai_provider,
     },
     chat = {
-      adapter = adapter,
+      adapter = vim.g.ai_provider,
       slash_commands = {
         ["buffer"] = {
           opts = {
@@ -107,7 +119,7 @@ require("codecompanion").setup({
         },
         send = {
           modes = {
-            n = "<C-s>",
+            n = {"<C-s>", "<Cr>"},
             x = "<C-s>",
             i = "<C-s>",
           },
