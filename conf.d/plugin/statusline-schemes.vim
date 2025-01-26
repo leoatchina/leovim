@@ -358,7 +358,7 @@ elseif g:complete_engine == 'cmp'
     call SetScheme('nightfox', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('terafox', 'hybrid')
+        call SetScheme('nightfox', 'hybrid')
     else
         call SetScheme('sonokai', 'sublime')
     endif
