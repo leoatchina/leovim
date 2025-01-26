@@ -240,12 +240,12 @@
   },
   // focus on editor && split cell
   {
-    "key": "ctrl+shift+alt+l",
+    "key": "ctrl+shift+alt+p",
     "command": "workbench.action.focusPanel",
     "when": "editorFoucs"
   },
   {
-    "key": "ctrl+shift+alt+l",
+    "key": "ctrl+shift+alt+p",
     "command": "workbench.action.focusActiveEditorGroup",
     "when": "!editorFoucs"
   },
@@ -457,7 +457,7 @@
   },
   // reload current file
   {
-    "key": "ctrl+shift+alt+e",
+    "key": "ctrl+shift+alt+enter",
     "command": "multiCommand.reloadFile"
   },
   // transparency or glassit
@@ -504,18 +504,38 @@
     "command": "workbench.panel.composerViewPane2.view.focus"
   },
   //---------------------- vscode positron --------------
-  //tongyi
+  // tongyi
+  {
+    "key": "ctrl+`",
+    "command": "tongyi.show.panel.chat",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+`",
+    "command": "tongyi.show.panel.developer",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "-tongyi.show.panel.developer",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+l",
+    "command": "-tongyi.show.panel.chat",
+    "when": "TongyiLingMa.Chat.active"
+  },
   {
     "key": "ctrl+shift+l",
     "command": "-tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
   },
-  // cline
+  // roo-cline 
   {
     "key": "ctrl+\\",
-    "command": "claude-dev.SidebarProvider.focus"
+    "command": "roo-cline.SidebarProvider.focus"
   },
-  //continue ai
+  // continue
   {
     "key": "shift+alt+a",
     "command": "continue.applyCodeFromChat"
@@ -544,25 +564,5 @@
   {
     "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
-  },
-  {
-    "key": "ctrl+shift+`",
-    "command": "tongyi.show.panel.developer",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
-    "key": "ctrl+shift+i",
-    "command": "-tongyi.show.panel.developer",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
-    "key": "ctrl+`",
-    "command": "tongyi.show.panel.chat",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
-    "key": "ctrl+shift+l",
-    "command": "-tongyi.show.panel.chat",
-    "when": "TongyiLingMa.Chat.active"
   }
 ]
