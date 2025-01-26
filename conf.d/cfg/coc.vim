@@ -176,6 +176,8 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " ----------------------------
 " inlayHint/codeLens/codeaction
 " ----------------------------
+call coc#config('python.pythonPath', g:python_prog)
+call coc#config('python.venvPath', ['.venv'])
 if has('nvim') || has('patch-9.0.0252')
     call coc#config('inlayHint.enable', v:true)
     nnoremap <leader>I :CocCommand document.toggleInlayHint<Cr>
