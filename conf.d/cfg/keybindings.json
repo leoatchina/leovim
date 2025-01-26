@@ -294,22 +294,12 @@
     "when": "terminalFocus && terminalProcessSupported || terminalFocus && terminalWebExtensionContributedProfile"
   },
   {
-    "key": "alt+[",
+    "key": "shift+alt+[",
       "command": "workbench.action.terminal.focusPrevious"
   },
   {
-    "key": "alt+]",
-    "command": "workbench.action.terminal.focusNext"
-  },
-  {
-    "key": "shift+alt+[",
-      "command": "workbench.action.terminal.focusPreviousPane",
-      "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
     "key": "shift+alt+]",
-    "command": "workbench.action.terminal.focusNextPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+    "command": "workbench.action.terminal.focusNext"
   },
   {
     "key": "shift+alt+-",
@@ -397,15 +387,15 @@
     "command": "-workbench.action.splitEditor"
   },
   {
-    "key": "ctrl+shift+\\",
-    "command": "workbench.action.splitEditor"
-  },
-  {
     "key": "ctrl+k ctrl+\\",
     "command": "-workbench.action.splitEditorDown"
   },
   {
-    "key": "ctrl+alt+\\",
+    "key": "alt+]",
+    "command": "workbench.action.splitEditor"
+  },
+  {
+    "key": "alt+[",
     "command": "workbench.action.splitEditorDown"
   },
   // markdown
