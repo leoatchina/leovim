@@ -499,10 +499,6 @@
   },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
-  {
-    "key": "ctrl+shift+alt+l",
-    "command": "workbench.panel.composerViewPane2.view.focus"
-  },
   //---------------------- vscode positron --------------
   // tongyi
   {
@@ -545,7 +541,7 @@
     "command": "-continue.applyCodeFromChat"
   },
   {
-    "key": "ctrl+alt+l",
+    "key": "ctrl+shift+alt+l",
     "command": "continue.viewHistory"
   },
   //-------------------------- last, open keybindings ---------------------------
