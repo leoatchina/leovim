@@ -229,21 +229,24 @@ if has('patch-9.0.0185') || has('nvim')
         PlugAdd 'github/copilot.vim'
     endif
 endif
-if has('nvim-0.10.1') && Planned('nvim-treesitter') && (
-            \ exists('$XAI_API_KEY') ||
-            \ exists('$OPENAI_API_KEY') ||
-            \ exists('$ANTHROPIC_API_KEY') ||
-            \ exists('$GEMINI_API_KEY') ||
-            \ exists('$DEEPSEEK_API_KEY') ||
-            \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
-            \ )
-    if executable('curl') && Planned('nvim-cmp') && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion'))
+if has('nvim-0.10.1') && Planned('nvim-treesitter')
+    if executable('curl') && Planned('nvim-cmp') && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion') &&
+                \ exists('$OPENAI_API_KEY') ||
+                \ exists('$ANTHROPIC_API_KEY') ||
+                \ exists('$GEMINI_API_KEY') ||
+                \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
+                \ )
         PlugAdd 'olimorris/codecompanion.nvim'
         PlugAdd 'echasnovski/mini.pick'
-    elseif UNIX()
-        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
-    else
-        PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
+    elseif exists('$OPENAI_API_KEY') ||
+                \ exists('$ANTHROPIC_API_KEY') ||
+                \ exists('$GEMINI_API_KEY') ||
+                \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
+        if UNIX()
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+        else
+            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
+        endif
     endif
 endif
 " ------------------------------
