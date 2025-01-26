@@ -156,11 +156,11 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 #### 4.2.1.4. 配置 Vim 运行时路径 (RTP) 和包路径:
 
 - 设置 RTP: 将自定义的目录添加到 Vim 的运行时路径中，这允许 Vim 加载这些目录下的插件和脚本。
-- 包管理: 使用 Vim 的内置包管理功能（packadd）来加载插件。
+- 包管理: 使用 Vim 的内置包管理功能`packadd`来加载插件。
 
 #### 4.2.1.5. 插件管理与加载
 
-- 插件加载: 使用自定义命令 PlugAddOpt 来加载模块，例如 vim-eunuch, conflict-marker.vim, nerdcommenter 等。
+- 插件加载: 使用自定义命令 `PlugAddOpt` 来加载模块，例如 `vim-eunuch`, `conflict-marker.vim`, `nerdcommenter` 等。
 
 #### 4.2.1.6. 快捷键映射
 
@@ -174,13 +174,9 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 
 #### 4.2.1.7. 自定义函数和命令
 
-- 自定义函数: 提供了许多实用函数，如 Trim(), Expand(), TripTrailingWhiteSpace() 等，用于文本处理和配置管理。
+- 自定义函数: 提供了许多实用函数，如 `Trim()`, `Expand()`, `TripTrailingWhiteSpace()` 等，用于文本处理和配置管理。
 - 自定义命令: 例如 YankWord, YankLine 等，用于增强 Vim 的默认行为。
 
-#### 4.2.1.8. 特定功能的配置
-
-- 搜索增强: 配置了 hlslens 插件来增强搜索高亮。
-- 剪贴板操作: 设置了剪贴板行为，方便把复制的内容存到系统寄存器，以及利用终端的osc52能力复制到终端现在电脑上。
 
 ### 4.2.2. 核心文件 `conf.d\cfg\main.vim`
 
@@ -221,6 +217,7 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 - `templates/:`  存放各种模板文件，例如 `.gitignore`、`.lintr` 等。
 - `dap/:`  存放调试适配器 (DAP) 的相关配置，用于配置不同语言的调试环境。
 - `vimspector/:`存放 Vimspector 调试器的配置。
+- `snippets/:`存放vscode格式的代码片断 
 
 ## 4.3. 其他目录
 

@@ -86,15 +86,15 @@ if Planned('vim-vsnip')
         call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
         return ''
     endfunction
-    let g:vsnip_snippet_dir = expand("~/.leovim/snippets")
+    let g:vsnip_snippet_dir = expand("~/.leovim/conf.d/snippets")
     nnoremap <M-h>e :VsnipOpen<Cr>
     if PlannedLeaderf()
-        nnoremap <M-h>s :Leaderf file --no-sort ~/.leovim/snippets<Cr>
+        nnoremap <M-h>s :Leaderf file --no-sort ~/.leovim/conf.d/snippets<Cr>
     elseif PlannedFzf()
-        nnoremap <M-h>s :FzfFiles ~/.leovim/snippets<Cr>
+        nnoremap <M-h>s :FzfFiles ~/.leovim/conf.d/snippets<Cr>
     endif
     if Installed('coc.nvim')
-        call coc#config("snippets.userSnippetsDirectory", Expand("~/.leovim/snippets"))
+        call coc#config("snippets.userSnippetsDirectory", Expand("~/.leovim/conf.d/snippets"))
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
         smap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'
