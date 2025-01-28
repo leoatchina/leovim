@@ -70,8 +70,8 @@ require("codecompanion").setup({
       return require("codecompanion.adapters").extend("openai_compatible", {
         env = {
           api_key = vim.g.openai_compatible_api_key,
-          url = vim.g.openai_compatible_url,
         },
+        url = vim.g.openai_compatible_url,
         schema = {
           model = {
             default = vim.g.openai_compatible_model
