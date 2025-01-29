@@ -121,11 +121,11 @@ if Installed('blamer.nvim')
     au FileType fugitiveblame nnoremap <buffer><silent> g<tab> :quit<Cr>
 endif
 if PlannedLeaderf()
-    nnoremap <silent><M-g><M-i> :Leaderf git<Cr>
+    nnoremap <silent><M-g><M-g> :Leaderf git<Cr>
     nnoremap <silent><M-g><M-h> :Leaderf git diff HEAD --directly<Cr>
     nnoremap <silent><M-g><M-l> :Leaderf git log<Cr>
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
-    nnoremap <silent><M-g><M-d> :Leaderf git diff --current-file --side-by-side<Cr>
+    nnoremap <silent><M-g><M-i> :Leaderf git diff --current-file --side-by-side<Cr>
     nnoremap <silent>g<Tab> :Leaderf git blame<Cr>
     if has('patch-9.0.200') || has('nvim')
         nnoremap <silent>g\ :LeaderfGitInlineBlameToggle<Cr>
@@ -137,7 +137,7 @@ if PlannedFzf()
     if Installed('blamer.nvim') || PlannedLeaderf() && !has('patch-9.0.200')
         command! GCommands call FzfCallCommands('GCommands', 'G', ['Glance', 'Gutentag', 'Grep', 'Get'])
     else
-        command! GCommands call FzfCallCommands('GCommands', 'G', 'LeaderfGit', ['Glance', 'Gutentag', 'Grep', 'Get'])
+        command! GCommands call FzfCallCommands('GCommands', 'LeaderfGit', 'G', ['Glance', 'Gutentag', 'Grep', 'Get'])
     endif
     nnoremap <silent>g<Cr> :GCommands<Cr>
 endif
