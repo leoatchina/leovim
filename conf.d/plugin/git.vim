@@ -197,15 +197,15 @@ nnoremap <M-g>m :GMergeTab<space>
 " -----------------------------------------------------
 if has('nvim') || has('patch-8.0.902')
     let g:signify_disable_by_default = 0
-    function! s:SignifyDiffWithLayout()
+    function! s:SignifyDiff()
         SignifyDiff
         if winnr('$') == 2
             wincmd H
         endif
     endfunction
-    nnoremap q\ :call <SID>SignifyDiffWithLayout()<CR>
-    nnoremap q<Tab> :SignifyToggle<Cr>
-    nnoremap q<Space> :SignifyRefresh<Cr>
+    nnoremap \\| :call <SID>SignifyDiff()<CR>
+    nnoremap \<Tab> :SignifyToggle<Cr>
+    nnoremap \<Space> :SignifyRefresh<Cr>
     nmap ;g <plug>(signify-next-hunk)
     nmap ,g <plug>(signify-prev-hunk)
     omap im <plug>(signify-motion-inner-pending)
@@ -217,5 +217,5 @@ if has('nvim') || has('patch-8.0.902')
     PlugAddOpt 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
-    nnoremap q<Cr> :SignifyCommands<Cr>
+    nnoremap \<Cr> :SignifyCommands<Cr>
 endif
