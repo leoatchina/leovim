@@ -11,6 +11,33 @@ elseif Planned('indentline')
     let g:indentLine_char_list = ['|', '¦', '┆', '┊']
     nnoremap <silent><leader>i :IndentLinesToggle<Cr>
 endif
+" -----------------------------------------------------
+" marks
+" -----------------------------------------------------
+if Planned('vim-signature')
+    let g:SignatureMap = {
+                \ 'Leader'           : "m",
+                \ 'ToggleMarkAtLine' : "m.",
+                \ 'PlaceNextMark'    : "m;",
+                \ 'PurgeMarksAtLine' : "m,",
+                \ 'PurgeMarks'       : "m<Bs>",
+                \ 'PurgeMarkers'     : "m-",
+                \ 'DeleteMark'       : "dm",
+                \ 'ListBufferMarks'   : "m/",
+                \ 'ListBufferMarkers' : "m?",
+                \ 'GotoNextLineAlpha' : ";m",
+                \ 'GotoPrevLineAlpha' : ",m",
+                \ 'GotoNextSpotAlpha' : ";M",
+                \ 'GotoPrevSpotAlpha' : ",M",
+                \ 'GotoNextLineByPos' : "]m",
+                \ 'GotoPrevLineByPos' : "[m",
+                \ 'GotoNextSpotByPos' : "]M",
+                \ 'GotoPrevSpotByPos' : "[M",
+                \ }
+endif
+if PlannedFzf()
+    nnoremap <silent><leader>M :FzfMarks<CR>
+endif
 " --------------------
 " WhichKey
 " --------------------

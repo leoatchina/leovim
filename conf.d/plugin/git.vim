@@ -192,3 +192,24 @@ function! s:createMergeTab(...)
 endfunc
 command! -nargs=* GMergeTab call s:createMergeTab(<f-args>)
 nnoremap <M-g>m :GMergeTab<space>
+" -----------------------------------------------------
+" vim-signify
+" -----------------------------------------------------
+if has('nvim') || has('patch-8.0.902')
+    let g:signify_disable_by_default = 0
+    nnoremap q\ :SignifyDiff<Cr><C-w>H
+    nnoremap q<Tab> :SignifyToggle<Cr>
+    nnoremap q<Space> :SignifyRefresh<Cr>
+    nmap ;g <plug>(signify-next-hunk)
+    nmap ,g <plug>(signify-prev-hunk)
+    omap im <plug>(signify-motion-inner-pending)
+    xmap im <plug>(signify-motion-inner-visual)
+    omap am <plug>(signify-motion-outer-pending)
+    xmap am <plug>(signify-motion-outer-visual)
+    nmap <leader>vm vim
+    nmap <leader>vM vam
+    PlugAddOpt 'vim-signify'
+    " commands
+    command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
+    nnoremap q<Cr> :SignifyCommands<Cr>
+endif

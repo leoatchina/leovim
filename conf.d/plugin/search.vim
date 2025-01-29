@@ -189,11 +189,11 @@ if PlannedFzf()
     nnoremap <nowait><Tab>\ :FzfSearchGit <C-r><C-w>
     xnoremap <nowait><Tab>\ :<C-u>FzfSearchGit <C-r>=GetVisualSelection()<Cr>
     nnoremap <nowait><Tab>? :FzfSearchGit <C-r>=@"<Cr><Cr>
-    nnoremap <nowait>q/ :FzfSearchAll<Cr>
-    nnoremap <nowait>q. :FzfSearchAllLast<Cr>
-    nnoremap <nowait>q\ :FzfSearchAll <C-r><C-w>
-    xnoremap <nowait>q\ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait>q? :FzfSearchAll <C-r>=@"<Cr><Cr>
+    nnoremap <nowait>\/ :FzfSearchAll<Cr>
+    nnoremap <nowait>\. :FzfSearchAllLast<Cr>
+    nnoremap <nowait>\\ :FzfSearchAll <C-r><C-w>
+    xnoremap <nowait>\\ :<C-u>FzfSearchAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait>\? :FzfSearchAll <C-r>=@"<Cr><Cr>
 endif
 " ----------------------------
 " leaderf search commands
@@ -293,16 +293,16 @@ if PlannedLeaderf()
     else
         let g:search_tool = "leaderf-grep"
     endif
-    nnoremap <nowait>qf/ :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait>qf\ :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f/ :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <nowait>\f\ :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 elseif PlannedFzf()
     let g:search_tool = "fzf-grep"
-    nnoremap <nowait>qf/ :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait>qf\ :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f/ :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <nowait>\f\ :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 else
     let g:search_tool = "grep"
-    nnoremap <nowait>qf/ :GrepAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait>qf\ :GrepAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f/ :GrepAll <C-r>=Expand("%:t:r")<Cr><Cr>
+    nnoremap <nowait>\f\ :GrepAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
 endif
 if PlannedFzf()
     nnoremap <nowait><leader>f/ :FzfSearch <C-r>=Expand("%:t:r")<Cr><Cr>
