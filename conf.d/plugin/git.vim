@@ -128,7 +128,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-g><M-d> :Leaderf git diff --current-file --side-by-side<Cr>
     nnoremap <silent>g<Tab> :Leaderf git blame<Cr>
     if has('patch-9.0.200') || has('nvim')
-        nnoremap <silent>g<Cr> :LeaderfGitInlineBlameToggle<Cr>
+        nnoremap <silent>g\ :LeaderfGitInlineBlameToggle<Cr>
     endif
 elseif Installed('vim-fugitive')
     nnoremap <silent>g<Tab> :Git blame<Cr>
@@ -139,7 +139,7 @@ if PlannedFzf()
     else
         command! GCommands call FzfCallCommands('GCommands', 'G', 'LeaderfGit', ['Glance', 'Gutentag', 'Grep', 'Get'])
     endif
-    nnoremap <silent><M-g><M-g> :GCommands<Cr>
+    nnoremap <silent>g<Cr> :GCommands<Cr>
 endif
 " ---------------------------------
 " tig lazygit intergrated
