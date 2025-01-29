@@ -197,7 +197,13 @@ nnoremap <M-g>m :GMergeTab<space>
 " -----------------------------------------------------
 if has('nvim') || has('patch-8.0.902')
     let g:signify_disable_by_default = 0
-    nnoremap q\ :SignifyDiff<Cr><C-w>H
+    function! s:SignifyDiffWithLayout()
+        SignifyDiff
+        if winnr('$') == 2
+            wincmd H
+        endif
+    endfunction
+    nnoremap q\ :call <SID>SignifyDiffWithLayout()<CR>
     nnoremap q<Tab> :SignifyToggle<Cr>
     nnoremap q<Space> :SignifyRefresh<Cr>
     nmap ;g <plug>(signify-next-hunk)
