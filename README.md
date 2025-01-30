@@ -83,17 +83,16 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 
 #### 3.1.2.2. 复制基础工具脚本
 
-- 将 z.sh，nv.sh，nvi.sh 复制到 `~/.local/bin`（增强程序）
 - 复制 inputrc 到 `~/.inputrc`（终端输入配置）
 - 复制 configrc 到 `~/.configrc`（通用配置）
 
 #### 3.1.2.3. Vim/Neovim 环境配置
 
 - 建立安装目录与 ~/.leovim 之间的软链接，
+- 将 z.sh，nv.sh，ni.sh 复制到 `~/.local/bin`（增强程序）
 - 创建和更新 `vim的 ~/.vimrc` 或者 `neovim的~/.conf/nvim/init.vim`配置文件，并加载上面的 `~/.leovim/conf.d/init.vim`配置文件完成初始化
 - 创建 `~/.vimrc.opt`文件，此为本项目的功能开关文件，vim/neovim启动时会根据其内容安装加载不同的程序模块
 - 使用插件管理器安装和更新插件
-- 生成neovim的启动文件 `nv.sh`和 `nvi.sh`, 并完成alias方便快速启动。
 
 #### 3.1.2.4. 扩展功能安装
 
