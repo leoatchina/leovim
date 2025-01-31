@@ -96,15 +96,21 @@ fun s:set_props()
         \ b:filetype == 'php' ||
         \ b:filetype == 'go' ||
         \ b:filetype == 'sass' ||
-        \ b:filetype == 'rust' ||
         \ b:filetype == 'systemverilog' ||
         \ b:filetype == 'verilog' ||
+        \ b:filetype == 'verilog_systemverilog' ||
         \ b:filetype == 'lex' ||
         \ b:filetype == 'yacc'
 
         let b:block_comment = 1
         let b:comment_char = ' *'
         let b:comment_begin = '/**'
+        let b:comment_end = ' */'
+    " ----------------------------------
+    elseif b:filetype == 'rust'
+        let b:block_comment = 1
+        let b:comment_char = ' *'
+        let b:comment_begin = '/*'
         let b:comment_end = ' */'
     " ----------------------------------
     elseif b:filetype == 'haskell'
@@ -461,25 +467,25 @@ fun s:update_header()
 endfun
 
 " Generate Minified Header
-fun s:add_min_header(...)
+fun s:add_min_header()
     let save_pos = getpos(".")
-    let idx = 0
+    let i = 0
 
     " If filetype has initial line
     if b:first_line != ''
         let line = search(b:first_line_pattern)
         if line == 0
-            call append(idx, b:first_line)
-            let idx += 1
+            call append(i, b:first_line)
+            let i += 1
         else
-            let idx = line
+            let i = line
         endif
     endif
 
-    " if b:encoding != ''
-    "     call append(idx, b:encoding)
-    "     let idx += 1
-    " endif
+    if b:encoding != ''
+        call append(i, b:encoding)
+        let i += 1
+    endif
 
     " Set comment open char
     if b:block_comment
@@ -493,34 +499,32 @@ fun s:add_min_header(...)
     endif
 
     " Fill user's information
-    if a:0 > 0 && a:1 > 0
-        if g:header_field_filename
-            if g:header_field_filename_path
-                let header_line .= ' ' . expand('%s:t')
-            else
-                let header_line .= ' ' . split(expand('%s:t'),'/')[-1]
-            endif
+    if g:header_field_filename
+        if g:header_field_filename_path
+            let header_line .= ' ' . expand('%s:t')
+        else
+            let header_line .= ' ' . split(expand('%s:t'),'/')[-1]
         endif
-        if g:header_field_author != ''
-            if g:header_field_author_email != ''
-                let email = ' <' . g:header_field_author_email . '>'
-            else
-                let email = ''
-            endif
-            let header_line .= ' ' . b:field_author . ' "' . g:header_field_author . email . '"'
-        endif
-        if g:header_field_timestamp
-            let header_line .= ' ' . b:field_date . ' ' . strftime(g:header_field_timestamp_format)
-        endif
-
-        " If filetype supports block comment, close comment
-        if b:block_comment
-            let header_line .= ' ' . b:comment_end
-        endif
-
-        " Add line to file
-        call append(idx, header_line)
     endif
+    if g:header_field_author != ''
+        if g:header_field_author_email != ''
+            let email = ' <' . g:header_field_author_email . '>'
+        else
+            let email = ''
+        endif
+        let header_line .= ' ' . b:field_author . ' "' . g:header_field_author . email . '"'
+    endif
+    if g:header_field_timestamp
+        let header_line .= ' ' . b:field_date . ' ' . strftime(g:header_field_timestamp_format)
+    endif
+
+    " If filetype supports block comment, close comment
+    if b:block_comment
+        let header_line .= ' ' . b:comment_end
+    endif
+
+    " Add line to file
+    call append(i, header_line)
     call setpos(".", save_pos)
 endfun
 
@@ -760,9 +764,8 @@ endfun
 " Main function selects header generator to add header
 " type parameter options;
 "   0: Normal Header
-"   1: Bang Header
-"   2: Minified Header
-"   3: License Header (also uses license parameter)
+"   1: Minified Header
+"   2: License Header (also uses license parameter)
 fun header#add_header(type, license, silent)
     call s:set_props()
 
@@ -787,8 +790,6 @@ fun header#add_header(type, license, silent)
         elseif a:type == 1
             call s:add_min_header()
         elseif a:type == 2
-            call s:add_min_header(1)
-        elseif a:type == 3
             call s:add_license_header(a:license)
         else
             echo 'There is no "' . a:type . '" type to add header.'

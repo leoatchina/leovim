@@ -69,6 +69,6 @@ endif
 
 " let g:vimtex_view_method = 'zathura'
 
-" let g:header_field_author = 'leoatchina'
-" let g:header_field_author_email = 'leoatchina@outlook.com'
-" nnoremap <M-g>n :!git config user.name "leoatchina"<Cr>:!git config user.email "leoatchina@outlook.com"<Cr>
+" let g:header_field_author = ''
+" let g:header_field_author_email = ''
+" nnoremap <M-g>n :!git config user.name ""<Cr>:!git config user.email ""<Cr>
