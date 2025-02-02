@@ -240,12 +240,12 @@
   },
   // focus on editor && split cell
   {
-    "key": "ctrl+shift+alt+p",
+    "key": "ctrl+shift+alt+e",
     "command": "workbench.action.focusPanel",
     "when": "editorFoucs"
   },
   {
-    "key": "ctrl+shift+alt+p",
+    "key": "ctrl+shift+alt+e",
     "command": "workbench.action.focusActiveEditorGroup",
     "when": "!editorFoucs"
   },
@@ -530,6 +530,18 @@
   {
     "key": "ctrl+\\",
     "command": "roo-cline.SidebarProvider.focus"
+  },
+  {
+    "key": "ctrl+shift+alt+p",
+    "command": "roo-cline.promptsButtonClicked"
+  },
+  {
+    "key": "ctrl+shift+alt+m",
+    "command": "roo-cline.mcpButtonClicked"
+  },
+  {
+    "key": "ctrl+alt+\\",
+    "command": "roo-cline.plusButtonClicked"
   },
   // continue
   {
