@@ -67,7 +67,7 @@ if Planned('vim-fugitive')
     nnoremap <silent><M-g>L :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<cr>
     au FileType git nnoremap <silent><buffer><tab> 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
     au FileType git nnoremap <silent><buffer><space> 0"ayiw:bw<cr>:rightbelow Gdiff <c-r>a<cr>
-    au FileType git nnoremap <silent><buffer>, <Nop>
+    au FileType git nnoremap <silent><buffer>q <Nop>
     au FileType git nnoremap <silent><buffer>\ <Nop>
     " git diff
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
