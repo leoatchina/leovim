@@ -35,10 +35,10 @@ function! s:search_cur(...)
     endif
 endfunction
 command! -nargs=? SearchCurrBuf call s:search_cur(<f-args>)
-nnoremap \| :SearchCurrBuf <C-r><C-w><Cr>
-xnoremap \| :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
-nnoremap <leader>\| :SearchCurrBuf <C-r><C-w>
-xnoremap <leader>\| :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
+nnoremap z/ :SearchCurrBuf <C-r><C-w><Cr>
+xnoremap z/ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
+nnoremap z\ :SearchCurrBuf <C-r><C-w>
+xnoremap z\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
 " ----------------------------
 " grepsearch search
 " ----------------------------
