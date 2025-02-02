@@ -39,6 +39,11 @@ nnoremap z/ :SearchCurrBuf <C-r><C-w><Cr>
 xnoremap z/ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
 nnoremap z\ :SearchCurrBuf <C-r><C-w>
 xnoremap z\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
+nnoremap z? :SearchCurrBuf <C-r>=@"<Cr><Cr>
+" repeat search
+command! -nargs=0 SearchRepeat call s:search_cur(get(g:, 'grepper_word', ''))
+nnoremap z. :SearchRepeat<CR>
+xnoremap z. :<C-u>SearchRepeat<CR>
 " ----------------------------
 " grepsearch search
 " ----------------------------

@@ -118,7 +118,6 @@ if PlannedLeaderf()
     nnoremap <silent><M-g><M-h> :Leaderf git diff HEAD --directly<Cr>
     nnoremap <silent><M-g><M-l> :Leaderf git log<Cr>
     nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
-    nnoremap <silent>g\| :Leaderf git diff --current-file --side-by-side<Cr>
     nnoremap <silent>g<Tab> :Leaderf git blame<Cr>
 elseif Installed('vim-fugitive')
     nnoremap <silent>g<Tab> :Git blame<Cr>
@@ -204,7 +203,8 @@ if has('nvim') || has('patch-8.0.902')
             wincmd H
         endif
     endfunction
-    nnoremap \| :call <SID>SignifyDiff()<CR>
+    nnoremap <silent>g\| :call <SID>SignifyDiff()<CR>
+    nnoremap <silent>\| :SignifyDiff<Cr>
     nnoremap \<Tab> :SignifyToggle<Cr>
     nnoremap \<Cr> :SignifyRefresh<Cr>
     nmap ;g <plug>(signify-next-hunk)

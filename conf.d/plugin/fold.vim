@@ -16,8 +16,8 @@ nmap <leader>zb zfiB
 nmap <Tab>zb zfaB
 " ufo
 if Installed('nvim-ufo')
-    lua vim.keymap.set('n', 'ZO', require('ufo').openAllFolds)
-    lua vim.keymap.set('n', 'ZC', require('ufo').closeAllFolds)
+    lua vim.keymap.set('n', 'z<cr>', require('ufo').openAllFolds)
+    lua vim.keymap.set('n', 'z<tab>', require('ufo').closeAllFolds)
     if Installed('nvim-treesitter')
         lua require('ufo').setup({provider_selector = function(bufnr, filetype, buftype) return {'treesitter', 'indent'} end })
     elseif AdvCompEngine()
