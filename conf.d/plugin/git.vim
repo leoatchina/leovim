@@ -86,10 +86,9 @@ if Planned('vim-fugitive')
         au FileType GV nmap <buffer><nowait>, gb
     endif
     " buffer map
-    au FileType fugitiveblame nnoremap <buffer><silent><nowait>q :quit<Cr>
-    au FileType fugitive,git nnoremap <silent><buffer><nowait>q :q!<Cr>
-    au FileType fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
-    au FileType fugitive,git nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
+    au FileType fugitiveblame,fugitive,git nnoremap <silent><buffer><nowait>q :q!<Cr>
+    au FileType fugitiveblame,fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
+    au FileType fugitiveblame,fugitive,git nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
     au FileType fugitive nnoremap <buffer><nowait>gg gg
     au FileType fugitive nmap <buffer><nowait><Space> =
     au FileType fugitive nmap <buffer><nowait><Tab> -
