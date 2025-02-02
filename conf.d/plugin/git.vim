@@ -117,8 +117,8 @@ if PlannedLeaderf()
     nnoremap <silent><M-g>g :Leaderf git<Cr>
     nnoremap <silent><M-g>h :Leaderf git diff HEAD --directly<Cr>
     nnoremap <silent><M-g>l :Leaderf git log<Cr>
-    nnoremap <silent><M-g>o :Leaderf git log  --current-file<Cr>
-    nnoremap <silent><M-g>\ :Leaderf git diff --current-file --side-by-side<Cr>
+    nnoremap <silent><M-g>o :Leaderf git log --current-file<Cr>
+    nnoremap <silent>g\ :Leaderf git diff --current-file --side-by-side<Cr>
     nnoremap <silent>g<Tab> :Leaderf git blame<Cr>
 elseif Installed('vim-fugitive')
     nnoremap <silent>g<Tab> :Git blame<Cr>
