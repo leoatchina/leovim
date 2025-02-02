@@ -64,7 +64,7 @@ if Planned('vim-fugitive')
     nnoremap <M-g>U :Git push<Space>
     " compare with history version
     let g:fugitive_summary_format = "%as-[%an]: %s"
-    nnoremap <silent>g\ :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<cr>
+    nnoremap <silent><M-g>L :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<cr>
     au FileType git nnoremap <silent><buffer><tab> 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
     au FileType git nnoremap <silent><buffer><space> 0"ayiw:bw<cr>:rightbelow Gdiff <c-r>a<cr>
     au FileType git nnoremap <silent><buffer>, <Nop>
@@ -86,9 +86,10 @@ if Planned('vim-fugitive')
         au FileType GV nmap <buffer><nowait>, gb
     endif
     " buffer map
-    au FileType fugitiveblame,fugitive,git nnoremap <silent><buffer><nowait>q :q!<Cr>
-    au FileType fugitiveblame,fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
-    au FileType fugitiveblame,fugitive,git nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
+    au FileType fugitiveblame nnoremap <buffer><silent><nowait>q :quit<Cr>
+    au FileType fugitive,git nnoremap <silent><buffer><nowait>q :q!<Cr>
+    au FileType fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
+    au FileType fugitive,git nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
     au FileType fugitive nnoremap <buffer><nowait>gg gg
     au FileType fugitive nmap <buffer><nowait><Space> =
     au FileType fugitive nmap <buffer><nowait><Tab> -
@@ -100,23 +101,24 @@ else
     if Installed('asyncrun.vim') && g:has_terminal && UNIX()
         nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 add -A<Cr>
         nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
-        nnoremap <silent><M-g><Space> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
+        nnoremap <silent><M-g><Cr> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
         nnoremap <M-G> :AsyncRun -mode=term -focus=1 git
         nnoremap <M-g>U :AsyncRun -mode=term -focus=1 git push<Space>
     else
         nnoremap <silent><M-g>a :!git add -A<Cr>
         nnoremap <silent><M-g>u :!git push<Cr>
-        nnoremap <silent><M-g><Space> :!git commit -a -m ""<Left>
+        nnoremap <silent><M-g><Cr> :!git commit -a -m ""<Left>
         nnoremap <M-G> :!git
         nnoremap <M-g>U :!git push<Space>
     endif
 endif
 " blamer on left
 if PlannedLeaderf()
-    nnoremap <silent><M-g><M-g> :Leaderf git<Cr>
-    nnoremap <silent><M-g><M-h> :Leaderf git diff HEAD --directly<Cr>
-    nnoremap <silent><M-g><M-l> :Leaderf git log<Cr>
-    nnoremap <silent><M-g><M-c> :Leaderf git log --current-file<Cr>
+    nnoremap <silent><M-g>g :Leaderf git<Cr>
+    nnoremap <silent><M-g>h :Leaderf git diff HEAD --directly<Cr>
+    nnoremap <silent><M-g>l :Leaderf git log<Cr>
+    nnoremap <silent><M-g>o :Leaderf git log  --current-file<Cr>
+    nnoremap <silent><M-g>\ :Leaderf git diff --current-file --side-by-side<Cr>
     nnoremap <silent>g<Tab> :Leaderf git blame<Cr>
 elseif Installed('vim-fugitive')
     nnoremap <silent>g<Tab> :Git blame<Cr>
@@ -141,14 +143,14 @@ else
 endif
 nnoremap <silent><M-g>c :GCommands<Cr>
 " ---------------------------------
-" tig lazygit intergrated
+" lazygit intergrated
 " ---------------------------------
-if g:has_popup_floating && g:has_terminal && executable('lazygit')
+if Installed('vim-floaterm') && executable('lazygit')
     command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
     if has('nvim')
-        nnoremap <silent><M-g>l :GLazyGit<Cr>
+        nnoremap <silent><M-g>f :GLazyGit<Cr>
     else
-        nnoremap <silent><M-g>l :GLazyGit<Cr>i
+        nnoremap <silent><M-g>f :GLazyGit<Cr>i
     endif
 endif
 "########## Merge ##########{{{
@@ -202,10 +204,9 @@ if has('nvim') || has('patch-8.0.902')
             wincmd H
         endif
     endfunction
-    nnoremap <silent>g\| :call <SID>SignifyDiff()<CR>
-    nnoremap <silent>\| :SignifyDiff<Cr>
+    nnoremap \| :call <SID>SignifyDiff()<CR>
     nnoremap \<Tab> :SignifyToggle<Cr>
-    nnoremap \<Cr> :SignifyRefresh<Cr>
+    nnoremap \<Space> :SignifyRefresh<Cr>
     nmap ;g <plug>(signify-next-hunk)
     nmap ,g <plug>(signify-prev-hunk)
     omap im <plug>(signify-motion-inner-pending)
@@ -217,5 +218,5 @@ if has('nvim') || has('patch-8.0.902')
     PlugAddOpt 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
-    nnoremap \c :SignifyCommands<Cr>
+    nnoremap \<Cr> :SignifyCommands<Cr>
 endif
