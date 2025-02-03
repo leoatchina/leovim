@@ -670,8 +670,10 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 if has('clipboard')
-    if exists('g:vscode') || LINUX()
+    if exists('g:vscode')
         set clipboard=unnamed,unnamedplus
+    elseif exists("$TMUX") && LINUX()
+        set clipboard=unnamedplus
     else
         set clipboard=unnamed
     endif
@@ -791,7 +793,11 @@ function! s:open_in_other()
     endif
 endfunction
 command! OpenInOther call s:open_in_other()
-nnoremap <silent>gO :OpenInOther<Cr>
+if has('nvim')
+    nnoremap <silent><nowait>gc :OpenInOther<Cr>
+else
+    nnoremap <silent><nowait>gO :OpenInOther<Cr>
+endif
 " ------------------------
 " open url/file under cursor
 " ------------------------
