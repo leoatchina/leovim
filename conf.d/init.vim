@@ -791,7 +791,7 @@ function! s:open_in_other()
     endif
 endfunction
 command! OpenInOther call s:open_in_other()
-nnoremap <silent>gO :OpenInOther<Cr>
+nnoremap <silent>gx :OpenInOther<Cr>
 " ------------------------
 " open url/file under cursor
 " ------------------------
@@ -830,12 +830,12 @@ function! s:open_file_in_editor(text, col)
     if location[0] != '' && filereadable(location[0])
         if location[1] != ''
             if location[2] != ''
-                exec "! " . editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
+                exec "!" . editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
             else
-                exec "! " . editor . " " . location[0] . ":" . str2nr(location[1])
+                exec "!" . editor . " " . location[0] . ":" . str2nr(location[1])
             endif
         else
-            exec "! " . editor . " " . location[0]
+            exec "!" . editor . " " . location[0]
         endif
     else
         echo "Not URL found, and not a valid file path."
