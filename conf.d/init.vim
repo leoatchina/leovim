@@ -670,9 +670,9 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 if has('clipboard')
-    if exists('g:vscode')
+    if exists('g:vscode') || LINUX()
         set clipboard=unnamed,unnamedplus
-    elseif WINDOWS() || MACOS() || !has('nvim')
+    else
         set clipboard=unnamed
     endif
     xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
