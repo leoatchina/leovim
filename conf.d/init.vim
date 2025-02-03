@@ -791,7 +791,7 @@ function! s:open_in_other()
     endif
 endfunction
 command! OpenInOther call s:open_in_other()
-nnoremap <silent>gx :OpenInOther<Cr>
+nnoremap <silent>gO :OpenInOther<Cr>
 " ------------------------
 " open url/file under cursor
 " ------------------------
