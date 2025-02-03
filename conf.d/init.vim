@@ -265,7 +265,7 @@ function! GetVisualSelection(...) abort
         return ""
     endif
     let inclusive = (&selection == 'inclusive')? 1 : 2
-    " Must trim the end before the start, the beginning will shift left.
+    " Must trim the end before the start, the begin will shift left.
     let lines[-1] = list2str(str2list(lines[-1])[:column_end - inclusive])
     let lines[0] = list2str(str2list(lines[0])[column_start - 1:])
     if a:0 && a:1
@@ -670,14 +670,13 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 if has('clipboard')
-    if exists('g:vscode')
-        set clipboard=unnamed,unnamedplus
-    elseif exists("$TMUX") && LINUX()
+    if (exists("$TMUX") || exists('g:vscode')) && LINUX()
         set clipboard=unnamedplus
+        xnoremap Y "+y:echo 'Yank selection to x11 clipboard.'<Cr>
     else
         set clipboard=unnamed
+        xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
     endif
-    xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
 else
     xnoremap Y y:echo 'Yank selection to internal register.'<Cr>
 endif
@@ -706,16 +705,16 @@ function! s:yank_border(...) abort
         let target = 'line'
     elseif yankmode == 4
         let action = 'vgg0o'
-        let target = 'from file beginning'
+        let target = 'from file begin'
     elseif yankmode == 3
         let action = 'vG'
-        let target = 'to file ending'
+        let target = 'to file end'
     elseif yankmode == 2
         let action = 'v^'
-        let target = 'from line beginning'
+        let target = 'from line begin'
     elseif yankmode == 1
         let action = 'v$'
-        let target = 'to line ending'
+        let target = 'to line end'
     else
         let action = 'viw'
         let target = 'word'
@@ -747,33 +746,6 @@ endif
 nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
-" -------------------------------
-" clipboard from remote to local
-" -------------------------------
-if exists("##TextYankPost") && UNIX()
-    function! s:raw_echo(str)
-        if filewritable('/dev/fd/2')
-            call writefile([a:str], '/dev/fd/2', 'b')
-        else
-            exec("silent! !echo " . shellescape(a:str))
-            redraw!
-        endif
-    endfunction
-    function! s:copy() abort
-        let c = join(v:event.regcontents,"\n")
-        if len(Trim(c)) == 0
-            return
-        endif
-        let c64 = system("base64", c)
-        if $TMUX == ''
-            let s = "\e]52;c;" . Trim(c64) . "\x07"
-        else
-            let s = "\ePtmux;\e\e]52;c;" . Trim(c64) . "\x07\e\\"
-        endif
-        call s:raw_echo(s)
-    endfunction
-    autocmd TextYankPost * call s:copy()
-endif
 " ------------------------
 " set optional
 " ------------------------

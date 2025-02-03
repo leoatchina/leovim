@@ -75,3 +75,30 @@ endif
 " ------------------------
 inoremap <M-I> <C-\><C-o>:set nopaste \| echo "nopaste"<Cr>
 nnoremap <M-I> :set nopaste! nopaste?<CR>
+" -------------------------------
+" clipboard from remote to local
+" -------------------------------
+if exists("##TextYankPost") && UNIX()
+    function! s:raw_echo(str)
+        if filewritable('/dev/fd/2')
+            call writefile([a:str], '/dev/fd/2', 'b')
+        else
+            exec("silent! !echo " . shellescape(a:str))
+            redraw!
+        endif
+    endfunction
+    function! s:copy() abort
+        let c = join(v:event.regcontents,"\n")
+        if len(Trim(c)) == 0
+            return
+        endif
+        let c64 = system("base64", c)
+        if $TMUX == ''
+            let s = "\e]52;c;" . Trim(c64) . "\x07"
+        else
+            let s = "\ePtmux;\e\e]52;c;" . Trim(c64) . "\x07\e\\"
+        endif
+        call s:raw_echo(s)
+    endfunction
+    autocmd TextYankPost * call s:copy()
+endif
