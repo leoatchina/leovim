@@ -65,33 +65,47 @@ function! which_key#mappings#parse(key, dict, visual) " {{{
         if empty(mapd) || mapd.lhs =~? '<Plug>.*' || mapd.lhs =~? '<SNR>.*'
             continue
         endif
+        " desc is nvim's comment of map
         if has_key(mapd, 'desc')
-            let mapd.rhs = mapd.desc
+            let mapd.display = copy(mapd.desc)
             unlet mapd.desc
-        " NOTE: nvim's built-in lua functions have `callback` key in mapd, it must be deleted.
-        " Acctually, nvim's runtime script contain these functions, mapd.rhs could be rebuilt
-        " so the built-in lua function could be parsed, maybe it is not a beautiful resolution but workable.
-        elseif has_key(mapd, 'callback')
-            unlet mapd.callback
-            try
-                let sp = split(split(maparg(raw_sp[0], line[0])[:-2])[-1], ":")
-                " `fl` is nvim runtime script
-                let fl = expand(sp[0])
-                " `ln` is the line where the lua function layed,
-                let ln = str2nr(sp[-1]) - 1
-                let rhs = trim(readfile(fl)[ln])
-                let rhs = split(rhs, 'M.')[1]
-                " create api from file name
-                let api = split(substitute(fl, "\\", "/", 'g'), 'runtime/lua/')[1]
-                let api = substitute(api, 'lua$', '', 'g')
-                let api = substitute(api, '/', '.', 'g')
-                let mapd.rhs = "<Cmd>lua " . api . rhs . '<Cr>'
-            catch /.*/
-                let mapd.rhs = "lua function not show"
-            endtry
         endif
-
-        let mapd.display = call(g:WhichKeyFormatFunc, [mapd.rhs])
+        " NOTE: nvim's built-in lua functions have `callback` key in mapd, it must be deleted.
+        " Acctually, nvim's runtime script contain mapd.rhs functions from could be rebuilt from origin lua
+        " maybe it is not a beautiful resolution but workable.
+        if has_key(mapd, 'callback')
+            unlet mapd.callback
+            if has_key(mapd, 'display')
+                if !has_key(mapd, 'rhs')
+                    let mapd.rhs = "<Cmd>echo lua " . mapd.display
+                endif
+            else
+                try
+                    let sp = split(split(maparg(raw_sp[0], line[0])[:-2])[-1], ":")
+                    " `fl` is nvim runtime script
+                    let fl = expand(sp[0])
+                    " `ln` is the line where the lua function layed,
+                    let ln = str2nr(sp[-1]) - 1
+                    let rhs = trim(readfile(fl)[ln])
+                    let rhs = split(rhs, 'M.')[1]
+                    " create api from file name
+                    let api = split(substitute(fl, "\\", "/", 'g'), 'runtime/lua/')[1]
+                    let api = substitute(api, 'lua$', '', 'g')
+                    let api = substitute(api, '/', '.', 'g')
+                    let mapd.rhs = "<Cmd>lua " . api . rhs . '<Cr>'
+                    let mapd.display = call(g:WhichKeyFormatFunc, [mapd.rhs])
+                catch /.*/
+                    let mapd.rhs = "<Cmd>echo lua function not show<Cr>"
+                    let mapd.display = "lua function not show"
+                endtry
+            endif
+        else
+            let mapd.rhs = substitute(mapd.rhs, '<SID>', '<SNR>'.mapd['sid'].'_', 'g')
+            if mapd.expr
+                let mapd.rhs = eval(mapd.rhs)
+            endif
+            let mapd.display = call(g:WhichKeyFormatFunc, [mapd.rhs])
+        endif
 
         let mapd.lhs = substitute(mapd.lhs, key, '', '')
         " EasyMotion workaround, <leader><leader> is default easymotion prefix
@@ -100,12 +114,11 @@ function! which_key#mappings#parse(key, dict, visual) " {{{
         endif
         let mapd.lhs = substitute(mapd.lhs, '<Space>', ' ', 'g')
         let mapd.lhs = substitute(mapd.lhs, '<C-I>', '<Tab>', 'g')
-        let mapd.rhs = substitute(mapd.rhs, '<SID>', '<SNR>'.mapd['sid'].'_', 'g')
 
         " eval the expression as the final {rhs}
         " Ref #60
-        if mapd.expr
-            let mapd.rhs = eval(mapd.rhs)
+        if has_key(mapd, 'display')
+        else
         endif
 
         if mapd.lhs !=# '' && mapd.display !~# 'WhichKey.*'
