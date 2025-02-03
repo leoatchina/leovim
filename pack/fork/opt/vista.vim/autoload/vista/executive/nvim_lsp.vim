@@ -41,33 +41,33 @@ function! s:RunAsync() abort
   endif
   call vista#SetProvider(s:provider)
   lua << EOF
-    local params = vim.lsp.util.make_position_params()
-    local callback = function(err, method_or_result, result_or_context)
-        -- signature for the handler changed in neovim 0.6/master. The block
-        -- below allows users to check the compatibility.
-        local result
-        if type(method_or_result) == 'string' then
-          -- neovim 0.5.x
-          result = result_or_context
-        else
-          -- neovim 0.6+
-          result = method_or_result
-        end
+  local params = vim.lsp.util.make_position_params()
+  local callback = function(err, method_or_result, result_or_context)
+  -- signature for the handler changed in neovim 0.6/master. The block
+  -- below allows users to check the compatibility.
+  local result
+  if type(method_or_result) == 'string' then
+    -- neovim 0.5.x
+    result = result_or_context
+  else
+    -- neovim 0.6+
+    result = method_or_result
+  end
 
-        if err then print(tostring(err)) return end
-        if not result then return end
-        data = vim.fn['vista#renderer#LSPPreprocess'](result)
-        vim.fn['vista#executive#nvim_lsp#SetData'](data)
-        vim.g.vista_executive_nvim_lsp_fetching = false
-        if next(data) ~= nil then
-          res = vim.fn['vista#renderer#LSPProcess'](data, vim.g.vista_executive_nvim_lsp_reload_only, vim.g.vista_executive_nvim_lsp_should_display)
-          vim.g.vista_executive_nvim_lsp_reload_only = res[1]
-          vim.g.vista_executive_nvim_lsp_should_display = res[2]
-          vim.fn['vista#cursor#TryInitialRun']()
-        end
+  if err then print(tostring(err)) return end
+    if not result then return end
+      data = vim.fn['vista#renderer#LSPPreprocess'](result)
+      vim.fn['vista#executive#nvim_lsp#SetData'](data)
+      vim.g.vista_executive_nvim_lsp_fetching = false
+      if next(data) ~= nil then
+        res = vim.fn['vista#renderer#LSPProcess'](data, vim.g.vista_executive_nvim_lsp_reload_only, vim.g.vista_executive_nvim_lsp_should_display)
+        vim.g.vista_executive_nvim_lsp_reload_only = res[1]
+        vim.g.vista_executive_nvim_lsp_should_display = res[2]
+        vim.fn['vista#cursor#TryInitialRun']()
+      end
     end
     vim.lsp.buf_request(0, 'textDocument/documentSymbol', params, callback)
-EOF
+    EOF
 endfunction
 
 function! vista#executive#nvim_lsp#Run(fpath) abort

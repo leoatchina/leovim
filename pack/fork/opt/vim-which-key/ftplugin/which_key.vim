@@ -1,23 +1,23 @@
 " No usual did_ftplugin check here as we NEED to run this always
 
 setlocal
-  \ nonumber
-  \ norelativenumber
-  \ nolist
-  \ nowrap
-  \ nofoldenable
-  \ nopaste
-  \ nomodeline
-  \ noswapfile
-  \ nocursorline
-  \ nocursorcolumn
-  \ winfixwidth
-  \ winfixheight
-  \ colorcolumn=
-  \ nobuflisted
-  \ buftype=nofile
-  \ bufhidden=unload
-  \ nospell
+            \ nonumber
+            \ norelativenumber
+            \ nolist
+            \ nowrap
+            \ nofoldenable
+            \ nopaste
+            \ nomodeline
+            \ noswapfile
+            \ nocursorline
+            \ nocursorcolumn
+            \ winfixwidth
+            \ winfixheight
+            \ colorcolumn=
+            \ nobuflisted
+            \ buftype=nofile
+            \ bufhidden=unload
+            \ nospell
 
 let &l:statusline = which_key#statusline()
 

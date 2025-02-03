@@ -1,5 +1,9 @@
 #!/bin/bash
 
+rm -rf vim-which-key 
+git clone --depth 1 https://github.com/leoatchina/vim-which-key.git
+for fl in `find ./vim-which-key -type f | grep vim$` ; do echo $fl; vim -c "normal ggVG=" -c "wq!" $fl ; done
+
 rm -rf vista.vim
 git clone --depth 1 https://github.com/leoatchina/vista.vim.git
 for fl in `find ./vista.vim -type f | grep vim$` ; do echo $fl; vim -c "normal ggVG=" -c "wq!" $fl ; done

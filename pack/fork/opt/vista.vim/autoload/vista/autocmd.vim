@@ -121,29 +121,29 @@ function! vista#autocmd#Init(group_name, AUF) abort
   endif
 
   execute 'augroup' a:group_name
-    autocmd!
+  autocmd!
 
-    " vint: -ProhibitAutocmdWithNoGroup
-    autocmd WinEnter,WinLeave __vista__ call vista#statusline#RenderOnWinEvent()
+  " vint: -ProhibitAutocmdWithNoGroup
+  autocmd WinEnter,WinLeave __vista__ call vista#statusline#RenderOnWinEvent()
 
-    " BufReadPost is needed for reloading the current buffer if the file
-    " was changed by an external command;
-    "
-    " CursorHold and CursorHoldI event have been removed in order to
-    " highlight the nearest tag automatically.
+  " BufReadPost is needed for reloading the current buffer if the file
+  " was changed by an external command;
+  "
+  " CursorHold and CursorHoldI event have been removed in order to
+  " highlight the nearest tag automatically.
 
-    autocmd BufReadPost  * call s:TriggerUpdate('BufReadPost', +expand('<abuf>'), fnamemodify(expand('<afile>'), ':p'))
-    autocmd BufWritePost * call s:TriggerUpdate('BufWritePost', +expand('<abuf>'), fnamemodify(expand('<afile>'), ':p'))
-    autocmd BufEnter     * call s:OnBufEnter(+expand('<abuf>'), fnamemodify(expand('<afile>'), ':p'))
+  autocmd BufReadPost  * call s:TriggerUpdate('BufReadPost', +expand('<abuf>'), fnamemodify(expand('<afile>'), ':p'))
+  autocmd BufWritePost * call s:TriggerUpdate('BufWritePost', +expand('<abuf>'), fnamemodify(expand('<afile>'), ':p'))
+  autocmd BufEnter     * call s:OnBufEnter(+expand('<abuf>'), fnamemodify(expand('<afile>'), ':p'))
 
-    autocmd BufDelete,BufWipeout * call s:OnBufDelete(+expand('<abuf>'))
+  autocmd BufDelete,BufWipeout * call s:OnBufDelete(+expand('<abuf>'))
 
-    autocmd VimLeavePre * call s:ClearTempData()
+  autocmd VimLeavePre * call s:ClearTempData()
 
-    if g:vista_update_on_text_changed
-      autocmd TextChanged,TextChangedI *
-            \ call s:AutoUpdateWithDelay(+expand('<abuf>'), fnamemodify(expand('<afile>'), ':p'))
-    endif
+  if g:vista_update_on_text_changed
+    autocmd TextChanged,TextChangedI *
+          \ call s:AutoUpdateWithDelay(+expand('<abuf>'), fnamemodify(expand('<afile>'), ':p'))
+  endif
   augroup END
 endfunction
 

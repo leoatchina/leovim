@@ -54,8 +54,8 @@ function! s:RunAsync() abort
     " vim-lsc
     call lsc#file#flushChanges()
     call lsc#server#userCall('textDocument/documentSymbol',
-        \ lsc#params#textDocument(),
-        \ function('s:HandleLSPResponse'))
+          \ lsc#params#textDocument(),
+          \ function('s:HandleLSPResponse'))
   endif
 endfunction
 

@@ -49,11 +49,11 @@ function! s:RunAsync() abort
 
   let bufnum = bufnr('%')
   let params = #{textDocument: #{uri: lsp#util#LspFileToUri(bufname(bufnum))}}
-  let servers = lsp#buffer#BufLspServersGet(bufnum)
+    let servers = lsp#buffer#BufLspServersGet(bufnum)
 
   for server in servers
     if !server.isDocumentSymbolProvider
-        continue
+      continue
     endif
 
     silent call server.rpc_a('textDocument/documentSymbol', params, function('s:HandleLSPResponse'))

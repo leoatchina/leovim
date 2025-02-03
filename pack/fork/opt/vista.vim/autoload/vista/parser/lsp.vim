@@ -5,33 +5,33 @@
 " https://microsoft.github.io/language-server-protocol/specification#textDocument_documentSymbol
 " This should be updated periodically according the latest LSP specification.
 let s:symbol_kind = {
-    \ '1': 'File',
-    \ '2': 'Module',
-    \ '3': 'Namespace',
-    \ '4': 'Package',
-    \ '5': 'Class',
-    \ '6': 'Method',
-    \ '7': 'Property',
-    \ '8': 'Field',
-    \ '9': 'Constructor',
-    \ '10': 'Enum',
-    \ '11': 'Interface',
-    \ '12': 'Function',
-    \ '13': 'Variable',
-    \ '14': 'Constant',
-    \ '15': 'String',
-    \ '16': 'Number',
-    \ '17': 'Boolean',
-    \ '18': 'Array',
-    \ '19': 'Object',
-    \ '20': 'Key',
-    \ '21': 'Null',
-    \ '22': 'EnumMember',
-    \ '23': 'Struct',
-    \ '24': 'Event',
-    \ '25': 'Operator',
-    \ '26': 'TypeParameter',
-    \ }
+      \ '1': 'File',
+      \ '2': 'Module',
+      \ '3': 'Namespace',
+      \ '4': 'Package',
+      \ '5': 'Class',
+      \ '6': 'Method',
+      \ '7': 'Property',
+      \ '8': 'Field',
+      \ '9': 'Constructor',
+      \ '10': 'Enum',
+      \ '11': 'Interface',
+      \ '12': 'Function',
+      \ '13': 'Variable',
+      \ '14': 'Constant',
+      \ '15': 'String',
+      \ '16': 'Number',
+      \ '17': 'Boolean',
+      \ '18': 'Array',
+      \ '19': 'Object',
+      \ '20': 'Key',
+      \ '21': 'Null',
+      \ '22': 'EnumMember',
+      \ '23': 'Struct',
+      \ '24': 'Event',
+      \ '25': 'Operator',
+      \ '26': 'TypeParameter',
+      \ }
 
 function! s:Kind2Symbol(kind) abort
   return has_key(s:symbol_kind, a:kind) ? s:symbol_kind[a:kind] : 'Unknown kind '.a:kind
@@ -52,11 +52,11 @@ function! vista#parser#lsp#KindToSymbol(line, container) abort
       let lnum = location.range.start.line + 1
       let col = location.range.start.character + 1
       call add(a:container, {
-         \ 'lnum': lnum,
-         \ 'col': col,
-         \ 'kind': s:Kind2Symbol(line.kind),
-         \ 'text': line.name,
-         \ })
+            \ 'lnum': lnum,
+            \ 'col': col,
+            \ 'kind': s:Kind2Symbol(line.kind),
+            \ 'text': line.name,
+            \ })
     endif
   " DocumentSymbol class
   elseif has_key(line, 'range')

@@ -65,7 +65,7 @@ endfunction
 
 function! vista#debugging#InfoToClipboard() abort
   redir => l:output
-    silent call vista#debugging#Info()
+  silent call vista#debugging#Info()
   redir END
 
   let @+ = l:output

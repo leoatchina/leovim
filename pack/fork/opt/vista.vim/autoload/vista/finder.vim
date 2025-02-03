@@ -157,10 +157,10 @@ endfunction
 " Prepare opts for fzf#run(fzf#wrap(opts))
 function! vista#finder#PrepareOpts(source, prompt) abort
   let opts = {
-          \ 'source': a:source,
-          \ 'sink': function('vista#finder#fzf#sink'),
-          \ 'options': ['--prompt', a:prompt, '--nth', '..-2', '--delimiter', ':'] + get(g:, 'vista_fzf_opt', []),
-          \ }
+        \ 'source': a:source,
+        \ 'sink': function('vista#finder#fzf#sink'),
+        \ 'options': ['--prompt', a:prompt, '--nth', '..-2', '--delimiter', ':'] + get(g:, 'vista_fzf_opt', []),
+        \ }
 
   if len(g:vista_fzf_preview) > 0
     let s:vista_fzf_preview = copy(g:vista_fzf_preview)
@@ -219,7 +219,7 @@ function! vista#finder#RunFZFOrSkim(apply_run) abort
     "
     "  &modifiable is to avoid error in MacVim - E948: Job still running (add ! to end the job)
     " if !has('nvim') && &modifiable
-      " edit
+    " edit
     " endif
   endif
 endfunction

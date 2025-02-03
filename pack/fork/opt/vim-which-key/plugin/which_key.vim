@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 if exists('g:loaded_vim_which_key')
-  finish
+    finish
 endif
 let g:loaded_vim_which_key = 1
 
