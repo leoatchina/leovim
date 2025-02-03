@@ -691,7 +691,10 @@ function! s:yank_border(...) abort
         let yankmode = 0
     endif
     let original_cursor_position = getpos('.')
-    if &clipboard =~ 'unnamed' || has('nvim')
+    if &clipboard =~ 'unnamedplus'
+        let yank = '"+y'
+        let tclip = 'to x11 clipboard.'
+    elseif &clipboard =~ 'unnamed'
         let yank = '"*y'
         let tclip = 'to system clipboard.'
     else
