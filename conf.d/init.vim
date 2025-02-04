@@ -768,11 +768,7 @@ function! s:open_in_other()
     endif
 endfunction
 command! OpenInOther call s:open_in_other()
-if has('nvim')
-    nnoremap <silent><nowait>gc :OpenInOther<Cr>
-else
-    nnoremap <silent><nowait>gO :OpenInOther<Cr>
-endif
+nnoremap <silent><nowait>gc :OpenInOther<Cr>
 " ------------------------
 " open url/file under cursor
 " ------------------------
