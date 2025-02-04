@@ -691,6 +691,7 @@ if has('clipboard')
     endif
 else
     xnoremap Y y:echo 'Yank selection to internal register.'<Cr>
+    set clipboard=
 endif
 " ------------------------
 " special yank
@@ -735,12 +736,12 @@ function! s:yank_border(...) abort
     call setpos('.', original_cursor_position)
     echo 'Yank ' . target . ' ' . tclip
 endfunction
-command! YankWord call s:yank_border(0)
-command! YankToLineEnd call s:yank_border(1)
-command! YankFromLineBegin call s:yank_border(2)
-command! YankToFileEnd call s:yank_border(3)
-command! YankFromFileBegin call s:yank_border(4)
 command! YankLine call s:yank_border(5)
+command! YankFromFileBegin call s:yank_border(4)
+command! YankToFileEnd call s:yank_border(3)
+command! YankFromLineBegin call s:yank_border(2)
+command! YankToLineEnd call s:yank_border(1)
+command! YankWord call s:yank_border()
 nnoremap <silent>gY :YankWord<Cr>
 nnoremap <silent><leader>Y :YankLine<Cr>
 if exists('g:vscode')

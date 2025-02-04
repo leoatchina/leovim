@@ -64,7 +64,7 @@ if Planned('vim-fugitive')
     nnoremap <M-g>U :Git push<Space>
     " compare with history version
     let g:fugitive_summary_format = "%as-[%an]: %s"
-    nnoremap <silent><M-g>L :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<cr>
+    nnoremap <silent>g\ :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<cr>
     au FileType git nnoremap <silent><buffer><tab> 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
     au FileType git nnoremap <silent><buffer><space> 0"ayiw:bw<cr>:rightbelow Gdiff <c-r>a<cr>
     au FileType git nnoremap <silent><buffer>q <Nop>
@@ -114,11 +114,11 @@ else
 endif
 " blamer on left
 if PlannedLeaderf()
-    nnoremap <silent><M-g>g :Leaderf git<Cr>
+    nnoremap <silent><M-g>i :Leaderf git<Cr>
     nnoremap <silent><M-g>h :Leaderf git diff HEAD --directly<Cr>
     nnoremap <silent><M-g>l :Leaderf git log<Cr>
     nnoremap <silent><M-g>o :Leaderf git log --current-file<Cr>
-    nnoremap <silent>g\ :Leaderf git diff --current-file --side-by-side<Cr>
+    nnoremap <silent>g\| :Leaderf git diff --current-file --side-by-side<Cr>
     nnoremap <silent>g<Tab> :Leaderf git blame<Cr>
 elseif Installed('vim-fugitive')
     nnoremap <silent>g<Tab> :Git blame<Cr>
