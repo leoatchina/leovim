@@ -319,10 +319,6 @@ function! UpdateLightline() abort
         let g:lightline.colorscheme = 'simpleblack'
     elseif colors_name == 'sublime'
         let g:lightline.colorscheme = 'molokai'
-    elseif colors_name == 'hybrid'
-        let g:lightline.colorscheme = 'nord'
-    elseif colors_name == 'gruvbox-material'
-        let g:lightline.colorscheme = 'gruvbox_material'
     elseif colors_name == 'gruvbox'
         let g:lightline.colorscheme = 'gruvboxdark'
     elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name =~ 'fox'
@@ -362,6 +358,8 @@ elseif g:complete_engine == 'coc'
     else
         call SetScheme('sonokai', 'sublime')
     endif
+elseif g:complete_engine == 'apm'
+    colorscheme gruvbox
 else
     colorscheme hybrid
 endif
