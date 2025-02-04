@@ -670,12 +670,23 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------------------
 " clipboard
 " ------------------------------------
+let s:clipboard = ""
 if has('clipboard')
-    if (exists("$TMUX") || exists('g:vscode')) && LINUX()
-        set clipboard=unnamedplus
+    if LINUX() && (exists('g:vscode') || exists('$TMUX'))
+        let s:clipboard = 'unnamedplus'
+        if exists('g:vscode')
+            set clipboard=unnamedplus
+        else
+            set clipboard=
+        endif
         xnoremap Y "+y:echo 'Yank selection to x11 clipboard.'<Cr>
     else
-        set clipboard=unnamed
+        let s:clipboard = 'unnamed'
+        if exists('g:vscode')
+            set clipboard=unnamed
+        else
+            set clipboard=
+        endif
         xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
     endif
 else
@@ -691,10 +702,10 @@ function! s:yank_border(...) abort
         let yankmode = 0
     endif
     let original_cursor_position = getpos('.')
-    if &clipboard =~ 'unnamedplus'
+    if s:clipboard == 'unnamedplus'
         let yank = '"+y'
         let tclip = 'to x11 clipboard.'
-    elseif &clipboard =~ 'unnamed'
+    elseif s:clipboard == 'unnamed'
         let yank = '"*y'
         let tclip = 'to system clipboard.'
     else
