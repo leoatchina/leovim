@@ -1,13 +1,13 @@
 " ------------------------
 " basic enhanced shortcut
 " ------------------------
+nnoremap \| <Cmd>lua require('vscode-neovim').action("git.openChange")<CR>
 nnoremap <Cr> <Cmd>lua require('vscode-neovim').action("workbench.action.navigateForward")<CR>
 xnoremap <C-c> <Cmd>lua require('vscode-neovim').action('editor.action.clipboardCopyAction')<CR><ESC>
 nnoremap <C-s> <Cmd>lua require('vscode-neovim').action('workbench.action.files.save')<CR>
 nnoremap <C-h> <Cmd>lua require('vscode-neovim').action("editor.action.startFindReplaceAction")<CR>
 nnoremap <C-n> <Cmd>lua require('vscode-neovim').action("editor.action.addSelectionToNextFindMatch")<CR>
 nnoremap s<Cr> <Cmd>lua require('vscode-neovim').action('workbench.action.findInFiles', {args = {query = vim.fn.expand('<cword>')}})<CR>
-nnoremap \| <Cmd>lua require('vscode-neovim').action("actions.find", {args = { query = vim.fn.expand("<cword>")}})<CR>
 nnoremap <C-a> <Cmd>lua require('vscode-neovim').action("editor.action.selectAll")<Cr>
 xnoremap <C-x> <Cmd>call VSCodeNotifyVisual("editor.action.clipboardCutAction", 1)<Cr>
 nnoremap <C-x> x
@@ -33,8 +33,8 @@ nnoremap <leader>h <Cmd>lua require('vscode-neovim').action("references-view.sho
 " ------------------------
 " format
 " ------------------------
-xnoremap Q <Cmd>lua require('vscode-neovim').action('editor.action.formatSelection')<CR>
-nnoremap Q <Cmd>lua require('vscode-neovim').action('editor.action.formatDocument.multiple')<CR>
+xnoremap M <Cmd>lua require('vscode-neovim').action('editor.action.formatSelection')<CR>
+nnoremap M <Cmd>lua require('vscode-neovim').action('editor.action.formatDocument.multiple')<CR>
 " ------------------------
 " vscode speicially mapping
 " ------------------------
