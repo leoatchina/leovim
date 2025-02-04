@@ -313,7 +313,11 @@ function! SetScheme(scheme, ...) abort
 endfunction
 function! UpdateLightline() abort
     let colors_name = get(g:, 'colors_name', '')
-    if colors_name == 'codedark' || colors_name == 'one'
+    if colors_name == 'sonokai' || colors_name == 'edge' || colors_name =~ 'fox'
+        let g:lightline.colorscheme = g:colors_name
+    elseif colors_name =~ 'catppuccin'
+        let g:lightline.colorscheme = "catppuccin"
+    elseif colors_name == 'codedark' || colors_name == 'one'
         let g:lightline.colorscheme = g:colors_name
     elseif colors_name == 'space-vim-dark'
         let g:lightline.colorscheme = 'simpleblack'
@@ -321,12 +325,10 @@ function! UpdateLightline() abort
         let g:lightline.colorscheme = 'molokai'
     elseif colors_name == 'gruvbox'
         let g:lightline.colorscheme = 'gruvboxdark'
-    elseif colors_name == 'sonokai' || colors_name == 'edge' || colors_name =~ 'fox'
-        let g:lightline.colorscheme = g:colors_name
-    elseif colors_name =~ 'catppuccin'
-        let g:lightline.colorscheme = "catppuccin"
+    elseif colors_name == 'hybrid'
+        let g:lightline.colorscheme = 'jellybeans'
     else
-        let g:lightline.colorscheme = 'default'
+        let g:lightline.colorscheme = 'wombat'
     endif
     call lightline#init()
     call lightline#colorscheme()
