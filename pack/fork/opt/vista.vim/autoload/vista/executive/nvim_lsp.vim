@@ -66,8 +66,8 @@ function! s:RunAsync() abort
         vim.fn['vista#cursor#TryInitialRun']()
       end
     end
-    vim.lsp.buf_request(0, 'textDocument/documentSymbol', params, callback)
-    EOF
+  vim.lsp.buf_request(0, 'textDocument/documentSymbol', params, callback)
+EOF
 endfunction
 
 function! vista#executive#nvim_lsp#Run(fpath) abort
