@@ -799,7 +799,7 @@ function! s:get_cursor_pos(text, col)
     endif
     return []
 endfunction
-function! s:open_file_in_editor(text, col)
+function! s:open_link_in_editor(text, col)
     let l:url = textobj#uri#open_uri()
     redraw!
     if exists('l:url') && len(l:url)
@@ -831,7 +831,7 @@ function! s:open_file_in_editor(text, col)
         echo "Not URL found, and not a valid file path."
     endif
 endfunction
-command! OpenLink call s:open_file_in_editor(getline("."), col("."))
+command! OpenLink call s:open_link_in_editor(getline("."), col("."))
 nnoremap <silent>go :OpenLink<cr>
 " --------------------------------------------
 " vscode or (neo)vim 's differnt config
