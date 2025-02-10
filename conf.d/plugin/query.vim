@@ -2,22 +2,22 @@ if Planned('vim-translator')
     let g:translator_default_engines=['bing', 'haici']
     if g:has_popup_floating
         " show translate in popup or floating windows
-        nmap <silent>gw <Plug>TranslateW
-        xmap <silent>gw <Plug>TranslateWV
+        nmap <silent>q\ <Plug>TranslateW
+        xmap <silent>q\ <Plug>TranslateWV
     else
-        nmap <silent>gw <Plug>Translate
-        xmap <silent>gw <Plug>TranslateV
+        nmap <silent>q\ <Plug>Translate
+        xmap <silent>q\ <Plug>TranslateV
     endif
 endif
 if Planned('dash.vim')
-    nmap g: :Dash<Space>
-    nmap gy <Plug>DashGlobalSearch
-    nmap gz <Plug>DashSearch
+    nmap q: :Dash<Space>
+    nmap q? <Plug>DashGlobalSearch
+    nmap q/ <Plug>DashSearch
 elseif Planned('zeavim.vim')
-    nmap g: :Zeavim<Space>
-    nmap gy <Plug>ZVKeyDocset
-    nmap gz <Plug>Zeavim
-    xmap gz <Plug>ZVVisSelection
+    nmap q: :Zeavim<Space>
+    nmap q? <Plug>ZVKeyDocset
+    nmap q/ <Plug>Zeavim
+    xmap q/ <Plug>ZVVisSelection
 endif
 " map_K
 function! s:k()
