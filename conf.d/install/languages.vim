@@ -5,8 +5,6 @@ if WINDOWS()
     let g:R_exe = Expand(exepath(get(g:, 'R_exe', 'R.exe')))
 else
     let g:R_exe = Expand(exepath(get(g:, 'R_exe', 'R')))
-else
-    let g:R_exe = ''
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
