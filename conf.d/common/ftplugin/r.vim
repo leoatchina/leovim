@@ -58,10 +58,10 @@ if Installed('nvim-r')
             let t:robjrb_status = 0
         endif
     endfunction
-    nnoremap <buffer><silent><M-B> :call ToggleRObjBrowser()<Cr>
-    nnoremap <buffer><silent><M-M> :call ToggleEnvLib()<Cr>
-    au FileType rbrowser nnoremap <silent><M-B> :call ToggleRObjBrowser()<Cr>
-    au FileType rbrowser nnoremap <silent><M-M> :call ToggleEnvLib()<Cr>
+    nnoremap <buffer><silent>q<Space> :call ToggleRObjBrowser()<Cr>
+    nnoremap <buffer><silent>q<Tab> :call ToggleEnvLib()<Cr>
+    au FileType rbrowser nnoremap <silent>q<Space> :call ToggleRObjBrowser()<Cr>
+    au FileType rbrowser nnoremap <silent>q<Tab> :call ToggleEnvLib()<Cr>
     " view variable
     nnoremap <buffer><silent>J :call RAction('print')<CR>
     nnoremap <buffer><silent>- :call RAction('viewobj')<CR>
@@ -78,13 +78,9 @@ if Installed('nvim-r')
     nnoremap <buffer><M-e>c :call RClearConsole()<Cr>
     nnoremap <buffer><M-e>C :call RClearAll()<Cr>
     " run
-    nnoremap <buffer><M-R>  :call StartR('R')<Cr>
-    nnoremap <buffer><Tab>q :call RQuit('nosave')<Cr>
-    nnoremap <buffer><Tab>Q :call RQuit('save')<Cr>
-elseif !exists('g:vscode')
-    nnoremap <buffer><M-R> :echo "Please install Nvim-R to run StartR()."<Cr>
-    nnoremap <buffer><M-B> :echo "Please install Nvim-R to browser Envs."<Cr>
-    nnoremap <buffer><M-M> :echo "Please install Nvim-R to toggle Envs."<Cr>
+    nnoremap <buffer>\r :call StartR('R')<Cr>
+    nnoremap <buffer>\q :call RQuit('nosave')<Cr>
+    nnoremap <buffer>\Q :call RQuit('save')<Cr>
 endif
 inoremap <buffer><< <-
 inoremap <buffer>>> ->
