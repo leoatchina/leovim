@@ -17,7 +17,7 @@ if Installed('nvim-r')
     augroup END
     function! ToggleEnvLib() abort
         if string(g:SendCmdToR) == "function('SendCmdToR_fake')"
-            call RWarningMsg("The Object Browser can be opened only if R is running. Press <M-B> to StartR.")
+            call RWarningMsg("The Object Browser can be opened only if R is running. Press \r to StartR.")
             return
         elseif string(g:SendCmdToR) == "function('SendCmdToR_NotYet')"
             call RWarningMsg("R is not ready yet")
