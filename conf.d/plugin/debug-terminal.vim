@@ -666,15 +666,15 @@ if Installed('jupynium.nvim')
     endfunction
     command JupyniumExecuteSelectedCellsForword call s:execute_and_forword()
     function! s:map() abort
+        nnoremap <buffer><silent>q<Cr> <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
         nnoremap <buffer><silent>qh <Cmd>JupyniumKernelHover<Cr>
-        nnoremap <buffer><silent>qs <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
+        nnoremap <buffer><silent>qk <Cmd>JupyniumKernelSelect<Cr>
         nnoremap <buffer><silent>qr <Cmd>JupyniumRun<Cr>
         nnoremap <buffer><silent>qt <Cmd>JupyniumRunInTerminal<Cr>
         nnoremap <buffer><silent>qq <Cmd>JupyniumStopSync<Cr>
-        nnoremap <buffer><silent>qk <Cmd>JupyniumKernelSelect<Cr>
         nnoremap <buffer><silent>qb <Cmd>JupyniumScrollToCell<Cr>
-        nnoremap <buffer><silent>qp <Cmd>JupyniumScrollUp<Cr>
-        nnoremap <buffer><silent>qn <Cmd>JupyniumScrollDown<Cr>
+        nnoremap <buffer><silent>qu <Cmd>JupyniumScrollUp<Cr>
+        nnoremap <buffer><silent>qd <Cmd>JupyniumScrollDown<Cr>
         nnoremap <buffer><silent>qc <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
         xnoremap <buffer><silent>qc <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
         nnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
