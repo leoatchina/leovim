@@ -634,7 +634,7 @@ if Installed('jupynium.nvim')
     function! s:jupynium_run(...)
         let jupynium_urls = get(g:, 'jupynium_urls', [g:jupynium_url])
         if len(jupynium_urls) == 1
-            let t:jupynium_url = jupynium_urls[0]
+            let tLjupynium_url = jupynium_urls[0]
         else
             let t:jupynium_url = ChooseOne(jupynium_urls, 'Choose a jupynium url', 1)
         endif
@@ -675,12 +675,12 @@ if Installed('jupynium.nvim')
         nnoremap <buffer><silent>qb <Cmd>JupyniumScrollToCell<Cr>
         nnoremap <buffer><silent>qu <Cmd>JupyniumScrollUp<Cr>
         nnoremap <buffer><silent>qd <Cmd>JupyniumScrollDown<Cr>
-        nnoremap <buffer><silent>qc <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        xnoremap <buffer><silent>qc <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        nnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        xnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
         nnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
         xnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
         nnoremap <buffer><silent>qf <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
-        nnoremap <buffer><silent><M-M> <Cmd>JupyniumCommands<Cr>
+        nnoremap <buffer><silent>qc <Cmd>JupyniumCommands<Cr>
     endfunction
     au FileType python,r call s:map()
 endif
