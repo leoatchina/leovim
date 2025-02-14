@@ -85,7 +85,6 @@ endif
 inoremap <buffer><< <-
 inoremap <buffer>>> ->
 inoremap <buffer>?? %>%
-inoremap <buffer>!! !=
 inoremap <buffer><M-e> # %%
 inoremap <buffer><M-d> # STEP
 inoremap <buffer><M-m> # In[]<Left>
