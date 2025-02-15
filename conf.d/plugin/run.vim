@@ -366,7 +366,7 @@ if has('nvim') || v:version >= 801
     nnoremap <leader>r<Space> :AsyncTaskCommon<Cr>
     " asynctask shortcuts
     command! AsyncTaskCommands call FzfCallCommands('AsyncTaskCommands', 'AsyncTask')
-    nnoremap <leader>rc :AsyncTaskCommands<Cr>
+    nnoremap <leader>r: :AsyncTaskCommands<Cr>
     nnoremap <leader>rm :AsyncTaskMacro<Cr>
     nnoremap <leader>re :AsyncTaskEdit<Space>
     " run shortcuts

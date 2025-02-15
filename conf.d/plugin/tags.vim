@@ -117,7 +117,7 @@ if Planned('vim-gutentags')
     nnoremap <leader>g<Tab> :GutentagsDelTags<Cr>
     nnoremap <leader>g<Space> :GutentagsDelTagsAndUpdate<Cr>
     command! GutentagsCommands call FzfCallCommands('GutentagsCommands', 'Gutentags')
-    nnoremap <leader>gc :GutentagsCommands<Cr>
+    nnoremap <leader>g: :GutentagsCommands<Cr>
 endif
 " --------------------------
 " gtags

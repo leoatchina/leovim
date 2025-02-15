@@ -124,7 +124,7 @@ nnoremap <silent><M-l>r :CocRestart<Cr><Cr>
 nnoremap <silent><M-V>  :CocFzfList yank<Cr>
 nnoremap <silent><M-l>e :CocFzfList extensions<Cr>
 nnoremap <silent><M-l>M :CocFzfList marketplace<Cr>
-nnoremap <silent><M-l>c :CocFzfList commands<Cr>
+nnoremap <silent><M-l>: :CocFzfList commands<Cr>
 nnoremap <silent><M-l>. :call CocAction('repeatCommand')<Cr>
 nnoremap <silent><M-l>; :CocNext<Cr>
 nnoremap <silent><M-l>, :CocPrev<Cr>

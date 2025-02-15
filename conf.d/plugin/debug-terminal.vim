@@ -260,8 +260,8 @@ if Planned('vimspector')
     nnoremap <M-d><M-r> :VimspectorRenameSession<Space>
     nnoremap <M-d><M-s> :VimspectorSwitchToSession<Space>
     command! VimspectorCommands call FzfCallCommands('VimspectorCommands', 'Vimspector')
-    nnoremap <M-d>v :VimspectorCommands<Cr>
-    nnoremap <M-d>V :call vimspector#
+    nnoremap <M-d>: :VimspectorCommands<Cr>
+    nnoremap <M-d>v :call vimspector#
     " breakpoint
     nnoremap <silent><M-d>c :call vimspector#ClearBreakpoints()<Cr>
     nnoremap <silent><M-d>f :call vimspector#AddFunctionBreakpoint('')<left><left>
@@ -676,12 +676,12 @@ if Installed('jupynium.nvim')
         nnoremap <buffer><silent>qb <Cmd>JupyniumScrollToCell<Cr>
         nnoremap <buffer><silent>qu <Cmd>JupyniumScrollUp<Cr>
         nnoremap <buffer><silent>qd <Cmd>JupyniumScrollDown<Cr>
-        nnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        xnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        nnoremap <buffer><silent>qc <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        xnoremap <buffer><silent>qc <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
         nnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
         xnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
         nnoremap <buffer><silent>qf <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
-        nnoremap <buffer><silent>qc <Cmd>JupyniumCommands<Cr>
+        nnoremap <buffer><silent>q: <Cmd>JupyniumCommands<Cr>
     endfunction
     au FileType python,r call s:map()
 endif

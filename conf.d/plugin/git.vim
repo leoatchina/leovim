@@ -141,7 +141,7 @@ elseif PlannedLeaderf()
 else
     command! GCommands call FzfCallCommands('GCommands', 'G', ['Gutentag', 'Grep', 'Get'])
 endif
-nnoremap <silent><M-g>c :GCommands<Cr>
+nnoremap <silent><M-g>: :GCommands<Cr>
 " ---------------------------------
 " lazygit intergrated
 " ---------------------------------
@@ -218,5 +218,5 @@ if has('nvim') || has('patch-8.0.902')
     PlugAddOpt 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
-    nnoremap \<Cr> :SignifyCommands<Cr>
+    nnoremap \: :SignifyCommands<Cr>
 endif
