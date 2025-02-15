@@ -21,6 +21,7 @@ endif
 " coc-global-extensions
 " ------------------------
 let g:coc_global_extensions = [
+            \ 'coc-explorer',
             \ 'coc-lists',
             \ 'coc-marketplace',
             \ 'coc-snippets',
@@ -34,6 +35,7 @@ let g:coc_global_extensions = [
             \ 'coc-vimlsp',
             \ 'coc-dictionary',
             \ 'coc-pyright',
+            \ 'coc-pyright',
             \ ]
 if UNIX()
     let g:coc_global_extensions += ['coc-lua']
@@ -41,7 +43,7 @@ elseif WINDOWS()
     let g:coc_global_extensions += ['coc-powershell']
 endif
 if has('nvim')
-    let g:coc_global_extensions += ['coc-explorer', 'coc-symbol-line']
+    let g:coc_global_extensions += ['coc-symbol-line']
 endif
 if Require('web')
     let g:coc_global_extensions += [
@@ -68,9 +70,7 @@ if Require('ccls') && g:ccls_exe != ''
                 \ "initializationOptions": {
                 \ "cache": {
                 \ "directory": $HOME . "/.leovim.d/ccls"
-                \ }
-                \ }
-                \ })
+                \ }}})
 endif
 if Require('R') && g:R_exe != ''
     let g:coc_global_extensions += ['coc-r-lsp']

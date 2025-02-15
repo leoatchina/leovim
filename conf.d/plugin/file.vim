@@ -120,9 +120,6 @@ nnoremap <leader>E :tabe <C-r>=GetRootDir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
-if v:version >= 802 || has('nvim')
-    source $CFG_DIR/fern.vim
-endif
 if Installed('vim-floaterm')
     function! s:floaterm_float(prg)
         let prg = a:prg
@@ -149,8 +146,6 @@ elseif executable('yazi') && g:has_popup_floating && (UNIX() || WINDOWS() && has
 elseif executable('ranger') && g:has_popup_floating
     command! FloatermRanger call s:floaterm_float('ranger')
     nnoremap <silent><nowait><leader>e :FloatermRanger<Cr>
-elseif Installed('vim-fern')
-    nnoremap <silent><nowait><leader>e :Fern . -reveal=%<Cr>
 endif
 " -----------------------------------
 " using system file explorer
