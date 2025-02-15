@@ -1,7 +1,7 @@
 PlugAddOpt 'vim-sidebar-manager'
 let g:sidebars = {}
 function! s:check_buf_ft(name, nr) abort
-    return getwinvar(a:nr, '&filetype') ==# tolower(a:name) || bufname(winbufnr(a:nr)) ==# tolower(a:name)
+    return getwinvar(a:nr, '&filetype') ==# a:name || bufname(winbufnr(a:nr)) ==# a:name
 endfunction
 " --------------------------
 " symbol
@@ -82,27 +82,40 @@ endif
 " --------------------------
 if Installed('coc.nvim')
     let g:tree_browser = 'coc-explore'
+    function s:coc_explorer_open() abort
+        CocCommand explorer
+        sleep 50m
+        wincmd w
+    endfunction
+    command! CocExplorerOpen call s:coc_explorer_open()
+    function! s:check_coc_explorer(nr)
+        return s:check_buf_ft('coc-explorer', a:nr)
+    endfunction
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_coc_explorer'),
-                \ 'open': 'CocCommand explorer',
+                \ 'open': 'CocExplorerOpen',
                 \ 'close': 'CocCommand explorer'
                 \ }
 elseif Installed('nvim-tree.lua')
     let g:loaded_netrw = 1
     let g:loaded_netrwPlugin = 1
     lua require("nvim-tree").setup()
+    function! s:nvim_tree_open_stay()
+        NvimTreeOpen
+        sleep 50m
+        wincmd w
+    endfunction
+    command! NvimTreeOpenStay call s:nvim_tree_open_stay()
     function! s:check_nvim_tree(nr)
         return s:check_buf_ft('NvimTree', a:nr)
     endfunction
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_nvim_tree'),
-                \ 'open': 'NvimTreeOpen',
+                \ 'open': 'NvimTreeOpenStay',
                 \ 'close': 'NvimTreeClose'
                 \ }
-    nnoremap <leader>fr <Cmd>NvimTreeFocus<Cr>
-    nnoremap <leader>f. <Cmd>NvimTreeFindFileToggle<Cr>
 else
     let g:tree_browser = 'netrw'
     let g:netrw_nogx = 1
