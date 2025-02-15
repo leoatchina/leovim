@@ -106,18 +106,6 @@ git clone --depth 1 https://github.com/ZSaberLv0/ZFVimIgnore.git
 git clone --depth 1 https://github.com/ZSaberLv0/ZFVimBackup.git
 git clone --depth 1 https://github.com/ZSaberLv0/ZFVimDirDiff.git
 
-# fern
-rm -rf vim-fern* fern-*
-rm -rf vim-nerdfont vim-glyph-palette
-git clone --depth 1 https://github.com/lambdalisue/vim-fern
-git clone --depth 1 https://github.com/lambdalisue/vim-fern-git-status
-git clone --depth 1 https://github.com/lambdalisue/vim-fern-hijack
-git clone --depth 1 https://github.com/lambdalisue/vim-fern-renderer-nerdfont
-git clone --depth 1 https://github.com/lambdalisue/vim-nerdfont
-git clone --depth 1 https://github.com/lambdalisue/vim-glyph-palette
-git clone --depth 1 https://github.com/LumaKernel/fern-mapping-fzf.vim
-git clone --depth 1 https://github.com/yuki-yano/fern-preview.vim
-
 # delete files
 find . -type f | grep -i \.jpg$ | xargs rm -f
 find . -type f | grep -i \.png$ | xargs rm -f
