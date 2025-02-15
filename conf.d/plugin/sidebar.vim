@@ -82,22 +82,27 @@ endif
 " --------------------------
 if Installed('coc.nvim')
     let g:tree_browser = 'coc-explore'
-    function s:coc_explorer_open() abort
-        CocCommand explorer
-        sleep 50m
-        wincmd w
-    endfunction
-    command! CocExplorerOpen call s:coc_explorer_open()
-    function! s:check_coc_explorer(nr)
-        return s:check_buf_ft('coc-explorer', a:nr)
-    endfunction
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_coc_explorer'),
-                \ 'open': 'CocExplorerOpen',
+                \ 'open': 'CocCommand explorer',
                 \ 'close': 'CocCommand explorer'
                 \ }
-elseif Installed('nvim-tree')
+elseif Installed('nvim-tree.lua')
+    let g:loaded_netrw = 1
+    let g:loaded_netrwPlugin = 1
+    lua require("nvim-tree").setup()
+    function! s:check_nvim_tree(nr)
+        return s:check_buf_ft('NvimTree', a:nr)
+    endfunction
+    let g:sidebars.tree_browser = {
+                \ 'position': 'left',
+                \ 'check_win': function('s:check_nvim_tree'),
+                \ 'open': 'NvimTreeOpen',
+                \ 'close': 'NvimTreeClose'
+                \ }
+    nnoremap <leader>fr <Cmd>NvimTreeFocus<Cr>
+    nnoremap <leader>f. <Cmd>NvimTreeFindFileToggle<Cr>
 else
     let g:tree_browser = 'netrw'
     let g:netrw_nogx = 1
@@ -125,14 +130,6 @@ else
         wincmd p
     endfunction
     command! NetrwOpen call NetrwOpen()
-    function! NetrwToggle()
-        if exists("t:netrw_winnr")
-            NetrwClose
-        else
-            NetrwOpen
-        endif
-    endfunction
-    command! NetrwToggle call NetrwToggle()
     function! s:check_netrw(nr) abort
         return s:check_buf_ft('netrw', a:nr)
     endfunction

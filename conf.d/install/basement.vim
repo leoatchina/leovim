@@ -140,6 +140,8 @@ if g:complete_engine == 'cmp'
     if Require('neoconf')
         PlugAdd 'folke/neoconf.nvim'
     endif
+    " nvim-tree
+    PlugAdd 'nvim-tree/nvim-tree.lua'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
