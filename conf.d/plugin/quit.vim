@@ -1,15 +1,15 @@
 let g:autoclose_ft_buf = [
-            \ 'netrw', 'coc-explorer', 'neo-tree', 'fern',
+            \ 'netrw', 'coc-explorer', 'neo-tree', 'fern', 'nvimtree',
             \ 'qf', 'preview', 'loclist',
             \ 'vista', 'tagbar', 'leaderf',
             \ 'help', 'gitcommit', 'man', 'fugitive', 'fugtiveblame', 'gitcommit',
             \ 'terminal', 'floaterm', 'popup'
             \ ]
 function! s:autoclose(...) abort
-    let ft = getbufvar(winbufnr(winnr()), '&ft')
-    let bt = getbufvar(winbufnr(winnr()), '&bt')
+    let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
+    let bt = tolower(getbufvar(winbufnr(winnr()), '&bt'))
     if winnr("$") <= 1 && a:0 && a:1 || !a:0 || a:1 == 0
-        return index(g:autoclose_ft_buf, ft) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
+        return index(g:autoclose_ft_buf, (ft)) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
     else
         return 0
     endif
