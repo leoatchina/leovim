@@ -4,7 +4,6 @@ if Installed('vim-quickui')
     au BufNew,BufEnter,BufNewFile,BufRead * nnoremap gx :call quickui#tools#python_help("")<Cr>
 endif
 inoremap <buffer>>> ->
-inoremap <buffer>!! !=
 inoremap <buffer><M-e> # %%
 inoremap <buffer><M-d> # STEP
 inoremap <buffer><M-m> # In[]<Left>
@@ -47,4 +46,6 @@ function! s:SetPython3Host()
 endfunction
 " 当打开Python文件时自动调用
 command! SetPython3Host call s:SetPython3Host()
-nnoremap <buffer><silent><M-M> :SetPython3Host<Cr>
+if !hasmapto('<M-M>')
+    nnoremap <buffer><silent><M-M> :SetPython3Host<Cr>
+endif

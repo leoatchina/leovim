@@ -1,6 +1,5 @@
-nnoremap _ -
 nnoremap <silent>- :call preview#errmsg("Please intalled debug plugins.")<Cr>
-inoremap <M--> ->
+nnoremap _ -
 inoremap !! !=
 " --------------------
 " J show diag
@@ -580,6 +579,7 @@ function! s:bind_keymap(mapvar, command) abort
     if !Planned('vimspector') && !Planned('nvim-dap') || a:mapvar ==# '<M-{>' || a:mapvar ==# '<M-}>'
         execute printf('nnoremap <silent> %s :%s<CR>', a:mapvar, a:command)
     endif
+    execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
     execute printf('tnoremap <silent>%s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
 endfunction
 call s:bind_keymap('<M-{>', 'FloatermPrev')
@@ -681,7 +681,7 @@ if Installed('jupynium.nvim')
         nnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
         xnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
         nnoremap <buffer><silent>qf <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
-        nnoremap <buffer><silent>q: <Cmd>JupyniumCommands<Cr>
+        nnoremap <buffer><silent><M-M> <Cmd>JupyniumCommands<Cr>
     endfunction
     au FileType python,r call s:map()
 endif

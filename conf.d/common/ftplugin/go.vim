@@ -18,4 +18,3 @@ if Installed('coc.nvim')
     nmap <buffer>qtx :CocCommand go.tags.clear<cr>
 endif
 inoremap <buffer>:: :=
-inoremap <buffer>!! ! nnoremap <buffer><silent><M-?> :GoImpl<Cr>=
