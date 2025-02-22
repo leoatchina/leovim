@@ -9,9 +9,6 @@ inoremap <buffer><M-d> # STEP
 inoremap <buffer><M-m> # In[]<Left>
 " 检测项目目录中的venv并设置Python路径
 function! s:SetPython3Host()
-    if exists("g:python3_host_prog")
-        return
-    endif
     let l:root_dir = GetRootDir()
     let l:venv_path = ''
     " set names
@@ -40,8 +37,6 @@ function! s:SetPython3Host()
             let g:ale_python_flake8_executable = l:python_prog
             call preview#cmdmsg("Set g:python_prog to " . g:python_prog, 1)
         endif
-    elseif executable('python3')
-        let g:python3_host_prog = exepath('python3')
     endif
 endfunction
 " 当打开Python文件时自动调用
