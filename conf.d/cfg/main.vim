@@ -88,19 +88,36 @@ nnoremap <M-h>R :echo GetRootDir()<Cr>
 " python_support
 " --------------------------
 function! s:python_prog()
-    try
-        if executable('python3')
-            return exepath('python3')
-        elseif executable('python')
-            return exepath('python')
-        else
-            return ""
+    let l:root_dir = GetRootDir()
+    let l:venv_path = ''
+    let l:venv_names = ['venv', '.venv', 'env', '.env']
+    for l:venv_name in l:venv_names
+        let l:possible_venv = l:root_dir . '/' . l:venv_name
+        if isdirectory(l:possible_venv)
+            let l:venv_path = l:possible_venv
+            break
         endif
-    catch
+    endfor
+    " set python_prog path if venv_path
+    if !empty(l:venv_path)
+        if has('win32') || has('win64')
+            let l:python_prog = l:venv_path . '/Scripts/python.exe'
+        else
+            let l:python_prog = l:venv_path . '/bin/python'
+        endif
+    endif
+    if filereadable(get(l:, "python_prog", ""))
+        let g:ale_python_pylint_executable = l:python_prog
+        let g:ale_python_flake8_executable = l:python_prog
+        return l:python_prog
+    elseif executable('python3')
+        return exepath('python3')
+    elseif executable('python')
+        return exepath('python')
+    else
         return ""
-    endtry
+    endif
 endfunction
-" NOTE: python_prog 和 python3_host_prog(neovim才有) 不是一个东西
 let g:python_prog = get(g:, 'python_prog', s:python_prog())
 if has('nvim')
     let g:python3_host_prog = get(g:, 'python3_host_prog', g:python_prog)
@@ -108,7 +125,7 @@ endif
 if WIN32UNIX()
     let g:python_version = 0
 else
-    " NOTE, 不能使用pyxeval/py3eval/pyeval, 否则neovimc没有pip安装相关包时，执行会出错.
+    " NOTE, 不能使用pyxeval/py3eval/pyeval, 否则neovim 没有pip安装相关包时，执行会出错.
     try
         let py_version = Execute('py3 print(sys.version)')
     catch
