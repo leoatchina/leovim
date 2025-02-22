@@ -148,6 +148,9 @@ command! FloatermList call s:floaterm_list()
 tnoremap <silent><C-\><C-f> <C-\><C-n>:FloatermList<Cr>
 inoremap <silent><C-\><C-f> <C-o>:FloatermList<Cr>
 nnoremap <silent><C-\><C-f> :FloatermList<Cr>
+tnoremap <silent><C-/> <C-\><C-n>:FloatermList<Cr>
+inoremap <silent><C-/> <C-o>:FloatermList<Cr>
+nnoremap <silent><C-/> :FloatermList<Cr>
 " ---------------------------------
 " debug: load_json
 " ---------------------------------
@@ -614,12 +617,12 @@ nnoremap <silent><M-e>a :FloatermReplSendAll!<Cr>
 nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
 xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
 " mark print send
-nnoremap <silent><M-e><M-m> :FloatermReplMark<Cr>
-xnoremap <silent><M-e><M-m> :FloatermReplMark!<Cr>
-nnoremap <silent><M-e><M-l> :FloatermReplSendMark<Cr>
-nnoremap <silent><M-e><M-r> :FloatermReplQuickuiMark<Cr>
+nnoremap <silent><M-e>m :FloatermReplMark<Cr>
+xnoremap <silent><M-e>m :FloatermReplMark!<Cr>
+nnoremap <silent><M-e>s :FloatermReplSendMark<Cr>
+nnoremap <silent><M-e>q :FloatermReplQuickuiMark<Cr>
 " clear
-nnoremap <silent><M-e><M-c> :FloatermReplSendClear<Cr>
+nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
 " ---------------------------------------
 " jupynvim
 " ---------------------------------------
@@ -676,10 +679,10 @@ if Installed('jupynium.nvim')
         nnoremap <buffer><silent>qb <Cmd>JupyniumScrollToCell<Cr>
         nnoremap <buffer><silent>qu <Cmd>JupyniumScrollUp<Cr>
         nnoremap <buffer><silent>qd <Cmd>JupyniumScrollDown<Cr>
-        nnoremap <buffer><silent>qc <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        xnoremap <buffer><silent>qc <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
         nnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
         xnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
+        nnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        xnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
         nnoremap <buffer><silent>qf <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
         nnoremap <buffer><silent><M-M> <Cmd>JupyniumCommands<Cr>
     endfunction
