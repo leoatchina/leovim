@@ -51,6 +51,39 @@ nnoremap <M-z> :set nowrap! nowrap?<Cr>
 if has('nvim')
     nnoremap <M-k>U :UpdateRemotePlugins<Cr>
 endif
+" ------------------------------
+" file functions
+" ------------------------------
+function! FileDir(file) abort
+    return Expand(fnamemodify(a:file , ':p:h'))
+endfunction
+function! FilePath(file) abort
+    return Expand(fnamemodify(a:file , ':h'))
+endfunction
+function! FileReadonly()
+    return &readonly && &filetype !=# 'help' ? 'RO' : ''
+endfunction
+function! GetRootDir(...)
+    let init_dir = Expand('%:p:h')
+    let curr_dir = init_dir
+    while 1
+        if WINDOWS() && curr_dir[-2:-1] == ':/' || UNIX() && curr_dir ==# '/'
+            return init_dir
+        endif
+        for each in g:root_patterns + g:root_files
+            let chk_path = curr_dir . '/' . each
+            if isdirectory(chk_path) || filereadable(chk_path)
+                if a:0 && a:1 > 0
+                    return substitute(curr_dir, '/', '\', 'g')
+                else
+                    return curr_dir
+                endif
+            endif
+        endfor
+        let curr_dir = fnamemodify(curr_dir, ":h")
+    endwhile
+endfunction
+nnoremap <M-h>R :echo GetRootDir()<Cr>
 " --------------------------
 " python_support
 " --------------------------
