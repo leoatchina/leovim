@@ -32,7 +32,7 @@ nnoremap <M-j><M-d> :ZFBackupListDir<Cr>
 nnoremap <M-j><M-m> :ZFBackupRemove<Cr>
 nnoremap <M-j><M-r> :ZFBackupRemoveDir<Cr>
 function! s:zfbackup_cleanup() abort
-    let confirm = ChooseOne(['yes', 'no'], "Cleanup all ZFBackup files")
+    let confirm = ChooseOne(['yes', 'no'], "Cleanup all ZFBackup files?")
     if confirm == 'yes'
         if WINDOWS()
             exec printf('!del %s\*.* /a /f /q', ZFBackup_backupDir())

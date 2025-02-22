@@ -79,8 +79,10 @@ function! ChooseOne(lst, ...) abort
     let cmds = a:lst
     if len(cmds) == 0
         return ""
+    elseif len(cmds) > 9
+        let cmds=cmds[:8]
     endif
-    if a:0
+    if a:0 && a:1 != ''
         let title = a:1
     else
         let title = "Please choose one."
@@ -89,9 +91,6 @@ function! ChooseOne(lst, ...) abort
         let add_num = 1
     else
         let add_num = 0
-    endif
-    if len(cmds) > 9
-        let cmds=cmds[:8]
     endif
     let cnt = 0
     let lines = []

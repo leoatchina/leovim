@@ -51,3 +51,56 @@ nnoremap <leader>sc :SClose<Cr>
 nnoremap <leader>ss :SSave<Space>
 nnoremap <leader>sl :SLoad<Space>
 nnoremap <leader>sd :SDelete<Space>
+" --------------------------------
+" Session management with fzf
+" --------------------------------
+if PlannedFzf()
+    function! s:session_list()
+        let lines = split(globpath(g:startify_session_dir, '*'), '\n')
+        if len(lines) > 1
+            return lines[1:]
+        else
+            return lines
+        endif
+    endfunction
+    function! s:session_load(lines)
+        if len(a:lines) == 0
+            return
+        endif
+        execute 'SLoad ' . fnamemodify(a:lines[0], ':t')
+    endfunction
+    function! s:session_delete(lines)
+        if len(a:lines) == 0
+            return
+        endif
+        let confirm = ChooseOne(['yes', 'no'], "Delete selected session(s)?")
+        if confirm == 'yes'
+            for session in a:lines
+                call startify#session_delete(1, fnamemodify(session, ':t'))
+            endfor
+        endif
+    endfunction
+    function! s:handle_key(lines, key)
+        if a:key ==# 'enter'
+            call s:session_load(a:lines)
+        elseif a:key ==# 'ctrl-x' || a:key ==# 'x' || a:key ==# 'X'
+            call s:session_delete(a:lines)
+        endif
+    endfunction
+    function! s:fzf_startify_session()
+        let sessions = s:session_list()
+        let opts = {
+            \ 'source': sessions,
+            \ 'sink*': { lines -> s:handle_key(lines[1:], lines[0]) },
+            \ 'options': [
+            \   '--prompt', 'Sessions> ',
+            \   '--multi',
+            \   '--bind', 'tab:toggle',
+            \   '--expect', 'enter,ctrl-x,x,X'
+            \ ],
+            \ }
+        call fzf#run(fzf#wrap(opts))
+    endfunction
+    command! FzfSession call s:fzf_startify_session()
+    nnoremap <silent> <Leader>S :FzfSession<Cr>
+endif

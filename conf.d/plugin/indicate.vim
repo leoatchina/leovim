@@ -92,7 +92,7 @@ if get(g:, 'leovim_whichkey', 1)
         nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
         xnoremap <M-t> :WhichKeyVisual "\<M-t\>"<Cr>
     endif
-    if g:has_terminal
+    if Installed('vim-floaterm')
         nnoremap <M-e> :WhichKey "\<M-e\>"<Cr>
         xnoremap <M-e> :WhichKeyVisual "\<M-e\>"<Cr>
     endif
@@ -102,12 +102,9 @@ if get(g:, 'leovim_whichkey', 1)
     endif
     if Planned('vim-fugitive')
         au FileType fugitive nnoremap <buffer>g :WhichKey "g"<Cr>
-        au FileType fugitive nnoremap <buffer>c :WhichKey "c"<Cr><Cr>
+        au FileType fugitive nnoremap <buffer>c :WhichKey "c"<Cr>
         au FileType fugitive nnoremap <buffer>d :WhichKey "d"<Cr>
         au FileType fugitive nnoremap <buffer>r :WhichKey "r"<Cr>
-    endif
-    if Planned('gv.vim')
-        au FileType GV nnoremap <buffer><C-c>
     endif
 endif
 " --------------------------
