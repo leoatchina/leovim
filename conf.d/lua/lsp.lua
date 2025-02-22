@@ -349,7 +349,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       map(nx, "<leader>C", require("lsp").codelens_toggle, opts_echo)
       map(nx, "<leader>a", vim.lsp.codelens.run, opts_echo)
     end
-    map(nx, "<leader>R", require('symbol-usage').toggle, opts_echo)
+    map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
     -- lspimport for python and pyright
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'python',

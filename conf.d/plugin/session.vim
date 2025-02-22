@@ -83,12 +83,20 @@ if PlannedFzf()
     function! s:handle_key(lines, key)
         if a:key ==# 'enter'
             call s:session_load(a:lines)
-        elseif a:key ==# 'ctrl-x' || a:key ==# 'x' || a:key ==# 'X'
+        elseif a:key ==# 'ctrl-x'
             call s:session_delete(a:lines)
         endif
     endfunction
     function! s:fzf_startify_session()
         let sessions = s:session_list()
+        let header = "
+        \ Sessions Management:\n
+        \ --------------------------------\n
+        \ <Enter>   Load selected session\n
+        \ <Tab>     Toggle selection mode\n
+        \ <Ctrl-x>  Delete selected session(s)\n
+        \ --------------------------------\n"
+
         let opts = {
             \ 'source': sessions,
             \ 'sink*': { lines -> s:handle_key(lines[1:], lines[0]) },
@@ -96,11 +104,12 @@ if PlannedFzf()
             \   '--prompt', 'Sessions> ',
             \   '--multi',
             \   '--bind', 'tab:toggle',
-            \   '--expect', 'enter,ctrl-x,x,X'
+            \   '--expect', 'enter,ctrl-x',
+            \   '--header', header,
             \ ],
             \ }
         call fzf#run(fzf#wrap(opts))
     endfunction
     command! FzfSession call s:fzf_startify_session()
-    nnoremap <silent> <Leader>S :FzfSession<Cr>
+    nnoremap <silent> <Leader>sf :FzfSession<Cr>
 endif
