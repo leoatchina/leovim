@@ -182,6 +182,7 @@ local function get_lsp_loc(value)
     col = col
   }
 end
+-- main action
 function M.LspAction(method, open_action)
   local handler_dict = {
     definition = 'textDocument/definition',
@@ -193,68 +194,48 @@ function M.LspAction(method, open_action)
   local handler = handler_dict[method]
   local params = vim.tbl_extend('force', vim.lsp.util.make_position_params(), method == 'references' and { context = { includeDeclaration = false } } or {})
   local results = vim.lsp.buf_request_sync(0, handler, params, 500)
-  if type(results) == 'table' and next(results) then
-    results = results[1]
-    if results == nil or next(results) == nil then
-      vim.api.nvim_set_var("lsp_found", 0)
-      return
+  if type(results) ~= 'table' then
+    vim.api.nvim_set_var("lsp_found", 0)
+    return
+  end
+  _, results = next(results)
+  if results == nil or results['result'] == nil then
+    vim.api.nvim_set_var("lsp_found", 0)
+    return
+  end
+  local qflist = {}
+  local result = results['result']
+  local add_qf = #result > 1 or open_action == 'list'
+  for _, value in pairs(result) do
+    if value == nil then
+      goto continue
     end
-    local qflist = {}
-    for key, values in pairs(results) do
-      if key == 'error' then
-        vim.fn['preview#errmsg'](values['message'])
-        vim.api.nvim_set_var("lsp_found", 0)
+    local loc = get_lsp_loc(value)
+    if loc == nil then
+      goto continue
+    else
+      local filename = loc.filename:gsub("file://", "")
+      if add_qf then
+        local text = vim.fn.readfile(filename)[loc.lnum]
+        table.insert(qflist , {
+          filename = filename,
+          lnum = loc.lnum,
+          col = loc.col,
+          text = text
+        })
+      else
+        vim.api.nvim_set_var("lsp_found", 1)
+        vim.api.nvim_command(open_action .. ' ' .. filename)
+        vim.api.nvim_win_set_cursor(0, {loc.lnum, loc.col})
         return
-      elseif key == 'result' then
-        if values == nil then
-          vim.api.nvim_set_var("lsp_found", 0)
-          return
-        elseif #values > 1 or open_action == 'list' then
-          for _, value in pairs(values) do
-            if value == nil then
-              goto continue
-            end
-            local loc = get_lsp_loc(value)
-            if loc == nil then
-              goto continue
-            else
-              local filename = loc.filename:gsub("file://", "")
-              local text = vim.fn.readfile(filename)[loc.lnum]
-              table.insert(qflist , {
-                filename = filename,
-                lnum = loc.lnum,
-                col = loc.col,
-                text = text
-              })
-            end
-            ::continue::
-          end
-        else
-          local value = values[1]
-          if value == nil then
-            vim.api.nvim_set_var("lsp_found", 0)
-            return
-          end
-          local loc = get_lsp_loc(value)
-          if loc == nil then
-            vim.api.nvim_set_var("lsp_found", 0)
-            return
-          end
-          vim.api.nvim_set_var("lsp_found", 1)
-          vim.api.nvim_command(open_action .. ' ' .. loc.filename)
-          vim.api.nvim_win_set_cursor(0, {loc.lnum, loc.col})
-          return
-        end
       end
     end
-    if next(qflist) then
-      --  NOTE: 因为要开qflist的原因, 不能return 0/1
-      vim.api.nvim_set_var("lsp_found", 1)
-      vim.fn.setqflist(qflist)
-      vim.cmd('copen')
-    else
-      vim.api.nvim_set_var("lsp_found", 0)
-    end
+    ::continue::
+  end
+  if next(qflist) then
+    vim.api.nvim_set_var("lsp_found", 1)
+    vim.fn.setqflist(qflist)
+    vim.cmd('copen')
   else
     vim.api.nvim_set_var("lsp_found", 0)
   end
