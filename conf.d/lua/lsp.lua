@@ -371,6 +371,9 @@ require("winbar").setup({
     "fugitive",
     "vim-plug",
     "qf",
+    "NvimTree",
+    "fern",
+    "coc-explorer"
   },
 })
 autocmd("FileType", {
@@ -378,6 +381,7 @@ autocmd("FileType", {
     "fzf",
     "leaderf",
     "fern",
+    "NvimTree",
     "vista",
     "vista_kind",
     "vista_toc",

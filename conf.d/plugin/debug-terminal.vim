@@ -579,8 +579,8 @@ au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteW
 " map Floaterm keys
 " -------------------------------------
 function! s:bind_keymap(mapvar, command) abort
-    if !Planned('vimspector') && !Planned('nvim-dap') || a:mapvar ==# '<M-{>' || a:mapvar ==# '<M-}>'
-        execute printf('nnoremap <silent> %s :%s<CR>', a:mapvar, a:command)
+    if !hasmapto(a:mapvar)
+        execute printf('nnoremap <silent>%s :%s<CR>', a:mapvar, a:command)
     endif
     execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
     execute printf('tnoremap <silent>%s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
