@@ -306,7 +306,7 @@ function! s:lsp_tag_search(method, ...) abort
             if symbol_found
                 call s:settagstack(winnr, tagname, pos)
                 call feedkeys("zz", "n")
-                echo "found by coc " . jump_command | sleep 2
+                echo "found by coc " . jump_command
             endif
         endif
     " --------------------------
@@ -319,7 +319,7 @@ function! s:lsp_tag_search(method, ...) abort
         if symbol_found
             call s:settagstack(winnr, tagname, pos)
             call feedkeys("zz", "n")
-            echo "found by vim.lsp " . method | sleep 2
+            echo "found by vim.lsp " . method
         endif
     else
         let symbol_found = 0
