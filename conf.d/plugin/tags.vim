@@ -253,20 +253,18 @@ function! s:lsp_tag_search(method, ...) abort
             endtry
         endif
         return
-    else
-        if index(['definition', 'references', 'type_defition', 'implementation', 'declaration', 'tags'], method) < 0
-            let method = 'definition'
-        endif
+    elseif index(['definition', 'references', 'type_defition', 'implementation', 'declaration', 'tags'], method) < 0
+        let method = 'definition'
     endif
     " --------------------------
     " open_position
     " --------------------------
     if a:0 == 1
         let open_action = a:1
+        if index(['edit', 'tabe', 'split', 'vsplit', 'list'], open_action) < 0
+            let open_action = 'edit'
+        endif
     else
-        let open_action = 'edit'
-    endif
-    if index(['edit', 'tabe', 'split', 'vsplit', 'list'], open_action) < 0
         let open_action = 'edit'
     endif
     " --------------------------
