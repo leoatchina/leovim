@@ -188,12 +188,7 @@
   {
     "key": "alt+/",
     "command": "references-view.findReferences",
-    "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
-  },
-  {
-    "key": "shift+alt+f12",
-    "command": "-references-view.findReferences",
-    "when": "editorHasReferenceProvider"
+    "when": "editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
   },
   // comment
   {
