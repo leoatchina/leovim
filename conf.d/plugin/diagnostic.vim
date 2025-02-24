@@ -40,15 +40,7 @@ if Installed('coc.nvim')
         endfunction
         command! Diagnostics call s:Diagnostics()
         nnoremap <silent><leader>d :Diagnostics<Cr>
-        if WINDOWS()
-            if has('nvim')
-                nnoremap <silent><leader>D :CocDiagnostics<CR>
-            else
-                nnoremap <silent><leader>D :CocFzfList diagnostics<CR>
-            endif
-        else
-            nnoremap <silent><leader>D :CocFzfList diagnostics<CR>
-        endif
+        nnoremap <silent><leader>D :CocFzfList diagnostics<CR>
         nmap <silent>;d <Plug>(coc-diagnostic-next)
         nmap <silent>,d <Plug>(coc-diagnostic-prev)
         nmap <silent>;e <Plug>(coc-diagnostic-next-error)
