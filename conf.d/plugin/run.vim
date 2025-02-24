@@ -370,11 +370,12 @@ if has('nvim') || v:version >= 801
     nnoremap <leader>rm :AsyncTaskMacro<Cr>
     nnoremap <leader>re :AsyncTaskEdit<Space>
     " run shortcuts
-    nnoremap <leader>rr :AsyncTask project-run<Cr>
-    nnoremap <leader>rf :AsyncTask project-finalize<Cr>
-    nnoremap <leader>rt :AsyncTask project-test<Cr>
+    nnoremap <leader>ri :AsyncTask project-init<Cr>
     nnoremap <leader>rb :AsyncTask project-build<Cr>
+    nnoremap <leader>rc :AsyncTask project-compile<Cr>
     nnoremap <leader>rd :AsyncTask project-debug<Cr>
+    nnoremap <leader>rr :AsyncTask project-run<Cr>
+    nnoremap <leader>rt :AsyncTask project-test<Cr>
     nnoremap <leader>r. :AsyncTaskLast<Cr>
     function! s:asynctasks_profile_loop() abort
         if get(g:, 'asynctasks_profile', '') == ''
