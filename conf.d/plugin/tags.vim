@@ -253,7 +253,7 @@ function! s:lsp_tag_search(method, ...) abort
             endtry
         endif
         return
-    elseif index(['definition', 'references', 'type_defition', 'implementation', 'declaration', 'tags'], method) < 0
+    elseif index(['definition', 'declaration', 'type_definition', 'implementation', 'references', 'tags'], method) < 0
         let method = 'definition'
     endif
     " --------------------------
@@ -289,10 +289,10 @@ function! s:lsp_tag_search(method, ...) abort
     if Installed('coc.nvim') && lsp
         let commands_dict = {
                     \ 'definition' : 'jumpDefinition',
-                    \ 'references' : 'jumpReferences',
-                    \ 'type_defition' : 'jumpTypeDefinition',
-                    \ 'implementation' : 'jumpImplementation',
                     \ 'declaration' : 'jumpDeclaration',
+                    \ 'type_definition' : 'jumpTypeDefinition',
+                    \ 'implementation' : 'jumpImplementation',
+                    \ 'references' : 'jumpReferences',
                     \ }
         let jump_command = commands_dict[method]
         if open_action == 'list'

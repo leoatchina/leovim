@@ -23,8 +23,6 @@ function! UpdateBufGit()
     else
         let idx = 0
     endif
-
-
     if g:git_version > 1.8
         " 确保在当前buffer目录下执行git命令
         let l:cur_dir = expand('%:p:h')
@@ -35,7 +33,6 @@ function! UpdateBufGit()
             " 使用静默模式执行git命令
             let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel 2>/dev/null')
             let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
-
             if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
                 let b:git_root_dir = ''
                 let b:git_branch = ''
@@ -65,9 +62,8 @@ function! UpdateBufGit()
         let b:git_root_dir = ''
         let b:git_branch = ''
     endif
-
 endfunction
-autocmd WinEnter,BufCreate,BufEnter * call UpdateBufGit()
+autocmd BufEnter * call UpdateBufGit()
 "------------------------
 " fugitve and others
 "------------------------
