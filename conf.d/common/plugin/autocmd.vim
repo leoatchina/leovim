@@ -1,17 +1,15 @@
 " --------------------------
 " auto lcd current dir
 " --------------------------
-augroup AUTOLCD
-    autocmd WinEnter,BufCreate,BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
-                \ && bufname("") !~ "rg"                   " rg
-                \ && bufname("") !~ "outline"              " outline
-                \ && bufname("") !~ "vista"                " vista
-                \ && bufname("") !~ "tag"                  " tag
-                \ && bufname("") !~ "fern"                 " fern
-                \ && bufname("")[0] != "!"                 " some special buf
-                \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
-                \ | lcd %:p:h | endif
-augroup END
+autocmd WinEnter,BufCreate,BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
+            \ && bufname("") !~ "rg"                   " rg
+            \ && bufname("") !~ "outline"              " outline
+            \ && bufname("") !~ "vista"                " vista
+            \ && bufname("") !~ "tag"                  " tag
+            \ && bufname("") !~ "fern"                 " fern
+            \ && bufname("")[0] != "!"                 " some special buf
+            \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
+            \ | lcd %:p:h | endif
 " -----------------------------------
 " swap exists ignore
 " -----------------------------------

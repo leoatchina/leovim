@@ -1,38 +1,67 @@
 function! RelativeDir()
     let root = GitRootDir()
     let path = Expand('%:p:h', 1)
-    if root == ''
+    if root == '' || path == ''
         return path
-    else
-        return path[len(root) + 1:]
     endif
+    " 统一使用正斜杠
+    let root = substitute(root, '\\', '/', 'g')
+    let path = substitute(path, '\\', '/', 'g')
+    " 确保两个路径都以 / 结尾进行比较
+    let root = root . (root[-1:] == '/' ? '' : '/')
+    let path = path . (path[-1:] == '/' ? '' : '/')
+    if path[:len(root)-1] ==# root
+        let rel_path = path[len(root):]
+        return rel_path == '' ? '.' : rel_path[:-2]
+    endif
+    return path[:-2]
 endfunction
 function! AbsPath()
     return Expand('%:p', 1)
 endfunction
-"-----------------------------------------------------
-" lightline init, NOTE: must be set before schemes
-"-----------------------------------------------------
-set laststatus=2
-let g:modes_dict={
-            \ "\<C-V>": 'V·Block',
-            \ 'Rv': 'V·Replace',
-            \ 'n':  'NORMAL',
-            \ 'v':  'VISUAL',
-            \ 'V':  'V·Line',
-            \ 'i':  'INSERT',
-            \ 'R':  'R',
-            \ 'c':  'Command',
-            \}
+function! RelativePath()
+    if &ft == ''
+        return ''
+    endif
+    let root = GitRootDir()
+    let path = AbsPath()
+    if root == '' || path == ''
+        return path
+    endif
+    " 统一使用正斜杠
+    let root = substitute(root, '\\', '/', 'g')
+    let path = substitute(path, '\\', '/', 'g')
+    " 确保root不以/结尾
+    let root = substitute(root, '/$', '', '')
+    if path[:len(root)-1] ==# root
+        let rel_path = path[len(root)+1:]
+        return rel_path == '' ? '.' : rel_path
+    endif
+    return path
+endfunction
 function! Mode()
+    let l:modes_dict={
+                \ "\<C-V>": 'V·Block',
+                \ 'Rv': 'V·Replace',
+                \ 'n':  'NORMAL',
+                \ 'v':  'VISUAL',
+                \ 'V':  'V·Line',
+                \ 'i':  'INSERT',
+                \ 'R':  'R',
+                \ 'c':  'Command',
+                \}
     let m = mode()
-    if has_key(g:modes_dict, m)
-        let m = g:modes_dict[m]
+    if has_key(l:modes_dict, m)
+        let m = l:modes_dict[m]
     else
         let m = ""
     endif
     return m
 endfunction
+" ---------------------------
+" lightline global settings
+" ---------------------------
+set laststatus=2
 let g:lightline#bufferline#unnamed = ''
 let g:lightline#bufferline#show_number = 0
 let g:lightline#bufferline#unicode_symbols = 1
@@ -58,7 +87,7 @@ nmap ]B <Plug>lightline#bufferline#move_last()
 PlugAddOpt 'lightline.vim'
 PlugAddOpt 'lightline-bufferline'
 " ------------------------
-" init
+" lightline init
 " ------------------------
 let g:lightline = {
                 \ 'component': {
@@ -166,25 +195,13 @@ function! Buffers()
         endif
     endif
     if GitRootDir() == ''
-        let res[1] = [icon . ' ' . RelativeDir()]
+        let res[1] = [icon]
     else
         let res[1] = [icon . ' ' . GitRootDir()]
     endif
     return res
 endfunction
 let g:lightline['component_expand']['buffers'] = 'Buffers'
-" ------------------------
-" RelativePath
-" ------------------------
-function! RelativePath()
-    if &ft == ''
-        return ''
-    elseif GitRootDir() == ''
-        return Expand('%')
-    else
-        return RelativeDir() . '/' . expand('%')
-    endif
-endfunction
 let g:lightline['component_expand']['relativepath'] = 'RelativePath'
 " ------------------------
 " left part
@@ -336,7 +353,7 @@ endfunction
 augroup UpdateLightline
     autocmd!
     autocmd ColorScheme * call UpdateLightline()
-    autocmd WinEnter,VimEnter,BufWritePost * call lightline#update()
+    autocmd WinEnter,BufCreate,BufEnter,VimEnter,BufWritePost * call lightline#update()
     if PlannedCoc()
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif

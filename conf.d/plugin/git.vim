@@ -23,16 +23,28 @@ function! UpdateBufGit()
     else
         let idx = 0
     endif
+
+
     if g:git_version > 1.8
+        " 确保在当前buffer目录下执行git命令
+        let l:cur_dir = expand('%:p:h')
+        if l:cur_dir != ''
+            execute 'lcd ' . l:cur_dir
+        endif
         try
-            let b:git_root_dir = split(system('git rev-parse --show-toplevel'), "\\n")[idx]
-            if b:git_root_dir =~ 'fatal:' && b:git_root_dir =~ '.git'
+            " 使用静默模式执行git命令
+            let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel 2>/dev/null')
+            let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
+
+            if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
                 let b:git_root_dir = ''
                 let b:git_branch = ''
             else
                 try
-                    let b:git_branch = split(system('git rev-parse --abbrev-ref HEAD'), "\\n")[idx]
-                    if b:git_branch =~ 'fatal:'
+                    let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
+                    let b:git_branch = substitute(l:branch, '\n\+$', '', '')
+
+                    if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
                         let b:git_root_dir = ''
                         let b:git_branch = ''
                     endif
@@ -45,14 +57,17 @@ function! UpdateBufGit()
             let b:git_root_dir = ''
             let b:git_branch = ''
         endtry
+        " 恢复到之前的目录
+        if l:cur_dir != ''
+            execute 'lcd -'
+        endif
     else
         let b:git_root_dir = ''
         let b:git_branch = ''
     endif
+
 endfunction
-augroup AUTOLCD
-    autocmd BufEnter * call UpdateBufGit()
-augroup END
+autocmd WinEnter,BufCreate,BufEnter * call UpdateBufGit()
 "------------------------
 " fugitve and others
 "------------------------
