@@ -394,15 +394,13 @@ if g:complete_engine != 'cmp' && isdirectory(mason_bin) && $PATH !~ 'mason/bin'
         let $PATH = mason_bin . ':' . $PATH
     endif
 endif
-" ===============================================================================================================
-" <M-Key> map for vim
-" ===============================================================================================================
+" ------------------------------
+" <M-Key> map
+" ------------------------------
 " NOTE: must be set affer all plugins are installed
-if !has('nvim') && HAS_GUI() == 0
-    function! s:set_metacode(key)
-        exec "set <M-".a:key.">=\e".a:key
-    endfunction
-    for c in s:metacode_group
-        call s:set_metacode(c)
-    endfor
-endif
+function! s:set_metacode(key)
+    exec "set <M-".a:key.">=\e".a:key
+endfunction
+for c in s:metacode_group
+    call s:set_metacode(c)
+endfor
