@@ -7,6 +7,7 @@ endfunction
 " symbol
 " --------------------------
 if Installed('vista.vim')
+    autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
     let g:vista#renderer#ctags = 'kind'
     let g:vista_update_on_text_changed = 1
     let g:vista_sidebar_position = 'vertical topleft'

@@ -165,12 +165,16 @@ if has('patch-8.0.1129') && !has('nvim')
         unmenu WinBar
         let fname = expand("%f")
         let ename = Escape(fname)
-        execute "nnoremenu 1.00 WinBar." .  ename . ' :e '. fname
+        let symbol = get(b:, 'vista_nearest_method_or_function', '')
+        execute 'nnoremenu 1.00 WinBar.' .  ename . ' '. symbol . ' :e '. fname
+    endfunction
+    function CloseWinBar()
+        unmenu WinBar
     endfunction
     augroup WindowBarGroup
         autocmd!
         autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * call UpdateWinBar()
-        autocmd WinClosed,WinLeave,TabClosed,TabLeave * unmenu WinBar
+        autocmd WinClosed,WinLeave,TabClosed,TabLeave * call CloseWinBar()
     augroup END
 elseif Installed('winbar.nvim')
     lua require('cfg/winbar')
