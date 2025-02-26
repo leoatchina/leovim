@@ -274,7 +274,9 @@ if has('nvim-0.8')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/dressing.nvim'
-    PlugAdd 'fgheng/winbar.nvim'
+    if !PlannedCoc()
+        PlugAdd 'fgheng/winbar.nvim'
+    endif
 endif
 " ------------------------------
 " Git
