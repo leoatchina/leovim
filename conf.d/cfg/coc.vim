@@ -229,7 +229,6 @@ omap ac <Plug>(coc-classobj-a)
 if has('nvim')
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
     nnoremap <Leader>W :CocFzfList symbols<Cr>
-    lua require("cfg/coc")
 else
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
 endif

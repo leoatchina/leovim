@@ -140,6 +140,8 @@ if g:complete_engine == 'cmp'
     endif
     " nvim-tree
     PlugAdd 'nvim-tree/nvim-tree.lua'
+    " winbar
+    PlugAdd 'fgheng/winbar.nvim'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
@@ -274,9 +276,6 @@ if has('nvim-0.8')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/dressing.nvim'
-    if !PlannedCoc()
-        PlugAdd 'fgheng/winbar.nvim'
-    endif
 endif
 " ------------------------------
 " Git

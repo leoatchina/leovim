@@ -172,6 +172,8 @@ if has('patch-8.0.1129') && !has('nvim')
         autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * call UpdateWinBar()
         autocmd WinClosed,WinLeave,TabClosed,TabLeave * unmenu WinBar
     augroup END
+elseif has('nvim') && PlannedCoc()
+    lua require('cfg/coc')
 elseif Installed('winbar.nvim')
     lua require('cfg/winbar')
 endif
