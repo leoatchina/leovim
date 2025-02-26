@@ -17,17 +17,16 @@ endfunction
 function! GitRootDir()
     return get(b:, 'git_root_dir', '')
 endfunction
-function! UpdateBufGit()
-    if WINDOWS()
-        let idx = -1
-    else
-        let idx = 0
+function! AutoLCD_UpdateGit()
+    let cur_dir = expand('%:p:h')
+    if cur_dir != ''
+        execute 'lcd ' . cur_dir
     endif
     if g:git_version > 1.8
-        " 确保在当前buffer目录下执行git命令
-        let l:cur_dir = expand('%:p:h')
-        if l:cur_dir != ''
-            execute 'lcd ' . l:cur_dir
+        if WINDOWS()
+            let idx = -1
+        else
+            let idx = 0
         endif
         try
             " 使用静默模式执行git命令
@@ -59,7 +58,7 @@ function! UpdateBufGit()
         let b:git_branch = ''
     endif
 endfunction
-autocmd BufEnter * if !CheckIgnoreFtBt() | call UpdateBufGit() | endif
+autocmd BufEnter * if !CheckIgnoreFtBt() | call AutoLCD_UpdateGit() | endif
 "------------------------
 " fugitve and others
 "------------------------

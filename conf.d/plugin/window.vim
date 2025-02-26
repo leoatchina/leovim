@@ -158,23 +158,28 @@ nnoremap <silent>\s     :call SmartResize('j', 'j')<Cr>
 " winbar
 " ------------------------
 if has('patch-8.0.1129') && !has('nvim')
-    function! UpdateWinBar() abort
+    function! s:toggle_winbar(open) abort
         if CheckIgnoreFtBt()
-            return
-        endif
-        let fname = expand("%f")
-        let ename = Escape(fname)
-        if !empty(getcompletion('WinBar.', 'menu'))
-            execute 'nnoremenu 1.00 WinBar.' . ename . ' :echo '. ename
+            if !empty(getcompletion('WinBar.', 'menu'))
+                unmenu WinBar
+            endif
         else
-            execute 'unmenu WinBar.' . ename
-            execute 'nnoremenu 1.00 WinBar.' . ename . ' :echo '. ename
-        endi
+            let fname = expand("%f")
+            let ename = Escape(fname)
+            if index(getcompletion('WinBar.', 'menu'), ename) >= 0
+                execute 'unmenu WinBar.' . ename
+            endif
+            if a:open
+                execute "nnoremenu 1.00 WinBar." .  ename . ' :echo '. fname
+            endif
+        endif
     endfunction
+    command! OpenWinBar call s:toggle_winbar(1)
+    command! CloseWinBar call s:toggle_winbar(0)
     augroup WindowBarGroup
         autocmd!
-        autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * call UpdateWinBar()
-        autocmd WinClosed,WinLeave,TabClosed,TabLeave * call UpdateWinBar()
+        autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * OpenWinBar
+        autocmd WinClosed,WinLeave,TabClosed,TabLeave,BufLeave * CloseWinBar
     augroup END
 elseif has('nvim') && PlannedCoc()
     lua require('cfg/coc')
