@@ -63,7 +63,7 @@ function! UpdateBufGit()
         let b:git_branch = ''
     endif
 endfunction
-autocmd BufEnter * call UpdateBufGit()
+autocmd BufEnter * if !CheckIgnoreFtBt() | call UpdateBufGit() | endif
 "------------------------
 " fugitve and others
 "------------------------

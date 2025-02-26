@@ -157,7 +157,7 @@ nnoremap <silent>\s     :call SmartResize('j', 'j')<Cr>
 " ------------------------
 " winbar
 " ------------------------
-if has('patch-8.0.1129')
+if has('patch-8.0.1129') && !has('nvim')
     function UpdateWinBar()
         if CheckIgnoreFtBt()
             return

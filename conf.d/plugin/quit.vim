@@ -31,7 +31,7 @@ function! s:confirm_quit(all) abort
         q!
     elseif Expand('%') == '' && all == 0
         q!
-    elseif CheckFtBt() && all == 0
+    elseif CheckIgnoreFtBt() && all == 0
         q!
     else
         if all

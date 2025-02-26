@@ -31,7 +31,7 @@ require("winbar").setup({
     "coc-explorer"
   },
 })
-autocmd("FileType", {
+vim.api.nvim_create_autocmd("FileType", {
   pattern = {
     "fzf",
     "leaderf",
@@ -51,11 +51,10 @@ autocmd("FileType", {
     vim.wo.winbar = ""
   end,
 })
-autocmd({ "BufEnter", "BufRead", "BufReadPost", "BufCreate" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "BufRead", "BufReadPost", "BufCreate" }, {
   callback = function()
     if vim.bo.buftype == "" or vim.bo.buftype == "terminal" then
       vim.wo.winbar = ""
     end
   end,
 })
-
