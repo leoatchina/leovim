@@ -155,10 +155,10 @@ imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<C
 " call hierarchy
 nnoremap <silent>gh :call CocAction('showIncomingCalls')<Cr>
 nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>
-nnoremap <silent>gt :call CocAction('showSubTypes')<Cr>
-nnoremap <silent>gr :call CocAction('showSuperTypes')<Cr>
+nnoremap <silent>gs :call CocAction('showSubTypes')<Cr>
+nnoremap <silent>gS :call CocAction('showSuperTypes')<Cr>
 " refactor
-nmap <silent><leader>R <Plug>(coc-refactor)
+nmap <silent>gr <Plug>(coc-refactor)
 " ----------------------------
 " actions
 " ----------------------------
@@ -194,8 +194,8 @@ endif
 nmap <silent><F2> <Plug>(coc-rename)
 xmap <silent><leader>X <Plug>(coc-fix-current)
 nmap <silent><leader>X <Plug>(coc-fix-current)
-nmap <silent><leader>r <Plug>(coc-codeaction-refactor-selected)
-xmap <silent><leader>r <Plug>(coc-codeaction-refactor-selected)
+nmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
+xmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
 nmap <silent><leader>a <Plug>(coc-codeaction-selected)
 xmap <silent><leader>a <Plug>(coc-codeaction-selected)
 nmap <silent><leader>ar <Plug>(coc-codeaction-refactor)
@@ -229,7 +229,6 @@ omap ac <Plug>(coc-classobj-a)
 if has('nvim')
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
     nnoremap <Leader>W :CocFzfList symbols<Cr>
-    lua require("cfg/coc")
 else
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
 endif

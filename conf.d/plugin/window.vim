@@ -158,19 +158,23 @@ nnoremap <silent>\s     :call SmartResize('j', 'j')<Cr>
 " winbar
 " ------------------------
 if has('patch-8.0.1129') && !has('nvim')
-    function UpdateWinBar()
+    function! UpdateWinBar() abort
         if CheckIgnoreFtBt()
             return
         endif
-        unmenu WinBar
         let fname = expand("%f")
         let ename = Escape(fname)
-        execute 'nnoremenu 1.00 WinBar.' .  ename . ' :e '. fname
+        if !empty(getcompletion('WinBar.', 'menu'))
+            execute 'nnoremenu 1.00 WinBar.' . ename . ' :echo '. ename
+        else
+            execute 'unmenu WinBar.' . ename
+            execute 'nnoremenu 1.00 WinBar.' . ename . ' :echo '. ename
+        endi
     endfunction
     augroup WindowBarGroup
         autocmd!
         autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * call UpdateWinBar()
-        autocmd WinClosed,WinLeave,TabClosed,TabLeave * unmenu WinBar
+        autocmd WinClosed,WinLeave,TabClosed,TabLeave * call UpdateWinBar()
     augroup END
 elseif Installed('winbar.nvim')
     lua require('cfg/winbar')
