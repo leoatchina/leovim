@@ -85,7 +85,7 @@ if Installed('coc.nvim')
     let g:tree_browser = 'coc-explore'
     function s:coc_explorer_open() abort
         CocCommand explorer
-        sleep 50m
+        sleep 100m
         wincmd w
     endfunction
     command! CocExplorerOpen call s:coc_explorer_open()
