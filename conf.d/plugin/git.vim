@@ -54,10 +54,6 @@ function! UpdateBufGit()
             let b:git_root_dir = ''
             let b:git_branch = ''
         endtry
-        " 恢复到之前的目录
-        if l:cur_dir != ''
-            execute 'lcd -'
-        endif
     else
         let b:git_root_dir = ''
         let b:git_branch = ''

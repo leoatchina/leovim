@@ -1,15 +1,30 @@
 " --------------------------
-" auto lcd current dir
+" autoclose_ft_buf
 " --------------------------
-autocmd WinEnter,BufCreate,BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://"   " terminal
-            \ && bufname("") !~ "rg"                   " rg
-            \ && bufname("") !~ "outline"              " outline
-            \ && bufname("") !~ "vista"                " vista
-            \ && bufname("") !~ "tag"                  " tag
-            \ && bufname("") !~ "fern"                 " fern
-            \ && bufname("")[0] != "!"                 " some special buf
-            \ && getbufvar(winbufnr(winnr()), "&buftype") != "popup"
-            \ | lcd %:p:h | endif
+let g:autoclose_ft_buf = [
+            \ 'netrw', 'coc-explorer', 'fern', 'nvimtree',
+            \ 'qf', 'preview', 'loclist', 'rg', 'outline',
+            \ 'vista', 'tagbar', 'vista_kind',
+            \ 'leaderf', 'fzf', 'help', 'man',
+            \ 'gitcommit', 'fugitive', 'fugtiveblame', 'gitcommit',
+            \ 'terminal', 'floaterm', 'popup'
+            \ ]
+function! s:autoclose(...) abort
+    let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
+    let bt = tolower(getbufvar(winbufnr(winnr()), '&bt'))
+    if winnr("$") <= 1 && a:0 && a:1 || !a:0 || a:1 == 0
+        return index(g:autoclose_ft_buf, (ft)) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
+    else
+        return 0
+    endif
+endfunction
+function! CheckIgnoreFtBt() abort
+    return s:autoclose(0)
+endfunction
+function! AutoCloseFtBt() abort
+    return s:autoclose(1)
+endfunction
+autocmd WinEnter,BufWinEnter * if AutoCloseFtBt() | q! | endif
 " -----------------------------------
 " swap exists ignore
 " -----------------------------------
