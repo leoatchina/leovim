@@ -236,7 +236,6 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter')
                 \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
                 \ )
         PlugAdd 'olimorris/codecompanion.nvim'
-        PlugAdd 'echasnovski/mini.pick'
     elseif exists('$OPENAI_API_KEY') ||
                 \ exists('$ANTHROPIC_API_KEY') ||
                 \ exists('$GEMINI_API_KEY') ||
@@ -247,6 +246,8 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter')
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
+    PlugAdd 'HakonHarnes/img-clip.nvim'
+    PlugAdd 'echasnovski/mini.pick'
 endif
 " ------------------------------
 " pairs
