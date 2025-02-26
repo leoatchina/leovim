@@ -348,9 +348,7 @@ if Planned('vimspector')
     nnoremap <silent><M-=> :TerminalOrFloatermSpecial<Cr>
     " VimspectorDisassemble
     nmap <silent><F1> <Plug>VimspectorDisassemble
-    " ----------------------
     " view variables
-    " ----------------------
     nnoremap <silent>J :BalloonEval<Cr>
 elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
@@ -478,9 +476,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ReplOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :FloatElementOrFloatermSpecial<Cr>
-    " ----------------------
     " view variables
-    " ----------------------
     nnoremap <silent>J :DapUIEval<Cr>
 elseif v:version >= 801 && !has('nvim') && Require('termdebug')
     let g:debug_tool = 'termdebug'
