@@ -165,8 +165,7 @@ if has('patch-8.0.1129') && !has('nvim')
         unmenu WinBar
         let fname = expand("%f")
         let ename = Escape(fname)
-        let symbol = Escape(get(b:, 'vista_nearest_method_or_function', ''))
-        execute "nnoremenu 1.00 WinBar." .  ename . ' ' . symbol . ' :e '. fname
+        execute "nnoremenu 1.00 WinBar." .  ename . ' :e '. fname
     endfunction
     augroup WindowBarGroup
         autocmd!

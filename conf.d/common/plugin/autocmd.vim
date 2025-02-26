@@ -5,7 +5,7 @@ let g:autoclose_ft_buf = [
             \ 'netrw', 'coc-explorer', 'fern', 'nvimtree',
             \ 'qf', 'preview', 'loclist', 'rg', 'outline',
             \ 'vista', 'tagbar', 'vista_kind',
-            \ 'leaderf', 'fzf', 'help', 'man',
+            \ 'leaderf', 'fzf', 'help', 'man', 'startify',
             \ 'gitcommit', 'fugitive', 'fugtiveblame', 'gitcommit',
             \ 'terminal', 'floaterm', 'popup'
             \ ]
