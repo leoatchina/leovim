@@ -164,11 +164,14 @@ if has('patch-8.0.1129') && !has('nvim')
         else
             let fname = Expand("%:t")
             let ename = Escape(fname)
-            if index(getcompletion('WinBar.', 'menu'), ename) >= 0
-                execute 'unmenu WinBar.' . ename
-            endif
             if a:open
-                execute "nnoremenu 1.00 WinBar." .  ename . ' :echo '. fname
+                if index(getcompletion('WinBar.', 'menu'), ename) < 0
+                    execute "nnoremenu 1.00 WinBar." .  ename . ' :echo '. fname
+                endif
+            else
+                if index(getcompletion('WinBar.', 'menu'), ename) >= 0
+                    execute 'unmenu WinBar.' . ename
+                endif
             endif
         endif
     endfunction
