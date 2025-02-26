@@ -1,8 +1,9 @@
 let g:autoclose_ft_buf = [
-            \ 'netrw', 'coc-explorer', 'neo-tree', 'fern', 'nvimtree',
+            \ 'netrw', 'coc-explorer', 'fern', 'nvimtree',
             \ 'qf', 'preview', 'loclist',
-            \ 'vista', 'tagbar', 'leaderf',
-            \ 'help', 'gitcommit', 'man', 'fugitive', 'fugtiveblame', 'gitcommit',
+            \ 'vista', 'tagbar', 'vista_kind',
+            \ 'leaderf', 'fzf', 'help', 'man',
+            \ 'gitcommit', 'fugitive', 'fugtiveblame', 'gitcommit',
             \ 'terminal', 'floaterm', 'popup'
             \ ]
 function! s:autoclose(...) abort
@@ -14,7 +15,13 @@ function! s:autoclose(...) abort
         return 0
     endif
 endfunction
-autocmd WinEnter * if s:autoclose(1) | q! | endif
+function! CheckIgnoreFtBt() abort
+    return s:autoclose(0)
+endfunction
+function! AutoCloseFtBt() abort
+    return s:autoclose(1)
+endfunction
+autocmd WinEnter * if AutoCloseFtBt() | q! | endif
 " confirem quit
 function! s:confirm_quit(all) abort
     let all = a:all
@@ -24,7 +31,7 @@ function! s:confirm_quit(all) abort
         q!
     elseif Expand('%') == '' && all == 0
         q!
-    elseif s:autoclose(0) && all == 0
+    elseif CheckFtBt() && all == 0
         q!
     else
         if all

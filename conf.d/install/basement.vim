@@ -19,7 +19,6 @@ function! InstalledNvimLsp() abort
                 \ 'mason-lspconfig.nvim',
                 \ 'nvim-lsp-selection-range',
                 \ 'symbol-usage.nvim',
-                \ 'winbar.nvim',
                 \ )
 endfunction
 function! InstalledCmp() abort
@@ -132,7 +131,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
     PlugAdd 'josa42/nvim-lightline-lsp'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
-    PlugAdd 'fgheng/winbar.nvim'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     " lspimport is only for pyright
     PlugAdd 'stevanmilic/nvim-lspimport'
@@ -276,6 +274,7 @@ if has('nvim-0.8')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/dressing.nvim'
+    PlugAdd 'fgheng/winbar.nvim'
 endif
 " ------------------------------
 " Git

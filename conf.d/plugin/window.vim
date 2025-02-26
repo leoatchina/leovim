@@ -1,3 +1,6 @@
+" open in vsplit/split
+nnoremap <Tab>v :vsplit<Space>
+nnoremap <Tab>s :split<Space>
 " ------------------------
 " Previous Window Control
 " ------------------------
@@ -22,8 +25,6 @@ function! PreviousCursor(mode)
         exec "normal! \<C-e>"
     elseif a:mode == 'ctrly'
         exec "normal! \<C-y>"
-    elseif a:mode == 'ctrli'
-        exec "normal! \<C-i>"
     elseif a:mode == 'ctrlm'
         exec "normal! \<C-m>"
     elseif a:mode == 'ctrlh'
@@ -153,6 +154,25 @@ nnoremap <silent><Tab>k :call SmartResize('k', 'k')<Cr>
 nnoremap <silent><Tab>j :call SmartResize('k', 'j')<Cr>
 nnoremap <silent>\w     :call SmartResize('j', 'k')<Cr>
 nnoremap <silent>\s     :call SmartResize('j', 'j')<Cr>
-" open in vsplit/split
-nnoremap <Tab>v :vsplit<Space>
-nnoremap <Tab>s :split<Space>
+" ------------------------
+" winbar
+" ------------------------
+if has('patch-8.0.1129')
+    function UpdateWinBar()
+        if CheckIgnoreFtBt()
+            return
+        endif
+        unmenu WinBar
+        let fname = expand("%f")
+        let ename = Escape(fname)
+        let symbol = Escape(get(b:, 'vista_nearest_method_or_function', ''))
+        execute "nnoremenu 1.00 WinBar." .  ename . ' ' . symbol . ' :e '. fname
+    endfunction
+    augroup WindowBarGroup
+        autocmd!
+        autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * call UpdateWinBar()
+        autocmd WinClosed,WinLeave,TabClosed,TabLeave * unmenu WinBar
+    augroup END
+elseif Installed('winbar.nvim')
+    lua require('cfg/winbar')
+endif
