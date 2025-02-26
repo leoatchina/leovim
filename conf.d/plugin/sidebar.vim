@@ -103,7 +103,7 @@ elseif Installed('nvim-tree.lua')
     lua require("nvim-tree").setup()
     function! s:nvim_tree_open_stay()
         NvimTreeOpen
-        sleep 50m
+        sleep 100m
         wincmd w
     endfunction
     command! NvimTreeOpenStay call s:nvim_tree_open_stay()
