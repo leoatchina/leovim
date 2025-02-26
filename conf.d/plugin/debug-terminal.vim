@@ -312,7 +312,7 @@ if Planned('vimspector')
     function! s:vimspector_opened()
         return bufwinnr('vimspector.Variables') >= 0 || bufwinnr('vimspector.Watches') >= 0 || bufwinnr('vimspector.StackTrace') >= 0
     endfunction
-    au BufEnter * if s:vimspector_opened() | SignifyDisable | execute 'autocmd! WindowBarGroup BufEnter <buffer=' . tabpagenr() . '>' | endif
+    au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
     function! s:vimspector_or_floaterm(type)
         if s:vimspector_opened()
             if a:type ==# 'code'

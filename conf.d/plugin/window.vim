@@ -164,7 +164,7 @@ if has('patch-8.0.1129') && !has('nvim')
                 unmenu WinBar
             endif
         else
-            let fname = expand("%f")
+            let fname = Expand("%:t")
             let ename = Escape(fname)
             if index(getcompletion('WinBar.', 'menu'), ename) >= 0
                 execute 'unmenu WinBar.' . ename
