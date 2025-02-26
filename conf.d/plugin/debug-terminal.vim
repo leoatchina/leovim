@@ -269,7 +269,7 @@ if Planned('vimspector')
     nnoremap <silent><M-d>f :call vimspector#AddFunctionBreakpoint('')<left><left>
     nnoremap <silent><M-d>b :call vimspector#ToggleAllBreakpointsViewBreakpoint()<Cr>
     " start / stop
-    nnoremap <silent><M-d>. :call .()<Cr>
+    nnoremap <silent><M-d>. :call vimspector#Restart()<Cr>
     nnoremap <silent><M-d>Q :call vimspector#Stop({'interactive': v:true})<Cr>
     " function
     nnoremap <silent><M-d>u :call vimspector#UpFrame()<Cr>
@@ -278,6 +278,7 @@ if Planned('vimspector')
     " jump/show windows in vimspector
     " --------------------------------------
     function! GoToVimspectorWindow(name) abort
+        let name = a:name
         try
             if name ==# 'variables'
                 let windowNr = bufwinnr('vimspector.Variables')
@@ -289,6 +290,7 @@ if Planned('vimspector')
                 let windowNr = bufwinnr(winbufnr(g:vimspector_session_windows[name]))
             else
                 call vimspector#ShowOutput(name)
+                let windowNr = -1
             endif
         catch
             call preview#errmsg('Wrong input name.')
@@ -301,6 +303,7 @@ if Planned('vimspector')
     nnoremap <silent><M-'>  :call vimspector#ListBreakpoints()<Cr>
     nnoremap <silent><M-m>i :call GoToVimspectorWindow('important')<Cr>
     nnoremap <silent><M-m>s :call GoToVimspectorWindow('server')<Cr>
+    nnoremap <silent><M-m>e :call GoToVimspectorWindow('stderr')<Cr>
     nnoremap <silent><M-m>v :call GoToVimspectorWindow('Vimspector')<Cr>
     nnoremap <silent><M-m>t :call GoToVimspectorWindow('Telemetry')<Cr>
     nnoremap <silent><M-m>1 :call GoToVimspectorWindow('variables')<Cr>
@@ -579,16 +582,16 @@ au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteW
 " map Floaterm keys
 " -------------------------------------
 function! s:bind_keymap(mapvar, command) abort
-    if !hasmapto(a:mapvar)
+    if empty(maparg(a:mapvar, 'n'))
         execute printf('nnoremap <silent>%s :%s<CR>', a:mapvar, a:command)
     endif
     execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
     execute printf('tnoremap <silent>%s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
 endfunction
-call s:bind_keymap('<M-{>', 'FloatermPrev')
-call s:bind_keymap('<M-}>', 'FloatermNext')
 call s:bind_keymap('<M-->', 'FloatermToggle')
 call s:bind_keymap('<M-=>', 'FloatermSpecial')
+call s:bind_keymap('<M-{>', 'FloatermPrev')
+call s:bind_keymap('<M-}>', 'FloatermNext')
 call s:bind_keymap('<M-_>', 'FloatermKill')
 " ---------------------------------------
 " using vim-floaterm to do repl
