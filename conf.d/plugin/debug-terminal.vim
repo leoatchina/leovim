@@ -309,10 +309,10 @@ if Planned('vimspector')
     " --------------------------------------
     " special map
     " ---------------------------------------
-    au BufEnter * if s:vimspector_opened() | SignifyDisable | autocmd! WindowBarGroup | endif
     function! s:vimspector_opened()
-        return bufwinnr('vimspector.Variables') >= 0 && bufwinnr('vimspector.Watches') >= 0 && bufwinnr('vimspector.StackTrace') >= 0
+        return bufwinnr('vimspector.Variables') >= 0 || bufwinnr('vimspector.Watches') >= 0 || bufwinnr('vimspector.StackTrace') >= 0
     endfunction
+    au BufEnter * if s:vimspector_opened() | SignifyDisable | execute 'autocmd! WindowBarGroup BufEnter <buffer=' . tabpagenr() . '>' | endif
     function! s:vimspector_or_floaterm(type)
         if s:vimspector_opened()
             if a:type ==# 'code'
@@ -435,7 +435,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
     " check dapui openned
     function! s:dapui_opened()
-        return bufwinnr("DAP Scopes") >= 0 && bufwinnr("DAP Watches") >= 0 && bufwinnr("DAP Stacks") >= 0
+        return bufwinnr("DAP Scopes") >= 0 || bufwinnr("DAP Watches") >= 0 || bufwinnr("DAP Stacks") >= 0
     endfunction
     au BufEnter * if s:dapui_opened() | SignifyDisable | endif
     " --------------------------------------
