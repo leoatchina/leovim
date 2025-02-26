@@ -309,7 +309,7 @@ if Planned('vimspector')
     " --------------------------------------
     " special map
     " ---------------------------------------
-    au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
+    au BufEnter * if s:vimspector_opened() | SignifyDisable | augroup! WindowBarGroup | endif
     function! s:vimspector_opened()
         return bufwinnr('vimspector.Variables') >= 0 && bufwinnr('vimspector.Watches') >= 0 && bufwinnr('vimspector.StackTrace') >= 0
     endfunction
