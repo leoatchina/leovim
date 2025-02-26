@@ -1,13 +1,11 @@
-{
-  "rust:launch": {
-    "adapter": "CodeLLDB",
-    "configuration": {
-      "name": "rust lldb",
-      "type": "lldb",
-      "request": "launch",
-      "stopOnEntry": false,
-      "MIMode": "gdb",
-      "program": "${workspaceFolder}/../target/debug/"
-    }
+"rust:launch": {
+  "adapter": "CodeLLDB",
+  "configuration": {
+    "name": "rust lldb",
+    "type": "lldb",
+    "request": "launch",
+    "stopOnEntry": false,
+    "MIMode": "gdb",
+    "program": "${workspaceFolder}/../target/debug/"
   }
 }

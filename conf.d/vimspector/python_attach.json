@@ -1,30 +1,28 @@
-{
-  "python-attach": {
-    "adapter": "debugpy",
-    "filetypes": [ "python" ],
-    "breakpoints": {
-      "exception": {
-        "raised": "",
-        "uncaught": "",
-        "userUnhandled": ""
-      }
-    },
-    "configuration": {
-      "name": "python: Attach",
-      "type": "python",
-      "request": "attach",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "listen": {
-        "host": "0.0.0.0",
-        "port": 5678
-      },
-      "pathMappings": [
-        {
-          "localRoot": "${workspaceFolder}",
-          "remoteRoot": "."
-        }
-      ]
+"python-attach": {
+  "adapter": "debugpy",
+  "filetypes": [ "python" ],
+  "breakpoints": {
+    "exception": {
+      "raised": "",
+      "uncaught": "",
+      "userUnhandled": ""
     }
+  },
+  "configuration": {
+    "name": "python: Attach",
+    "type": "python",
+    "request": "attach",
+    "stopOnEntry": false,
+    "console": "integratedTerminal",
+    "listen": {
+      "host": "0.0.0.0",
+      "port": 5678
+    },
+    "pathMappings": [
+      {
+        "localRoot": "${workspaceFolder}",
+        "remoteRoot": "."
+      }
+    ]
   }
 }

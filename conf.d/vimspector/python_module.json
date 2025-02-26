@@ -1,27 +1,25 @@
-{
-  "python-module": {
-    "adapter": "debugpy",
-    "filetypes": [ "python" ],
-    "breakpoints": {
-      "exception": {
-        "raised": "",
-        "uncaught": "",
-        "userUnhandled": ""
-      }
-    },
-    "configuration": {
-      "name": "python: Module",
-      "type": "python",
-      "request": "launch",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "python": "~/miniconda3/bin/python3",
-      "cwd": "${fileDirname}",
-      "module": "scrapy",
-      "args": [
-        "crawl",
-        "test"
-      ]
+"python-module": {
+  "adapter": "debugpy",
+  "filetypes": [ "python" ],
+  "breakpoints": {
+    "exception": {
+      "raised": "",
+      "uncaught": "",
+      "userUnhandled": ""
     }
+  },
+  "configuration": {
+    "name": "python: Module",
+    "type": "python",
+    "request": "launch",
+    "stopOnEntry": false,
+    "console": "integratedTerminal",
+    "python": "~/miniconda3/bin/python3",
+    "cwd": "${fileDirname}",
+    "module": "scrapy",
+    "args": [
+      "crawl",
+      "test"
+    ]
   }
 }
