@@ -29,7 +29,6 @@ function! AutoLCD_UpdateGit()
             let idx = 0
         endif
         try
-            " 使用静默模式执行git命令
             let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel 2>/dev/null')
             let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
             if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
@@ -39,7 +38,6 @@ function! AutoLCD_UpdateGit()
                 try
                     let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
                     let b:git_branch = substitute(l:branch, '\n\+$', '', '')
-
                     if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
                         let b:git_root_dir = ''
                         let b:git_branch = ''
