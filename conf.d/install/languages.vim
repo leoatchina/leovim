@@ -95,6 +95,12 @@ if get(g:, 'gobin_exe', '') != '' && Require('go') && (has('patch-8.1.2269') || 
     PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 endif
 " ------------------------------
+" latex
+" ------------------------------
+if Require('latex') && executable(get(g:, "vimtex_view_method", ''))
+    PlugAdd 'lervag/vimtex', {'for': 'latex'}
+endif
+" ------------------------------
 " nvim-java
 " ------------------------------
 if Require('java') && Planned('nvim-lspconfig') && Planned('nvim-dap')
