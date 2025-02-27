@@ -250,16 +250,6 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter')
     PlugAdd 'echasnovski/mini.pick'
 endif
 " ------------------------------
-" pairs
-" ------------------------------
-if g:complete_engine == 'cmp'
-    PlugAdd 'windwp/nvim-autopairs'
-elseif v:version >= 800
-    PlugAdd 'tmsvg/pear-tree'
-elseif has('patch-7.4.849')
-    PlugAdd 'jiangmiao/auto-pairs'
-endif
-" ------------------------------
 " fuzzy_finder
 " ------------------------------
 if exists('*systemlist') && has('patch-7.4.1304')
@@ -273,11 +263,20 @@ endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
-if has('nvim-0.8')
-    PlugAdd 'kevinhwang91/nvim-bqf'
-    PlugAdd 'stevearc/quicker.nvim'
-    PlugAdd 'stevearc/dressing.nvim'
+" ------------------------------
+" pairs
+" ------------------------------
+if g:complete_engine == 'cmp'
+    PlugAdd 'windwp/nvim-autopairs'
+elseif v:version >= 800
+    PlugAdd 'tmsvg/pear-tree'
+elseif has('patch-7.4.849')
+    PlugAdd 'jiangmiao/auto-pairs'
 endif
+" -----------------------
+" format
+" -----------------------
+PlugAdd 'sbdchd/neoformat'
 " ------------------------------
 " Git
 " ------------------------------
@@ -289,10 +288,23 @@ if executable('git') && v:version >= 800 && g:git_version >= 1.85
         PlugAdd 'APZelos/blamer.nvim'
     endif
 endif
-" -----------------------
-" format
-" -----------------------
-PlugAdd 'sbdchd/neoformat'
+" ----------------------------
+" nvim plugins
+" ----------------------------
+if has('nvim')
+    PlugAdd 'kevinhwang91/promise-async'
+    PlugAdd 'kevinhwang91/nvim-ufo'
+endif
+if has('nvim-0.8')
+    PlugAdd 'kevinhwang91/nvim-bqf'
+    PlugAdd 'stevearc/quicker.nvim'
+    PlugAdd 'stevearc/dressing.nvim'
+endif
+if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
+    PlugAdd 'williamboman/mason.nvim'
+    PlugAdd 'MunifTanjim/nui.nvim'
+    PlugAdd 'nvim-lua/plenary.nvim'
+endif
 " ------------------------------
 " fullscreen
 " ------------------------------
@@ -302,14 +314,6 @@ if LINUX() && HAS_GUI() && executable('wmctrl')
         let g:fullscreen#start_command = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 1)"
         let g:fullscreen#stop_command  = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 0)"
     endif
-endif
-" ----------------------------
-" nvim plugins
-" ----------------------------
-if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
-    PlugAdd 'williamboman/mason.nvim'
-    PlugAdd 'MunifTanjim/nui.nvim'
-    PlugAdd 'nvim-lua/plenary.nvim'
 endif
 " ----------------------------
 " wilder
@@ -336,13 +340,6 @@ if has('nvim-0.8')
     PlugAdd 'lukas-reineke/indent-blankline.nvim'
 elseif has('conceal')
     PlugAdd 'Yggdroot/indentLine'
-endif
-" ------------------------------
-" fold
-" ------------------------------
-if has('nvim-0.6.1')
-    PlugAdd 'kevinhwang91/promise-async'
-    PlugAdd 'kevinhwang91/nvim-ufo'
 endif
 " ------------------------------
 " devicons
@@ -385,20 +382,5 @@ if Require('query') && v:version >= 800
         PlugAdd 'rizzatti/dash.vim'
     else
         PlugAdd 'KabbAmine/zeavim.vim'
-    endif
-endif
-" ------------------------------
-" writing
-" ------------------------------
-if Require('markdown')
-    PlugAdd 'leoatchina/vim-table-mode'
-    PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
-    PlugAdd 'ferrine/md-img-paste.vim', {'for': 'markdown'}
-    if get(g:, 'node_version', 0) > 12 && (has('nvim') || v:version >= 801)
-        PlugAdd 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-        PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
-    elseif g:python_version > 0
-        PlugAdd 'iamcco/markdown-preview.vim', {'for': ['markdown']}
-        PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
     endif
 endif

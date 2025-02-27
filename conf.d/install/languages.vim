@@ -7,18 +7,9 @@ else
     let g:R_exe = Expand(exepath(get(g:, 'R_exe', 'R')))
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
-    PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
+    PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .'), 'for': ['r', 'rmd', 'python']}
 elseif Require('nvim-R') && (has('nvim-0.8') || v:version >= 802) && executable(g:R_exe)
     PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
-endif
-" ------------------------------
-" markdown
-" ------------------------------
-if executable('mdr') && (has('nvim') || has('patch-8.1.1401'))
-    PlugAddOpt 'preview-markdown.vim'
-endif
-if has('nvim-0.10')
-    PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
 endif
 " ------------------------------
 " helpful
@@ -95,12 +86,6 @@ if get(g:, 'gobin_exe', '') != '' && Require('go') && (has('patch-8.1.2269') || 
     PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 endif
 " ------------------------------
-" latex
-" ------------------------------
-if Require('latex') && executable(get(g:, "vimtex_view_method", ''))
-    PlugAdd 'lervag/vimtex', {'for': 'latex'}
-endif
-" ------------------------------
 " nvim-java
 " ------------------------------
 if Require('java') && Planned('nvim-lspconfig') && Planned('nvim-dap')
@@ -111,4 +96,31 @@ if Require('java') && Planned('nvim-lspconfig') && Planned('nvim-dap')
     PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'nvim-java/nvim-java-refactor'
     PlugAdd 'JavaHello/spring-boot.nvim'
+endif
+" ------------------------------
+" latex
+" ------------------------------
+if Require('latex') && executable(get(g:, "vimtex_view_method", ''))
+    PlugAdd 'lervag/vimtex', {'for': 'latex'}
+endif
+" ------------------------------
+" markdown
+" ------------------------------
+if executable('mdr') && (has('nvim') || has('patch-8.1.1401'))
+    PlugAddOpt 'preview-markdown.vim'
+endif
+if has('nvim-0.10')
+    PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
+endif
+if Require('markdown')
+    PlugAdd 'leoatchina/vim-table-mode'
+    PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
+    PlugAdd 'ferrine/md-img-paste.vim', {'for': 'markdown'}
+    if get(g:, 'node_version', 0) > 12 && (has('nvim') || v:version >= 801)
+        PlugAdd 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+        PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
+    elseif g:python_version > 0
+        PlugAdd 'iamcco/markdown-preview.vim', {'for': ['markdown']}
+        PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
+    endif
 endif
