@@ -849,6 +849,6 @@ if exists('g:vscode')
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
     source $CFG_DIR/easymotion.vim
-    source $CFG_DIR/basic.vim
+    source $CFG_DIR/main.vim
 endif
 let g:leovim_loaded = 1

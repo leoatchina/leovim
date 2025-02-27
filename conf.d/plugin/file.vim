@@ -204,12 +204,14 @@ function! s:open_or_create_file(file, ...) abort
         endtry
     endif
 endfunction
+" bashrc
+nnoremap <M-h>b :call <SID>open_or_create_file("~/.bashrc")<Cr>
+" zshrc
+nnoremap <M-h>z :call <SID>open_or_create_file("~/.zshrc")<Cr>
 " ssh/config
 nnoremap <M-h>S :call <SID>open_or_create_file("~/.ssh/config")<Cr>
 " gitconfig
 nnoremap <M-h>G :call <SID>open_or_create_file("~/.gitconfig")<Cr>
-" bashrc
-nnoremap <M-h>B :call <SID>open_or_create_file("~/.bashrc")<Cr>
 " configrc
 nnoremap <M-h>C :call <SID>open_or_create_file("~/.configrc")<Cr>
 " ------------------
@@ -243,7 +245,7 @@ if get(g:, 'leovim_openmap', 1)
     endfunction
     nnoremap <silent><M-h>i :call TabeOpen("$CONF_D_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>I :call TabeOpen("$INSTALL_DIR/install.vim")<Cr>
-    nnoremap <silent><M-h>b :call TabeOpen("$CFG_DIR/basic.vim")<Cr>
+    nnoremap <silent><M-h>m :call TabeOpen("$CFG_DIR/main.vim")<Cr>
     nnoremap <silent><M-h>k :call TabeOpen("$CFG_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>v :call TabeOpen("$CFG_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$CFG_DIR/opt.vim")<Cr>
