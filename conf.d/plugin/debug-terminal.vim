@@ -209,7 +209,7 @@ endif
 if Planned('vimspector')
     let g:debug_tool = "vimspector"
     let g:vimspector_enable_auto_hover = 0
-    let g:vimspector_base_dir = $DEPLOY_DIR . "/vimspector"
+    let g:vimspector_base_dir = Expand("~/.vim/vimspector")
     " load template
     if PlannedFzf()
         function! ReadVimspectorTemplate(template_file) abort
