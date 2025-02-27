@@ -7,6 +7,7 @@ let g:autoclose_ft_buf = [
             \ 'vista', 'tagbar', 'vista_kind',
             \ 'leaderf', 'fzf', 'help', 'man', 'startify',
             \ 'gitcommit', 'fugitive', 'fugtiveblame', 'gitcommit',
+            \ 'vimspector', 'vimspectorprompt',
             \ 'terminal', 'floaterm', 'popup',
             \ ]
 function! s:autoclose(...) abort

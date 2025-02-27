@@ -318,12 +318,12 @@ if Planned('vimspector')
     au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
     function! s:vimspector_or_floaterm(type)
         if s:vimspector_opened()
-            if a:type ==# 'code'
+            if index(['code', 'terminal'], a:type) >= 0
                 try
-                    let windowNr = bufwinnr(winbufnr(g:vimspector_session_windows['code']))
+                    let windowNr = bufwinnr(winbufnr(g:vimspector_session_windows[a:type]))
                     execute windowNr . 'wincmd w'
                 catch /.*/
-                    call preview#errmsg('No code window')
+                    call preview#errmsg('No ' . a:type . ' window')
                 endtry
             elseif a:type ==# 'eval'
                 execute  "normal \<Plug>VimspectorBalloonEval"
