@@ -15,6 +15,7 @@ cd ~ && tar -cvzf \
   --exclude GRTAGS \
   --exclude GTAGS \
   .local/fzf \
+  .local/vim? \
   .local/nvim* \
   .local/node* \
   .local/ctags \
