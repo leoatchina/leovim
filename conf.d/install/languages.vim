@@ -7,7 +7,7 @@ else
     let g:R_exe = Expand(exepath(get(g:, 'R_exe', 'R')))
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
-    PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .'), 'for': ['r', 'rmd', 'python']}
+    PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 elseif Require('nvim-R') && (has('nvim-0.8') || v:version >= 802) && executable(g:R_exe)
     PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
