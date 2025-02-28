@@ -314,4 +314,8 @@ if PlannedFzf()
     nnoremap <nowait><leader>f\ :FzfSearch <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
     nnoremap <nowait><Tab>f/ :FzfSearchGit <C-r>=Expand("%:t:r")<Cr><Cr>
     nnoremap <nowait><Tab>f\ :FzfSearchGit <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><Tab>f<Cr> :FzfSearchGit <C-r>=@"<Cr><Cr>
+    nnoremap <nowait><Tab>f<Tab> :FzfGitFiles <C-r>=@"<Cr><Cr>
+    xnoremap <nowait><Tab>f<Cr> y:<C-u>FzfSearchGit <C-r>=@"<Cr><Cr>
+    xnoremap <nowait><Tab>f<Tab> y:<C-u>FzfGitFiles <C-r>=@"<Cr><Cr>
 endif
