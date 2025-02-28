@@ -141,7 +141,12 @@ if g:complete_engine == 'cmp'
     " nvim-tree
     PlugAdd 'nvim-tree/nvim-tree.lua'
     " winbar
-    PlugAdd 'fgheng/winbar.nvim'
+    if UNIX()
+        PlugAdd 'Bekaboo/dropbar.nvim'
+        PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
+    else
+        PlugAdd 'fgheng/winbar.nvim'
+    endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}

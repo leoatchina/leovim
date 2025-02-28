@@ -1,6 +1,6 @@
 " open in vsplit/split
 nnoremap <Tab>v :vsplit<Space>
-nnoremap <Tab>s :split<Space>
+nnoremap <Tab>x :split<Space>
 " ------------------------
 " Previous Window Control
 " ------------------------
@@ -184,6 +184,8 @@ if has('patch-8.0.1129') && !has('nvim')
     augroup END
 elseif has('nvim') && PlannedCoc()
     lua require('cfg/coc')
+elseif Installed('dropbar.nvim')
+    lua require('cfg/dropbar')
 elseif Installed('winbar.nvim')
     lua require('cfg/winbar')
 endif
