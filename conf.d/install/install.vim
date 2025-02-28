@@ -19,6 +19,7 @@ function! InstalledNvimLsp() abort
                 \ 'nvim-lsp-selection-range',
                 \ 'mason-lspconfig.nvim',
                 \ 'symbol-usage.nvim',
+                \ 'call-graph.nvim',
                 \ 'dropbar.nvim',
                 \ )
 endfunction
@@ -141,6 +142,8 @@ if g:complete_engine == 'cmp'
     endif
     " nvim-tree
     PlugAdd 'nvim-tree/nvim-tree.lua'
+    " call-graph
+    PlugAdd 'ravenxrz/call-graph.nvim'
     " winbar
     PlugAdd 'Bekaboo/dropbar.nvim'
     if UNIX()

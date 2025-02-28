@@ -243,6 +243,13 @@ end
 -----------------
 -- lsp attach
 -----------------
+require('call_graph').setup({
+  log_level = "info",
+  reuse_buf = true,
+  auto_toggle_hl = true,
+  hl_delay_ms = 200,
+  ref_call_max_depth = 3
+})
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
@@ -265,7 +272,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', "<M-a>", vim.lsp.buf.code_action, opts_silent)
     -- vista
     map(nx, "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
-    --
+    -- call-graph
+    map(nx, "gr", [[<Cmd>CallGraphR<Cr>]], opts_silent)
+    map(nx, "gy", [[<Cmd>CallGraphI<Cr>]], opts_silent)
     -- diagnostic error
     map(nx, ';d', vim.diagnostic.goto_next, opts_silent)
     map(nx, ',d', vim.diagnostic.goto_prev, opts_silent)
