@@ -283,6 +283,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "<leader>O", toggle_diagnostics_highlight, opts_silent)
     map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
     map(nx, "<leader>D", [[<Cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<Cr>]], opts_silent)
+    -- dropbar
+    map('n', '<Tab>s', require('dropbar.api').pick, { desc = 'Pick symbols in dropbar' })
+    map('n', ',s', require('dropbar.api').goto_context_start, { desc = 'Go to start of current context' })
+    map('n', ';s', require('dropbar.api').select_next_context, { desc = 'Select next context' })
     -- select range
     local ok
     ok, _ = pcall(function()
