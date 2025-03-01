@@ -55,7 +55,7 @@ command! CR execute('cd ' .  GetRootDir())
 nnoremap cdr :CR<Cr>
 nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
-" open files
+" search files
 "------------------------
 nnoremap <M-j>e gf
 nnoremap <M-j>t <C-w>gf
@@ -77,6 +77,10 @@ elseif PlannedLeaderf()
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
+endif
+if PlannedFzf()
+    nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
+    xnoremap <nowait>\g y:<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
 endif
 " ---------------------------------
 " open gitroot getroot
