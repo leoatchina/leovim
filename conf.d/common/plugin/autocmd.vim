@@ -28,7 +28,10 @@ endfunction
 function! AutoCloseFtBt() abort
     return s:autoclose(1)
 endfunction
-autocmd WinEnter,BufWinEnter * if AutoCloseFtBt() | q! | endif
+augroup AutoCloseFtBt
+    autocmd!
+    autocmd BufWinEnter * if AutoCloseFtBt() | q! | endif
+augroup END
 " -----------------------------------
 " swap exists ignore
 " -----------------------------------
