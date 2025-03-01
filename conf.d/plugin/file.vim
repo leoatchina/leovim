@@ -104,23 +104,16 @@ if Installed('vim-floaterm')
             endif
         endif
     endfunction
-endif
-if executable('yazi') && g:has_popup_floating
-    command! FloatermYazi call s:floaterm_float('yazi')
-    nnoremap <silent><nowait><leader>e :FloatermYazi<Cr>
-elseif executable('ranger') && g:has_popup_floating
-    command! FloatermRanger call s:floaterm_float('ranger')
-    nnoremap <silent><nowait><leader>e :FloatermRanger<Cr>
-elseif PlannedCoc()
-    function! s:coc_file() abort
-        if has('nvim')
-            exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
-        else
-            exec("CocCommand explorer --toggle --position tab")
-        endif
-    endfunction
-    command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><leader>e :CocFile<Cr>
+    if executable('yazi')
+        command! FloatermYazi call s:floaterm_float('yazi')
+        nnoremap <silent><nowait><leader>e :FloatermYazi<Cr>
+    elseif executable('ranger')
+        command! FloatermRanger call s:floaterm_float('ranger')
+        nnoremap <silent><nowait><leader>e :FloatermRanger<Cr>
+    elseif executable('lf')
+        command! FloatermLF call s:floaterm_float('lf')
+        nnoremap <silent><nowait><leader>e :FloatermLF<Cr>
+    endif
 endif
 " -----------------------------------
 " using system file explorer
