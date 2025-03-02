@@ -1,4 +1,3 @@
-" ----------------------------
 " extend Planned function
 " ----------------------------
 function! PlannedFzf() abort
@@ -298,14 +297,18 @@ endif
 " ----------------------------
 " nvim plugins
 " ----------------------------
-if has('nvim')
-    PlugAdd 'kevinhwang91/promise-async'
-    PlugAdd 'kevinhwang91/nvim-ufo'
-endif
 if has('nvim-0.8')
+    PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/dressing.nvim'
+    PlugAdd 'lukas-reineke/indent-blankline.nvim'
+    PlugAdd 'nvim-tree/nvim-web-devicons'
+elseif has('conceal')
+    PlugAdd 'Yggdroot/indentLine'
+    if v:version >= 800
+        PlugAdd 'ryanoasis/vim-devicons'
+    endif
 endif
 if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
     PlugAdd 'williamboman/mason.nvim'
@@ -340,24 +343,6 @@ endif
 " marks
 " ------------------------------
 PlugAdd 'kshenoy/vim-signature'
-" --------------------------
-" indentline
-" --------------------------
-if has('nvim-0.8')
-    PlugAdd 'lukas-reineke/indent-blankline.nvim'
-elseif has('conceal')
-    PlugAdd 'Yggdroot/indentLine'
-endif
-" ------------------------------
-" devicons
-" ------------------------------
-if v:version >= 800
-    if has('nvim-0.8')
-        PlugAdd 'nvim-tree/nvim-web-devicons'
-    else
-        PlugAdd 'ryanoasis/vim-devicons'
-    endif
-endif
 " ------------------------------
 " undo && search hl
 " ------------------------------
