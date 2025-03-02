@@ -66,6 +66,7 @@ let g:Lf_CommandMap = {
             \ '<C-Up>': ['<Up>', '<C-b>'],
             \ '<C-Down>': ['<Down>', '<C-f>'],
             \ '<C-v>': ['<C-v>', '<C-y>'],
+            \ '<ESC>': ['<ESC>', '<C-c>', '<C-a>'],
             \ }
 let g:Lf_NormalCommandMap = {
             \ "*":{
