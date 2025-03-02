@@ -325,7 +325,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- inlay_hint
     if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      map(nx, "<leader>I", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
+      map(nx, "<leader>i", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
     end
     -- codelens
     if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then

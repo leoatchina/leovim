@@ -180,7 +180,7 @@ call coc#config('python.pythonPath', g:python_prog)
 call coc#config('python.venvPath', ['.venv'])
 if has('nvim') || has('patch-9.0.0252')
     call coc#config('inlayHint.enable', v:true)
-    nnoremap <leader>I :CocCommand document.toggleInlayHint<Cr>
+    nnoremap <silent><leader>i :CocCommand document.toggleInlayHint<Cr>
 else
     call coc#config('inlayHint.enable', v:false)
 endif

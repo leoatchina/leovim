@@ -9,7 +9,7 @@ elseif Planned('indentline')
     let g:indentLine_enabled = 0
     let g:markdown_syntax_conceal = 0
     let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-    nnoremap <silent><leader>i :IndentLinesToggle<Cr>
+    nnoremap <silent><leader>I :IndentLinesToggle<Cr>
 endif
 " -----------------------------------------------------
 " marks

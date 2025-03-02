@@ -5,7 +5,7 @@ ibl.setup({
 })
 vim.keymap.set(
   { "n", "x" },
-  "<leader>i",
+  "<leader>I",
   function()
     ibl.setup_buffer(0, {
       enabled = not config.get_config(0).enabled,
