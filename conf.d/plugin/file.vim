@@ -209,12 +209,12 @@ endfunction
 nnoremap <M-h>b :call <SID>open_or_create_file("~/.bashrc")<Cr>
 " zshrc
 nnoremap <M-h>z :call <SID>open_or_create_file("~/.zshrc")<Cr>
+" configrc
+nnoremap <M-h>c :call <SID>open_or_create_file("~/.configrc")<Cr>
 " ssh/config
 nnoremap <M-h>S :call <SID>open_or_create_file("~/.ssh/config")<Cr>
 " gitconfig
 nnoremap <M-h>G :call <SID>open_or_create_file("~/.gitconfig")<Cr>
-" configrc
-nnoremap <M-h>C :call <SID>open_or_create_file("~/.configrc")<Cr>
 " ------------------
 " create root file
 " ------------------
@@ -253,7 +253,6 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>f :call TabeOpen("$CONF_D_DIR/plugin/file.vim")<Cr>
     if PlannedLeaderf()
         nnoremap <silent><M-h>a :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/autoload<Cr>
-        nnoremap <silent><M-h>c :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/common<Cr>
         nnoremap <silent><M-h>p :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --fuzzy --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --fuzzy --no-sort ~/.leovim<Cr>
@@ -262,7 +261,6 @@ if get(g:, 'leovim_openmap', 1)
         endif
     elseif PlannedFzf()
         nnoremap <silent><M-h>a :FzfFiles ~/.leovim/conf.d/autoload<Cr>
-        nnoremap <silent><M-h>c :FzfFiles ~/.leovim/conf.d/common<Cr>
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
