@@ -15,11 +15,11 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 
 ## 1.2. 设计理念
 
-1. **开箱即用**: 合理的默认配置,安装后即可投入使用
-2. **渐进式学习**: 可以逐步掌握和使用更多高级功能
-3. **一致性**: 在不同环境下保持一致的使用体验
-4. **高效性**: 优化的性能和启动速度
-5. **可维护性**: 清晰的代码组织和完善的文档
+- **开箱即用**: 合理的默认配置,安装后即可投入使用
+- **渐进式学习**: 可以逐步掌握和使用更多高级功能
+- **一致性**: 在不同环境下保持一致的使用体验
+- **高效性**: 优化的性能和启动速度
+- **可维护性**: 清晰的代码组织和完善的文档
 
 ## 1.3. 主要功能
 
@@ -57,14 +57,10 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 # 3. 安装卸载转移
 
 ## 3.1. 基础安装
-
 本程序采用一键式安装, linux下基础安装仅需要执行根目录下的 `install.sh` 脚本, 在windows下用`admin`权限通过执行 `install.cmd`进行安装。
 
-
 ### 3.1.1. 增强软件安装
-
 在linux环境中通过在 `install.sh`后加上不同的参数，可完成增强功能的安装。
-
 - ` neovim`: 强制安装最新版neovim
 - ` nodejs`: 强制安装最新版nodejs
 - ` nvim`: 安装最新版nvim
@@ -75,19 +71,15 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 - 注：上述 ` all`和 ` rc`选项会安装美化并且加入大量新功能的 `~/.bashrc`, 在安装前会询问是否要替换原有配置文件。
 
 ### 3.1.2. 主要安装内容
-
 #### 3.1.2.1. 创建必要的目录结构
-
 - `~/.config/nvim`：Neovim 的配置目录
 - `~/.local/bin`: 可执行文件的安装目录
 
 #### 3.1.2.2. 复制基础工具脚本
-
 - 复制 inputrc 到 `~/.inputrc`（终端输入配置）
 - 复制 configrc 到 `~/.configrc`（通用配置）
 
 #### 3.1.2.3. Vim/Neovim 环境配置
-
 - 建立安装目录与 ~/.leovim 之间的软链接，
 - 将 z.sh，nv.sh，ni.sh 复制到 `~/.local/bin`（增强程序）
 - 创建和更新 `vim的 ~/.vimrc` 或者 `neovim的~/.conf/nvim/init.vim`配置文件，并加载上面的 `~/.leovim/conf.d/init.vim`配置文件完成初始化
@@ -95,19 +87,15 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 - 使用插件管理器安装和更新插件
 
 #### 3.1.2.4. 扩展功能安装
-
 - 在有 `git`的可连接外同的环境下，会安装更多的增强插件, 以完成复杂的功能, 如下图
   ![](assets/image-7.png)
 
 ## 3.2. 卸载
-
 - 运行根目录下的 `uninstall.sh` 。
 - windows下执行 `uninstall.cmd`。
 
 ## 3.3. 打包转移
-
 `scripts/compress.sh` 脚本用于将 LeoVim 配置文件和相关目录打包成一个 tar.gz 文件。该脚本会排除一些不必要的文件和目录，如 `.git`、`.gz`、`.bz2`、`.zip`、`.tags`、`.gtags` 等。具体打包的文件和目录包括：
-
 - `.local/fzf`
 - `.local/nvim*`
 - `.local/node*`
@@ -121,18 +109,13 @@ LeoVim 是一个面向开发人员的 Vim/Neovim 通用配置框架,旨在提供
 执行上述命令后，会在用户主目录下生成一个名为 `leovim.tar.gz` 的压缩文件, 再复制到其他主机解压并执行 `install.sh`即可完成软件和插件的转移。
 
 # 4. 文件目录说明
-
 ## 4.1. `pack`基础包目录
-
-`pack` 目录是预安装目录，用于存放可以通过动态加载的模块集合，这种方式使得模块的加载更加灵活，提高启动速度。
-
-`pack` 目录下包含 `autoload`、`clone`、`colors`、`doc`、`fork`、`ftplugin`、`leo`、`plugin` 和 `syntax` 等子目录，为配色方案、文档、文件类型定义、运行模块、通用插件和文件模块等。
+- `pack` 目录是预安装目录，用于存放可以通过动态加载的模块集合，这种方式使得模块的加载更加灵活，提高启动速度。
+- `pack` 目录下包含 `autoload`、`clone`、`colors`、`doc`、`fork`、`ftplugin`、`leo`、`plugin` 和 `syntax` 等子目录，为配色方案、文档、文件类型定义、运行模块、通用插件和文件模块等。
 
 保证Leovim-IDE在没有网络无法安装增强插件的情况下，可以完成基本的IDE操作。
-
 ## 4.2. `conf.d`目录
-
-`conf.d` 目录是主要的程序目录，包含了以下子目录和文件：
+- `conf.d` 目录是主要的程序目录，包含了以下子目录和文件：
 
 ### 4.2.1. 入口文件 `conf.d/init.vim:`
 
@@ -318,46 +301,47 @@ let g:maplocalleader = 'q'
   - `cdr`: 更改到当前文件的根目录。
   - `cdl`: 更改到当前文件的目录。
 - **打开文件**:
-  - `<M-j> e`: 打开文件。
-  - `<M-j> t`: 在新标签页中打开文件。
-  - `<M-j> s`: 在新窗口中打开文件。
-  - `<M-j> v`: 在垂直分割窗口中打开文件。
+  - `<M-j>e`: 打开文件。
+  - `<M-j>t`: 在新标签页中打开文件。
+  - `<M-j>s`: 在新窗口中打开文件。
+  - `<M-j>v`: 在垂直分割窗口中打开文件。
 - **文件浏览器**:
-  - `<Leader> e`: 打开文件浏览器。
-  - `<Leader> ff`: 打开文件搜索。
-  - `<Leader> p`: 打开 Git 文件搜索。
-  - `<Leader> <Enter>`: 重新加载当前文件。
-  - `<Leader> E`: 打开文件选择器。
+  - `<Leader>e`: 打开文件浏览器。
+  - `<Leader>ff`: 打开文件搜索。
+  - `<Leader>p`: 打开 Git 文件搜索。
+  - `<Leader><Enter>`: 重新加载当前文件。
+  - `<Leader>E`: 打开Project文件选择器。
+  - `<Leader>P`: 打开GitRoot文件选择器。
 
 ### 6.4.4. 文件创建和打开
 
 - **创建或打开文件**:
-  - `<M-h> S`: 打开或创建 `~/.ssh/config` 文件。
-  - `<M-h> G`: 打开或创建 `~/.gitconfig` 文件。
-  - `<M-h> B`: 打开或创建 `~/.bashrc` 文件。
-  - `<M-h> C`: 打开或创建 `~/.configrc` 文件。
-  - `<M-h> t`: 打开或创建 `TODO.md` 文件。
-  - `<M-h> r`: 打开或创建 `README.md` 文件。
-  - `<M-h> g`: 打开或创建 `.gitignore` 文件。
-  - `<M-h> w`: 打开或创建 `.wildignore` 文件。
+  - `<M-h>S`: 打开或创建 `~/.ssh/config` 文件。
+  - `<M-h>G`: 打开或创建 `~/.gitconfig` 文件。
+  - `<M-h>B`: 打开或创建 `~/.bashrc` 文件。
+  - `<M-h>C`: 打开或创建 `~/.configrc` 文件。
+  - `<M-h>t`: 打开或创建 `TODO.md` 文件。
+  - `<M-h>r`: 打开或创建 `README.md` 文件。
+  - `<M-h>g`: 打开或创建 `.gitignore` 文件。
+  - `<M-h>w`: 打开或创建 `.wildignore` 文件。
 - **打开配置文件**:
-  - `<M-h> <Enter>`: 重新加载 `~/.leovim/conf.d/init.vim` 文件。
-  - `<M-h> o`: 打开 `~/.vimrc.opt` 文件。
-  - `<M-h> i`: 打开 `~/.leovim/conf.d/init.vim` 文件。
-  - `<M-h> b`: 打开 `~/.leovim/basement.vim` 文件。
-  - `<M-h> k`: 打开 `~/.leovim/conf.d/keybindings.json` 文件。
-  - `<M-h> v`: 打开 `~/.leovim/conf.d/vscode.vim` 文件。
-  - `<M-h> m`: 打开 `~/.leovim/conf.d/main.vim` 文件。
-  - `<M-h> O`: 打开 `~/.leovim/conf.d/opt.vim` 文件。
-  - `<M-h> f`: 打开 `~/.leovim/conf.d/plugin/file.vim` 文件。
-  - `<M-h> a`: 打开 `~/.leovim/conf.d/autoload` 目录中的文件。
-  - `<M-h> c`: 打开 `~/.leovim/conf.d/common` 目录中的文件。
-  - `<M-h> p`: 打开 `~/.leovim/conf.d/plugin` 目录中的文件。
-  - `<M-h> d`: 打开 `~/.leovim/conf.d` 目录中的文件。
-  - `<M-h> l`: 打开 `~/.leovim` 目录中的文件。
-  - `<M-h> L`: 打开 `~/.local/bin` 目录中的文件。
-  - `<M-h> A`: 打开或创建 `~/.leovim.d/after.vim` 文件。
-  - `<M-h> P`: 打开或创建 `~/.leovim.d/pack.vim` 文件。
+  - `<M-h><Enter>`: 重新加载 `~/.leovim/conf.d/init.vim` 文件。
+  - `<M-h>o`: 打开 `~/.vimrc.opt` 文件。
+  - `<M-h>i`: 打开 `~/.leovim/conf.d/init.vim` 文件。
+  - `<M-h>I`: 打开 `~/.leovim/conf.d/install/install.vim` 文件。
+  - `<M-h>k`: 打开 `~/.leovim/conf.d/keybindings.json` 文件。
+  - `<M-h>v`: 打开 `~/.leovim/conf.d/vscode.vim` 文件。
+  - `<M-h>m`: 打开 `~/.leovim/conf.d/main.vim` 文件。
+  - `<M-h>O`: 打开 `~/.leovim/conf.d/opt.vim` 文件。
+  - `<M-h>f`: 打开 `~/.leovim/conf.d/plugin/file.vim` 文件。
+  - `<M-h>a`: 打开 `~/.leovim/conf.d/autoload` 目录中的文件。
+  - `<M-h>c`: 打开 `~/.leovim/conf.d/common` 目录中的文件。
+  - `<M-h>p`: 打开 `~/.leovim/conf.d/plugin` 目录中的文件。
+  - `<M-h>d`: 打开 `~/.leovim/conf.d` 目录中的文件。
+  - `<M-h>l`: 打开 `~/.leovim` 目录中的文件。
+  - `<M-h>L`: 打开 `~/.local/bin` 目录中的文件。
+  - `<M-h>A`: 打开或创建 `~/.leovim.d/after.vim` 文件。
+  - `<M-h>P`: 打开或创建 `~/.leovim.d/pack.vim` 文件。
 
 ### 6.4.5. 缓存文件清理
 
@@ -405,13 +389,21 @@ let g:maplocalleader = 'q'
 ### 6.4.9. 窗口操作
 
 - **调整窗口大小**:
-  - `<Tab> h`: 向左调整窗口大小。
-  - `<Tab> l`: 向右调整窗口大小。
-  - `<Tab> k`: 向上调整窗口大小。
-  - `<Tab> j`: 向下调整窗口大小。
+  - `\a`: 向左调整窗口大小。
+  - `\d`: 向右调整窗口大小。
+  - `\w`: 向上调整窗口大小。
+  - `\s`: 向下调整窗口大小。
+  - `<Tab>k`: 向上调整窗口大小。
+  - `<Tab>j`: 向下调整窗口大小。
 - **打开新窗口**:
-  - `<Tab> v`: 垂直分割窗口。
-  - `<Tab> s`: 水平分割窗口。
+  - `<Tab>v`: 垂直分割窗口。
+  - `<Tab>x`: 水平分割窗口。
+- **窗口控制**:
+  - `<M-Q>`: 关闭前一个窗口。
+  - `<M-U>`: 在前一个窗口向上滚动半页。
+  - `<M-D>`: 在前一个窗口向下滚动半页。
+  - `<M-E>`: 在前一个窗口向下滚动一行。
+  - `<M-Y>`: 在前一个窗口向上滚动一行。
 
 ## 6.5. 代码运行与编译
 
@@ -501,6 +493,7 @@ let g:maplocalleader = 'q'
 ### 6.6.3. Debug: load_json
 
 - 定义了 `s:load_json` 函数，用于加载 `dap` 或 `vimspector` 的 JSON 配置文件。
+- `-`用于watch 某个变量, 在对应的watch窗口, 用`x`删除
 
 ### 6.6.4. Vimspector 调试器相关
 
@@ -520,7 +513,7 @@ let g:maplocalleader = 'q'
 ### 6.6.6. F1-F12 快捷键映射
 
 - F1:  如果安装了 vimspector，则执行 `<Plug>VimspectorDisassemble` 命令。如果安装了 nvim-dap，则执行 `<Cmd>DapReplToggle<Cr>` 命令。
-- F2:  利用lsp的改中操作。
+- F2:  利用lsp的rename操作。
 - F3:  停止调试
 - F4:  运行到光标位置
 - F5:  开始Debug/继续debug
@@ -581,8 +574,7 @@ let g:maplocalleader = 'q'
 * **actions**:  配置了 `coc.nvim` 的代码操作相关功能。映射 `<C-q>` 来格式化选定的代码或整个文件。定义了 `Format`、`Fold` 和 `OR` 命令来执行格式化、折叠和组织导入操作。
 * **inlayHint/codeLens/codeaction**:  配置了 inlay hint、codeLens 和 code action 功能。根据 Vim 版本启用或禁用 inlay hint 和 codeLens，并映射了快捷键来切换它们的状态。还映射了快捷键来执行重命名、快速修复、代码操作和 codelens 操作。
 * **textobject using coc lsp**:  映射了快捷键来使用 `coc.nvim` 提供的基于 LSP 的文本对象。
-* **symbol line and other**:  根据是否为 Neovim 来配置 `coc.nvim` 的 `currentFunctionSymbolAutoUpdate` 选项。
-* **ColorScheme**:  根据是否安装了 `nvim-treesitter` 来配置 `gopls` 的 `semanticTokens` 选项。使用自动命令修复特定配色方案下 `CocExplorerIndentLine` 的背景色。
+* **others**:  设置了其他 LSP 相关的功能。例如，为 hover 和 signatureHelp 弹出窗口添加了边框，并设置了 signatureHelp 的关闭事件。
 
 ### 6.7.3. `conf.d/lua/lsp.lua`
 
@@ -641,7 +633,7 @@ let g:maplocalleader = 'q'
 - 显示诊断信息:
   - **快捷键:** `<M-l>d`，用于显示光标下诊断信息的详细内容。
 
-## 6.9. 符号晃动
+## 6.9. 符号查找
 
 ### 6.9.1. 基础符号显示
 
@@ -653,15 +645,18 @@ let g:maplocalleader = 'q'
 
 ### 6.9.2. 符号搜索功能
 
-这部分定义了一个核心函数 `s:lsp_tags_searchall(method, ...)`，用于根据配置和插件，使用 LSP 或 tags 来查找符号定义、引用等。
+这部分定义了一个核心函数 `s:lsp_tag_search(method, ...)`，用于根据配置和插件，使用 LSP 或 tags 来查找符号定义、引用等。
 
 - 该函数首先获取光标下的词作为要查找的符号。
 - 如果 `method` 是 `preview`，则尝试使用进行预览。
 - 否则，根据 `method` 的值（definition, references 等）进行相应的查找。
-- 根据是否安装了 `coc.nvim` 或 `lspui.nvim` 以及 `lsp` 变量的值，尝试使用相应的 LSP 功能进行查找。
-- 如果 LSP 没有找到，且配置了 ctags，则调用 `s:find_with_ctags` 函数使用 ctags 进行查找。
-- 如果仍然没有找到，则执行 `g:searchall` 命令进行全局搜索。
-- 定义了多个快捷键，用于调用 以不同的方式查找符号（预览、定义、引用等）。快捷键的映射会根据是否启用了高级补全引擎而有所不同。
+- 符号查找采用三层查找机制，按以下顺序尝试：
+  1. **LSP查找**：优先使用LSP进行查找，根据配置可能使用以下两种方式之一：
+     - 如果安装了`coc.nvim`，使用CocAction进行符号查找
+     - 如果安装了Neovim LSP，使用`vim.lsp.buf`相关函数进行符号查找
+  2. **Tags查找**：如果LSP查找失败且配置了ctags，则调用 `s:find_with_ctags` 函数使用 ctags 进行查找
+  3. **全局搜索**：如果上述两种方法都失败，则执行 `g:search_all_cmd` 命令进行全局文本搜索
+- 定义了多个快捷键，用于调用以不同的方式查找符号（预览、定义、引用等）。快捷键的映射会根据是否启用了高级补全引擎而有所不同。
   - `<C-h>`: Hover符号定义。
   - `<M-c>`: 预览符号定义。
   - `<M-C>`: 预览符号声明。
@@ -702,7 +697,7 @@ Vim 的文本对象（Text Objects）是 Vim 编辑器中一个非常强大的�
 - `iL`: 选择循环内部的文本。
 - 可以通过 `v` (字符选择), `V` (行选择), `<C-v>` (块选择) 等模式后接以上快捷键来选择不同类型的文本对象。 例如 `vac` 选择整个类。
 
-#### 6.10.2.2. 移动到文本对象 (Move):
+#### 6.10.2.2. 跳转到文本对象 (Move):
 
 这些快捷键利用了 `nvim-treesitter` 强大的语法解析能力，可以精确地识别代码结构，从而实现更智能的文本操作。
 
@@ -737,65 +732,62 @@ Vim 的文本对象（Text Objects）是 Vim 编辑器中一个非常强大的�
   * 如果安装了 `leaderf`，则使用 `Leaderf line --all` 在所有 buffer 中进行模糊搜索。
   * 如果安装了 `fzf`，则使用 `FzfLines` 在所有 buffer 中搜索行。
 * `\|`: 在普通模式下，使用当前光标下的词语在当前 buffer 中进行搜索。
-* `v\|`: 在可视模式下，使用选中的文本在当前 buffer 中进行搜索。
+* `<Visual>\|`: 在可视模式下，使用选中的文本在当前 buffer 中进行搜索。
 * `<leader>\|`: 在普通模式下，使用当前光标下的词语在当前 buffer 中进行搜索 (与 `\|` 相同，但使用了 `<leader>` 键)。
-* `v<leader>\|`: 在可视模式下，使用选中的文本在当前 buffer 中进行搜索 (与 `v\|` 相同，但使用了 `<leader>` 键)。
-* `s<Cr>`: 使用 `GrepAll` 命令进行全局搜索。
-* `vs<Cr>`: 在可视模式下，使用选中的文本进行全局搜索。
+* `<Visual><leader>\|`: 在可视模式下，使用选中的文本在当前 buffer 中进行搜索 (与 `<Visual>\|` 相同，但使用了 `<leader>` 键)。
+* `s<Cr>`: 在普通模式下，使用当前光标下的词语进行全局搜索。
+* `<Visual>s<Cr>`: 在可视模式下，使用选中的文本进行全局搜索。
 * `s.`: 使用 `GrepAllLast` 命令，搜索上次全局搜索的关键词。
-* `s/`: 使用 `GrepAll` 命令，搜索当前光标下的词语。
-* `s\`: 使用 `Grep` 命令在当前目录下搜索。
-* `vs\`: 在可视模式下，使用选中的文本在当前目录下搜索。
+* `s/`: 在普通模式下，使用当前光标下的词语在当前目录下搜索。
+* `<Visual>s\`: 在可视模式下，使用选中的文本在当前目录下搜索。
 * `s[`: 使用 `GrepLast` 命令，搜索上次在当前目录搜索的关键词。
 * `s]`: 使用 `Grep` 命令，搜索当前光标下的词语 (与 `s\` 相同)。
-* `<leader>/`:使用 `FzfSearch` 命令进行模糊搜索当前目录。
-* `<leader>.`:使用 `FzfSearchLast` 命令搜索上次 `fzf` 搜索的关键词。
-* `<leader>\`:使用 `FzfSearch` 命令搜索当前光标下的词语。
-* `v<leader>\`: 使用 `FzfSearch` 命令搜索选中的文本。
+* `<leader>/`: 使用 `FzfSearch` 命令进行模糊搜索当前目录。
+* `<leader>.`: 使用 `FzfSearchLast` 命令搜索上次 `fzf` 搜索的关键词。
+* `<leader>\`: 在普通模式下，使用当前光标下的词语进行 `FzfSearch` 搜索。
+* `<Visual><leader>\`: 在可视模式下，使用选中的文本进行 `FzfSearch` 搜索。
 * `<Tab>/`: 使用 `FzfSearchGit` 命令在 Git 仓库中搜索。
 * `<Tab>.`: 使用 `FzfSearchGitLast` 命令搜索上次 Git 搜索的关键词。
-* `<Tab>\`: 使用 `FzfSearchGit` 命令搜索当前光标下的词语。
-* `v<Tab>\`: 使用 `FzfSearchGit` 命令搜索选中的文本。
+* `<Tab>\`: 在普通模式下，使用当前光标下的词语进行 `FzfSearchGit` 搜索。
+* `<Visual><Tab>\`: 在可视模式下，使用选中的文本进行 `FzfSearchGit` 搜索。
 * `q/`: 使用 `FzfSearchAll` 命令进行全局搜索。
 * `q.`: 使用 `FzfSearchAllLast` 命令搜索上次全局搜索的关键词。
-* `q\`: 使用 `FzfSearchAll` 命令搜索当前光标下的词语。
-* `vq\`: 使用 `FzfSearchAll` 命令搜索选中的文本。
+* `q\`: 在普通模式下，使用当前光标下的词语进行 `FzfSearchAll` 搜索。
+* `<Visual>q\`: 在可视模式下，使用选中的文本进行 `FzfSearchAll` 搜索。
 * `<leader>?`: 使用 `FzfSearchCommands` 命令搜索可用的 `fzf` 命令。
 * `<C-f>.`: 使用 `Leaderf rg --recal` 重新加载 `leaderf` 缓存并进行搜索。
 * `<C-f>;`: 使用 `Leaderf rg --next` 跳转到下一个搜索结果。
 * `<C-f>,`: 使用 `Leaderf rg --previous` 跳转到上一个搜索结果。
-* `<C-f>e`: 使用 `Leaderf rg` 在底部打开，搜索当前光标下的词语。
-* `v<C-f>e`: 使用 `Leaderf rg` 在底部打开，搜索选中的文本。
-* `<C-f>b`: 使用 `Leaderf rg --all-buffers` 在底部打开，搜索当前光标下的词语。
-* `v<C-f>b`: 使用 `Leaderf rg --all-buffers` 在底部打开，搜索选中的文本。
-* `<C-f>w`: 使用 `Leaderf rg -w` 在底部打开，搜索当前光标下的完整单词。
-* `v<C-f>w`: 使用 `Leaderf rg -w` 在底部打开，搜索选中的完整单词。
-* `<C-f>f`: 使用 `Leaderf rg -F` 在底部打开，搜索当前文件名（不带扩展名）。
-* `v<C-f>f`: 使用 `Leaderf rg -F` 在底部打开，搜索选中的文件名。
-* `<C-f>x`: 使用 `Leaderf rg -x` 在底部打开，搜索当前光标下的精确匹配。
-* `v<C-f>x`: 使用 `Leaderf rg -x` 在底部打开，搜索选中的精确匹配。
-* `<C-f>a`: 使用 `Leaderf rg --append` 在底部打开，追加搜索当前光标下的词语。
-* `v<C-f>a`: 使用 `Leaderf rg --append` 在底部打开，追加搜索选中的文本。
+* `<C-f>e`: 在普通模式下，使用 `Leaderf rg` 在底部打开，搜索当前光标下的词语。
+* `<Visual><C-f>e`: 在可视模式下，使用 `Leaderf rg` 在底部打开，搜索选中的文本。
+* `<C-f>b`: 在普通模式下，使用 `Leaderf rg --all-buffers` 在底部打开，搜索当前光标下的词语。
+* `<Visual><C-f>b`: 在可视模式下，使用 `Leaderf rg --all-buffers` 在底部打开，搜索选中的文本。
+* `<C-f>w`: 在普通模式下，使用 `Leaderf rg -w` 在底部打开，搜索当前光标下的词语。
+* `<Visual><C-f>w`: 在可视模式下，使用 `Leaderf rg -w` 在底部打开，搜索选中的文本。
+* `<C-f>x`: 在普通模式下，使用 `Leaderf rg -x` 在底部打开，搜索当前光标下的词语。
+* `<Visual><C-f>x`: 在可视模式下，使用 `Leaderf rg -x` 在底部打开，搜索选中的文本。
+* `<C-f>a`: 在普通模式下，使用 `Leaderf rg --append` 在底部打开，追加搜索当前光标下的词语。
+* `<Visual><C-f>a`: 在可视模式下，使用 `Leaderf rg --append` 在底部打开，追加搜索选中的文本。
 * `<C-f>i`: 使用 `LeaderfRgInteractive` 打开交互式 `leaderf rg` 搜索。
 * `<C-f><Tab>`: 使用 `Leaderf rg --no-ignore` 打开 `leaderf rg` 搜索，忽略忽略文件。
 * `<C-f>t`: 使用 `LeaderfTODO` 搜索 TODO 注释。
 * `<C-f>n`: 使用 `LeaderfNOTE` 搜索 NOTE 注释。
 * `<C-f>T`: 使用 `LeaderfTodo` 在本地搜索 TODO 注释。
 * `<C-f>N`: 使用 `LeaderfNote` 在本地搜索 NOTE 注释。
-* `<C-f><Cr>`: 使用 `LeaderfSearchAll` 或 `FzfSearchAll` 或 `GrepAll` 进行全局搜索，取决于安装的插件。
-* `v<C-f><Cr>`: 使用 `LeaderfSearchAll` 或 `FzfSearchAll` 进行全局搜索选中的文本。
-* `<C-f><Space>`: 使用 `LeaderfSearchAll` 或 `FzfSearchAll` 进行全局搜索当前光标下的词语。
-* `v<C-f><Space>`: 使用 `LeaderfSearchAll` 或 `FzfSearchAll` 进行全局搜索选中的文本。
-* `<C-f><C-f>`: 使用 `LeaderfSearch` 在本地搜索当前光标下的词语。
-* `v<C-f><C-f>`: 使用 `LeaderfSearch` 在本地搜索选中的文本。
-* `<C-f><C-]>`: 使用 `LeaderfSearch` 搜索当前光标下的词语。
-* `v<C-f><C-]>`: 使用 `LeaderfSearch` 搜索选中的文本。
+* `<C-f><Cr>`: 在普通模式下，使用 `LeaderfSearchAll` 或 `FzfSearchAll` 或 `GrepAll` 进行全局搜索当前光标下的词语。
+* `<Visual><C-f><Cr>`: 在可视模式下，使用 `LeaderfSearchAll` 或 `FzfSearchAll` 进行全局搜索选中的文本。
+* `<C-f><Space>`: 在普通模式下，使用 `LeaderfSearchAll` 或 `FzfSearchAll` 进行全局搜索当前光标下的词语。
+* `<Visual><C-f><Space>`: 在可视模式下，使用 `LeaderfSearchAll` 或 `FzfSearchAll` 进行全局搜索选中的文本。
+* `<C-f><C-f>`: 在普通模式下，使用 `LeaderfSearch` 在本地搜索当前光标下的词语。
+* `<Visual><C-f><C-f>`: 在可视模式下，使用 `LeaderfSearch` 在本地搜索选中的文本。
+* `<C-f><C-]>`: 在普通模式下，使用 `LeaderfSearch` 搜索当前光标下的词语。
+* `<Visual><C-f><C-]>`: 在可视模式下，使用 `LeaderfSearch` 搜索选中的文本。
 * `<C-f>/`: 使用 `Leaderf rg --auto-preview --wd-mode=f` 在本地进行 `rg` 搜索并自动预览。
 * `<C-f>?`: 使用 `Leaderf rg --auto-preview` 进行 `rg` 搜索并自动预览。
-* `<C-f><C-\>`: 使用 `Leaderf rg --auto-preview --wd-mode=f --cword` 在本地搜索当前光标下的词语并自动预览。
-* `v<C-f><C-\>`: 使用 `Leaderf rg --auto-preview --wd-mode=f` 在本地搜索选中的文本并自动预览。
-* `<C-f>\`: 使用 `Leaderf rg --auto-preview --cword` 搜索当前光标下的词语并自动预览。
-* `v<C-f>\`: 使用 `Leaderf rg --auto-preview` 搜索选中的文本并自动预览。
+* `<C-f><C-\>`: 在普通模式下，使用 `Leaderf rg --auto-preview --wd-mode=f --cword` 在本地搜索当前光标下的词语并自动预览。
+* `<Visual><C-f><C-\>`: 在可视模式下，使用 `Leaderf rg --auto-preview --wd-mode=f` 在本地搜索选中的文本并自动预览。
+* `<C-f>\`: 在普通模式下，使用 `Leaderf rg --auto-preview --cword` 搜索当前光标下的词语并自动预览。
+* `<Visual><C-f>\`: 在可视模式下，使用 `Leaderf rg --auto-preview` 搜索选中的文本并自动预览。
 * `<C-f>p`: 使用 `LeaderfSearchAll` 或 `FzfSearchAll` 或 `GrepAll` 搜索当前文件名（不带扩展名）。
 * `<C-f>d`: 使用 `LeaderfSearchAll` 或 `FzfSearchAll` 或 `GrepAll` 搜索当前文件所在目录名。
 
