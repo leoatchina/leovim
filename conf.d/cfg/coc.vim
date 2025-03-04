@@ -35,7 +35,6 @@ let g:coc_global_extensions = [
             \ 'coc-vimlsp',
             \ 'coc-dictionary',
             \ 'coc-pyright',
-            \ 'coc-pyright',
             \ ]
 if UNIX()
     let g:coc_global_extensions += ['coc-lua']
