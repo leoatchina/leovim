@@ -208,7 +208,7 @@ local function get_lsp_loc(value)
   end
   -- jumpto position
   local lnum = range.start.line + 1
-  local col = range.start.character
+  local col = range.start.character + 1
   -- return
   return {
     filename = filename,
