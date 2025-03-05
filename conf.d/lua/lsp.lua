@@ -153,7 +153,41 @@ require("mason-lspconfig").setup({
     end,
     jdtls = function()
       lspconfig.jdtls.setup({
+        filetypes = { "java", "javac", "jar" },
         capabilities = lsp_capabilities,
+      })
+    end,
+    pyright = function ()
+      lspconfig.pyright.setup({
+        filetypes = { "python" },
+        cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright', '--stdio'} ,
+        capabilities = lsp_capabilities,
+        settings = {
+          pyright = {
+            -- disable import sorting and use Ruff for this
+            disableOrganizeImports = true,
+            disableTaggedHints = false,
+          },
+          python = {
+            analysis = {
+              autoSearchPaths = true,
+              diagnosticMode = "workspace",
+              typeCheckingMode = "standard",
+              useLibraryCodeForTypes = true,
+              -- we can this setting below to redefine some diagnostics
+              diagnosticSeverityOverrides = {
+                deprecateTypingAliases = false,
+              },
+              -- inlay hint settings are provided by pylance?
+              inlayHints = {
+                callArgumentNames = "partial",
+                functionReturnTypes = true,
+                pytestParameters = true,
+                variableTypes = true,
+              },
+            },
+          },
+        },
       })
     end,
   }
