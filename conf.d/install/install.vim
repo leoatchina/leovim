@@ -19,7 +19,6 @@ function! InstalledNvimLsp() abort
                 \ 'mason-lspconfig.nvim',
                 \ 'symbol-usage.nvim',
                 \ 'call-graph.nvim',
-                \ 'dropbar.nvim',
                 \ )
 endfunction
 function! InstalledCmp() abort
@@ -143,11 +142,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'nvim-tree/nvim-tree.lua'
     " call-graph
     PlugAdd 'ravenxrz/call-graph.nvim'
-    " winbar
-    PlugAdd 'Bekaboo/dropbar.nvim'
-    if UNIX()
-        PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
-    endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
@@ -207,10 +201,6 @@ endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
     PlugAdd 'sainnhe/sonokai'
-    if has('nvim-0.8.1')
-        PlugAdd 'EdenEast/nightfox.nvim'
-        PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
-    endif
 endif
 " ------------------------------
 " debug tool
@@ -304,6 +294,15 @@ if has('nvim-0.8')
     PlugAdd 'stevearc/dressing.nvim'
     PlugAdd 'lukas-reineke/indent-blankline.nvim'
     PlugAdd 'nvim-tree/nvim-web-devicons'
+    " color
+    PlugAdd 'EdenEast/nightfox.nvim'
+    PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
+    if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
+        PlugAdd 'Bekaboo/dropbar.nvim'
+        if UNIX()
+            PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
+        endif
+    endif
 elseif has('conceal')
     PlugAdd 'Yggdroot/indentLine'
     if v:version >= 800
