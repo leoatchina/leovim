@@ -160,7 +160,7 @@ require("mason-lspconfig").setup({
     pyright = function ()
       lspconfig.pyright.setup({
         filetypes = { "python" },
-        cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright', '--stdio'} ,
+        cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright-langserver', '--stdio'} ,
         capabilities = lsp_capabilities,
         settings = {
           pyright = {
