@@ -17,37 +17,35 @@ endfunction
 function! GitRootDir()
     return get(b:, 'git_root_dir', '')
 endfunction
-function! AutoLCD_UpdateGit()
-    let cur_dir = expand('%:p:h')
-    if cur_dir != ''
-        execute 'lcd ' . cur_dir
+function! AutoLCD_UpdateGit() abort
+    let l:cur_dir = expand('%:p:h')
+    if l:cur_dir != ''
+        execute 'lcd ' . l:cur_dir
     endif
     if g:git_version > 1.8
-        if WINDOWS()
-            let idx = -1
-        else
-            let idx = 0
-        endif
         try
-            let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel 2>/dev/null')
+            if WINDOWS()
+                let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel')
+            else
+                let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel 2>/dev/null')
+            endif
             let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
             if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
                 let b:git_root_dir = ''
                 let b:git_branch = ''
             else
-                try
+                if WINDOWS()
+                    let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD')
+                else
                     let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
-                    let b:git_branch = substitute(l:branch, '\n\+$', '', '')
-                    if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
-                        let b:git_root_dir = ''
-                        let b:git_branch = ''
-                    endif
-                catch /.*/
+                endif
+                let b:git_branch = substitute(l:branch, '\n\+$', '', '')
+                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
                     let b:git_root_dir = ''
                     let b:git_branch = ''
-                endtry
+                endif
             endif
-        catch /.*/
+        catch
             let b:git_root_dir = ''
             let b:git_branch = ''
         endtry
