@@ -4,8 +4,8 @@ elif [ -f "$HOME/.local/nvim-macos-arm64/bin/nvim" ] && [ -x "$HOME/.local/nvim-
   NVIMCMD="$HOME/.local/nvim-macos-arm64/bin/nvim"
 elif [ -f "$HOME/.local/nvim-macos-x86_64/bin/nvim" ] && [ -x "$HOME/.local/nvim-macos-x86_64/bin/nvim" ]; then
   NVIMCMD="$HOME/.local/nvim-macos-x86_64/bin/nvim"
-elif [ -f "$HOME/.local/nvim-linux64/bin/nvim" ] && [ -x "$HOME/.local/nvim-linux64/bin/nvim" ]; then
-  NVIMCMD="$HOME/.local/nvim-linux64/bin/nvim"
+elif [ -f "$HOME/.local/nvim-linux-x86_64/bin/nvim" ] && [ -x "$HOME/.local/nvim-linux-x86_64/bin/nvim" ]; then
+  NVIMCMD="$HOME/.local/nvim-linux-x86_64/bin/nvim"
 elif [ -f "$HOME/.local/bin/nvim" ] && [ -x "$HOME/.local/bin/nvim" ]; then
   NVIMCMD="$HOME/.local/bin/nvim"
 elif [ -x "nvim" ]; then

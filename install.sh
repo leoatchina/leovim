@@ -236,8 +236,8 @@ if [ $# -gt 0 ]; then
                     tar xzf nvim-macos-x86_64.tar.gz
                     ;;
                 *)
-                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
-                    tar xzf nvim-linux64.tar.gz
+                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz
+                    tar xzf nvim-linux-x86_64.tar.gz
                     ;;
             esac
             rm nvim-*.tar.gz
