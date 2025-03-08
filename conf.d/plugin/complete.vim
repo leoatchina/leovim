@@ -254,6 +254,4 @@ endif
 " --------------------------
 " helpful
 " --------------------------
-if !exists('g:vscode')
-    au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
-endif
+au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
