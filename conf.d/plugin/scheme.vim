@@ -55,14 +55,3 @@ endif
 if Installed('nvim-web-devicons')
     lua require('nvim-web-devicons').setup({})
 endif
-" --------------------------
-" render-markdown
-" --------------------------
-if Installed('render-markdown.nvim')
-    " 在 Vim 配置文件中添加以下内容
-    augroup SetupRenderMarkdown
-        autocmd!
-        autocmd User avante.nvim,codecompanion.nvim,mini.pick ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
-        autocmd FileType markdown,Avante,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
-    augroup END
-endif

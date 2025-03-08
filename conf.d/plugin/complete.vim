@@ -50,6 +50,13 @@ elseif !exists("g:ai_complete_engine")
     xnoremap <M-i> <Nop>
     inoremap <M-i> <Nop>
 endif
+if Installed('render-markdown.nvim')
+    augroup SetupRenderMarkdown
+        autocmd!
+        autocmd User avante.nvim,codecompanion.nvim,mini.pick ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
+        autocmd FileType markdown,Avante,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
+    augroup END
+endif
 " -----------------------------
 " vista_default_executive
 " -----------------------------
