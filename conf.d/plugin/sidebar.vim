@@ -80,7 +80,16 @@ endif
 " --------------------------
 " tree_browser
 " --------------------------
-if Installed('coc.nvim')
+if v:version >= 801 || has('nvim')
+    source $CFG_DIR/fern.vim
+    let g:tree_browser = 'fern'
+    let g:sidebars.tree_browser = {
+                \ 'position': 'left',
+                \ 'check_win': function('s:check_buf_ft', ["fern"]),
+                \ 'open': 'Fern . -drawer -stay -toggle',
+                \ 'close': 'Fern . -drawer -toggle'
+                \ }
+elseif Installed('coc.nvim')
     let g:tree_browser = 'coc-explore'
     function s:coc_explorer_open() abort
         CocCommand explorer
@@ -96,34 +105,6 @@ if Installed('coc.nvim')
                 \ 'check_win': function('s:check_coc_explorer'),
                 \ 'open': 'CocExplorerOpen',
                 \ 'close': 'CocCommand explorer'
-                \ }
-elseif v:version >= 801 || has('nvim')
-    source $CFG_DIR/fern.vim
-    let g:tree_browser = 'fern'
-    let g:sidebars.tree_browser = {
-                \ 'position': 'left',
-                \ 'check_win': function('s:check_buf_ft', ["fern"]),
-                \ 'open': 'Fern . -drawer -stay -toggle',
-                \ 'close': 'Fern . -drawer -toggle'
-                \ }
-elseif Installed('nvim-tree.lua')
-    let g:loaded_netrw = 1
-    let g:loaded_netrwPlugin = 1
-    lua require('nvim-tree').setup({hijack_cursor = true, sync_root_with_cwd = true})
-    function! s:nvim_tree_open_stay()
-        NvimTreeOpen
-        sleep 100m
-        wincmd w
-    endfunction
-    command! NvimTreeOpenStay call s:nvim_tree_open_stay()
-    function! s:check_nvim_tree(nr)
-        return s:check_buf_ft('NvimTree', a:nr)
-    endfunction
-    let g:sidebars.tree_browser = {
-                \ 'position': 'left',
-                \ 'check_win': function('s:check_nvim_tree'),
-                \ 'open': 'NvimTreeOpenStay',
-                \ 'close': 'NvimTreeClose'
                 \ }
 else
     let g:tree_browser = 'netrw'
