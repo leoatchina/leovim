@@ -159,7 +159,7 @@ nnoremap <silent>\s     :call SmartResize('j', 'j')<Cr>
 " ------------------------
 if has('patch-8.0.1129') && !has('nvim')
     function! s:toggle_winbar(open) abort
-        if CheckIgnoreFtBt()
+        if FtBtIgnored()
             return
         else
             let fname = Expand("%:t", 1)

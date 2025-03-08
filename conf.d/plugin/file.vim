@@ -22,7 +22,7 @@ function! s:autoclose(...) abort
         return 0
     endif
 endfunction
-function! CheckIgnoreFtBt() abort
+function! FtBtIgnored() abort
     return s:autoclose(0)
 endfunction
 function! AutoCloseFtBt() abort
@@ -42,7 +42,7 @@ function! GitRootDir()
     return get(b:, 'git_root_dir', '')
 endfunction
 function! AutoLcdGit() abort
-    if CheckIgnoreFtBt()
+    if FtBtIgnored()
         return
     endif
     let l:cur_dir = AbsDir()
@@ -398,35 +398,43 @@ nnoremap <M-k><space> :ToggleModity<Cr>
 " -------------------------
 " confirem quit
 " -------------------------
-function! s:confirm_quit(all) abort
-    let all = a:all
+function! s:confirm_quit(type) abort
+    let type = a:type
     if &ft == 'floaterm'
         FloatermKill
-    elseif (&ft == '' || Expand('%') == '' || CheckIgnoreFtBt()) && all == 0
+    elseif (&ft == '' || Expand('%') == '' || FtBtIgnored()) && type == 0
         q!
     else
-        if all
-            let title = "Do you want to quit all?"
-        else
-            let title = "Do you want to quit?"
-        endif
-        if &modified && all == 0
-            let choices = ['Save And Quit', 'Quit Only']
-            let confirmed = ChooseOne(choices, title, 0, 'Cancel')
-            if confirmed =~# '^Save'
-                wq!
-            elseif confirmed =~# '^Quit'
+        if type == 'all'
+            let choices = ['Quit All']
+            let title = "Do you want to quit all buffers? Ctrl+C to cancel"
+        elseif type == 'direct'
+            if &modified
+                let choices = ['Save And Quit', 'Quit Only']
+                let title = "Do you want to quit without save? Ctrl+C to cancel""
+            else
                 q!
+                return
             endif
         else
-            if all
-                let choices = ['Quit All']
+            let title = "Do you want to quit? Ctrl+C to cancel""
+            if &modified
+                let choices = ['Save And Quit', 'Quit Only']
             else
                 let choices = ['Quit']
             endif
-            let confirmed = ChooseOne(choices, title, 0, 'Cancel')
-            if confirmed =~# '^Quit'
-                if all
+        endif
+        if &modified && type == 'check'
+            let choice = ChooseOne(choices, title, 0, 'Cancel')
+            if choice =~# '^Save'
+                wq!
+            elseif choice =~# '^Quit'
+                q!
+            endif
+        else
+            let choice = ChooseOne(choices, title, 0, 'Cancel')
+            if choice =~# '^Quit'
+                if type == 'all'
                     if exists(':cquit')
                         cquit
                     else
@@ -435,27 +443,15 @@ function! s:confirm_quit(all) abort
                 else
                     q!
                 endif
+            elseif choice =~# '^Save'
+                wq!
             endif
         endif
     endif
 endfun
-command! ConfirmQuit call s:confirm_quit(0)
+command! ConfirmQuit call s:confirm_quit('check')
 nnoremap <silent><M-q> :ConfirmQuit<Cr>
-command! ConfirmQuitAll call s:confirm_quit(1)
+command! ConfirmQuitAll call s:confirm_quit('all')
 nnoremap <silent><leader><BS> :ConfirmQuitAll<Cr>
-" quit directly
-function! s:quit() abort
-    if &modified
-        let choices = ['Save And Quit', 'Quit']
-        let confirmed = ChooseOne(choices, 'Save && Quit || Quit only', 0, 'Cancel')
-        if confirmed =~# '^Save'
-            wq!
-        elseif confirmed =~# '^Quit'
-            q!
-        endif
-    else
-        q!
-    endif
-endfunction
-command! Quit call s:quit()
+command! Quit call s:confirm_quit('direct')
 nnoremap <silent><leader>q :Quit<Cr>
