@@ -210,7 +210,7 @@ if has('nvim')
         exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
     endfunction
     command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><leader>f. :CocFile<Cr>
+    nnoremap <silent><nowait><leader>fe :CocFile<Cr>
 endif
 " ------------------------
 " coc git
