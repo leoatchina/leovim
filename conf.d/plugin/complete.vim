@@ -251,3 +251,9 @@ if Planned('vim-go')
         let g:go_code_completion_enabled = 1
     endif
 endif
+" --------------------------
+" helpful
+" --------------------------
+if !exists('g:vscode')
+    au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
+endif

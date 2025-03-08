@@ -58,7 +58,7 @@ function! FileReadonly()
     return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
 function! GetRootDir(...)
-    let init_dir = Expand('%:p:h')
+    let init_dir = AbsDir()
     let curr_dir = init_dir
     while 1
         if WINDOWS() && curr_dir[-2:-1] == ':/' || UNIX() && curr_dir ==# '/'

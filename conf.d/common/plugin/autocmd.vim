@@ -1,15 +1,15 @@
-" -----------------------------------
-" swap exists ignore
-" -----------------------------------
-autocmd SwapExists * let v:swapchoice = 'o'
-" -----------------------------------
+" ---------------------------------------
 " autoread modified file outside (neo)vim
-" -----------------------------------
+" ---------------------------------------
 set autoread
 autocmd BufRead acwrite set ma
 if has('nvim') || !HAS_GUI()
     autocmd FocusGained * :silent! !
 endif
+" -----------------------------------
+" swap exists ignore
+" -----------------------------------
+autocmd SwapExists * let v:swapchoice = 'o'
 " --------------------------
 " goto last visited line
 " --------------------------
@@ -52,8 +52,11 @@ augroup NoAddComment
     autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 augroup END
 " --------------------------
-" helpful
+" file templates
 " --------------------------
-if !exists('g:vscode')
-    au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
-endif
+autocmd BufNewFile .lintr          0r $CONF_D_DIR/templates/lintr.spec
+autocmd BufNewFile .Rprofile       0r $CONF_D_DIR/templates/Rprofile.spec
+autocmd BufNewFile .gitconfig      0r $CONF_D_DIR/templates/gitconfig.spec
+autocmd BufNewFile .gitignore      0r $CONF_D_DIR/templates/gitignore.spec
+autocmd BufNewFile .wildignore     0r $CONF_D_DIR/templates/wildignore.spec
+autocmd BufNewFile .radian_profile 0r $CONF_D_DIR/templates/radian_profile.spec

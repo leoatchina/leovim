@@ -109,26 +109,6 @@ function! RelativePath() abort
     endif
 endfunction
 "----------------------------------------------------------------------
-" save
-"----------------------------------------------------------------------
-nnoremap <C-s> :w!<Cr>
-cnoremap <C-s> w!<Cr>
-inoremap <C-s> <C-o>:w!<Cr>
-xnoremap <C-s> <ESC>:w!<Cr>gv
-nnoremap <Leader>w :wa!<Cr>
-onoremap <Leader>w :wa!<Cr>
-function! s:toggle_modify() abort
-    if &modifiable
-        setl nomodifiable
-        echo 'Current buffer is now non-modifiable'
-    else
-        setl modifiable
-        echo 'Current buffer is now modifiable'
-    endif
-endfunction
-command! ToggleModity call s:toggle_modify()
-nnoremap <M-k><space> :ToggleModity<Cr>
-"----------------------------------------------------------------------
 " Sudo
 "----------------------------------------------------------------------
 nnoremap <leader>su :Sudo
@@ -391,12 +371,87 @@ if WINDOWS()
 else
     nnoremap <leader>x :!bash <C-r>=Expand("~/.leovim.clean")<Cr><Cr> \| e %<Cr><C-o>
 endif
-" --------------------------
-" file templates
-" --------------------------
-autocmd BufNewFile .lintr          0r $CONF_D_DIR/templates/lintr.spec
-autocmd BufNewFile .Rprofile       0r $CONF_D_DIR/templates/Rprofile.spec
-autocmd BufNewFile .gitconfig      0r $CONF_D_DIR/templates/gitconfig.spec
-autocmd BufNewFile .gitignore      0r $CONF_D_DIR/templates/gitignore.spec
-autocmd BufNewFile .wildignore     0r $CONF_D_DIR/templates/wildignore.spec
-autocmd BufNewFile .radian_profile 0r $CONF_D_DIR/templates/radian_profile.spec
+"----------------------------------------------------------------------
+" save
+"----------------------------------------------------------------------
+nnoremap <C-s> :w!<Cr>
+cnoremap <C-s> w!<Cr>
+inoremap <C-s> <C-o>:w!<Cr>
+xnoremap <C-s> <ESC>:w!<Cr>gv
+nnoremap <Leader>w :wa!<Cr>
+onoremap <Leader>w :wa!<Cr>
+function! s:toggle_modify() abort
+    if &modifiable
+        setl nomodifiable
+        echo 'Current buffer is now non-modifiable'
+    else
+        setl modifiable
+        echo 'Current buffer is now modifiable'
+    endif
+endfunction
+command! ToggleModity call s:toggle_modify()
+nnoremap <M-k><space> :ToggleModity<Cr>
+" -------------------------
+" confirem quit
+" -------------------------
+function! s:confirm_quit(all) abort
+    let all = a:all
+    if &ft == 'floaterm'
+        FloatermKill
+    elseif (&ft == '' || Expand('%') == '' || CheckIgnoreFtBt()) && all == 0
+        q!
+    else
+        if all
+            let title = "Do you want to quit all?"
+        else
+            let title = "Do you want to quit?"
+        endif
+        if &modified && all == 0
+            let choices = ['Save And Quit', 'Quit Only']
+            let confirmed = ChooseOne(choices, title, 0, 'Cancel')
+            if confirmed =~# '^Save'
+                wq!
+            elseif confirmed =~# '^Quit'
+                q!
+            endif
+        else
+            if all
+                let choices = ['Quit All']
+            else
+                let choices = ['Quit']
+            endif
+            let confirmed = ChooseOne(choices, title, 0, 'Cancel')
+            if confirmed =~# '^Quit'
+                if all
+                    if exists(':cquit')
+                        cquit
+                    else
+                        qall!
+                    endif
+                else
+                    q!
+                endif
+            endif
+        endif
+    endif
+endfun
+command! ConfirmQuit call s:confirm_quit(0)
+nnoremap <silent><M-q> :ConfirmQuit<Cr>
+command! ConfirmQuitAll call s:confirm_quit(1)
+nnoremap <silent><leader><BS> :ConfirmQuitAll<Cr>
+" quit directly
+function! s:quit() abort
+    if &modified
+        let choices = ['Save And Quit', 'Quit']
+        let confirmed = ChooseOne(choices, 'Save && Quit || Quit only', 0, 'Cancel')
+        if confirmed =~# '^Save'
+            wq!
+        elseif confirmed =~# '^Quit'
+            q!
+        endif
+    else
+        q!
+    endif
+endfunction
+command! Quit call s:quit()
+nnoremap <silent><leader>q :Quit<Cr>
