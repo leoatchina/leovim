@@ -68,7 +68,7 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
-    let left = &columns - len(FileReadonly() + GitBranch() + GitRootDir() + RelativeDir() + Mode())
+    let left = &columns - len(FileReadonly() + GitRootDir() + RelativeDir() + Mode())
     return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
@@ -95,7 +95,6 @@ let g:lightline = {
                     \ },
                 \ 'component_function': {
                     \ 'readonly': 'FileReadonly',
-                    \ 'gitbranch': 'GitBranch',
                     \ 'mode': 'Mode',
                     \ 'abspath': 'AbsPath',
                     \ },
@@ -110,8 +109,8 @@ let g:lightline = {
 "------------------------
 " right part
 "------------------------
-let g:lightline.active.right = [['gitbranch', 'filetype', 'fileencoding', 'lineinfo']]
-let g:lightline.inactive.right = [['gitbranch', 'filetype', 'fileencoding', 'lineinfo']]
+let g:lightline.active.right = [['filetype', 'fileencoding', 'lineinfo']]
+let g:lightline.inactive.right = [['filetype', 'fileencoding', 'lineinfo']]
 let s:component_type = {}
 if Installed('lightline-ale')
     let g:lightline.component_expand =  {
@@ -173,15 +172,6 @@ endif
 " show buffers and current file path
 " ---------------------------------------
 function! Buffers()
-    if WINDOWS()
-        if has('nvim')
-            let icon = 'Ⓡ '
-        else
-            let icon = '@'
-        endif
-    else
-        let icon = 'Ⓡ '
-    endif
     " origin buffers list
     let buffers = lightline#bufferline#buffers()
     " reorder buffers
@@ -195,18 +185,19 @@ function! Buffers()
         endif
     endif
     if GitRootDir() == ''
-        let res[1] = [icon]
+        let res[1] = ['Ⓡ ']
     else
-        let res[1] = [icon . ' ' . GitRootDir()]
+        let res[1] = ['Ⓡ ' . GitRootDir()]
     endif
     return res
 endfunction
 let g:lightline['component_expand']['buffers'] = 'Buffers'
 let g:lightline['component_expand']['relativepath'] = 'RelativePath'
+let g:lightline['component_expand']['branch'] = 'GitBranch'
 " ------------------------
 " left part
 " ------------------------
-let g:lightline.active.left = [['mode', 'paste'], ['buffers', 'relativepath', 'modified']]
+let g:lightline.active.left = [['mode', 'paste'], ['buffers', 'relativepath', 'modified', 'branch']]
 let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------
 " lightline component_type
