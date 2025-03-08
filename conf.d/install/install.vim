@@ -138,8 +138,6 @@ if g:complete_engine == 'cmp'
     if Require('neoconf')
         PlugAdd 'folke/neoconf.nvim'
     endif
-    " nvim-tree
-    PlugAdd 'nvim-tree/nvim-tree.lua'
     " call-graph
     PlugAdd 'ravenxrz/call-graph.nvim'
 elseif g:complete_engine == 'coc'

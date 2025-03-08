@@ -97,6 +97,15 @@ if Installed('coc.nvim')
                 \ 'open': 'CocExplorerOpen',
                 \ 'close': 'CocCommand explorer'
                 \ }
+elseif v:version >= 801 || has('nvim')
+    source $CFG_DIR/fern.vim
+    let g:tree_browser = 'fern'
+    let g:sidebars.tree_browser = {
+                \ 'position': 'left',
+                \ 'check_win': function('s:check_buf_ft', ["fern"]),
+                \ 'open': 'Fern . -drawer -stay -toggle',
+                \ 'close': 'Fern . -drawer -toggle'
+                \ }
 elseif Installed('nvim-tree.lua')
     let g:loaded_netrw = 1
     let g:loaded_netrwPlugin = 1

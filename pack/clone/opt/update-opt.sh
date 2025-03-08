@@ -99,6 +99,15 @@ git clone --depth 1 https://github.com/lifepillar/vim-mucomplete.git
 rm -rf vim-choosewin
 git clone --depth 1 https://github.com/t9md/vim-choosewin.git
 
+# fern
+rm -rf vim-fern* fern-*
+git clone --depth 1 https://github.com/lambdalisue/vim-fern
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-git-status
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-hijack
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-renderer-nerdfont
+git clone --depth 1 https://github.com/lambdalisue/vim-nerdfont
+git clone --depth 1 https://github.com/lambdalisue/vim-glyph-palette
+
 # zfvim
 rm -rf ZFVim*
 git clone --depth 1 https://github.com/ZSaberLv0/ZFVimJob.git

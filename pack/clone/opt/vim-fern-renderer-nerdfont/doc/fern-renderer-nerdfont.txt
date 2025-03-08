@@ -1,0 +1,91 @@
+*fern-renderer-nerdfont.txt*		fern plugin to render nerdfont
+
+=============================================================================
+CONTENTS				*fern-renderer-nerdfont-contents*
+
+INTRODUCTION			|fern-renderer-nerdfont-introduction|
+USAGE				|fern-renderer-nerdfont-usage|
+INTERFACE			|fern-renderer-nerdfont-interface|
+  VARIABLE			|fern-renderer-nerdfont-variable|
+  COLORS			|fern-renderer-nerdfont-colors|
+
+
+=============================================================================
+INTRODUCTION				*fern-renderer-nerdfont-introduction*
+
+*fern-renderer-nerdfont.vim* is a |fern.vim| plugin which add nerdfont
+support.
+
+
+=============================================================================
+USAGE					*fern-renderer-nerdfont-usage*
+
+Install https://github.com/lambdalisue/nerdfont.vim and set "nerdfont" to
+|g:fern#renderer| like:
+>
+	let g:fern#renderer = "nerdfont"
+<
+
+=============================================================================
+INTERFACE				*fern-renderer-nerdfont-interface*
+
+-----------------------------------------------------------------------------
+VARIABLE				*fern-renderer-nerdfont-variable*
+
+*g:fern#renderer#nerdfont#leading*
+	A |String| which is prepended to each node to indicates the nested
+	level of the node.
+
+	For example, when the value is "~~", the renderer output become:
+>
+	  root
+	  |- deep
+	  ~~|- alpha
+	  ~~~~|- beta
+	  ~~~~~~|  gamma
+<
+	Default: " "
+
+*g:fern#renderer#nerdfont#padding*
+	A |String| which is placed between the symobl and the label.
+	Add more spaces to regulate the position of the label after the
+	symbol.
+	Default: " "
+
+*g:fern#renderer#nerdfont#root_symbol*
+	A |String| used as a symbol of root node.
+	Default: ""
+
+*g:fern#renderer#nerdfont#indent_markers*
+	Set 1 to enable fern indent markers.
+	Enabling this option may affect performance.
+	Default: 0
+
+*g:fern#renderer#nerdfont#root_leading*
+	A |String| to add a lead (padding) in front
+        of the root level nodes.
+	Default: |g:fern#renderer#nerdfont#leading|
+
+        Example, with root_leading set to "" (shown below with
+        *number* set):
+>
+    1│root
+    2│ file1.txt
+    3│ file2.txt
+<
+        With root_leading set to "@  ":
+>
+    1│@  root
+    2│@   file1.txt
+    3│@   file2.txt
+<
+
+-----------------------------------------------------------------------------
+COLORS				*fern-renderer-nerdfont-colors*
+
+Use glyph-palette.vim to apply colors on Nerd Fonts.
+https://github.com/lambdalisue/glyph-palette.vim
+
+
+=============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
