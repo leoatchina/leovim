@@ -69,7 +69,7 @@ endif
 " ------------------------------
 " normal complete_engine
 " ------------------------------
-if InstalledCmp()
+if InstalledCmp() && InstalledNvimLsp()
     lua require("cfg/cmp")
 elseif Installed('coc.nvim')
     source $CFG_DIR/coc.vim
