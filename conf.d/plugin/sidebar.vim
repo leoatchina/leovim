@@ -89,23 +89,6 @@ if v:version >= 801 || has('nvim')
                 \ 'open': 'FernGetRoot',
                 \ 'close': 'Fern . -drawer -toggle'
                 \ }
-" elseif Installed('coc.nvim')
-"     let g:tree_browser = 'coc-explore'
-"     function s:coc_explorer_open() abort
-"         CocCommand explorer
-"         sleep 100m
-"         wincmd w
-"     endfunction
-"     command! CocExplorerOpen call s:coc_explorer_open()
-"     function! s:check_coc_explorer(nr)
-"         return s:check_buf_ft('coc-explorer', a:nr)
-"     endfunction
-"     let g:sidebars.tree_browser = {
-"                 \ 'position': 'left',
-"                 \ 'check_win': function('s:check_coc_explorer'),
-"                 \ 'open': 'CocExplorerOpen',
-"                 \ 'close': 'CocCommand explorer'
-"                 \ }
 else
     let g:tree_browser = 'netrw'
     let g:netrw_nogx = 1

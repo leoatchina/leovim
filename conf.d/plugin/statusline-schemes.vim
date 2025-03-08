@@ -23,13 +23,12 @@ function! RelativePath()
     if &ft == ''
         return ''
     endif
-    let root = GitRootDir()
     let path = AbsPath()
-    if root == '' || path == ''
-        return path
+    if path == ''
+        return ''
     endif
     " 统一使用正斜杠
-    let root = substitute(root, '\\', '/', 'g')
+    let root = substitute(GitRootDir(), '\\', '/', 'g')
     let path = substitute(path, '\\', '/', 'g')
     " 确保root不以/结尾
     let root = substitute(root, '/$', '', '')
