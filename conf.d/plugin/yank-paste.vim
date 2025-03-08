@@ -55,21 +55,12 @@ xnoremap \p` "0p
 nnoremap <leader>yu mp_yg_`p
 " Copy a line without leading whitespaces and line break to clipboard
 nnoremap <leader>yw mp_"*yg_`p
-if has('clipboard')
-    " Copy file path
-    nnoremap <leader>yp :let @*=Expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
-    " Copy file name
-    nnoremap <leader>yf :let @*=Expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
-    " Copy bookmark position reference
-    nnoremap <leader>ym :let @*=Expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
-else
-    " Copy file path
-    nnoremap <leader>yp :let @"=Expand("%:p")<cr>:echo '-= File path copied=-'<Cr>
-    " Copy file name
-    nnoremap <leader>yf :let @"=Expand("%:t")<cr>:echo '-= File name copied=-'<Cr>
-    " Copy bookmark position reference
-    nnoremap <leader>ym :let @"=Expand("%:p").':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
-endif
+" Copy file path
+nnoremap <leader>yp :let @"=AbsPath()<cr>:echo '-= File path copied=-'<Cr>
+" Copy file name
+nnoremap <leader>yf :let @"=FileName()<cr>:echo '-= File name copied=-'<Cr>
+" Copy bookmark position reference
+nnoremap <leader>ym :let @"=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
 " ------------------------
 " pastemode toggle
 " ------------------------

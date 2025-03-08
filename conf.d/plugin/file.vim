@@ -1,9 +1,3 @@
-function! AbsDir()
-    return Expand('%:p:h', 1)
-endfunction
-function! AbsPath()
-    return Expand('%:p', 1)
-endfunction
 " --------------------------
 " autoclose_ft_buf
 " --------------------------
@@ -89,51 +83,30 @@ function! AutoLcdGit() abort
         let b:git_branch = ''
     endif
 endfunction
-autocmd BufEnter,BufWinEnter * call AutoLcdGit()
-"----------------------------------------------------------------------
-" Dir && Path
-"----------------------------------------------------------------------
+augroup AutoLcdGit
+    au!
+    autocmd BufEnter,BufWinEnter * call AutoLcdGit()
+augroup END
+" ----------------------
+" relative dir && path
+" ----------------------
 function! RelativeDir() abort
     let absdir = AbsDir()
-    if absdir == ''
+    let gitroot = GitRootDir()
+    if gitroot != '' && len(absdir) > len(gitroot)
+        return gitroot
+    else
         return absdir
     endif
-    let gitroot = GitRootDir()
-    if gitroot && len(absdir) > len(gitroot)
-        " 如果在 Git 仓库中，返回相对路径
-        " 统一使用正斜杠
-        let gitroot = substitute(gitroot, '\\', '/', 'g')
-        let absdir = substitute(absdir, '\\', '/', 'g')
-        " 确保 gitroot 不以 / 结尾
-        let gitroot = substitute(gitroot, '/$', '', '')
-        if absdir[:len(gitroot)-1] ==# gitroot
-            let rel_path = absdir[len(gitroot)+1:]
-            return rel_path == '' ? '.' : rel_path
-        endif
-    endif
-    " 不在 Git 仓库中或路径不匹配，返回绝对路径
-    return absdir
 endfunction
 function! RelativePath() abort
     let abspath = AbsPath()
-    if abspath == ''
-        return ''
-    endif
     let gitroot = GitRootDir()
-    if gitroot && len(abspath) > len(gitroot)
-        " 如果在 Git 仓库中，返回相对路径
-        " 统一使用正斜杠
-        let gitroot = substitute(gitroot, '\\', '/', 'g')
-        let abspath = substitute(abspath, '\\', '/', 'g')
-        " 确保 gitroot 不以 / 结尾
-        let gitroot = substitute(gitroot, '/$', '', '')
-        if abspath[:len(gitroot)-1] ==# gitroot
-            let rel_path = abspath[len(gitroot)+1:]
-            return rel_path == '' ? '.' : rel_path
-        endif
+    if gitroot != '' && len(abspath) > len(gitroot)
+        return abspath[len(gitroot)+1:]
+    else
+        return Expand("%:t", 1)
     endif
-    " 不在 Git 仓库中或路径不匹配，返回文件名
-    return Expand("%:t", 1)
 endfunction
 "----------------------------------------------------------------------
 " save
@@ -268,7 +241,7 @@ if HAS_GUI() || WINDOWS()
             let g:browsefilter .= a:desc . " (" . a:wildcard . ")\t" . a:wildcard . "\n"
         endfunc
         function! s:use_system_browser()
-            let l:path = Expand("%:p:h")
+            let l:path = AbsDir()
             if l:path == '' | let l:path = getcwd() | endif
             if exists('g:browsefilter') && exists('b:browsefilter')
                 if g:browsefilter != ''
@@ -299,7 +272,7 @@ endif
 " open or add file
 " --------------------------
 function! s:open_or_create_file(file, ...) abort
-    let file = Expand(a:file)
+    let file = Expand(a:file, 1)
     if filereadable(file)
         try
             execute "tabe " . file
@@ -309,7 +282,7 @@ function! s:open_or_create_file(file, ...) abort
             return 0
         endtry
     else
-        let dir = AbsDir(file)
+        let dir = AbsDir()
         try
             if !isdirectory(dir)
                 call mkdir(dir, "p")

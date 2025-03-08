@@ -275,6 +275,18 @@ function! GetVisualSelection(...) abort
         return join(lines, "\n")
     endif
 endfunction
+function! AbsDir()
+    return Expand('%:p:h', 1)
+endfunction
+function! AbsPath()
+    return Expand('%:p', 1)
+endfunction
+function! FileName()
+    return Expand('%:t', 1)
+endfunction
+function! FileNameNoEXT()
+    return Expand('%:t:r', 1)
+endfunction
 " -----------------------------------
 " filetypes definition
 " -----------------------------------
@@ -679,6 +691,9 @@ if has('clipboard')
             set clipboard=
         endif
         xnoremap Y "+y:echo 'Yank selection to x11 clipboard.'<Cr>
+        nnoremap <leader>YP :let @+=AbsPath()<cr>:echo '-= File path copied to x11 clipboard=-'<Cr>
+        nnoremap <leader>YF :let @+=FileName()<cr>:echo '-= File name copied to x11 clipboard=-'<Cr>
+        nnoremap <leader>YM :let @+=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to x11 clipboard=-'<cr>'
     else
         let s:clipboard = 'unnamed'
         if exists('g:vscode')
@@ -687,6 +702,9 @@ if has('clipboard')
             set clipboard=
         endif
         xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
+        nnoremap <leader>YP :let @*=AbsPath()<cr>:echo '-= File path copied to system clipboard=-'<Cr>
+        nnoremap <leader>YF :let @*=FileName()<cr>:echo '-= File name copied to system clipboard=-'<Cr>
+        nnoremap <leader>YM :let @*=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to system clipboard=-'<cr>'
     endif
 else
     let s:clipboard = ""
@@ -743,7 +761,7 @@ command! YankFromLineBegin call s:yank_border(2)
 command! YankToLineEnd call s:yank_border(1)
 command! YankWord call s:yank_border()
 nnoremap <silent>gY :YankWord<Cr>
-nnoremap <silent><leader>Y :YankLine<Cr>
+nnoremap <silent><leader>yy :YankLine<Cr>
 if exists('g:vscode')
     nnoremap <silent>Y :YankToLineEnd<Cr>
 else

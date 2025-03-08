@@ -162,7 +162,7 @@ if has('patch-8.0.1129') && !has('nvim')
         if CheckIgnoreFtBt()
             return
         else
-            let fname = Expand("%:t")
+            let fname = Expand("%:t", 1)
             let ename = Escape(fname)
             if a:open
                 if index(getcompletion('WinBar.', 'menu'), ename) < 0

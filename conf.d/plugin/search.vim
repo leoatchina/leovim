@@ -298,22 +298,22 @@ if PlannedLeaderf()
     else
         let g:search_tool = "leaderf-grep"
     endif
-    nnoremap <nowait>\f/ :LeaderfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait>\f\ :LeaderfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f/ :LeaderfSearchAll <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait>\f\ :LeaderfSearchAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
 elseif PlannedFzf()
     let g:search_tool = "fzf-grep"
-    nnoremap <nowait>\f/ :FzfSearchAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait>\f\ :FzfSearchAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f/ :FzfSearchAll <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait>\f\ :FzfSearchAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
 else
     let g:search_tool = "grep"
-    nnoremap <nowait>\f/ :GrepAll <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait>\f\ :GrepAll <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f/ :GrepAll <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait>\f\ :GrepAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
 endif
 if PlannedFzf()
-    nnoremap <nowait><leader>f/ :FzfSearch <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><leader>f\ :FzfSearch <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
-    nnoremap <nowait><Tab>f/ :FzfSearchGit <C-r>=Expand("%:t:r")<Cr><Cr>
-    nnoremap <nowait><Tab>f\ :FzfSearchGit <C-r>=split(Expand("%:p:h"), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><leader>f/ :FzfSearch <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait><leader>f\ :FzfSearch <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><Tab>f/ :FzfSearchGit <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait><Tab>f\ :FzfSearchGit <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
     nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
     xnoremap <nowait>\g y:<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
 endif

@@ -65,7 +65,7 @@ endif
 " vim-gutentags
 " -------------------------------
 set tags=./tags;,tags,./.tags;,.tags
-let g:Lf_CacheDirectory = Expand("~/.vim")
+let g:Lf_CacheDirectory = Expand("~/.vim", 1)
 let g:gutentags_cache_dir = g:Lf_CacheDirectory . '/LeaderF/gtags'
 if !isdirectory(g:gutentags_cache_dir)
     silent! call mkdir(g:gutentags_cache_dir, 'p')
