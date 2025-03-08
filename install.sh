@@ -132,9 +132,9 @@ cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin
 # leovim command
 if [ $os == 'linux' ]; then
     # 检测 $SHELL 中是否包含 bash 或 zsh
-    if [[ "$SHELL" == *"bash"* ]]; then
+    if [[ "$SHELL" == *bash* ]]; then
         shell=bash
-    elif [[ "$SHELL" == *"zsh"* ]]; then
+    elif [[ "$SHELL" == *zsh* ]]; then
         shell=zsh
     else
         # 默认使用 bash
