@@ -161,7 +161,9 @@ nnoremap <leader>fv :DiffVsp<Space>
 " cd dir
 "------------------------
 command! CR execute('cd ' .  GetRootDir())
+command! CG execute('cd ' .  GitRootDir())
 nnoremap cdr :CR<Cr>
+nnoremap cdg :CG<Cr>
 nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
@@ -185,7 +187,7 @@ else
 endif
 if PlannedFzf()
     nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
-    xnoremap <nowait>\g y:<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
+    xnoremap <nowait>\g :<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
 endif
 " ---------------------------------
 " open gitroot getroot
