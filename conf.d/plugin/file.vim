@@ -1,8 +1,127 @@
-try
-    set nrformats+=unsigned
-catch /.*/
-    " pass
-endtry
+" --------------------------
+" autoclose_ft_buf
+" --------------------------
+let g:autoclose_ft_buf = [
+            \ 'netrw', 'coc-explorer', 'fern', 'nvimtree',
+            \ 'qf', 'preview', 'loclist', 'rg', 'outline',
+            \ 'vista', 'tagbar', 'vista_kind',
+            \ 'leaderf', 'fzf', 'help', 'man', 'startify',
+            \ 'gitcommit', 'fugitive', 'fugtiveblame', 'gitcommit',
+            \ 'vimspector', 'vimspectorprompt',
+            \ 'terminal', 'floaterm', 'popup',
+            \ 'dropbar', 'dropbar_preview',
+            \ ]
+function! s:autoclose(...) abort
+    let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
+    let bt = tolower(getbufvar(winbufnr(winnr()), '&bt'))
+    if winnr("$") <= 1 && a:0 && a:1
+        return index(g:autoclose_ft_buf, ft) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
+    elseif !a:0 || a:1 == 0
+        return ft == '' || index(g:autoclose_ft_buf, ft) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
+    else
+        return 0
+    endif
+endfunction
+function! CheckIgnoreFtBt() abort
+    return s:autoclose(0)
+endfunction
+function! AutoCloseFtBt() abort
+    return s:autoclose(1)
+endfunction
+augroup AutoCloseFtBt
+    autocmd!
+    autocmd BufWinEnter * if AutoCloseFtBt() | q! | endif
+augroup END
+" ----------------------------------------------------------------------
+" git related functions
+" ----------------------------------------------------------------------
+function! GitBranch()
+    return get(b:, 'git_branch', '')
+endfunction
+function! GitRootDir()
+    return get(b:, 'git_root_dir', '')
+endfunction
+function! AutoLcdGit() abort
+    let l:cur_dir = expand('%:p:h')
+    if l:cur_dir != ''
+        execute 'lcd ' . l:cur_dir
+    endif
+    if g:git_version > 1.8
+        try
+            if WINDOWS()
+                let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel')
+            else
+                let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel 2>/dev/null')
+            endif
+            let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
+            if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
+                let b:git_root_dir = ''
+                let b:git_branch = ''
+            else
+                if WINDOWS()
+                    let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD')
+                else
+                    let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
+                endif
+                let b:git_branch = '@' . substitute(l:branch, '\n\+$', '', '')
+                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
+                    let b:git_root_dir = ''
+                    let b:git_branch = ''
+                endif
+            endif
+        catch
+            let b:git_root_dir = ''
+            let b:git_branch = ''
+        endtry
+    else
+        let b:git_root_dir = ''
+        let b:git_branch = ''
+    endif
+endfunction
+autocmd BufEnter * if !CheckIgnoreFtBt() | call AutoLcdGit() | endif
+"----------------------------------------------------------------------
+" Dir && Path
+"----------------------------------------------------------------------
+function! AbsPath()
+    return Expand('%:p', 1)
+endfunction
+function! RelativeDir()
+    let root = GitRootDir()
+    let path = Expand('%:p:h', 1)
+    if root == '' || path == ''
+        return path
+    endif
+    " 统一使用正斜杠
+    let root = substitute(root, '\\', '/', 'g')
+    let path = substitute(path, '\\', '/', 'g')
+    " 确保两个路径都以 / 结尾进行比较
+    let root = root . (root[-1:] == '/' ? '' : '/')
+    let path = path . (path[-1:] == '/' ? '' : '/')
+    if path[:len(root)-1] ==# root
+        let rel_path = path[len(root):]
+        return rel_path == '' ? '.' : rel_path[:-2]
+    endif
+    return path[:-2]
+endfunction
+function! RelativePath()
+    if &ft == ''
+        return ''
+    endif
+    let path = AbsPath()
+    if path == ''
+        return ''
+    endif
+    " 统一使用正斜杠
+    let root = substitute(GitRootDir(), '\\', '/', 'g')
+    let path = substitute(path, '\\', '/', 'g')
+    " 确保root不以/结尾
+    let root = substitute(root, '/$', '', '')
+    if path[:len(root)-1] ==# root
+        let rel_path = path[len(root)+1:]
+        return rel_path == '' ? '.' : rel_path
+    endif
+    return path
+endfunction
 "----------------------------------------------------------------------
 " save
 "----------------------------------------------------------------------
@@ -57,10 +176,6 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-nnoremap <M-j>e gf
-nnoremap <M-j>t <C-w>gf
-nnoremap <M-j>s <C-w>f
-nnoremap <M-j>v <C-w>f<C-w>L
 if PlannedFzf()
     nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
 elseif PlannedLeaderf()
@@ -115,9 +230,14 @@ if Installed('vim-floaterm')
         nnoremap <silent><nowait><leader>e :FloatermLF<Cr>
     endif
 endif
-" -----------------------------------
+"------------------------
+" open file
+"------------------------
+nnoremap <M-j>e gf
+nnoremap <M-j>t <C-w>gf
+nnoremap <M-j>s <C-w>f
+nnoremap <M-j>v <C-w>f<C-w>L
 " using system file explorer
-" -----------------------------------
 if HAS_GUI() || WINDOWS()
     imap <M-O> <C-o>O
     nmap <M-O> O
@@ -268,9 +388,7 @@ if get(g:, 'leovim_openmap', 1)
             nnoremap <silent><M-h>L :FzfFiles ~/.local/bin<Cr>
         endif
     endif
-    " --------------------------
     " addtional vim config
-    " --------------------------
     if filereadable(expand("~/.leovim.d/after.vim"))
         source ~/.leovim.d/after.vim
     endif

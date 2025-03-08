@@ -9,53 +9,6 @@ if executable('git') && get(g:, 'header_field_author', '') != '' && get(g:, 'hea
     nnoremap <M-g>S :GitSet<Cr>
 endif
 "------------------------
-" git related function
-"------------------------
-function! GitBranch()
-    return get(b:, 'git_branch', '')
-endfunction
-function! GitRootDir()
-    return get(b:, 'git_root_dir', '')
-endfunction
-function! AutoLCD_UpdateGit() abort
-    let l:cur_dir = expand('%:p:h')
-    if l:cur_dir != ''
-        execute 'lcd ' . l:cur_dir
-    endif
-    if g:git_version > 1.8
-        try
-            if WINDOWS()
-                let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel')
-            else
-                let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel 2>/dev/null')
-            endif
-            let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
-            if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
-                let b:git_root_dir = ''
-                let b:git_branch = ''
-            else
-                if WINDOWS()
-                    let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD')
-                else
-                    let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
-                endif
-                let b:git_branch = '@' . substitute(l:branch, '\n\+$', '', '')
-                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
-                    let b:git_root_dir = ''
-                    let b:git_branch = ''
-                endif
-            endif
-        catch
-            let b:git_root_dir = ''
-            let b:git_branch = ''
-        endtry
-    else
-        let b:git_root_dir = ''
-        let b:git_branch = ''
-    endif
-endfunction
-autocmd BufEnter * if !CheckIgnoreFtBt() | call AutoLCD_UpdateGit() | endif
-"------------------------
 " fugitve and others
 "------------------------
 if Planned('vim-fugitive')
@@ -150,12 +103,41 @@ nnoremap <silent><M-g>: :GCommands<Cr>
 if Installed('vim-floaterm') && executable('lazygit')
     command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
     if has('nvim')
-        nnoremap <silent><M-g>f :GLazyGit<Cr>
+        nnoremap <silent><M-g><M-g> :GLazyGit<Cr>
     else
-        nnoremap <silent><M-g>f :GLazyGit<Cr>i
+        nnoremap <silent><M-g><M-g> :GLazyGit<Cr>i
     endif
 endif
-"########## Merge ##########{{{
+" -----------------------------------------------------
+" vim-signify
+" -----------------------------------------------------
+if has('nvim') || has('patch-8.0.902')
+    let g:signify_disable_by_default = 0
+    function! s:SignifyDiff()
+        SignifyDiff
+        if winnr('$') == 2
+            wincmd H
+        endif
+    endfunction
+    nnoremap \| :call <SID>SignifyDiff()<CR>
+    nnoremap \<Tab> :SignifyToggle<Cr>
+    nnoremap \<Space> :SignifyRefresh<Cr>
+    nmap ;g <plug>(signify-next-hunk)
+    nmap ,g <plug>(signify-prev-hunk)
+    omap im <plug>(signify-motion-inner-pending)
+    xmap im <plug>(signify-motion-inner-visual)
+    omap am <plug>(signify-motion-outer-pending)
+    xmap am <plug>(signify-motion-outer-visual)
+    nmap <leader>vm vim
+    nmap <leader>vM vam
+    PlugAddOpt 'vim-signify'
+    " commands
+    command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
+    nnoremap \: :SignifyCommands<Cr>
+endif
+" -----------------------------------------------------
+" Merge
+" -----------------------------------------------------
 let s:mergeSources = {
             \  'L':      1,
             \  'LOCAL':  1,
@@ -195,30 +177,3 @@ function! s:createMergeTab(...)
 endfunc
 command! -nargs=* GMergeTab call s:createMergeTab(<f-args>)
 nnoremap <M-g>m :GMergeTab<space>
-" -----------------------------------------------------
-" vim-signify
-" -----------------------------------------------------
-if has('nvim') || has('patch-8.0.902')
-    let g:signify_disable_by_default = 0
-    function! s:SignifyDiff()
-        SignifyDiff
-        if winnr('$') == 2
-            wincmd H
-        endif
-    endfunction
-    nnoremap \| :call <SID>SignifyDiff()<CR>
-    nnoremap \<Tab> :SignifyToggle<Cr>
-    nnoremap \<Space> :SignifyRefresh<Cr>
-    nmap ;g <plug>(signify-next-hunk)
-    nmap ,g <plug>(signify-prev-hunk)
-    omap im <plug>(signify-motion-inner-pending)
-    xmap im <plug>(signify-motion-inner-visual)
-    omap am <plug>(signify-motion-outer-pending)
-    xmap am <plug>(signify-motion-outer-visual)
-    nmap <leader>vm vim
-    nmap <leader>vM vam
-    PlugAddOpt 'vim-signify'
-    " commands
-    command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
-    nnoremap \: :SignifyCommands<Cr>
-endif

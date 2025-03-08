@@ -1,3 +1,8 @@
+try
+    set nrformats+=unsigned
+catch /.*/
+    " pass
+endtry
 " --------------------------
 " easyalign
 " --------------------------

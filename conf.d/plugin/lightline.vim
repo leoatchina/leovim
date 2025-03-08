@@ -1,43 +1,3 @@
-function! RelativeDir()
-    let root = GitRootDir()
-    let path = Expand('%:p:h', 1)
-    if root == '' || path == ''
-        return path
-    endif
-    " 统一使用正斜杠
-    let root = substitute(root, '\\', '/', 'g')
-    let path = substitute(path, '\\', '/', 'g')
-    " 确保两个路径都以 / 结尾进行比较
-    let root = root . (root[-1:] == '/' ? '' : '/')
-    let path = path . (path[-1:] == '/' ? '' : '/')
-    if path[:len(root)-1] ==# root
-        let rel_path = path[len(root):]
-        return rel_path == '' ? '.' : rel_path[:-2]
-    endif
-    return path[:-2]
-endfunction
-function! AbsPath()
-    return Expand('%:p', 1)
-endfunction
-function! RelativePath()
-    if &ft == ''
-        return ''
-    endif
-    let path = AbsPath()
-    if path == ''
-        return ''
-    endif
-    " 统一使用正斜杠
-    let root = substitute(GitRootDir(), '\\', '/', 'g')
-    let path = substitute(path, '\\', '/', 'g')
-    " 确保root不以/结尾
-    let root = substitute(root, '/$', '', '')
-    if path[:len(root)-1] ==# root
-        let rel_path = path[len(root)+1:]
-        return rel_path == '' ? '.' : rel_path
-    endif
-    return path
-endfunction
 function! Mode()
     let l:modes_dict={
                 \ "\<C-V>": 'V·Block',
@@ -301,23 +261,6 @@ function! s:tooglebg()
 endf
 command! ToggleBackgroud call s:tooglebg()
 nnoremap <M-k>b :ToggleBackgroud<Cr>
-function! SetScheme(scheme, ...) abort
-    let scheme = a:scheme
-    let defaultscheme = get(a:, 1, 'hybrid')
-    try
-        if g:has_truecolor
-            execute('colorscheme '. scheme)
-        else
-            execute('colorscheme '. defaultscheme)
-        endif
-    catch
-        try
-            execute('colorscheme '. defaultscheme)
-        catch
-            colorscheme slate
-        endtry
-    endtry
-endfunction
 function! UpdateLightline() abort
     let colors_name = get(g:, 'colors_name', '')
     if colors_name == 'sonokai' || colors_name == 'edge' || colors_name =~ 'fox'
@@ -349,41 +292,3 @@ augroup UpdateLightline
     endif
 augroup END
 nnoremap <silent><C-l> :redraw \| call lightline#update()<Cr>
-" --------------------------
-" schemes need truecolor
-" --------------------------
-let g:terminal_color_13 = '#000000'
-let g:edge_better_performance = 1
-let g:sonokai_better_performance = 1
-if g:complete_engine == 'mcm'
-    call SetScheme('edge', 'one')
-elseif g:complete_engine == 'cmp'
-    call SetScheme('catppuccin', 'codedark')
-elseif g:complete_engine == 'coc'
-    if has('nvim')
-        call SetScheme('duskfox', 'space-vim-dark')
-    else
-        call SetScheme('sonokai', 'sublime')
-    endif
-elseif g:complete_engine == 'apm'
-    colorscheme gruvbox
-else
-    colorscheme hybrid
-endif
-" --------------------------
-" nvim-web-devicons
-" --------------------------
-if Installed('nvim-web-devicons')
-    lua require('nvim-web-devicons').setup({})
-endif
-" --------------------------
-" render-markdown
-" --------------------------
-if Installed('render-markdown.nvim')
-    " 在 Vim 配置文件中添加以下内容
-    augroup SetupOnce
-        autocmd!
-        autocmd User avante.nvim ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
-        autocmd FileType markdown,Avante,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
-    augroup END
-endif
