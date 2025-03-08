@@ -151,18 +151,18 @@ let g:lightline['component_expand']['branch'] = 'GitBranch'
 let g:lightline['component_expand']['buffers'] = 'Buffers'
 let g:lightline['component_expand']['relativepath'] = 'RelativePath'
 " ------------------------
-" left part
-" ------------------------
-let g:lightline.active.left = [['mode', 'paste'], ['buffers', 'relativepath', 'modified', 'branch']]
-let g:lightline.inactive.left = [['mode'], ['abspath']]
-" ------------------------
 " lightline component_type
 " ------------------------
 let g:lightline.component_type = extend(s:component_type, {
-            \ 'gitbranch': 'info',
+            \ 'branch': 'raw',
             \ 'buffers': 'tabsel',
             \ 'relativepath': 'info'
             \ })
+" ------------------------
+" XXX:left part
+" ------------------------
+let g:lightline.active.left = [['mode', 'paste'], ['buffers', 'relativepath', 'modified', 'branch']]
+let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ---------------------
 " UpdateLightline
 " ---------------------
