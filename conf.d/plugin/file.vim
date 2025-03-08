@@ -374,12 +374,18 @@ endif
 "----------------------------------------------------------------------
 " save
 "----------------------------------------------------------------------
-nnoremap <C-s> :w!<Cr>
-cnoremap <C-s> w!<Cr>
-inoremap <C-s> <C-o>:w!<Cr>
-xnoremap <C-s> <ESC>:w!<Cr>gv
-nnoremap <Leader>w :wa!<Cr>
-onoremap <Leader>w :wa!<Cr>
+nnoremap <Leader>W :wa!<Cr>
+nnoremap <Leader>w :w!<Cr>
+if v:version >= 800 || has('nvim')
+    nnoremap <C-s> :w!<Cr>
+    xnoremap <C-s> <ESC>:w!<Cr>gv
+    cnoremap <C-s> w!<Cr>
+    inoremap <C-s> <C-o>:w!<Cr>
+    nnoremap <C-w><C-s> :redraw \| wa!<Cr>
+    xnoremap <C-w><C-s> <ESC>:wa!<Cr>gv
+    nnoremap <C-w><C-v> :redraw \| wa!<Cr>
+    xnoremap <C-w><C-v> <ESC>:wa!<Cr>gv
+endif
 function! s:toggle_modify() abort
     if &modifiable
         setl nomodifiable
