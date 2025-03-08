@@ -15,12 +15,13 @@ function! SetScheme(scheme, ...) abort
         endtry
     endtry
 endfunction
-let g:terminal_color_13 = '#000000'
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
+    call SetScheme('nightfox', 'codedark')
+elseif g:complete_engine == 'blk'
     call SetScheme('catppuccin', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
