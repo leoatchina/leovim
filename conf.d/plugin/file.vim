@@ -382,9 +382,7 @@ if v:version >= 800 || has('nvim')
     cnoremap <C-s> w!<Cr>
     inoremap <C-s> <C-o>:w!<Cr>
     nnoremap <C-w><C-s> :redraw \| wa!<Cr>
-    xnoremap <C-w><C-s> <ESC>:wa!<Cr>gv
     nnoremap <C-w><C-v> :redraw \| wa!<Cr>
-    xnoremap <C-w><C-v> <ESC>:wa!<Cr>gv
 endif
 function! s:toggle_modify() abort
     if &modifiable
