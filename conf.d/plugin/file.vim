@@ -82,45 +82,35 @@ autocmd BufEnter * if !CheckIgnoreFtBt() | call AutoLcdGit() | endif
 "----------------------------------------------------------------------
 " Dir && Path
 "----------------------------------------------------------------------
+function! AbsDir()
+    return Expand('%:p:h', 1)
+endfunction
 function! AbsPath()
     return Expand('%:p', 1)
 endfunction
 function! RelativeDir()
-    let root = GitRootDir()
-    let path = Expand('%:p:h', 1)
-    if root == '' || path == ''
+    let path = AbsDir()
+    if path == ''
         return path
     endif
-    " 统一使用正斜杠
-    let root = substitute(root, '\\', '/', 'g')
-    let path = substitute(path, '\\', '/', 'g')
-    " 确保两个路径都以 / 结尾进行比较
-    let root = root . (root[-1:] == '/' ? '' : '/')
-    let path = path . (path[-1:] == '/' ? '' : '/')
-    if path[:len(root)-1] ==# root
-        let rel_path = path[len(root):]
-        return rel_path == '' ? '.' : rel_path[:-2]
+    let root = GitRootDir()
+    if root
+        return root
+    else
+        return path
     endif
-    return path[:-2]
 endfunction
 function! RelativePath()
-    if &ft == ''
-        return ''
-    endif
     let path = AbsPath()
     if path == ''
         return ''
     endif
-    " 统一使用正斜杠
-    let root = substitute(GitRootDir(), '\\', '/', 'g')
-    let path = substitute(path, '\\', '/', 'g')
-    " 确保root不以/结尾
-    let root = substitute(root, '/$', '', '')
-    if path[:len(root)-1] ==# root
-        let rel_path = path[len(root)+1:]
-        return rel_path == '' ? '.' : rel_path
+    let root = GitRootDir()
+    if root
+        return path[len(root)+1:]
+    else
+        return Expand("%:t", 1)
     endif
-    return path
 endfunction
 "----------------------------------------------------------------------
 " save
@@ -294,7 +284,7 @@ function! s:open_or_create_file(file, ...) abort
             return 0
         endtry
     else
-        let dir = FileDir(file)
+        let dir = AbsDir(file)
         try
             if !isdirectory(dir)
                 call mkdir(dir, "p")

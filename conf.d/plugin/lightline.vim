@@ -143,16 +143,12 @@ function! Buffers()
             let res = [buffers[0] + buffers[2], buffers[1], []]
         endif
     endif
-    if GitRootDir() == ''
-        let res[1] = ['Ⓡ ']
-    else
-        let res[1] = ['Ⓡ ' . GitRootDir()]
-    endif
+    let res[1] = ['Ⓡ ' . RelativeDir()]
     return res
 endfunction
+let g:lightline['component_expand']['branch'] = 'GitBranch'
 let g:lightline['component_expand']['buffers'] = 'Buffers'
 let g:lightline['component_expand']['relativepath'] = 'RelativePath'
-let g:lightline['component_expand']['branch'] = 'GitBranch'
 " ------------------------
 " left part
 " ------------------------
@@ -161,8 +157,7 @@ let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ------------------------
 " lightline component_type
 " ------------------------
-let g:lightline.component_type = extend(s:component_type,
-            \ {
+let g:lightline.component_type = extend(s:component_type, {
             \ 'gitbranch': 'info',
             \ 'buffers': 'tabsel',
             \ 'relativepath': 'info'

@@ -54,12 +54,6 @@ endif
 " ------------------------------
 " file functions
 " ------------------------------
-function! FileDir(file) abort
-    return Expand(fnamemodify(a:file , ':p:h'))
-endfunction
-function! FilePath(file) abort
-    return Expand(fnamemodify(a:file , ':h'))
-endfunction
 function! FileReadonly()
     return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
