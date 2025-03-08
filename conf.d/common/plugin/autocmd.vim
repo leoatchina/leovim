@@ -1,37 +1,3 @@
-" --------------------------
-" autoclose_ft_buf
-" --------------------------
-let g:autoclose_ft_buf = [
-            \ 'netrw', 'coc-explorer', 'fern', 'nvimtree',
-            \ 'qf', 'preview', 'loclist', 'rg', 'outline',
-            \ 'vista', 'tagbar', 'vista_kind',
-            \ 'leaderf', 'fzf', 'help', 'man', 'startify',
-            \ 'gitcommit', 'fugitive', 'fugtiveblame', 'gitcommit',
-            \ 'vimspector', 'vimspectorprompt',
-            \ 'terminal', 'floaterm', 'popup',
-            \ 'dropbar', 'dropbar_preview',
-            \ ]
-function! s:autoclose(...) abort
-    let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
-    let bt = tolower(getbufvar(winbufnr(winnr()), '&bt'))
-    if winnr("$") <= 1 && a:0 && a:1
-        return index(g:autoclose_ft_buf, ft) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
-    elseif !a:0 || a:1 == 0
-        return ft == '' || index(g:autoclose_ft_buf, ft) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
-    else
-        return 0
-    endif
-endfunction
-function! CheckIgnoreFtBt() abort
-    return s:autoclose(0)
-endfunction
-function! AutoCloseFtBt() abort
-    return s:autoclose(1)
-endfunction
-augroup AutoCloseFtBt
-    autocmd!
-    autocmd BufWinEnter * if AutoCloseFtBt() | q! | endif
-augroup END
 " -----------------------------------
 " swap exists ignore
 " -----------------------------------
@@ -88,4 +54,6 @@ augroup END
 " --------------------------
 " helpful
 " --------------------------
-au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
+if !exists('g:vscode')
+    au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
+endif

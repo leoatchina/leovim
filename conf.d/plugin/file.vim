@@ -1,3 +1,9 @@
+function! AbsDir()
+    return Expand('%:p:h', 1)
+endfunction
+function! AbsPath()
+    return Expand('%:p', 1)
+endfunction
 " --------------------------
 " autoclose_ft_buf
 " --------------------------
@@ -42,36 +48,37 @@ function! GitRootDir()
     return get(b:, 'git_root_dir', '')
 endfunction
 function! AutoLcdGit() abort
-    let l:cur_dir = expand('%:p:h')
+    if CheckIgnoreFtBt()
+        return
+    endif
+    let l:cur_dir = AbsDir()
     if l:cur_dir != ''
         execute 'lcd ' . l:cur_dir
     endif
     if g:git_version > 1.8
         try
             if WINDOWS()
-                let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel')
+                let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
             else
-                let l:git_root = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --show-toplevel 2>/dev/null')
+                let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel 2>/dev/null')
             endif
             let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
             if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
                 let b:git_root_dir = ''
                 let b:git_branch = ''
-                return
             else
                 if WINDOWS()
-                    let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD')
+                    let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
                 else
-                    let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
-                endif
-                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
-                    let b:git_root_dir = ''
-                    let b:git_branch = ''
-                    return
+                    let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
                 endif
                 " TODO: change branch icon according to branch status, referring https://www.nerdfonts.com/cheat-sheet
                 let icon = ' '
                 let b:git_branch = icon . substitute(l:branch, '\n\+$', '', '')
+                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
+                    let b:git_root_dir = ''
+                    let b:git_branch = ''
+                endif
             endif
         catch
             let b:git_root_dir = ''
@@ -82,39 +89,51 @@ function! AutoLcdGit() abort
         let b:git_branch = ''
     endif
 endfunction
-autocmd BufEnter * if !CheckIgnoreFtBt() | call AutoLcdGit() | endif
+autocmd BufEnter,BufWinEnter * call AutoLcdGit()
 "----------------------------------------------------------------------
 " Dir && Path
 "----------------------------------------------------------------------
-function! AbsDir()
-    return Expand('%:p:h', 1)
-endfunction
-function! AbsPath()
-    return Expand('%:p', 1)
-endfunction
-function! RelativeDir()
-    let path = AbsDir()
-    if path == ''
-        return path
+function! RelativeDir() abort
+    let absdir = AbsDir()
+    if absdir == ''
+        return absdir
     endif
-    let root = GitRootDir()
-    if root
-        return root
-    else
-        return path
+    let gitroot = GitRootDir()
+    if gitroot && len(absdir) > len(gitroot)
+        " 如果在 Git 仓库中，返回相对路径
+        " 统一使用正斜杠
+        let gitroot = substitute(gitroot, '\\', '/', 'g')
+        let absdir = substitute(absdir, '\\', '/', 'g')
+        " 确保 gitroot 不以 / 结尾
+        let gitroot = substitute(gitroot, '/$', '', '')
+        if absdir[:len(gitroot)-1] ==# gitroot
+            let rel_path = absdir[len(gitroot)+1:]
+            return rel_path == '' ? '.' : rel_path
+        endif
     endif
+    " 不在 Git 仓库中或路径不匹配，返回绝对路径
+    return absdir
 endfunction
-function! RelativePath()
-    let path = AbsPath()
-    if path == ''
+function! RelativePath() abort
+    let abspath = AbsPath()
+    if abspath == ''
         return ''
     endif
-    let root = GitRootDir()
-    if root
-        return path[len(root)+1:]
-    else
-        return Expand("%:t", 1)
+    let gitroot = GitRootDir()
+    if gitroot && len(abspath) > len(gitroot)
+        " 如果在 Git 仓库中，返回相对路径
+        " 统一使用正斜杠
+        let gitroot = substitute(gitroot, '\\', '/', 'g')
+        let abspath = substitute(abspath, '\\', '/', 'g')
+        " 确保 gitroot 不以 / 结尾
+        let gitroot = substitute(gitroot, '/$', '', '')
+        if abspath[:len(gitroot)-1] ==# gitroot
+            let rel_path = abspath[len(gitroot)+1:]
+            return rel_path == '' ? '.' : rel_path
+        endif
     endif
+    " 不在 Git 仓库中或路径不匹配，返回文件名
+    return Expand("%:t", 1)
 endfunction
 "----------------------------------------------------------------------
 " save
