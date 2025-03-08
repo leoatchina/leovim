@@ -132,10 +132,11 @@ endif
 " ---------------------------------------
 function! Buffers()
     " origin buffers list
-    let buffers = lightline#bufferline#buffers()
+    let buffers = copy(lightline#bufferline#buffers())
+    let icon = buffers[1][0][:3]
     " reorder buffers
     if empty(buffers[2])
-        let res = copy(buffers)
+        let res = buffers
     else
         if empty(buffers[0])
             let res = [buffers[2], buffers[1], []]
@@ -143,7 +144,7 @@ function! Buffers()
             let res = [buffers[0] + buffers[2], buffers[1], []]
         endif
     endif
-    let res[1] = ['Ⓡ ' . RelativeDir()]
+    let res[1] = [icon . RelativeDir()]
     return res
 endfunction
 let g:lightline['component_expand']['branch'] = 'GitBranch'

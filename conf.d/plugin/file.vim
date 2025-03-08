@@ -63,7 +63,7 @@ function! AutoLcdGit() abort
                 else
                     let l:branch = system('git -C ' . shellescape(l:cur_dir) . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
                 endif
-                let b:git_branch = '@' . substitute(l:branch, '\n\+$', '', '')
+                let b:git_branch = ' @' . substitute(l:branch, '\n\+$', '', '')
                 if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
                     let b:git_root_dir = ''
                     let b:git_branch = ''
