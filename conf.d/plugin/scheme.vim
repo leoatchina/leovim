@@ -50,4 +50,3 @@ if Installed('render-markdown.nvim')
         autocmd FileType markdown,Avante,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
     augroup END
 endif
-
