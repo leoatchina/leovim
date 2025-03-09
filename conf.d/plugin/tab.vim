@@ -28,6 +28,7 @@ nnoremap <leader><Tab> :tabe<Space>
 " ------------------------
 " tab label
 " ------------------------
+" 定义标签页编号的高亮组
 function! Vim_NeatBuffer(bufnr, fullname)
     let l:name = bufname(a:bufnr)
     if getbufvar(a:bufnr, '&modifiable')
@@ -67,21 +68,20 @@ function! Vim_NeatTabLabel(n, active)
     return l:label
 endfun
 " make tabline in terminal mode
+hi link TabNumSel Type
 function! Vim_NeatTabLine()
     let s = ''
     for i in range(tabpagenr('$'))
         let nr = i + 1
+        " set the tab page number (for mouse clicks)
+        let s .= '%' . nr . 'T'
         " select the highlighting
         if nr == tabpagenr()
             let s .= '%#TabLineSel#'
+            let s .= '%#TabNumSel# ' . nr . '%#TabLineSel#'
         else
-            let s .= '%#TabLine#'
+            let s .= '%#TabLine# ' . nr . ''
         endif
-        " set the tab page number (for mouse clicks)
-        let s .= '%' . nr . 'T'
-        " set nr
-        let s .=  nr . ''
-        " set hl
         let s .= '%{Vim_NeatTabLabel(' . nr . ', 0)} '
     endfor
     " after the last tab fill with TabLineFill and reset tab page nr

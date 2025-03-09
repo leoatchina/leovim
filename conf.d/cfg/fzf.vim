@@ -42,6 +42,29 @@ else
     let g:fzf_vim.preview_window = ['right,45%', 'ctrl-l']
     let g:vista_fzf_preview = g:fzf_vim.preview_window
 endif
+" 使用 fzf 查看高亮配置
+function! s:get_highlight_list()
+    redir => l:highlight_output
+    silent highlight
+    redir END
+    let l:highlight_lines = split(l:highlight_output, '\n')
+    let l:highlight_groups = []
+    for l:line in l:highlight_lines
+        if l:line =~ '^\S\+\s\+xxx\s\+'
+            call add(l:highlight_groups, l:line)
+        endif
+    endfor
+    return l:highlight_groups
+endfunction
+command! -nargs=? FzfHighlight call fzf#run(fzf#wrap({
+    \ 'source': s:get_highlight_list(),
+    \ 'sink': function('s:highlight_sink'),
+    \ }))
+function! s:highlight_sink(line)
+    let l:group = split(a:line)[0]
+    execute 'highlight ' . l:group
+endfunction
+nnoremap <silent><M-k>h :FzfHighlight<Cr>
 " ---------------
 " FzfFiles
 " ---------------
