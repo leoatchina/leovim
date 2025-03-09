@@ -89,7 +89,7 @@ function! GetRootDir(...)
         let curr_dir = fnamemodify(curr_dir, ":h")
     endwhile
 endfunction
-nnoremap <M-h>R :echo GetRootDir()<Cr>
+nnoremap <M-k>r :echo GetRootDir()<Cr>
 " --------------------------
 " python_support
 " --------------------------
