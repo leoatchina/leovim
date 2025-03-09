@@ -21,7 +21,6 @@ endif
 " coc-global-extensions
 " ------------------------
 let g:coc_global_extensions = [
-            \ 'coc-explorer',
             \ 'coc-lists',
             \ 'coc-marketplace',
             \ 'coc-snippets',

@@ -13,7 +13,7 @@ augroup END
 PlugAddOpt 'vim-fern-git-status'
 PlugAddOpt 'vim-fern-hijack'
 " fern_open
-function! FernOpen(type, ...) abort
+function! s:fern_open(type, ...) abort
     let l:opts = get(a:, 1, {})
     if a:type == 'lcd'
         let l:dir = '.'
@@ -28,9 +28,9 @@ function! FernOpen(type, ...) abort
     endif
     execute l:cmd
 endfunction
-command! FernLCD call FernOpen('lcd')
-command! FernGitRoot call FernOpen('gitroot')
-command! FernGetRoot call FernOpen('getroot')
+command! FernLCD call s:fern_open('lcd')
+command! FernGitRoot call s:fern_open('gitroot')
+command! FernGetRoot call s:fern_open('getroot')
 nnoremap <leader>fn :Fern
 nnoremap <silent><leader>fl :FernLCD<Cr>
 nnoremap <silent><leader>fg :FernGitRoot<Cr>
@@ -76,3 +76,63 @@ augroup fern-settings
     autocmd FileType fern call s:fern_settings()
 augroup END
 PlugAddOpt 'fern-preview.vim'
+" --------------------
+" fern explore
+" --------------------
+if g:has_popup_floating
+    function! s:fern_popup() abort
+        if has('nvim')
+            " Neovim: 使用floating window
+            let l:width = float2nr(&columns * 0.8)
+            let l:height = float2nr(&lines * 0.8)
+            let l:row = float2nr((&lines - l:height) / 2)
+            let l:col = float2nr((&columns - l:width) / 2)
+            let l:opts = {
+                \ 'relative': 'editor',
+                \ 'row': l:row,
+                \ 'col': l:col,
+                \ 'width': l:width,
+                \ 'height': l:height,
+                \ 'style': 'minimal',
+                \ 'border': 'rounded'
+                \ }
+            let l:buf = nvim_create_buf(v:false, v:true)
+            let l:win = nvim_open_win(l:buf, v:true, l:opts)
+            call s:fern_open('lcd', {'popup': 1})
+        else
+            " Vim: 使用popup buffer
+            let l:width = float2nr(&columns * 0.8)
+            let l:height = float2nr(&lines * 0.8)
+            let l:current_dir = AbsDir()
+            " 创建一个新的buffer
+            let l:popbuf = bufadd('')
+            call bufload(l:popbuf)
+            call setbufvar(l:popbuf, '&buftype', 'nofile')
+            call setbufvar(l:popbuf, '&bufhidden', 'wipe')
+            " 创建popup window
+            let l:popup_opts = {
+                        \ 'line': float2nr((&lines - l:height) / 2),
+                        \ 'col': float2nr((&columns - l:width) / 2),
+                        \ 'minwidth': l:width,
+                        \ 'minheight': l:height,
+                        \ 'title': ' Fern Explorer ',
+                        \ 'border': [1,1,1,1],
+                        \ 'padding': [0,1,0,1],
+                        \ 'highlight': 'Normal',
+                        \ 'borderhighlight': ['PopupBorder'],
+                        \ 'scrollbar': 1,
+                        \ 'close': 'button',
+                        \ 'resize': 1,
+                        \ 'drag': 1,
+                        \ 'mapping': 0,
+                        \ 'filter': 'popup_filter_yesno',
+                        \ 'callback': {-> execute('bdelete! ' . l:popbuf)}
+                        \ }
+            let l:winid = popup_create(l:popbuf, l:popup_opts)
+            " 在popup窗口中执行fern命令
+            call win_execute(l:winid, 'Fern ' . l:current_dir)
+        endif
+    endfunction
+    command! FernPopupOrFloating call s:fern_popup()
+    nnoremap <silent><leader>fe :FernPopupOrFloating<Cr>
+endif

@@ -105,7 +105,8 @@
 - [x] FzfSearch Command optimize, 3 levels, Git/Project/Current.
 - [x] show/yank current dir/file/path
 - [x] codecompanion.nvim
-- [ ] tab nr highlighting group
+- [x] tab nr highlighting group
+- [ ] vim-fern in popup || floating_window
 - [ ] git branch icons
 - [ ] Fzf --no-sort option for different commands
 - [ ] find conflicts using Git/Project/Current path.
