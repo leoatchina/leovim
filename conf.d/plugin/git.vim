@@ -8,6 +8,74 @@ if executable('git') && get(g:, 'header_field_author', '') != '' && get(g:, 'hea
                 \ g:header_field_author_email))
     nnoremap <M-g>S :GitSet<Cr>
 endif
+" ----------------------------------------------------------------------
+" git related functions
+" ----------------------------------------------------------------------
+function! GitBranch()
+    return get(b:, 'git_branch', '')
+endfunction
+function! GitRootDir()
+    return get(b:, 'git_root_dir', '')
+endfunction
+function! AutoLcdGit() abort
+    if FtBtIgnored()
+        return
+    endif
+    let l:cur_dir = AbsDir()
+    if l:cur_dir != ''
+        execute 'lcd ' . l:cur_dir
+    endif
+    if g:git_version > 1.8
+        try
+            let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
+            let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
+            if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
+                let b:git_root_dir = ''
+                let b:git_branch = ''
+            else
+                let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
+                " TODO: change branch icon according to branch status, referring https://www.nerdfonts.com/cheat-sheet
+                let icon = ' '
+                let b:git_branch = icon . substitute(l:branch, '\n\+$', '', '')
+                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
+                    let b:git_root_dir = ''
+                    let b:git_branch = ''
+                endif
+            endif
+        catch
+            let b:git_root_dir = ''
+            let b:git_branch = ''
+        endtry
+    else
+        let b:git_root_dir = ''
+        let b:git_branch = ''
+    endif
+endfunction
+augroup AutoLcdGit
+    au!
+    autocmd BufEnter,BufWinEnter * call AutoLcdGit()
+augroup END
+" ----------------------
+" relative dir && path
+" ----------------------
+function! RelativeDir() abort
+    let absdir = AbsDir()
+    let gitroot = GitRootDir()
+    if gitroot != '' && len(absdir) > len(gitroot)
+        return gitroot
+    else
+        return absdir
+    endif
+endfunction
+function! RelativePath() abort
+    let abspath = AbsPath()
+    let gitroot = GitRootDir()
+    if gitroot != '' && len(abspath) > len(gitroot)
+        return abspath[len(gitroot)+1:]
+    else
+        return Expand("%:t", 1)
+    endif
+endfunction
 "------------------------
 " fugitve and others
 "------------------------
