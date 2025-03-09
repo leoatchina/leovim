@@ -34,7 +34,6 @@ function! Vim_NeatBuffer(bufnr, fullname)
         if l:name == ''
             return '[No Name]'
         else
-            " TODO:  short table name
             if a:fullname
                 return fnamemodify(l:name, ':p')
             else
@@ -61,7 +60,11 @@ function! Vim_NeatTabLabel(n, active)
     let l:buflist = tabpagebuflist(a:n)
     let l:winnr = tabpagewinnr(a:n)
     let l:bufnr = l:buflist[l:winnr - 1]
-    return Vim_NeatBuffer(l:bufnr, a:active)
+    let l:label = Vim_NeatBuffer(l:bufnr, a:active)
+    if getbufvar(l:bufnr, '&modified')
+        let l:label .= '|+'
+    endif
+    return l:label
 endfun
 " make tabline in terminal mode
 function! Vim_NeatTabLine()
@@ -77,7 +80,7 @@ function! Vim_NeatTabLine()
         " set the tab page number (for mouse clicks)
         let s .= '%' . nr . 'T'
         " set nr
-        let s .= '【' . nr . '】'
+        let s .=  nr . ''
         " set hl
         let s .= '%{Vim_NeatTabLabel(' . nr . ', 0)} '
     endfor
