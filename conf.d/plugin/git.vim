@@ -188,10 +188,10 @@ if has('nvim') || has('patch-8.0.902')
         endif
     endfunction
     nnoremap <silent>\| :call <SID>SignifyDiff()<CR>
-    nnoremap <silent>\<Cr> :SignifyRefresh<Cr>
-    nnoremap <silent>\<Tab> :SignifyToggle<Cr>
-    nnoremap <silent>\<Space> :SignifyHunkDiff<Cr>
-    nnoremap <silent>\<BackSpace> :SignifyHunkUndo<Cr>
+    nnoremap \<Cr> :SignifyRefresh<Cr>
+    nnoremap \<Tab> :SignifyToggle<Cr>
+    nnoremap \<Space> :SignifyHunkDiff<Cr>
+    nnoremap \<BackSpace> :SignifyHunkUndo<Cr>
     nmap ;h <plug>(signify-next-hunk)
     nmap ,h <plug>(signify-prev-hunk)
     omap im <plug>(signify-motion-inner-pending)
@@ -203,7 +203,7 @@ if has('nvim') || has('patch-8.0.902')
     PlugAddOpt 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
-    nnoremap \: :SignifyCommands<Cr>
+    nnoremap <silent>\: :SignifyCommands<Cr>
 endif
 " -----------------------------------------------------
 " Merge
