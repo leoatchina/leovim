@@ -203,16 +203,6 @@ nmap <silent><leader>ac <Plug>(coc-codeaction-cursor)
 nmap <silent><M-a> <Plug>(coc-codelens-action)
 nmap <silent><leader>A :CocFzfList actions<Cr>
 " ------------------------
-" coc file
-" ------------------------
-if has('nvim')
-    function! s:coc_file() abort
-        exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
-    endfunction
-    command! CocFile call s:coc_file()
-    nnoremap <silent><nowait><leader>fe :CocFile<Cr>
-endif
-" ------------------------
 " coc git
 " ------------------------
 omap ig <Plug>(coc-git-chunk-inner)
