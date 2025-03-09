@@ -6,8 +6,8 @@ PlugAddOpt 'vim-nerdfont'
 PlugAddOpt 'vim-glyph-palette'
 PlugAddOpt 'vim-fern-renderer-nerdfont'
 augroup my-glyph-palette
-    autocmd! *
-        autocmd FileType fern,startify call glyph_palette#apply()
+    autocmd!
+    autocmd FileType fern,startify call glyph_palette#apply()
 augroup END
 " enhance
 PlugAddOpt 'vim-fern-git-status'
