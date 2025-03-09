@@ -187,11 +187,13 @@ if has('nvim') || has('patch-8.0.902')
             wincmd H
         endif
     endfunction
-    nnoremap \| :call <SID>SignifyDiff()<CR>
-    nnoremap \<Tab> :SignifyToggle<Cr>
-    nnoremap \<Space> :SignifyRefresh<Cr>
-    nmap ;g <plug>(signify-next-hunk)
-    nmap ,g <plug>(signify-prev-hunk)
+    nnoremap <silent>\| :call <SID>SignifyDiff()<CR>
+    nnoremap <silent>\<Cr> :SignifyRefresh<Cr>
+    nnoremap <silent>\<Tab> :SignifyToggle<Cr>
+    nnoremap <silent>\<Space> :SignifyHunkDiff<Cr>
+    nnoremap <silent>\<BackSpace> :SignifyHunkUndo<Cr>
+    nmap ;h <plug>(signify-next-hunk)
+    nmap ,h <plug>(signify-prev-hunk)
     omap im <plug>(signify-motion-inner-pending)
     xmap im <plug>(signify-motion-inner-visual)
     omap am <plug>(signify-motion-outer-pending)

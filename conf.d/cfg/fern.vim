@@ -80,30 +80,27 @@ PlugAddOpt 'fern-preview.vim'
 " fern explore
 " --------------------
 if g:has_popup_floating
-    function! s:fern_popup() abort
+    function! s:fern_explorer() abort
+        let l:width = float2nr(&columns * 0.8)
+        let l:height = float2nr(&lines * 0.8)
+        let l:row = float2nr((&lines - l:height) / 2)
+        let l:col = float2nr((&columns - l:width) / 2)
+        let l:current_dir = AbsDir()
         if has('nvim')
             " Neovim: 使用floating window
-            let l:width = float2nr(&columns * 0.8)
-            let l:height = float2nr(&lines * 0.8)
-            let l:row = float2nr((&lines - l:height) / 2)
-            let l:col = float2nr((&columns - l:width) / 2)
-            let l:opts = {
-                \ 'relative': 'editor',
-                \ 'row': l:row,
-                \ 'col': l:col,
-                \ 'width': l:width,
-                \ 'height': l:height,
-                \ 'style': 'minimal',
-                \ 'border': 'rounded'
-                \ }
+            let l:floating_opts = {
+                        \ 'relative': 'editor',
+                        \ 'row': l:row,
+                        \ 'col': l:col,
+                        \ 'width': l:width,
+                        \ 'height': l:height,
+                        \ 'style': 'minimal',
+                        \ 'border': 'rounded'
+                        \ }
             let l:buf = nvim_create_buf(v:false, v:true)
-            let l:win = nvim_open_win(l:buf, v:true, l:opts)
+            let l:win = nvim_open_win(l:buf, v:true, l:floating_opts)
             call s:fern_open('lcd', {'popup': 1})
         else
-            " Vim: 使用popup buffer
-            let l:width = float2nr(&columns * 0.8)
-            let l:height = float2nr(&lines * 0.8)
-            let l:current_dir = AbsDir()
             " 创建一个新的buffer
             let l:popbuf = bufadd('')
             call bufload(l:popbuf)
@@ -111,8 +108,8 @@ if g:has_popup_floating
             call setbufvar(l:popbuf, '&bufhidden', 'wipe')
             " 创建popup window
             let l:popup_opts = {
-                        \ 'line': float2nr((&lines - l:height) / 2),
-                        \ 'col': float2nr((&columns - l:width) / 2),
+                        \ 'line': l:row,
+                        \ 'col': l:col,
                         \ 'minwidth': l:width,
                         \ 'minheight': l:height,
                         \ 'title': ' Fern Explorer ',
@@ -129,10 +126,9 @@ if g:has_popup_floating
                         \ 'callback': {-> execute('bdelete! ' . l:popbuf)}
                         \ }
             let l:winid = popup_create(l:popbuf, l:popup_opts)
-            " 在popup窗口中执行fern命令
             call win_execute(l:winid, 'Fern ' . l:current_dir)
         endif
     endfunction
-    command! FernPopupOrFloating call s:fern_popup()
-    nnoremap <silent><leader>fe :FernPopupOrFloating<Cr>
+    command! FernExplorer call s:fern_explorer()
+    nnoremap <silent><leader>fe :FernExplorer<Cr>
 endif

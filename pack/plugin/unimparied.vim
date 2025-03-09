@@ -446,12 +446,12 @@ function! UnimpairedMapTransform(algorithm, key) abort
     call s:map('n', a:key.a:key[strlen(a:key)-1], '<Plug>unimpaired_line_'.a:algorithm)
 endfunction
 
-call UnimpairedMapTransform('string_encode','[Y')
-call UnimpairedMapTransform('string_decode',']Y')
-call UnimpairedMapTransform('url_encode','[U')
-call UnimpairedMapTransform('url_decode',']U')
-call UnimpairedMapTransform('xml_encode','[X')
-call UnimpairedMapTransform('xml_decode',']X')
+call UnimpairedMapTransform('string_encode','[y')
+call UnimpairedMapTransform('string_decode',']y')
+call UnimpairedMapTransform('url_encode','[u')
+call UnimpairedMapTransform('url_decode',']u')
+call UnimpairedMapTransform('xml_encode','[x')
+call UnimpairedMapTransform('xml_decode',']x')
 
 " Section: Activation
 
