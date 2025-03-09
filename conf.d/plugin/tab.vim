@@ -126,6 +126,16 @@ nnoremap <silent><M-7> :tabn7<Cr>
 nnoremap <silent><M-8> :tabn8<Cr>
 nnoremap <silent><M-9> :tabn9<Cr>
 nnoremap <silent><M-0> :tablast<Cr>
+nnoremap <silent>1<Tab> :tabn1<Cr>
+nnoremap <silent>2<Tab> :tabn2<Cr>
+nnoremap <silent>3<Tab> :tabn3<Cr>
+nnoremap <silent>4<Tab> :tabn4<Cr>
+nnoremap <silent>5<Tab> :tabn5<Cr>
+nnoremap <silent>6<Tab> :tabn6<Cr>
+nnoremap <silent>7<Tab> :tabn7<Cr>
+nnoremap <silent>8<Tab> :tabn8<Cr>
+nnoremap <silent>9<Tab> :tabn9<Cr>
+nnoremap <silent>0<Tab> :tablast<Cr>
 " Map in terminal
 if g:has_terminal == 0
     finish
