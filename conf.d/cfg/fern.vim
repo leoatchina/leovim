@@ -40,7 +40,6 @@ nnoremap <silent><leader>fr :FernGetRoot<Cr>
 " ---------------
 function! Fern_mapping_fzf_customize_option(spec)
     let a:spec.options .= ' --multi'
-    " Note that fzf#vim#with_preview comes from fzf.vim
     if exists('*fzf#vim#with_preview')
         return fzf#vim#with_preview(a:spec)
     else
@@ -54,7 +53,7 @@ function! Fern_mapping_fzf_before_all(dict)
     return a:dict.fern_helper.async.update_marks([])
 endfunction
 function! s:reveal(dict)
-    execute "FernReveal -wait" a:dict.relative_path
+    execute "Fern . -opener=edit/split -stay -reveal=%:p"
     execute "normal \<Plug>(fern-action-mark:set)"
 endfunction
 let g:Fern_mapping_fzf_file_sink = function('s:reveal')
