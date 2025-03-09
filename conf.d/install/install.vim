@@ -181,7 +181,7 @@ endif
 " ----------------------------
 " schemes && textobj
 " ----------------------------
-if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', LINUX() || MACOS())
+if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX())
     PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
     PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
@@ -193,12 +193,16 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
     PlugAdd 'gcmt/wildfire.vim'
 endif
-if !Planned('nvim-treesitter') && Require('c') && Planned('coc.nvim') && Planned('nvim-cmp')
+if !Planned('nvim-treesitter') && Require('c') && (PlannedCoc() || Planned('nvim-lspconfig'))
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
     PlugAdd 'sainnhe/sonokai'
+    if has('nvim-0.8')
+        PlugAdd 'EdenEast/nightfox.nvim'
+        PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
+    endif
 endif
 " ------------------------------
 " debug tool
@@ -277,7 +281,7 @@ PlugAdd 'sbdchd/neoformat'
 if executable('git') && v:version >= 800 && g:git_version >= 1.85
     PlugAdd 'tpope/vim-fugitive'
     PlugAdd 'junegunn/gv.vim'
-    " NOTE: blamer.nvim installed condition
+    " NOTE: blamer.nvim installed when without virtual text
     if g:has_popup_floating && UNIX() && (!Planned('leaderf') || Planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
         PlugAdd 'APZelos/blamer.nvim'
     endif
@@ -292,9 +296,7 @@ if has('nvim-0.8')
     PlugAdd 'stevearc/dressing.nvim'
     PlugAdd 'lukas-reineke/indent-blankline.nvim'
     PlugAdd 'nvim-tree/nvim-web-devicons'
-    " color
-    PlugAdd 'EdenEast/nightfox.nvim'
-    PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
+    " dropbar
     if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
         PlugAdd 'Bekaboo/dropbar.nvim'
         if UNIX()
