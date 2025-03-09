@@ -107,6 +107,8 @@ git clone --depth 1 https://github.com/lambdalisue/vim-fern-hijack
 git clone --depth 1 https://github.com/lambdalisue/vim-fern-renderer-nerdfont
 git clone --depth 1 https://github.com/lambdalisue/vim-nerdfont
 git clone --depth 1 https://github.com/lambdalisue/vim-glyph-palette
+git clone --depth 1 https://github.com/LumaKernel/fern-mapping-fzf.vim
+git clone --depth 1 https://github.com/yuki-yano/fern-preview.vim
 
 # zfvim
 rm -rf ZFVim*

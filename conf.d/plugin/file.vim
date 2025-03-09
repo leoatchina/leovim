@@ -2,8 +2,8 @@
 " autoclose_ft_buf
 " --------------------------
 let g:autoclose_ft_buf = [
-            \ 'netrw', 'coc-explorer', 'fern', 'nvimtree',
-            \ 'qf', 'preview', 'loclist', 'rg', 'outline',
+            \ 'netrw', 'coc-explorer', 'fern', 'nvimtree', 'fern_preview',
+            \ 'qf', 'preview', 'loclist', 'rg', 'outline', 'nofile',
             \ 'vista', 'tagbar', 'vista_kind',
             \ 'leaderf', 'fzf', 'help', 'man', 'startify',
             \ 'gitcommit', 'fugitive', 'fugtiveblame', 'gitcommit',
