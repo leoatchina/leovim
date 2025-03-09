@@ -47,8 +47,6 @@ set ttimeoutlen=60
 set timeoutlen=300
 set updatetime=200
 if get(g:, 'leovim_whichkey', 1)
-    nnoremap ]c ]c
-    nnoremap [c [c
     let g:which_key_group_dicts = ''
     let g:which_key_use_floating_win = g:has_popup_floating
     PlugAddOpt 'vim-which-key'
