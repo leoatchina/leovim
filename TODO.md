@@ -104,13 +104,14 @@
 - [x] use native vim.lsp command instead of LspUI.
 - [x] FzfSearch Command optimize, 3 levels, Git/Project/Current.
 - [x] show/yank current dir/file/path
-- [ ] codecompanion.nvim
+- [x] codecompanion.nvim
+- [ ] tab nr highlighting group
+- [ ] git branch icons
 - [ ] Fzf --no-sort option for different commands
-- [ ] search enhanced like fzfx.nvim
-- [ ] find conflicts using Git/Project/Curent path.
+- [ ] find conflicts using Git/Project/Current path.
 - [ ] R.exe exepath in windows
 ## MyPlugins:
-- [ ] write fzf-startify
+- [x] write fzf-startify
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
