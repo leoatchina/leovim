@@ -365,7 +365,7 @@ onoremap g_ $
 function! MoveToEndAndAddSemicolon() abort
     execute "normal! :s/\\s\\+$//e\\r"
     normal! g_
-    if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php', 'javascript', 'typescript'], &ft) >= 0
+    if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php', 'javascript', 'typescript', 'go', 'r'], &ft) >= 0
         if index([';', '{', '}'], getline('.')[col('.') - 1]) >= 0
             normal! a
         else
@@ -375,7 +375,7 @@ function! MoveToEndAndAddSemicolon() abort
         normal! a
     endif
 endfunction
-inoremap <C-j> <C-\><C-n>:call MoveToEndAndAddSemicolon()<CR>
+inoremap <silent><C-j> <C-\><C-n>:call MoveToEndAndAddSemicolon()<CR>
 " ------------------------
 " select and search
 " ------------------------
