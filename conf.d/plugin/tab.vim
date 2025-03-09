@@ -78,9 +78,9 @@ function! Vim_NeatTabLine()
         " select the highlighting
         if nr == tabpagenr()
             let s .= '%#TabLineSel#'
-            let s .= '%#TabNumSel# ' . nr . '%#TabLineSel#'
+            let s .= '%#TabNumSel#' . nr . ' %#TabLineSel#'
         else
-            let s .= '%#TabLine# ' . nr . ''
+            let s .= '%#TabLine#' . nr . ' '
         endif
         let s .= '%{Vim_NeatTabLabel(' . nr . ', 0)} '
     endfor
