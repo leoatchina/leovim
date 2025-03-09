@@ -1,0 +1,2 @@
+setlocal nonu
+setlocal nornu
