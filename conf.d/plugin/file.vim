@@ -51,21 +51,13 @@ function! AutoLcdGit() abort
     endif
     if g:git_version > 1.8
         try
-            if WINDOWS()
-                let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
-            else
-                let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel 2>/dev/null')
-            endif
+            let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
             let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
             if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
                 let b:git_root_dir = ''
                 let b:git_branch = ''
             else
-                if WINDOWS()
-                    let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
-                else
-                    let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD 2>/dev/null')
-                endif
+                let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
                 " TODO: change branch icon according to branch status, referring https://www.nerdfonts.com/cheat-sheet
                 let icon = ' '
                 let b:git_branch = icon . substitute(l:branch, '\n\+$', '', '')
