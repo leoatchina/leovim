@@ -1,14 +1,15 @@
 #!/bin/bash
 rm -rf vim-which-key 
 git clone --depth 1 https://github.com/leoatchina/vim-which-key.git
-for fl in `find ./vim-which-key -type f | grep vim$` ; do echo $fl; vim -c "normal ggVG=" -c "wq!" $fl ; done
+for fl in `find ./vim-which-key -type f | grep .vim$` ; do echo $fl; sed -i -E ':a;s/^([[:space:]]*)  /\1    /g;ta; s/\t/    /g' $fl ; done
 
 rm -rf vista.vim
 git clone --depth 1 https://github.com/leoatchina/vista.vim.git
+for fl in `find ./vista.vim -type f | grep .vim$` ; do echo $fl; sed -i -E ':a;s/^([[:space:]]*)  /\1    /g;ta; s/\t/    /g' $fl ; done
 
 rm -rf vim-floaterm
 git clone --depth 1 https://github.com/leoatchina/vim-floaterm.git
-for fl in `find ./vim-floaterm -type f | grep vim$` ; do echo $fl; vim -c "normal ggVG=" -c "wq!" $fl ; done
+for fl in `find ./vim-floaterm -type f | grep .vim$` ; do echo $fl; sed -i -E ':a;s/^([[:space:]]*)  /\1    /g;ta; s/\t/    /g' $fl ; done
 
 # delete files
 find . -type f | grep -i \.jpg$ | xargs rm -f
