@@ -133,7 +133,11 @@ endif
 function! Buffers()
     " origin buffers list
     let buffers = copy(lightline#bufferline#buffers())
-    let icon = buffers[1][0][:3]
+    try
+        let icon = buffers[1][0][:3]
+    catch
+        let icon = '@'
+    endtry
     " reorder buffers
     if empty(buffers[2])
         let res = buffers
