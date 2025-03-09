@@ -93,6 +93,11 @@ function! Vim_NeatTabLine()
     return s
 endfunction
 set tabline=%!Vim_NeatTabLine()
+" Re-apply the tabline after a colorscheme change
+augroup TablineColorschemeFix
+    autocmd!
+    autocmd ColorScheme * set tabline=%!Vim_NeatTabLine()
+augroup END
 " get a single tab label in gui
 function! Vim_NeatGuiTabLabel()
     let l:num = v:lnum
