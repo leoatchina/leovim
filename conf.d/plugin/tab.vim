@@ -57,11 +57,16 @@ function! Vim_NeatBuffer(bufnr, fullname)
     endif
 endfunc
 " get a single tab label
-function! Vim_NeatTabLabel(n, active)
+function! Vim_NeatTabLabel(n, ...)
+    if a:0 && a:1
+        let active = 1
+    else
+        let active = 0
+    endif
     let l:buflist = tabpagebuflist(a:n)
     let l:winnr = tabpagewinnr(a:n)
     let l:bufnr = l:buflist[l:winnr - 1]
-    let l:label = Vim_NeatBuffer(l:bufnr, a:active)
+    let l:label = Vim_NeatBuffer(l:bufnr, active)
     if getbufvar(l:bufnr, '&modified')
         let l:label .= ' +'
     endif
@@ -71,23 +76,29 @@ endfun
 hi link TabNumSel Type
 function! Vim_NeatTabLine()
     let s = ''
-    for i in range(tabpagenr('$'))
+    let taball = tabpagenr('$')
+    for i in range(taball)
         let nr = i + 1
         " set the tab page number (for mouse clicks)
         let s .= '%' . nr . 'T'
         " select the highlighting
-        if nr == tabpagenr()
+        let tabcur = tabpagenr()
+        if nr == tabcur
             let s .= '%#TabLineSel#'
             let s .= '%#TabNumSel# ' . nr . ' %#TabLineSel# ' .  get(b:, 'file_icon', '')
         else
             let s .= '%#TabLine# ' . nr . ' '
         endif
-        let s .= '%{Vim_NeatTabLabel(' . nr . ', 0)} '
+        if nr == tabcur -1 || nr == tabcur || nr == taball
+            let s .= '%{Vim_NeatTabLabel(' . nr . ')} '
+        else
+            let s .= '%{Vim_NeatTabLabel(' . nr . ')} |'
+        endif
     endfor
     " after the last tab fill with TabLineFill and reset tab page nr
     let s .= '%#TabLineFill#%T'
     " right-align the label to close the current tab page
-    if tabpagenr('$') > 1
+    if taball > 1
         let s .= '%=%#TabLine#%999XX'
     endif
     return s
