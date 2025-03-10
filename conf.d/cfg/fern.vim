@@ -13,7 +13,7 @@ augroup END
 PlugAddOpt 'vim-fern-git-status'
 PlugAddOpt 'vim-fern-hijack'
 " fern_open
-function! s:fern_open(type, ...) abort
+function! FernOpen(type, ...) abort
     let l:opts = get(a:, 1, {})
     if a:type == 'lcd'
         let l:dir = '.'
@@ -28,9 +28,9 @@ function! s:fern_open(type, ...) abort
     endif
     execute l:cmd
 endfunction
-command! FernLCD call s:fern_open('lcd')
-command! FernGitRoot call s:fern_open('gitroot')
-command! FernGetRoot call s:fern_open('getroot')
+command! FernLCD call FernOpen('lcd')
+command! FernGitRoot call FernOpen('gitroot')
+command! FernGetRoot call FernOpen('getroot')
 nnoremap <leader>fn :Fern
 nnoremap <silent><leader>fl :FernLCD<Cr>
 nnoremap <silent><leader>fg :FernGitRoot<Cr>
