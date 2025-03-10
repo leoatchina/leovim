@@ -27,7 +27,7 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
-    let left = &columns - len(FileReadonly() + GitRootDir() + RelativeDir() + Mode())
+    let left = &columns - len(FileReadonly() + RelativeDir() + RelativePath() + GitBranch() + Mode())
     return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
