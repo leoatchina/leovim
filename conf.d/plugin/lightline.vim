@@ -134,9 +134,9 @@ function! Buffers()
     " origin buffers list
     let buffers = copy(lightline#bufferline#buffers())
     try
-        let icon = buffers[1][0][:3]
+        let b:file_icon = buffers[1][0][:3]
     catch
-        let icon = '@'
+        let b:file_icon = ''
     endtry
     " reorder buffers
     if empty(buffers[2])
@@ -148,7 +148,7 @@ function! Buffers()
             let res = [buffers[0] + buffers[2], buffers[1], []]
         endif
     endif
-    let res[1] = [icon . RelativeDir()]
+    let res[1] = [b:file_icon . RelativeDir()]
     return res
 endfunction
 let g:lightline['component_expand']['branch'] = 'GitBranch'
