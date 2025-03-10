@@ -8,7 +8,7 @@ let g:autoclose_ft_buf = [
             \ 'leaderf', 'fzf', 'help', 'man', 'startify',
             \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame',
             \ 'vimspector', 'vimspectorprompt',
-            \ 'terminal', 'floaterm', 'popup',
+            \ 'terminal', 'floaterm', 'popup', 'undotree',
             \ 'dropbar', 'dropbar_preview',
             \ ]
 function! s:autoclose(...) abort
