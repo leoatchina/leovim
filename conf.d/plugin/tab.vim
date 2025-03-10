@@ -63,7 +63,7 @@ function! Vim_NeatTabLabel(n, active)
     let l:bufnr = l:buflist[l:winnr - 1]
     let l:label = Vim_NeatBuffer(l:bufnr, a:active)
     if getbufvar(l:bufnr, '&modified')
-        let l:label .= '|+'
+        let l:label .= ' +'
     endif
     return l:label
 endfun

@@ -844,7 +844,7 @@ function! s:open_link_in_editor(text, col)
             exec "!" . editor . " " . location[0]
         endif
     else
-        echo "Not URL found, and not a valid file path."
+        echo "Neigher URL nor file path under cursor."
     endif
 endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
