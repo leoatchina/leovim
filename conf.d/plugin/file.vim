@@ -25,12 +25,12 @@ endfunction
 function! FtBtIgnored() abort
     return s:autoclose(0)
 endfunction
-function! AutoCloseFtBt() abort
+function! AutoCloseLastWin() abort
     return s:autoclose(1)
 endfunction
-augroup AutoCloseFtBt
+augroup AutoCloseLastWin
     autocmd!
-    autocmd BufWinEnter * if AutoCloseFtBt() | q! | endif
+    autocmd BufWinEnter * if AutoCloseLastWin() | q! | endif
 augroup END
 "----------------------------------------------------------------------
 " Sudo
