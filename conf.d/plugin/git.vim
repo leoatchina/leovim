@@ -53,7 +53,7 @@ function! AutoLcdGit() abort
 endfunction
 augroup AutoLcdGit
     au!
-    autocmd BufEnter,BufWinEnter * call AutoLcdGit()
+    autocmd BufWinEnter * call AutoLcdGit()
 augroup END
 " ----------------------
 " relative dir && path

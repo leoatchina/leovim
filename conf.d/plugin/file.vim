@@ -30,7 +30,7 @@ function! AutoCloseLastWin() abort
 endfunction
 augroup AutoCloseLastWin
     autocmd!
-    autocmd BufEnter,BufWinEnter * if AutoCloseLastWin() | q! | endif
+    autocmd BufWinEnter * if AutoCloseLastWin() | q! | endif
 augroup END
 "----------------------------------------------------------------------
 " Sudo
