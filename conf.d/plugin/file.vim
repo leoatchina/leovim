@@ -30,7 +30,7 @@ function! AutoCloseLastWin() abort
 endfunction
 augroup AutoCloseLastWin
     autocmd!
-    autocmd BufWinEnter * if AutoCloseLastWin() | q! | endif
+    autocmd BufEnter,BufWinEnter * if AutoCloseLastWin() | q! | endif
 augroup END
 "----------------------------------------------------------------------
 " Sudo
@@ -337,6 +337,7 @@ function! s:confirm_quit(type) abort
                 let choices = ['Save And Quit', 'Quit Only']
                 let title = "Do you want to quit without save? Ctrl+C to cancel""
             else
+                UndotreeHide
                 q!
                 return
             endif
@@ -351,23 +352,28 @@ function! s:confirm_quit(type) abort
         if &modified && type == 'check'
             let choice = ChooseOne(choices, title, 0, 'Cancel')
             if choice =~# '^Save'
+                UndotreeHide
                 wq!
             elseif choice =~# '^Quit'
+                UndotreeHide
                 q!
             endif
         else
             let choice = ChooseOne(choices, title, 0, 'Cancel')
             if choice =~# '^Quit'
                 if type == 'all'
+                    UndotreeHide
                     if exists(':cquit')
                         cquit
                     else
                         qall!
                     endif
                 else
+                    UndotreeHide
                     q!
                 endif
             elseif choice =~# '^Save'
+                UndotreeHide
                 wq!
             endif
         endif

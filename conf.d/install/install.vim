@@ -343,12 +343,12 @@ endif
 " ------------------------------
 PlugAdd 'kshenoy/vim-signature'
 " ------------------------------
-" undo && search hl
+" undo
 " ------------------------------
 if has('nvim') && UNIX()
     PlugAdd 'kevinhwang91/nvim-fundo'
 endif
-PlugAdd 'mbbill/undotree'
+PlugAddOpt 'undotree'
 " ------------------------------
 " zfvim
 " ------------------------------

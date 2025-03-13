@@ -71,7 +71,6 @@ git clone --depth 1 https://github.com/jessekelighine/vindent.vim
 # tmux
 rm -rf vim-tmux-navigator
 git clone --depth 1 https://github.com/christoomey/vim-tmux-navigator.git
-
 rm -rf vim-tmux-clipboard
 git clone --depth 1 https://github.com/roxma/vim-tmux-clipboard.git
 
@@ -98,6 +97,10 @@ git clone --depth 1 https://github.com/lifepillar/vim-mucomplete.git
 # vim-choosewin
 rm -rf vim-choosewin
 git clone --depth 1 https://github.com/t9md/vim-choosewin.git
+
+# undotree
+rm -rf undotree 
+git clone --depth 1 https://github.com/mbbill/undotree.git
 
 # fern
 rm -rf vim-fern* fern-*
