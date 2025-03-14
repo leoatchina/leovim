@@ -1,4 +1,4 @@
-setlocal wrap
+setlocal nowrap
 setlocal norelativenumber
 setlocal foldcolumn=0 colorcolumn= cursorline
 nnoremap <silent><buffer>q :q!<Cr>
