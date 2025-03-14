@@ -31,19 +31,18 @@ else
         nnoremap <silent><buffer>K :call quickui#tools#preview_quickfix()<Cr>
         nnoremap <silent><buffer>n j:call quickui#tools#preview_quickfix()<Cr>
         nnoremap <silent><buffer>p k:call quickui#tools#preview_quickfix()<Cr>
+        if exists('b:current_syntax')
+            finish
+        endif
+        syn match	qfFileName	"^[^│]*" contains=qfLineNr
+        syn match	qfSeparator	"│"
+        syn match	qfLineNr	":\d*" contained
+        " The default highlighting.
+        hi def link qfFileName	Directory
+        hi def link qfLineNr	LineNr
+        hi def link qfSeparator	VertSplit
+        let b:current_syntax = 'qf'
     else
         nnoremap <buffer>K <Nop>
     endif
-    " highlighting
-    if exists('b:current_syntax')
-        finish
-    endif
-    syn match	qfFileName	"^[^│]*" contains=qfLineNr
-    syn match	qfSeparator	"│"
-    syn match	qfLineNr	":\d*" contained
-    " The default highlighting.
-    hi def link qfFileName	Directory
-    hi def link qfLineNr	LineNr
-    hi def link qfSeparator	VertSplit
-    let b:current_syntax = 'qf'
 endif
