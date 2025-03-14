@@ -93,8 +93,38 @@ endif
 " ----------------------------
 if Installed('quicker.nvim')
     lua require("cfg/quicker")
+elseif exists('&quickfixtextfunc')
+    function! QuickFixFormat(info)
+        let qflist = getqflist({'id' : a:info.id, 'items' : 1}).items
+        let qflist = map(qflist,
+                    \ 'extend(v:val, {"filename" : bufname(v:val.bufnr)})')
+        let prefix_len = 2 + max(map(copy(qflist),
+                    \ 'strchars(v:val.filename . v:val.lnum)'))
+        let fmt = '%-' . prefix_len . 's' . '%s'
+        return map(qflist,
+                    \ 'printf(fmt, v:val.filename . ":" . v:val.lnum, "│ " . v:val.text)')
+    endfunction
+    set quickfixtextfunc=QuickFixFormat
+else
+    function! QuickFixFormat()
+        let qflist = map(getqflist(),
+                    \ 'extend(v:val, {"filename" : bufname(v:val.bufnr)})')
+        let prefix_len = 2 + max(map(copy(qflist),
+                    \ 'strchars(v:val.filename . v:val.lnum)'))
+        let fmt = '%-' . prefix_len . 's' . '%s'
+        setlocal modifiable
+        call setline('1', map(qflist,
+                    \ 'printf(fmt, v:val.filename . ":" . v:val.lnum, "| " . v:val.text)'))
+        setlocal nomodifiable nomodified
+    endfunction
+    augroup QuickFixFormat
+        autocmd!
+        autocmd BufReadPost quickfix call QuickFixFormat()
+    augroup END
 endif
 if Installed('quickfix.nvim')
-    let g:quickfix_mapping_filter_text = 'f'
-    let g:quickfix_mapping_rfilter_text = 'F'
+    let g:quickfix_mapping_filter_filename = 'f'
+    let g:quickfix_mapping_rfilter_filename = 'F'
+    let g:quickfix_mapping_filter_text = 'e'
+    let g:quickfix_mapping_rfilter_text = 'E'
 endif
