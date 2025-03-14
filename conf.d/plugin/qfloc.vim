@@ -89,28 +89,12 @@ if Installed('nvim-bqf')
     lua require("cfg/bqf")
 endif
 " ----------------------------
-" quicker
+" quickfix
 " ----------------------------
 if Installed('quicker.nvim')
-    lua << EOF
-    require("quicker").setup({
-    keys = {
-        {
-                ">",
-                function()
-
-                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
-                end,
-                desc = "Expand quickfix context",
-        },
-        {
-                "<",
-                function()
-                require("quicker").collapse()
-                end,
-                desc = "Collapse quickfix context",
-        },
-    },
-    })
-EOF
+    lua require("cfg/quicker")
+endif
+if Installed('quickfix.nvim')
+    let g:quickfix_mapping_filter_text = 'f'
+    let g:quickfix_mapping_rfilter_text = 'F'
 endif

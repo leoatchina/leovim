@@ -3,9 +3,9 @@ setlocal norelativenumber
 setlocal foldcolumn=0 colorcolumn= cursorline
 nnoremap <silent><buffer>q :q!<Cr>
 nnoremap <silent><buffer>Q :q!<Cr>
+nnoremap <silent><buffer>J <Nop>
 nnoremap <silent><buffer>p <Nop>
 nnoremap <silent><buffer>P <Nop>
-nnoremap <silent><buffer>J <Nop>
 nnoremap <silent><buffer><C-h> <Nop>
 nnoremap <silent><buffer><M-c> <Nop>
 nnoremap <silent><buffer><M-C> <Nop>

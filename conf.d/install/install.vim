@@ -292,6 +292,7 @@ endif
 if has('nvim-0.8')
     PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'kevinhwang91/nvim-bqf'
+    PlugAdd 'wsdjeg/quickfix.nvim'
     PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/dressing.nvim'
     PlugAdd 'lukas-reineke/indent-blankline.nvim'

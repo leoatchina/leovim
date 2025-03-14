@@ -33,8 +33,8 @@ require('bqf').setup({
     tabc    = 't',
     tabb    = 'T',
     tabdrop = 'O',
+    drop  = 'o',
+    openc = 'e',
     open  = '<Cr>',
-    openc = 'o',
-    drop  = 'e',
   },
 })
