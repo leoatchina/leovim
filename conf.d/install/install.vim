@@ -289,19 +289,21 @@ endif
 " ----------------------------
 " nvim plugins
 " ----------------------------
-if has('nvim-0.8')
-    PlugAdd 'kevinhwang91/promise-async'
+if has('nvim')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'wsdjeg/quickfix.nvim'
-    PlugAdd 'stevearc/quicker.nvim'
-    PlugAdd 'stevearc/dressing.nvim'
-    PlugAdd 'lukas-reineke/indent-blankline.nvim'
     PlugAdd 'nvim-tree/nvim-web-devicons'
-    " dropbar
-    if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
-        PlugAdd 'Bekaboo/dropbar.nvim'
-        if UNIX()
-            PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
+    if has('nvim-0.8')
+        PlugAdd 'kevinhwang91/promise-async'
+        PlugAdd 'stevearc/quicker.nvim'
+        PlugAdd 'stevearc/dressing.nvim'
+        PlugAdd 'lukas-reineke/indent-blankline.nvim'
+        " dropbar
+        if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
+            PlugAdd 'Bekaboo/dropbar.nvim'
+            if UNIX()
+                PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
+            endif
         endif
     endif
 elseif has('conceal')
