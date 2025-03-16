@@ -6,7 +6,7 @@ let g:autoclose_ft_buf = [
             \ 'vista', 'tagbar', 'vista_kind',
             \ 'qf', 'loclist', 'rg', 'outline', 'nofile',
             \ 'leaderf', 'fzf', 'help', 'man', 'startify',
-            \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame',
+            \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame', 'diff',
             \ 'vimspector', 'vimspectorprompt',
             \ 'terminal', 'floaterm', 'popup', 'undotree',
             \ 'dropbar', 'dropbar_preview',
