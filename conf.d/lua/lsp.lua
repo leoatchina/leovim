@@ -308,7 +308,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
     -- call-graph
     map(nx, "gr", [[<Cmd>CallGraphR<Cr>]], opts_silent)
-    map(nx, "gy", [[<Cmd>CallGraphI<Cr>]], opts_silent)
+    map(nx, "gh", [[<Cmd>CallGraphI<Cr>]], opts_silent)
+    map(nx, "gl", vim.lsp.buf.outgoing_calls, opts_silent)
     -- diagnostic error
     map(nx, ';d', vim.diagnostic.goto_next, opts_silent)
     map(nx, ',d', vim.diagnostic.goto_prev, opts_silent)
@@ -316,8 +317,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, ',e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR, wrap=false})<CR>]], opts_silent)
     -- native lsp
     map('i', "<C-x><C-x>", vim.lsp.buf.signature_help, opts_silent)
-    map(nx, "gl", vim.lsp.buf.outgoing_calls, opts_silent)
-    map(nx, "gh", vim.lsp.buf.incoming_calls, opts_silent)
     map(nx, "<C-q>", vim.lsp.buf.format, opts_silent)
     map(nx, "<leader>W", vim.lsp.buf.workspace_symbol, opts_silent)
     map(nx, "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
