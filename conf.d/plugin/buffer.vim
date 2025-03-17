@@ -7,6 +7,9 @@ elseif Planned('vim-quickui')
 else
     nnoremap <silent><leader>b :CtrlPBuffer<Cr>
 endif
+" kill other buffers
+command! BdOther silent! execute "%bd|e#|bd#"
+nnoremap <silent><M-Q> :BdOther<Cr>
 " Command ':Bclose' executes ':bd' to delete buffer in current window.
 if !exists('g:bclose_multiple')
     let g:bclose_multiple = 1
@@ -60,7 +63,4 @@ function! s:buffer_close(bang, buffer)
     execute wcurrent.'wincmd w'
 endfunction
 command! -bang -complete=buffer -nargs=? Bclose call s:buffer_close(<q-bang>, <q-args>)
-nnoremap <silent><leader>Q :Bclose!<Cr>
-" kill other buffers
-command! BdOther silent! execute "%bd|e#|bd#"
-nnoremap <silent><leader>B :BdOther<Cr>
+nnoremap <silent><leader>B :Bclose!<Cr>

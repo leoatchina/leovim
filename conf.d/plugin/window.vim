@@ -38,12 +38,11 @@ function! PreviousCursor(mode)
     endif
     noautocmd silent! wincmd p
 endfunction
-nnoremap <silent><M-Q> :call PreviousCursor('quit')<Cr>
+nnoremap <silent><leader>Q :call PreviousCursor('quit')<Cr>
 nnoremap <silent><M-U> :call PreviousCursor('ctrlu')<Cr>
 nnoremap <silent><M-D> :call PreviousCursor('ctrld')<Cr>
 nnoremap <silent><M-E> :call PreviousCursor('ctrle')<Cr>
 nnoremap <silent><M-Y> :call PreviousCursor('ctrly')<Cr>
-inoremap <silent><M-Q> <C-o>:call PreviousCursor('quit')<Cr>
 inoremap <silent><M-U> <C-o>:call PreviousCursor('ctrlu')<Cr>
 inoremap <silent><M-D> <C-o>:call PreviousCursor('ctrld')<Cr>
 inoremap <silent><M-E> <C-o>:call PreviousCursor('ctrle')<Cr>
