@@ -32,6 +32,7 @@ command! FernLCD call FernOpen('lcd')
 command! FernGitRoot call FernOpen('gitroot')
 command! FernGetRoot call FernOpen('getroot')
 nnoremap <leader>fn :Fern
+nnoremap <silent><leader>f. :Fern ./<Cr>
 nnoremap <silent><leader>fl :FernLCD<Cr>
 nnoremap <silent><leader>fg :FernGitRoot<Cr>
 nnoremap <silent><leader>fr :FernGetRoot<Cr>
