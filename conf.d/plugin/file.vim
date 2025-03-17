@@ -8,7 +8,7 @@ let g:autoclose_ft_buf = [
             \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame', 'diff',
             \ 'vimspector', 'vimspectorprompt',
             \ 'terminal', 'floaterm', 'popup', 'undotree',
-            \ 'dropbar', 'dropbar_preview', '',
+            \ 'dropbar', 'dropbar_preview',
             \ ]
 function! s:autoclose(...) abort
     let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
