@@ -2,13 +2,13 @@
 " autoclose_ft_buf
 " --------------------------
 let g:autoclose_ft_buf = [
-            \ 'netrw', 'vista', 'tagbar', 'vista_kind',
+            \ 'netrw', 'tagbar', 'vista', 'vista_kind',
             \ 'qf', 'loclist', 'rg', 'outline',
             \ 'leaderf', 'fzf', 'help', 'man', 'startify',
             \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame', 'diff',
             \ 'vimspector', 'vimspectorprompt',
             \ 'terminal', 'floaterm', 'popup', 'undotree',
-            \ 'dropbar', 'dropbar_preview',
+            \ 'dropbar', 'dropbar_preview', '',
             \ ]
 function! s:autoclose(...) abort
     let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
