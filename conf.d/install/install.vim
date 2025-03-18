@@ -244,6 +244,8 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter')
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
+endif
+if Planned('avante.nvim') || Planned('codecompanion.nvim')
     PlugAdd 'echasnovski/mini.pick'
     PlugAdd '0xrusowsky/nvim-ctx-ingest'
 endif
