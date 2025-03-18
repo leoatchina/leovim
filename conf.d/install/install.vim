@@ -244,8 +244,8 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter')
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
-    PlugAdd 'HakonHarnes/img-clip.nvim'
     PlugAdd 'echasnovski/mini.pick'
+    PlugAdd '0xrusowsky/nvim-ctx-ingest'
 endif
 " ------------------------------
 " fuzzy_finder

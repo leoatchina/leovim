@@ -29,3 +29,4 @@ end
 -- set ai_complete_engine
 vim.g.ai_complete_engine = vim.g.ai_complete_engine and ai_model .. '&&' .. vim.g.ai_complete_engine
   or ai_model
+

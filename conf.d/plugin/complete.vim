@@ -50,6 +50,10 @@ elseif !exists("g:ai_complete_engine")
     xnoremap <M-i> <Nop>
     inoremap <M-i> <Nop>
 endif
+if Installed('nvim-ctx-ingest')
+    lua require("nvim-ctx-ingest").setup({})
+    nnoremap <silent><M-i><M-i> <Cmd>CtxIngest<Cr>
+endif
 if Installed('render-markdown.nvim')
     augroup SetupRenderMarkdown
         autocmd!

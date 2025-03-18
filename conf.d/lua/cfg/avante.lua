@@ -1,6 +1,6 @@
 require('avante_lib').load()
 -- keymaps
-vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i>:", [[<Cmd>AvanteCommands<Cr>]], { noremap = true, silent = true })
 vim.keymap.set("n", "<M-i><M-c>", [[<Cmd>AvanteClear<Cr>]], { noremap = true, silent = true })
 require('avante').setup({
   provider = vim.g.ai_provider,
@@ -53,9 +53,9 @@ require('avante').setup({
     focus = "<M-i><M-f>",
     refresh = "<M-i><M-r>",
     toggle = {
+      default = "<M-i><Cr>",
       hint = "<M-i><M-h>",
       debug = "<M-i><M-d>",
-      default = "<M-i><M-i>",
       repo_map = "<M-i><M-m>",
       suggestion = "<M-i><M-s>",
     },

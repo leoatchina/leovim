@@ -1,5 +1,5 @@
-vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
-vim.keymap.set("n", "<M-i><M-i>", [[<Cmd>CodeCompanionChat<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i><M-a>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionChat<Cr>]], { noremap = true, silent = true })
 require("codecompanion").setup({
   opts = {
     log_level = "DEBUG",
