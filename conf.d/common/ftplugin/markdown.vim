@@ -1,5 +1,3 @@
-let g:mdip_imgdir = '.'
-let g:mdip_imgname = 'image'
 let g:preview_markdown_vertical = 1
 inoremap <buffer><C-w>1 <Space><C-u>#<Space>
 inoremap <buffer><C-w>2 <Space><C-u>##<Space>
@@ -7,7 +5,9 @@ inoremap <buffer><C-w>3 <Space><C-u>###<Space>
 inoremap <buffer><C-w>4 <Space><C-u>####<Space>
 inoremap <buffer><C-w>5 <Space><C-u>#####<Space>
 if Installed('md-img-paste.vim')
-    nmap <silent><buffer><leader>i :call mdip#MarkdownClipboardImage()<CR>
+    let g:mdip_imgdir = './'
+    let g:mdip_imgname = 'attach'
+    nnoremap <silent><buffer><leader>i :call mdip#MarkdownClipboardImage()<CR>
 endif
 if Installed('preview-markdown.vim')
     function! s:smart_preview_markdown()
@@ -18,11 +18,14 @@ if Installed('preview-markdown.vim')
         endif
     endfunction
     command! SmartPreviewMarkdown call s:smart_preview_markdown()
-    nmap <silent><buffer><M-B> :SmartPreviewMarkdown<Cr>
+    nnoremap <silent><buffer><M-F> :SmartPreviewMarkdown<Cr>
+endif
+if Installed('render-markdown.nvim')
+    nnoremap <silent><buffer><M-B> :RenderMarkdown buf_toggle<Cr>
 endif
 if Installed('markdown-preview.nvim') || Installed('markdown-preview.vim')
-    nmap <silent><buffer><M-R> :MarkdownPreview<Cr>
-    nmap <silent><buffer><Tab>q :MarkdownPreviewStop<Cr>
+    nnoremap <silent><buffer><M-R> :MarkdownPreview<Cr>
+    nnoremap <silent><buffer><Tab>q :MarkdownPreviewStop<Cr>
 endif
 " Markdown number toggle function
 function! s:get_header_level(line)
@@ -34,7 +37,6 @@ function! s:get_header_level(line)
     endwhile
     return l:count
 endfunction
-
 function! s:get_current_numbers(level, numbers)
     if a:level <= 3
         return join(a:numbers[0:a:level-1], '.')
@@ -105,4 +107,5 @@ function! ToggleMarkdownNumbers(enable = 0) range
     call append(a:firstline - 1, l:new_lines)
 endfunction
 " Add command for markdown number toggle
-au FileType markdown command! -range -nargs=? MdNumber <line1>,<line2>call ToggleMarkdownNumbers(<args>)
+au FileType markdown command! -range -nargs=? ToggleMarkdownNumbers <line1>,<line2>call ToggleMarkdownNumbers(<args>)
+nnoremap <silent><buffer><M-T> :ToggleMarkdownNumbers<Cr>
