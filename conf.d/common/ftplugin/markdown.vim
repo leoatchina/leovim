@@ -18,13 +18,13 @@ if Installed('preview-markdown.vim')
         endif
     endfunction
     command! SmartPreviewMarkdown call s:smart_preview_markdown()
-    nnoremap <silent><buffer><M-F> :SmartPreviewMarkdown<Cr>
+    nnoremap <silent><buffer><M-R> :SmartPreviewMarkdown<Cr>
 endif
 if Installed('render-markdown.nvim')
     nnoremap <silent><buffer><M-B> :RenderMarkdown buf_toggle<Cr>
 endif
 if Installed('markdown-preview.nvim') || Installed('markdown-preview.vim')
-    nnoremap <silent><buffer><M-R> :MarkdownPreview<Cr>
+    nnoremap <silent><buffer><M-F> :MarkdownPreview<Cr>
     nnoremap <silent><buffer><Tab>q :MarkdownPreviewStop<Cr>
 endif
 " Markdown number toggle function
@@ -45,7 +45,8 @@ function! s:get_current_numbers(level, numbers)
     endif
     return ''
 endfunction
-function! ToggleMarkdownNumbers(enable = 0) range
+" FIXME: this function is not completed
+function! s:ToggleMarkdownNumbers(enable = 0) range
     let l:numbers = [0, 0, 0, 0]  " 存储每级标题的当前序号
     let l:last_level = 0          " 记录上一个标题的级别
     " 首先收集所有行
@@ -107,5 +108,5 @@ function! ToggleMarkdownNumbers(enable = 0) range
     call append(a:firstline - 1, l:new_lines)
 endfunction
 " Add command for markdown number toggle
-au FileType markdown command! -range -nargs=? ToggleMarkdownNumbers <line1>,<line2>call ToggleMarkdownNumbers(<args>)
+au FileType markdown command! -range -nargs=? ToggleMarkdownNumbers <line1>,<line2>call s:ToggleMarkdownNumbers(<args>)
 nnoremap <silent><buffer><M-T> :ToggleMarkdownNumbers<Cr>
