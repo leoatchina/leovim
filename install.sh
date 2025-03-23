@@ -148,13 +148,13 @@ fi
 echo "#!/usr/bin/env $shell" > $HOME/.local/bin/leovim
 echo "export leovim=$HOME/.leovim" >> $HOME/.local/bin/leovim
 echo 'cd $leovim && git pull' >> $HOME/.local/bin/leovim
-echo "$shell" >> $HOME/.local/bin/leovim && chmod 755 $HOME/.local/bin/leovim
+chmod 755 $HOME/.local/bin/leovim
 
 # leovimd command
 echo "#!/usr/bin/env $shell" > $HOME/.local/bin/leovimd
 echo "export LEOVIMD=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
 echo 'cd $LEOVIMD' >> $HOME/.local/bin/leovimd
-echo "$shell" >> $HOME/.local/bin/leovimd && chmod 755 $HOME/.local/bin/leovimd
+chmod 755 $HOME/.local/bin/leovimd
 
 ########################### install softwares #####################################
 if [ $# -gt 0 ]; then
