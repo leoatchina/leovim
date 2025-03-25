@@ -7,7 +7,7 @@ function! PlannedLeaderf() abort
     return Planned('leaderf')
 endfunction
 function! PlannedCoc() abort
-    return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
+    return Planned('coc.nvim')
 endfunction
 function! PlannedNvimLsp() abort
     return Planned(
@@ -24,9 +24,6 @@ endfunction
 function! PrefFzf()
     return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
 endfunction
-function! InstalledCoc() abort
-    return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
-endfunction
 function! InstalledNvimLsp() abort
     return Installed(
                 \ 'nvim-lspconfig',
@@ -35,6 +32,12 @@ function! InstalledNvimLsp() abort
                 \ 'symbol-usage.nvim',
                 \ 'call-graph.nvim',
                 \ )
+endfunction
+function! InstalledCoc() abort
+    return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
+endfunction
+function! InstalledBlk() abort
+    return Installed('blink.cmp', 'friendly-snippets')
 endfunction
 function! InstalledCmp() abort
     return Installed(
@@ -102,6 +105,12 @@ elseif Require('coc')
     else
         let s:smart_engine_select = 1
     endif
+elseif (Require('blk') || Require('blink')) && executable('cargo')
+    if has('nvim-0.10.1')
+        let g:complete_engine = 'blk'
+    else
+        let s:smart_engine_select = 1
+    endif
 elseif Require('cmp')
     if has('nvim-0.10.1')
         let g:complete_engine = 'cmp'
@@ -114,8 +123,6 @@ endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.10.1')
         let g:complete_engine = 'cmp'
-    elseif g:node_version >= 16.18 && has('nvim-0.8.1')
-        let g:complete_engine = 'coc'
     elseif UNIX()
         let g:complete_engine = 'mcm'
     elseif v:version >= 800
@@ -141,6 +148,17 @@ if g:complete_engine == 'cmp'
     PlugAdd 'fcying/cmp-async-path'
     PlugAdd 'onsails/lspkind-nvim'
     PlugAdd 'xzbdmw/colorful-menu.nvim'
+elseif g:complete_engine == 'blk'
+    PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release'}
+elseif g:complete_engine == 'coc'
+    if get(g:, 'coc_install_release', 0)
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
+    else
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
+    endif
+    PlugAddOpt 'coc-fzf'
+endif
+if g:complete_engine == 'cmp' || g:complete_engine == 'blk'
     " lsp related
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
@@ -149,19 +167,8 @@ if g:complete_engine == 'cmp'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     " lspimport is only for pyright
     PlugAdd 'stevanmilic/nvim-lspimport'
-    " neoconf should be clearly required
-    if Require('neoconf')
-        PlugAdd 'folke/neoconf.nvim'
-    endif
     " call-graph
     PlugAdd 'ravenxrz/call-graph.nvim'
-elseif g:complete_engine == 'coc'
-    if get(g:, 'coc_install_release', 0)
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
-    else
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
-    endif
-    PlugAddOpt 'coc-fzf'
 endif
 " ------------------------------
 " dict && snippets
@@ -242,7 +249,7 @@ if has('patch-9.0.0185') || has('nvim')
     endif
 endif
 if has('nvim-0.10.1') && Planned('nvim-treesitter')
-    if executable('curl') && Planned('nvim-cmp') && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion') &&
+    if executable('curl') && PlannedLsp() && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion') &&
                 \ exists('$OPENAI_API_KEY') ||
                 \ exists('$ANTHROPIC_API_KEY') ||
                 \ exists('$GEMINI_API_KEY') ||
@@ -347,7 +354,7 @@ endif
 " ----------------------------
 " wilder
 " ----------------------------
-if !Planned('nvim-cmp')
+if !Planned('nvim-cmp') && !Planned('blink.cmp')
     if g:python_version > 3 && has('nvim') && UNIX()
         function! UpdateRemotePlugins(...)
             let &rtp=&rtp

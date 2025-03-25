@@ -125,6 +125,7 @@ cp -n $APP_PATH/scripts/v.sh  $HOME/.local/bin
 cp -n $APP_PATH/scripts/vi.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/ni.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/nn.sh $HOME/.local/bin
 
 # dirdiff
 cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin

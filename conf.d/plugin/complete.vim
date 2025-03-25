@@ -80,8 +80,10 @@ endif
 " ------------------------------
 " normal complete_engine
 " ------------------------------
-if InstalledCmp() && InstalledNvimLsp()
+if InstalledCmp()
     lua require("cfg/cmp")
+elseif InstalledBlk()
+    lua require("cfg/blink")
 elseif Installed('coc.nvim')
     source $CFG_DIR/coc.vim
 elseif g:complete_engine == 'apm'
