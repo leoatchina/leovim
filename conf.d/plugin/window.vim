@@ -185,6 +185,6 @@ elseif Installed('dropbar.nvim')
     lua vim.keymap.set('n', 'sb', require('dropbar.api').pick, { desc = 'Pick symbols in dropbar' })
     lua vim.keymap.set('n', ',s', require('dropbar.api').goto_context_start, { desc = 'Go to start of current context' })
     lua vim.keymap.set('n', ';s', require('dropbar.api').select_next_context, { desc = 'Select next context' })
-elseif has('nvim') && PlannedCoc()
+elseif has('nvim') && InstalledCoc()
     lua require('cfg/coc_symboline')
 endif

@@ -4,7 +4,7 @@ nnoremap <buffer><silent><M-M> :GoCommands<Cr>
 if Installed('vim-go')
     nnoremap <buffer><silent>gl :GoDefPop<Cr>
     nnoremap <buffer><silent><leader>A :GoImports<Cr>
-    if AdvCompEngine()
+    if InstalledLsp()
         nnoremap <buffer><silent>gx :GoDoc<Cr>
     else
         nnoremap <buffer><silent><C-g> :GoDef<Cr>

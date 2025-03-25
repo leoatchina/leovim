@@ -27,7 +27,7 @@ function! s:k()
         else
             execute 'h '.expand('<cword>')
         endif
-    elseif PlannedCoc() && CocAction('hasProvider', 'hover')
+    elseif InstalledCoc() && CocAction('hasProvider', 'hover')
         call CocActionAsync('doHover')
     elseif InstalledNvimLsp()
         lua vim.lsp.buf.hover()

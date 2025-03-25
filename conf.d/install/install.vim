@@ -9,8 +9,23 @@ endfunction
 function! PlannedCoc() abort
     return Planned('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
+function! PlannedNvimLsp() abort
+    return Planned(
+                \ 'nvim-lspconfig',
+                \ 'nvim-lsp-selection-range',
+                \ 'mason-lspconfig.nvim',
+                \ 'symbol-usage.nvim',
+                \ 'call-graph.nvim',
+                \ )
+endfunction
+function! PlannedLsp() abort
+    return PlannedCoc() || PlannedNvimLsp()
+endfunction
 function! PrefFzf()
     return PlannedFzf() && (get(g:, 'prefer_fzf', UNIX()) || !PlannedLeaderf())
+endfunction
+function! InstalledCoc() abort
+    return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
 function! InstalledNvimLsp() abort
     return Installed(
@@ -38,7 +53,7 @@ function! InstalledCmp() abort
                 \ 'friendly-snippets',
                 \ )
 endfunction
-function! AdvCompEngine() abort
+function! InstalledLsp() abort
      return Installed('coc.nvim') || InstalledNvimLsp()
 endfunction
 " --------------------------
@@ -193,7 +208,7 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
     PlugAdd 'gcmt/wildfire.vim'
 endif
-if !Planned('nvim-treesitter') && Require('c') && (PlannedCoc() || Planned('nvim-lspconfig'))
+if !Planned('nvim-treesitter') && Require('c') && (InstalledCoc() || Planned('nvim-lspconfig'))
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
@@ -301,7 +316,7 @@ if has('nvim')
         PlugAdd 'stevearc/dressing.nvim'
         PlugAdd 'lukas-reineke/indent-blankline.nvim'
         " dropbar
-        if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
+        if has('nvim-0.10') && (!InstalledCoc() || InstalledCoc() && Planned('nvim-treesitter'))
             PlugAdd 'Bekaboo/dropbar.nvim'
             if UNIX()
                 PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}

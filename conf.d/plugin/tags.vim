@@ -139,7 +139,7 @@ if Planned('gutentags_plus')
     nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><Cr>
     nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><Cr>
     nnoremap <silent><leader>gz :GscopeFind z <C-R><C-W><Cr>
-    if AdvCompEngine()
+    if InstalledLsp()
         nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><Cr>
         nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><Cr>
     else
@@ -359,7 +359,7 @@ nnoremap <silent><C-w><C-g> :call <SID>lsp_tag_search("definition", "tabe")<Cr>
 nnoremap <silent><C-w><C-]> :call <SID>lsp_tag_search("definition", "split")<Cr>
 " references
 nnoremap <silent><M-/> :call <SID>lsp_tag_search("references", "list")<Cr>
-if AdvCompEngine()
+if InstalledLsp()
     " declaration
     nnoremap <silent><M-C> :call <SID>lsp_tag_search("declaration", "list")<Cr>
     " implementation

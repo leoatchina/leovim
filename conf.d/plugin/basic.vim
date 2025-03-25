@@ -35,7 +35,7 @@ if v:version >= 802 || has('nvim')
     nnoremap <Tab>o :PreviewPopupFile
     nnoremap <F13> :call quickui#preview#scroll(1)<Cr>
     nnoremap <F14> :call quickui#preview#scroll(-1)<Cr>
-    if PlannedCoc()
+    if InstalledCoc()
         nmap <silent><expr><C-j> coc#float#has_scroll() ? coc#float#scroll(1) : quickui#preview#visible() > 0 ? "\<F13>" : "\%"
         nmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : quickui#preview#visible() > 0 ? "\<F14>" : "\g%"
     else

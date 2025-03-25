@@ -8,7 +8,7 @@ function! s:diag_or_errmsg(diagnostic)
     if a:diagnostic
         if Planned('ale')
             ALEDetail
-        elseif PlannedCoc()
+        elseif InstalledCoc()
             call CocActionAsync('diagnosticInfo')
         elseif InstalledNvimLsp()
             lua vim.diagnostic.open_float()

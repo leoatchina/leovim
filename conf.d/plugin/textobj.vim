@@ -21,7 +21,7 @@ else
     nmap <silent>{{ [m
     nmap <silent>}] ]M
     nmap <silent>{[ [M
-    if PlannedCoc()
+    if InstalledCoc()
         nmap <M-s> <Plug>(coc-range-select)
         xmap <M-s> <Plug>(coc-range-select)
         omap <M-s> <Plug>(coc-range-select)

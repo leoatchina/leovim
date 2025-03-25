@@ -117,7 +117,7 @@ if Planned('vim-vsnip')
         imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
     endif
-    if !AdvCompEngine()
+    if !InstalledLsp()
         function! MapTabCr(tab) abort
             if pumvisible()
                 if a:tab
@@ -247,7 +247,7 @@ endif
 if Planned('vim-go')
     let g:go_doc_balloon = 0
     let g:go_def_mapping_enabled = 0
-    if AdvCompEngine()
+    if InstalledLsp()
         let g:go_doc_keywordprg_enabled = 0
         let g:go_code_completion_enabled = 0
     else
