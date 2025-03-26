@@ -44,7 +44,7 @@ alias MV="rsync -ravpzHogt --progress --size-only --remove-source-files "
 alias SYNC="rsync -ravpzHogt --progress --size-only --delete "
 
 alias CL="cd ~/.leovim"
-alias CD="cd ~/.leovim.d"
+alias CE="cd ~/.leovim.d"
 alias GR='cd $(git rev-parse --show-toplevel)'
 alias GIT="\\ls -A --group-directories-first -1 | while IFS= read -r line; do git log --color --format=\"\$(\\ls -d -F --color \"\$line\") =} %C(bold black)▏%Creset%Cred%h %Cgreen(%cr)%Creset =} %C(bold black)▏%Creset%s %C(bold blue)<%an>%Creset\" --abbrev-commit --max-count 1 HEAD -- \"\$line\"; done | awk -F'=}' '{ nf[NR]=NF; for (i = 1; i <= NF; i++) { cell[NR,i] = \$i; gsub(/\\033\\[([[:digit:]]+(;[[:digit:]]+)*)?[mK]/, \"\", \$i); len[NR,i] = l = length(\$i); if (l > max[i]) max[i] = l; } } END { for (row = 1; row <= NR; row++) { for (col = 1; col < nf[row]; col++) printf \"%s%*s%s\", cell[row,col], max[col]-len[row,col], \"\", OFS; print cell[row,nf[row]]; } }'"
 alias ATT='tmux attach -t 0'
@@ -118,7 +118,7 @@ function sf() {
 if [ -f /usr/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
     mkdir -p $HOME/.local/bin
     ln -sf /usr/bin/batcat $HOME/.local/bin/bat
-elif [ -f /usr/loca/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
+elif [ -f /usr/local/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
     mkdir -p $HOME/.local/bin
     ln -sf /usr/local/bin/batcat $HOME/.local/bin/bat
 fi
