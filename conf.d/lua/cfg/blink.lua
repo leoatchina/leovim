@@ -3,7 +3,6 @@ require('blink.cmp').setup({
   appearance = {
     nerd_font_variant = 'mono'
   },
-  completion = { documentation = { auto_show = false } },
   fuzzy = { implementation = "prefer_rust_with_warning" },
   signature = { enabled = true },
   completion = {
@@ -18,6 +17,10 @@ require('blink.cmp').setup({
       -- Show the ghost text when the menu is closed
       show_without_menu = true,
     },
+    documentation = {
+      auto_show = true,
+      auto_show_delay_ms = 500,
+    }
   },
   snippets = {
     expand = function(snippet) vim.snippet.expand(snippet) end,
