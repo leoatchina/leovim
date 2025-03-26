@@ -146,17 +146,6 @@ else
     shell=zsh
 fi
 
-echo "#!/usr/bin/env $shell" > $HOME/.local/bin/leovim
-echo "export leovim=$HOME/.leovim" >> $HOME/.local/bin/leovim
-echo 'cd $leovim && git pull' >> $HOME/.local/bin/leovim
-chmod 755 $HOME/.local/bin/leovim
-
-# leovimd command
-echo "#!/usr/bin/env $shell" > $HOME/.local/bin/leovimd
-echo "export LEOVIMD=$HOME/.leovim.d" >> $HOME/.local/bin/leovimd
-echo 'cd $LEOVIMD' >> $HOME/.local/bin/leovimd
-chmod 755 $HOME/.local/bin/leovimd
-
 ########################### install softwares #####################################
 if [ $# -gt 0 ]; then
     mode=$1
@@ -180,7 +169,6 @@ if [ $# -gt 0 ]; then
         fi
     # copy configrc
     elif [[ $mode == 'rc' ]]; then
-
         if [ -f ~/.bashrc ] && [ $os == 'linux' ]; then
             read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
             echo

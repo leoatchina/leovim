@@ -1,3 +1,7 @@
+if ! command -v cargo &> /dev/null; then
+    echo "Please install rust toolchain including cargo."
+    exit 1
+fi
 if  [ -f "$HOME/.local/bin/nvim.appimage" ] && [ -x "$HOME/.local/bin/nvim.appimage" ];  then
   NVIMCMD="$HOME/.local/bin/nvim.appimage"
 elif [ -f "$HOME/.local/nvim-macos-arm64/bin/nvim" ] && [ -x "$HOME/.local/nvim-macos-arm64/bin/nvim" ]; then
