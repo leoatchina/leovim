@@ -31,6 +31,7 @@ function! InstalledNvimLsp() abort
                 \ 'mason-lspconfig.nvim',
                 \ 'symbol-usage.nvim',
                 \ 'call-graph.nvim',
+                \ 'neoconf.nvim'
                 \ )
 endfunction
 function! InstalledCoc() abort
@@ -229,7 +230,7 @@ endif
 " ------------------------------
 " debug tool
 " ------------------------------
-if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !Planned('nvim-lspconfig'))
+if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !PlannedNvimLsp())
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
 elseif has('nvim-0.9.5') && Require('debug') && Planned('nvim-lspconfig')
@@ -249,7 +250,7 @@ if has('patch-9.0.0185') || has('nvim')
     endif
 endif
 if has('nvim-0.10.1') && Planned('nvim-treesitter')
-    if executable('curl') && PlannedLsp() && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion') &&
+    if executable('curl') && PlannedNvimLsp() && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion') &&
                 \ exists('$OPENAI_API_KEY') ||
                 \ exists('$ANTHROPIC_API_KEY') ||
                 \ exists('$GEMINI_API_KEY') ||
@@ -266,10 +267,6 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter')
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
-endif
-if Planned('avante.nvim') || Planned('codecompanion.nvim')
-    PlugAdd 'echasnovski/mini.pick'
-    PlugAdd '0xrusowsky/nvim-ctx-ingest'
 endif
 " ------------------------------
 " fuzzy_finder
@@ -314,15 +311,19 @@ endif
 " nvim plugins
 " ----------------------------
 if has('nvim')
-    PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'wsdjeg/quickfix.nvim'
+    PlugAdd 'kevinhwang91/nvim-bqf'
+    PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'nvim-tree/nvim-web-devicons'
     if has('nvim-0.8')
-        PlugAdd 'kevinhwang91/promise-async'
         PlugAdd 'stevearc/quicker.nvim'
-        PlugAdd 'stevearc/dressing.nvim'
         PlugAdd 'lukas-reineke/indent-blankline.nvim'
-        " dropbar
+        if PlannedNvimLsp()
+            PlugAdd 'stevearc/dressing.nvim'
+        endif
+        if PlannedLsp() && Require('neoconf')
+            PlugAdd 'folke/neoconf.nvim'
+        endif
         if has('nvim-0.10') && (!InstalledCoc() || InstalledCoc() && Planned('nvim-treesitter'))
             PlugAdd 'Bekaboo/dropbar.nvim'
             if UNIX()
@@ -336,10 +337,15 @@ elseif has('conceal')
         PlugAdd 'ryanoasis/vim-devicons'
     endif
 endif
-if Planned('nvim-lspconfig') || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
-    PlugAdd 'williamboman/mason.nvim'
+if PlannedNvimLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
+    if Planned('nvim-lspconfig') || Planned('nvim-dap')
+        PlugAdd 'williamboman/mason.nvim'
+    else
+        PlugAdd 'echasnovski/mini.pick'
+        PlugAdd '0xrusowsky/nvim-ctx-ingest'
+    endif
 endif
 " ------------------------------
 " fullscreen

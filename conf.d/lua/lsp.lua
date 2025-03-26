@@ -79,6 +79,25 @@ require('symbol-usage').setup({
     filetypes = { 'txt', 'log' },
   },
 })
+-----------------
+-- neoconf
+-----------------
+if Installed('neoconf.nvim') then
+  require("neoconf").setup({
+    -- name of the local settings files
+    local_settings = ".vim/.neoconf.json",
+    import = {
+      vscode = true,
+      coc = true,
+      nlsp = false,
+    }
+  })
+  local opts_neoconf = { noremap = true, silent = true }
+  map('n', "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
+  map('n', "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
+  map('n', "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
+  map('n', "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
+end
 -------------------------
 -- mason lspconfig
 -------------------------
