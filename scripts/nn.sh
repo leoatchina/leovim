@@ -1,5 +1,5 @@
 if ! command -v cargo &> /dev/null; then
-    echo "Please install rust toolchain including cargo."
+    echo "Please install rust toolchain including cargo to use neovim's plug blink.cmp"
     exit 1
 fi
 if  [ -f "$HOME/.local/bin/nvim.appimage" ] && [ -x "$HOME/.local/bin/nvim.appimage" ];  then

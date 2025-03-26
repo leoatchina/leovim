@@ -281,7 +281,6 @@ else
     installplug='yes'
 fi
 
-
 # clone unix tools for (neo)vim
 note "Install/update leovim.unix"
 if [ -d ~/.leovim.unix ]; then
@@ -310,7 +309,11 @@ if [ $installplug != 'no' ]; then
     fi
     setup_plug "$HOME/.local/bin/nv.sh"
     setup_plug "$HOME/.local/bin/ni.sh"
-    setup_plug "$HOME/.local/bin/nn.sh"
+    if program_exists cargo; then
+        setup_plug "$HOME/.local/bin/nn.sh"
+    else
+        error "Please install rust toolchain including cargo to use neovim's plug blink.cmp" 
+    fi
 fi
 
 echo
