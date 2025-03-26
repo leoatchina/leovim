@@ -79,9 +79,10 @@ setup_plug() {
 
 ############################ MAIN() #################################
 variable_set "$HOME"
+os="linux" # default value
+
 OS=$(uname)
 ARCH=$(uname -m)
-os="linux" # default value
 
 if [ "$OS" = "Darwin" ]; then
     if [ "$ARCH" = "arm64" ]; then
@@ -240,7 +241,7 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'neovim' ]] && exit 0
     fi
-    # nvm &&　nodejs 
+    # nodejs && nvm
     if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
         node_link=~/.local/node
         if [ -L $node_link ] && [ $mode == 'all' ]; then
@@ -291,7 +292,7 @@ else
     success "~/.leovim.unix cloned"
 fi
 
-############################################## set optional config #####################################
+################################ set optional config #############################
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
 else
@@ -307,14 +308,21 @@ if [ $installplug != 'no' ]; then
     else
         setup_plug "vim"
     fi
-    setup_plug "$HOME/.local/bin/nv.sh"
+    # cmp
     setup_plug "$HOME/.local/bin/ni.sh"
+    # coc
+    if program_exists node; then
+        setup_plug "$HOME/.local/bin/nv.sh"
+    else
+        error "Please install node to use neovim's plug coc.nvim" 
+    fi
+    # blink 
     if program_exists cargo; then
         setup_plug "$HOME/.local/bin/nn.sh"
     else
         error "Please install rust toolchain including cargo to use neovim's plug blink.cmp" 
     fi
 fi
-
+############################### copyright ##################################
 echo
 success "Thanks for installing leoatchina's vim config. `date +%Y` https://github.com/leoatchina/leovim"
