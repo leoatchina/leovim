@@ -30,8 +30,7 @@ function! InstalledNvimLsp() abort
                 \ 'nvim-lsp-selection-range',
                 \ 'mason-lspconfig.nvim',
                 \ 'symbol-usage.nvim',
-                \ 'call-graph.nvim',
-                \ 'neoconf.nvim'
+                \ 'call-graph.nvim'
                 \ )
 endfunction
 function! InstalledCoc() abort
@@ -337,12 +336,14 @@ elseif has('conceal')
         PlugAdd 'ryanoasis/vim-devicons'
     endif
 endif
+" backbone nvim plugins. TODO: aider
 if PlannedNvimLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
-    if Planned('nvim-lspconfig') || Planned('nvim-dap')
+    if PlannedNvimLsp() || Planned('nvim-dap')
         PlugAdd 'williamboman/mason.nvim'
-    else
+    endif
+    if Planned('avante.nvim') || Planned('codecompanion.nvim')
         PlugAdd 'echasnovski/mini.pick'
         PlugAdd '0xrusowsky/nvim-ctx-ingest'
     endif
