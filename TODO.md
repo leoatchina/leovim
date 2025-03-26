@@ -105,14 +105,16 @@
 - [x] FzfSearch Command optimize, 3 levels, Git/Project/Current.
 - [x] show/yank current dir/file/path
 - [x] codecompanion.nvim
+- [x] write fzf-startify
 - [x] tab nr highlighting group
-- [ ] vim-fern in popup || floating_window
-- [ ] git branch icons
+- [x] ~~vim-fern in popup || floating_window~~
+- [x] git branch icons
+- [ ] blink sources https://cmp.saghen.dev/configuration/sources.html#community-sources
+- [ ] R.exe exepath in windows
+- [ ] Aider
 - [ ] Fzf --no-sort option for different commands
 - [ ] find conflicts using Git/Project/Current path.
-- [ ] R.exe exepath in windows
 ## MyPlugins:
-- [x] write fzf-startify
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
@@ -136,7 +138,6 @@
   - [x] deploy to github
 - [x] fzf-registers
 ## Plenty of works
-- [ ] blink
 - [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
