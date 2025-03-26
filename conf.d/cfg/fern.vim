@@ -14,7 +14,6 @@ PlugAddOpt 'vim-fern-git-status'
 PlugAddOpt 'vim-fern-hijack'
 " fern_open
 function! FernOpen(type, ...) abort
-    let l:opts = get(a:, 1, {})
     if a:type == 'lcd'
         let l:dir = '.'
     elseif a:type == 'gitroot'
@@ -23,19 +22,20 @@ function! FernOpen(type, ...) abort
         let l:dir = GetRootDir()
     endif
     let l:cmd = 'Fern ' . l:dir
-    if !has_key(l:opts, 'popup')
+    if !get(a:, 1, 0)
         let l:cmd .= ' -drawer -stay -reveal=%:p'
     endif
     execute l:cmd
 endfunction
-command! FernLCD call FernOpen('lcd')
-command! FernGitRoot call FernOpen('gitroot')
-command! FernGetRoot call FernOpen('getroot')
+command! FernLCD call FernOpen('lcd', 1)
+command! FernSideLCD call FernOpen('lcd')
+command! FernSideGitRoot call FernOpen('gitroot')
+command! FernSideGetRoot call FernOpen('getroot')
 nnoremap <leader>fn :Fern
-nnoremap <silent><leader>f. :Fern ./<Cr>
-nnoremap <silent><leader>fl :FernLCD<Cr>
-nnoremap <silent><leader>fg :FernGitRoot<Cr>
-nnoremap <silent><leader>fr :FernGetRoot<Cr>
+nnoremap <silent><leader>f. :Fern ./ -reveal=%:p<Cr>
+nnoremap <silent><leader>fl :FernSideLCD<Cr>
+nnoremap <silent><leader>fg :FernSideGitRoot<Cr>
+nnoremap <silent><leader>fr :FernSideGetRoot<Cr>
 " ---------------
 " fzf
 " ---------------

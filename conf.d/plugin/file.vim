@@ -110,7 +110,13 @@ if Installed('vim-floaterm')
             endif
         endif
     endfunction
-    if executable('yazi')
+    if InstalledCoc() && has('nvim')
+        function! s:coc_file() abort
+            exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
+        endfunction
+        command! CocFile call s:coc_file()
+        nnoremap <silent><nowait><leader>e :CocFile<Cr>
+    elseif executable('yazi')
         command! FloatermYazi call s:floaterm_float('yazi')
         nnoremap <silent><nowait><leader>e :FloatermYazi<Cr>
     elseif executable('ranger')

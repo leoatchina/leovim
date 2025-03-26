@@ -322,6 +322,7 @@ if [ $installplug != 'no' ]; then
     fi
     setup_plug "$HOME/.local/bin/nv.sh"
     setup_plug "$HOME/.local/bin/ni.sh"
+    setup_plug "$HOME/.local/bin/nn.sh"
 fi
 
 echo

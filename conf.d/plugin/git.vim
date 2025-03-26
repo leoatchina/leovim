@@ -18,7 +18,7 @@ function! GitRootDir()
     return get(b:, 'git_root_dir', '')
 endfunction
 function! AutoLcdGit() abort
-    if FtBtIgnored() || tolower(&ft) =~ 'fern'
+    if FtBtIgnored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
         return
     endif
     let l:cur_dir = AbsDir()

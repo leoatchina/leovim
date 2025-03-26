@@ -86,7 +86,7 @@ if v:version >= 801 || has('nvim')
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_buf_ft', ["fern"]),
-                \ 'open': 'FernGetRoot',
+                \ 'open': 'FernSideGetRoot',
                 \ 'close': 'Fern . -drawer -toggle'
                 \ }
 else
