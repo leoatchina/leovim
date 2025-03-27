@@ -70,7 +70,7 @@ else
 endif
 if get(g:, 'cargo_exe', '') != '' && Require('rust') && v:version >= 800
     PlugAdd 'rust-lang/rust.vim', {'for': 'rust'}
-    if Planned('nvim-cmp')
+    if PlannedNvimLsp()
         PlugAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
 endif

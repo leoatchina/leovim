@@ -183,9 +183,9 @@ endif
 " ------------------------------
 " check tool
 " ------------------------------
-if g:complete_engine == 'cmp'
+if PlannedNvimLsp()
     let g:check_tool = 'lsp'
-elseif g:complete_engine == 'coc'
+elseif PlannedCoc()
     if g:python_version > 3.06 && Require('ale')
         let g:check_tool = 'ale'
     else
@@ -361,7 +361,7 @@ endif
 " ----------------------------
 " wilder
 " ----------------------------
-if !Planned('nvim-cmp') && !Planned('blink.cmp')
+if !PlannedNvimLsp()
     if g:python_version > 3 && has('nvim') && UNIX()
         function! UpdateRemotePlugins(...)
             let &rtp=&rtp
