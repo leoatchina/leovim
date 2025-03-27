@@ -9,6 +9,9 @@ endfunction
 function! PlannedCoc() abort
     return Planned('coc.nvim')
 endfunction
+function! PlannedBlk() abort
+    return Planned('blink.cmp')
+endfunction
 function! PlannedNvimLsp() abort
     return Planned(
                 \ 'nvim-lspconfig',
@@ -174,10 +177,12 @@ endif
 " dict && snippets
 " ------------------------------
 if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##TextChangedP")
-    PlugAdd 'hrsh7th/vim-vsnip'
     PlugAdd 'rafamadriz/friendly-snippets'
-    if g:complete_engine == 'mcm'
-        PlugAdd 'hrsh7th/vim-vsnip-integ'
+    if !PlannedCoc() && !PlannedBlk()
+        PlugAdd 'hrsh7th/vim-vsnip'
+        if g:complete_engine == 'mcm'
+            PlugAdd 'hrsh7th/vim-vsnip-integ'
+        endif
     endif
 endif
 " ------------------------------
@@ -215,7 +220,7 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
     PlugAdd 'gcmt/wildfire.vim'
 endif
-if !Planned('nvim-treesitter') && Require('c') && (InstalledCoc() || Planned('nvim-lspconfig'))
+if !Planned('nvim-treesitter') && Require('c') && PlannedLsp()
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
@@ -324,7 +329,7 @@ if has('nvim')
         if PlannedLsp() && Require('neoconf')
             PlugAdd 'folke/neoconf.nvim'
         endif
-        if has('nvim-0.10') && (!InstalledCoc() || InstalledCoc() && Planned('nvim-treesitter'))
+        if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
             PlugAdd 'Bekaboo/dropbar.nvim'
             if UNIX()
                 PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
@@ -337,7 +342,7 @@ elseif has('conceal')
         PlugAdd 'ryanoasis/vim-devicons'
     endif
 endif
-" backbone nvim plugins. TODO: aider
+" backbone nvim plugins.
 if PlannedNvimLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
