@@ -156,7 +156,7 @@ nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>
 nnoremap <silent>gs :call CocAction('showSubTypes')<Cr>
 nnoremap <silent>gS :call CocAction('showSuperTypes')<Cr>
 " refactor
-nmap <silent>gr <Plug>(coc-refactor)
+nmap <nowait><silent>gr <Plug>(coc-refactor)
 " ----------------------------
 " actions
 " ----------------------------

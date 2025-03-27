@@ -294,8 +294,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local nx = { 'n', 'x' }
     local bufnr = args.bufnr
     local client = vim.lsp.get_client_by_id(args.data.client_id)
-    local opts_silent = { noremap = true, silent = true, buffer = bufnr }
-    local opts_echo = { noremap = true, silent = false, buffer = bufnr }
+    local opts_silent = { noremap = true, silent = true, nowait = true, buffer = bufnr }
+    local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
     if lsp_capabilities and lsp_capabilities.completionProvider then
       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
     end
@@ -305,7 +305,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- lsp info/restart
     map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
     map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
-    --
+    -- code action
     map('n', "<F2>", vim.lsp.buf.rename, opts_echo)
     map('n', "<M-a>", vim.lsp.buf.code_action, opts_silent)
     -- vista
