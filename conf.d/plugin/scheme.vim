@@ -37,10 +37,10 @@ if g:complete_engine == 'mcm'
 elseif g:complete_engine == 'cmp'
     call SetScheme('nightfox', 'codedark')
 elseif g:complete_engine == 'blk'
-    call SetScheme('duskfox', 'codedark')
+    call SetScheme('catppuccin', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('catppuccin', 'space-vim-dark')
+        call SetScheme('duskfox', 'space-vim-dark')
     else
         call SetScheme('sonokai', 'sublime')
     endif

@@ -19,7 +19,11 @@ function _G.toggle_diagnostics()
   if vim.b.diagnostics_enable then
     print("diagnostics off")
     vim.b.diagnostics_enable = false
-    vim.diagnostic.disable()
+    if vim.fn.has('nvim-0.11') then
+      vim.diagnostic.enable(false)
+    else
+      vim.diagnostic.disable()
+    end
   else
     print("diagnostics on")
     vim.b.diagnostics_enable = true
