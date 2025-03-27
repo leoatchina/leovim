@@ -310,6 +310,7 @@ endif
 " nvim plugins
 " ----------------------------
 if has('nvim')
+    PlugAdd 'dstein64/nvim-scrollview'
     PlugAdd 'wsdjeg/quickfix.nvim'
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'kevinhwang91/promise-async'
