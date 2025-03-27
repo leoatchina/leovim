@@ -203,26 +203,6 @@ if [ $# -gt 0 ]; then
     else
         note "Install softwares"
     fi
-    # rust 
-    if [[ $mode == 'all' || $mode == 'rust' ]]; then
-        if program_exists cargo; then
-            info "Rust toolchain has been installed."
-        else
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-        fi
-        [[ $mode == 'rust' ]] && exit 0
-    fi
-    # z.lua
-    if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
-        if [ -d ~/z.lua ]; then
-            info "z.lua already installed."
-            cd ~/z.lua && git pull
-        else
-            git clone https://github.com/skywind3000/z.lua ~/z.lua
-            success "z.lua installed"
-        fi
-        [[ $mode == 'z.lua' ]] && exit 0
-    fi
     # neovim
     if [[ $mode == 'all' || $mode == 'neovim' ]]; then
         if [ -d ~/.local/nvim-linux64 ] && [ $mode == 'all' ]; then
@@ -249,6 +229,35 @@ if [ $# -gt 0 ]; then
             success "neovim installed"
         fi
         [[ $mode == 'neovim' ]] && exit 0
+    fi
+    # z.lua
+    if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
+        if [ -d ~/z.lua ]; then
+            info "z.lua already installed."
+            cd ~/z.lua && git pull
+        else
+            git clone https://github.com/skywind3000/z.lua ~/z.lua
+            success "z.lua installed"
+        fi
+        [[ $mode == 'z.lua' ]] && exit 0
+    fi
+    # gvm 
+    if [[ $mode == 'all' || $mode == 'gvm' ]]; then
+        if program_exists gvm; then
+            info "gvm has been installed."
+        else
+            bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer) 
+        fi
+        [[ $mode == 'gvm' ]] && exit 0
+    fi
+    # rust 
+    if [[ $mode == 'all' || $mode == 'rust' ]]; then
+        if program_exists cargo; then
+            info "Rust toolchain has been installed."
+        else
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        fi
+        [[ $mode == 'rust' ]] && exit 0
     fi
     # nodejs && nvm
     if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
