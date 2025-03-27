@@ -109,15 +109,17 @@ augroup TablineColorschemeFix
     autocmd!
     autocmd ColorScheme * set tabline=%!Vim_NeatTabLine()
 augroup END
-" get a single tab label in gui
-function! Vim_NeatGuiTabLabel()
-    let l:num = v:lnum
-    let l:buflist = tabpagebuflist(l:num)
-    let l:winnr = tabpagewinnr(l:num)
-    let l:bufnr = l:buflist[l:winnr - 1]
-    return Vim_NeatBuffer(l:bufnr, 0)
-endfunc
-set guitablabel=%{Vim_NeatGuiTabLabel()}
+if !has('nvim-0.11')
+    " get a single tab label in gui
+    function! Vim_NeatGuiTabLabel()
+        let l:num = v:lnum
+        let l:buflist = tabpagebuflist(l:num)
+        let l:winnr = tabpagewinnr(l:num)
+        let l:bufnr = l:buflist[l:winnr - 1]
+        return Vim_NeatBuffer(l:bufnr, 0)
+    endfunc
+    set guitablabel=%{Vim_NeatGuiTabLabel()}
+endif
 " --------------------------
 " TabSwitch / close
 " --------------------------

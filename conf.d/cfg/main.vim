@@ -1,5 +1,7 @@
 set rtp^=$CONF_D_DIR
-let &termencoding=&enc
+if !has('nvim-0.11')
+    let &termencoding=&enc
+endif
 " ------------------------------------
 " Meta key
 " ------------------------------------
