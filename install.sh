@@ -203,6 +203,15 @@ if [ $# -gt 0 ]; then
     else
         note "Install softwares"
     fi
+    # rust 
+    if [[ $mode == 'all' || $mode == 'rust' ]]; then
+        if program_exists cargo; then
+            info "Rust toolchain has been installed."
+        else
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        fi
+        [[ $mode == 'rust' ]] && exit 0
+    fi
     # z.lua
     if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
         if [ -d ~/z.lua ]; then
