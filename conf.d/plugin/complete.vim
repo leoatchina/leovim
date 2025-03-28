@@ -38,7 +38,7 @@ elseif Planned('copilot.vim')
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 endif
-if Installed('codecompanion.nvim', 'mini.pick')
+if Installed('codecompanion.nvim')
     lua require("cfg/ai")
     lua require("cfg/codecompanion")
 elseif Installed('avante.nvim')
@@ -87,7 +87,7 @@ if InstalledCmp()
     lua require("cfg/cmp")
 elseif InstalledBlk()
     lua require("cfg/blink")
-elseif Installed('coc.nvim')
+elseif InstalledCoc()
     source $CFG_DIR/coc.vim
 elseif g:complete_engine == 'apm'
     source $CFG_DIR/apm.vim
@@ -110,7 +110,7 @@ if Planned('vim-vsnip')
     elseif PlannedFzf()
         nnoremap <M-h>s :FzfFiles ~/.leovim/conf.d/snippets<Cr>
     endif
-    if Installed('coc.nvim')
+    if InstalledCoc()
         call coc#config("snippets.userSnippetsDirectory", Expand("~/.leovim/conf.d/snippets"))
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
@@ -187,7 +187,7 @@ if Installed('wilder.nvim')
     call wilder#set_option('renderer', wilder#popupmenu_renderer({
                 \ 'highlighter': wilder#basic_highlighter(),
                 \ }))
-elseif !InstalledCmp()
+elseif !InstalledAdv()
     cnoremap <expr><C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
     cnoremap <expr><C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
     cnoremap <expr><C-n> pumvisible() ? "\<Down>" : "\<C-n>"
