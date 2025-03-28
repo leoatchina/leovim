@@ -93,6 +93,10 @@ function! GetRootDir(...)
 endfunction
 nnoremap <M-k>r :echo GetRootDir()<Cr>
 " --------------------------
+" some support
+" --------------------------
+let g:loaded_perl_provider = 0
+" --------------------------
 " python_support
 " --------------------------
 function! s:python_prog()
