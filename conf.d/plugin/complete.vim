@@ -65,7 +65,7 @@ endif
 " -----------------------------
 " vista_default_executive
 " -----------------------------
-if InstalledNvimLsp()
+if InstalledLsp()
     let g:vista_default_executive = 'nvim_lsp'
     source $CFG_DIR/lsp.vim
 else
@@ -122,7 +122,7 @@ if Planned('vim-vsnip')
         imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
     endif
-    if !InstalledLsp()
+    if !InstalledAdv()
         function! MapTabCr(tab) abort
             if pumvisible()
                 if a:tab
@@ -252,7 +252,7 @@ endif
 if Planned('vim-go')
     let g:go_doc_balloon = 0
     let g:go_def_mapping_enabled = 0
-    if InstalledLsp()
+    if InstalledAdv()
         let g:go_doc_keywordprg_enabled = 0
         let g:go_code_completion_enabled = 0
     else

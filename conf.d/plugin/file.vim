@@ -303,8 +303,7 @@ endif
 "----------------------------------------------------------------------
 " save
 "----------------------------------------------------------------------
-nnoremap <Leader>W :wa!<Cr>
-nnoremap <Leader>w :w!<Cr>
+nnoremap <nowait><Leader>w :wa!<Cr>
 if v:version >= 800 || has('nvim')
     nnoremap <C-s> :w!<Cr>
     xnoremap <C-s> <ESC>:w!<Cr>gv

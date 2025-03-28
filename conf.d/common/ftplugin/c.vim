@@ -14,7 +14,7 @@ if Installed('vim-ccls')
 endif
 " cppman
 if Installed('vim-cppman')
-    if InstalledLsp()
+    if InstalledAdv()
         nnoremap <buffer>gx :Cppman <C-r>=expand('<cword>')<Cr>
         xnoremap <buffer>gx :<C-u>Cppman <C-r>=GetVisualSelection()<Cr>
     else

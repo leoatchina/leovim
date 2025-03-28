@@ -10,7 +10,7 @@ function! s:diag_or_errmsg(diagnostic)
             ALEDetail
         elseif InstalledCoc()
             call CocActionAsync('diagnosticInfo')
-        elseif InstalledNvimLsp()
+        elseif InstalledLsp()
             lua vim.diagnostic.open_float()
         else
             call preview#errmsg('Please select lines to merge!') | sleep 2
