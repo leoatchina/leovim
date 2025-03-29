@@ -15,7 +15,7 @@ command! ToggleBackgroud call s:tooglebg()
 nnoremap <M-k>b :ToggleBackgroud<Cr>
 function! SetScheme(scheme, ...) abort
     let scheme = a:scheme
-    let defaultscheme = get(a:, 1, 'hybrid')
+    let defaultscheme = get(a:, 1, 'slate')
     try
         if g:has_truecolor
             execute('colorscheme '. scheme)
@@ -23,11 +23,7 @@ function! SetScheme(scheme, ...) abort
             execute('colorscheme '. defaultscheme)
         endif
     catch
-        try
-            execute('colorscheme '. defaultscheme)
-        catch
-            colorscheme slate
-        endtry
+        colorscheme slate
     endtry
 endfunction
 let g:edge_better_performance = 1
