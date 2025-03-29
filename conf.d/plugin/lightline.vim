@@ -182,8 +182,6 @@ function! UpdateLightline() abort
         let g:lightline.colorscheme = 'simpleblack'
     elseif colors_name == 'sublime'
         let g:lightline.colorscheme = 'molokai'
-    elseif colors_name == 'gruvbox'
-        let g:lightline.colorscheme = 'gruvboxdark'
     elseif colors_name == 'hybrid'
         let g:lightline.colorscheme = 'jellybeans'
     else

@@ -45,9 +45,9 @@ elseif g:complete_engine == 'coc'
         call SetScheme('sonokai', 'sublime')
     endif
 elseif g:complete_engine == 'apm'
-    colorscheme gruvbox
-else
     colorscheme hybrid
+else
+    colorscheme slate
 endif
 " --------------------------
 " nvim-web-devicons

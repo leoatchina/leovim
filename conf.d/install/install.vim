@@ -85,17 +85,13 @@ catch
         call AddRequire('mcm')
     endif
 endtry
-if Require('nocomplete')
+if Require('nocomplete') || Require('noc')
     let g:complete_engine = ''
+elseif Require('mcm')
+    let g:complete_engine = 'mcm'
 elseif Require('apm')
     if v:version >= 800
         let g:complete_engine = 'apm'
-    else
-        let s:smart_engine_select = 1
-    endif
-elseif Require('mcm')
-    if v:version >= 901 || UNIX()
-        let g:complete_engine = 'mcm'
     else
         let s:smart_engine_select = 1
     endif
@@ -123,12 +119,8 @@ endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.10.1')
         let g:complete_engine = 'cmp'
-    elseif UNIX()
-        let g:complete_engine = 'mcm'
-    elseif v:version >= 800
-        let g:complete_engine = 'apm'
     else
-        let g:complete_engine = ''
+        let g:complete_engine = 'mcm'
     endif
 endif
 " ------------------------------
