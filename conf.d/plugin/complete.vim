@@ -89,8 +89,6 @@ elseif InstalledBlk()
     lua require("cfg/blink")
 elseif InstalledCoc()
     source $CFG_DIR/coc.vim
-elseif g:complete_engine == 'apm'
-    source $CFG_DIR/apm.vim
 elseif g:complete_engine != ''
     let g:complete_engine = 'mcm'
     source $CFG_DIR/mcm.vim
