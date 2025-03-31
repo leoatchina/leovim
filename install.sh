@@ -245,15 +245,6 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'z.lua' ]] && exit 0
     fi
-    # gvm 
-    if [[ $mode == 'all' || $mode == 'gvm' ]]; then
-        if program_exists gvm; then
-            info "gvm has been installed."
-        else
-            bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer) 
-        fi
-        [[ $mode == 'gvm' ]] && exit 0
-    fi
     # rust 
     if [[ $mode == 'all' || $mode == 'rust' ]]; then
         if program_exists cargo; then
@@ -298,6 +289,15 @@ if [ $# -gt 0 ]; then
             success "nvim install to $nvm_dir"
         fi
         exit 0
+    fi
+    # gvm 
+    if [ $mode == 'gvm' ]; then
+        if program_exists gvm; then
+            info "gvm has been installed."
+        else
+            bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer) 
+        fi
+        [[ $mode == 'gvm' ]] && exit 0
     fi
 else
     mode=normal
