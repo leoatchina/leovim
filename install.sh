@@ -96,11 +96,11 @@ mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
 # z scripts is for history file browser
-cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
+cp --update=none $APP_PATH/scripts/z.sh $HOME/.local/bin
 
 # enhanced config
-cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
-cp -n $APP_PATH/scripts/configrc $HOME/.configrc
+cp --update=none $APP_PATH/scripts/inputrc $HOME/.inputrc
+cp --update=none $APP_PATH/scripts/configrc $HOME/.configrc
 
 
 note "Set links, create (neo)vim's configs, and cp start scripts"
@@ -122,14 +122,14 @@ create_vimrc "$HOME/.config/nvim/init.vim"
 [ ! -f $HOME/.gvimrc ] && echo '" set guifont=CascadiaCode\ Code:h11' > $HOME/.gvimrc && echo '" set guifont=CascadiaCode\ Nerd\ Font:h11.5' >> $HOME/.gvimrc
 
 # vim run scripts
-cp -n $APP_PATH/scripts/v.sh  $HOME/.local/bin
-cp -n $APP_PATH/scripts/vi.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/ni.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/nn.sh $HOME/.local/bin
+cp --update=none $APP_PATH/scripts/v.sh  $HOME/.local/bin
+cp --update=none $APP_PATH/scripts/vi.sh $HOME/.local/bin
+cp --update=none $APP_PATH/scripts/nv.sh $HOME/.local/bin
+cp --update=none $APP_PATH/scripts/ni.sh $HOME/.local/bin
+cp --update=none $APP_PATH/scripts/nn.sh $HOME/.local/bin
 
 # dirdiff
-cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin
+cp --update=none $APP_PATH/scripts/dirdiff $HOME/.local/bin
 
 # leovim command
 if [ $os == 'linux' ]; then
@@ -205,7 +205,11 @@ if [ $# -gt 0 ]; then
     fi
     # neovim
     if [[ $mode == 'all' || $mode == 'neovim' ]]; then
-        if [ -d ~/.local/nvim-linux64 ] && [ $mode == 'all' ]; then
+        if [ $os == 'macos-arm64' ] && [ -d ~/.local/nvim-macos-arm64 ] && [ $mode == 'all' ]; then
+            info "neovim already installed"
+        elif [ $os == 'macos-x64' ] && [ -d ~/.local/nvim-macos-x86_64 ] && [ $mode == 'all' ]; then
+            info "neovim already installed"
+        elif [ $os == 'linux' ] && [ -d ~/.local/nvim-linux-x86_64 ] && [ $mode == 'all' ]; then
             info "neovim already installed"
         else
             cd ~/.local
