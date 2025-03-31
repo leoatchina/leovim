@@ -96,13 +96,11 @@ mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
 # z scripts is for history file browser
-cp --update=none $APP_PATH/scripts/z.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
 
 # enhanced config
-cp --update=none $APP_PATH/scripts/inputrc $HOME/.inputrc
-cp --update=none $APP_PATH/scripts/configrc $HOME/.configrc
-
-
+cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
+cp -n $APP_PATH/scripts/configrc $HOME/.configrc
 note "Set links, create (neo)vim's configs, and cp start scripts"
 
 # set links
@@ -122,14 +120,14 @@ create_vimrc "$HOME/.config/nvim/init.vim"
 [ ! -f $HOME/.gvimrc ] && echo '" set guifont=CascadiaCode\ Code:h11' > $HOME/.gvimrc && echo '" set guifont=CascadiaCode\ Nerd\ Font:h11.5' >> $HOME/.gvimrc
 
 # vim run scripts
-cp --update=none $APP_PATH/scripts/v.sh  $HOME/.local/bin
-cp --update=none $APP_PATH/scripts/vi.sh $HOME/.local/bin
-cp --update=none $APP_PATH/scripts/nv.sh $HOME/.local/bin
-cp --update=none $APP_PATH/scripts/ni.sh $HOME/.local/bin
-cp --update=none $APP_PATH/scripts/nn.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/v.sh  $HOME/.local/bin
+cp -n $APP_PATH/scripts/vi.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/ni.sh $HOME/.local/bin
+cp -n $APP_PATH/scripts/nn.sh $HOME/.local/bin
 
 # dirdiff
-cp --update=none $APP_PATH/scripts/dirdiff $HOME/.local/bin
+cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin
 
 # leovim command
 if [ $os == 'linux' ]; then
@@ -148,6 +146,17 @@ else
 fi
 
 ########################### install softwares #####################################
+
+# clone unix tools for (neo)vim
+note "Install/update leovim.unix"
+if [ -d ~/.leovim.unix ]; then
+    cd ~/.leovim.unix && git pull > /dev/null 2>&1
+    success "~/.leovim.unix updated"
+else
+    git clone https://gitee.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
+    success "~/.leovim.unix cloned"
+fi
+
 if [ $# -gt 0 ]; then
     mode=$1
     if [ $# -gt 1 ]; then
@@ -302,16 +311,6 @@ if [ $# -gt 0 ]; then
 else
     mode=normal
     installplug='yes'
-fi
-
-# clone unix tools for (neo)vim
-note "Install/update leovim.unix"
-if [ -d ~/.leovim.unix ]; then
-    cd ~/.leovim.unix && git pull > /dev/null 2>&1
-    success "~/.leovim.unix updated"
-else
-    git clone https://gitee.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
-    success "~/.leovim.unix cloned"
 fi
 
 ################################ set optional config #############################
