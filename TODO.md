@@ -109,14 +109,15 @@
 - [x] tab nr highlighting group
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
+- [ ] vim-flog
 - [ ] nvim-lsp
     - [ ] require nvim-0.11
     - [ ] delete nvim-lspconfig 
-    - [ ] blink sources https://cmp.saghen.dev/configuration/sources.html#community-sources
+    - [ ] blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources
 - [ ] Ai related 
     - [ ] copilot enhanced 
     - [ ] minuet.ai
-    - [ ] yarepl
+    - [ ] yarepl + aider
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
 - [ ] find conflicts using Git/Project/Current path.
@@ -154,5 +155,5 @@
   - [ ] mix `vim-plug` and `vim-jetpack` together
 - [ ] vim-zeal
   - [ ] view document in (neo)vim
-- [ ] rewrite readme
-- [ ] introduce video
+- [ ] Rewrite readme
+- [ ] Introduce video
