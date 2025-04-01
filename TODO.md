@@ -109,9 +109,15 @@
 - [x] tab nr highlighting group
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
-- [ ] blink sources https://cmp.saghen.dev/configuration/sources.html#community-sources
+- [ ] nvim-lsp
+    - [ ] require nvim-0.11
+    - [ ] delete nvim-lspconfig 
+    - [ ] blink sources https://cmp.saghen.dev/configuration/sources.html#community-sources
+- [ ] Ai related 
+    - [ ] copilot enhanced 
+    - [ ] minuet.ai
+    - [ ] yarepl
 - [ ] R.exe exepath in windows
-- [ ] Aider
 - [ ] Fzf --no-sort option for different commands
 - [ ] find conflicts using Git/Project/Current path.
 ## MyPlugins:
@@ -142,10 +148,10 @@
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
   - [ ] ctags enhanced, according to zhihu user `成隽`
-- [ ] vim-plug
+- [ ] vim-packadd
   - [ ] floating or popup window.
   - [ ] use `:packadd` to load plugins
-  - [ ] mix `vim-plug` and `vim-packadd` together
+  - [ ] mix `vim-plug` and `vim-jetpack` together
 - [ ] vim-zeal
   - [ ] view document in (neo)vim
 - [ ] rewrite readme
