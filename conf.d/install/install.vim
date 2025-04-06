@@ -96,7 +96,7 @@ elseif Require('apm')
         let s:smart_engine_select = 1
     endif
 elseif Require('coc')
-    if g:node_version >= 16.18 && (has('nvim-0.8.1') || has('patch-9.0.0438'))
+    if g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
         let g:complete_engine = 'coc'
     else
         let s:smart_engine_select = 1
@@ -119,6 +119,8 @@ endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.10.1')
         let g:complete_engine = 'cmp'
+    elseif g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
+        let g:complete_engine = 'coc'
     else
         let g:complete_engine = 'mcm'
     endif
