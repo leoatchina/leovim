@@ -36,7 +36,7 @@ endfunction
 function! InstalledCoc() abort
     return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
-function! InstalledBlk() abort
+function! InstalledBlink() abort
     return Installed('blink.cmp', 'friendly-snippets')
 endfunction
 function! InstalledCmp() abort
@@ -101,9 +101,9 @@ elseif Require('coc')
     else
         let s:smart_engine_select = 1
     endif
-elseif (Require('blk') || Require('blink')) && executable('cargo')
+elseif Require('blink') && executable('cargo')
     if has('nvim-0.10.1')
-        let g:complete_engine = 'blk'
+        let g:complete_engine = 'blink'
     else
         let s:smart_engine_select = 1
     endif
@@ -141,7 +141,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'fcying/cmp-async-path'
     PlugAdd 'onsails/lspkind-nvim'
     PlugAdd 'xzbdmw/colorful-menu.nvim'
-elseif g:complete_engine == 'blk'
+elseif g:complete_engine == 'blink'
     PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release'}
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
@@ -151,7 +151,7 @@ elseif g:complete_engine == 'coc'
     endif
     PlugAddOpt 'coc-fzf'
 endif
-if g:complete_engine == 'cmp' || g:complete_engine == 'blk'
+if g:complete_engine == 'cmp' || g:complete_engine == 'blink'
     " lsp related
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'

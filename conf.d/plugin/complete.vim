@@ -85,7 +85,7 @@ endif
 " ------------------------------
 if InstalledCmp()
     lua require("cfg/cmp")
-elseif InstalledBlk()
+elseif InstalledBlink()
     lua require("cfg/blink")
 elseif InstalledCoc()
     source $CFG_DIR/coc.vim

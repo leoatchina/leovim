@@ -18,4 +18,4 @@ else
   echo "nvim not executable"
   exit 1
 fi
-$NVIMCMD --cmd "let g:preset_group=['blk']" "$@"
+$NVIMCMD --cmd "let g:preset_group=['blink']" "$@"

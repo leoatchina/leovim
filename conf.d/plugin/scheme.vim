@@ -30,11 +30,11 @@ let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
     call SetScheme('sonokai', 'sublime')
-elseif g:complete_engine == 'itg'
+elseif g:complete_engine == 'inner'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
     call SetScheme('duskfox', 'space-vim-dark')
-elseif g:complete_engine == 'blk'
+elseif g:complete_engine == 'blink'
     call SetScheme('catppuccin', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
