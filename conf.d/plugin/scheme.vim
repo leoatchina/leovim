@@ -29,19 +29,19 @@ endfunction
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
+    call SetScheme('sonokai', 'sublime')
+elseif g:complete_engine == 'itg'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
-    call SetScheme('nightfox', 'codedark')
+    call SetScheme('duskfox', 'space-vim-dark')
 elseif g:complete_engine == 'blk'
     call SetScheme('catppuccin', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('duskfox', 'space-vim-dark')
+        call SetScheme('nightfox', 'hybrid')
     else
-        call SetScheme('sonokai', 'sublime')
+        call SetScheme('nightfly', 'hybrid')
     endif
-elseif g:complete_engine == 'apm'
-    colorscheme hybrid
 else
     colorscheme slate
 endif
