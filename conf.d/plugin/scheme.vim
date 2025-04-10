@@ -33,12 +33,12 @@ if g:complete_engine == 'mcm'
 elseif g:complete_engine == 'inner'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
-    call SetScheme('duskfox', 'space-vim-dark')
+    call SetScheme('nightfox', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
     call SetScheme('catppuccin', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('nightfox', 'hybrid')
+        call SetScheme('carbonfox', 'hybrid')
     else
         call SetScheme('nightfly', 'hybrid')
     endif
