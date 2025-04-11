@@ -40,9 +40,9 @@ elseif g:complete_engine == 'blink'
     call SetScheme('catppuccin', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('carbonfox', 'space-vim-dark')
+        call SetScheme('nightfox', 'space-vim-dark')
     else
-        call SetScheme('moonfly', 'space-vim-dark')
+        call SetScheme('nightfly', 'space-vim-dark')
     endif
 else
     colorscheme slate
