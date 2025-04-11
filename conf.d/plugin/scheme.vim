@@ -26,6 +26,8 @@ function! SetScheme(scheme, ...) abort
         colorscheme slate
     endtry
 endfunction
+" set scheme for different complete_engine
+let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
@@ -33,14 +35,14 @@ if g:complete_engine == 'mcm'
 elseif g:complete_engine == 'inner'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
-    call SetScheme('nightfox', 'space-vim-dark')
+    call SetScheme('tokyonight', 'hybrid')
 elseif g:complete_engine == 'blink'
     call SetScheme('catppuccin', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('carbonfox', 'hybrid')
+        call SetScheme('carbonfox', 'space-vim-dark')
     else
-        call SetScheme('nightfly', 'hybrid')
+        call SetScheme('moonfly', 'space-vim-dark')
     endif
 else
     colorscheme slate
