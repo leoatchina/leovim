@@ -242,22 +242,24 @@ endif
 if has('patch-9.0.0185') || has('nvim')
     if Require('codeium')
         PlugAdd 'Exafunction/codeium.vim'
-    elseif Require('copilot') && g:node_version > 18
+    elseif Require('copilot') && !Require('copliot_enhance') && g:node_version > 18
         PlugAdd 'github/copilot.vim'
     endif
 endif
 if has('nvim-0.10.1') && Planned('nvim-treesitter')
     if executable('curl') && PlannedLsp() && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion') &&
-                \ exists('$OPENAI_API_KEY') ||
-                \ exists('$ANTHROPIC_API_KEY') ||
-                \ exists('$GEMINI_API_KEY') ||
-                \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
-                \ )
+                \ ( exists('$OPENAI_API_KEY') ||
+                  \ exists('$ANTHROPIC_API_KEY') ||
+                  \ exists('$GEMINI_API_KEY') ||
+                  \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model') ||
+                  \ Require('copliot_enhance')
+                \ ))
         PlugAdd 'olimorris/codecompanion.nvim'
     elseif exists('$OPENAI_API_KEY') ||
-                \ exists('$ANTHROPIC_API_KEY') ||
-                \ exists('$GEMINI_API_KEY') ||
-                \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
+         \ exists('$ANTHROPIC_API_KEY') ||
+         \ exists('$GEMINI_API_KEY') ||
+         \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model') ||
+         \ Require('copliot_enhance')
         if UNIX()
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
         else
