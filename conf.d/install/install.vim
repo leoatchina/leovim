@@ -155,18 +155,19 @@ if g:complete_engine == 'cmp' || g:complete_engine == 'blink'
     " lsp related
     PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
-    PlugAdd 'josa42/nvim-lightline-lsp'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'Wansmer/symbol-usage.nvim'
+    PlugAdd 'ravenxrz/call-graph.nvim'
+    " lightline
+    PlugAdd 'josa42/nvim-lightline-lsp'
     " lspimport is only for pyright
     PlugAdd 'stevanmilic/nvim-lspimport'
-    " call-graph
-    PlugAdd 'ravenxrz/call-graph.nvim'
 endif
 " ------------------------------
 " dict && snippets
 " ------------------------------
-if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##TextChangedP")
+PlugAddOpt 'vim-dict'
+if ai_complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'rafamadriz/friendly-snippets'
     if index(['mcm', 'cmp'], g:complete_engine) >= 0
         PlugAdd 'hrsh7th/vim-vsnip'
@@ -175,7 +176,6 @@ if index(['', 'apm'], g:complete_engine) < 0 && exists('v:true') && exists("##Te
         endif
     endif
 endif
-PlugAddOpt 'vim-dict'
 " ------------------------------
 " check tool
 " ------------------------------
@@ -285,7 +285,7 @@ endif
 " ------------------------------
 " pairs
 " ------------------------------
-if g:complete_engine == 'cmp'
+if PlannedLsp()
     PlugAdd 'windwp/nvim-autopairs'
 elseif v:version >= 800
     PlugAdd 'tmsvg/pear-tree'
