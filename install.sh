@@ -330,10 +330,10 @@ if [ $installplug != 'no' ]; then
         setup_plug "vim"
     fi
     # cmp
-    setup_plug "$HOME/.local/bin/ni.sh"
+    setup_plug "$HOME/.local/bin/nv.sh"
     # coc
     if program_exists node; then
-        setup_plug "$HOME/.local/bin/nv.sh"
+        setup_plug "$HOME/.local/bin/ni.sh"
     else
         error "Please install node to use neovim's plug coc.nvim" 
     fi
