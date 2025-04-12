@@ -167,7 +167,7 @@ endif
 " dict && snippets
 " ------------------------------
 PlugAddOpt 'vim-dict'
-if ai_complete_engine != '' && exists('v:true') && exists("##TextChangedP")
+if g:complete_enginecomplete_engine != '' && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'rafamadriz/friendly-snippets'
     if index(['mcm', 'cmp'], g:complete_engine) >= 0
         PlugAdd 'hrsh7th/vim-vsnip'
