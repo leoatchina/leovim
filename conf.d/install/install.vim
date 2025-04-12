@@ -102,13 +102,13 @@ elseif Require('coc')
         let s:smart_engine_select = 1
     endif
 elseif Require('blink') && executable('cargo')
-    if has('nvim-0.10.1')
+    if has('nvim-0.11')
         let g:complete_engine = 'blink'
     else
         let s:smart_engine_select = 1
     endif
 elseif Require('cmp')
-    if has('nvim-0.10.1')
+    if has('nvim-0.11')
         let g:complete_engine = 'cmp'
     else
         let s:smart_engine_select = 1
@@ -117,9 +117,9 @@ else
     let s:smart_engine_select = 1
 endif
 if get(s:, 'smart_engine_select', 0)
-    if has('nvim-0.10.1')
+    if has('nvim-0.11')
         let g:complete_engine = 'cmp'
-    elseif g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
+    elseif g:node_version >= 16.18 && has('nvim-0.8')
         let g:complete_engine = 'coc'
     else
         let g:complete_engine = 'mcm'
@@ -247,17 +247,19 @@ if has('patch-9.0.0185') || has('nvim')
     endif
 endif
 if has('nvim-0.10.1') && Planned('nvim-treesitter')
-    if executable('curl') && PlannedLsp() && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion') &&
+    if executable('curl') && PlannedLsp() && (exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY') || Require('codecompanion') && (
                 \ exists('$OPENAI_API_KEY') ||
                 \ exists('$ANTHROPIC_API_KEY') ||
                 \ exists('$GEMINI_API_KEY') ||
-                \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
-                \ )
+                \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model') ||
+                \ Require('copliot_plus')
+                \ ))
         PlugAdd 'olimorris/codecompanion.nvim'
     elseif exists('$OPENAI_API_KEY') ||
                 \ exists('$ANTHROPIC_API_KEY') ||
                 \ exists('$GEMINI_API_KEY') ||
-                \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
+                \ exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model') ||
+                \ Require('copliot_plus')
         if UNIX()
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
         else
