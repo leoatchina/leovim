@@ -12,12 +12,16 @@ let g:nvim_treesitter_install = UNIX()
 " call AddRequire('r')
 " call AddRequire('web')
 " call AddRequire('wubi')
-" call AddRequire('debug')
+" call AddRequire('pinyin')
 " call AddRequire('query')
 " call AddRequire('bioinfo')
 " call AddRequire('markdown')
-" call AddRequire('c', 'rust', 'go')
 
+" call AddRequire('c')
+" call AddRequire('go')
+" call AddRequire('rust')
+
+" call AddRequire('debug')
 " call AddRequire('java')
 " call AddRequire('neoconf')
 
@@ -51,7 +55,6 @@ if WINDOWS()
     " let g:python3_host_prog='C:\\Python37\\python.exe'
     " let &pythonthreedll='C:\\Python37\\python37.dll'
     " let &pythonthreehome='C:\\Python37'
-
     " let g:code_user_dir = 'C:\Users\Admin\AppData\Roaming\Code\User'
     " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
     " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'

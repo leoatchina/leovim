@@ -31,7 +31,7 @@ endif
 if Installed('spring-boot.nvim')
     lua require('cfg/springboot')
 endif
-if Installed('nvim-java', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'lua-async-await')
+if Installed('nvim-java', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'lua-async-await', 'nvim-java-dap')
     lua require('java').setup({verification = { invalid_mason_registry = false }})
 endif
 lua require("lsp")
