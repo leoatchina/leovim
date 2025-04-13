@@ -15,8 +15,8 @@ vim.keymap.set('n', "<M-l>L", [[<Cmd>Neoconf lsp<Cr>]], {noremap = true, silent 
 function _G.OpenNeoconfJson()
   local vim_dir = vim.fn.GetRootDir() .. "/.vim"
   local neoconf_json = vim_dir .. "/neoconf.json"
-  if fn.isdirectory(vim_dir) == 0 then
-    fn.mkdir(vim_dir, "p")
+  if vim.fn.isdirectory(vim_dir) == 0 then
+    vim.fn.mkdir(vim_dir, "p")
   end
   vim.cmd("tabedit " .. neoconf_json)
 end
