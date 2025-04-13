@@ -89,6 +89,7 @@ endif
 " nvim-java
 " ------------------------------
 if Require('java') && PlannedLsp()
+    PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'nvim-java/nvim-java'
     PlugAdd 'nvim-java/nvim-java-core'

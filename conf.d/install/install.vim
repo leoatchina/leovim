@@ -190,34 +190,6 @@ if g:linter_tool == 'ale'
     PlugAdd 'dense-analysis/ale'
     PlugAdd 'maximbaz/lightline-ale'
 endif
-" ----------------------------
-" schemes && textobj
-" ----------------------------
-if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX())
-    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
-    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
-    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
-    PlugAdd 'm-demare/hlargs.nvim'
-elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
-    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
-    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
-    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
-    PlugAdd 'gcmt/wildfire.vim'
-endif
-if !Planned('nvim-treesitter') && Require('c') && PlannedAdv()
-    PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
-endif
-if g:has_truecolor
-    PlugAdd 'sainnhe/edge'
-    PlugAdd 'sainnhe/sonokai'
-    PlugAdd 'bluz71/vim-nightfly-colors'
-    if has('nvim-0.8')
-        PlugAdd 'folke/tokyonight.nvim'
-        PlugAdd 'EdenEast/nightfox.nvim'
-        PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
-    endif
-endif
 " ------------------------------
 " debug tool
 " ------------------------------
@@ -323,22 +295,14 @@ elseif has('conceal')
         PlugAdd 'ryanoasis/vim-devicons'
     endif
 endif
+" ------------------------------
 " backbone nvim plugins.
+" ------------------------------
 if PlannedLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
     if PlannedLsp() || Planned('nvim-dap')
         PlugAdd 'williamboman/mason.nvim'
-    endif
-endif
-" ------------------------------
-" fullscreen
-" ------------------------------
-if LINUX() && HAS_GUI() && executable('wmctrl')
-    PlugAdd 'lambdalisue/vim-fullscreen'
-    if has('nvim')
-        let g:fullscreen#start_command = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 1)"
-        let g:fullscreen#stop_command  = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 0)"
     endif
 endif
 " ----------------------------
@@ -362,10 +326,6 @@ else
         PlugAdd 'jiangmiao/auto-pairs'
     endif
 endif
-" ------------------------------
-" marks
-" ------------------------------
-PlugAdd 'kshenoy/vim-signature'
 " ------------------------------
 " undo
 " ------------------------------
