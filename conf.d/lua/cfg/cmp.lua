@@ -273,17 +273,8 @@ cmp.setup.filetype('gitcommit', {
     { name = 'buffer' },
   })
 })
----------------------------
+----------------------------------
 -- autopairs
----------------------------
-if Installed('nvim-autopairs') then
-  local autopairs = require("nvim-autopairs")
-  autopairs.setup({
-    disable_filetype = {},
-  })
-  local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-  cmp.event:on(
-  'confirm_done',
-  cmp_autopairs.on_confirm_done()
-  )
-end
+----------------------------------
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())

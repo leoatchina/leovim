@@ -113,6 +113,7 @@
     - [x] require nvim-0.11
     - [x] delete nvim-lspconfig 
     - [ ] optimize nvim-0.11 builtin completion
+    - [ ] nvim-java
     - [ ] blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources
 - [ ] Ai related 
     - [ ] copilot plus 

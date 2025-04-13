@@ -83,25 +83,6 @@ require('symbol-usage').setup({
     filetypes = { 'txt', 'log' },
   },
 })
------------------
--- neoconf
------------------
-if Installed('neoconf.nvim') then
-  require("neoconf").setup({
-    -- name of the local settings files
-    local_settings = ".vim/.neoconf.json",
-    import = {
-      vscode = true,
-      coc = true,
-      nlsp = false,
-    }
-  })
-  local opts_neoconf = { noremap = true, silent = true }
-  map('n', "<M-l>n", [[<Cmd>Neoconf local<Cr>]], opts_neoconf)
-  map('n', "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], opts_neoconf)
-  map('n', "<M-l>s", [[<Cmd>Neoconf show<Cr>]], opts_neoconf)
-  map('n', "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
-end
 -------------------------
 -- mason lspconfig
 -------------------------
@@ -109,11 +90,10 @@ require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed,
   handlers = {
     function (server_name)
-      vim.lsp.enable(server_name)
       vim.lsp.config(server_name, {capabilities = lsp_capabilities})
+      vim.lsp.enable(server_name)
     end,
     ['pyright'] = function()
-      vim.lsp.enable('pyright')
       vim.lsp.config('pyright', {
         filetypes = { "python" },
         cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright-langserver', '--stdio'},
@@ -145,9 +125,9 @@ require("mason-lspconfig").setup({
           },
         },
       })
+      vim.lsp.enable('pyright')
     end,
     ['lua_ls'] = function()
-      vim.lsp.enable('lua_ls')
       vim.lsp.config('lua_ls', {
         capabilities = lsp_capabilities,
         filetypes = { "lua" },
@@ -165,9 +145,9 @@ require("mason-lspconfig").setup({
           },
         },
       })
+      vim.lsp.enable('lua_ls')
     end,
     ['gopls'] = function()
-      vim.lsp.enable('gopls')
       vim.lsp.config('gopls', {
         filetypes = { "go" },
         capabilities = lsp_capabilities,
@@ -187,13 +167,14 @@ require("mason-lspconfig").setup({
           },
         },
       })
+      vim.lsp.enable('gopls')
     end,
     ['jdtls'] = function()
-      vim.lsp.enable('jdtls')
       vim.lsp.config('jdtls', {
         filetypes = { "java", "javac", "jar" },
         capabilities = lsp_capabilities,
       })
+      vim.lsp.enable('jdtls')
     end,
   }
 })
@@ -387,5 +368,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
       end,
     })
   end
+})
+---------------------------
+-- autopairs
+---------------------------
+local autopairs = require("nvim-autopairs")
+autopairs.setup({
+  disable_filetype = {},
 })
 return M

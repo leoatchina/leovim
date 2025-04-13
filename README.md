@@ -628,7 +628,7 @@ let g:maplocalleader = 'q'
 ### 6.8.3. coc.nvim 配置:
 
 - 诊断显示控制:
-  - 如果 `g:check_tool == 'ale'`，则配置 `coc.nvim` 使用 `ale` 来显示诊断信息。
+  - 如果 `g:linter_tool == 'ale'`，则配置 `coc.nvim` 使用 `ale` 来显示诊断信息。
   - 否则，定义 `s:Diagnostics()` 函数来调用 `CocDiagnostics` 显示诊断，并根据是否使用 `leaderf` 以及是否是 Neovim 来决定是否打开 quickfix 或 locationlist。
 - 显示诊断信息:
   - **快捷键:** `<M-l>d`，用于显示光标下诊断信息的详细内容。

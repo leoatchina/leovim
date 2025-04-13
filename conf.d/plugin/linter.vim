@@ -25,7 +25,7 @@ if Installed('coc.nvim')
     endfunction
     command! ToggleDiagnosticsHighLight call s:toggle_diagnostics_highlight()
     nnoremap <silent><leader>O :ToggleDiagnosticsHighLight<Cr>
-    if g:check_tool == 'ale'
+    if g:linter_tool == 'ale'
         call coc#config('diagnostic.displayByAle', v:true)
     else
         function! s:Diagnostics()

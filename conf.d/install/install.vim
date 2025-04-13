@@ -7,12 +7,7 @@ function! PlannedCoc() abort
     return Planned('coc.nvim')
 endfunction
 function! PlannedLsp() abort
-    return Planned(
-                \ 'nvim-lsp-selection-range',
-                \ 'mason-lspconfig.nvim',
-                \ 'symbol-usage.nvim',
-                \ 'call-graph.nvim',
-                \ )
+    return index(['cmp', 'blink', 'builtin'], g:complete_engine)  >= 0
 endfunction
 function! PlannedAdv() abort
     return PlannedCoc() || PlannedLsp()
@@ -28,14 +23,15 @@ function! InstalledLsp() abort
                 \ 'nvim-lsp-selection-range',
                 \ 'mason-lspconfig.nvim',
                 \ 'symbol-usage.nvim',
-                \ 'call-graph.nvim'
+                \ 'call-graph.nvim',
+                \ 'nvim-autopairs',
                 \ )
 endfunction
 function! InstalledCoc() abort
     return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
 function! InstalledBlink() abort
-    return Installed('blink.cmp', 'friendly-snippets')
+    return Installed('blink.cmp', 'friendly-snippets', 'nvim-autopairs')
 endfunction
 function! InstalledCmp() abort
     return Installed(
@@ -52,6 +48,7 @@ function! InstalledCmp() abort
                 \ 'lspkind-nvim',
                 \ 'colorful-menu.nvim',
                 \ 'friendly-snippets',
+                \ 'nvim-autopairs',
                 \ )
 endfunction
 function! InstalledAdv() abort
@@ -174,22 +171,22 @@ if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 " ------------------------------
-" check tool
+" linter tool
 " ------------------------------
 if PlannedLsp()
-    let g:check_tool = 'lsp'
+    let g:linter_tool = 'lsp'
 elseif PlannedCoc()
     if g:python_version > 3.06 && Require('ale')
-        let g:check_tool = 'ale'
+        let g:linter_tool = 'ale'
     else
-        let g:check_tool = 'coc'
+        let g:linter_tool = 'coc'
     endif
 elseif g:python_version > 3.06 && v:version >= 800
-    let g:check_tool = 'ale'
+    let g:linter_tool = 'ale'
 else
-    let g:check_tool = ''
+    let g:linter_tool = ''
 endif
-if g:check_tool == 'ale'
+if g:linter_tool == 'ale'
     PlugAdd 'dense-analysis/ale'
     PlugAdd 'maximbaz/lightline-ale'
 endif
@@ -227,7 +224,7 @@ endif
 if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !PlannedLsp())
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
-elseif has('nvim-0.9.5') && Require('debug') && Planned('nvim-lspconfig')
+elseif has('nvim-0.9.5') && Require('debug')
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'rcarriga/nvim-dap-ui'
@@ -283,16 +280,6 @@ endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
-" ------------------------------
-" pairs
-" ------------------------------
-if PlannedLsp()
-    PlugAdd 'windwp/nvim-autopairs'
-elseif v:version >= 800
-    PlugAdd 'tmsvg/pear-tree'
-elseif has('patch-7.4.849')
-    PlugAdd 'jiangmiao/auto-pairs'
-endif
 " -----------------------
 " format
 " -----------------------
@@ -322,9 +309,6 @@ if has('nvim')
         PlugAdd 'lukas-reineke/indent-blankline.nvim'
         if PlannedLsp()
             PlugAdd 'stevearc/dressing.nvim'
-        endif
-        if PlannedAdv() && Require('neoconf')
-            PlugAdd 'folke/neoconf.nvim'
         endif
         if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
             PlugAdd 'Bekaboo/dropbar.nvim'
@@ -358,9 +342,11 @@ if LINUX() && HAS_GUI() && executable('wmctrl')
     endif
 endif
 " ----------------------------
-" wilder
+" pairs && wilder
 " ----------------------------
-if !PlannedLsp()
+if PlannedLsp()
+    PlugAdd 'windwp/nvim-autopairs'
+else
     if g:python_version > 3 && has('nvim') && UNIX()
         function! UpdateRemotePlugins(...)
             let &rtp=&rtp
@@ -369,6 +355,11 @@ if !PlannedLsp()
         Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
     elseif !has('nvim') && v:version >= 801 || has('nvim') && !WINDOWS()
         PlugAdd 'gelguy/wilder.nvim'
+    endif
+    if v:version >= 800
+        PlugAdd 'tmsvg/pear-tree'
+    elseif has('patch-7.4.849')
+        PlugAdd 'jiangmiao/auto-pairs'
     endif
 endif
 " ------------------------------
