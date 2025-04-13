@@ -3,14 +3,14 @@ require("neoconf").setup({
   local_settings = ".vim/neoconf.json",
   import = {
     vscode = true,
-    coc = true,
+    coc = false,
     nlsp = false,
   }
 })
-vim.keymap.set('n', "<M-l>n", [[<Cmd>Neoconf local<Cr>]], {noremap = true, silent = true})
+vim.keymap.set('n', "<M-l>l", [[<Cmd>Neoconf local<Cr>]], {noremap = true, silent = true})
 vim.keymap.set('n', "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], {noremap = true, silent = true})
 vim.keymap.set('n', "<M-l>s", [[<Cmd>Neoconf show<Cr>]], {noremap = true, silent = true})
-vim.keymap.set('n', "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], {noremap = true, silent = true})
+vim.keymap.set('n', "<M-l>L", [[<Cmd>Neoconf lsp<Cr>]], {noremap = true, silent = true})
 
 -- 打开或创建 neoconf.json 文件的函数
 function _G.OpenNeoconfJson()
