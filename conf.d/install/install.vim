@@ -87,9 +87,9 @@ if Require('nocomplete') || Require('noc')
     let g:complete_engine = ''
 elseif Require('mcm')
     let g:complete_engine = 'mcm'
-elseif Require('apm')
-    if v:version >= 800
-        let g:complete_engine = 'apm'
+elseif Require('builtin')
+    if has('nvim-0.11')
+        let g:complete_engine = 'builtin'
     else
         let s:smart_engine_select = 1
     endif
@@ -99,8 +99,8 @@ elseif Require('coc')
     else
         let s:smart_engine_select = 1
     endif
-elseif Require('blink') && executable('cargo')
-    if has('nvim-0.11')
+elseif Require('blink')
+    if has('nvim-0.11') && executable('cargo')
         let g:complete_engine = 'blink'
     else
         let s:smart_engine_select = 1
@@ -149,7 +149,7 @@ elseif g:complete_engine == 'coc'
     endif
     PlugAddOpt 'coc-fzf'
 endif
-if g:complete_engine == 'cmp' || g:complete_engine == 'blink'
+if index(['cmp', 'blink', 'builtin'], g:complete_engine) >= 0
     " lsp related
     PlugAdd 'williamboman/mason-lspconfig.nvim'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'

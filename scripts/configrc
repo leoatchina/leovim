@@ -56,6 +56,7 @@ alias disks="df -lh | head -1; df -lh | sort | grep -vE '^/srv' |  grep -E '/hom
 # alias clash="https_proxy=http://127.0.0.1:9898 http_proxy=http://127.0.0.1:9898 all_proxy=socks5://127.0.0.1:9898 "
 
 alias v='bash ~/.local/bin/v.sh'
+alias n='bash ~/.local/bin/n.sh'
 alias vi='bash ~/.local/bin/vi.sh'
 alias nv='bash ~/.local/bin/nv.sh'
 alias ni='bash ~/.local/bin/ni.sh'

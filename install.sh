@@ -121,6 +121,7 @@ create_vimrc "$HOME/.config/nvim/init.vim"
 
 # vim run scripts
 cp -n $APP_PATH/scripts/v.sh  $HOME/.local/bin
+cp -n $APP_PATH/scripts/n.sh  $HOME/.local/bin
 cp -n $APP_PATH/scripts/vi.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
 cp -n $APP_PATH/scripts/ni.sh $HOME/.local/bin

@@ -15,7 +15,7 @@ endif
 " AI complete
 " ------------------------------
 let g:max_tokens = get(g:, 'max_tokens', 8192)
-if Planned('codeium.vim')
+if Installed('codeium.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
     imap <script><silent><nowait><expr> <M-i> codeium#Accept()
@@ -26,7 +26,7 @@ if Planned('codeium.vim')
     imap <M-;> <Plug>(codeium-next)
     imap <M-,> <Plug>(codeium-previous)
     let g:ai_complete_engine = 'codeium'
-elseif Planned('copilot.vim')
+elseif Installed('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
     let g:copilot_no_tab_map = v:true
     imap <silent><nowait><script><expr><M-i> copilot#Accept("\<CR>")
@@ -87,6 +87,8 @@ if InstalledCmp()
     lua require("cfg/cmp")
 elseif InstalledBlink()
     lua require("cfg/blink")
+elseif g:complete_engine == 'builtin'
+    lua require("cfg/builtin")
 elseif InstalledCoc()
     source $CFG_DIR/coc.vim
 elseif g:complete_engine != ''

@@ -32,7 +32,7 @@ let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
     call SetScheme('sonokai', 'sublime')
-elseif g:complete_engine == 'inner'
+elseif g:complete_engine == 'builtin'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'hybrid')

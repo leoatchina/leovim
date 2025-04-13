@@ -111,7 +111,8 @@
 - [x] git branch icons
 - [ ] nvim-lsp
     - [x] require nvim-0.11
-    - [ ] delete nvim-lspconfig 
+    - [x] delete nvim-lspconfig 
+    - [ ] optimize nvim-0.11 builtin completion
     - [ ] blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources
 - [ ] Ai related 
     - [ ] copilot plus 
