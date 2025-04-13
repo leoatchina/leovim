@@ -12,13 +12,14 @@ let g:nvim_treesitter_install = UNIX()
 " call AddRequire('r')
 " call AddRequire('web')
 " call AddRequire('wubi')
-" call AddRequire('java')
 " call AddRequire('debug')
 " call AddRequire('query')
-" call AddRequire('neoconf')
 " call AddRequire('bioinfo')
 " call AddRequire('markdown')
 " call AddRequire('c', 'rust', 'go')
+
+" call AddRequire('java')
+" call AddRequire('neoconf')
 
 " let g:open_vim="nvim.exe"
 " let g:open_editor="code.exe"

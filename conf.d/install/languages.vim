@@ -86,18 +86,25 @@ if get(g:, 'gobin_exe', '') != '' && Require('go') && (has('patch-8.1.2269') || 
     PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 endif
 " ------------------------------
-" nvim-java
+" nvim-java && neoconf
 " ------------------------------
-if Require('java') && PlannedLsp()
-    PlugAdd 'neovim/nvim-lspconfig'
-    PlugAdd 'nvim-java/lua-async-await'
-    PlugAdd 'nvim-java/nvim-java'
-    PlugAdd 'nvim-java/nvim-java-core'
-    PlugAdd 'nvim-java/nvim-java-test'
-    PlugAdd 'nvim-java/nvim-java-refactor'
-    PlugAdd 'JavaHello/spring-boot.nvim'
-    if Planned('nvim-dap')
-        PlugAdd 'nvim-java/nvim-java-dap'
+if PlannedLsp()
+    if Require('java')
+        PlugAdd 'nvim-java/lua-async-await'
+        PlugAdd 'nvim-java/nvim-java'
+        PlugAdd 'nvim-java/nvim-java-core'
+        PlugAdd 'nvim-java/nvim-java-test'
+        PlugAdd 'nvim-java/nvim-java-refactor'
+        PlugAdd 'JavaHello/spring-boot.nvim'
+        if Planned('nvim-dap')
+            PlugAdd 'nvim-java/nvim-java-dap'
+        endif
+    endif
+    if Require('neoconf')
+        PlugAdd 'folke/neoconf.nvim'
+    endif
+    if Require('java') || Require('neoconf')
+        PlugAdd 'neovim/nvim-lspconfig'
     endif
 endif
 " ------------------------------

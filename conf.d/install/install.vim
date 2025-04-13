@@ -1,13 +1,14 @@
+" ----------------------------
 " extend Planned function
 " ----------------------------
 function! PlannedFzf() abort
     return Planned('fzf', 'fzf.vim')
 endfunction
 function! PlannedCoc() abort
-    return Planned('coc.nvim')
+    return Require('coc') && g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
 endfunction
 function! PlannedLsp() abort
-    return index(['cmp', 'blink', 'builtin'], g:complete_engine)  >= 0
+    return (Require('cmp') || Require('builtin') || Require('blink')) && has('nvim-0.11')
 endfunction
 function! PlannedAdv() abort
     return PlannedCoc() || PlannedLsp()
@@ -23,8 +24,7 @@ function! InstalledLsp() abort
                 \ 'nvim-lsp-selection-range',
                 \ 'mason-lspconfig.nvim',
                 \ 'symbol-usage.nvim',
-                \ 'call-graph.nvim',
-                \ 'nvim-autopairs',
+                \ 'call-graph.nvim'
                 \ )
 endfunction
 function! InstalledCoc() abort
@@ -84,27 +84,23 @@ if Require('nocomplete') || Require('noc')
     let g:complete_engine = ''
 elseif Require('mcm')
     let g:complete_engine = 'mcm'
+elseif PlannedCoc()
+    let g:complete_engine = 'coc'
 elseif Require('builtin')
     if has('nvim-0.11')
         let g:complete_engine = 'builtin'
     else
         let s:smart_engine_select = 1
     endif
-elseif Require('coc')
-    if g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
-        let g:complete_engine = 'coc'
+elseif Require('cmp')
+    if has('nvim-0.11')
+        let g:complete_engine = 'cmp'
     else
         let s:smart_engine_select = 1
     endif
 elseif Require('blink')
     if has('nvim-0.11') && executable('cargo')
         let g:complete_engine = 'blink'
-    else
-        let s:smart_engine_select = 1
-    endif
-elseif Require('cmp')
-    if has('nvim-0.11')
-        let g:complete_engine = 'cmp'
     else
         let s:smart_engine_select = 1
     endif
@@ -146,17 +142,6 @@ elseif g:complete_engine == 'coc'
     endif
     PlugAddOpt 'coc-fzf'
 endif
-if index(['cmp', 'blink', 'builtin'], g:complete_engine) >= 0
-    " lsp related
-    PlugAdd 'williamboman/mason-lspconfig.nvim'
-    PlugAdd 'camilledejoye/nvim-lsp-selection-range'
-    PlugAdd 'Wansmer/symbol-usage.nvim'
-    PlugAdd 'ravenxrz/call-graph.nvim'
-    " lightline
-    PlugAdd 'josa42/nvim-lightline-lsp'
-    " lspimport is only for pyright
-    PlugAdd 'stevanmilic/nvim-lspimport'
-endif
 " ------------------------------
 " dict && snippets
 " ------------------------------
@@ -171,10 +156,19 @@ if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 " ------------------------------
-" linter tool
+" lsp && linter tool
 " ------------------------------
 if PlannedLsp()
     let g:linter_tool = 'lsp'
+    " lsp related
+    PlugAdd 'williamboman/mason-lspconfig.nvim'
+    PlugAdd 'camilledejoye/nvim-lsp-selection-range'
+    PlugAdd 'Wansmer/symbol-usage.nvim'
+    PlugAdd 'ravenxrz/call-graph.nvim'
+    " lightline
+    PlugAdd 'josa42/nvim-lightline-lsp'
+    " lspimport is only for pyright
+    PlugAdd 'stevanmilic/nvim-lspimport'
 elseif PlannedCoc()
     if g:python_version > 3.06 && Require('ale')
         let g:linter_tool = 'ale'
@@ -191,16 +185,19 @@ if g:linter_tool == 'ale'
     PlugAdd 'maximbaz/lightline-ale'
 endif
 " ------------------------------
-" debug tool
+" textobj
 " ------------------------------
-if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !PlannedLsp())
-    let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
-elseif has('nvim-0.9.5') && Require('debug')
-    PlugAdd 'nvim-neotest/nvim-nio'
-    PlugAdd 'mfussenegger/nvim-dap'
-    PlugAdd 'rcarriga/nvim-dap-ui'
-    PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX())
+    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
+    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
+    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
+    PlugAdd 'm-demare/hlargs.nvim'
+elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
+    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
+    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
+    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+    PlugAdd 'gcmt/wildfire.vim'
 endif
 " ------------------------------
 " AI completion engine
@@ -252,24 +249,41 @@ endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
+" ------------------------------
+" debug tool
+" ------------------------------
+if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !PlannedLsp())
+    let vimspector_install = " ./install_gadget.py --update-gadget-config"
+    PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
+elseif has('nvim-0.9.5') && Require('debug')
+    PlugAdd 'mfussenegger/nvim-dap'
+    PlugAdd 'nvim-neotest/nvim-nio'
+    PlugAdd 'rcarriga/nvim-dap-ui'
+    PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+endif
 " -----------------------
 " format
 " -----------------------
 PlugAdd 'sbdchd/neoformat'
-" ------------------------------
-" Git
-" ------------------------------
-if executable('git') && v:version >= 800 && g:git_version >= 1.85
-    PlugAdd 'tpope/vim-fugitive'
-    PlugAdd 'junegunn/gv.vim'
-    " NOTE: blamer.nvim installed when without virtual text
-    if g:has_popup_floating && UNIX() && (!Planned('leaderf') || Planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
-        PlugAdd 'APZelos/blamer.nvim'
+" ----------------------------
+" scheme
+" ----------------------------
+if !Planned('nvim-treesitter') && Require('c') && PlannedAdv()
+    PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
+endif
+if g:has_truecolor
+    PlugAdd 'sainnhe/edge'
+    PlugAdd 'sainnhe/sonokai'
+    PlugAdd 'bluz71/vim-nightfly-colors'
+    if has('nvim-0.8')
+        PlugAdd 'folke/tokyonight.nvim'
+        PlugAdd 'EdenEast/nightfox.nvim'
+        PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
     endif
 endif
-" ----------------------------
-" nvim plugins
-" ----------------------------
+" ------------------------------
+" backbone nvim plugins.
+" ------------------------------
 if has('nvim')
     PlugAdd 'dstein64/nvim-scrollview'
     PlugAdd 'wsdjeg/quickfix.nvim'
@@ -278,10 +292,6 @@ if has('nvim')
     PlugAdd 'nvim-tree/nvim-web-devicons'
     if has('nvim-0.8')
         PlugAdd 'stevearc/quicker.nvim'
-        PlugAdd 'lukas-reineke/indent-blankline.nvim'
-        if PlannedLsp()
-            PlugAdd 'stevearc/dressing.nvim'
-        endif
         if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
             PlugAdd 'Bekaboo/dropbar.nvim'
             if UNIX()
@@ -289,73 +299,12 @@ if has('nvim')
             endif
         endif
     endif
-elseif has('conceal')
-    PlugAdd 'Yggdroot/indentLine'
-    if v:version >= 800
-        PlugAdd 'ryanoasis/vim-devicons'
-    endif
-endif
-" ------------------------------
-" backbone nvim plugins.
-" ------------------------------
-if PlannedLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
-    PlugAdd 'MunifTanjim/nui.nvim'
-    PlugAdd 'nvim-lua/plenary.nvim'
-    if PlannedLsp() || Planned('nvim-dap')
+    if PlannedLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
+        PlugAdd 'MunifTanjim/nui.nvim'
+        PlugAdd 'nvim-lua/plenary.nvim'
+        PlugAdd 'stevearc/dressing.nvim'
         PlugAdd 'williamboman/mason.nvim'
     endif
-endif
-" ----------------------------
-" pairs && wilder
-" ----------------------------
-if PlannedLsp()
-    PlugAdd 'windwp/nvim-autopairs'
-else
-    if g:python_version > 3 && has('nvim') && UNIX()
-        function! UpdateRemotePlugins(...)
-            let &rtp=&rtp
-            UpdateRemotePlugins
-        endfunction
-        Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
-    elseif !has('nvim') && v:version >= 801 || has('nvim') && !WINDOWS()
-        PlugAdd 'gelguy/wilder.nvim'
-    endif
-    if v:version >= 800
-        PlugAdd 'tmsvg/pear-tree'
-    elseif has('patch-7.4.849')
-        PlugAdd 'jiangmiao/auto-pairs'
-    endif
-endif
-" ------------------------------
-" undo
-" ------------------------------
-if has('nvim') && UNIX()
-    PlugAdd 'kevinhwang91/nvim-fundo'
-endif
-PlugAddOpt 'undotree'
-" ------------------------------
-" zfvim
-" ------------------------------
-if (Require('wubi') || Require('pinyin')) && g:has_terminal && UNIX()
-    PlugAdd 'ZSaberLv0/ZFVimIM'
-    if Require('wubi')
-        PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'
-        let g:input_method = 'zfvim_wubi'
-    else
-        let g:input_method = 'zfvim_pinyin'
-    endif
-    PlugAdd 'ZSaberLv0/ZFVimIM_pinyin'
-endif
-" ------------------------------
-" translate && query
-" ------------------------------
-if Require('query') && v:version >= 800
-    if g:python_version >= 3.06
-        PlugAdd 'voldikss/vim-translator'
-    endif
-    if MACOS()
-        PlugAdd 'rizzatti/dash.vim'
-    else
-        PlugAdd 'KabbAmine/zeavim.vim'
-    endif
+elseif v:version >= 800
+    PlugAdd 'ryanoasis/vim-devicons'
 endif

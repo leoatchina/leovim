@@ -27,12 +27,6 @@ if Installed('neoconf.nvim') then
   map('n', "<M-l>l", [[<Cmd>Neoconf lsp<Cr>]], opts_neoconf)
 end
 -------------
--- lspconfig
--------------
-if Installed('nvim-lspconfig') then
-  require("lspconfig").setup({})
-end
--------------
 -- diagnostic
 -------------
 vim.diagnostic.config({
