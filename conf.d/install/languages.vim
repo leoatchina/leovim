@@ -101,7 +101,7 @@ if PlannedLsp()
     if Require('neoconf')
         PlugAdd 'folke/neoconf.nvim'
     endif
-    if PlannedLsp('nvim-java') || Require('neoconf')
+    if Planned('nvim-java') || Require('neoconf')
         PlugAdd 'neovim/nvim-lspconfig'
     endif
 endif
