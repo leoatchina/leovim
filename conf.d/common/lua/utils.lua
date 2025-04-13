@@ -66,4 +66,3 @@ vim.ui.select = function(items, opts, on_choice)
     vim.api.nvim_feedkeys("\n", "n", true)
   end
 end
-
