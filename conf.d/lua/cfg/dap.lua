@@ -9,11 +9,10 @@ dap.defaults.fallback.exception_breakpoints = { 'default' }
 dap.defaults.python.exception_breakpoints = { 'uncaught' }
 fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
 -------------------------------------
--- function get_mason_adapter
+-- mason
 -------------------------------------
 require("mason-nvim-dap").setup({
   ensure_installed = { "python" },
-  automatic_installation = true,
   handlers = {
     function(config)
       require('mason-nvim-dap').default_setup(config)

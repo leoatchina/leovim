@@ -105,66 +105,18 @@ end
 -------------------------
 -- mason lspconfig
 -------------------------
-local lspconfig = require("lspconfig")
-local default_setup = function(server)
-  lspconfig[server].setup({
-    capabilities = lsp_capabilities
-  })
-end
 require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed,
   handlers = {
-    default_setup,
-    lua_ls = function()
-      lspconfig.lua_ls.setup({
-        filetypes = { "lua" },
-        capabilities = lsp_capabilities,
-        hint = {
-          enable = true,
-        },
-        codeLens = {
-          enable = false,
-        },
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-          },
-        },
-      })
+    function (server_name)
+      vim.lsp.enable(server_name)
+      vim.lsp.config(server_name, {capabilities = lsp_capabilities})
     end,
-    gopls = function()
-      lspconfig.gopls.setup({
-        filetypes = { "go" },
-        capabilities = lsp_capabilities,
-        hint = {
-          enable = true,
-        },
-        codeLens = {
-          enable = true,
-        },
-        settings = {
-          gopls = {
-            analyses = {
-              unusedparams = true,
-            },
-            staticcheck = vim.g.gobin_exe_version ~= nil and vim.g.gobin_exe_version > 1.1913,
-            gofumpt = vim.g.gobin_exe_version ~= nil and vim.g.gobin_exe_version > 1.1913,
-          },
-        },
-      })
-    end,
-    jdtls = function()
-      lspconfig.jdtls.setup({
-        filetypes = { "java", "javac", "jar" },
-        capabilities = lsp_capabilities,
-      })
-    end,
-    pyright = function ()
-      lspconfig.pyright.setup({
+    ['pyright'] = function()
+      vim.lsp.enable('pyright')
+      vim.lsp.config('pyright', {
         filetypes = { "python" },
-        cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright-langserver', '--stdio'} ,
+        cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright-langserver', '--stdio'},
         capabilities = lsp_capabilities,
         settings = {
           pyright = {
@@ -192,6 +144,55 @@ require("mason-lspconfig").setup({
             },
           },
         },
+      })
+    end,
+    ['lua_ls'] = function()
+      vim.lsp.enable('lua_ls')
+      vim.lsp.config('lua_ls', {
+        capabilities = lsp_capabilities,
+        filetypes = { "lua" },
+        hint = {
+          enable = true,
+        },
+        codeLens = {
+          enable = false,
+        },
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+          },
+        },
+      })
+    end,
+    ['gopls'] = function()
+      vim.lsp.enable('gopls')
+      vim.lsp.config('gopls', {
+        filetypes = { "go" },
+        capabilities = lsp_capabilities,
+        hint = {
+          enable = true,
+        },
+        codeLens = {
+          enable = true,
+        },
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = vim.g.gobin_exe_version ~= nil and vim.g.gobin_exe_version > 1.1913,
+            gofumpt = vim.g.gobin_exe_version ~= nil and vim.g.gobin_exe_version > 1.1913,
+          },
+        },
+      })
+    end,
+    ['jdtls'] = function()
+      vim.lsp.enable('jdtls')
+      vim.lsp.config('jdtls', {
+        filetypes = { "java", "javac", "jar" },
+        capabilities = lsp_capabilities,
       })
     end,
   }

@@ -8,7 +8,6 @@ function! PlannedCoc() abort
 endfunction
 function! PlannedLsp() abort
     return Planned(
-                \ 'nvim-lspconfig',
                 \ 'nvim-lsp-selection-range',
                 \ 'mason-lspconfig.nvim',
                 \ 'symbol-usage.nvim',
@@ -26,7 +25,6 @@ function! PrefFzf()
 endfunction
 function! InstalledLsp() abort
     return Installed(
-                \ 'nvim-lspconfig',
                 \ 'nvim-lsp-selection-range',
                 \ 'mason-lspconfig.nvim',
                 \ 'symbol-usage.nvim',
@@ -153,7 +151,6 @@ elseif g:complete_engine == 'coc'
 endif
 if g:complete_engine == 'cmp' || g:complete_engine == 'blink'
     " lsp related
-    PlugAdd 'neovim/nvim-lspconfig'
     PlugAdd 'williamboman/mason-lspconfig.nvim'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'Wansmer/symbol-usage.nvim'
@@ -267,6 +264,10 @@ if has('nvim-0.10.1') && Planned('nvim-treesitter')
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
         endif
     endif
+    if Planned('avante.nvim') || Planned('codecompanion.nvim')
+        PlugAdd 'echasnovski/mini.pick'
+        PlugAdd '0xrusowsky/nvim-ctx-ingest'
+    endif
 endif
 " ------------------------------
 " fuzzy_finder
@@ -344,10 +345,6 @@ if PlannedLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('cod
     PlugAdd 'nvim-lua/plenary.nvim'
     if PlannedLsp() || Planned('nvim-dap')
         PlugAdd 'williamboman/mason.nvim'
-    endif
-    if Planned('avante.nvim') || Planned('codecompanion.nvim')
-        PlugAdd 'echasnovski/mini.pick'
-        PlugAdd '0xrusowsky/nvim-ctx-ingest'
     endif
 endif
 " ------------------------------
