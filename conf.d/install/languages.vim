@@ -101,9 +101,6 @@ if PlannedLsp()
     if Require('neoconf')
         PlugAdd 'folke/neoconf.nvim'
     endif
-    if Planned('nvim-java') || Require('neoconf')
-        PlugAdd 'neovim/nvim-lspconfig'
-    endif
 endif
 " ------------------------------
 " latex

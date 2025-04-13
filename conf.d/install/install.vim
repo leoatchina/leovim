@@ -21,10 +21,11 @@ function! PrefFzf()
 endfunction
 function! InstalledLsp() abort
     return Installed(
-                \ 'nvim-lsp-selection-range',
+                \ 'nvim-lspconfig',
                 \ 'mason-lspconfig.nvim',
+                \ 'call-graph.nvim',
                 \ 'symbol-usage.nvim',
-                \ 'call-graph.nvim'
+                \ 'nvim-lsp-selection-range',
                 \ )
 endfunction
 function! InstalledCoc() abort
@@ -165,6 +166,7 @@ if PlannedLsp()
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'ravenxrz/call-graph.nvim'
+    PlugAdd 'neovim/nvim-lspconfig'
     " lightline
     PlugAdd 'josa42/nvim-lightline-lsp'
     " lspimport is only for pyright
