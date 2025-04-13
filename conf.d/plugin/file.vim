@@ -229,7 +229,9 @@ nnoremap <M-h>z :call <SID>open_or_create_file("~/.zshrc")<Cr>
 " configrc
 nnoremap <M-h>c :call <SID>open_or_create_file("~/.configrc")<Cr>
 " ssh/config
-nnoremap <M-h>S :call <SID>open_or_create_file("~/.ssh/config")<Cr>
+nnoremap <M-h>C :call <SID>open_or_create_file("~/.ssh/config")<Cr>
+" xinitrc
+nnoremap <M-h>x :call <SID>open_or_create_file("~/.xinitrc")<Cr>
 " gitconfig
 nnoremap <M-h>G :call <SID>open_or_create_file("~/.gitconfig")<Cr>
 " ------------------
