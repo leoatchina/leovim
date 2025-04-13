@@ -63,8 +63,11 @@ if Installed('render-markdown.nvim')
     augroup END
 endif
 " -----------------------------
-" vista_default_executive
+" lsp && vista_default_executive
 " -----------------------------
+if Installed('neoconf.nvim')
+    lua require('cfg/neoconf')
+endif
 if InstalledLsp()
     let g:vista_default_executive = 'nvim_lsp'
     source $CFG_DIR/lsp.vim

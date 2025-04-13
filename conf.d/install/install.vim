@@ -171,6 +171,10 @@ if PlannedLsp()
     PlugAdd 'josa42/nvim-lightline-lsp'
     " lspimport is only for pyright
     PlugAdd 'stevanmilic/nvim-lspimport'
+    " neoconf
+    if Require('neoconf')
+        PlugAdd 'folke/neoconf.nvim'
+    endif
 elseif PlannedCoc()
     if g:python_version > 3.06 && Require('ale')
         let g:linter_tool = 'ale'
@@ -294,9 +298,6 @@ if has('nvim')
     PlugAdd 'nvim-tree/nvim-web-devicons'
     if has('nvim-0.8')
         PlugAdd 'stevearc/quicker.nvim'
-        if Require('neoconf')
-            PlugAdd 'folke/neoconf.nvim'
-        endif
         if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
             PlugAdd 'Bekaboo/dropbar.nvim'
             if UNIX()
