@@ -215,23 +215,29 @@ if has('patch-9.0.0185') || has('nvim')
         PlugAdd 'github/copilot.vim'
     endif
 endif
-if exists('$XAI_API_KEY') || exists('$DEEPSEEK_API_KEY')
-    let s:ai_api_key = 2
+if exists('$XAI_API_KEY') ||
+    \  exists('$DEEPSEEK_API_KEY') ||
+    \  exists('GEMINI_API_KEY') ||
+    \  exists('MISTRAL_API_KEY')
+    let g:ai_api_key = 3
 elseif exists('$OPENAI_API_KEY') ||
     \  exists('$GEMINI_API_KEY') ||
     \  exists('$ANTHROPIC_API_KEY') ||
-    \  Require('copliot_plus') ||
-    \  exists('g:openai_compatible_api_key') && exists('g:openai_compatible_url') && exists('g:openai_compatible_model')
-    let s:ai_api_key = 1
+    \  Require('copliot_plus')
+    let g:ai_api_key = 2
+elseif get(g:, 'openai_compatible_api_key', '') !='' &&
+    \  get(g:, 'openai_compatible_url', '') != '' &&
+    \  get(g:,'openai_compatible_model', '') != ''
+    let g:ai_api_key = 1
 else
-    let s:ai_api_key = 0
+    let g:ai_api_key = 0
 endif
-if has('nvim-0.9') && Require('aider') && executable('aider')
+if has('nvim-0.9') && Require('aider') && executable('aider') && g:ai_api_key
     PlugAdd 'milanglacier/yarepl.nvim'
 elseif has('nvim-0.10.1') && Planned('nvim-treesitter')
-    if executable('curl') && PlannedLsp() && (s:ai_api_key == 2 || Require('codecompanion') && s:ai_api_key)
+    if executable('curl') && PlannedLsp() && (g:ai_api_key == 3 || Require('codecompanion') && g:ai_api_key)
         PlugAdd 'olimorris/codecompanion.nvim'
-    elseif s:ai_api_key == 1
+    elseif g:ai_api_key == 1 || g:ai_api_key == 2
         if UNIX()
             PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
         else
