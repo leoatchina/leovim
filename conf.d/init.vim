@@ -848,7 +848,7 @@ function! s:open_link_in_editor(text, col)
     endif
 endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
-nnoremap <silent>go :OpenLink<cr>
+nnoremap <silent>gx :OpenLink<cr>
 " --------------------------------------------
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------

@@ -112,9 +112,9 @@
 - [ ] nvim-lsp
     - [x] require nvim-0.11
     - [x] nvim-java
-    - [ ] create .vim folder for neoconf
-    - [ ] optimize nvim-0.11 builtin completion
+    - [x] create .vim folder for neoconf
     - [ ] blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources
+    - [ ] optimize nvim-0.11 builtin completion
 - [ ] Ai related 
     - [ ] copilot plus 
     - [ ] minuet.ai
