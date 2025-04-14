@@ -23,7 +23,7 @@ local sources = {
   { name = 'vsnip', priority = 8 },
   { name = 'nvim_lsp', priority = 4 },
   { name = 'buffer', priority = 2 },
-  { name = 'async-path', priority = 1 },
+  { name = 'async_path', priority = 1 },
 }
 if Installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 64})
