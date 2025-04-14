@@ -109,16 +109,16 @@
 - [x] tab nr highlighting group
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
+- [ ] Ai related 
+    - [ ] yarepl.nvim + aider
+    - [ ] copilot plus 
+    - [ ] minuet.ai
 - [ ] nvim-lsp
     - [x] require nvim-0.11
     - [x] nvim-java
     - [x] create .vim folder for neoconf
     - [ ] blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources
     - [ ] optimize nvim-0.11 builtin completion
-- [ ] Ai related 
-    - [ ] copilot plus 
-    - [ ] minuet.ai
-    - [ ] yarepl.nvim + aider
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
 - [ ] find conflicts using Git/Project/Current path.

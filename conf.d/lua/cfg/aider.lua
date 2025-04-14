@@ -1,5 +1,5 @@
 require('yarepl').setup {
-  metas = { aider = require('yarepl.extensions.aider').create_aider_meta() }
+  metas = { aider = require('yarepl.extensions.aider').create_aider_meta(), wincmd = 'vertical 30 split' }
 }
 local map = vim.api.nvim_set_keymap
 -- general map from yarepl
@@ -12,7 +12,7 @@ map('n', '<M-i>f', '<Plug>(REPLFocus-aider)', {
 map('n', '<M-i>h', '<Plug>(REPLHide-aider)', {
   desc = 'Hide aider REPL',
 })
-map('v', '<M-i>r', '<Plug>(REPLSendVisual-aider)', {
+map('v', '<M-i><M-i>', '<Plug>(REPLSendVisual-aider)', {
   desc = 'Send visual region to aider',
 })
 map('n', '<M-i>r', '<Plug>(REPLSendOperator-aider)', {
