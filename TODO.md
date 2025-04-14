@@ -110,8 +110,8 @@
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
 - [ ] Ai related 
-    - [x] ~~yarepl.nvim + aider~~
-    - [ ] vim-floaterm-aider 
+    - [x] yarepl.nvim + aider
+    - [ ] XXX:vim-floaterm-aider 
     - [ ] copilot plus 
     - [ ] minuet.ai
 - [ ] nvim-lsp
