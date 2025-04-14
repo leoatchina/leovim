@@ -25,6 +25,9 @@ let g:nvim_treesitter_install = UNIX()
 " call AddRequire('java')
 " call AddRequire('neoconf')
 
+" call AddRequire('aider')
+" call AddRequire('codecompanion')
+
 " let g:open_vim="nvim.exe"
 " let g:open_editor="code.exe"
 

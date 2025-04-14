@@ -38,12 +38,14 @@ elseif Installed('copilot.vim')
     imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 endif
-if Installed('codecompanion.nvim')
-    lua require("cfg/ai")
+if Installed("yarepl.nvim")
+    lua require("cfg/aider")
+elseif Installed('codecompanion.nvim')
+    lua require("cfg/api")
     lua require("cfg/codecompanion")
 elseif Installed('avante.nvim')
     command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
-    lua require("cfg/ai")
+    lua require("cfg/api")
     lua require("cfg/avante")
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>

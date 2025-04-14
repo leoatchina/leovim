@@ -226,7 +226,9 @@ elseif exists('$OPENAI_API_KEY') ||
 else
     let s:ai_api_key = 0
 endif
-if has('nvim-0.10.1') && Planned('nvim-treesitter')
+if has('nvim-0.9') && Require('aider') && executable('aider')
+    PlugAdd 'milanglacier/yarepl.nvim'
+elseif has('nvim-0.10.1') && Planned('nvim-treesitter')
     if executable('curl') && PlannedLsp() && (s:ai_api_key == 2 || Require('codecompanion') && s:ai_api_key)
         PlugAdd 'olimorris/codecompanion.nvim'
     elseif s:ai_api_key == 1

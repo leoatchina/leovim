@@ -83,7 +83,7 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap <M-l> :WhichKey "\<M-l\>"<Cr>
     nnoremap <M-y> :WhichKey "\<M-y\>"<Cr>
     inoremap <M-y> <C-o>:WhichKey "\<M-y\>"<Cr>
-    if Installed("codecompanion.nvim") || Installed('avante.nvim')
+    if Installed("codecompanion.nvim") || Installed('avante.nvim') || Installed('yarepl.nvim')
         nnoremap <M-i> :WhichKey "\<M-i\>"<Cr>
     endif
     if Planned("vim-table-mode")

@@ -79,6 +79,7 @@ function FzfCallCommands(prompt, ...)
     endif
     if a:0 > 1
         let last = a:000[-1]
+        " if last parameter is list, it is the ignore list
         if type(last) == type([])
             let search_prefix = a:000[:-2]
             let ignore_cmds = [prompt] + last
