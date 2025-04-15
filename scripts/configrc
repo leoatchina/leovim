@@ -48,7 +48,6 @@ alias CO="cd ~/.leovim.d"
 
 alias GR='cd $(git rev-parse --show-toplevel)'
 alias GIT="\\ls -A --group-directories-first -1 | while IFS= read -r line; do git log --color --format=\"\$(\\ls -d -F --color \"\$line\") =} %C(bold black)▏%Creset%Cred%h %Cgreen(%cr)%Creset =} %C(bold black)▏%Creset%s %C(bold blue)<%an>%Creset\" --abbrev-commit --max-count 1 HEAD -- \"\$line\"; done | awk -F'=}' '{ nf[NR]=NF; for (i = 1; i <= NF; i++) { cell[NR,i] = \$i; gsub(/\\033\\[([[:digit:]]+(;[[:digit:]]+)*)?[mK]/, \"\", \$i); len[NR,i] = l = length(\$i); if (l > max[i]) max[i] = l; } } END { for (row = 1; row <= NR; row++) { for (col = 1; col < nf[row]; col++) printf \"%s%*s%s\", cell[row,col], max[col]-len[row,col], \"\", OFS; print cell[row,nf[row]]; } }'"
-alias ATT='tmux attach -t 0'
 alias RG='rg --no-heading '
 
 alias tmp='cd /tmp'
@@ -109,8 +108,8 @@ function sf() {
         --bind 'ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down' \
         --bind 'shift-up:preview-top,shift-down:preview-bottom' \
         --bind 'alt-up:half-page-up,alt-down:half-page-down' \
-        --bind 'ctrl-]:execute(tmux split-window -h "/root/.local/nvim-linux64/bin/nvim +{2} {1}")' \
-        --bind 'ctrl-x:execute(tmux split-window -v "/root/.local/nvim-linux64/bin/nvim +{2} {1}")' \
+        --bind 'ctrl-]:execute(tmux split-window -h "vim +{2} {1}")' \
+        --bind 'ctrl-x:execute(tmux split-window -v "vim +{2} {1}")' \
         | awk -F : '{print $1,"+"$2}')
     if [ -n "$FILE" ]; then
         vim $FILE
@@ -177,4 +176,3 @@ function tmonitor() {
         tmux send-keys "watch gpustat -f" C-m
     fi
 }
-
