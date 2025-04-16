@@ -111,14 +111,14 @@
 - [x] git branch icons
 - [ ] Ai related 
     - [x] ~~yarepl.nvim + aider~~
-    - [ ] vim-floaterm-repl-aider 
     - [ ] copilot plus 
     - [ ] minuet.ai
+    - [ ] vim-floaterm-repl-aider 
 - [ ] nvim-lsp
     - [x] require nvim-0.11
     - [x] nvim-java
     - [x] create .vim folder for neoconf
-    - [ ] blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources
+    - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
     - [ ] optimize nvim-0.11 builtin completion
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands

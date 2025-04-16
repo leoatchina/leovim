@@ -264,16 +264,6 @@ cmp.setup.cmdline(':', {
   })
 })
 ----------------------------------
--- gitcommit
-----------------------------------
-cmp.setup.filetype('gitcommit', {
-  sources = cmp.config.sources({
-    { name = 'git' },
-  }, {
-    { name = 'buffer' },
-  })
-})
-----------------------------------
 -- autopairs
 ----------------------------------
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
