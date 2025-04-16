@@ -126,7 +126,7 @@ fi
 
 # tmonitor command to creater monitor panels
 function tmonitor() {
-        # 1. Check if we're already in a tmux session
+    # 1. Check if we're already in a tmux session
     if [ -z "$TMUX" ]; then
         # 1.1 & 1.2: Not in tmux, check if sessions exist
         if tmux has-session 2>/dev/null; then
@@ -137,42 +137,35 @@ function tmonitor() {
             tmux new-session
         fi
     fi
-      # 2. Now we're in tmux, check if monitor window exists
+    # 2. Now we're in tmux, check if monitor window exists
     if tmux list-windows | grep -q "monitor"; then
         # 2.1: Monitor window exists, switch to it
         tmux select-window -t monitor
     else
         # Create a new window named 'monitor'
         tmux new-window -t 0 -n monitor
-
         # Split vertically (creating left and right panes)
         tmux split-window -h
-
         # Split the left pane horizontally
         tmux select-pane -t 0
         tmux split-window -v
-
         # Split the right pane horizontally
         tmux select-pane -t 1
         tmux split-window -v
-
         # Adjust the vertical split to 2:1 ratio
         tmux select-pane -t 1
         tmux resize-pane -y 66%
         tmux select-pane -t 3
         tmux resize-pane -y 66%
-
         # Run commands in each pane
         tmux select-pane -t 1
         tmux send-keys "btop" C-m
-
-        tmux select-pane -t 3
-        tmux send-keys "nvitop" C-m
-
         tmux select-pane -t 2
         tmux send-keys "htop" C-m
-
+        tmux select-pane -t 3
+        tmux send-keys "nvitop" C-m
         tmux select-pane -t 4
         tmux send-keys "watch gpustat -f" C-m
     fi
 }
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
