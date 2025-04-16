@@ -44,7 +44,6 @@ function! InstalledCmp() abort
                 \ 'cmp-cmdline',
                 \ 'cmp-vsnip',
                 \ 'cmp-nvim-lsp-signature-help',
-                \ 'cmp-git',
                 \ 'cmp-dictionary',
                 \ 'cmp-async-path',
                 \ 'lspkind-nvim',
@@ -129,7 +128,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-cmdline'
     PlugAdd 'hrsh7th/cmp-vsnip'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
-    PlugAdd 'petertriho/cmp-git'
     PlugAdd 'uga-rosa/cmp-dictionary'
     PlugAdd 'FelipeLema/cmp-async-path'
     PlugAdd 'onsails/lspkind-nvim'
