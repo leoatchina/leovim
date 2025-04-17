@@ -45,6 +45,7 @@ alias SYNC="rsync -ravpzHogt --progress --size-only --delete "
 
 alias CL="cd ~/.leovim"
 alias CO="cd ~/.leovim.d"
+alias CD="cd ~/docker"
 
 alias GR='cd $(git rev-parse --show-toplevel)'
 alias GIT="\\ls -A --group-directories-first -1 | while IFS= read -r line; do git log --color --format=\"\$(\\ls -d -F --color \"\$line\") =} %C(bold black)▏%Creset%Cred%h %Cgreen(%cr)%Creset =} %C(bold black)▏%Creset%s %C(bold blue)<%an>%Creset\" --abbrev-commit --max-count 1 HEAD -- \"\$line\"; done | awk -F'=}' '{ nf[NR]=NF; for (i = 1; i <= NF; i++) { cell[NR,i] = \$i; gsub(/\\033\\[([[:digit:]]+(;[[:digit:]]+)*)?[mK]/, \"\", \$i); len[NR,i] = l = length(\$i); if (l > max[i]) max[i] = l; } } END { for (row = 1; row <= NR; row++) { for (col = 1; col < nf[row]; col++) printf \"%s%*s%s\", cell[row,col], max[col]-len[row,col], \"\", OFS; print cell[row,nf[row]]; } }'"
@@ -52,7 +53,7 @@ alias RG='rg --no-heading '
 
 alias tmp='cd /tmp'
 alias disks="df -lh | head -1; df -lh | sort | grep -vE '^/srv' |  grep -E '/home|/srv|/export|/data|/mnt|/work|/$'"
-# alias clash="https_proxy=http://127.0.0.1:9898 http_proxy=http://127.0.0.1:9898 all_proxy=socks5://127.0.0.1:9898 "
+alias clash="https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897 "
 
 alias v='bash ~/.local/bin/v.sh'
 alias n='bash ~/.local/bin/n.sh'
@@ -124,8 +125,8 @@ elif [ -f /usr/local/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
     ln -sf /usr/local/bin/batcat $HOME/.local/bin/bat
 fi
 
-# tmonitor command to creater monitor panels
-function tmonitor() {
+# tmon command to creater monitor panels
+function tmon() {
     # 1. Check if we're already in a tmux session
     if [ -z "$TMUX" ]; then
         # 1.1 & 1.2: Not in tmux, check if sessions exist
@@ -168,4 +169,5 @@ function tmonitor() {
         tmux send-keys "watch gpustat -f" C-m
     fi
 }
+
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
