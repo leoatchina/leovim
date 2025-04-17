@@ -1,4 +1,3 @@
----@diagnostic disable: unbalanced-assignments
 local fn = vim.fn
 
 if fn.has("nvim-0.10") == 1 then
@@ -28,18 +27,48 @@ function _G.exists(name)
    return fn.exists(name) > 0
 end
 
+function _G.has(name)
+   return fn.has(name) > 0
+end
+
 function _G.Installed(name)
   if fn['Installed'](name) > 0 then
     return true
+  else
+    return false
   end
-  return false
 end
 
 function _G.InstalledLsp()
   if fn['InstalledLsp']() > 0 then
     return true
+  else
+    return false
   end
-  return false
+end
+
+function _G.InstalledCmp()
+  if fn['InstalledCmp']() > 0 then
+    return true
+  else
+    return false
+  end
+end
+
+function _G.InstalledBlink()
+  if fn['InstalledBlink']() > 0 then
+    return true
+  else
+    return false
+  end
+end
+
+function _G.InstalledCoc()
+  if fn['InstalledCoc']() > 0 then
+    return true
+  else
+    return false
+  end
 end
 
 function _G.WINDOWS()
