@@ -1,6 +1,18 @@
 ---@diagnostic disable: unbalanced-assignments
 local fn = vim.fn
 
+if fn.has("nvim-0.10") == 1 then
+  vim.keymap.del({ "n" }, "gcc")
+  vim.keymap.del({ "n", "x", "o" }, "gc")
+end
+
+if fn.has("nvim-0.11") == 1 then
+  vim.keymap.del({ "n" }, "grr")
+  vim.keymap.del({ "n" }, "grn")
+  vim.keymap.del({ "n" }, "gri")
+  vim.keymap.del({ "n", "x"}, "gra")
+end
+
 function _G.inspect(item)
   vim.print(item)
 end
@@ -18,6 +30,13 @@ end
 
 function _G.Installed(name)
   if fn['Installed'](name) > 0 then
+    return true
+  end
+  return false
+end
+
+function _G.InstalledLsp()
+  if fn['InstalledLsp']() > 0 then
     return true
   end
   return false
