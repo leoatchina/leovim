@@ -109,6 +109,7 @@
 - [x] tab nr highlighting group
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
+- [ ] floaterm run is current tab related only, could not be used in other tabs
 - [ ] Ai related 
     - [x] ~~yarepl.nvim + aider~~
     - [ ] copilot plus 
