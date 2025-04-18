@@ -109,12 +109,14 @@
 - [x] tab nr highlighting group
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
-- [ ] floaterm run is current tab related only, could not be used in other tabs
+- [ ] name vim-floaterm-repl to vim-floaterm-run
+    - [ ] floaterm run is current tab related only, could not be used in other tabs, 
+    - [ ] using different tags for run, repl
+    - [ ] aider intergrated 
 - [ ] Ai related 
     - [x] ~~yarepl.nvim + aider~~
     - [ ] copilot plus 
     - [ ] minuet.ai
-    - [ ] vim-floaterm-repl-aider 
 - [ ] nvim-lsp
     - [x] require nvim-0.11
     - [x] nvim-java
