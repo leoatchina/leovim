@@ -99,8 +99,8 @@ elseif Require('cmp')
     else
         let s:smart_engine_select = 1
     endif
-elseif Require('blink')
-    if has('nvim-0.11') && executable('cargo')
+elseif Require('blink') || Require('blink.lua')
+    if has('nvim-0.11')
         let g:complete_engine = 'blink'
     else
         let s:smart_engine_select = 1
@@ -133,7 +133,11 @@ if g:complete_engine == 'cmp'
     PlugAdd 'onsails/lspkind-nvim'
     PlugAdd 'xzbdmw/colorful-menu.nvim'
 elseif g:complete_engine == 'blink'
-    PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release'}
+    if executable('cargo') && !Require('blink.lua')
+        PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release'}
+    else
+        PlugAdd 'Saghen/blink.cmp'
+    endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
