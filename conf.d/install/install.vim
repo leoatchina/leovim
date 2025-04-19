@@ -217,14 +217,14 @@ if exists('$XAI_API_KEY') ||
     \  exists('$HUGGINGFACE_API_KEY') ||
     \  exists('$MISTRAL_API_KEY')
     let g:ai_api_key = 3
-elseif Require('copliot_plus') ||
+elseif Require('copilot_plus') ||
     \  exists('$OPENAI_API_KEY') ||
     \  exists('$ANTHROPIC_API_KEY') ||
-    \  exists('$GEMINI_API_KEY') ||
+    \  exists('$GEMINI_API_KEY')
     let g:ai_api_key = 2
 elseif get(g:, 'openai_compatible_api_key', '') !='' &&
-    \  get(g:, 'openai_compatible_url', '') != '' &&
-    \  get(g:, 'openai_compatible_model', '') != ''
+    \  get(g:, 'openai_compatible_model', '') != '' &&
+    \  get(g:, 'openai_compatible_url', '') != ''
     let g:ai_api_key = 1
 else
     let g:ai_api_key = 0
@@ -257,7 +257,7 @@ if has('nvim-0.10') && (
 elseif has('patch-9.0.0185') || has('nvim')
     if Require('codeium')
         PlugAdd 'Exafunction/codeium.vim'
-    elseif Require('copilot') && !Require('copliot_enhance') && g:node_version > 18
+    elseif Require('copilot') && !Require('copilot_enhance') && g:node_version > 18
         PlugAdd 'github/copilot.vim'
     endif
 endif
