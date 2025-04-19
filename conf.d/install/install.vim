@@ -212,26 +212,19 @@ endif
 " ------------------------------
 " AI completion engine
 " ------------------------------
-if has('patch-9.0.0185') || has('nvim')
-    if Require('codeium')
-        PlugAdd 'Exafunction/codeium.vim'
-    elseif Require('copilot') && !Require('copliot_enhance') && g:node_version > 18
-        PlugAdd 'github/copilot.vim'
-    endif
-endif
 if exists('$XAI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
-    \  exists('GEMINI_API_KEY') ||
-    \  exists('MISTRAL_API_KEY')
+    \  exists('$HUGGINGFACE_API_KEY') ||
+    \  exists('$MISTRAL_API_KEY')
     let g:ai_api_key = 3
-elseif exists('$OPENAI_API_KEY') ||
-    \  exists('$GEMINI_API_KEY') ||
+elseif Require('copliot_plus') ||
+    \  exists('$OPENAI_API_KEY') ||
     \  exists('$ANTHROPIC_API_KEY') ||
-    \  Require('copliot_plus')
+    \  exists('$GEMINI_API_KEY') ||
     let g:ai_api_key = 2
 elseif get(g:, 'openai_compatible_api_key', '') !='' &&
     \  get(g:, 'openai_compatible_url', '') != '' &&
-    \  get(g:,'openai_compatible_model', '') != ''
+    \  get(g:, 'openai_compatible_model', '') != ''
     let g:ai_api_key = 1
 else
     let g:ai_api_key = 0
@@ -251,6 +244,21 @@ elseif has('nvim-0.10.1') && Planned('nvim-treesitter')
     if Planned('avante.nvim') || Planned('codecompanion.nvim')
         PlugAdd 'echasnovski/mini.pick'
         PlugAdd '0xrusowsky/nvim-ctx-ingest'
+    endif
+endif
+if has('nvim-0.10') && (
+    \  exists('$OPENAI_API_KEY') ||
+    \  exists('$GEMINI_API_KEY') ||
+    \  exists('$ANTHROPIC_API_KEY') ||
+    \  exists('$CODESTRAL_API_KEY') ||
+    \  g:ai_api_key == 1
+    \  )
+    PlugAdd 'milanglacier/minuet-ai.nvim'
+elseif has('patch-9.0.0185') || has('nvim')
+    if Require('codeium')
+        PlugAdd 'Exafunction/codeium.vim'
+    elseif Require('copilot') && !Require('copliot_enhance') && g:node_version > 18
+        PlugAdd 'github/copilot.vim'
     endif
 endif
 " ------------------------------
@@ -317,10 +325,13 @@ if has('nvim')
             endif
         endif
     endif
-    if PlannedLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim')
+    if PlannedLsp() || Planned('nvim-dap')
+                \ || Planned('avante.nvim') || Planned('codecompanion.nvim') || Planned('minuet-ai.nvim')
         PlugAdd 'MunifTanjim/nui.nvim'
         PlugAdd 'nvim-lua/plenary.nvim'
         PlugAdd 'stevearc/dressing.nvim'
+    endif
+    if PlannedLsp() || Planned('nvim-dap')
         PlugAdd 'williamboman/mason.nvim'
     endif
 elseif v:version >= 800
