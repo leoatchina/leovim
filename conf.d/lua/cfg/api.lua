@@ -3,8 +3,8 @@ vim.g.ai_provider = ''
 vim.g.openai_url = ''
 -- base models
 vim.g.xai_model = vim.g.xai_model or "grok-beta"
-vim.g.openai_model = vim.g.openai_model or "o1-mini"
-vim.g.claude_model = vim.g.claude_model or "claude-3.5-haiku"
+vim.g.openai_model = vim.g.openai_model or "gpt4o"
+vim.g.claude_model = vim.g.claude_model or "claude-3.5-sonnet"
 vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-pro"
 vim.g.deepseek_model = vim.g.deepseek_model or "deepseek-chat"
 if vim.env.OPENAI_API_KEY then
@@ -29,4 +29,3 @@ end
 -- set ai_complete_engine
 vim.g.ai_complete_engine = vim.g.ai_complete_engine and ai_model .. '&&' .. vim.g.ai_complete_engine
   or ai_model
-

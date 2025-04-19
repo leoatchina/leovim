@@ -39,7 +39,7 @@ elseif Installed('copilot.vim')
     let g:ai_complete_engine = 'copliot'
 endif
 if Installed("yarepl.nvim")
-    lua require("cfg/aider")
+    lua require("cfg/yarepl")
 elseif Installed('codecompanion.nvim')
     lua require("cfg/api")
     lua require("cfg/codecompanion")
@@ -88,12 +88,15 @@ endif
 " ------------------------------
 " normal complete_engine
 " ------------------------------
-if InstalledCmp()
-    lua require("cfg/cmp")
-elseif InstalledBlink()
-    lua require("cfg/blink")
-elseif g:complete_engine == 'builtin'
-    lua require("cfg/builtin")
+if InstalledLsp()
+    if InstalledCmp() && InstalledLsp()
+        lua require("cfg/cmp")
+    elseif InstalledBlink() && InstalledLsp()
+        lua require("cfg/blink")
+    else
+        let g:complete_engine = 'builtin'
+        lua require("cfg/builtin")
+    endif
 elseif InstalledCoc()
     source $CFG_DIR/coc.vim
 elseif g:complete_engine != ''

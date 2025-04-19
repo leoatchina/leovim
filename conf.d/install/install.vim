@@ -213,9 +213,9 @@ endif
 " AI completion engine
 " ------------------------------
 if exists('$XAI_API_KEY') ||
+    \  exists('$MISTRAL_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
-    \  exists('$HUGGINGFACE_API_KEY') ||
-    \  exists('$MISTRAL_API_KEY')
+    \  exists('$HUGGINGFACE_API_KEY')
     let g:ai_api_key = 3
 elseif Require('copilot_plus') ||
     \  exists('$OPENAI_API_KEY') ||
