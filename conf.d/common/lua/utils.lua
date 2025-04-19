@@ -31,6 +31,14 @@ function _G.has(name)
    return fn.has(name) > 0
 end
 
+function _G.Require(name)
+  if fn['Require'](name) > 0 then
+    return true
+  else
+    return false
+  end
+end
+
 function _G.Installed(name)
   if fn['Installed'](name) > 0 then
     return true
