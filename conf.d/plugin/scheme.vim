@@ -35,14 +35,14 @@ if g:complete_engine == 'mcm'
 elseif g:complete_engine == 'builtin'
     call SetScheme('sonokai', 'sublime')
 elseif g:complete_engine == 'cmp'
-    call SetScheme('tokyonight', 'hybrid')
+    call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
     call SetScheme('catppuccin', 'codedark')
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('nightfox', 'space-vim-dark')
+        call SetScheme('nightfox', 'hybrid')
     else
-        call SetScheme('nightfly', 'space-vim-dark')
+        call SetScheme('nightfly', 'hybrid')
     endif
 else
     colorscheme slate
