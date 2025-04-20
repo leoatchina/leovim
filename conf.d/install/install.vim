@@ -175,7 +175,7 @@ if PlannedLsp()
     " lightline
     PlugAdd 'josa42/nvim-lightline-lsp'
     " lspimport is only for pyright
-    PlugAdd 'stevanmilic/nvim-lspimport'
+    PlugAdd 'leoatchina/nvim-lspimport'
     " neoconf
     if Require('neoconf')
         PlugAdd 'folke/neoconf.nvim'

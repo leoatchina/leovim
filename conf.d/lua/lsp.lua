@@ -270,14 +270,14 @@ require('call_graph').setup({
   hl_delay_ms = 200,
   ref_call_max_depth = 3
 })
+local nx = { 'n', 'x' }
+local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
+local opts_silent = { noremap = true, silent = true, nowait = true, buffer = bufnr }
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
-    local nx = { 'n', 'x' }
     local bufnr = args.bufnr
     local client = vim.lsp.get_client_by_id(args.data.client_id)
-    local opts_silent = { noremap = true, silent = true, nowait = true, buffer = bufnr }
-    local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
     if lsp_capabilities and lsp_capabilities.completionProvider then
       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
     end
@@ -360,14 +360,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
       map(nx, "<leader>a", vim.lsp.codelens.run, opts_echo)
     end
     map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
-    -- lspimport for python and pyright
-    vim.api.nvim_create_autocmd('FileType', {
-      pattern = 'python',
-      callback = function()
-        map(nx, "<leader>A", require("lspimport").import, opts_silent)
-      end,
-    })
   end
+})
+-- lspimport for python and pyright
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {'python'},
+  callback = function()
+    map(nx, "<leader>A", require("lspimport").import, opts_silent)
+  end,
 })
 ---------------------------
 -- autopairs
