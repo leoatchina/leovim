@@ -15,7 +15,10 @@ endif
 " AI complete
 " ------------------------------
 let g:max_tokens = get(g:, 'max_tokens', 8192)
-if Installed('codeium.vim')
+if Installed('minuet-ai.nvim')
+    lua require('minuet')
+    let g:ai_complete_engine = 'minuet'
+elseif Installed('codeium.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
     imap <script><silent><nowait><expr> <M-i> codeium#Accept()
@@ -39,6 +42,7 @@ elseif Installed('copilot.vim')
     let g:ai_complete_engine = 'copliot'
 endif
 if Installed("yarepl.nvim")
+    lua require("cfg/api")
     lua require("cfg/yarepl")
 elseif Installed('codecompanion.nvim')
     lua require("cfg/api")

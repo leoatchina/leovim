@@ -1,25 +1,39 @@
 -- provider
 vim.g.ai_provider = ''
 vim.g.openai_url = ''
--- base models
+-- codecompanion only models
 vim.g.xai_model = vim.g.xai_model or "grok-beta"
-vim.g.openai_model = vim.g.openai_model or "gpt4o"
-vim.g.claude_model = vim.g.claude_model or "claude-3.5-sonnet"
-vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-pro"
 vim.g.deepseek_model = vim.g.deepseek_model or "deepseek-chat"
-if vim.env.OPENAI_API_KEY then
-  vim.g.ai_provider = 'openai'
-  vim.g.openai_url = "https://api.openai.com/v1"
-  ai_model = vim.g.openai_model
-elseif vim.env.ANTHROPIC_API_KEY then
-  vim.g.ai_provider = Installed('avante.nvim') and 'claude' or 'anthropic'
-  ai_model = vim.g.claude_model
-elseif vim.env.GEMINI_API_KEY then
-  vim.g.ai_provider = 'gemini'
-  ai_model = vim.g.gemini_model
+vim.g.mistral_model = vim.g.mistral_model or "mistral-large-latest"
+vim.g.huggingface_model = vim.g.huggingface_model or "Qwen/Qwen2.5-72B-Instruct"
+-- codecompanion && avante models
+vim.g.openai_model = vim.g.openai_model or "gpt4o"
+vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-pro"
+vim.g.claude_model = vim.g.claude_model or "claude-3.5-sonnet"
+-- codecompanion only
+if vim.env.XAI_API_KEY then
+  vim.g.ai_provider = 'xai'
+  ai_model = vim.g.xai_model
 elseif vim.env.DEEPSEEK_API_KEY then
   vim.g.ai_provider = 'deepseek'
   ai_model = vim.g.deepseek_model
+elseif vim.env.MISTRAL_API_KEY then
+  vim.g.ai_provider = 'mistral'
+  ai_model = vim.g.claude_model
+elseif vim.env.HUGGINGFACE_API_KEY then
+  vim.g.ai_provider = 'huggingface'
+  ai_model = vim.g.claude_model
+-- avante && codecompanion
+elseif vim.env.OPENAI_API_KEY then
+  vim.g.ai_provider = 'openai'
+  vim.g.openai_url = "https://api.openai.com/v1"
+  ai_model = vim.g.openai_model
+elseif vim.env.GEMINI_API_KEY then
+  vim.g.ai_provider = 'gemini'
+  ai_model = vim.g.gemini_model
+elseif vim.env.ANTHROPIC_API_KEY then
+  vim.g.ai_provider = Installed('avante.nvim') and 'claude' or 'anthropic'
+  ai_model = vim.g.claude_model
 else
   vim.g.ai_provider = Installed('avante.nvim') and 'openai' or 'openai_compatible'
   vim.env.OPENAI_API_KEY = vim.g.openai_model_api_key
