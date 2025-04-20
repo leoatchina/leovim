@@ -93,9 +93,9 @@ endif
 " normal complete_engine
 " ------------------------------
 if InstalledLsp()
-    if InstalledCmp() && InstalledLsp()
+    if InstalledCmp()
         lua require("cfg/cmp")
-    elseif InstalledBlink() && InstalledLsp()
+    elseif InstalledBlink()
         lua require("cfg/blink")
     else
         let g:complete_engine = 'builtin'
