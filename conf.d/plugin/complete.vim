@@ -78,7 +78,6 @@ if InstalledLsp()
     let g:vista_default_executive = 'nvim_lsp'
     source $CFG_DIR/lsp.vim
 else
-    lua vim.diagnostic.enable(false)
     if InstalledCoc()
         let g:vista_default_executive = 'coc'
     else

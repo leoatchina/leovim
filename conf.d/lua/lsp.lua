@@ -10,38 +10,34 @@ lsp_capabilities.textDocument.foldingRange = {
 -------------
 -- diagnostic
 -------------
+vim.diagnostic.enable(false)
 vim.diagnostic.config({
   virtual_text = false,
   underline = false,
   float = {border = "single"}
 })
 function _G.toggle_diagnostics()
-  if vim.b.diagnostics_enable then
+  if vim.g.diagnostics_enable then
     print("diagnostics off")
-    vim.b.diagnostics_enable = false
-    if vim.fn.has('nvim-0.11') > 0 then
-      vim.diagnostic.enable(false)
-    else
-      vim.diagnostic.disable()
-    end
+    vim.diagnostic.enable(false)
   else
     print("diagnostics on")
-    vim.b.diagnostics_enable = true
+    vim.g.diagnostics_enable = true
     vim.diagnostic.enable()
   end
 end
 -- toggle diagnostic virtual text && underline
 function _G.toggle_diagnostics_highlight()
-  if vim.b.diagnostic_virtualtext_underline then
+  if vim.g.diagnostic_virtualtext_underline then
     print("virtualtext_underline off")
-    vim.b.diagnostic_virtualtext_underline = false
+    vim.g.diagnostic_virtualtext_underline = false
     vim.diagnostic.config({
       virtual_text = false,
       underline = false,
     })
   else
     print("virtualtext_underline on")
-    vim.b.diagnostic_virtualtext_underline = true
+    vim.g.diagnostic_virtualtext_underline = true
     vim.diagnostic.config({
       virtual_text = true,
       underline = true,
