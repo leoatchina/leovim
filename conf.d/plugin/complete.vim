@@ -16,14 +16,14 @@ endif
 " ------------------------------
 let g:max_tokens = get(g:, 'max_tokens', 8192)
 if Installed('minuet-ai.nvim')
-    lua require('minuet')
+    lua require('cfg/minuet')
     let g:ai_complete_engine = 'minuet'
 elseif Installed('codeium.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
     imap <script><silent><nowait><expr> <M-i> codeium#Accept()
     imap <script><silent><nowait><expr> <M-}> codeium#AcceptNextWord()
-    imap <script><silent><nowait><expr> <M-{> codeium#AcceptNextLine()
+    imap <script><silent><nowait><expr> <M-:> codeium#AcceptNextLine()
     imap <silent><script><nowait><expr> <M-/> codeium#Clear()
     imap <M-.> <Plug>(codeium-complete)
     imap <M-;> <Plug>(codeium-next)
@@ -38,7 +38,7 @@ elseif Installed('copilot.vim')
     imap <silent><nowait><M-;> <Plug>(copilot-next)
     imap <silent><nowait><M-,> <Plug>(copilot-previous)
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
-    imap <silent><nowait><M-{> <Plug>(copilot-accept-line)
+    imap <silent><nowait><M-:> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 endif
 if Installed("yarepl.nvim")

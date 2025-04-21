@@ -33,7 +33,7 @@ function! InstalledCoc() abort
     return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
 function! InstalledBlink() abort
-    return Installed('blink.cmp', 'friendly-snippets', 'nvim-autopairs')
+    return Installed('blink.cmp', 'blink-cmp-dictionary', 'friendly-snippets', 'nvim-autopairs')
 endfunction
 function! InstalledCmp() abort
     return Installed(
@@ -139,6 +139,7 @@ elseif g:complete_engine == 'blink'
     else
         PlugAdd 'Saghen/blink.cmp'
     endif
+    PlugAdd 'Kaiser-Yang/blink-cmp-dictionary'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}

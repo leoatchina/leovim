@@ -18,21 +18,31 @@ local compare = cmp.config.compare
 local keymap = require('cmp.utils.keymap')
 local lspkind = require('lspkind')
 local sources = {
-  { name = 'nvim_lua', priority = 32 },
-  { name = 'dictionary', priority = 16 },
-  { name = 'vsnip', priority = 8 },
-  { name = 'nvim_lsp', priority = 4 },
+  { name = 'nvim_lua', priority = 10 },
+  { name = 'vsnip', priority = 9 },
+  { name = 'nvim_lsp', priority = 8 },
+  { name = 'dictionary', priority = 3 },
   { name = 'buffer', priority = 2 },
   { name = 'async_path', priority = 1 },
 }
+if Installed('minuet-ai.nvim') then
+  table.insert(sources, 1, { name = 'minuet', priority = 6})
+end
 if Installed('jupynium.nvim') then
-  table.insert(sources, 1, { name = 'jupynium', priority = 64})
+  table.insert(sources, 1, { name = 'jupynium', priority = 7})
 end
 -----------------
 -- setup
 -----------------
 cmp.setup({
   sources = sources,
+  performance = {
+    -- It is recommended to increase the timeout duration due to
+    -- the typically slower response speed of LLMs compared to
+    -- other completion sources. This is not needed when you only
+    -- need manual completion.
+    fetching_timeout = 2500,
+  },
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body)
@@ -56,7 +66,8 @@ cmp.setup({
     completion = cmp.config.window.bordered(),
     documentation = cmp.config.window.bordered(),
   },
-  mapping = cmp.mapping({
+  mapping = {
+    ["<M-.>"] = require('minuet').make_cmp_map(),
     -- cmdline only mapping
     ['<C-j>'] = {
       c = function(fallback)
@@ -210,7 +221,7 @@ cmp.setup({
         end
       end,
     }
-  }),
+  },
   -- 使用lspkind-nvim显示类型图标
   formatting = {
     format = lspkind.cmp_format({

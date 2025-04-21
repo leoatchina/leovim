@@ -1,5 +1,4 @@
 require('blink.cmp').setup({
-  keymap = { preset = 'super-tab' },
   appearance = {
     nerd_font_variant = 'mono'
   },
@@ -28,7 +27,7 @@ require('blink.cmp').setup({
     jump = function(direction) vim.snippet.jump(direction) end,
   },
   sources = {
-    default = { 'path', 'snippets', 'buffer', 'lsp' },
+    default = vim.list_extend(Installed('minuet-ai.nvim') and { 'minuet' } or {}, { 'dictionary', 'path', 'buffer', 'lsp', 'snippets' }),
     providers = {
       lsp = {
         name = 'LSP',
@@ -46,7 +45,31 @@ require('blink.cmp').setup({
         fallbacks = {},
         score_offset = 0, -- Boost/penalize the score of the items
         override = nil, -- Override the source's functions
+      },
+      minuet = {
+        name = 'minuet',
+        module = 'minuet.blink',
+        async = true,
+        -- Should match minuet.config.request_timeout * 1000,
+        -- since minuet.config.request_timeout is in seconds
+        timeout_ms = 2500,
+        score_offset = 50, -- Gives minuet higher priority among suggestions
+      },
+      dictionary = {
+        module = 'blink-cmp-dictionary',
+        name = 'Dict',
+        -- Make sure this is at least 2.
+        -- 3 is recommended
+        min_keyword_length = 3,
+        opts = {
+          -- options for blink-cmp-dictionary
+        }
       }
-    }
-  }
+    },
+  },
+  completion = { trigger = { prefetch_on_insert = false } },
+  keymap = {
+    preset = 'super-tab',
+    ['<M-.>'] = Installed('minuet-ai.nvim') and require('minuet').make_blink_map(),
+  },
 })
