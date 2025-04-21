@@ -258,7 +258,7 @@ if has('nvim-0.10') && (
 elseif has('patch-9.0.0185') || has('nvim')
     if Require('codeium')
         PlugAdd 'Exafunction/codeium.vim'
-    elseif Require('copilot') && !Require('copilot_enhance') && g:node_version > 18
+    elseif Require('copilot') && !Require('copilot_plus') && g:node_version > 18
         PlugAdd 'github/copilot.vim'
     endif
 endif
