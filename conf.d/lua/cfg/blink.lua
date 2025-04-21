@@ -58,18 +58,20 @@ require('blink.cmp').setup({
       dictionary = {
         module = 'blink-cmp-dictionary',
         name = 'Dict',
-        -- Make sure this is at least 2.
         -- 3 is recommended
-        min_keyword_length = 3,
-        opts = {
-          -- options for blink-cmp-dictionary
-        }
+        min_keyword_length = 3
       }
     },
   },
   completion = { trigger = { prefetch_on_insert = false } },
   keymap = {
     preset = 'super-tab',
-    ['<M-.>'] = Installed('minuet-ai.nvim') and require('minuet').make_blink_map(),
-  },
+    ['<M-.>'] = {
+      function()
+        if Installed('minuet-ai.nvim') then
+          require('minuet').make_blink_map()
+        end
+      end
+    }
+  }
 })

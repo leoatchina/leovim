@@ -67,7 +67,11 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
   mapping = {
-    ["<M-.>"] = require('minuet').make_cmp_map(),
+    ["<M-.>"] = function()
+      if Installed('minuet-ai.nvim') then
+        require('minuet').make_cmp_map()
+      end
+    end,
     -- cmdline only mapping
     ['<C-j>'] = {
       c = function(fallback)
