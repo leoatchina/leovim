@@ -77,8 +77,8 @@ if Planned('neoformat')
         endif
     endfunction
     command! -bang -range ChooseFormatPrg call ChooseFormatPrg(<bang>0)
-    nnoremap = :ChooseFormatPrg<Cr>
-    xnoremap M :ChooseFormatPrg!<Cr>
+    nnoremap + :ChooseFormatPrg<Cr>
+    xnoremap + :ChooseFormatPrg!<Cr>
 else
     nnoremap <silent>= :call BuiltInFormat()<Cr>
 endif

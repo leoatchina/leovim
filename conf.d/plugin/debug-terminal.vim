@@ -45,14 +45,12 @@ tmap <expr><C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
 if has('nvim')
     command! TermPackD tabe | call termopen([&shell], {'cwd': expand('~/.leovim.d')})
     nnoremap <silent><M-h>D :TermPackD<Cr>i
-    nnoremap <silent><M-+> :tabnew<Cr>:terminal<Cr>i
-    inoremap <silent><M-+> <C-o>:tabnew<Cr>:terminal<Cr>i
-    tnoremap <silent><M-+> <C-\><C-n>:tabnew<Cr>:terminal<Cr>i
+    tnoremap <silent><M--> <C-\><C-n>:tabnew<Cr>:terminal<Cr>i
+    nnoremap <silent>_ :tabnew<Cr>:terminal<Cr>i
 else
     nnoremap <silent><M-h>D :tab terminal<CR>cd ~/.leovim.d<tab><CR>
-    nnoremap <silent><M-+> :tab terminal<Cr>
-    inoremap <silent><M-+> <C-o>:tab terminal<Cr>
-    tnoremap <silent><M-+> <C-\><C-n>:tab terminal<Cr>
+    tnoremap <silent><M--> <C-\><C-n>:tab terminal<Cr>
+    nnoremap <silent>_ :tab terminal<Cr>
 endif
 tnoremap <silent><C-v> <C-\><C-n>
 tnoremap <silent><M-q> <C-\><C-n>:ConfirmQuit<Cr>
@@ -66,14 +64,11 @@ let g:floaterm_wintype  = 'split'
 let g:floaterm_position = 'belowright'
 let g:floaterm_height = 0.3
 PlugAddOpt 'vim-floaterm'
-" --------------------------
-" new floaterm
-" --------------------------
+" ---------------------------------------------------------
+" enhanced functions and commands
+" ---------------------------------------------------------
 command! FloatermCommands call FzfCallCommands('FloatermCommands', 'Floaterm')
 nnoremap <silent><Tab>: :FloatermCommands<Cr>
-" --------------------------
-" new floaterm
-" --------------------------
 let s:floaterm_parameters = {}
 let s:floaterm_parameters.right = " --wintype=vsplit --width=0.382"
 let s:floaterm_parameters.belowright = " --wintype=split --height=0.3"
@@ -97,9 +92,6 @@ function! s:floaterm_select_pos()
     execute cmd
 endfunction
 command! FloatermSpecial call s:floaterm_select_pos()
-" -----------------------------
-" show floaterm
-" -----------------------------
 function! s:floaterm_list() abort
     let bufs = floaterm#buflist#gather()
     let cnt = len(bufs)
@@ -145,12 +137,6 @@ function! s:floaterm_list() abort
     endif
 endfunc
 command! FloatermList call s:floaterm_list()
-tnoremap <silent><C-\><C-f> <C-\><C-n>:FloatermList<Cr>
-inoremap <silent><C-\><C-f> <C-o>:FloatermList<Cr>
-nnoremap <silent><C-\><C-f> :FloatermList<Cr>
-tnoremap <silent><C-/> <C-\><C-n>:FloatermList<Cr>
-inoremap <silent><C-/> <C-o>:FloatermList<Cr>
-nnoremap <silent><C-/> :FloatermList<Cr>
 " ---------------------------------
 " debug: load_json
 " ---------------------------------
@@ -577,18 +563,23 @@ au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteW
 " -------------------------------------
 " map Floaterm keys
 " -------------------------------------
-function! s:bind_keymap(mapvar, command) abort
-    if empty(maparg(a:mapvar, 'n'))
+function! s:bind_keymap(mapvar, command, ...) abort
+    let mp = maparg(a:mapvar, 'n')
+    if empty(mp) || mp =~# 'Nop'
         execute printf('nnoremap <silent>%s :%s<CR>', a:mapvar, a:command)
     endif
     execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
-    execute printf('tnoremap <silent>%s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
+    " XXX: if 0, not overwrite tmap
+    if a:0 == 0 || a:1 > 0
+        execute printf('tnoremap <silent>%s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
+    endif
 endfunction
-call s:bind_keymap('<M-->', 'FloatermToggle')
-call s:bind_keymap('<M-=>', 'FloatermSpecial')
+call s:bind_keymap('<M-->', 'FloatermToggle', 0)
+call s:bind_keymap('<M-_>', 'FloatermKill')
 call s:bind_keymap('<M-{>', 'FloatermPrev')
 call s:bind_keymap('<M-}>', 'FloatermNext')
-call s:bind_keymap('<M-_>', 'FloatermKill')
+call s:bind_keymap('<M-=>', 'FloatermSpecial')
+call s:bind_keymap('<M-+>', 'FloatermList')
 " ---------------------------------------
 " using vim-floaterm to do repl
 " ---------------------------------------
