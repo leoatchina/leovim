@@ -53,6 +53,7 @@ nnoremap <M-z> :set nowrap! nowrap?<Cr>
 if has('nvim')
     nnoremap <M-k>U :UpdateRemotePlugins<Cr>
 endif
+nnoremap = :<C-r>=
 " ------------------------------
 " file functions
 " ------------------------------
