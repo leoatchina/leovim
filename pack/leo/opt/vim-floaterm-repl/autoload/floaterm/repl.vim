@@ -295,7 +295,8 @@ function! floaterm#repl#mark(visual) range abort
         echom "Error mark."
     endtry
 endfunction
-function! floaterm#repl#quickui_mark()
+" TODO, using quickfix to show lines
+function! floaterm#repl#show_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echo "t:floaterm_repl_marked_lines is None"
     else

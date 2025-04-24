@@ -588,12 +588,13 @@ PlugAddOpt 'vim-floaterm-repl'
 " start
 nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
 nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
-" basic send
+" line send
 nnoremap <silent><M-e>n :FloatermReplSend<Cr>
 nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
 xnoremap <silent><M-e>n :FloatermReplSendVisual<Cr>
 xnoremap <silent><M-e>l :FloatermReplSendVisual!<Cr>
 nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
+nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
 " block send
 xnoremap <silent><M-e><M-e>   :FloatermReplSendVisual<Cr>
 xnoremap <silent><M-e><Space> :FloatermReplSendVisual!<Cr>
@@ -610,9 +611,7 @@ xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
 nnoremap <silent><M-e>m :FloatermReplMark<Cr>
 xnoremap <silent><M-e>m :FloatermReplMark!<Cr>
 nnoremap <silent><M-e>s :FloatermReplSendMark<Cr>
-nnoremap <silent><M-e>q :FloatermReplQuickuiMark<Cr>
-" clear
-nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
+nnoremap <silent><M-e>S :FloatermReplQuickuiMark<Cr>
 " ---------------------------------------
 " jupynvim
 " ---------------------------------------

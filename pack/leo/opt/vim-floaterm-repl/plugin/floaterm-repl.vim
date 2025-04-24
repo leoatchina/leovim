@@ -52,4 +52,4 @@ command! -bang -range FloatermReplSendWord call floaterm#repl#send_word(<bang>0)
 " mark
 command! -bang -range FloatermReplMark call floaterm#repl#mark(<bang>0)
 command! FloatermReplSendMark call floaterm#repl#send_mark()
-command! FloatermReplQuickuiMark call floaterm#repl#quickui_mark()
+command! FloatermReplShowMark call floaterm#repl#show_mark()
