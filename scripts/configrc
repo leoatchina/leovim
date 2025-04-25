@@ -24,7 +24,6 @@ else
     alias llS='ls -lSh'
 fi
 
-
 export GOROOT=$HOME/go
 [ -d $GOROOT ] && export PATH=$GOROOT/bin${PATH:+:${PATH}} && export GOBIN=$GOROOT/bin
 
@@ -33,6 +32,7 @@ export GOPATH=$HOME/gopath
 
 export NODEPATH=$HOME/.local/node
 [ -d $NODEPATH ] && export PATH=$NODEPATH/bin${PATH:+:${PATH}}
+# export PATH=$HOME/.local/vim/bin${PATH:+:${PATH}}
 # export PATH=$HOME/.local/ctags/bin${PATH:+:${PATH}}
 # export PATH=$HOME/.local/gtags/bin${PATH:+:${PATH}}
 # export PATH=$HOME/.local/tmux/bin${PATH:+:${PATH}}
@@ -79,7 +79,7 @@ if [ -f ~/.local/bin/z.sh ]; then
     source ~/.local/bin/z.sh
 fi
 
-function envs() {
+function en() {
     conda activate $(conda info --env | grep -v "^#" | fzf --reverse | awk '{print $NF}')
 }
 
@@ -117,16 +117,8 @@ function sf() {
     fi
 }
 
-if [ -f /usr/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
-    mkdir -p $HOME/.local/bin
-    ln -sf /usr/bin/batcat $HOME/.local/bin/bat
-elif [ -f /usr/local/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
-    mkdir -p $HOME/.local/bin
-    ln -sf /usr/local/bin/batcat $HOME/.local/bin/bat
-fi
-
-# tmon command to creater monitor panels
-function tmon() {
+# tm command to creater monitor panels
+function tm() {
     # 1. Check if we're already in a tmux session
     if [ -z "$TMUX" ]; then
         # 1.1 & 1.2: Not in tmux, check if sessions exist
@@ -170,4 +162,12 @@ function tmon() {
     fi
 }
 
+# ln and graphic card order
+if [ -f /usr/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
+    mkdir -p $HOME/.local/bin
+    ln -sf /usr/bin/batcat $HOME/.local/bin/bat
+elif [ -f /usr/local/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
+    mkdir -p $HOME/.local/bin
+    ln -sf /usr/local/bin/batcat $HOME/.local/bin/bat
+fi
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
