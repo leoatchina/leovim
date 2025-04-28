@@ -212,8 +212,9 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'gcmt/wildfire.vim'
 endif
 " ------------------------------
-" AI completion engine
+" AI engine
 " ------------------------------
+" AI chat
 if exists('$XAI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
     \  exists('$MISTRAL_API_KEY') ||
@@ -248,6 +249,7 @@ elseif has('nvim-0.10.1') && Planned('nvim-treesitter')
         PlugAdd '0xrusowsky/nvim-ctx-ingest'
     endif
 endif
+" AI complete
 if has('nvim-0.10') && (
     \  exists('$OPENAI_API_KEY') ||
     \  exists('$GEMINI_API_KEY') ||
@@ -264,20 +266,6 @@ elseif has('patch-9.0.0185') || has('nvim')
     endif
 endif
 " ------------------------------
-" fuzzy_finder
-" ------------------------------
-if exists('*systemlist') && has('patch-7.4.1304')
-    PlugAdd 'junegunn/fzf.vim'
-    if WINDOWS()
-        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
-    else
-        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
-    endif
-endif
-if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
-    PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
-endif
-" ------------------------------
 " debug tool
 " ------------------------------
 if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !PlannedLsp())
@@ -289,10 +277,6 @@ elseif has('nvim-0.9.5') && Require('debug')
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
 endif
-" -----------------------
-" format
-" -----------------------
-PlugAdd 'sbdchd/neoformat'
 " ----------------------------
 " scheme
 " ----------------------------
@@ -309,9 +293,24 @@ if g:has_truecolor
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
     endif
 endif
+" -----------------------
+" format
+" -----------------------
+PlugAdd 'sbdchd/neoformat'
 " ------------------------------
-" backbone nvim plugins.
+" backbone plugins.
 " ------------------------------
+if exists('*systemlist') && has('patch-7.4.1304')
+    PlugAdd 'junegunn/fzf.vim'
+    if WINDOWS()
+        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
+    else
+        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
+    endif
+endif
+if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
+    PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
+endif
 if has('nvim')
     PlugAdd 'dstein64/nvim-scrollview'
     PlugAdd 'wsdjeg/quickfix.nvim'
@@ -327,8 +326,7 @@ if has('nvim')
             endif
         endif
     endif
-    if PlannedLsp() || Planned('nvim-dap')
-                \ || Planned('avante.nvim') || Planned('codecompanion.nvim') || Planned('minuet-ai.nvim')
+    if PlannedLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim') || Planned('minuet-ai.nvim')
         PlugAdd 'MunifTanjim/nui.nvim'
         PlugAdd 'nvim-lua/plenary.nvim'
         PlugAdd 'stevearc/dressing.nvim'
