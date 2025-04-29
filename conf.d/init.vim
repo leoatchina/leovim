@@ -729,7 +729,10 @@ function! s:yank_border(...) abort
         let yank = 'y'
         let tclip = 'to internal clipboard.'
     endif
-    if yankmode == 5
+    if yankmode == 6
+        let action = '%'
+        let target = ' whole file'
+    elseif yankmode == 5
         let action = '0v$'
         let target = 'line'
     elseif yankmode == 4
@@ -752,6 +755,7 @@ function! s:yank_border(...) abort
     call setpos('.', original_cursor_position)
     echo 'Yank ' . target . ' ' . tclip
 endfunction
+command! YankFile call s:yank_border(6)
 command! YankLine call s:yank_border(5)
 command! YankFromFileBegin call s:yank_border(4)
 command! YankToFileEnd call s:yank_border(3)
@@ -759,6 +763,7 @@ command! YankFromLineBegin call s:yank_border(2)
 command! YankToLineEnd call s:yank_border(1)
 command! YankWord call s:yank_border()
 nnoremap <silent>gY :YankWord<Cr>
+nnoremap <silent>yY :YankFile<Cr>
 nnoremap <silent><leader>yy :YankLine<Cr>
 if exists('g:vscode')
     nnoremap <silent>Y :YankToLineEnd<Cr>
