@@ -769,10 +769,10 @@ if exists('g:vscode')
     nnoremap <silent>Y :YankToLineEnd<Cr>
 else
     nnoremap Y y$:echo "Yank to line end to internal register."<Cr>
-    nnoremap <silent><Tab>Y :YankToLineEnd<Cr>
-    nnoremap <silent><Tab>y :YankFromLineBegin<Cr>
-    nnoremap <silent>\Y :YankToFileEnd<Cr>
-    nnoremap <silent>\y :YankFromFileBegin<Cr>
+    nnoremap <silent>;y :YankToLineEnd<Cr>
+    nnoremap <silent>,y :YankFromLineBegin<Cr>
+    nnoremap <silent><Tab>Y :YankToFileEnd<Cr>
+    nnoremap <silent><Tab>y :YankFromFileBegin<Cr>
 endif
 " ------------------------
 " special paste
