@@ -100,6 +100,7 @@ elseif InstalledCoc()
     source $CFG_DIR/coc.vim
 elseif g:complete_engine != ''
     let g:complete_engine = 'mcm'
+    PlugAddOpt 'vim-dict'
     source $CFG_DIR/mcm.vim
 endif
 " ------------------------------
