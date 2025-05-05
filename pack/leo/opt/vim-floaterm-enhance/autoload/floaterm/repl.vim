@@ -89,17 +89,23 @@ function! s:get_begin() abort
     let start = 1
     return [1, curr_line == 1 ? 1 : curr_line - 1]
 endfunction
+" -------------------------------------
 " Get range from current line to end
+" -------------------------------------
 function! s:get_end() abort
     let curr_line = line('.')
     let end = line("$")
     return [curr_line, end]
 endfunction
+" -------------------------------------
 " Get range of entire file
+" -------------------------------------
 function! s:get_all() abort
     return [1, line("$")]
 endfunction
+" -------------------------------------
 " Get range of current code block
+" -------------------------------------
 function! s:get_block() abort
     let ft = &ft
     let comment = s:get_comment(ft)
@@ -128,28 +134,6 @@ function! s:get_block() abort
         let end -= 1
     endif
     return [start, end]
-endfunction
-" Original function, kept for backward compatibility, but calls new functions
-function! s:get_border(...) abort
-    if a:0 > 0
-        if index(['begin', 'end', 'all', 'block'], a:1) >= 0
-            let border = a:1
-        else
-            let border = 'block'
-        endif
-    else
-        let border = 'block'
-    endif
-
-    if border == 'all'
-        return s:get_all()
-    elseif border == 'begin'
-        return s:get_begin()
-    elseif border == 'end'
-        return s:get_end()
-    else " block
-        return s:get_block()
-    endif
 endfunction
 " -------------------------------------
 " choose a program to run repl
@@ -188,7 +172,8 @@ function! s:choose_program(lst) abort
     return ""
 endfunction
 " -------------------------------------------
-" core function
+" core function send_contents. contents is
+" the codes/scripts want to send
 " -------------------------------------------
 function! s:send_contents(contents, ft, repl_bufnr, keep, jump_line, vmode) abort
     let comment = s:get_comment(a:ft)
@@ -342,7 +327,7 @@ function! floaterm#repl#mark(visual) range abort
             let t:floaterm_repl_marked_lines = getline("'<", "'>")
             echom "Visual selection marked."
         else
-            let [start, end] = s:get_border('block')
+            let [start, end] = s:get_block()
             let t:floaterm_repl_marked_lines = getline(start, end)
             echom "Block code marked."
         endif
@@ -350,7 +335,9 @@ function! floaterm#repl#mark(visual) range abort
         echom "Error mark."
     endtry
 endfunction
+" -------------------------------------
 " Using quickfix to show marked contents
+" -------------------------------------
 function! floaterm#repl#show_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echo "t:floaterm_repl_marked_lines is None"
@@ -379,7 +366,9 @@ function! floaterm#repl#show_mark()
     " Set title for quickfix window
     let w:quickfix_title = 'REPL Marked contents'
 endfunction
+" -------------------------------------
 " sent marked contents
+" -------------------------------------
 function! floaterm#repl#send_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echom "t:floaterm_repl_marked_lines is empty"
@@ -419,7 +408,6 @@ function! floaterm#repl#send_clear() abort
     let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
     let idx = ft . curr_bufnr
     let [repl_bufnr, termname] = s:get_bufnr(idx)
-
     if repl_bufnr > 0
         if has_key(g:floaterm_repl_clear, ft) && g:floaterm_repl_clear[ft] != ''
             call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_clear[ft]])
