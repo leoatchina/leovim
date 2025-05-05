@@ -234,7 +234,7 @@ endfunction
 " ---------------------------------------------
 " update repl position, must do check at first
 " ---------------------------------------------
-function! floaterm#repl#update_open_position() abort
+function! floaterm#repl#update_repl_position() abort
     let open_position = get(g:, 'floaterm_repl_open_position', 'auto')
     if open_position == 'auto'
         if &columns > &lines * 3
@@ -270,17 +270,37 @@ function! floaterm#repl#start(choose_program) abort
         return v:false
     endif
     try
+        let program = ""
         if choose_program
-            let program = s:choose_program(g:floaterm_repl_programs[ft])
+            " User wants to choose program interactively
+            try
+                let program = s:choose_program(g:floaterm_repl_programs[ft])
+            catch /.*/
+                call s:showmsg("Error occurred when choosing REPL program", 1)
+                return v:false
+            endtry
+            " Check if user cancelled program selection
+            if empty(program)
+                call s:showmsg("REPL program selection cancelled", 1)
+                return v:false
+            endif
         else
-            let program = g:floaterm_repl_programs[ft][0]
+            " Automatically select the first available program
+            try
+                let program = get(g:floaterm_repl_programs[ft], 0, "")
+                if empty(program)
+                    call s:showmsg("No REPL program available for " . ft, 1)
+                    return v:false
+                endif
+            catch /.*/
+                call s:showmsg("Error selecting REPL program", 1)
+                return v:false
+            endtry
         endif
     catch /.*/
-        let program = ""
-    endtry
-    if empty(program)
+        call s:showmsg("Error occurred when choosing REPL program", 1)
         return v:false
-    endif
+    endtry
     if empty(termname) || repl_bufnr <= 0
         let termname = printf('#%s|%s!%S', b:floaterm_repl_curr_bufnr, ft, toupper(split(program, " ")[0]))
         call s:update_termname(ft, b:floaterm_repl_curr_bufnr, termname)
