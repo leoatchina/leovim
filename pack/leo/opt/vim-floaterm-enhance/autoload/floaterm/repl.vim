@@ -206,9 +206,9 @@ function! floaterm#repl#update_open_position() abort
         let open_position = "right"
     endif
     if open_position == 'right'
-        let g:floaterm_repl_new_cmd = "FloatermNew --wintype=vsplit --postion=right --width="
+        let g:floaterm_repl_new_cmd = "FloatermNew --wintype=vsplit --position=right --width="
     else
-        let g:floaterm_repl_new_cmd = "FloatermNew --wintype=split --postion=bottom --height="
+        let g:floaterm_repl_new_cmd = "FloatermNew --wintype=split --position=bottom --height="
     endif
     let g:floaterm_repl_new_cmd = g:floaterm_repl_new_cmd . string(get(g:, 'floaterm_repl_ratio', 0.38))
 endfunction
