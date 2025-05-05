@@ -583,7 +583,7 @@ call s:bind_keymap('<M-+>', 'FloatermSpecial')
 " ---------------------------------------
 " using vim-floaterm to do repl
 " ---------------------------------------
-PlugAddOpt 'vim-floaterm-repl'
+PlugAddOpt 'vim-floaterm-enhance'
 " NOTE: below bang[!] means cursor not move
 " start
 nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
