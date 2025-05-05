@@ -10,7 +10,7 @@ endfunction
 function! PlannedLsp() abort
     return (Require('cmp') || Require('builtin') || Require('blink') || Require('blink.lua')) && has('nvim-0.11')
 endfunction
-function! PlannedAdv() abort
+function! PlannedAdvCompEng() abort
     return PlannedCoc() || PlannedLsp()
 endfunction
 function! PlannedLeaderf() abort
@@ -33,7 +33,7 @@ function! InstalledCoc() abort
     return Installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && PlannedFzf()
 endfunction
 function! InstalledBlink() abort
-    return Installed('blink.cmp', 'blink-cmp-dictionary', 'friendly-snippets', 'nvim-autopairs')
+    return Installed('blink.cmp', 'friendly-snippets', 'nvim-autopairs')
 endfunction
 function! InstalledCmp() abort
     return Installed(
@@ -44,7 +44,6 @@ function! InstalledCmp() abort
                 \ 'cmp-cmdline',
                 \ 'cmp-vsnip',
                 \ 'cmp-nvim-lsp-signature-help',
-                \ 'cmp-dictionary',
                 \ 'cmp-async-path',
                 \ 'lspkind-nvim',
                 \ 'colorful-menu.nvim',
@@ -129,7 +128,6 @@ if g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/cmp-cmdline'
     PlugAdd 'hrsh7th/cmp-vsnip'
     PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
-    PlugAdd 'uga-rosa/cmp-dictionary'
     PlugAdd 'FelipeLema/cmp-async-path'
     PlugAdd 'onsails/lspkind-nvim'
     PlugAdd 'xzbdmw/colorful-menu.nvim'
@@ -139,7 +137,6 @@ elseif g:complete_engine == 'blink'
     else
         PlugAdd 'Saghen/blink.cmp'
     endif
-    PlugAdd 'Kaiser-Yang/blink-cmp-dictionary'
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
@@ -149,9 +146,8 @@ elseif g:complete_engine == 'coc'
     PlugAddOpt 'coc-fzf'
 endif
 " ------------------------------
-" dict && snippets
+" snippets
 " ------------------------------
-PlugAddOpt 'vim-dict'
 if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'rafamadriz/friendly-snippets'
     if index(['mcm', 'cmp'], g:complete_engine) >= 0
@@ -280,7 +276,7 @@ endif
 " ----------------------------
 " scheme
 " ----------------------------
-if !Planned('nvim-treesitter') && Require('c') && PlannedAdv()
+if !Planned('nvim-treesitter') && Require('c') && PlannedAdvCompEng()
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor

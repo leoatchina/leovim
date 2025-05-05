@@ -21,7 +21,6 @@ local sources = {
   { name = 'nvim_lua', priority = 10 },
   { name = 'vsnip', priority = 9 },
   { name = 'nvim_lsp', priority = 8 },
-  { name = 'dictionary', priority = 3 },
   { name = 'buffer', priority = 2 },
   { name = 'async_path', priority = 1 },
 }
