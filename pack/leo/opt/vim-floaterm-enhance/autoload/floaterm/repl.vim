@@ -1,4 +1,6 @@
+" -------------------------------------------
 " get formly visual select
+" -------------------------------------------
 function! s:trim(str) abort
     return substitute(a:str, "^\s\+\|\s\+$", "", "g")
 endfunction
@@ -14,7 +16,7 @@ function! s:get_visual_select() abort
     return join(lines, "\n")
 endfunction
 " echo cmdline message, this function is from github.com/skywind3000/vim-preview
-function! s:showmsg(content, ...)
+function! s:showmsg(content, ...) abort
     let saveshow = &showmode
     set noshowmode
     let wincols = &columns
@@ -79,8 +81,56 @@ function! s:get_comment(ft) abort
     return comment
 endfunction
 " -------------------------------------------
-" get border
+" get border functions
 " -------------------------------------------
+" Get range from beginning to current line
+function! s:get_begin() abort
+    let curr_line = line('.')
+    let start = 1
+    return [1, curr_line == 1 ? 1 : curr_line - 1]
+endfunction
+" Get range from current line to end
+function! s:get_end() abort
+    let curr_line = line('.')
+    let end = line("$")
+    return [curr_line, end]
+endfunction
+" Get range of entire file
+function! s:get_all() abort
+    return [1, line("$")]
+endfunction
+" Get range of current code block
+function! s:get_block() abort
+    let ft = &ft
+    let comment = s:get_comment(ft)
+    
+    if type(g:floaterm_repl_block_mark[ft]) == v:t_list
+        let lst = []
+        for each in g:floaterm_repl_block_mark[ft]
+            call add(lst, '^' . each)
+        endfor
+        let search_str = join(lst, '\|')
+    else
+        let search_str = '^' . g:floaterm_repl_block_mark[ft]
+    endif
+    " Find block start position
+    let start = search(search_str, 'nbW')
+    if start == 0
+        let start = 1
+    elseif getline(start)[0] ==# comment
+        let start += 1
+    endif
+    " Find block end position
+    let end = search(search_str, 'nW')
+    if end == 0
+        let end = line("$")
+    endif
+    if getline(end)[0] ==# comment && end > start
+        let end -= 1
+    endif
+    return [start, end]
+endfunction
+" Original function, kept for backward compatibility, but calls new functions
 function! s:get_border(...) abort
     if a:0 > 0
         if index(['begin', 'end', 'all', 'block'], a:1) >= 0
@@ -91,50 +141,20 @@ function! s:get_border(...) abort
     else
         let border = 'block'
     endif
-    let ft = &ft
-    let comment = s:get_comment(ft)
+    
     if border == 'all'
-        let lst = [1, line("$")]
-    else
-        let curr_line = line('.')
-        if border == 'begin'
-            let start = 1
-            let lst =[1, curr_line == 1 ? 1 : curr_line - 1]
-        elseif border == 'end'
-            let end = line("$")
-            let lst = [curr_line, end]
-        " block
-        else
-            if type(g:floaterm_repl_block_mark[ft]) == v:t_list
-                let lst = []
-                for each in g:floaterm_repl_block_mark[ft]
-                    call add(lst, '^' . each)
-                endfor
-                let search_str = join(lst, '\|')
-            else
-                let search_str = '^' . g:floaterm_repl_block_mark[ft]
-            endif
-            " start
-            let start = search(search_str, 'nbW')
-            if start == 0
-                let start = 1
-            elseif getline(start)[0] ==# comment
-                let start += 1
-            endif
-            " end
-            let end = search(search_str, 'nW')
-            if end == 0
-                let end = line("$")
-            endif
-            if getline(end)[0] ==# comment && end > start
-                let end -= 1
-            endif
-            let lst = [start, end]
-        endif
+        return s:get_all()
+    elseif border == 'begin'
+        return s:get_begin()
+    elseif border == 'end'
+        return s:get_end()
+    else " block
+        return s:get_block()
     endif
-    return lst
 endfunction
+" -------------------------------------
 " choose a program to run repl
+" -------------------------------------
 function! s:choose_program(lst) abort
     let cmds = a:lst
     if len(cmds) == 0
@@ -295,13 +315,34 @@ function! floaterm#repl#mark(visual) range abort
         echom "Error mark."
     endtry
 endfunction
-" TODO, using quickfix to show lines
+" Using quickfix to show marked lines
 function! floaterm#repl#show_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echo "t:floaterm_repl_marked_lines is None"
-    else
-        call quickui#textbox#open(t:floaterm_repl_marked_lines, {"close":"button", "title": "repl_marked_lines"})
+        return
     endif
+    " Clear quickfix list
+    call setqflist([])
+    " Get current buffer number for location reference
+    let bufnr = bufnr('%')
+    " Prepare quickfix entries
+    let qf_entries = []
+    let line_nr = 1
+    for line in t:floaterm_repl_marked_lines
+        call add(qf_entries, {
+            \ 'bufnr': bufnr,
+            \ 'lnum': line_nr,
+            \ 'text': line,
+            \ 'type': 'I'
+            \ })
+        let line_nr += 1
+    endfor
+    " Set quickfix list with entries
+    call setqflist(qf_entries)
+    " Open quickfix window
+    copen
+    " Set title for quickfix window
+    let w:quickfix_title = 'REPL Marked Lines'
 endfunction
 " -------------------------------------------
 " core function
@@ -339,9 +380,7 @@ function! s:send(lines, ft, repl_bufnr, keep, jump_line, vmode) abort
         redraw
     endif
 endfunction
-" -------------------------------------------
 " sent marked lines
-" -------------------------------------------
 function! floaterm#repl#send_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echom "t:floaterm_repl_marked_lines is empty"
@@ -445,6 +484,14 @@ function! floaterm#repl#send_border(border, keep) abort
     else
         let border = 'block'
     endif
-    let [begin, end] = s:get_border(border)
+    if border == 'all'
+        let [begin, end] = s:get_all()
+    elseif border == 'begin'
+        let [begin, end] = s:get_begin()
+    elseif border == 'end'
+        let [begin, end] = s:get_end()
+    else " block
+        let [begin, end] = s:get_block()
+    endif
     call floaterm#repl#send(begin, end, keep)
 endfunction

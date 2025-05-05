@@ -34,8 +34,7 @@ let g:floaterm_repl_exit.r = 'quit'
 call floaterm#repl#update_open_position()
 au VimResized * call floaterm#repl#update_open_position()
 " ----------------------------------
-" commands
-" <bang>0 means move forword
+" commands. NOTE <bang>0 means move forword
 " ----------------------------------
 command! -bang FloatermReplStart call floaterm#repl#start(<bang>0)
 command! -bang -range FloatermReplSend call floaterm#repl#send(<line1>, <line2>, <bang>0)
