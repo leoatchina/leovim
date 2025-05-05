@@ -5,15 +5,15 @@ function! s:trim(str) abort
     return substitute(a:str, "^\s\+\|\s\+$", "", "g")
 endfunction
 function! s:get_visual_select() abort
-    let [line_start, column_start] = getpos("'<")[1:2]
+    let [line_begin, column_start] = getpos("'<")[1:2]
     let [line_end, column_end] = getpos("'>")[1:2]
-    let lines = getline(line_start, line_end)
-    if len(lines) == 0
+    let contents = getline(line_begin, line_end)
+    if len(contents) == 0
         return ""
     endif
-    let lines[-1] = lines[-1][:column_end - (&selection == "inclusive" ? 1 : 2)]
-    let lines[0] = lines[0][column_start - 1:]
-    return join(lines, "\n")
+    let contents[-1] = contents[-1][:column_end - (&selection == "inclusive" ? 1 : 2)]
+    let contents[0] = contents[0][column_start - 1:]
+    return join(contents, "\n")
 endfunction
 " echo cmdline message, this function is from github.com/skywind3000/vim-preview
 function! s:showmsg(content, ...) abort
@@ -103,7 +103,6 @@ endfunction
 function! s:get_block() abort
     let ft = &ft
     let comment = s:get_comment(ft)
-    
     if type(g:floaterm_repl_block_mark[ft]) == v:t_list
         let lst = []
         for each in g:floaterm_repl_block_mark[ft]
@@ -141,7 +140,7 @@ function! s:get_border(...) abort
     else
         let border = 'block'
     endif
-    
+
     if border == 'all'
         return s:get_all()
     elseif border == 'begin'
@@ -161,32 +160,68 @@ function! s:choose_program(lst) abort
         return ""
     endif
     let cnt = 0
-    let lines = []
+    let contents = []
     let title = "Which REPL program"
     for cmd in cmds
         let cnt += 1
-        call add(lines, '&' . cnt . ' '. cmd)
+        call add(contents, '&' . cnt . ' '. cmd)
     endfor
     if &rtp=~#'vim-quickui'
         let opts = {'title': title, 'index': g:quickui#listbox#cursor, 'w': 64}
-        let idx = quickui#listbox#inputlist(lines, opts)
+        let idx = quickui#listbox#inputlist(contents, opts)
         if idx >= 0
             return cmds[idx]
         endif
     else
         let cnt += 1
         if a:0 >= 3 && a:3 != ''
-            call add(lines, '&' . a:3)
+            call add(contents, '&' . a:3)
         else
-            call add(lines, '&0None')
+            call add(contents, '&0None')
         endif
-        let content = join(lines, "\n")
+        let content = join(contents, "\n")
         let idx = confirm(title, content, cnt)
         if idx > 0 && idx < cnt
             return cmds[idx-1]
         endif
     endif
     return ""
+endfunction
+" -------------------------------------------
+" core function
+" -------------------------------------------
+function! s:send_contents(contents, ft, repl_bufnr, keep, jump_line, vmode) abort
+    let comment = s:get_comment(a:ft)
+    let contents = []
+    for line in a:contents
+        if line =~# "^\s*" . comment || line =~# "^\s*$"
+            continue
+        endif
+        call add(contents, line)
+    endfor
+    if len(contents) > 0
+        if len(contents) > 1 && contents[-1] =~# '^\s\+' && a:ft ==# 'python'
+            call add(contents, "")
+        endif
+        call floaterm#terminal#send(a:repl_bufnr, contents)
+    endif
+    if a:keep == 0
+        execute "normal! " . a:jump_line . 'G'
+        normal! j
+        let t_col = line("$")
+        let c_col = line('.')
+        let line = getline('.')
+        while (line =~# "^\s*" . comment || line =~# "^\s*$") && c_col < t_col
+            normal! j
+            let c_col = line('.')
+            let line = getline('.')
+        endwhile
+    elseif a:keep && a:vmode
+        execute "normal! " . a:jump_line . 'G'
+    endif
+    if !has('nvim')
+        redraw
+    endif
 endfunction
 " -------------------------------------
 " set repl program for each filetype
@@ -315,7 +350,7 @@ function! floaterm#repl#mark(visual) range abort
         echom "Error mark."
     endtry
 endfunction
-" Using quickfix to show marked lines
+" Using quickfix to show marked contents
 function! floaterm#repl#show_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echo "t:floaterm_repl_marked_lines is None"
@@ -342,45 +377,9 @@ function! floaterm#repl#show_mark()
     " Open quickfix window
     copen
     " Set title for quickfix window
-    let w:quickfix_title = 'REPL Marked Lines'
+    let w:quickfix_title = 'REPL Marked contents'
 endfunction
-" -------------------------------------------
-" core function
-" -------------------------------------------
-function! s:send(lines, ft, repl_bufnr, keep, jump_line, vmode) abort
-    let comment = s:get_comment(a:ft)
-    let lines = []
-    for line in a:lines
-        if line =~# "^\s*" . comment || line =~# "^\s*$"
-            continue
-        endif
-        call add(lines, line)
-    endfor
-    if len(lines) > 0
-        if len(lines) > 1 && lines[-1] =~# '^\s\+' && a:ft ==# 'python'
-            call add(lines, "")
-        endif
-        call floaterm#terminal#send(a:repl_bufnr, lines)
-    endif
-    if a:keep == 0
-        execute "normal! " . a:jump_line . 'G'
-        normal! j
-        let t_col = line("$")
-        let c_col = line('.')
-        let line = getline('.')
-        while (line =~# "^\s*" . comment || line =~# "^\s*$") && c_col < t_col
-            normal! j
-            let c_col = line('.')
-            let line = getline('.')
-        endwhile
-    elseif a:keep && a:vmode
-        execute "normal! " . a:jump_line . 'G'
-    endif
-    if !has('nvim')
-        redraw
-    endif
-endfunction
-" sent marked lines
+" sent marked contents
 function! floaterm#repl#send_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echom "t:floaterm_repl_marked_lines is empty"
@@ -390,93 +389,109 @@ function! floaterm#repl#send_mark()
         let idx = ft . curr_bufnr
         let [repl_bufnr, termname] = s:get_bufnr(idx)
         if repl_bufnr > 0
-            call s:send(t:floaterm_repl_marked_lines, ft, repl_bufnr, 1, line('.') , 0)
+            call s:send_contents(t:floaterm_repl_marked_lines, ft, repl_bufnr, 1, line('.') , 0)
         endif
     endif
 endfunction
+" ------------------------------------------------------
+" Send a newline to REPL or start REPL if not running
+" ------------------------------------------------------
+function! floaterm#repl#send_newline() abort
+    let ft = &filetype
+    let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
+    let idx = ft . curr_bufnr
+    let [repl_bufnr, termname] = s:get_bufnr(idx)
+    if repl_bufnr > 0
+        call floaterm#terminal#send(repl_bufnr, [""])
+    else
+        if floaterm#repl#start(0)
+            call s:showmsg("Starting REPL for " . ft)
+        else
+            call s:showmsg("Start repl failed.", 1)
+        endif
+    endif
+endfunction
+" ------------------------------------------------------
+" Send clear command to REPL
+" ------------------------------------------------------
+function! floaterm#repl#send_clear() abort
+    let ft = &filetype
+    let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
+    let idx = ft . curr_bufnr
+    let [repl_bufnr, termname] = s:get_bufnr(idx)
+
+    if repl_bufnr > 0
+        if has_key(g:floaterm_repl_clear, ft) && g:floaterm_repl_clear[ft] != ''
+            call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_clear[ft]])
+        endif
+    else
+        call s:showmsg("Start REPL first to send clear signal.")
+    endif
+endfunction
+" ------------------------------------------------------
+" Send exit command to REPL
+" ------------------------------------------------------
+function! floaterm#repl#send_exit() abort
+    let ft = &filetype
+    let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
+    let idx = ft . curr_bufnr
+    let [repl_bufnr, termname] = s:get_bufnr(idx)
+    if repl_bufnr > 0
+        if has_key(g:floaterm_repl_exit, ft) && g:floaterm_repl_exit[ft] != ''
+            call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_exit[ft]])
+        endif
+    else
+        call s:showmsg("Start REPL first to send exit signal.")
+    endif
+endfunction
 " -------------------------------------------
-" sent current line or selected lines to repl
+" sent current line or selected contents to repl
 " -------------------------------------------
-function! floaterm#repl#send(line1, line2, keep, ...) range abort
+function! floaterm#repl#send(line_begin, line_end, keep, ...) range abort
     if a:0 && a:1 > 0
         let vmode = 1
     else
         let vmode = 0
     endif
-    let line1 = a:line1
-    let line2 = a:line2
-    let keep = a:keep
+    " Send newline - both line_begin and line_end are 0
+    if a:line_begin == 0 || a:line_end == 0
+        return
+    endif
+    " Normal case - send code contents
     let ft = &filetype
     let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
     let idx = ft . curr_bufnr
     let [repl_bufnr, termname] = s:get_bufnr(idx)
-    " --------------------------------------
-    " line1 == line2 == 0 send enter
-    " --------------------------------------
-    if line1 == 0 && line2 == 0
-        if repl_bufnr > 0
-            call floaterm#terminal#send(repl_bufnr, [""])
-        else
-            if floaterm#repl#start(0)
-                call s:showmsg("Starting REPL for " . ft)
-            else
-                call s:showmsg("Start repl failed.", 1)
-            endif
-        endif
-        return
-    " --------------------------------------
-    " line2 == 0 means send clear
-    " --------------------------------------
-    elseif line2 == 0
-        if repl_bufnr > 0
-            if has_key(g:floaterm_repl_clear, ft) && g:floaterm_repl_clear[ft] != ''
-                call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_clear[ft]])
-            endif
-        else
-            call s:showmsg("Start REPL first to send clear signal.")
-        endif
-        return
-    " --------------------------------------
-    " line1 == 0 means send exit
-    " --------------------------------------
-    elseif line1 == 0
-        if repl_bufnr > 0
-            if has_key(g:floaterm_repl_exit, ft) && g:floaterm_repl_exit[ft] != ''
-                call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_exit[ft]])
-            endif
-        else
-            call s:showmsg("Start REPL first to send exit signal.")
-        endif
-        return
-    endif
-    " --------------------------------------
-    " normally send
-    " --------------------------------------
     if repl_bufnr < 0
         call s:showmsg("Do REPLFloatermStart at first.")
-    else
-        if vmode
-            let [line1] = getpos("'<")[1:1]
-            let [line2] = getpos("'>")[1:1]
-        endif
-        if line1 == 0 || line2 == 0 || line1 > line2
-            return
-        endif
-        " NOTE: if visual selected,  line('.') == 1, otherwise row where cursor located
-        if line1 == line2
-            let lines = [getline(line1)]
-        else
-            let lines = getline(line1, line2)
-        endif
-        if empty(lines)
-            call s:showmsg('No lines selected.')
-            return
-        elseif get(g:, 'floaterm_repl_showsend', 0)
-            call s:showmsg(printf("%s,%s %slines", line1, line2, len(lines)))
-        endif
-        call s:send(lines, ft, repl_bufnr, keep, line2, vmode)
+        return
     endif
+    let line_begin = a:line_begin
+    let line_end = a:line_end
+    if vmode
+        let [line_begin] = getpos("'<")[1:1]
+        let [line_end] = getpos("'>")[1:1]
+    endif
+    if line_begin == 0 || line_end == 0 || line_begin > line_end
+        return
+    endif
+    " NOTE: if visual selected, line('.') == 1, otherwise row where cursor located
+    if line_begin == line_end
+        let contents = [getline(line_begin)]
+    else
+        let contents = getline(line_begin, line_end)
+    endif
+    if empty(contents)
+        call s:showmsg('No contents selected.')
+        return
+    elseif get(g:, 'floaterm_repl_showsend', 0)
+        call s:showmsg(printf("%s,%s %slines", line_begin, line_end, len(contents)))
+    endif
+    call s:send_contents(contents, ft, repl_bufnr, a:keep, line_end, vmode)
 endfunction
+" ------------------------------------------------------
+" Send border
+" ------------------------------------------------------
 function! floaterm#repl#send_border(border, keep) abort
     let keep = a:keep
     if index(['begin', 'end', 'all', 'block'], a:border) >= 0
@@ -485,13 +500,13 @@ function! floaterm#repl#send_border(border, keep) abort
         let border = 'block'
     endif
     if border == 'all'
-        let [begin, end] = s:get_all()
-    elseif border == 'begin'
-        let [begin, end] = s:get_begin()
+        let [line_begin, line_end] = s:get_all()
+    elseif border == 'line_begin'
+        let [line_begin, line_end] = s:get_begin()
     elseif border == 'end'
-        let [begin, end] = s:get_end()
+        let [line_begin, line_end] = s:get_end()
     else " block
-        let [begin, end] = s:get_block()
+        let [line_begin, line_end] = s:get_block()
     endif
-    call floaterm#repl#send(begin, end, keep)
+    call floaterm#repl#send(line_begin, line_end, keep)
 endfunction
