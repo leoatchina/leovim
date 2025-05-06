@@ -532,7 +532,7 @@ let g:maplocalleader = 'q'
 ![](assets/image-2.png)
 
 * **REPL 程序定义：** 该插件为各种语言（Python、R、Shell、PHP、PowerShell、Perl、Lua、Vim、Ruby、Julia、JavaScript）定义了常用 REPL 程序的列表。它使用
-  `floaterm#repl#add_program` 函数将文件类型与其对应的 REPL 命令关联起来。这使得插件能够根据当前文件的类型自动启动正确的 REPL 环境。
+  `floaterm#repl#add_repl_program` 函数将文件类型与其对应的 REPL 命令关联起来。这使得插件能够根据当前文件的类型自动启动正确的 REPL 环境。
 * **块标记：** 该插件支持使用特殊的注释标记（例如，Python 的 `# %%`）标记代码块。这允许用户轻松地将特定的代码块发送到 REPL。`g:floaterm_repl_block_mark`
   变量存储了不同文件类型的这些标记。
 * **清除和退出命令：** 该插件定义了用于清除 REPL 屏幕和退出不同语言的 REPL 环境的命令。这些命令存储在 `g:floaterm_repl_clear` 和 `g:floaterm_repl_exit`
