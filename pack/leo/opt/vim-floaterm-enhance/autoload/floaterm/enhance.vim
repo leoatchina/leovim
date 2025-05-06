@@ -1,9 +1,6 @@
 " -------------------------------------------
-" basic functions
+" get_visual_select
 " -------------------------------------------
-function! floaterm#enhance#trim(str) abort
-    return substitute(a:str, "^\s\+\|\s\+$", "", "g")
-endfunction
 function! floaterm#enhance#get_visual_select() abort
     let [line_begin, column_start] = getpos("'<")[1:2]
     let [line_end, column_end] = getpos("'>")[1:2]
@@ -15,35 +12,6 @@ function! floaterm#enhance#get_visual_select() abort
     let contents[0] = contents[0][column_start - 1:]
     return join(contents, "\n")
 endfunction
-" echo cmdline message, this function is from github.com/skywind3000/vim-preview
-function! floaterm#enhance#showmsg(content, ...) abort
-    let saveshow = &showmode
-    set noshowmode
-    let wincols = &columns
-    let statusline = (&laststatus==1 && winnr('$')>1) || (&laststatus==2)
-    let reqspaces_lastline = (statusline || !&ruler) ? 12 : 29
-    let width = len(a:content)
-    let limit = wincols - reqspaces_lastline
-    let l:content = a:content
-    if width + 1 > limit
-        let l:content = strpart(l:content, 0, limit - 1)
-        let width = len(l:content)
-    endif
-    " prevent scrolling caused by multiple echo
-    redraw | echo '' | redraw
-    if a:0 > 0 && a:1 > 0
-        echohl ErrorMsg
-        echo l:content
-        echohl NONE
-    else
-        echohl Type
-        echo l:content
-        echohl NONE
-    endif
-    if saveshow != 0
-        set showmode
-    endif
-endfunc
 " -------------------------------------------
 " get border functions
 " -------------------------------------------
@@ -66,7 +34,7 @@ endfunction
 " Get range of current code block
 function! floaterm#enhance#get_block() abort
     let ft = &ft
-    let comment = s:get_comment(ft)
+    let comment = floaterm#enhance#get_comment(ft)
     if type(g:floaterm_repl_block_mark[ft]) == v:t_list
         let lst = []
         for each in g:floaterm_repl_block_mark[ft]
@@ -96,15 +64,51 @@ endfunction
 " -------------------------------------
 " get comment
 " -------------------------------------
-function! floaterm#enhance#get_comment(ft) abort
-    if !has_key(g:floaterm_repl_block_mark, a:ft) || empty(g:floaterm_repl_block_mark[a:ft])
-        let g:floaterm_repl_block_mark[a:ft] = g:floaterm_repl_block_mark['default']
-    endif
-    if type(g:floaterm_repl_block_mark[a:ft]) == type([])
-        let comment = split(g:floaterm_repl_block_mark[a:ft][0], " ")[0]
+function! floaterm#enhance#get_comment(...) abort
+    if a:0
+        let ft = a:1
     else
-        let comment = split(g:floaterm_repl_block_mark[a:ft], " ")[0]
+        let ft = &filetype
+    endif
+    if !has_key(g:floaterm_repl_block_mark, ft) || empty(g:floaterm_repl_block_mark[ft])
+        let g:floaterm_repl_block_mark[ft] = g:floaterm_repl_block_mark['default']
+    endif
+    if type(g:floaterm_repl_block_mark[ft]) == type([])
+        let comment = split(g:floaterm_repl_block_mark[ft][0], " ")[0]
+    else
+        let comment = split(g:floaterm_repl_block_mark[ft], " ")[0]
     endif
     return comment
 endfunction
-
+" --------------------------------------------------------------
+" echo cmdline message
+" XXX:this function is from github.com/skywind3000/vim-preview
+" --------------------------------------------------------------
+function! floaterm#enhance#showmsg(content, ...) abort
+    let saveshow = &showmode
+    set noshowmode
+    let wincols = &columns
+    let statusline = (&laststatus==1 && winnr('$')>1) || (&laststatus==2)
+    let reqspaces_lastline = (statusline || !&ruler) ? 12 : 29
+    let width = len(a:content)
+    let limit = wincols - reqspaces_lastline
+    let l:content = a:content
+    if width + 1 > limit
+        let l:content = strpart(l:content, 0, limit - 1)
+        let width = len(l:content)
+    endif
+    " prevent scrolling caused by multiple echo
+    redraw | echo '' | redraw
+    if a:0 > 0 && a:1 > 0
+        echohl ErrorMsg
+        echo l:content
+        echohl NONE
+    else
+        echohl Type
+        echo l:content
+        echohl NONE
+    endif
+    if saveshow != 0
+        set showmode
+    endif
+endfunc

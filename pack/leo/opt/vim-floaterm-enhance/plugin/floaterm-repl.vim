@@ -1,16 +1,16 @@
 let g:floaterm_repl_programs = get(g:, 'floaterm_repl_programs', {})
 " repl add_program
-call floaterm#repl#add_repl_program('python', 'ipython --no-autoindent', 'python3', 'python', 'ptipython', 'ptpython')
-call floaterm#repl#add_repl_program('r', 'radian', 'R')
-call floaterm#repl#add_repl_program('sh', 'bash', 'zsh', 'fish')
-call floaterm#repl#add_repl_program('php', 'psysh', 'php -a')
-call floaterm#repl#add_repl_program('ps1', 'powershell -noexit -executionpolicy bypass')
-call floaterm#repl#add_repl_program('perl', 'perlconsole', 'reply', 're.pl')
-call floaterm#repl#add_repl_program('lua', 'lua')
-call floaterm#repl#add_repl_program('vim', 'vim -e')
-call floaterm#repl#add_repl_program('rudy', 'irb')
-call floaterm#repl#add_repl_program('julia', 'julia')
-call floaterm#repl#add_repl_program('javascript', 'node')
+call floaterm#repl#add_program('python', 'ipython --no-autoindent', 'python3', 'python', 'ptipython', 'ptpython')
+call floaterm#repl#add_program('r', 'radian', 'R')
+call floaterm#repl#add_program('sh', 'bash', 'zsh', 'fish')
+call floaterm#repl#add_program('php', 'psysh', 'php -a')
+call floaterm#repl#add_program('ps1', 'powershell -noexit -executionpolicy bypass')
+call floaterm#repl#add_program('perl', 'perlconsole', 'reply', 're.pl')
+call floaterm#repl#add_program('lua', 'lua')
+call floaterm#repl#add_program('vim', 'vim -e')
+call floaterm#repl#add_program('rudy', 'irb')
+call floaterm#repl#add_program('julia', 'julia')
+call floaterm#repl#add_program('javascript', 'node')
 " block mark
 let g:floaterm_repl_block_mark = get(g:, 'floaterm_repl_block_mark', {})
 let g:floaterm_repl_block_mark.default = '# %%'
@@ -31,12 +31,13 @@ let g:floaterm_repl_exit.r = 'quit'
 " ----------------------------------
 " update open postion
 " ----------------------------------
-call floaterm#repl#update_repl_position()
-au VimResized * call floaterm#repl#update_repl_position()
+call floaterm#repl#update_position()
+au VimResized * call floaterm#repl#update_position()
 " ----------------------------------
 " commands. NOTE <bang>0 means move forword
 " ----------------------------------
-command! -bang FloatermReplStart call floaterm#repl#start(<bang>0)
+command! -bang FloatermReplStart call floaterm#repl#start()
+command! -bang FloatermReplChoose call floaterm#repl#choose()
 command! -bang -range FloatermReplSend call floaterm#repl#send(<line1>, <line2>, <bang>0)
 command! -bang -range FloatermReplSendVisual call floaterm#repl#send(<line1>, <line2>, <bang>0, 1)
 command! -bang FloatermReplSendBlock call floaterm#repl#send_border("block", <bang>0)
