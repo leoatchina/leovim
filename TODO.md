@@ -109,10 +109,9 @@
 - [x] tab nr highlighting group
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
-- [ ] name vim-floaterm-repl to vim-floaterm-run
-    - [ ] floaterm run is current tab related only, could not be used in other tabs, 
-    - [ ] using different tags for run, repl
-    - [ ] aider intergrated 
+- [ ] name vim-floaterm-repl to vim-floaterm-enhance
+    - [ ] Run is current tab related only, could not be used in other tabs, 
+    - [ ] using different idx for aider, repl
 - [ ] Ai related 
     - [x] ~~yarepl.nvim + aider~~
     - [ ] copilot plus 
@@ -127,6 +126,7 @@
 - [ ] Fzf --no-sort option for different commands
 - [ ] find conflicts using Git/Project/Current path.
 ## MyPlugins:
+- [x] fzf-registers
 - [ ] vim-funky
   - [x] open bug
   - [x] preview funky
@@ -148,7 +148,6 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [x] README
   - [x] deploy to github
-- [x] fzf-registers
 ## Plenty of works
 - [ ] vista
   - [ ] icons bug in windows-terminal
