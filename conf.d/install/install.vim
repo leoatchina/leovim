@@ -158,59 +158,8 @@ if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 " ------------------------------
-" lsp && linter tool
-" ------------------------------
-if PlannedLsp()
-    let g:linter_tool = 'lsp'
-    " lsp related
-    PlugAdd 'williamboman/mason-lspconfig.nvim'
-    PlugAdd 'camilledejoye/nvim-lsp-selection-range'
-    PlugAdd 'Wansmer/symbol-usage.nvim'
-    PlugAdd 'ravenxrz/call-graph.nvim'
-    PlugAdd 'neovim/nvim-lspconfig'
-    PlugAdd 'mhartington/formatter.nvim'
-    " lightline
-    PlugAdd 'josa42/nvim-lightline-lsp'
-    " lspimport is only for pyright
-    PlugAdd 'leoatchina/nvim-lspimport'
-    " neoconf
-    if Require('neoconf')
-        PlugAdd 'folke/neoconf.nvim'
-    endif
-elseif PlannedCoc()
-    if g:python_version > 3.06 && Require('ale')
-        let g:linter_tool = 'ale'
-    else
-        let g:linter_tool = 'coc'
-    endif
-elseif g:python_version > 3.06 && v:version >= 800
-    let g:linter_tool = 'ale'
-else
-    let g:linter_tool = ''
-endif
-if g:linter_tool == 'ale'
-    PlugAdd 'dense-analysis/ale'
-    PlugAdd 'maximbaz/lightline-ale'
-endif
-" ------------------------------
-" textobj
-" ------------------------------
-if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX())
-    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
-    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
-    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
-    PlugAdd 'm-demare/hlargs.nvim'
-elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
-    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
-    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
-    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
-    PlugAdd 'gcmt/wildfire.vim'
-endif
-" ------------------------------
 " AI engine
 " ------------------------------
-" AI chat
 if exists('$XAI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
     \  exists('$MISTRAL_API_KEY') ||
@@ -262,6 +211,41 @@ elseif has('patch-9.0.0185') || has('nvim')
     endif
 endif
 " ------------------------------
+" lsp && linter tool
+" ------------------------------
+if PlannedLsp()
+    let g:lint_tool = 'lsp'
+    " lsp related
+    PlugAdd 'williamboman/mason-lspconfig.nvim'
+    PlugAdd 'camilledejoye/nvim-lsp-selection-range'
+    PlugAdd 'Wansmer/symbol-usage.nvim'
+    PlugAdd 'ravenxrz/call-graph.nvim'
+    PlugAdd 'neovim/nvim-lspconfig'
+    PlugAdd 'mhartington/formatter.nvim'
+    " lightline
+    PlugAdd 'josa42/nvim-lightline-lsp'
+    " lspimport is only for pyright
+    PlugAdd 'leoatchina/nvim-lspimport'
+    " neoconf
+    if Require('neoconf')
+        PlugAdd 'folke/neoconf.nvim'
+    endif
+elseif PlannedCoc()
+    if g:python_version > 3.06 && Require('ale')
+        let g:lint_tool = 'ale'
+    else
+        let g:lint_tool = 'coc'
+    endif
+elseif g:python_version > 3.06 && v:version >= 800
+    let g:lint_tool = 'ale'
+else
+    let g:lint_tool = ''
+endif
+if g:lint_tool == 'ale'
+    PlugAdd 'dense-analysis/ale'
+    PlugAdd 'maximbaz/lightline-ale'
+endif
+" ------------------------------
 " debug tool
 " ------------------------------
 if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !PlannedLsp())
@@ -272,6 +256,25 @@ elseif has('nvim-0.9.5') && Require('debug')
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+endif
+" -----------------------
+" format
+" -----------------------
+PlugAdd 'sbdchd/neoformat'
+" ------------------------------
+" textobj
+" ------------------------------
+if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX())
+    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
+    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
+    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
+    PlugAdd 'm-demare/hlargs.nvim'
+elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
+    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
+    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
+    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+    PlugAdd 'gcmt/wildfire.vim'
 endif
 " ----------------------------
 " scheme
@@ -289,10 +292,6 @@ if g:has_truecolor
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
     endif
 endif
-" -----------------------
-" format
-" -----------------------
-PlugAdd 'sbdchd/neoformat'
 " ------------------------------
 " backbone plugins.
 " ------------------------------

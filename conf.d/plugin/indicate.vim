@@ -157,8 +157,8 @@ function! Version()
     if get(g:, 'symbol_tool', '') != ''
         let params_dict['symbol_tool'] = g:symbol_tool
     endif
-    if get(g:, 'linter_tool', '') != ''
-        let params_dict['linter_tool'] = g:linter_tool
+    if get(g:, 'lint_tool', '') != ''
+        let params_dict['lint_tool'] = g:lint_tool
     endif
     if get(g:, 'input_method', '') != ''
         let params_dict['input_method'] = g:input_method
