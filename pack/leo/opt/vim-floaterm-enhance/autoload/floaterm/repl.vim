@@ -2,8 +2,8 @@
 " get repl buf nr
 " -------------------------------------
 function! s:get_repl_bufnr(idx) abort
-    if exists('t:floaterm_repl_termnames') && has_key(t:floaterm_repl_termnames, a:idx)
-        let termname = t:floaterm_repl_termnames[a:idx]
+    if exists('t:floaterm_repl_dict') && has_key(t:floaterm_repl_dict, a:idx)
+        let termname = t:floaterm_repl_dict[a:idx]
         let bufnr = floaterm#terminal#get_bufnr(termname)
         return [bufnr, termname]
     else
@@ -11,14 +11,14 @@ function! s:get_repl_bufnr(idx) abort
     endif
 endfunction
 " -------------------------------------
-" update repl terminal name
+" set repl terminal name
 " -------------------------------------
-function! s:update_repl_tername(ft, bufnr, termname) abort
-    if !exists('t:floaterm_repl_termnames')
-        let t:floaterm_repl_termnames = {}
+function! s:set_repl_tername(ft, bufnr, termname) abort
+    if !exists('t:floaterm_repl_dict')
+        let t:floaterm_repl_dict = {}
     endif
     let idx = a:ft . a:bufnr
-    let t:floaterm_repl_termnames[idx] = a:termname
+    let t:floaterm_repl_dict[idx] = a:termname
 endfunction
 " -------------------------------------
 " choose a program to run repl
@@ -142,7 +142,7 @@ function! s:start(ft, choose_prg) abort
     endtry
     if empty(termname) || repl_bufnr <= 0
         let termname = printf('#%s|%s!%S', b:floaterm_repl_curr_bufnr, a:ft, toupper(split(program, " ")[0]))
-        call s:update_repl_tername(a:ft, b:floaterm_repl_curr_bufnr, termname)
+        call s:set_repl_tername(a:ft, b:floaterm_repl_curr_bufnr, termname)
         let floatermnew_cmd = printf('%s --name=%s --title=%s %s', g:floaterm_repl_new_cmd, termname, termname, program)
         execute floatermnew_cmd
     else

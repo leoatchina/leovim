@@ -48,7 +48,7 @@ if !isdirectory(g:startify_session_dir)
 endif
 nnoremap <leader>st :Startify<Cr>
 nnoremap <leader>sc :SClose<Cr>
-nnoremap <leader>ss :SSave<Space>
+nnoremap <leader>sv :SSave<Space>
 nnoremap <leader>sl :SLoad<Space>
 nnoremap <leader>sd :SDelete<Space>
 " --------------------------------
@@ -111,5 +111,5 @@ if PlannedFzf()
         call fzf#run(fzf#wrap(opts))
     endfunction
     command! FzfSession call s:fzf_startify_session()
-    nnoremap <silent> <Leader>sf :FzfSession<Cr>
+    nnoremap <silent><Leader>ss :FzfSession<Cr>
 endif
