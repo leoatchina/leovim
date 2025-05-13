@@ -130,6 +130,8 @@ function tm() {
             tmux new-session
         fi
     fi
+    # tmux set-option -g default-shell /bin/bash
+    # tmux set-option -g default-shell /bin/zsh
     # 2. Now we're in tmux, check if monitor window exists
     if tmux list-windows | grep -q "monitor"; then
         # 2.1: Monitor window exists, switch to it
