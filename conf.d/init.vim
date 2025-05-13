@@ -285,7 +285,7 @@ let g:web_filetypes = get(g:, 'web_filetypes', ['php', 'html', 'css', 'scss', 'w
 " -----------------------------------
 let g:todo_patterns = "(TODO|FIXME|WARN|ERROR|BUG)"
 let g:note_patterns = "(NOTE|XXX|HINT|STEP|ETC|In\\[\\d\*\\])"
-let g:root_patterns = get(g:, 'root_patterns', [".git", ".hg", ".svn", ".root", ".env", ".vscode", ".vim", ".idea", ".ccls", ".project", ".next"])
+let g:root_patterns = get(g:, 'root_patterns', [".git", ".hg", ".svn", ".root", ".env", ".vscode", ".vim", ".idea", ".ccls", ".project", ".next", ".venv", ".env", "venv", "env"])
 let g:root_files = get(g:, 'root_files', [".task", "tsconfig.js", "Cargo.toml", "go.mod"])
 " -----------------------------------
 " map

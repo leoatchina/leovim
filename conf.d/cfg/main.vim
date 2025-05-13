@@ -103,7 +103,7 @@ let g:loaded_perl_provider = 0
 function! s:python_prog()
     let l:root_dir = GetRootDir()
     let l:venv_path = ''
-    let l:venv_names = ['venv', '.venv', 'env', '.env']
+    let l:venv_names = ['.venv', '.env', 'venv', 'env']
     for l:venv_name in l:venv_names
         let l:possible_venv = l:root_dir . '/' . l:venv_name
         if isdirectory(l:possible_venv)
