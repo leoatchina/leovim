@@ -102,8 +102,8 @@ function d2c() {
 }
 
 
-alias cfi="cd $HOME/miniconda3/bin && conda install -c conda-forge "
-alias cpi="cd $HOME/miniconda3/bin && pip install "
+alias cfi="cd $HOME/miniconda3/bin && ./conda install -c conda-forge "
+alias cpi="cd $HOME/miniconda3/bin && ./pip install "
 
 # Function to link conda binaries to ~/.local/bin
 function lnc() {
