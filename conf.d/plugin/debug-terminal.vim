@@ -45,11 +45,9 @@ tmap <expr><C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
 if has('nvim')
     command! TermPackD tabe | call termopen([&shell], {'cwd': expand('~/.leovim.d')})
     nnoremap <silent><M-h>D :TermPackD<Cr>i
-    tnoremap <silent><M--> <C-\><C-n>:tabnew<Cr>:terminal<Cr>i
     nnoremap <silent>_ :tabnew<Cr>:terminal<Cr>i
 else
     nnoremap <silent><M-h>D :tab terminal<CR>cd ~/.leovim.d<tab><CR>
-    tnoremap <silent><M--> <C-\><C-n>:tab terminal<Cr>
     nnoremap <silent>_ :tab terminal<Cr>
 endif
 tnoremap <silent><C-v> <C-\><C-n>
@@ -563,23 +561,19 @@ au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteW
 " -------------------------------------
 " map Floaterm keys
 " -------------------------------------
-function! s:bind_keymap(mapvar, command, ...) abort
+function! s:bind_keymap(mapvar, command) abort
     let mp = maparg(a:mapvar, 'n')
     if empty(mp) || mp =~# 'Nop'
         execute printf('nnoremap <silent>%s :%s<CR>', a:mapvar, a:command)
     endif
     execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
-    " XXX: if 0, not overwrite tmap
-    if a:0 == 0 || a:1 > 0
-        execute printf('tnoremap <silent>%s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
-    endif
 endfunction
-call s:bind_keymap('<M-->', 'FloatermToggle', 0)
+call s:bind_keymap('<M-->', 'FloatermToggle')
+call s:bind_keymap('<M-+>', 'FloatermSpecial')
+call s:bind_keymap('<M-=>', 'FloatermList')
 call s:bind_keymap('<M-_>', 'FloatermKill')
 call s:bind_keymap('<M-{>', 'FloatermPrev')
 call s:bind_keymap('<M-}>', 'FloatermNext')
-call s:bind_keymap('<M-=>', 'FloatermList')
-call s:bind_keymap('<M-+>', 'FloatermSpecial')
 " -----------------------------------------------------------------------------------------
 " using vim-floaterm-enhance to do repl/run/aider. NOTE: below bang[!] means cursor not move
 " -----------------------------------------------------------------------------------------
