@@ -1,0 +1,32 @@
+#define _STD_BEGIN namespace std {
+-D _STD_BEGIN= namespace std {
+#define _STD_END   }
+-D _STD_END=}
+#define _STD       ::std::
+-D _STD= ::std::
+#define _CHRONO    ::std::chrono::
+-D _CHRONO= ::std::chrono::
+#define _RANGES    ::std::ranges::
+-D _RANGES= ::std::ranges::
+#define _STDEXT_BEGIN namespace stdext {
+-D _STDEXT_BEGIN= namespace stdext {
+#define _STDEXT_END   }
+-D _STDEXT_END=}
+#define _STDEXT       ::stdext::
+-D _STDEXT= ::stdext::
+#define _CSTD    ::
+-D _CSTD=::
+# Ignores
+-I _NODISCARD
+-I _EXPORT_STD
+-I _CRT_GUARDOVERFLOW
+-I _Out_writes_all_+
+-I _In_reads_+
+-I _CONSTEXPR20 
+-I _CONSTEXPR17
+-I __PURE_APPDOMAIN_GLOBAL
+-I _CRTDATA2_IMPORT
+-I _CRTIMP2_PURE_IMPORT
+-I __thiscall
+-I _STL_RESTORE_CLANG_WARNINGS
+-I _STL_DISABLE_CLANG_WARNINGS

@@ -1,0 +1,18 @@
+# nlohmann/json options
+-D NLOHMANN_BASIC_JSON_TPL_DECLARATION template<template<typename, typename, typename...> class ObjectType, template<typename, typename...> class ArrayType, class StringType, class BooleanType, class NumberIntegerType, class NumberUnsignedType, class NumberFloatType, template<typename> class AllocatorType, template<typename, typename = void> class JSONSerializer, class BinaryType, class CustomBaseClass>
+# to simplify we ignore version discrimination in the symbols
+-D NLOHMANN_JSON_NAMESPACE_BEGIN=namespace nlohmann {
+-D NLOHMANN_JSON_NAMESPACE_END=}
+-D JSON_HAS_CPP_14=1
+-D JSON_DIAGNOSTICS=0
+-D JSON_THROW(x)=x
+-D JSON_TRY=try
+-D JSON_CATCH=catch
+-D JSON_INLINE_VARIABLE=inline
+# JSON_HEDLEY_LIKELY(x)=(!!(x))
+-D JSON_HEDLEY_LIKELY(x)=x
+# JSON_HEDLEY_UNLIKELY(x)=(!!(x))
+-D JSON_HEDLEY_UNLIKELY(x)=x
+-D JSON_HEDLEY_DEPRECATED_FOR(x)=x
+-D JSON_PRIVATE_UNLESS_TESTED=private
+-I JSON_EXPLICIT
