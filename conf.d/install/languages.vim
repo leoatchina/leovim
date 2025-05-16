@@ -90,11 +90,11 @@ endif
 " ------------------------------
 if PlannedLsp() && Require('java') && Planned('nvim-dap')
     PlugAdd 'nvim-java/lua-async-await'
-    PlugAdd 'Zeioth/nvim-java', {'branch': 'mason-v2.0'}
+    PlugAdd 'nvim-java/nvim-java'
+    PlugAdd 'nvim-java/nvim-java-dap'
     PlugAdd 'nvim-java/nvim-java-core'
     PlugAdd 'nvim-java/nvim-java-test'
     PlugAdd 'nvim-java/nvim-java-refactor'
-    PlugAdd 'nvim-java/nvim-java-dap'
     PlugAdd 'JavaHello/spring-boot.nvim'
 endif
 " ------------------------------
