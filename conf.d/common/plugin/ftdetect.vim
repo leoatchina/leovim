@@ -1,6 +1,6 @@
 au BufRead,BufNewFile .tmux.conf,tmux.conf set filetype=tmux
-au BufRead,BufNewFile .configrc,.bashrc,.zshrc,bashrc,configrc set filetype=bash
-au BufRead,BufNewFile *.vimrc.* set filetype=vim
+au BufRead,BufNewFile .configrc,.bashrc,.zshrc,bashrc,configrc,*.sh set filetype=bash
+au BufRead,BufNewFile *.vimrc.*,.vimrc set filetype=vim
 au BufRead,BufNewFile *.jl set filetype=julia
 au BufRead,BufNewFile *.idr set filetype=idris
 au BufRead,BufNewFile *.conf set filetype=conf

@@ -58,7 +58,8 @@ else
     xnoremap ! :<C-u>!<C-R>=GetVisualSelection()<Cr>
 endif
 function! s:asyncrun(...)
-    if &ft == '' || &buftype != ''
+    let ft = &ft
+    if ft == '' || &buftype != ''
         call preview#errmsg("nofiletype could not be runned.")
         return
     endif
@@ -106,42 +107,43 @@ function! s:asyncrun(...)
             let params = ' -cwd=$(VIM_FILEDIR) -mode=bang'
         endif
     endif
-    if &ft ==# 'dosbatch' && WINDOWS()
+    let ft = &ft
+    if ft ==# 'dosbatch' && WINDOWS()
         let run_cmd = s:run_command . params. ' %'
-    elseif &ft ==# 'sh' && executable('bash')
+    elseif (ft ==# 'sh' || ft ==# 'bash') && executable('bash')
         let run_cmd = s:run_command . params . ' bash %'
-    elseif &ft ==# 'python' && executable(g:python_prog)
+    elseif ft ==# 'python' && executable(g:python_prog)
         if get(g:, 'pretty_errors_import', 0)
             let run_cmd = s:run_command . params . ' ' . g:python_prog . ' -m pretty_errors %'
         else
             let run_cmd = s:run_command . params . ' ' . g:python_prog . ' %'
         endif
-    elseif &ft ==# 'r' && executable('Rscript')
+    elseif ft ==# 'r' && executable('Rscript')
         let run_cmd = s:run_command . params . ' Rscript %'
-    elseif &ft ==# 'go' && executable('go')
+    elseif ft ==# 'go' && executable('go')
         let run_cmd = s:run_command . params . ' go run %'
-    elseif &ft ==# 'perl' && executable('perl')
+    elseif ft ==# 'perl' && executable('perl')
         let run_cmd = s:run_command . params . ' perl %'
-    elseif &ft ==# 'javascript' && executable('node')
+    elseif ft ==# 'javascript' && executable('node')
         let run_cmd = s:run_command . params . ' node %'
-    elseif &ft ==# 'vue' && executable('npm')
+    elseif ft ==# 'vue' && executable('npm')
         let run_cmd = s:run_command . params . ' npm run %'
-    elseif &ft ==# 'typescript' && executable('ts-node')
+    elseif ft ==# 'typescript' && executable('ts-node')
         let run_cmd = s:run_command . params . ' ts-node %'
-    elseif &ft ==# 'javascript' && executable('node')
+    elseif ft ==# 'javascript' && executable('node')
         let run_cmd = s:run_command . params . ' node %'
     " c && cpp
-    elseif &ft ==# 'c' && get(g:, 'gcc_cmd', '') != ''
+    elseif ft ==# 'c' && get(g:, 'gcc_cmd', '') != ''
         if WINDOWS()
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:gcc_cmd
-    elseif &ft ==# 'cpp' && get(g:, 'gpp_cmd', '') != ''
+    elseif ft ==# 'cpp' && get(g:, 'gpp_cmd', '') != ''
         if WINDOWS()
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:gpp_cmd
-    elseif &ft ==# 'rust' && get(g:, 'rustc_cmd', '') != ''
+    elseif ft ==# 'rust' && get(g:, 'rustc_cmd', '') != ''
         if WINDOWS()
             silent! call mkdir("../target/test", "p")
         endif
@@ -150,11 +152,11 @@ function! s:asyncrun(...)
         let run_cmd = ''
     endif
     if empty(run_cmd)
-        if &ft ==# 'vim'
+        if ft ==# 'vim'
             echo "source current vim file"
             execute("source %")
         else
-            call preview#errmsg('FileType ' . &ft . ' could not be runned.')
+            call preview#errmsg('FileType ' . ft . ' could not be runned.')
         endif
     else
         if type == 'qf'
@@ -235,7 +237,7 @@ if has('nvim') || v:version >= 801
             elseif a:wintype != 'float'
                 call feedkeys("\<C-_>w", "n")
             endif
-        elseif &ft == 'floaterm'
+        elseif ft == 'floaterm'
             call floaterm#util#startinsert()
         endif
     endfunction
