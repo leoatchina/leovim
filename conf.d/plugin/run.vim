@@ -60,7 +60,7 @@ endif
 function! s:asyncrun(...)
     let ft = &ft
     if ft == '' || &buftype != ''
-        call preview#errmsg("nofiletype could not be runned.")
+        call preview#errmsg("empty filetype could not be runned.")
         return
     endif
     w!
@@ -186,39 +186,38 @@ command! RunQfRight call s:asyncrun('right', 'qf')
 " run in floaterm
 " -------------------------
 if has('nvim') || v:version >= 801
-    " run in tabterm
     let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
-    " run in floaterm right/bottom
-    function! s:floaterm_run(opts, wintype, position)
-        if !g:has_popup_floating && a:wintype == 'float'
+    " run in floaterm right/bottom/float
+    function! s:floaterm_run(opts, pos, position)
+        if !g:has_popup_floating && a:pos == 'float'
             call preview#errmsg("Please update to vim8.1+/nvim0.6+ to run script in floating or popup window.")
             return
         endif
-        let found_same_floaterm = v:false
+        let found_floaterm = v:false
         let buflist = floaterm#buflist#gather()
         if len(buflist) > 0
             for floaterm_bufnr in buflist
-                " NOTE: found floaterm of same floaterm wintype
-                if floaterm#config#get(floaterm_bufnr, 'wintype') == a:wintype
-                    let found_same_floaterm = v:true
+                " NOTE: found floaterm of same floaterm pos
+                if floaterm#config#get(floaterm_bufnr, 'wintype') == a:pos
+                    let found_floaterm = v:true
                     break
                 endif
             endfor
         endif
-        if found_same_floaterm
+        if found_floaterm
             call floaterm#terminal#open_existing(floaterm_bufnr)
         else
-            let cmd = 'FloatermNew --wintype=' . a:wintype
+            let cmd = 'FloatermNew --wintype=' . a:pos
             if has_key(a:opts, 'width')
-                let cmd .= " --width=" . a:opts.width
-            elseif a:wintype == 'float'
+                let cmd .= " --width="  . width
+            elseif a:pos == 'float'
                 let cmd .= " --width=0.7"
-            elseif a:wintype == 'vsplit'
+            elseif a:pos == 'vsplit'
                 let cmd .= " --width=0.45"
             endif
             if has_key(a:opts, 'height')
                 let cmd .= " --height=" . a:opts.height
-            elseif a:wintype == 'float' || a:wintype == 'split'
+            elseif a:pos == 'float' || a:pos == 'split'
                 let cmd .= " --height=0.3"
             endif
             let cmd .= " --position=" . a:position
@@ -234,7 +233,7 @@ if has('nvim') || v:version >= 801
         if get(a:opts, 'focus', 1) == 0
             if has('nvim')
                 stopinsert | noa wincmd p
-            elseif a:wintype != 'float'
+            elseif a:pos != 'float'
                 call feedkeys("\<C-_>w", "n")
             endif
         elseif ft == 'floaterm'
@@ -250,10 +249,10 @@ if has('nvim') || v:version >= 801
     function! s:floaterm_bottom(opts)
         call s:floaterm_run(a:opts, 'split', 'botright')
     endfunc
-    let g:asyncrun_runner.floaterm_right = function('s:floaterm_right')
-    let g:asyncrun_runner.floaterm_float = function('s:floaterm_float')
+    let g:asyncrun_runner.floaterm_right  = function('s:floaterm_right')
+    let g:asyncrun_runner.floaterm_float  = function('s:floaterm_float')
     let g:asyncrun_runner.floaterm_bottom = function('s:floaterm_bottom')
-    " ------------------ Taske check firstly, if not, run in special position
+    " Task check firstly, if not, run in special position
     function s:task_check(task_name)
         let tasks = asynctasks#list('')
         if len(tasks) == 0
@@ -280,38 +279,20 @@ if has('nvim') || v:version >= 801
         endif
     endfunction
     " set commands
-    command! TaskTestOrTab call s:task_run_or_pos('task-test', 'tab')
-    command! TaskRunOrRight call s:task_run_or_pos('task-run', 'floaterm_right')
-    command! TaskBuildOrBottom call s:task_run_or_pos('task-build', 'floaterm_bottom')
+    command! TaskTestOrTab       call s:task_run_or_pos('task-test', 'tab')
+    command! TaskFinalizeOrQf    call s:task_run_or_pos('task-finalize', 'qf')
+    command! TaskRunOrRight      call s:task_run_or_pos('task-run', 'floaterm_right')
+    command! TaskBuildOrBottom   call s:task_run_or_pos('task-build', 'floaterm_bottom')
     command! TaskFinalizeOrFloat call s:task_run_or_pos('task-finalize', 'floaterm_float')
-    command! TaskFinalizeOrQf call s:task_run_or_pos('task-finalize', 'qf')
     " map
-    nnoremap <silent><M-T> :TaskTestOrTab<CR>
-    nnoremap <silent><M-R> :TaskRunOrRight<CR>
-    nnoremap <silent><M-B> :TaskBuildOrBottom<CR>
     if has('nvim')
         nnoremap <silent><M-F> :TaskFinalizeOrFloat<CR>
     else
         nnoremap <silent><M-F> :TaskFinalizeOrQf<CR>
     endif
-    " SmartRunTerm is for different filetypes
-    function SmartRunTerm(cmd, pos)
-        if a:pos ==# 'smart'
-            if &columns > &lines * 3
-                execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_right -width=0.45 " .  a:cmd
-            else
-                if has("nvim")
-                    execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_float -width=0.9 -height=0.4 " .  a:cmd
-                else
-                    execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=0 -mode=term -pos=floaterm_bottom -height=0.4 " .  a:cmd
-                endif
-            endif
-        elseif a:pos ==# "external"
-            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=external " . a:cmd
-        else
-            execute "AsyncRun -cwd=$(VIM_FILEDIR) -focus=1 -mode=term -pos=" . a:pos . " " . a:cmd
-        endif
-    endfunction
+    nnoremap <silent><M-T> :TaskTestOrTab<CR>
+    nnoremap <silent><M-R> :TaskRunOrRight<CR>
+    nnoremap <silent><M-B> :TaskBuildOrBottom<CR>
 else
     nnoremap <M-T> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
     nnoremap <silent><M-B> :RunQfBottom<CR>
