@@ -1,10 +1,11 @@
 ---------------------
 -- dap
 ---------------------
-local dap = require("dap")
-local dapui = require("dapui")
-local api = vim.api
-local fn = vim.fn
+local vscode = require "dap.ext.vscode"
+local dap    = require("dap")
+local dapui  = require("dapui")
+local api    = vim.api
+local fn     = vim.fn
 dap.defaults.fallback.exception_breakpoints = { 'default' }
 dap.defaults.python.exception_breakpoints = { 'uncaught' }
 fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
@@ -111,22 +112,22 @@ dapui.setup({
     },
   },
 })
--------------------------------------
+------------------------------------------------------------
 -- load dap_json, modified from dap.ext.vscode.lauchjs
--------------------------------------
+------------------------------------------------------------
 local function load_json(dap_json)
-  local vscode = require "dap.ext.vscode"
   local type_to_filetypes = vscode.type_to_filetypes
   local configurations = vscode.getconfigs(dap_json)
-  -- init dap_configurations
-  local dap_config_inited = false
   assert(configurations, "launch.json must have a 'configurations' key")
+  -- NOTE: dap_config_inited may should be set outside ipairs
+  local dap_config_inited = false
   for _, config in ipairs(configurations) do
     assert(config.type, "Configuration in launch.json must have a 'type' key")
     assert(config.name, "Configuration in launch.json must have a 'name' key")
     local filetypes = type_to_filetypes[config.type] or { config.type, }
     for _, filetype in pairs(filetypes) do
       if not dap_config_inited then
+        -- do not use default config
         dap.configurations[filetype] = {}
         dap_config_inited = true
       end
@@ -140,7 +141,7 @@ local function load_json(dap_json)
     end
   end
 end
-local function dap_run(dap_json, run, run_to_cursor)
+local function dap_load_run(json_file, run, run_to_cursor)
   local ok = false
   run = run or false
   run_to_cursor = run_to_cursor or false
@@ -152,7 +153,7 @@ local function dap_run(dap_json, run, run_to_cursor)
         ok, _ = pcall(dap.continue)
       end
     else
-      ok, _ = pcall(load_json, dap_json)
+      ok, _ = pcall(load_json, json_file)
       if ok then
         if run_to_cursor then
           dap.clear_breakpoints()
@@ -162,21 +163,53 @@ local function dap_run(dap_json, run, run_to_cursor)
       end
     end
   else
-    ok, _ = pcall(load_json, dap_json)
+    ok, _ = pcall(load_json, json_file)
   end
   return ok
 end
-function _G.DapContinue(json)
-  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return dap_run(dap_json, true, false)
+local function get_json_file(json_file)
+  local json_file = json_file or fn.GetRootDir() .. '/.vim/dap.json'
+  if fn.filereadable(json_file) then
+    return json_file
+  else
+    return nil
+  end
 end
-function _G.DapRunToCusor(json)
-  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return dap_run(dap_json, true, true)
+function _G.DapRunToCusor(json_file)
+  local json_file = get_json_file(json_file)
+  if json_file then
+    ok = dap_load_run(json_file, true, true)
+  else
+    ok, _ = pcall(dap.run_to_cursor)
+  end
+  if not ok then
+    DapReset()
+  end
 end
-function _G.DapLoadConfig(json)
-  local dap_json = json and fn.filereadable(json) > 0 or (fn.GetRootDir() .. '/.vim/dap.json')
-  return dap_run(dap_json, false, false)
+function _G.DapContinue(json_file)
+  local json_file = get_json_file(json_file)
+  if json_file then
+    ok = dap_load_run(json_file, true, false)
+  else
+    ok, _ = pcall(dap.continue)
+  end
+  if not ok then
+    DapReset()
+  end
+end
+function _G.DapLoadConfig(json_file)
+  local json_file = get_json_file(json_file)
+  if json_file then
+    ok = dap_load_run(json_file, false, false)
+  else
+    ok = false
+  end
+  if not ok then
+    DapReset()
+  end
+end
+function _G.DapPause()
+  require"dap".pause()
 end
 ---------------------------------
 -- breakpoints
@@ -251,7 +284,7 @@ dap.listeners.before.event_exited.dapui_config = function()
   dap.repl.close()
 end
 -- close tab
-local function close_dap(close)
+local function dap_reset_close(close)
   local closetab = close or false
   pcall(dap.repl.close)
   pcall(dap.disconnect)
@@ -267,8 +300,8 @@ local function close_dap(close)
   end
 end
 function _G.DapReset()
-  close_dap(true)
+  dap_reset_close(true)
 end
 function _G.DapClose()
-  close_dap(false)
+  dap_reset_close(false)
 end

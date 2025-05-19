@@ -365,16 +365,16 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
     nnoremap <silent><M-d><M-d> <cmd>lua DapRunToCusor()<Cr>
     nnoremap <silent><M-d><Cr> <cmd>lua DapContinue()<Cr>
+    nnoremap <silent><M-d>p <cmd>lua DapPause()<Cr>
+    nnoremap <silent><M-d>q <cmd>lua DapReset()<Cr>
     nnoremap <silent><M-d>n <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><M-d>N <cmd>lua require"dap".step_back()<Cr>
     nnoremap <silent><M-d>i <cmd>lua require"dap".step_into()<Cr>
     nnoremap <silent><M-d>o <cmd>lua require"dap".step_out()<Cr>
-    nnoremap <silent><M-d>p <cmd>lua require"dap".pause()<Cr>
-    nnoremap <silent><M-d>q <cmd>lua DapReset()<Cr>
     nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
     nnoremap <silent><F4> <cmd>lua DapRunToCusor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
-    nnoremap <silent><F6> <cmd>lua require"dap".pause()<Cr>
+    nnoremap <silent><F6> <cmd>lua DapPause()<Cr>
     nnoremap <silent><F7> <cmd>lua DapBreakpointPrev()<Cr>
     nnoremap <silent><F8> <cmd>lua DapBreakpointNext()<Cr>
     nnoremap <silent><F9> <cmd>lua require"dap".toggle_breakpoint()<Cr>
