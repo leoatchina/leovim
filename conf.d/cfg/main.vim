@@ -385,7 +385,12 @@ function! s:plug_update() abort
     PlugUpdate
 endfunction
 command! PlugOptUpdate call s:plug_update()
-noremap <silent><leader>U :PlugOptUpdate<Cr>
+noremap <silent><Tab>U :PlugOptUpdate<Cr>
+noremap <silent><Tab>I :PlugInstall<Cr>
+noremap <silent><Tab>C :PlugClean<Cr>
+noremap <silent><Tab>S :PlugStatus<Cr>
+noremap <silent><Tab>O :PlugSnapshot<Cr>
+noremap <silent><Tab>P :Plug
 call plug#end()
 " ------------------------------
 " set installed
