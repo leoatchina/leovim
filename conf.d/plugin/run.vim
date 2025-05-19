@@ -188,8 +188,11 @@ command! RunQfRight call s:asyncrun('right', 'qf')
 if has('nvim') || v:version >= 801
     let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
     " run in floaterm right/bottom/float
-    function! s:floaterm_run(opts, pos, position)
-        if !g:has_popup_floating && a:pos == 'float'
+    function! s:floaterm_run(opts, floaterm_wintype, position)
+        let opts = copy(a:opts)
+        let floaterm_wintype = copy(a:floaterm_wintype)
+        let position = copy(a:position)
+        if !g:has_popup_floating && floaterm_wintype == 'float'
             call preview#errmsg("Please update to vim8.1+/nvim0.6+ to run script in floating or popup window.")
             return
         endif
@@ -198,7 +201,7 @@ if has('nvim') || v:version >= 801
         if len(buflist) > 0
             for floaterm_bufnr in buflist
                 " NOTE: found floaterm of same floaterm pos
-                if floaterm#config#get(floaterm_bufnr, 'wintype') == a:pos
+                if floaterm#config#get(floaterm_bufnr, 'wintype') == floaterm_wintype
                     let found_floaterm = v:true
                     break
                 endif
@@ -207,20 +210,20 @@ if has('nvim') || v:version >= 801
         if found_floaterm
             call floaterm#terminal#open_existing(floaterm_bufnr)
         else
-            let cmd = 'FloatermNew --wintype=' . a:pos
-            if has_key(a:opts, 'width')
-                let cmd .= " --width="  . width
-            elseif a:pos == 'float'
+            let cmd = 'FloatermNew --wintype=' . floaterm_wintype
+            if has_key(opts, 'width')
+                let cmd .= " --width="  . opts.width
+            elseif floaterm_wintype == 'float'
                 let cmd .= " --width=0.7"
-            elseif a:pos == 'vsplit'
+            elseif floaterm_wintype == 'vsplit'
                 let cmd .= " --width=0.45"
             endif
-            if has_key(a:opts, 'height')
-                let cmd .= " --height=" . a:opts.height
-            elseif a:pos == 'float' || a:pos == 'split'
+            if has_key(opts, 'height')
+                let cmd .= " --height=" . opts.height
+            elseif floaterm_wintype == 'float' || floaterm_wintype == 'split'
                 let cmd .= " --height=0.3"
             endif
-            let cmd .= " --position=" . a:position
+            let cmd .= " --position=" . position
             exec cmd
             let floaterm_bufnr = floaterm#buflist#curr()
         endif
@@ -233,7 +236,7 @@ if has('nvim') || v:version >= 801
         if get(a:opts, 'focus', 1) == 0
             if has('nvim')
                 stopinsert | noa wincmd p
-            elseif a:pos != 'float'
+            elseif floaterm_wintype != 'float'
                 call feedkeys("\<C-_>w", "n")
             endif
         elseif ft == 'floaterm'
