@@ -53,7 +53,7 @@ alias GIT="\\ls -A --group-directories-first -1 | while IFS= read -r line; do gi
 alias RG='rg --no-heading '
 
 alias tmp='cd /tmp'
-alias disks="df -lh | head -1; df -lh | sort | grep -vE '^/srv' |  grep -E '/home|/srv|/export|/data|/mnt|/work|/$'"
+alias disks="df -lh | head -1; df -lh | sort | grep -vE '^/srv' |  grep -E '/home|/srv|/export|/data|/mnt|/media|/docker|/work|/$'"
 alias clash="https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897 "
 
 alias v='bash ~/.local/bin/v.sh'
