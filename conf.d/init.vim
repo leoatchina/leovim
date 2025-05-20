@@ -790,6 +790,9 @@ endif
 " open_in_other
 " ------------------------
 function! s:open_in_other()
+    if !has('nvim')
+        return
+    endif
     if exists('g:vscode') && executable(get(g:, 'open_vim', ''))
         call VSCodeNotify('copyFilePath')
         let p = fnameescape(@*)

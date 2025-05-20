@@ -86,6 +86,24 @@ vim.keymap.set({"n", "x"}, "<M-m><M-m>",
     dapui_toggle()
   end, { noremap = true, silent = true }
 )
+-- 打开 dapui
+function _G.DapUIOpen()
+  local windows = require("dapui.windows")
+  -- 根据屏幕宽高比选择合适的布局
+  if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
+    dapui.open(2)
+    dapui.open(3)
+  else
+    dapui.open(1)
+    dapui.open(3)
+  end
+end
+-- 关闭 dapui
+function _G.DapUIClose()
+  dapui.close()
+end
+vim.keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
+vim.keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
 ---------------------
 -- dapui
 ---------------------
@@ -251,10 +269,10 @@ end
 function _G.DapBreakpointPrev()
   goto_breakpoint('prev')
 end
----------------------------------
+--------------------------------------
 -- daptab, auto open/close/load dapui in tab
 -- https://github.com/przepompownia/nvim-dap-tab/blob/master/lua/dap-tab/init.lua
----------------------------------
+--------------------------------------
 local debugWinId = nil
 local function daptab_exists()
   if nil ~= debugWinId and api.nvim_win_is_valid(debugWinId) then
