@@ -793,10 +793,10 @@ function! s:open_in_other()
     if !has('nvim')
         return
     endif
-    if exists('g:vscode') && executable(get(g:, 'open_vim', ''))
+    if exists('g:vscode') && executable(get(g:, 'open_neovim', ''))
         call VSCodeNotify('copyFilePath')
         let p = fnameescape(@*)
-        execute printf('!%s +%d "%s"', g:open_vim, line('.'), p)
+        execute printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
     elseif !exists('g:vscode') && executable(get(g:, 'open_editor', 'code'))
         let editor = get(g:, 'open_editor', 'code')
         silent! exec printf("!%s --goto %s:%d", editor, Expand("%:p"), line("."))
