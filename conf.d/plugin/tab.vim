@@ -26,7 +26,7 @@ nnoremap <C-w><Tab> <C-w>r
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
 " ------------------------------------
-" XXX: basic tab label function
+" basic tab label function
 " ------------------------------------
 function! Vim_NeatBuffer(bufnr, fullname)
     let l:name = bufname(a:bufnr)

@@ -65,10 +65,10 @@ nnoremap <M-I> :set nopaste! nopaste?<CR>
 " -------------------------------
 if exists("##TextYankPost") && UNIX()
     function! s:raw_echo(str)
-        if filewritable('/dev/fd/2')
+        if filewritable('/dev/fd/2') && !HAS_GUI()
             call writefile([a:str], '/dev/fd/2', 'b')
         else
-            exec("silent! !echo " . shellescape(a:str))
+            call system("!echo " . shellescape(a:str))
             redraw!
         endif
     endfunction
