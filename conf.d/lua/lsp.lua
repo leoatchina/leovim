@@ -230,18 +230,20 @@ function M.LspAction(method, open_action)
     if loc == nil then
       goto continue
     else
-      local filename = loc.filename:gsub("file://", "")
+      if loc.filename:match("^file:") then
+        loc.filename = loc.filename:gsub("^file:[/]*", "")
+      end
       if add_qf then
-        local text = vim.fn.readfile(filename)[loc.lnum]
+        local text = vim.fn.readfile(loc.filename)[loc.lnum]
         table.insert(qflist , {
-          filename = filename,
+          filename = loc.filename,
           lnum = loc.lnum,
           col = loc.col,
           text = text
         })
       else
         vim.api.nvim_set_var("lsp_found", 1)
-        vim.api.nvim_command(open_action .. ' ' .. filename)
+        vim.api.nvim_command(open_action .. ' ' .. loc.filename)
         vim.api.nvim_win_set_cursor(0, {loc.lnum, loc.col})
         return
       end
