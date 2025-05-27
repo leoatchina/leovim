@@ -148,16 +148,6 @@ fi
 
 ########################### install softwares #####################################
 
-# clone unix tools for (neo)vim
-note "Install/update leovim.unix"
-if [ -d ~/.leovim.unix ]; then
-    cd ~/.leovim.unix && git pull > /dev/null 2>&1
-    success "~/.leovim.unix updated"
-else
-    git clone https://gitee.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
-    success "~/.leovim.unix cloned"
-fi
-
 if [ $# -gt 0 ]; then
     mode=$1
     if [ $# -gt 1 ]; then
@@ -314,6 +304,16 @@ else
     installplug='yes'
 fi
 
+
+############################### clone unix tools ################################### 
+note "Install/update leovim.unix"
+if [ -d ~/.leovim.unix ]; then
+    cd ~/.leovim.unix && git pull > /dev/null 2>&1
+    success "~/.leovim.unix updated"
+else
+    git clone https://gitee.com/leoatchina/leovim-unix ~/.leovim.unix > /dev/null 2>&1
+    success "~/.leovim.unix cloned"
+fi
 ################################ set optional config #############################
 if [ -f $HOME/.vimrc.opt ];then
     info "$HOME/.vimrc.opt exists. You can modify it."
