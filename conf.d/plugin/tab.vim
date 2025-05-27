@@ -141,7 +141,7 @@ if exists('&showtabpanel')
             endif
         endfor
         " Add some padding for tab number and brackets
-        return l:max_length + 15
+        return l:max_length + 25
     endfunction
 
     function! Vim_NeatTabPanelText()
@@ -150,7 +150,16 @@ if exists('&showtabpanel')
         let l:winnr = tabpagewinnr(l:tabnr)
         let l:bufnr = l:buflist[l:winnr - 1]
         let l:caption = Vim_NeatBuffer(l:bufnr, 0)
-        return "%#TabNumSel#[".l:tabnr."]%#TabLineSel# ".l:caption
+        
+        " Check if this is the current active tab
+        let l:curtabnr = tabpagenr()
+        if l:tabnr == l:curtabnr
+            " Highlight active tab
+            return "%#TabNumSel#[".l:tabnr."]%#TabLineSel# ".l:caption." %#TabLineSel#"
+        else
+            " Normal tab display
+            return "%#TabLine#[".l:tabnr."]%#TabLine# ".l:caption." %#TabLine#"
+        endif
     endfunc
     function! Vim_UpdateTabPanelWidth()
         if exists('&tabpanelwidth')
