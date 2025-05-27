@@ -25,10 +25,9 @@ nnoremap <C-w><Cr> <C-w>T
 nnoremap <C-w><Tab> <C-w>r
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
-" ------------------------
-" tab label
-" ------------------------
-" 定义标签页编号的高亮组
+" ------------------------------------
+" XXX: basic tab label function
+" ------------------------------------
 function! Vim_NeatBuffer(bufnr, fullname)
     let l:name = bufname(a:bufnr)
     if getbufvar(a:bufnr, '&modifiable')
@@ -56,7 +55,6 @@ function! Vim_NeatBuffer(bufnr, fullname)
         endif
     endif
 endfunc
-" get a single tab label
 function! Vim_NeatTabLabel(n, ...)
     if a:0 && a:1
         let active = 1
@@ -72,7 +70,9 @@ function! Vim_NeatTabLabel(n, ...)
     endif
     return l:label
 endfun
+" ---------------------------------
 " make tabline in terminal mode
+" ---------------------------------
 hi link TabNumSel Type
 function! Vim_NeatTabLine()
     let s = ''
@@ -109,8 +109,10 @@ augroup TablineColorschemeFix
     autocmd!
     autocmd ColorScheme * set tabline=%!Vim_NeatTabLine()
 augroup END
-if !has('nvim-0.11')
-    " get a single tab label in gui
+" ---------------------------------
+" make tabline in GuiMode
+" ---------------------------------
+ if !has('nvim-0.11')
     function! Vim_NeatGuiTabLabel()
         let l:num = v:lnum
         let l:buflist = tabpagebuflist(l:num)
@@ -120,13 +122,65 @@ if !has('nvim-0.11')
     endfunc
     set guitablabel=%{Vim_NeatGuiTabLabel()}
 endif
+" ---------------------------------
+" make tabline in tabpanel
+" ---------------------------------
+if exists('&showtabpanel')
+    function! Vim_GetMaxTabNameLength()
+        let l:max_length = 0
+        let l:taball = tabpagenr('$')
+        for i in range(l:taball)
+            let l:tabnr = i + 1
+            let l:buflist = tabpagebuflist(l:tabnr)
+            let l:winnr = tabpagewinnr(l:tabnr)
+            let l:bufnr = l:buflist[l:winnr - 1]
+            let l:caption = Vim_NeatBuffer(l:bufnr, 0)
+            let l:name_length = strwidth(l:caption)
+            if l:name_length > l:max_length
+                let l:max_length = l:name_length
+            endif
+        endfor
+        " Add some padding for tab number and brackets
+        return l:max_length + 15
+    endfunction
+
+    function! Vim_NeatTabPanelText()
+        let l:tabnr = g:actual_curtabpage
+        let l:buflist = tabpagebuflist(l:tabnr)
+        let l:winnr = tabpagewinnr(l:tabnr)
+        let l:bufnr = l:buflist[l:winnr - 1]
+        let l:caption = Vim_NeatBuffer(l:bufnr, 0)
+        return "%#TabNumSel#[".l:tabnr."]%#TabLineSel# ".l:caption
+    endfunc
+    function! Vim_UpdateTabPanelWidth()
+        if exists('&tabpanelwidth')
+            try
+                let l:width = Vim_GetMaxTabNameLength()
+                " Set minimum and maximum width constraints
+                let l:width = max([15, min([l:width, 50])])
+                execute 'set tabpanelwidth=' . l:width
+            catch
+                " Silently ignore errors
+            endtry
+        endif
+    endfunction
+    set tabpanel=%!Vim_NeatTabPanelText()
+
+    " Update tabpanel width when tabs change
+    augroup TabPanelWidthUpdate
+        autocmd!
+        autocmd TabNew,TabEnter,BufEnter,BufWritePost * call Vim_UpdateTabPanelWidth()
+    augroup END
+
+    " Initial setup for tabpanel visibility
+    au TabNew,TabLeave * if tabpagenr('$') > 9 && &columns > &lines * 3 | set showtabpanel=1 showtabline=0 | else | set showtabpanel=0 showtabline=1 | endif
+
+    " Initialize the tabpanel width
+    call Vim_UpdateTabPanelWidth()
+endif
 " --------------------------
 " TabSwitch / close
 " --------------------------
-" TabClose
-nnoremap <silent><M-w> :tabclose!<Cr>
-nnoremap <silent><M-W> :tabonly!<Cr>
-" TabSwitch
 nnoremap <M-n> gt
 nnoremap <M-p> gT
 nnoremap <silent><M-1> :tabn1<Cr>
@@ -149,14 +203,12 @@ nnoremap <silent>7<Tab> :tabn7<Cr>
 nnoremap <silent>8<Tab> :tabn8<Cr>
 nnoremap <silent>9<Tab> :tabn9<Cr>
 nnoremap <silent>0<Tab> :tablast<Cr>
+nnoremap <silent><M-w> :tabclose!<Cr>
+nnoremap <silent><M-W> :tabonly!<Cr>
 " Map in terminal
 if g:has_terminal == 0
     finish
 endif
-" TabClose
-tnoremap <silent><M-w> <C-\><C-n>:tabclose!<Cr>
-tnoremap <silent><M-W> <C-\><C-n>:tabonly!<Cr>
-" TabSwitch
 tnoremap <M-n> <C-\><C-n>gt
 tnoremap <M-p> <C-\><C-n>gT
 tnoremap <silent><M-1> <C-\><C-n>:tabn1<Cr>
@@ -169,3 +221,5 @@ tnoremap <silent><M-7> <C-\><C-n>:tabn7<Cr>
 tnoremap <silent><M-8> <C-\><C-n>:tabn8<Cr>
 tnoremap <silent><M-9> <C-\><C-n>:tabn9<Cr>
 tnoremap <silent><M-0> <C-\><C-n>:tablast<Cr>
+tnoremap <silent><M-w> <C-\><C-n>:tabclose!<Cr>
+tnoremap <silent><M-W> <C-\><C-n>:tabonly!<Cr>
