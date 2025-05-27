@@ -140,52 +140,32 @@ if exists('&showtabpanel')
                 let l:max_length = l:name_length
             endif
         endfor
-        " Add some padding for tab number and brackets
-        return l:max_length + 25
+        return l:max_length + 5
     endfunction
-
+    function! Vim_UpdateTabPanelWidth()
+        let l:width = Vim_GetMaxTabNameLength()
+        execute 'set tabpanelopt=columns:' . l:width
+    endfunction
     function! Vim_NeatTabPanelText()
         let l:tabnr = g:actual_curtabpage
         let l:buflist = tabpagebuflist(l:tabnr)
         let l:winnr = tabpagewinnr(l:tabnr)
         let l:bufnr = l:buflist[l:winnr - 1]
         let l:caption = Vim_NeatBuffer(l:bufnr, 0)
-        
         " Check if this is the current active tab
         let l:curtabnr = tabpagenr()
         if l:tabnr == l:curtabnr
-            " Highlight active tab
             return "%#TabNumSel#[".l:tabnr."]%#TabLineSel# ".l:caption." %#TabLineSel#"
         else
-            " Normal tab display
             return "%#TabLine#[".l:tabnr."]%#TabLine# ".l:caption." %#TabLine#"
         endif
     endfunc
-    function! Vim_UpdateTabPanelWidth()
-        if exists('&tabpanelwidth')
-            try
-                let l:width = Vim_GetMaxTabNameLength()
-                " Set minimum and maximum width constraints
-                let l:width = max([15, min([l:width, 50])])
-                execute 'set tabpanelwidth=' . l:width
-            catch
-                " Silently ignore errors
-            endtry
-        endif
-    endfunction
     set tabpanel=%!Vim_NeatTabPanelText()
-
     " Update tabpanel width when tabs change
     augroup TabPanelWidthUpdate
         autocmd!
-        autocmd TabNew,TabEnter,BufEnter,BufWritePost * call Vim_UpdateTabPanelWidth()
+        autocmd TabNew,TabEnter,TabLeave * if tabpagenr('$') > 9 && &columns > &lines * 3 | set showtabpanel=1 showtabline=0 | call Vim_UpdateTabPanelWidth() | else | set showtabpanel=0 showtabline=1 | endif
     augroup END
-
-    " Initial setup for tabpanel visibility
-    au TabNew,TabLeave * if tabpagenr('$') > 9 && &columns > &lines * 3 | set showtabpanel=1 showtabline=0 | else | set showtabpanel=0 showtabline=1 | endif
-
-    " Initialize the tabpanel width
-    call Vim_UpdateTabPanelWidth()
 endif
 " --------------------------
 " TabSwitch / close
