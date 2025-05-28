@@ -17,7 +17,7 @@ endfunction
 " ------------------------------
 " lsp or vista or tagbar
 " ------------------------------
-if g:complete_engine == 'cmp'
+if PlannedLsp()
     call s:add_symbol('nvimlsp')
     call s:add_symbol('vista')
 elseif g:complete_engine == 'coc'
