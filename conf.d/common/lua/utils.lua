@@ -1,23 +1,13 @@
 local fn = vim.fn
-
 if fn.has("nvim-0.10") == 1 then
   vim.keymap.del({ "n" }, "gcc")
   vim.keymap.del({ "n", "x", "o" }, "gc")
 end
-
 if fn.has("nvim-0.11") == 1 then
   vim.keymap.del({ "n" }, "grr")
   vim.keymap.del({ "n" }, "grn")
   vim.keymap.del({ "n" }, "gri")
   vim.keymap.del({ "n", "x"}, "gra")
-end
--- 方法2: 重写 vim.notify 来过滤弃用警告
-local original_notify = vim.notify
-vim.notify = function(msg, level, opts)
-  if type(msg) == "string" and msg:match("deprecated") then
-    return
-  end
-  original_notify(msg, level, opts)
 end
 
 function _G.inspect(item)
@@ -29,14 +19,6 @@ function _G.executable(name)
     return true
   end
   return false
-end
-
-function _G.exists(name)
-   return fn.exists(name) > 0
-end
-
-function _G.has(name)
-   return fn.has(name) > 0
 end
 
 function _G.Require(name)
