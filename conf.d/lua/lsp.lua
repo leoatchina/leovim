@@ -232,9 +232,11 @@ function M.LspAction(method, open_action)
     else
       if loc.filename:match("^file:") then
         loc.filename = loc.filename:gsub("^file:[/]*", "")
-      end
-      if vim.fn.has('win32') == 1 then
-        loc.filename = loc.filename:gsub("%%3A", ":")
+        if vim.fn.has('win32') == 1 then
+          loc.filename = loc.filename:gsub("%%3A", ":")
+        else
+          loc.filename = '/' .. loc.filename
+        end
       end
       if add_qf then
         local text = vim.fn.readfile(loc.filename)[loc.lnum]
