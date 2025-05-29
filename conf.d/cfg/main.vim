@@ -75,11 +75,16 @@ endfunction
 function! GetRootDir(...)
     let init_dir = AbsDir()
     let curr_dir = init_dir
+    if a:0
+        let l:root = a:000
+    else
+        let l:root = g:root_patterns + g:root_files
+    endif
     while 1
         if WINDOWS() && curr_dir[-2:-1] == ':/' || UNIX() && curr_dir ==# '/'
             return init_dir
         endif
-        for each in g:root_patterns + g:root_files
+        for each in l:root
             let chk_path = curr_dir . '/' . each
             if isdirectory(chk_path) || filereadable(chk_path)
                 if a:0 && a:1 > 0
@@ -101,8 +106,8 @@ let g:loaded_perl_provider = 0
 " python_support
 " --------------------------
 function! s:python_prog()
-    let l:root_dir = GetRootDir()
     let l:venv_path = ''
+    let l:root_dir = GetRootDir('.venv', '.env', 'venv', 'env')
     let l:venv_names = ['.venv', '.env', 'venv', 'env']
     for l:venv_name in l:venv_names
         let l:possible_venv = l:root_dir . '/' . l:venv_name
