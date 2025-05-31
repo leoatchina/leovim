@@ -3,13 +3,6 @@ if !get(g:, 'ZFIgnore_ignore_gitignore', 1)
     finish
 endif
 
-if !exists('g:ZFIgnoreOptionDefault')
-    let g:ZFIgnoreOptionDefault = {}
-endif
-if !exists("g:ZFIgnoreOptionDefault['gitignore']")
-    let g:ZFIgnoreOptionDefault['gitignore'] = 1
-endif
-
 augroup ZFIgnore_ignore_gitignore_augroup
     autocmd!
     if exists('##DirChanged')
@@ -151,5 +144,14 @@ endfunction
 if !exists('g:ZFIgnoreData')
     let g:ZFIgnoreData = {}
 endif
-let g:ZFIgnoreData['ZFIgnore_ignore_gitignore'] = function('ZFIgnoreLoadGitignore')
+if !exists("g:ZFIgnoreData['ZFIgnore_ignore_gitignore']")
+    if !exists('g:ZFIgnoreOptionDefault')
+        let g:ZFIgnoreOptionDefault = {}
+    endif
+    if !exists("g:ZFIgnoreOptionDefault['gitignore']")
+        let g:ZFIgnoreOptionDefault['gitignore'] = 1
+    endif
+
+    let g:ZFIgnoreData['ZFIgnore_ignore_gitignore'] = function('ZFIgnoreLoadGitignore')
+endif
 

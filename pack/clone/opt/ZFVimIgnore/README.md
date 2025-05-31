@@ -11,6 +11,7 @@ or [buy me a coffee](https://github.com/ZSaberLv0/ZSaberLv0)
 **NOTE:
 by default, this plugin would recognize `.gitignore` and modify `wildignore`,
 which may affect `expand()` `glob()` functions**
+you should take care of `nosuf` param of them manually
 see [#1](https://github.com/ZSaberLv0/ZFVimIgnore/issues/1) for more info
 
 ---
@@ -119,6 +120,9 @@ endif
 if !exists("g:ZFIgnoreOptionDefault['YourOptionName']")
     let g:ZFIgnoreOptionDefault['YourOptionName'] = 1
 endif
+if !exists("g:ZFIgnoreOptionDefault['filter_YourOptionName']")
+    let g:ZFIgnoreOptionDefault['filter_YourOptionName'] = 1
+endif
 
 " if the ignore item is simple
 if !exists('g:ZFIgnoreData')
@@ -127,22 +131,34 @@ endif
 let g:ZFIgnoreData['YourImplName'] = {
         \   'common' : {
         \       'file' : {'*.obj':1, '*.bin':1},
-        \       'dir' : {'build':1},
+        \       'dir' : {'build*':1},
         \   },
         \   'YourOptionName' : {...},
         \ }
+if !exists('g:ZFIgnoreFilter')
+    let g:ZFIgnoreFilter = {}
+endif
+let g:ZFIgnoreFilter['YourImplName'] = {
+        \   'common' : {
+        \       'file' : {'xxx.obj':1, 'xxx.bin':1},
+        \       'dir' : {'build-abc':1},
+        \   },
+        \   'filter_YourOptionName' : {...},
+        \ }
 
 " if you want to implement more complex ignore detect at runtime
-autocmd User ZFIgnoreOnSetup call YourSetup()
-function! YourSetup()
-    let g:ZFIgnoreData['YourImplName'] = {
-            \   'common' : {
-            \       'file' : {'*.obj':1, '*.bin':1},
-            \       'dir' : {'build':1},
-            \   },
-            \   'YourOptionName' : {...},
+function! YourImpl(ignore)
+    return {
+            \   'file' : {'xxx':1},
+            \   'dir' : {'xxx':1},
             \ }
 endfunction
+let g:ZFIgnoreData['YourImplName'] = function('YourImpl')
+
+function! YourFilterImpl(ignore, option)
+    " a little complex, see plugin/filter_common.vim for example
+endfunction
+let g:ZFIgnoreFilter['YourImplName'] = function('YourFilterImpl')
 ```
 
 for users:
@@ -152,10 +168,14 @@ for users:
 let ignore = ZFIgnoreGet()
 
 " or enable/disable by option name
-let ignore = ZFIgnoreGet({'YourOptionName' : 1})
+let ignore = ZFIgnoreGet({
+        \   'YourOptionName' : 1,
+        \   'filter_YourOptionName' : 1,
+        \ })
 
-" or change default option
+" or change global default option
 let g:ZFIgnoreOptionDefault['YourOptionName'] = 0
+let g:ZFIgnoreOptionDefault['filter_YourOptionName'] = 0
 let ignore = ZFIgnoreGet()
 ```
 

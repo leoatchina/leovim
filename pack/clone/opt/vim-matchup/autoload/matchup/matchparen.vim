@@ -809,7 +809,7 @@ function! s:do_offscreen_popup_nvim(offscreen) abort " {{{1
     let l:border = get(g:matchup_matchparen_offscreen, 'border', 0)
     if !empty(l:border)
       let l:win_cfg.border = has('nvim-0.5')
-            \ && type(l:border) == v:t_string
+            \ && (type(l:border) == v:t_string || type(l:border) == v:t_list)
             \ ? l:border : ['', '═' ,'╗', '║', '╝', '═', '', '']
       if !has('nvim-0.6') && l:lnum >= line('.')
         let l:win_cfg.row -= min([2, l:row - winline() - 1])
@@ -843,6 +843,10 @@ function! s:do_offscreen_popup_nvim(offscreen) abort " {{{1
 
     if &cursorline
       call nvim_win_set_option(s:float_id, 'cursorline', v:false)
+    endif
+    " winbar was added in nvim 0.8.0
+    if has('nvim-0.8.0')
+      call nvim_win_set_option(s:float_id, 'winbar', '')
     endif
 
     call s:populate_floating_win(a:offscreen, l:text_method)

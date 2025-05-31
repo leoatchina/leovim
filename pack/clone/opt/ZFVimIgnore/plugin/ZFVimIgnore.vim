@@ -123,7 +123,7 @@ function! ZFIgnoreFilterApply(ignore, ...)
     for module in keys(g:ZFIgnoreFilter)
         let Fn = g:ZFIgnoreFilter[module]
         if type(Fn) == type(function('function'))
-            let tmp = Fn(a:ignore)
+            let tmp = Fn(a:ignore, option)
             call extend(ret['file_filters'], tmp['file_filters'])
             call extend(ret['dir_filters'], tmp['dir_filters'])
         else
@@ -139,7 +139,8 @@ function! ZFIgnoreFilterApply(ignore, ...)
                         let pattern = a:ignore[type][i]
                         for filterPattern in keys(filterPatterns)
                             if filterPatterns[filterPattern]
-                                if match(pattern, ZFIgnorePatternToRegexp(filterPattern)) >= 0
+                                let t = ZFIgnorePatternToRegexp(filterPattern)
+                                if !empty(t) && match(pattern, t) >= 0
                                     call remove(a:ignore[type], i)
                                     call add(a:ignore[type . '_filtered'], pattern)
                                     call add(ret[type . '_filters'], filterPattern)
@@ -294,7 +295,7 @@ function! ZFIgnoreCheck(text, ...)
     for filePathItem in split(filePath, '/')
         for item in ignoreData['dir']
             let pattern = ZFIgnorePatternToRegexp(item)
-            if match(filePathItem, pattern) >= 0
+            if !empty(pattern) && match(filePathItem, pattern) >= 0
                 call add(list, {
                             \   'type' : 'dir',
                             \   'rule' : item,
@@ -306,7 +307,7 @@ function! ZFIgnoreCheck(text, ...)
         if fileRuleOnDir
             for item in ignoreData['file']
                 let pattern = ZFIgnorePatternToRegexp(item)
-                if match(filePathItem, pattern) >= 0
+                if !empty(pattern) && match(filePathItem, pattern) >= 0
                     call add(list, {
                                 \   'type' : 'file',
                                 \   'rule' : item,
@@ -321,7 +322,7 @@ function! ZFIgnoreCheck(text, ...)
     let fileName = fnamemodify(text, ':t')
     for item in ignoreData['dir']
         let pattern = ZFIgnorePatternToRegexp(item)
-        if match(fileName, pattern) >= 0
+        if !empty(pattern) && match(fileName, pattern) >= 0
             call add(list, {
                         \   'type' : 'dir',
                         \   'rule' : item,
@@ -332,7 +333,7 @@ function! ZFIgnoreCheck(text, ...)
     endfor
     for item in ignoreData['file']
         let pattern = ZFIgnorePatternToRegexp(item)
-        if match(fileName, pattern) >= 0
+        if !empty(pattern) && match(fileName, pattern) >= 0
             call add(list, {
                         \   'type' : 'file',
                         \   'rule' : item,

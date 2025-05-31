@@ -11,6 +11,7 @@ augroup ZFIgnore_apply_wildignore_augroup
                 \   'gitignore' : 1,
                 \   'hidden' : 0,
                 \   'media' : 0,
+                \   'filter_rtp' : 1,
                 \ }))), ',')
 augroup END
 

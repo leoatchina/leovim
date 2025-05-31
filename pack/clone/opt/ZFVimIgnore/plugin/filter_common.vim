@@ -9,24 +9,34 @@ endif
 " * special patterns: `.` `*`
 " * vim's rtp is ignored
 
-function! ZFIgnore_filter_common(ignore)
+function! ZFIgnore_filter_common(ignore, option)
     let ret = {
                 \   'file_filters' : [],
                 \   'dir_filters' : [],
                 \ }
     let filterMap = {}
-    let filterMap['~'] = 1
-    let filterMap['.'] = 1
-    let filterMap['..'] = 1
-    let filterMap['*'] = 1
-    let filterMap['**'] = 1
-    for item in split(substitute($HOME, '\\', '/', 'g'), '/')
-        let filterMap[item] = 1
-    endfor
-    for item in split(substitute(getcwd(), '\\', '/', 'g'), '/')
-        let filterMap[item] = 1
-    endfor
-    if get(g:, 'ZFIgnore_filter_rtp', 1)
+
+    if get(a:option, 'filter_spec', 1)
+        let filterMap['~'] = 1
+        let filterMap['.'] = 1
+        let filterMap['..'] = 1
+        let filterMap['*'] = 1
+        let filterMap['**'] = 1
+    endif
+
+    if get(a:option, 'filter_HOME', 1)
+        for item in split(substitute($HOME, '\\', '/', 'g'), '/')
+            let filterMap[item] = 1
+        endfor
+    endif
+
+    if get(a:option, 'filter_cwd', 1)
+        for item in split(substitute(getcwd(), '\\', '/', 'g'), '/')
+            let filterMap[item] = 1
+        endfor
+    endif
+
+    if get(a:option, 'filter_rtp', 1)
         for rtp in split(&rtp, ',')
             for item in split(substitute(rtp, '\\', '/', 'g'), '/')
                 let filterMap[item] = 1
@@ -63,7 +73,25 @@ endfunction
 if !exists('g:ZFIgnoreFilter')
     let g:ZFIgnoreFilter = {}
 endif
-let g:ZFIgnoreFilter['path'] = function('ZFIgnore_filter_common')
+if !exists("g:ZFIgnoreFilter['ZFIgnore_filter_common']")
+    if !exists('g:ZFIgnoreOptionDefault')
+        let g:ZFIgnoreOptionDefault = {}
+    endif
+    if !exists("g:ZFIgnoreOptionDefault['filter_spec']")
+        let g:ZFIgnoreOptionDefault['filter_spec'] = 1
+    endif
+    if !exists("g:ZFIgnoreOptionDefault['filter_HOME']")
+        let g:ZFIgnoreOptionDefault['filter_HOME'] = 1
+    endif
+    if !exists("g:ZFIgnoreOptionDefault['filter_cwd']")
+        let g:ZFIgnoreOptionDefault['filter_cwd'] = 1
+    endif
+    if !exists("g:ZFIgnoreOptionDefault['filter_rtp']")
+        let g:ZFIgnoreOptionDefault['filter_rtp'] = 0
+    endif
+
+    let g:ZFIgnoreFilter['ZFIgnore_filter_common'] = function('ZFIgnore_filter_common')
+endif
 
 function! s:checkFilter(filter, pattern)
     let pattern = ZFIgnorePatternToRegexp(a:pattern)
