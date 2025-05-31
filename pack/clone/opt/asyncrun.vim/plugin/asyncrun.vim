@@ -188,7 +188,7 @@ let g:asyncrun_silent = get(g:, 'asyncrun_silent', 1)
 " skip autocmds
 let g:asyncrun_skip = get(g:, 'asyncrun_skip', 0)
 
-" last args 
+" last args
 let g:asyncrun_info = get(g:, 'asyncrun_info', '')
 
 " 0: no save, 1: save current buffer, 2: save all modified buffers.
@@ -216,6 +216,53 @@ let g:asyncrun_name = ''
 "----------------------------------------------------------------------
 "- Internal Functions
 "----------------------------------------------------------------------
+
+" Replace string
+function! s:StringReplace(text, old, new)
+	let l:data = split(a:text, a:old, 1)
+	return join(l:data, a:new)
+endfunc
+
+" Trim leading and tailing spaces
+function! s:StringStrip(text)
+	return substitute(a:text, '^\s*\(.\{-}\)\s*$', '\1', '')
+endfunc
+
+" extract options from command
+function! s:ExtractOpt(command)
+	let cmd = substitute(a:command, '^\s*\(.\{-}\)\s*$', '\1', '')
+	let opts = {}
+	while cmd =~# '^-\%(\w\+\)\%([= ]\|$\)'
+		let opt = matchstr(cmd, '^-\zs\w\+')
+		if cmd =~ '^-\w\+='
+			let val = matchstr(cmd, '^-\w\+=\zs\%(\\.\|\S\)*')
+		else
+			let val = (opt == 'cwd' || opt == 'encoding')? '' : 1
+		endif
+		let opts[opt] = substitute(val, '\\\(\s\)', '\1', 'g')
+		let cmd = substitute(cmd, '^-\w\+\%(=\%(\\.\|\S\)*\)\=\s*', '', '')
+	endwhile
+	let cmd = substitute(cmd, '^\s*\(.\{-}\)\s*$', '\1', '')
+	let cmd = substitute(cmd, '^@\s*', '', '')
+	let opts.cwd = get(opts, 'cwd', '')
+	let opts.mode = get(opts, 'mode', '')
+	let opts.save = get(opts, 'save', '')
+	let opts.program = get(opts, 'program', '')
+	let opts.post = get(opts, 'post', '')
+	let opts.text = get(opts, 'text', '')
+	let opts.auto = get(opts, 'auto', '')
+	let opts.raw = get(opts, 'raw', '')
+	let opts.strip = get(opts, 'strip', '')
+	let opts.append = get(opts, 'append', '')
+	if 0
+		echom 'cwd:'. opts.cwd
+		echom 'mode:'. opts.mode
+		echom 'save:'. opts.save
+		echom 'program:'. opts.program
+		echom 'command:'. cmd
+	endif
+	return [cmd, opts]
+endfunc
 
 " error message
 function! s:ErrorMsg(msg)
@@ -976,53 +1023,6 @@ endfunc
 " Utilities
 "----------------------------------------------------------------------
 
-" Replace string
-function! s:StringReplace(text, old, new)
-	let l:data = split(a:text, a:old, 1)
-	return join(l:data, a:new)
-endfunc
-
-" Trim leading and tailing spaces
-function! s:StringStrip(text)
-	return substitute(a:text, '^\s*\(.\{-}\)\s*$', '\1', '')
-endfunc
-
-" extract options from command
-function! s:ExtractOpt(command)
-	let cmd = substitute(a:command, '^\s*\(.\{-}\)\s*$', '\1', '')
-	let opts = {}
-	while cmd =~# '^-\%(\w\+\)\%([= ]\|$\)'
-		let opt = matchstr(cmd, '^-\zs\w\+')
-		if cmd =~ '^-\w\+='
-			let val = matchstr(cmd, '^-\w\+=\zs\%(\\.\|\S\)*')
-		else
-			let val = (opt == 'cwd' || opt == 'encoding')? '' : 1
-		endif
-		let opts[opt] = substitute(val, '\\\(\s\)', '\1', 'g')
-		let cmd = substitute(cmd, '^-\w\+\%(=\%(\\.\|\S\)*\)\=\s*', '', '')
-	endwhile
-	let cmd = substitute(cmd, '^\s*\(.\{-}\)\s*$', '\1', '')
-	let cmd = substitute(cmd, '^@\s*', '', '')
-	let opts.cwd = get(opts, 'cwd', '')
-	let opts.mode = get(opts, 'mode', '')
-	let opts.save = get(opts, 'save', '')
-	let opts.program = get(opts, 'program', '')
-	let opts.post = get(opts, 'post', '')
-	let opts.text = get(opts, 'text', '')
-	let opts.auto = get(opts, 'auto', '')
-	let opts.raw = get(opts, 'raw', '')
-	let opts.strip = get(opts, 'strip', '')
-	let opts.append = get(opts, 'append', '')
-	if 0
-		echom 'cwd:'. opts.cwd
-		echom 'mode:'. opts.mode
-		echom 'save:'. opts.save
-		echom 'program:'. opts.program
-		echom 'command:'. cmd
-	endif
-	return [cmd, opts]
-endfunc
-
 " write script to a file and return filename
 function! asyncrun#script_write(command, pause)
 	let tmpname = fnamemodify(tempname(), ':h') . '\asyncrun.cmd'
@@ -1730,7 +1730,7 @@ function! s:start_in_terminal(opts)
 		let rows = get(a:opts, 'rows', '')
 		let cols = get(a:opts, 'cols', '')
 		if pos == 'top'
-			exec "leftabove " . rows . "split"	
+			exec "leftabove " . rows . "split"
 		elseif pos == 'bottom' || pos == 'bot'
 			exec "rightbelow " . rows . "split"
 		elseif pos == 'left'
@@ -1741,7 +1741,7 @@ function! s:start_in_terminal(opts)
 			exec "rightbelow " . rows . "split"
 		endif
 	endif
-	if avail > 0 
+	if avail > 0
 		exec "normal! ". avail . "\<c-w>\<c-w>"
 		let a:opts._terminal_wipe = bufnr('%')
 	endif
