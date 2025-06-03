@@ -9,6 +9,7 @@ tag.lock
 .netrwhist
 .neoconf.json
 .vimspector.json
+.call_graph_history.json
 
 # 文件通配
 core.[0-9]*
@@ -24,10 +25,10 @@ core.[0-9]*
 *.dll
 *.tags
 *.tar
-*.tar.*
 *.zip
 *.tags
 *.wildignore
+*.tar.*
 *DS_Store
 
 # 文件夹
@@ -45,6 +46,7 @@ venv/
 .root/
 .svn/
 .vim/
+.nim/
 .vscode/
 .vs/
 .ccls-cache/
