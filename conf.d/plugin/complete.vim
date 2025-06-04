@@ -47,10 +47,6 @@ if Installed("yarepl.nvim")
 elseif Installed('codecompanion.nvim')
     lua require("cfg/api")
     lua require("cfg/codecompanion")
-elseif Installed('avante.nvim')
-    command! AvanteCommands call FzfCallCommands('AvanteCommands', 'Avante')
-    lua require("cfg/api")
-    lua require("cfg/avante")
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>
@@ -64,8 +60,8 @@ endif
 if Installed('render-markdown.nvim')
     augroup SetupRenderMarkdown
         autocmd!
-        autocmd User avante.nvim,codecompanion.nvim,mini.pick ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
-        autocmd FileType markdown,Avante,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "Avante", "vimwiki" }})
+        autocmd User codecompanion.nvim,mini.pick ++once lua require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
+        autocmd FileType markdown,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
     augroup END
 endif
 " -----------------------------

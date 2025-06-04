@@ -160,12 +160,11 @@ endif
 " ------------------------------
 " AI engine
 " ------------------------------
-if exists('$XAI_API_KEY') ||
+if Require('copilot_plus') ||
+    \  exists('$XAI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
     \  exists('$MISTRAL_API_KEY') ||
-    \  exists('$HUGGINGFACE_API_KEY')
-    let g:ai_api_key = 3
-elseif Require('copilot_plus') ||
+    \  exists('$HUGGINGFACE_API_KEY') ||
     \  exists('$OPENAI_API_KEY') ||
     \  exists('$ANTHROPIC_API_KEY') ||
     \  exists('$GEMINI_API_KEY')
@@ -177,21 +176,12 @@ elseif get(g:, 'openai_compatible_api_key', '') !='' &&
 else
     let g:ai_api_key = 0
 endif
-if has('nvim-0.9') && Require('aider') && executable('aider') && g:ai_api_key
-    PlugAdd 'milanglacier/yarepl.nvim'
-elseif has('nvim-0.10.1') && Planned('nvim-treesitter')
-    if executable('curl') && PlannedLsp() && (g:ai_api_key == 3 || Require('codecompanion') && g:ai_api_key)
+if g:ai_api_key
+    if has('nvim-0.9') && Require('aider') && executable('aider') && g:ai_api_key
+        PlugAdd 'milanglacier/yarepl.nvim'
+    elseif has('nvim-0.10.1') && Planned('nvim-treesitter') && executable('curl') && PlannedLsp() && Require('codecompanion')
         PlugAdd 'olimorris/codecompanion.nvim'
-    elseif g:ai_api_key == 1 || g:ai_api_key == 2
-        if UNIX()
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
-        else
-            PlugAdd 'yetone/avante.nvim', { 'branch': 'main', 'do': 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' }
-        endif
-    endif
-    if Planned('avante.nvim') || Planned('codecompanion.nvim')
         PlugAdd 'echasnovski/mini.pick'
-        PlugAdd '0xrusowsky/nvim-ctx-ingest'
     endif
 endif
 " AI complete
@@ -321,7 +311,7 @@ if has('nvim')
             endif
         endif
     endif
-    if PlannedLsp() || Planned('nvim-dap') || Planned('avante.nvim') || Planned('codecompanion.nvim') || Planned('minuet-ai.nvim')
+    if PlannedLsp() || Planned('nvim-dap') || Planned('codecompanion.nvim') || Planned('minuet-ai.nvim')
         PlugAdd 'MunifTanjim/nui.nvim'
         PlugAdd 'nvim-lua/plenary.nvim'
         PlugAdd 'stevearc/dressing.nvim'
