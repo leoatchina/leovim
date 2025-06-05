@@ -104,6 +104,31 @@ function _G.DapUIClose()
 end
 vim.keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
 vim.keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
+-- 配置调试适配器
+local mason_dir = vim.fn.expand("~/.leovim.d/mason")
+local BASH_DEBUG_ADAPTER_BIN = mason_dir .. "/bin/bash-debug-adapter"
+local BASHDB_DIR = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
+dap.adapters.bash = {
+  type = "executable",
+  command = BASH_DEBUG_ADAPTER_BIN,
+}
+dap.configurations.bash = {
+  {
+    name = "Launch Bash debugger",
+    type = "sh",
+    request = "launch",
+    program = "${file}",
+    cwd = "${fileDirname}",
+    pathBashdb = BASHDB_DIR .. "/bashdb",
+    pathBashdbLib = BASHDB_DIR,
+    pathBash = "bash",
+    pathCat = "cat",
+    pathMkfifo = "mkfifo",
+    pathPkill = "pkill",
+    env = {},
+    args = {},
+  }
+}
 ---------------------
 -- dapui
 ---------------------
