@@ -2,8 +2,9 @@
 -- dap
 ---------------------
 local vscode = require "dap.ext.vscode"
-local dap    = require("dap")
 local dapui  = require("dapui")
+local dap    = require("dap")
+local keymap = vim.keymap
 local api    = vim.api
 local fn     = vim.fn
 dap.defaults.fallback.exception_breakpoints = { 'default' }
@@ -82,7 +83,7 @@ local function dapui_toggle(open)
     end
   end
 end
-vim.keymap.set({"n", "x"}, "<M-m><M-m>",
+keymap.set({"n", "x"}, "<M-m><M-m>",
   function()
     dapui_toggle()
   end, { noremap = true, silent = true }
@@ -103,8 +104,8 @@ end
 function _G.DapUIClose()
   dapui.close()
 end
-vim.keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
-vim.keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
+keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
+keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
 -- 配置调试适配器
 local bash_debug_adapter_bin = mason_dir .. "/bin/bash-debug-adapter"
 local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
