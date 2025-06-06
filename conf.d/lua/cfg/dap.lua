@@ -105,7 +105,7 @@ end
 vim.keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
 vim.keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
 -- 配置调试适配器
-local mason_dir = vim.fn.expand("~/.leovim.d/mason")
+local mason_dir = fn.expand("~/.leovim.d/mason")
 local BASH_DEBUG_ADAPTER_BIN = mason_dir .. "/bin/bash-debug-adapter"
 local BASHDB_DIR = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
 dap.adapters.bash = {
@@ -115,7 +115,7 @@ dap.adapters.bash = {
 dap.configurations.bash = {
   {
     name = "Launch Bash debugger",
-    type = "sh",
+    type = "bash",
     request = "launch",
     program = "${file}",
     cwd = "${fileDirname}",
@@ -271,8 +271,8 @@ local function goto_breakpoint(dir)
 		end
 	end
 	local current = {
-		bufnr = vim.api.nvim_get_current_buf(),
-		line = vim.api.nvim_win_get_cursor(0)[1],
+		bufnr = api.nvim_get_current_buf(),
+		line = api.nvim_win_get_cursor(0)[1],
 	}
 	local nextPoint
 	for i = 1, #points do
