@@ -3,8 +3,9 @@
   "name": "Python : Current File",
   "request": "launch",
   "console": "integratedTerminal",
-  "cwd": "",
-  "env": {},
   "python": "~/miniconda3/bin/python",
-  "program": "${file}"
+  "cwd": "${fileDirname}",
+  "program": "${file}",
+  "args": [],
+  "env": {}
 }
