@@ -12,8 +12,9 @@ fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl
 -------------------------------------
 -- mason
 -------------------------------------
+local mason_dir = fn.expand("~/.leovim.d/mason")
 require("mason-nvim-dap").setup({
-  ensure_installed = { "python" },
+  ensure_installed = { "python", "bash" },
   handlers = {
     function(config)
       require('mason-nvim-dap').default_setup(config)
@@ -105,12 +106,11 @@ end
 vim.keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
 vim.keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
 -- 配置调试适配器
-local mason_dir = fn.expand("~/.leovim.d/mason")
-local BASH_DEBUG_ADAPTER_BIN = mason_dir .. "/bin/bash-debug-adapter"
-local BASHDB_DIR = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
+local bash_debug_adapter_bin = mason_dir .. "/bin/bash-debug-adapter"
+local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
 dap.adapters.bash = {
   type = "executable",
-  command = BASH_DEBUG_ADAPTER_BIN,
+  command = bash_debug_adapter_bin,
 }
 dap.configurations.bash = {
   {
@@ -119,8 +119,8 @@ dap.configurations.bash = {
     request = "launch",
     program = "${file}",
     cwd = "${fileDirname}",
-    pathBashdb = BASHDB_DIR .. "/bashdb",
-    pathBashdbLib = BASHDB_DIR,
+    pathBashdb = bashdb_dir .. "/bashdb",
+    pathBashdbLib = bashdb_dir,
     pathBash = "bash",
     pathCat = "cat",
     pathMkfifo = "mkfifo",
