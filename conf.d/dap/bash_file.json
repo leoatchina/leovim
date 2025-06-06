@@ -1,8 +1,16 @@
 {
-  "name": "bash Debugger: Current File",
+  "name": "Launch Bash debugger",
+  "type": "bash",
   "request": "launch",
-  "type": "bashdb",
-  "console": "integratedTerminal",
-  "cwd": "",
-  "program": "${file}"
+  "program": "${file}",
+  "cwd": "${fileDirname}",
+  "pathBashdb": "${env:HOME}/.leovim.d/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb",
+  "pathBashdbLib": "${env:HOME}/.leovim.d/mason/packages/bash-debug-adapter/extension/bashdb_dir",
+  "pathBash": "bash",
+  "pathCat": "cat",
+  "pathMkfifo": "mkfifo",
+  "pathPkill": "pkill",
+  "env": {},
+  "args": [],
+  "console": "integratedTerminal"
 }
