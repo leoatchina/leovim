@@ -3,13 +3,13 @@
   "request": "launch",
   "name": "Python Debugger: Module",
   "python": "~/miniconda3/bin/python",
-  "cwd": "./",
+  "cwd": "${fileDirname}",
+  "program": "${file}",
   "module":"scrapy",
   "args":[
     "crawl",
     "scrap"
   ],
   "env": {},
-  "justMyCode": true,
   "console": "integratedTerminal"
 }

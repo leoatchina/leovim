@@ -2,10 +2,10 @@
   "type": "python",
   "name": "Python : Current File",
   "request": "launch",
-  "console": "integratedTerminal",
   "python": "~/miniconda3/bin/python",
   "cwd": "${fileDirname}",
   "program": "${file}",
   "args": [],
-  "env": {}
+  "env": {},
+  "console": "integratedTerminal"
 }
