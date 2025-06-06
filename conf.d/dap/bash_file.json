@@ -1,5 +1,5 @@
 {
-  "type": "bash",
+  "type": "bashdb",
   "name": "Launch Bash debugger",
   "request": "launch",
   "pathBashdb": "${env:HOME}/.leovim.d/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb",
@@ -8,9 +8,11 @@
   "pathCat": "cat",
   "pathMkfifo": "mkfifo",
   "pathPkill": "pkill",
+  "file": "${file}",
   "program": "${file}",
-  "cwd": "${fileDirname}",
+  "cwd": "${workspaceFolder}",
   "args": [],
   "env": {},
-  "console": "integratedTerminal"
+  "console": "integratedTerminal",
+  "terminalKind": "integrated"
 }

@@ -109,13 +109,14 @@ keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true
 -- 配置调试适配器
 local bash_debug_adapter = mason_dir .. "/bin/bash-debug-adapter"
 local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
-dap.adapters.bash = {
+dap.adapters.bashdb = {
   type = "executable",
   command = bash_debug_adapter,
+  name = "bashdb",
 }
 dap.configurations.bash = {
   {
-    type = "bash",
+    type = "bashdb",
     name = "Launch Bash debugger",
     request = "launch",
     pathBashdb = bashdb_dir .. "/bashdb",
@@ -124,13 +125,17 @@ dap.configurations.bash = {
     pathCat = "cat",
     pathMkfifo = "mkfifo",
     pathPkill = "pkill",
-    cwd = "${fileDirname}",
+    file = "${file}",
     program = "${file}",
-    args = {},
+    cwd = "${workspaceFolder}",
+    args = [],
     env = {},
-    console = "integratedTerminal"
-  }
+    argsString = '',
+    console = "integratedTerminal",
+    terminalKind = "integrated",
+  },
 }
+dap.configurations.sh = dap.configurations.bash
 ---------------------
 -- dapui
 ---------------------
@@ -167,9 +172,9 @@ local function load_json(dap_json)
   -- NOTE: dap_config_inited may should be set outside ipairs
   local dap_config_inited = false
   for _, config in ipairs(configurations) do
-    assert(config.type, "Configuration in launch.json must have a 'type' key")
     assert(config.name, "Configuration in launch.json must have a 'name' key")
-    local filetypes = type_to_filetypes[config.type] or { config.type, }
+    assert(config.type, "Configuration in launch.json must have a 'type' key")
+    local filetypes = { config.type }
     for _, filetype in pairs(filetypes) do
       if not dap_config_inited then
         -- do not use default config
