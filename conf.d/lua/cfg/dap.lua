@@ -107,27 +107,28 @@ end
 keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
 keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
 -- 配置调试适配器
-local bash_debug_adapter_bin = mason_dir .. "/bin/bash-debug-adapter"
+local bash_debug_adapter = mason_dir .. "/bin/bash-debug-adapter"
 local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
 dap.adapters.bash = {
   type = "executable",
-  command = bash_debug_adapter_bin,
+  command = bash_debug_adapter,
 }
 dap.configurations.bash = {
   {
-    name = "Launch Bash debugger",
     type = "bash",
+    name = "Launch Bash debugger",
     request = "launch",
-    program = "${file}",
-    cwd = "${fileDirname}",
     pathBashdb = bashdb_dir .. "/bashdb",
     pathBashdbLib = bashdb_dir,
     pathBash = "bash",
     pathCat = "cat",
     pathMkfifo = "mkfifo",
     pathPkill = "pkill",
-    env = {},
+    cwd = "${fileDirname}",
+    program = "${file}",
     args = {},
+    env = {},
+    console = "integratedTerminal"
   }
 }
 ---------------------
