@@ -1,7 +1,9 @@
 {
-  "type": "bashdb",
+  "type": "bash",
   "name": "Launch Bash debugger",
   "request": "launch",
+  "showDebugOutput": true,
+  "trace": true,
   "pathBashdb": "${env:HOME}/.leovim.d/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb",
   "pathBashdbLib": "${env:HOME}/.leovim.d/mason/packages/bash-debug-adapter/extension/bashdb_dir",
   "pathBash": "bash",
@@ -11,6 +13,7 @@
   "file": "${file}",
   "program": "${file}",
   "cwd": "${workspaceFolder}",
+  "argsString": "",
   "args": [],
   "env": {},
   "console": "integratedTerminal",

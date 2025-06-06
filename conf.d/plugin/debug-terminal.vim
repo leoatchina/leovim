@@ -454,11 +454,11 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     endfunction
     command! DapUIEval call s:dap_or_floaterm("eval")
     command! FocusCode call s:dap_or_floaterm("focus")
-    command! ConsoleOrFloatermToggle call s:dap_or_floaterm("Console")
+    command! ReplOrFloatermToggle call s:dap_or_floaterm("repl")
     command! FloatElementOrFloatermList call s:dap_or_floaterm("element")
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
-    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
+    nnoremap <silent><M--> :ReplOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :FloatElementOrFloatermList<Cr>
     " view variables
     nnoremap <silent>J :DapUIEval<Cr>

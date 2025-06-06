@@ -47,7 +47,7 @@ local layouts = {
   --  console / breakpoints on bottom
   {
     elements = {
-      { id = "repl",     size = 0.7 },
+      { id = "console",     size = 0.7 },
       { id = "breakpoints", size = 0.3 },
     },
     size = 0.2,
@@ -110,15 +110,17 @@ keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true
 local bash_debug_adapter = mason_dir .. "/bin/bash-debug-adapter"
 local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
 dap.adapters.bashdb = {
-  type = "executable",
-  command = bash_debug_adapter,
-  name = "bashdb",
+  type = "executable";
+  command = bash_debug_adapter;
+  name = "bashdb";
 }
-dap.configurations.bash = {
+dap.configurations.sh = {
   {
     type = "bashdb",
     name = "Launch Bash debugger",
     request = "launch",
+    showDebugOutput = true,
+    trace = true,
     pathBashdb = bashdb_dir .. "/bashdb",
     pathBashdbLib = bashdb_dir,
     pathBash = "bash",
@@ -128,14 +130,13 @@ dap.configurations.bash = {
     file = "${file}",
     program = "${file}",
     cwd = "${workspaceFolder}",
-    args = [],
-    env = {},
     argsString = '',
+    args = {},
+    env = {},
     console = "integratedTerminal",
     terminalKind = "integrated",
   },
 }
-dap.configurations.sh = dap.configurations.bash
 ---------------------
 -- dapui
 ---------------------
@@ -174,7 +175,8 @@ local function load_json(dap_json)
   for _, config in ipairs(configurations) do
     assert(config.name, "Configuration in launch.json must have a 'name' key")
     assert(config.type, "Configuration in launch.json must have a 'type' key")
-    local filetypes = { config.type }
+    local filetypes = type_to_filetypes[config.type] or { config.filetype, } or { config.type, }
+    vim.g.filetypes = filetypes
     for _, filetype in pairs(filetypes) do
       if not dap_config_inited then
         -- do not use default config
@@ -190,6 +192,7 @@ local function load_json(dap_json)
       table.insert(dap.configurations[filetype], config)
     end
   end
+  vim.g.configurations = dap.configurations
 end
 local function dap_load_run(json_file, run, run_to_cursor)
   local ok = false
