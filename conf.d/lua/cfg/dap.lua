@@ -47,7 +47,7 @@ local layouts = {
   --  console / breakpoints on bottom
   {
     elements = {
-      { id = "console",     size = 0.7 },
+      { id = "repl",     size = 0.7 },
       { id = "breakpoints", size = 0.3 },
     },
     size = 0.2,
