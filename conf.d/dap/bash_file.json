@@ -1,5 +1,5 @@
 {
-  "type": "bash",
+  "type": "bashdb",
   "name": "Launch Bash debugger",
   "request": "launch",
   "showDebugOutput": true,
@@ -15,7 +15,6 @@
   "cwd": "${workspaceFolder}",
   "argsString": "",
   "args": [],
-  "env": {},
-  "console": "integratedTerminal",
+  "env": [],
   "terminalKind": "integrated"
 }
