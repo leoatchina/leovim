@@ -1,7 +1,7 @@
 ---------------------
 -- dap
 ---------------------
-local vscode = require "dap.ext.vscode"
+local vscode = require("dap.ext.vscode")
 local dapui  = require("dapui")
 local dap    = require("dap")
 local keymap = vim.keymap
@@ -135,7 +135,7 @@ dap.configurations.sh = {
     env = {},
     console = "integratedTerminal",
     terminalKind = "integrated",
-  },
+  }
 }
 ---------------------
 -- dapui
@@ -167,21 +167,21 @@ dapui.setup({
 -- load dap_json, modified from dap.ext.vscode.lauchjs
 ------------------------------------------------------------
 local function load_json(dap_json)
+  local cur_filetype = vim.bo.filetype
   local type_to_filetypes = vscode.type_to_filetypes
   local configurations = vscode.getconfigs(dap_json)
   assert(configurations, "launch.json must have a 'configurations' key")
-  -- NOTE: dap_config_inited may should be set outside ipairs
-  local dap_config_inited = false
+  -- 使用表来跟踪已初始化的文件类型
+  local dap_config_inited = {}
   for _, config in ipairs(configurations) do
     assert(config.name, "Configuration in launch.json must have a 'name' key")
     assert(config.type, "Configuration in launch.json must have a 'type' key")
-    local filetypes = type_to_filetypes[config.type] or { config.filetype, } or { config.type, }
-    vim.g.filetypes = filetypes
+    local filetypes = type_to_filetypes[config.type] or { cur_filetype, }
     for _, filetype in pairs(filetypes) do
-      if not dap_config_inited then
+      if not dap_config_inited[filetype] then
         -- do not use default config
         dap.configurations[filetype] = {}
-        dap_config_inited = true
+        dap_config_inited[filetype] = true
       end
       -- remove old value
       for i, dap_config in pairs(dap.configurations[filetype] ) do
@@ -192,7 +192,6 @@ local function load_json(dap_json)
       table.insert(dap.configurations[filetype], config)
     end
   end
-  vim.g.configurations = dap.configurations
 end
 local function dap_load_run(json_file, run, run_to_cursor)
   local ok = false
@@ -206,7 +205,7 @@ local function dap_load_run(json_file, run, run_to_cursor)
         ok, _ = pcall(dap.continue)
       end
     else
-      ok, _ = pcall(load_json, json_file)
+      ok, _ = pcall(load_json, json_file )
       if ok then
         if run_to_cursor then
           dap.clear_breakpoints()
