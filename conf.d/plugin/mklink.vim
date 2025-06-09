@@ -1,10 +1,12 @@
 if WINDOWS()
     let s:code_user_dir = substitute(fnameescape(get(g:, "code_user_dir", "")), '/', '\', 'g')
+    let s:trae_user_dir = substitute(fnameescape(get(g:, "trae_user_dir", "")), '/', '\', 'g')
     let s:cursor_user_dir = substitute(fnameescape(get(g:, "cursor_user_dir", "")), '/', '\', 'g')
     let s:positron_user_dir = substitute(fnameescape(get(g:, "positron_user_dir", "")), '/', '\', 'g')
     let s:windsurf_user_dir = substitute(fnameescape(get(g:, "windsurf_user_dir", "")), '/', '\', 'g')
 else
     let s:code_user_dir = fnameescape(get(g:, "code_user_dir", ""))
+    let s:trae_user_dir = fnameescape(get(g:, "trae_user_dir", ""))
     let s:cursor_user_dir = fnameescape(get(g:, "cursor_user_dir", ""))
     let s:positron_user_dir = fnameescape(get(g:, "positron_user_dir", ""))
     let s:windsurf_user_dir = fnameescape(get(g:, "windsurf_user_dir", ""))
@@ -15,10 +17,9 @@ function! s:execute(cmd, ...) abort
     endif
     execute("!" . a:cmd)
 endfunction
-function! s:link_keybindings() abort
-    if WINDOWS()
+function! s:link() abort
         for dir in [s:code_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
-            if isdirectory(dir)
+            if WINDOWS() && isdirectory(dir)
                 " rm
                 let delete_cmd = printf('del /Q /S %s\keybindings.json', dir)
                 call s:execute(delete_cmd)
@@ -29,11 +30,7 @@ function! s:link_keybindings() abort
                 call s:execute(mklink_cmd)
                 let mklink_cmd = printf('mklink /d %s %s', dir . '\snippets', $LEOVIM_DIR . '\snippets')
                 call s:execute(mklink_cmd)
-            endif
-        endfor
-    else
-        for dir in [s:code_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
-            if isdirectory(dir)
+            elseif isdirectory(dir)
                 " rm
                 let rm_cmd = printf('rm %s',  dir . '/keybindings.json')
                 call s:execute(rm_cmd)
@@ -46,7 +43,6 @@ function! s:link_keybindings() abort
                 call s:execute(ln_cmd, 1)
             endif
         endfor
-    endif
 endfunction
-command! LinkKeyBindings call s:link_keybindings()
-nnoremap <M-h>K :LinkKeyBindings<Cr>
+command! MkLinkKeyBindings call s:link()
+nnoremap <M-h>K :MkLinkKeyBindings<Cr>

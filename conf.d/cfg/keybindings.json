@@ -492,9 +492,27 @@
     "key": "ctrl+alt+meta+n",
     "command": "-welcome.showNewFileEntries"
   },
+  // open keybindings ---------------------------
+  {
+    "key": "ctrl+k ctrl+s",
+    "command": "-workbench.action.openGlobalKeybindings"
+  },
+  {
+    "key": "ctrl+m ctrl+s",
+    "command": "-workbench.action.openGlobalKeybindings"
+  },
+  {
+    "key": "ctrl+shift+alt+,",
+    "command": "workbench.action.openGlobalKeybindingsFile"
+  },
+  {
+    "key": "ctrl+alt+,",
+    "command": "workbench.action.openGlobalKeybindings"
+  },
+  //----------------- NOTE: AI editors ------------------
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
-  //---------------------- vscode positron --------------
+  //---------------- vscode positron trae ---------------
   // tongyi
   {
     "key": "ctrl+`",
@@ -521,23 +539,6 @@
     "command": "-tongyi.show.panel",
     "when": "TongyiLingMa.Chat.active"
   },
-  // roo-cline 
-  {
-    "key": "ctrl+\\",
-    "command": "roo-cline.SidebarProvider.focus"
-  },
-  {
-    "key": "ctrl+shift+alt+p",
-    "command": "roo-cline.promptsButtonClicked"
-  },
-  {
-    "key": "ctrl+shift+alt+m",
-    "command": "roo-cline.mcpButtonClicked"
-  },
-  {
-    "key": "ctrl+alt+\\",
-    "command": "roo-cline.plusButtonClicked"
-  },
   // continue
   {
     "key": "shift+alt+a",
@@ -550,22 +551,5 @@
   {
     "key": "ctrl+shift+alt+l",
     "command": "continue.viewHistory"
-  },
-  //-------------------------- last, open keybindings ---------------------------
-  {
-    "key": "ctrl+k ctrl+s",
-    "command": "-workbench.action.openGlobalKeybindings"
-  },
-  {
-    "key": "ctrl+m ctrl+s",
-    "command": "-workbench.action.openGlobalKeybindings"
-  },
-  {
-    "key": "ctrl+shift+alt+,",
-    "command": "workbench.action.openGlobalKeybindingsFile"
-  },
-  {
-    "key": "ctrl+alt+,",
-    "command": "workbench.action.openGlobalKeybindings"
   }
 ]
