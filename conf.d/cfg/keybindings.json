@@ -45,7 +45,7 @@
     "key": "shift+alt+down",
     "command": "workbench.action.focusBelowGroupWithoutWrap"
   },
-  // open file/folder, outline, symbol 
+  // open file/folder, outline, symbol
   {
     "key": "ctrl+shift+t",
     "command": "-workbench.action.reopenClosedEditor"
@@ -519,25 +519,15 @@
     "command": "tongyi.show.panel.chat",
     "when": "TongyiLingMa.Chat.active"
   },
+  // kilocode
   {
-    "key": "ctrl+shift+`",
-    "command": "tongyi.show.panel.developer",
-    "when": "TongyiLingMa.Chat.active"
+    "key": "ctrl+\\ e",
+    "command": "-vscode-neovim.send-cmdline",
+    "when": "neovim.init && neovim.mode == 'cmdline'"
   },
   {
-    "key": "ctrl+shift+i",
-    "command": "-tongyi.show.panel.developer",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
-    "key": "ctrl+shift+l",
-    "command": "-tongyi.show.panel.chat",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
-    "key": "ctrl+shift+l",
-    "command": "-tongyi.show.panel",
-    "when": "TongyiLingMa.Chat.active"
+    "key": "ctrl+\\",
+    "command": "workbench.view.extension.kilo-code-ActivityBar"
   },
   // continue
   {
@@ -549,17 +539,23 @@
     "command": "-continue.applyCodeFromChat"
   },
   {
+    "key": "alt+p",
+    "command": "-tongyi.action.inlineSuggest.trigger",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
     "key": "ctrl+shift+alt+l",
-    "command": "continue.viewHistory"
-  },
-  // kilocode
-  {
-    "key": "ctrl+\\ e",
-    "command": "-vscode-neovim.send-cmdline",
-    "when": "neovim.init && neovim.mode == 'cmdline'"
+    "command": "tongyi.action.inlineSuggest.trigger",
+    "when": "TongyiLingMa.Chat.active"
   },
   {
-    "key": "ctrl+\\",
-    "command": "workbench.view.extension.kilo-code-ActivityBar"
+    "key": "ctrl+shift+alt+i",
+    "command": "tongyi.action.inlineSuggest.acceptNextLine",
+    "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
+  },
+  {
+    "key": "ctrl+down",
+    "command": "-tongyi.action.inlineSuggest.acceptNextLine",
+    "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
   }
 ]
