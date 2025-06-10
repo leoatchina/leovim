@@ -18,7 +18,7 @@ function! s:execute(cmd, ...) abort
     execute("!" . a:cmd)
 endfunction
 function! s:link() abort
-        for dir in [s:code_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
+        for dir in [s:code_user_dir, s:trae_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
             if WINDOWS() && isdirectory(dir)
                 " rm
                 let delete_cmd = printf('del /Q /S %s\keybindings.json', dir)

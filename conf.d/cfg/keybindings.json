@@ -551,5 +551,15 @@
   {
     "key": "ctrl+shift+alt+l",
     "command": "continue.viewHistory"
+  },
+  // kilocode
+  {
+    "key": "ctrl+\\ e",
+    "command": "-vscode-neovim.send-cmdline",
+    "when": "neovim.init && neovim.mode == 'cmdline'"
+  },
+  {
+    "key": "ctrl+\\",
+    "command": "workbench.view.extension.kilo-code-ActivityBar"
   }
 ]
