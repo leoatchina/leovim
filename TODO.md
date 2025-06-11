@@ -109,6 +109,12 @@
 - [x] tab nr highlighting group
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
+- [ ] nvim-lsp
+    - [x] require nvim-0.11
+    - [x] nvim-java
+    - [x] create .vim folder for neoconf
+    - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
+    - [ ] optimize nvim-0.11 builtin completion
 - [ ] name vim-floaterm-repl to vim-floaterm-enhance
     - [ ] Run is current tab related only, could not be used in other tabs, 
     - [ ] using different idx for aider, repl
@@ -116,12 +122,6 @@
     - [x] ~~yarepl.nvim + aider~~
     - [ ] copilot plus 
     - [ ] minuet.ai
-- [ ] nvim-lsp
-    - [x] require nvim-0.11
-    - [x] nvim-java
-    - [x] create .vim folder for neoconf
-    - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
-    - [ ] optimize nvim-0.11 builtin completion
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
 - [ ] find conflicts using Git/Project/Current path.
