@@ -137,7 +137,6 @@ function! s:has_backspace() abort
 endfunction
 inoremap <silent><expr> <Cr> coc#pum#visible() ? coc#pum#stop() : "\<C-g>u\<Cr>\<C-r>=coc#on_enter()\<Cr>"
 inoremap <silent><expr> <TAB> coc#pum#visible() == v:false ? "\<Tab>" :
-            \ coc#pum#info()['index'] < 0 ? coc#pum#next(1) :
             \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<Cr>" :
             \ <SID>has_backspace() ? coc#refresh() :
             \ coc#_select_confirm()

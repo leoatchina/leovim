@@ -192,11 +192,7 @@ cmp.setup({
     ['<Tab>'] = {
       i = function(fallback)
         if cmp.visible() then
-          if cmp.get_selected_entry() then
-            cmp.confirm()
-          else
-            cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-          end
+          cmp.confirm({ select = true })
         elseif has_words_before() then
           cmp.complete()
         else

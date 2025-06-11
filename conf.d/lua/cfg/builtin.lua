@@ -1,3 +1,4 @@
+local fn = vim.fn
 local function keymap(lhs, rhs, opts, mode)
   opts = type(opts) == 'string' and { desc = opts }
   or vim.tbl_extend('error', opts --[[@as table]], { buffer = bufnr })
@@ -13,7 +14,7 @@ end
 
 ---Is the completion menu open?
 local function pumvisible()
-  return tonumber(vim.fn.pumvisible()) ~= 0
+  return tonumber(fn.pumvisible()) ~= 0
 end
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -60,19 +61,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
       -- Use <Tab> to navigate between snippet tabstops,
       -- or select the next completion.
       -- Do something similar with <S-Tab>.
-      keymap('<Tab>', function()
-        -- local copilot = require 'copilot.suggestion'
-        -- if copilot.is_visible() then
-        --   copilot.accept()
-        -- elseif pumvisible() then
-        if pumvisible() then
-          feedkeys '<C-n>'
-        elseif vim.snippet.active { direction = 1 } then
-          vim.snippet.jump(1)
-        else
-          feedkeys '<Tab>'
-        end
-      end, {}, { 'i', 's' })
+     do
+       keymap('<Tab>', function()
+         if vim.snippet.active { direction = 1 } then
+           vim.snippet.jump(1)
+         elseif pumvisible() then
+           feedkeys '<C-n>'
+         else
+           feedkeys '<Tab>'
+         end
+       end, {}, { 'i', 's' })
+     end
 
       keymap('<S-Tab>', function()
         if pumvisible() then

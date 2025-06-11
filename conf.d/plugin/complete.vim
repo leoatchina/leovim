@@ -126,34 +126,6 @@ if Planned('vim-vsnip')
         imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
     endif
-    if !InstalledAdv()
-        function! MapTabCr(tab) abort
-            if pumvisible()
-                if a:tab
-                    if empty(get(v:, 'completed_item', {}))
-                        return "\<C-n>"
-                    elseif vsnip#available(1)
-                        return "\<Plug>(vsnip-expand-or-jump)"
-                    else
-                        return "\<C-y>"
-                    endif
-                else
-                    return "\<C-y>"
-                endif
-            else
-                if a:tab
-                    return "\<Tab>"
-                else
-                    return "\<Cr>"
-                endif
-            endif
-        endfunction
-        au WinEnter,BufEnter * imap <silent><Tab> <C-R>=MapTabCr(1)<Cr>
-        au WinEnter,BufEnter * imap <silent><Cr> <C-R>=MapTabCr(0)<Cr>
-        if g:complete_engine == 'mcm'
-            au WinEnter,BufEnter * imap <expr><down> mucomplete#extend_fwd("\<down>")
-        endif
-    endif
 else
     imap <silent><C-b> <C-o>I
     imap <silent><C-f> <C-o>A
