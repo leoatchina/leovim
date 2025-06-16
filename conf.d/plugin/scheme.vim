@@ -31,20 +31,20 @@ let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call SetScheme('sonokai', 'sublime')
+    call SetScheme('edge', 'one')
 elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
     if Require('blink.lua')
-        call SetScheme('catppuccin-macchiato', 'codedark')
+        call SetScheme('nightfly', 'codedark')
     else
         call SetScheme('catppuccin-mocha', 'codedark')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('nightfox', 'hybrid')
+        call SetScheme('duskfox', 'hybrid')
     else
-        call SetScheme('nightfly', 'hybrid')
+        call SetScheme('sonokai', 'sublime')
     endif
 else
     colorscheme slate
