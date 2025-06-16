@@ -8,7 +8,7 @@ function! PlannedCoc() abort
     return Require('coc') && g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
 endfunction
 function! PlannedLsp() abort
-    return (Require('cmp') || Require('builtin') || Require('blink') || Require('blink.lua')) && has('nvim-0.11')
+    return (Require('cmp') || Require('blink') || Require('blink.lua')) && has('nvim-0.11')
 endfunction
 function! PlannedAdvCompEng() abort
     return PlannedCoc() || PlannedLsp()
@@ -86,12 +86,6 @@ elseif Require('mcm')
     let g:complete_engine = 'mcm'
 elseif PlannedCoc()
     let g:complete_engine = 'coc'
-elseif Require('builtin')
-    if has('nvim-0.11')
-        let g:complete_engine = 'builtin'
-    else
-        let s:smart_engine_select = 1
-    endif
 elseif Require('cmp')
     if has('nvim-0.11')
         let g:complete_engine = 'cmp'

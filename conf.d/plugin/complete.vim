@@ -84,13 +84,10 @@ endif
 " normal complete_engine
 " ------------------------------
 if InstalledLsp()
-    if InstalledCmp()
-        lua require("cfg/cmp")
-    elseif InstalledBlink()
+    if InstalledBlink()
         lua require("cfg/blink")
     else
-        let g:complete_engine = 'builtin'
-        lua require("cfg/builtin")
+        lua require("cfg/cmp")
     endif
 elseif InstalledCoc()
     source $CFG_DIR/coc.vim
