@@ -15,98 +15,17 @@ fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl
 -------------------------------------
 local mason_dir = fn.expand("~/.leovim.d/mason")
 require("mason-nvim-dap").setup({
-  ensure_installed = { "python", "bash" },
+  ensure_installed = { "bash" },
   handlers = {
     function(config)
       require('mason-nvim-dap').default_setup(config)
     end
   }
 })
----------------------
--- layouts
----------------------
-local layouts = {
-  {
-    elements = {
-      { id = "scopes",  size = 0.5 },
-      { id = "watches", size = 0.3 },
-      { id = "stacks",  size = 0.2 },
-    },
-    size = 0.2,
-    position = "top",
-  },
-  {
-    elements = {
-      { id = "scopes",  size = 0.5 },
-      { id = "watches", size = 0.3 },
-      { id = "stacks",  size = 0.2 },
-    },
-    size = 0.25,
-    position = "left",
-  },
-  --  console / breakpoints on bottom
-  {
-    elements = {
-      { id = "console",     size = 0.7 },
-      { id = "breakpoints", size = 0.3 },
-    },
-    size = 0.2,
-    position = "bottom",
-  },
-}
-local function dapui_toggle(open)
-  local ok, result = pcall(function() return open > 0 end)
-  if not ok then
-    open = false
-  else
-    open = result
-  end
-  local windows = require("dapui.windows")
-  -- width > height
-  if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
-    if windows.layouts[1]:is_open() or open then
-      dapui.close()
-      dapui.open(2)
-      dapui.open(3)
-    else
-      dapui.toggle(2)
-      dapui.toggle(3)
-    end
-  else
-    if windows.layouts[2]:is_open() or open then
-      dapui.close()
-      dapui.open(1)
-      dapui.open(3)
-    else
-      dapui.toggle(1)
-      dapui.toggle(3)
-    end
-  end
-end
-keymap.set({"n", "x"}, "<M-m><M-m>",
-  function()
-    dapui_toggle()
-  end, { noremap = true, silent = true }
-)
--- 打开 dapui
-function _G.DapUIOpen()
-  local windows = require("dapui.windows")
-  -- 根据屏幕宽高比选择合适的布局
-  if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
-    dapui.open(2)
-    dapui.open(3)
-  else
-    dapui.open(1)
-    dapui.open(3)
-  end
-end
--- 关闭 dapui
-function _G.DapUIClose()
-  dapui.close()
-end
-keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
-keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
+------------------------------------------------------------
 -- 配置调试适配器
+------------------------------------------------------------
+-- sh
 local bash_debug_adapter = mason_dir .. "/bin/bash-debug-adapter"
 local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
 dap.adapters.bashdb = {
@@ -137,32 +56,13 @@ dap.configurations.sh = {
     terminalKind = "integrated",
   }
 }
----------------------
--- dapui
----------------------
-dapui.setup({
-  -- Expand lines larger than the window
-  expand_lines = true,
-  mappings = {
-    -- Use a table to apply multiple mappings
-    expand = { "<Space>" },
-    open = "<Cr>",
-    remove = "x",
-    edit = "e",
-    repl = "r",
-    toggle = "t",
-  },
-  layouts = layouts,
-  controls = {
-    element = "repl",
-    enabled = true,
-  },
-  floating = {
-    mappings = {
-      close = { "<Esc>", "<M-q>", "<C-c>", "q" },
-    },
-  },
-})
+-- python
+dap.adapters.python = {
+  type = 'executable';
+  command = vim.g.python_prog;
+  args = { '-m', 'debugpy.adapter' };
+}
+vim.g.dap_adapters = dap.adapters
 ------------------------------------------------------------
 -- load dap_json, modified from dap.ext.vscode.lauchjs
 ------------------------------------------------------------
@@ -303,6 +203,116 @@ end
 function _G.DapBreakpointPrev()
   goto_breakpoint('prev')
 end
+---------------------
+-- layouts
+---------------------
+local layouts = {
+  {
+    elements = {
+      { id = "scopes",  size = 0.5 },
+      { id = "watches", size = 0.3 },
+      { id = "stacks",  size = 0.2 },
+    },
+    size = 0.2,
+    position = "top",
+  },
+  {
+    elements = {
+      { id = "scopes",  size = 0.5 },
+      { id = "watches", size = 0.3 },
+      { id = "stacks",  size = 0.2 },
+    },
+    size = 0.25,
+    position = "left",
+  },
+  --  console / breakpoints on bottom
+  {
+    elements = {
+      { id = "console",     size = 0.7 },
+      { id = "breakpoints", size = 0.3 },
+    },
+    size = 0.2,
+    position = "bottom",
+  },
+}
+local function dapui_toggle(open)
+  local ok, result = pcall(function() return open > 0 end)
+  if not ok then
+    open = false
+  else
+    open = result
+  end
+  local windows = require("dapui.windows")
+  -- width > height
+  if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
+    if windows.layouts[1]:is_open() or open then
+      dapui.close()
+      dapui.open(2)
+      dapui.open(3)
+    else
+      dapui.toggle(2)
+      dapui.toggle(3)
+    end
+  else
+    if windows.layouts[2]:is_open() or open then
+      dapui.close()
+      dapui.open(1)
+      dapui.open(3)
+    else
+      dapui.toggle(1)
+      dapui.toggle(3)
+    end
+  end
+end
+keymap.set({"n", "x"}, "<M-m><M-m>",
+  function()
+    dapui_toggle()
+  end, { noremap = true, silent = true }
+)
+-- 打开 dapui
+function _G.DapUIOpen()
+  local windows = require("dapui.windows")
+  -- 根据屏幕宽高比选择合适的布局
+  if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
+    dapui.open(2)
+    dapui.open(3)
+  else
+    dapui.open(1)
+    dapui.open(3)
+  end
+end
+-- 关闭 dapui
+function _G.DapUIClose()
+  dapui.close()
+end
+keymap.set({"n", "x"}, "<M-m>o", [[<Cmd>lua DapUIOpen()<Cr>]],  { noremap = true, silent = true })
+keymap.set({"n", "x"}, "<M-m>q", [[<Cmd>lua DapUIClose()<Cr>]], { noremap = true, silent = true })
+---------------------
+-- dapui
+---------------------
+dapui.setup({
+  -- Expand lines larger than the window
+  expand_lines = true,
+  mappings = {
+    -- Use a table to apply multiple mappings
+    expand = { "<Space>" },
+    open = "<Cr>",
+    remove = "x",
+    edit = "e",
+    repl = "r",
+    toggle = "t",
+  },
+  layouts = layouts,
+  controls = {
+    element = "repl",
+    enabled = true,
+  },
+  floating = {
+    mappings = {
+      close = { "<Esc>", "<M-q>", "<C-c>", "q" },
+    },
+  },
+})
 --------------------------------------
 -- daptab, auto open/close/load dapui in tab
 -- https://github.com/przepompownia/nvim-dap-tab/blob/master/lua/dap-tab/init.lua
