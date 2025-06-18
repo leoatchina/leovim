@@ -291,7 +291,7 @@ if [ $# -gt 0 ]; then
         exit 0
     fi
     # gvm 
-    if [ $mode == 'gvm' ]; then
+    if [[ $mode == 'all' || $mode == 'gvm' ]]; then
         if program_exists gvm; then
             info "gvm has been installed."
         else
