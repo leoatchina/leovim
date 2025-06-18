@@ -13,7 +13,6 @@ fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl
 -------------------------------------
 -- mason
 -------------------------------------
-local mason_dir = fn.expand("~/.leovim.d/mason")
 require("mason-nvim-dap").setup({
   ensure_installed = { "bash" },
   handlers = {
@@ -25,6 +24,7 @@ require("mason-nvim-dap").setup({
 ------------------------------------------------------------
 -- 配置调试适配器
 ------------------------------------------------------------
+local mason_dir = fn.expand("~/.leovim.d/mason")
 -- sh
 local bash_debug_adapter = mason_dir .. "/bin/bash-debug-adapter"
 local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"

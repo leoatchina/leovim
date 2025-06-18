@@ -84,6 +84,7 @@ require('symbol-usage').setup({
 -------------------------
 require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed,
+  automatic_enable = true,
   handlers = {
     function (server_name)
       vim.lsp.config(server_name, {capabilities = lsp_capabilities})
@@ -93,12 +94,19 @@ require("mason-lspconfig").setup({
       vim.lsp.config('pyright', {
         filetypes = { "python" },
         cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright-langserver', '--stdio'},
-        capabilities = lsp_capabilities,
         settings = {
           pyright = {
-            -- disable import sorting and use Ruff for this
-            disableOrganizeImports = true,
+            disableOrganizeImports = false,
             disableTaggedHints = false,
+            analysis = {
+              useLibraryCodeForTypes = true,
+              diagnosticMode = "workspace",  -- 更全面的诊断
+              -- 可选：忽略特定警告（如未使用变量）
+              diagnosticSeverityOverrides = {
+                reportUnusedVariable = "warning",  -- 未使用变量设为警告
+                reportUnusedImport = "warning",     -- 未使用导入设为警告
+              }
+            }
           },
           python = {
             analysis = {
@@ -110,6 +118,10 @@ require("mason-lspconfig").setup({
               diagnosticSeverityOverrides = {
                 deprecateTypingAliases = false,
               },
+              -- 启用严格的未使用诊断
+              reportUnusedImport = true,
+              reportUnusedVariable = true,
+              reportUnusedFunction = true,
               -- inlay hint settings are provided by pylance?
               inlayHints = {
                 callArgumentNames = "partial",
@@ -121,11 +133,9 @@ require("mason-lspconfig").setup({
           },
         },
       })
-      vim.lsp.enable('pyright')
     end,
     ['lua_ls'] = function()
       vim.lsp.config('lua_ls', {
-        capabilities = lsp_capabilities,
         filetypes = { "lua" },
         hint = {
           enable = true,
@@ -141,12 +151,10 @@ require("mason-lspconfig").setup({
           },
         },
       })
-      vim.lsp.enable('lua_ls')
     end,
     ['gopls'] = function()
       vim.lsp.config('gopls', {
         filetypes = { "go" },
-        capabilities = lsp_capabilities,
         hint = {
           enable = true,
         },
@@ -163,15 +171,12 @@ require("mason-lspconfig").setup({
           },
         },
       })
-      vim.lsp.enable('gopls')
     end,
     ['jdtls'] = function()
       vim.lsp.config('jdtls', {
         filetypes = { "java", "javac", "jar" },
-        capabilities = lsp_capabilities,
       })
-      vim.lsp.enable('jdtls')
-    end,
+    end
   }
 })
 ---------------------

@@ -412,8 +412,8 @@ endfor
 " set mason PATH
 " ------------------------------
 let mason_bin = Expand('~/.leovim.d/mason/bin')
-if g:complete_engine != 'cmp' && isdirectory(mason_bin) && $PATH !~ 'mason/bin'
-    if WINDOWS()
+if !Planned('mason.nvim') && get(g:, 'leovim_loaded', 0) ==0
+if WINDOWS()
         let $PATH = mason_bin . ';' . $PATH
     else
         let $PATH = mason_bin . ':' . $PATH

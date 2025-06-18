@@ -200,7 +200,7 @@ endif
 if PlannedLsp()
     let g:lint_tool = 'lsp'
     " lsp related
-    PlugAdd 'williamboman/mason-lspconfig.nvim'
+    PlugAdd 'mason-org/mason-lspconfig.nvim'
     PlugAdd 'camilledejoye/nvim-lsp-selection-range'
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'ravenxrz/call-graph.nvim'
@@ -311,7 +311,7 @@ if has('nvim')
         PlugAdd 'stevearc/dressing.nvim'
     endif
     if PlannedLsp() || Planned('nvim-dap')
-        PlugAdd 'williamboman/mason.nvim'
+        PlugAdd 'mason-org/mason.nvim'
     endif
 elseif v:version >= 800
     PlugAdd 'ryanoasis/vim-devicons'

@@ -1,3 +1,4 @@
+let g:test0 = $PATH
 if g:node_version > 16
     let g:ensure_installed = ['vimls', 'lua_ls']
 else
@@ -31,7 +32,7 @@ endif
 if Installed('spring-boot.nvim')
     lua require('cfg/springboot')
 endif
-if Installed('nvim-java', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'lua-async-await', 'nvim-java-dap')
-    lua require('java').setup({verification = { invalid_mason_registry = false }})
+if Installed('nvim-java', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'nvim-java-dap', 'lua-async-await')
+    lua require('java').setup()
 endif
 lua require("lsp")
