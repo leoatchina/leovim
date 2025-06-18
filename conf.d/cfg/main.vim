@@ -120,8 +120,10 @@ function! s:python_prog()
     if !empty(l:venv_path)
         if has('win32') || has('win64')
             let l:python_prog = l:venv_path . '/Scripts/python.exe'
+            let $PATH = l:venv_path . "\bin;". $PATH
         else
             let l:python_prog = l:venv_path . '/bin/python'
+            let $PATH = l:venv_path . "/bin:". $PATH
         endif
     endif
     if filereadable(get(l:, "python_prog", ""))
