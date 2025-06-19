@@ -44,7 +44,7 @@ endif
 if Installed("yarepl.nvim")
     lua require("cfg/api")
     lua require("cfg/yarepl")
-elseif Installed('codecompanion.nvim')
+elseif Installed('codecompanion.nvim', 'codecompanion-history.nvim')
     lua require("cfg/api")
     lua require("cfg/codecompanion")
 elseif !exists("g:ai_complete_engine")

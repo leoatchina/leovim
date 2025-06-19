@@ -175,6 +175,7 @@ if g:ai_api_key
         PlugAdd 'milanglacier/yarepl.nvim'
     elseif has('nvim-0.10.1') && Planned('nvim-treesitter') && executable('curl') && PlannedLsp() && Require('codecompanion')
         PlugAdd 'olimorris/codecompanion.nvim'
+        PlugAdd 'ravitemer/codecompanion-history.nvim'
         PlugAdd 'echasnovski/mini.pick'
     endif
 endif

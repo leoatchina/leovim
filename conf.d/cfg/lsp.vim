@@ -35,4 +35,4 @@ endif
 if Installed('nvim-java', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'nvim-java-dap', 'lua-async-await')
     lua require('java').setup()
 endif
-lua require("lsp")
+lua require("cfg/lsp")
