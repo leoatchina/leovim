@@ -16,6 +16,8 @@ vim.diagnostic.enable(false)
 local config = {
   virtual_text = false,
   underline = false,
+  update_in_insert = false,
+  severity_sort = true,
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = "",
@@ -24,8 +26,6 @@ local config = {
       [vim.diagnostic.severity.INFO] = "",
     },
   },
-  update_in_insert = true,
-  severity_sort = true,
   float = {
     focusable = false,
     style = "minimal",
