@@ -1,5 +1,4 @@
 local M = {}
-local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -14,9 +13,9 @@ lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
 --------------------------------------------
 vim.diagnostic.enable(false)
 local config = {
-  virtual_text = false,
-  underline = false,
   update_in_insert = false,
+  virtual_text = false,
+  underline = true,
   severity_sort = true,
   signs = {
     text = {
@@ -40,6 +39,7 @@ vim.diagnostic.config(config)
 function _G.toggle_diagnostics()
   if vim.g.diagnostics_enable then
     print("diagnostics off")
+    vim.g.diagnostics_enable = false
     vim.diagnostic.enable(false)
   else
     print("diagnostics on")
@@ -48,22 +48,17 @@ function _G.toggle_diagnostics()
   end
 end
 -- toggle diagnostic virtual text && underline
-function _G.toggle_diagnostics_highlight()
-  if vim.g.diagnostic_virtualtext_underline then
-    print("virtualtext_underline off")
-    vim.g.diagnostic_virtualtext_underline = false
-    vim.diagnostic.config({
-      virtual_text = false,
-      underline = false,
-    })
+function _G.toggle_virtual_text()
+  if vim.g.diagnostic_virtual_text then
+    print("virtual_text off")
+    vim.g.diagnostic_virtual_text = false
   else
-    print("virtualtext_underline on")
-    vim.g.diagnostic_virtualtext_underline = true
-    vim.diagnostic.config({
-      virtual_text = true,
-      underline = true,
-    })
+    print("virtual_text on")
+    vim.g.diagnostic_virtual_text = true
   end
+  vim.diagnostic.config({
+    virtual_text = vim.g.diagnostic_virtual_text
+  })
 end
 vim.lsp.config("*", {
   capabilities = lsp_capabilities,
@@ -279,7 +274,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('i', "<C-x><C-x>", function() vim.lsp.buf.signature_help { border = 'single' } end, opts_silent)
     -- diagnostic
     map(nx, "<leader>o", toggle_diagnostics, opts_silent)
-    map(nx, "<leader>O", toggle_diagnostics_highlight, opts_silent)
+    map(nx, "<leader>O", toggle_virtual_text, opts_silent)
     map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
     map(nx, "<leader>D", [[<Cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<Cr>]], opts_silent)
     -- select range

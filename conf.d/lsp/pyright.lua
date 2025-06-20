@@ -1,7 +1,6 @@
 return {
   name = 'pyright',
   filetypes = { "python" },
-  cmd = vim.fn.executable('delance-langserver') > 0 and {'delance-langserver', '--stdio'} or {'pyright-langserver', '--stdio'},
   settings = {
     pyright = {
       disableOrganizeImports = false,
@@ -17,17 +16,6 @@ return {
         reportUnusedVariable = 'hint',
         reportUnusedFunction = 'hint',
         reportUnusedImport = 'hint',
-        -- we can this setting below to redefine some diagnostics
-        diagnosticSeverityOverrides = {
-          deprecateTypingAliases = false,
-        },
-        -- inlay hint settings are provided by pylance?
-        inlayHints = {
-          callArgumentNames = "partial",
-          functionReturnTypes = true,
-          pytestParameters = true,
-          variableTypes = true,
-        },
       },
     },
   },
