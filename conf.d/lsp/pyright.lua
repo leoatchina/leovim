@@ -1,10 +1,10 @@
 return {
+  name = 'pyright',
   filetypes = { "python" },
   cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright-langserver', '--stdio'},
   settings = {
     pyright = {
-      -- disable import sorting and use Ruff for this
-      disableOrganizeImports = true,
+      disableOrganizeImports = false,
       disableTaggedHints = false,
     },
     python = {

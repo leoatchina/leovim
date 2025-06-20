@@ -353,7 +353,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
           vim.uv.cwd(),
         })
         local client =
-        vim.lsp.start(vim.tbl_extend("force", vim.lsp.config.basedpyright, { root_dir = root }), { attach = false })
+        vim.lsp.start(vim.tbl_extend("force", vim.lsp.config.pyright, { root_dir = root }), { attach = false })
         if client then
           vim.lsp.buf_attach_client(0, client)
         end
