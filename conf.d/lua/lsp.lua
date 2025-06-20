@@ -2,20 +2,41 @@ local M = {}
 local unpack = unpack or table.unpack
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
-local lsp_capabilities = require("lsp-selection-range").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
 lsp_capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
+    dynamicRegistration = true,
     lineFoldingOnly = true
 }
--------------
+lsp_capabilities.textDocument.semanticTokens.multilineTokenSupport = true
+lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
+--------------------------------------------
 -- diagnostic
--------------
+--------------------------------------------
 vim.diagnostic.enable(false)
-vim.diagnostic.config({
+local config = {
   virtual_text = false,
   underline = false,
-  float = {border = "single"}
-})
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN] = "",
+      [vim.diagnostic.severity.HINT] = "",
+      [vim.diagnostic.severity.INFO] = "",
+    },
+  },
+  update_in_insert = true,
+  severity_sort = true,
+  float = {
+    focusable = false,
+    style = "minimal",
+    border = "single",
+    source = "always",
+    header = "",
+    prefix = "",
+    suffix = "",
+  },
+}
+vim.diagnostic.config(config)
 function _G.toggle_diagnostics()
   if vim.g.diagnostics_enable then
     print("diagnostics off")
@@ -43,6 +64,46 @@ function _G.toggle_diagnostics_highlight()
       underline = true,
     })
   end
+end
+vim.lsp.config("*", {
+  capabilities = lsp_capabilities,
+  on_attach = function(client, bufnr)
+    local ok, diag = pcall(require, "rj.extras.workspace-diagnostic")
+    if ok then
+      diag.populate_workspace_diagnostics(client, bufnr)
+    end
+  end,
+})
+-----------------------
+-- symbol icons
+-----------------------
+local icons = {
+  Class = " ",
+  Color = " ",
+  Constant = " ",
+  Constructor = " ",
+  Enum = " ",
+  EnumMember = " ",
+  Event = " ",
+  Field = " ",
+  File = " ",
+  Folder = " ",
+  Function = "󰊕 ",
+  Interface = " ",
+  Keyword = " ",
+  Method = "ƒ ",
+  Module = "󰏗 ",
+  Property = " ",
+  Snippet = " ",
+  Struct = " ",
+  Text = " ",
+  Unit = " ",
+  Value = " ",
+  Variable = " ",
+}
+local completion_kinds = vim.lsp.protocol.CompletionItemKind
+for i, kind in ipairs(completion_kinds) do
+  completion_kinds[i] = icons[kind] and icons[kind] .. kind or kind
 end
 -----------------------
 -- symbol usage
@@ -84,100 +145,7 @@ require('symbol-usage').setup({
 -------------------------
 require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed,
-  automatic_enable = true,
-  handlers = {
-    function (server_name)
-      vim.lsp.config(server_name, {capabilities = lsp_capabilities})
-      vim.lsp.enable(server_name)
-    end,
-    ['pyright'] = function()
-      vim.lsp.config('pyright', {
-        filetypes = { "python" },
-        cmd = executable('delance-langserver') and {'delance-langserver', '--stdio'} or {'pyright-langserver', '--stdio'},
-        settings = {
-          pyright = {
-            disableOrganizeImports = false,
-            disableTaggedHints = false,
-            analysis = {
-              useLibraryCodeForTypes = true,
-              diagnosticMode = "workspace",  -- 更全面的诊断
-              -- 可选：忽略特定警告（如未使用变量）
-              diagnosticSeverityOverrides = {
-                reportUnusedVariable = "warning",  -- 未使用变量设为警告
-                reportUnusedImport = "warning",     -- 未使用导入设为警告
-              }
-            }
-          },
-          python = {
-            analysis = {
-              autoSearchPaths = true,
-              diagnosticMode = "workspace",
-              typeCheckingMode = "standard",
-              useLibraryCodeForTypes = true,
-              -- we can this setting below to redefine some diagnostics
-              diagnosticSeverityOverrides = {
-                deprecateTypingAliases = false,
-              },
-              -- 启用严格的未使用诊断
-              reportUnusedImport = true,
-              reportUnusedVariable = true,
-              reportUnusedFunction = true,
-              -- inlay hint settings are provided by pylance?
-              inlayHints = {
-                callArgumentNames = "partial",
-                functionReturnTypes = true,
-                pytestParameters = true,
-                variableTypes = true,
-              },
-            },
-          },
-        },
-      })
-    end,
-    ['lua_ls'] = function()
-      vim.lsp.config('lua_ls', {
-        filetypes = { "lua" },
-        hint = {
-          enable = true,
-        },
-        codeLens = {
-          enable = false,
-        },
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-          },
-        },
-      })
-    end,
-    ['gopls'] = function()
-      vim.lsp.config('gopls', {
-        filetypes = { "go" },
-        hint = {
-          enable = true,
-        },
-        codeLens = {
-          enable = true,
-        },
-        settings = {
-          gopls = {
-            analyses = {
-              unusedparams = true,
-            },
-            staticcheck = vim.g.gobin_exe_version ~= nil and vim.g.gobin_exe_version > 1.1913,
-            gofumpt = vim.g.gobin_exe_version ~= nil and vim.g.gobin_exe_version > 1.1913,
-          },
-        },
-      })
-    end,
-    ['jdtls'] = function()
-      vim.lsp.config('jdtls', {
-        filetypes = { "java", "javac", "jar" },
-      })
-    end
-  }
+  automatic_enable = true
 })
 ---------------------
 -- LspAction
@@ -271,16 +239,10 @@ end
 -----------------
 -- lsp attach
 -----------------
-require('call_graph').setup({
-  log_level = "info",
-  reuse_buf = true,
-  auto_toggle_hl = true,
-  hl_delay_ms = 200,
-  ref_call_max_depth = 3
-})
 local nx = { 'n', 'x' }
 local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
 local opts_silent = { noremap = true, silent = true, nowait = true, buffer = bufnr }
+-- Attach
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
@@ -370,18 +332,95 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
   end
 })
--- lspimport for python and pyright
+-- Start
+vim.api.nvim_create_user_command("LspStart", function()
+  vim.cmd.e()
+end, { desc = "Starts LSP clients in the current buffer" })
+-- Stop
+vim.api.nvim_create_user_command("LspStop", function(opts)
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+    if opts.args == "" or opts.args == client.name then
+      client:stop(true)
+      vim.notify(client.name .. ": stopped")
+    end
+  end
+end, {
+desc = "Stop all LSP clients or a specific client attached to the current buffer.",
+nargs = "?",
+complete = function(_, _, _)
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  local client_names = {}
+  for _, client in ipairs(clients) do
+    table.insert(client_names, client.name)
+  end
+  return client_names
+end,
+})
+-- Restart
+vim.api.nvim_create_user_command("LspRestart", function()
+  local detach_clients = {}
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+    client:stop(true)
+    if vim.tbl_count(client.attached_buffers) > 0 then
+      detach_clients[client.name] = { client, vim.lsp.get_buffers_by_client_id(client.id) }
+    end
+  end
+  local timer = vim.uv.new_timer()
+  if not timer then
+    return vim.notify("Servers are stopped but havent been restarted")
+  end
+  timer:start(
+  100,
+  50,
+  vim.schedule_wrap(function()
+    for name, client in pairs(detach_clients) do
+      local client_id = vim.lsp.start(client[1].config, { attach = false })
+      if client_id then
+        for _, buf in ipairs(client[2]) do
+          vim.lsp.buf_attach_client(buf, client_id)
+        end
+        vim.notify(name .. ": restarted")
+      end
+      detach_clients[name] = nil
+    end
+    if next(detach_clients) == nil and not timer:is_closing() then
+      timer:close()
+    end
+  end)
+  )
+end, {
+  desc = "Restart all the language client(s) attached to the current buffer",
+})
+-- Log
+vim.api.nvim_create_user_command("LspLog", function()
+  vim.cmd.vsplit(vim.lsp.log.get_filename())
+end, {
+  desc = "Get all the lsp logs",
+})
+-- Info
+vim.api.nvim_create_user_command("LspInfo", function()
+  vim.cmd("silent checkhealth vim.lsp")
+end, {
+  desc = "Get all the information about all LSP attached",
+})
+---------------------------
+-- other related plugins
+---------------------------
+local autopairs = require("nvim-autopairs")
+autopairs.setup({
+  disable_filetype = {},
+})
+require('call_graph').setup({
+  log_level = "info",
+  reuse_buf = true,
+  auto_toggle_hl = true,
+  hl_delay_ms = 200,
+  ref_call_max_depth = 3
+})
 vim.api.nvim_create_autocmd('FileType', {
   pattern = {'python'},
   callback = function()
     map(nx, "<leader>A", require("lspimport").import, opts_silent)
   end,
-})
----------------------------
--- autopairs
----------------------------
-local autopairs = require("nvim-autopairs")
-autopairs.setup({
-  disable_filetype = {},
 })
 return M
