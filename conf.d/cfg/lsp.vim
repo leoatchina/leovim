@@ -7,7 +7,7 @@ endif
 if g:python_version > 3.06 && Require('pylsp')
     let g:ensure_installed += ['pylsp']
 elseif g:node_version > 16
-    let g:ensure_installed += ['basedpyright']
+    let g:ensure_installed += ['pyright']
 endif
 if Require('web') && g:node_version > 16
     let g:ensure_installed += ['cssls', 'eslint', 'html', 'vuels', 'angularls']

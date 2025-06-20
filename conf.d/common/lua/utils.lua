@@ -14,80 +14,44 @@ function _G.inspect(item)
   vim.print(item)
 end
 
-function _G.executable(name)
-  if fn.executable(name) > 0 then
-    return true
-  end
-  return false
+function _G.executable(...)
+  return fn.executable(...) > 0
 end
 
-function _G.Require(name)
-  if fn['Require'](name) > 0 then
-    return true
-  else
-    return false
-  end
+function _G.Require(...)
+  return fn['Require'](...) > 0
 end
 
-function _G.Installed(name)
-  if fn['Installed'](name) > 0 then
-    return true
-  else
-    return false
-  end
+function _G.Installed(...)
+  return fn['Installed'](...) > 0
 end
 
 function _G.InstalledLsp()
-  if fn['InstalledLsp']() > 0 then
-    return true
-  else
-    return false
-  end
+  return fn['InstalledLsp']() > 0
 end
 
 function _G.InstalledCmp()
-  if fn['InstalledCmp']() > 0 then
-    return true
-  else
-    return false
-  end
+  return fn['InstalledCmp']() > 0
 end
 
 function _G.InstalledBlink()
-  if fn['InstalledBlink']() > 0 then
-    return true
-  else
-    return false
-  end
+  return fn['InstalledBlink']() > 0
 end
 
 function _G.InstalledCoc()
-  if fn['InstalledCoc']() > 0 then
-    return true
-  else
-    return false
-  end
+  return fn['InstalledCoc']() > 0
 end
 
 function _G.WINDOWS()
-  if fn['WINDOWS']() > 0 then
-    return true
-  end
-  return false
+  return fn['WINDOWS']() > 0
 end
 
 function _G.LINUX()
-  if fn['LINUX']() > 0 then
-    return true
-  end
-  return false
+  return fn['LINUX']() > 0
 end
 
 function _G.UNIX()
-  if fn['UNIX']() > 0 then
-    return true
-  end
-  return false
+  return fn['UNIX']() > 0
 end
 
 vim.ui.select = function(items, opts, on_choice)
