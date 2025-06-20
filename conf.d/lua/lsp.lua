@@ -311,8 +311,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       M.codelens_toggle()
       map(nx, "<leader>C", require("lsp").codelens_toggle, opts_echo)
       map(nx, "<leader>a", vim.lsp.codelens.run, opts_echo)
-      map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
     end
+    map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
     ---------------------------
     -- semantic token highlight
     ---------------------------
