@@ -237,17 +237,17 @@ function M.LspAction(method, open_action)
   end
 end
 -----------------
--- lsp attach
+-- lsp functions
 -----------------
-local nx = { 'n', 'x' }
-local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
-local opts_silent = { noremap = true, silent = true, nowait = true, buffer = bufnr }
 -- Attach
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
+    local nx = { 'n', 'x' }
     local bufnr = args.bufnr
     local client = vim.lsp.get_client_by_id(args.data.client_id)
+    local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
+    local opts_silent = { noremap = true, silent = true, nowait = true, buffer = bufnr }
     if lsp_capabilities and lsp_capabilities.completionProvider then
       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
     end
@@ -328,8 +328,52 @@ vim.api.nvim_create_autocmd('LspAttach', {
       M.codelens_toggle()
       map(nx, "<leader>C", require("lsp").codelens_toggle, opts_echo)
       map(nx, "<leader>a", vim.lsp.codelens.run, opts_echo)
+      map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
     end
-    map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
+    ---------------------------
+    -- Filetypes
+    ---------------------------
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = {'python'},
+      callback = function()
+        local ok, venv = pcall(require, "rj.extras.venv")
+        if ok then
+          venv.setup()
+        end
+        local root = vim.fs.root(0, {
+          "pyproject.toml",
+          "setup.py",
+          "setup.cfg",
+          "requirements.txt",
+          "Pipfile",
+          "pyrightconfig.json",
+          ".git",
+          vim.uv.cwd(),
+        })
+        local client =
+        vim.lsp.start(vim.tbl_extend("force", vim.lsp.config.basedpyright, { root_dir = root }), { attach = false })
+        if client then
+          vim.lsp.buf_attach_client(0, client)
+        end
+        map(nx, "<leader>A", require("lspimport").import, opts_silent)
+      end,
+    })
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "java",
+      callback = function()
+        local opts = { buffer = true }
+        -- Normal 模式下的映射
+        vim.keymap.set("n", "<leader>A", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts_silent)
+        vim.keymap.set("n", "sev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
+        vim.keymap.set("n", "sec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
+        vim.keymap.set("n", "stc", "<Cmd>lua require'jdtls'.test_class()<CR>", opts_silent)
+        vim.keymap.set("n", "stm", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts_silent)
+        -- Visual 模式下的映射
+        vim.keymap.set("x", "sev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
+        vim.keymap.set("x", "sec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
+        vim.keymap.set("x", "sem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
+      end,
+    })
   end
 })
 -- Start
@@ -416,11 +460,5 @@ require('call_graph').setup({
   auto_toggle_hl = true,
   hl_delay_ms = 200,
   ref_call_max_depth = 3
-})
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = {'python'},
-  callback = function()
-    map(nx, "<leader>A", require("lspimport").import, opts_silent)
-  end,
 })
 return M
