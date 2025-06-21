@@ -163,7 +163,7 @@ if Require('copilot_plus') ||
     \  exists('$ANTHROPIC_API_KEY') ||
     \  exists('$GEMINI_API_KEY')
     let g:ai_api_key = 2
-elseif get(g:, 'openai_compatible_api_key', '') !='' &&
+elseif get(g:, 'openai_compatible_api_key', '') != '' &&
     \  get(g:, 'openai_compatible_model', '') != '' &&
     \  get(g:, 'openai_compatible_url', '') != ''
     let g:ai_api_key = 1
@@ -173,7 +173,7 @@ endif
 if g:ai_api_key
     if has('nvim-0.9') && Require('aider') && executable('aider') && g:ai_api_key
         PlugAdd 'milanglacier/yarepl.nvim'
-    elseif has('nvim-0.10.1') && Planned('nvim-treesitter') && executable('curl') && PlannedLsp() && Require('codecompanion')
+    elseif Planned('nvim-treesitter') && executable('curl') && PlannedLsp() && Require('codecompanion')
         PlugAdd 'olimorris/codecompanion.nvim'
         PlugAdd 'ravitemer/codecompanion-history.nvim'
         PlugAdd 'echasnovski/mini.pick'
