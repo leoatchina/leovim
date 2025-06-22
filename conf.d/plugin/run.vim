@@ -1,10 +1,8 @@
 " --------------------------
 " set asyncrun_open
 " --------------------------
-augroup SetRunOpen
-    au VimResized,VimEnter * call s:SetRunRows()
-augroup END
-function! s:SetRunRows()
+au VimResized,VimEnter * call s:set_run_row()
+function! s:set_run_row()
     let row = float2nr(&lines * 0.2)
     if row < 10 || get(g:, 'asyncrun_open', 10) < 10
         let g:asyncrun_open = 10
@@ -27,23 +25,23 @@ if has('nvim') || has('timers') && has('channel') && has('job')
     if UNIX()
         silent! call mkdir(Expand("$HOME/.cache/build"), "p")
         if executable('gcc')
-            let g:gcc_cmd = 'gcc -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
+            let g:asyncrun_gcc_cmd = 'gcc -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
         if executable('g++')
-            let g:gpp_cmd = 'g++ -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
+            let g:asyncrun_gpp_cmd = 'g++ -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
         if executable('rustc')
-            let g:rustc_cmd = 'rustc -o ~/.cache/build/$(VIM_FILENOEXT) $(VIM_FILEPATH) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
+            let g:asyncrun_rustc_cmd = 'rustc -o ~/.cache/build/$(VIM_FILENOEXT) $(VIM_FILEPATH) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
     elseif WINDOWS()
         if executable('gcc')
-            let g:gcc_cmd = 'gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
+            let g:asyncrun_gcc_cmd = 'gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
         if executable('g++')
-            let g:gpp_cmd = 'g++ $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
+            let g:asyncrun_gpp_cmd = 'g++ $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
         if executable('rustc')
-            let g:rustc_cmd = 'rustc -o ..\target\test\$(VIM_FILENOEXT).exe $(VIM_FILEPATH) & ..\target\test\$(VIM_FILENOEXT).exe'
+            let g:asyncrun_rustc_cmd = 'rustc -o ..\target\test\$(VIM_FILENOEXT).exe $(VIM_FILEPATH) & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
     endif
     nnoremap ! :AsyncRun<Space>
@@ -133,21 +131,21 @@ function! s:asyncrun(...)
     elseif ft ==# 'javascript' && executable('node')
         let run_cmd = s:run_command . params . ' node %'
     " c && cpp
-    elseif ft ==# 'c' && get(g:, 'gcc_cmd', '') != ''
+    elseif ft ==# 'c' && get(g:, 'asyncrun_gcc_cmd', '') != ''
         if WINDOWS()
             silent! call mkdir("../target/test", "p")
         endif
-        let run_cmd = s:run_command . params . ' '. g:gcc_cmd
-    elseif ft ==# 'cpp' && get(g:, 'gpp_cmd', '') != ''
+        let run_cmd = s:run_command . params . ' '. g:asyncrun_gcc_cmd
+    elseif ft ==# 'cpp' && get(g:, 'asyncrun_gpp_cmd', '') != ''
         if WINDOWS()
             silent! call mkdir("../target/test", "p")
         endif
-        let run_cmd = s:run_command . params . ' '. g:gpp_cmd
-    elseif ft ==# 'rust' && get(g:, 'rustc_cmd', '') != ''
+        let run_cmd = s:run_command . params . ' '. g:asyncrun_gpp_cmd
+    elseif ft ==# 'rust' && get(g:, 'asyncrun_rustc_cmd', '') != ''
         if WINDOWS()
             silent! call mkdir("../target/test", "p")
         endif
-        let run_cmd = s:run_command . params . ' '. g:rustc_cmd
+        let run_cmd = s:run_command . params . ' '. g:asyncrun_rustc_cmd
     else
         let run_cmd = ''
     endif
@@ -181,12 +179,11 @@ function! s:asyncrun(...)
 endfunction
 command! RunQfSilent call s:asyncrun('bottom', 'qf', 1)
 command! RunQfBottom call s:asyncrun('bottom', 'qf')
-command! RunQfRight call s:asyncrun('right', 'qf')
+command! RunQfRight  call s:asyncrun('right',  'qf')
 " -------------------------
 " run in floaterm
 " -------------------------
 if has('nvim') || v:version >= 801
-    let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
     " run in floaterm right/bottom/float
     function! s:floaterm_run(opts, floaterm_wintype, position)
         let opts = copy(a:opts)
@@ -252,6 +249,7 @@ if has('nvim') || v:version >= 801
     function! s:floaterm_bottom(opts)
         call s:floaterm_run(a:opts, 'split', 'botright')
     endfunc
+    let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
     let g:asyncrun_runner.floaterm_right  = function('s:floaterm_right')
     let g:asyncrun_runner.floaterm_float  = function('s:floaterm_float')
     let g:asyncrun_runner.floaterm_bottom = function('s:floaterm_bottom')
