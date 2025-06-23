@@ -36,6 +36,14 @@ program_exists() {
     return 0
 }
 
+cp_n() {
+    if cp --help | grep -q 'update=none'; then
+        cp --update=none "$@"
+    else
+        cp -n "$@"
+    fi
+}
+
 variable_set() {
     if [ -z "$1" ]; then
         error "You must have your HOME environmental variable set to continue."
@@ -96,11 +104,11 @@ mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.local/bin"
 
 # z scripts is for history file browser
-cp -n $APP_PATH/scripts/z.sh $HOME/.local/bin
+cp_n $APP_PATH/scripts/z.sh $HOME/.local/bin
 
 # enhanced config
-cp -n $APP_PATH/scripts/inputrc $HOME/.inputrc
-cp -n $APP_PATH/scripts/configrc $HOME/.configrc
+cp_n $APP_PATH/scripts/inputrc $HOME/.inputrc
+cp_n $APP_PATH/scripts/configrc $HOME/.configrc
 note "Set links, create (neo)vim's configs, and cp start scripts"
 
 # set links
@@ -120,15 +128,15 @@ create_vimrc "$HOME/.config/nvim/init.vim"
 [ ! -f $HOME/.gvimrc ] && echo '" set guifont=CascadiaCode\ Code:h11' > $HOME/.gvimrc && echo '" set guifont=CascadiaCode\ Nerd\ Font:h11.5' >> $HOME/.gvimrc
 
 # vim run scripts
-cp -n $APP_PATH/scripts/v.sh  $HOME/.local/bin
-cp -n $APP_PATH/scripts/n.sh  $HOME/.local/bin
-cp -n $APP_PATH/scripts/vi.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/nv.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/ni.sh $HOME/.local/bin
-cp -n $APP_PATH/scripts/nn.sh $HOME/.local/bin
+cp_n $APP_PATH/scripts/v.sh  $HOME/.local/bin
+cp_n $APP_PATH/scripts/n.sh  $HOME/.local/bin
+cp_n $APP_PATH/scripts/vi.sh $HOME/.local/bin
+cp_n $APP_PATH/scripts/nv.sh $HOME/.local/bin
+cp_n $APP_PATH/scripts/ni.sh $HOME/.local/bin
+cp_n $APP_PATH/scripts/nn.sh $HOME/.local/bin
 
 # dirdiff
-cp -n $APP_PATH/scripts/dirdiff $HOME/.local/bin
+cp_n $APP_PATH/scripts/dirdiff $HOME/.local/bin
 
 # leovim command
 if [ $os == 'linux' ]; then
