@@ -2,16 +2,6 @@ if Installed('mason.nvim')
     lua require("cfg/mason")
 endif
 " ------------------------------
-" vim-header
-" ------------------------------
-if get(g:, 'header_field_author', '') != ''
-    nnoremap <M-k>a :AddHeader<Cr>
-    let g:header_auto_add_header = 0
-    let g:header_auto_update_header = 0
-    let g:header_field_timestamp_format = '%Y.%m.%d'
-    PlugAddOpt 'vim-header'
-endif
-" ------------------------------
 " AI complete
 " ------------------------------
 let g:max_tokens = get(g:, 'max_tokens', 8192)
@@ -73,12 +63,10 @@ endif
 if InstalledLsp()
     let g:vista_default_executive = 'nvim_lsp'
     source $CFG_DIR/lsp.vim
-else
-    if InstalledCoc()
-        let g:vista_default_executive = 'coc'
-    else
-        let g:vista_default_executive = 'ctags'
-    endif
+elseif InstalledCoc()
+    let g:vista_default_executive = 'coc'
+elseif Planned('vista.vim')
+    let g:vista_default_executive = 'ctags'
 endif
 " ------------------------------
 " normal complete_engine
@@ -91,6 +79,8 @@ if InstalledLsp()
     endif
 elseif InstalledCoc()
     source $CFG_DIR/coc.vim
+elseif g:complete_engine == 'builtin'
+    lua require("cfg/builtin")
 elseif g:complete_engine != ''
     let g:complete_engine = 'mcm'
     PlugAddOpt 'vim-dict'

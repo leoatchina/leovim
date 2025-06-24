@@ -84,6 +84,8 @@ if Require('nocomplete') || Require('noc')
     let g:complete_engine = ''
 elseif Require('mcm')
     let g:complete_engine = 'mcm'
+elseif Require('builtin') && has('nvim-0.11')
+    let g:complete_engine = 'builtin'
 elseif PlannedCoc()
     let g:complete_engine = 'coc'
 elseif Require('cmp')

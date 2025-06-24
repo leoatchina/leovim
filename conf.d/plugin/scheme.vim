@@ -32,6 +32,8 @@ let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
     call SetScheme('edge', 'one')
+elseif g:complete_engine == 'builtin'
+    call SetScheme('carbonfox', 'wombat')
 elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'

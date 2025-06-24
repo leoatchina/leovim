@@ -172,7 +172,7 @@ let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ---------------------
 function! UpdateLightline() abort
     let colors_name = get(g:, 'colors_name', '')
-    if index(['sonokai', 'edge', 'codedark', 'one'], colors_name) >= 0
+    if index(['sonokai', 'edge', 'codedark', 'one', 'wombat'], colors_name) >= 0
         let g:lightline.colorscheme = g:colors_name
     elseif colors_name =~ 'fox' || colors_name =~ 'fly'
         let g:lightline.colorscheme = g:colors_name
