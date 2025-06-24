@@ -52,7 +52,7 @@ function! InstalledCmp() abort
                 \ )
 endfunction
 function! InstalledAdv() abort
-     return Installed('coc.nvim') || InstalledLsp()
+    return Installed('coc.nvim') || InstalledLsp()
 endfunction
 " --------------------------
 " complete options
