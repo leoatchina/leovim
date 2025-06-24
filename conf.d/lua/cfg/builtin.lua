@@ -169,6 +169,7 @@ vim.api.nvim_create_user_command('DebugSnippets', function()
   end
   
   -- 显示当前 snippet 状态
+  print("Snippet 模式状态: " .. (snippet_mode_active and "激活" or "未激活"))
   if not vim.tbl_isempty(current_snippet_placeholders) then
     print("当前活跃 snippet 占位符: " .. vim.inspect(current_snippet_placeholders))
     print("当前占位符索引: " .. current_placeholder_index)
@@ -181,11 +182,14 @@ end, {})
 vim.api.nvim_create_user_command('ClearSnippet', function()
   current_snippet_placeholders = {}
   current_placeholder_index = 0
+  snippet_mode_active = false
+  print("Snippet 模式已清空")
 end, {})
 
 -- 全局变量存储当前 snippet 状态
 local current_snippet_placeholders = {}
 local current_placeholder_index = 0
+local snippet_mode_active = false
 
 -- 展开 snippet
 local function expand_snippet()
@@ -289,9 +293,24 @@ local function expand_snippet()
     
     -- 在 visual 模式下选中占位符文本
     vim.defer_fn(function()
-      -- 进入 visual 模式并选中占位符
-      vim.cmd('normal! v')
-      vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_end})
+      -- 安全地进入 visual 模式并选中占位符
+      local mode = vim.fn.mode()
+      if mode == 'i' then
+        -- 如果在插入模式，先退出到普通模式
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
+        vim.defer_fn(function()
+          pcall(function()
+            vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_start})
+            vim.cmd('normal! v')
+            vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_end})
+          end)
+        end, 20)
+      else
+        pcall(function()
+          vim.cmd('normal! v')
+          vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_end})
+        end)
+      end
     end, 10)
   else
     -- 没有占位符，设置光标到末尾
@@ -303,6 +322,7 @@ local function expand_snippet()
   -- 存储占位符信息供后续跳转使用
   current_snippet_placeholders = placeholders
   current_placeholder_index = 1
+  snippet_mode_active = true  -- 激活 snippet 模式
   
   return true
 end
@@ -323,10 +343,30 @@ local function jump_to_next_placeholder()
       for row, line in ipairs(lines) do
         local start_pos = line:find(current_snippet_placeholders[i].text, 1, true)
         if start_pos then
+          -- 安全地选中占位符文本
           vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+          local end_col = start_pos + #current_snippet_placeholders[i].text - 1
+          
+          -- 使用 vim.defer_fn 和错误处理来安全地进入 visual 模式
           vim.defer_fn(function()
-            vim.cmd('normal! v')
-            vim.api.nvim_win_set_cursor(0, {row, start_pos + #current_snippet_placeholders[i].text - 1})
+            -- 检查当前模式是否适合进入 visual 模式
+            local mode = vim.fn.mode()
+            if mode == 'i' then
+              -- 如果在插入模式，先退出到普通模式
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
+              vim.defer_fn(function()
+                pcall(function()
+                  vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+                  vim.cmd('normal! v')
+                  vim.api.nvim_win_set_cursor(0, {row, end_col})
+                end)
+              end, 20)
+            else
+              pcall(function()
+                vim.cmd('normal! v')
+                vim.api.nvim_win_set_cursor(0, {row, end_col})
+              end)
+            end
           end, 10)
           current_placeholder_index = i
           return true
@@ -335,9 +375,10 @@ local function jump_to_next_placeholder()
     end
   end
   
-  -- 没有更多占位符，清空状态
+  -- 没有更多占位符，清空状态并退出 snippet 模式
   current_snippet_placeholders = {}
   current_placeholder_index = 0
+  snippet_mode_active = false
   return false
 end
 
@@ -357,10 +398,30 @@ local function jump_to_prev_placeholder()
       for row, line in ipairs(lines) do
         local start_pos = line:find(current_snippet_placeholders[i].text, 1, true)
         if start_pos then
+          -- 安全地选中占位符文本
           vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+          local end_col = start_pos + #current_snippet_placeholders[i].text - 1
+          
+          -- 使用 vim.defer_fn 和错误处理来安全地进入 visual 模式
           vim.defer_fn(function()
-            vim.cmd('normal! v')
-            vim.api.nvim_win_set_cursor(0, {row, start_pos + #current_snippet_placeholders[i].text - 1})
+            -- 检查当前模式是否适合进入 visual 模式
+            local mode = vim.fn.mode()
+            if mode == 'i' then
+              -- 如果在插入模式，先退出到普通模式
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
+              vim.defer_fn(function()
+                pcall(function()
+                  vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+                  vim.cmd('normal! v')
+                  vim.api.nvim_win_set_cursor(0, {row, end_col})
+                end)
+              end, 20)
+            else
+              pcall(function()
+                vim.cmd('normal! v')
+                vim.api.nvim_win_set_cursor(0, {row, end_col})
+              end)
+            end
           end, 10)
           current_placeholder_index = i
           return true
@@ -382,7 +443,6 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
     local ft = vim.bo[args.buf].filetype
     local omni_funcs = {
-      python = 'python3complete#Complete',
       lua = 'v:lua.vim.lsp.omnifunc',
       javascript = 'javascriptcomplete#CompleteJS',
       typescript = 'javascriptcomplete#CompleteJS',
@@ -394,7 +454,19 @@ vim.api.nvim_create_autocmd('FileType', {
       java = 'javacomplete#Complete',
     }
     
-    if omni_funcs[ft] then
+    -- Python 特殊处理：检查是否有 python3 支持
+    if ft == 'python' then
+      if vim.fn.has('python3') == 1 then
+        vim.bo[args.buf].omnifunc = 'python3complete#Complete'
+      else
+        -- 如果没有 python3 支持，使用语法补全或 LSP
+        if vim.lsp.get_clients({bufnr = args.buf})[1] then
+          vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+        else
+          vim.bo[args.buf].omnifunc = 'syntaxcomplete#Complete'
+        end
+      end
+    elseif omni_funcs[ft] then
       vim.bo[args.buf].omnifunc = omni_funcs[ft]
     else
       vim.bo[args.buf].omnifunc = 'syntaxcomplete#Complete'
@@ -552,10 +624,13 @@ vim.api.nvim_create_autocmd('FileType', {
   end
 })
 
--- 占位符跳转快捷键
+-- 占位符跳转快捷键 - 只在 snippet 模式下生效
 vim.keymap.set({'i', 's'}, '<C-f>', function()
-  if not vim.tbl_isempty(current_snippet_placeholders) then
-    jump_to_next_placeholder()
+  if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
+    local success = jump_to_next_placeholder()
+    if not success then
+      snippet_mode_active = false  -- 如果跳转失败，退出 snippet 模式
+    end
     return ''
   else
     return vim.api.nvim_replace_termcodes('<C-f>', true, true, true)
@@ -563,7 +638,7 @@ vim.keymap.set({'i', 's'}, '<C-f>', function()
 end, {expr = true, silent = true})
 
 vim.keymap.set({'i', 's'}, '<C-b>', function()
-  if not vim.tbl_isempty(current_snippet_placeholders) then
+  if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
     jump_to_prev_placeholder()
     return ''
   else
@@ -571,19 +646,41 @@ vim.keymap.set({'i', 's'}, '<C-b>', function()
   end
 end, {expr = true, silent = true})
 
--- 其他补全相关快捷键
-vim.keymap.set('i', '<Down>', '<C-n>', {noremap = true})
-vim.keymap.set('i', '<Up>', '<C-p>', {noremap = true})
-vim.keymap.set('i', '<C-e>', '<C-e>', {noremap = true})
-vim.keymap.set('i', '<C-y>', '<C-y>', {noremap = true})
+-- 其他补全相关快捷键 - 只在补全菜单可见时生效
+vim.keymap.set('i', '<Down>', function()
+  if vim.fn.pumvisible() == 1 then
+    return vim.api.nvim_replace_termcodes('<C-n>', true, true, true)
+  else
+    return vim.api.nvim_replace_termcodes('<Down>', true, true, true)
+  end
+end, {expr = true, silent = true})
+
+vim.keymap.set('i', '<Up>', function()
+  if vim.fn.pumvisible() == 1 then
+    return vim.api.nvim_replace_termcodes('<C-p>', true, true, true)
+  else
+    return vim.api.nvim_replace_termcodes('<Up>', true, true, true)
+  end
+end, {expr = true, silent = true})
 
 -- 自动清空 snippet 状态的情况
 vim.api.nvim_create_autocmd({'InsertLeave', 'BufLeave'}, {
   callback = function()
     current_snippet_placeholders = {}
     current_placeholder_index = 0
+    snippet_mode_active = false  -- 退出 snippet 模式
   end
 })
+
+-- ESC 键退出 snippet 模式
+vim.keymap.set({'i', 's'}, '<Esc>', function()
+  if snippet_mode_active then
+    snippet_mode_active = false
+    current_snippet_placeholders = {}
+    current_placeholder_index = 0
+  end
+  return vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
+end, {expr = true, silent = true})
 
 -- 启动时的提示信息
 vim.defer_fn(function()
@@ -592,6 +689,7 @@ vim.defer_fn(function()
   if vim.fn.isdirectory(snippets_dir) == 1 then
     print("✅ 内置补全 + friendly snippets 已配置")
     print("⌨️  使用 <C-Space> 触发 snippet 补全，<Tab> 展开")
-    print("🔄 占位符跳转: <C-f>/<C-b>")
+    print("🔄 snippet 模式下占位符跳转: <C-f>/<C-b>")
+    print("🚪 按 <Esc> 退出 snippet 模式")
   end
 end, 1000)
