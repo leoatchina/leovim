@@ -160,25 +160,7 @@ end
 vim.api.nvim_create_user_command('DebugSnippets', function()
   local filetype = vim.bo.filetype
   local snippets = load_snippets_for_filetype(filetype)
-  print("当前文件类型: " .. filetype)
-  print("加载的 snippets 数量: " .. #snippets)
-  for i, snippet in ipairs(snippets) do
-    if i <= 5 then  -- 只显示前5个
-      print("  " .. i .. ". " .. snippet.word .. " - " .. snippet.menu)
-    end
-  end
-  if #snippets > 5 then
-    print("  ... 还有 " .. (#snippets - 5) .. " 个")
-  end
-  
-  -- 显示当前 snippet 状态
-  print("Snippet 模式状态: " .. (snippet_mode_active and "激活" or "未激活"))
-  if not vim.tbl_isempty(current_snippet_placeholders) then
-    print("当前活跃 snippet 占位符: " .. vim.inspect(current_snippet_placeholders))
-    print("当前占位符索引: " .. current_placeholder_index)
-  else
-    print("没有活跃的 snippet")
-  end
+  print(filetype .. ": " .. #snippets .. " snippets, mode: " .. (snippet_mode_active and "on" or "off"))
 end, {})
 
 -- 添加清空 snippet 状态的命令
@@ -186,7 +168,6 @@ vim.api.nvim_create_user_command('ClearSnippet', function()
   current_snippet_placeholders = {}
   current_placeholder_index = 0
   snippet_mode_active = false
-  print("Snippet 模式已清空")
 end, {})
 
 -- 全局变量存储当前 snippet 状态
@@ -705,12 +686,8 @@ end, {expr = true, silent = true})
 
 -- 启动时的提示信息
 vim.defer_fn(function()
-  -- 检查是否能找到 snippet 文件
   local snippets_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-snippets/snippets')
   if vim.fn.isdirectory(snippets_dir) == 1 then
-    print("✅ 内置补全 + friendly snippets 已配置")
-    print("⌨️  使用 <C-Space> 触发 snippet 补全，<Tab> 展开")
-    print("🔄 snippet 模式下占位符跳转: <C-f>/<C-b>")
-    print("🚪 按 <Esc> 退出 snippet 模式")
+    print("builtin completion ready")
   end
 end, 1000)
