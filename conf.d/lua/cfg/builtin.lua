@@ -3,10 +3,7 @@
 -- 局部变量定义
 local map = vim.keymap.set
 
--- 设置补全选项
-vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'fuzzy'}
-vim.opt.pumheight = 20
-vim.opt.pumwidth = 50
+
 
 -- 补全菜单样式
 vim.api.nvim_set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
@@ -509,8 +506,6 @@ map('i', '<S-Tab>', function()
   end
 end, {expr = true, silent = true})
 
-
-
 -- 回车键确认选择（不展开snippet）
 map('i', '<CR>', function()
   if vim.fn.pumvisible() == 1 then
@@ -683,11 +678,3 @@ map({'i', 's', 'v'}, '<Esc>', function()
   end
   return vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
 end, {expr = true, silent = true})
-
--- 启动时的提示信息
-vim.defer_fn(function()
-  local snippets_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-snippets/snippets')
-  if vim.fn.isdirectory(snippets_dir) == 1 then
-    print("builtin completion ready")
-  end
-end, 1000)

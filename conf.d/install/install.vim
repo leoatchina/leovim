@@ -55,7 +55,7 @@ function! InstalledAdv() abort
      return Installed('coc.nvim') || InstalledLsp()
 endfunction
 " --------------------------
-" complete engine
+" complete options
 " --------------------------
 set completeopt=menu,menuone
 if has('patch-9.0.1568')
@@ -68,18 +68,33 @@ if has('patch-7.4.1829')
     set shortmess+=a
     set shortmess+=c
 endif
-try
-    set completeopt+=noinsert
+" 补全选项设置 - 基于版本精确判断
+if has('patch-7.4.775')
     set completeopt+=noselect
-    if exists('+completepopup') != 0
-        set completeopt+=popup
-        set completepopup=align:menu,border:off,highlight:WildMenu
-    endif
-catch
-    if UNIX()
-        call AddRequire('mcm')
-    endif
-endtry
+endif
+if has('patch-7.4.784')
+    set completeopt+=noinsert
+endif
+if has('nvim-0.11')
+    set completeopt+=fuzzy
+endif
+" Vim 8.1.1880+ 的 popup 补全窗口（需要 textprop 支持，Neovim 使用浮动窗口）
+if !has('nvim') && has('patch-8.1.1880') && has('textprop') && exists('+completepopup')
+    set completeopt+=popup
+    set completepopup=align:menu,border:off,highlight:WildMenu
+endif
+" 补全菜单大小设置
+set pumheight=20
+if exists('+pumwidth')
+    set pumwidth=50
+endif
+" 如果补全功能不够完善，在Unix下使用mcm作为备选
+if !has('patch-7.4.775') && UNIX()
+    call AddRequire('mcm')
+endif
+" ------------------------------
+" complete_engine select
+" ------------------------------
 if Require('nocomplete') || Require('noc')
     let g:complete_engine = ''
 elseif Require('mcm')
@@ -114,7 +129,7 @@ if get(s:, 'smart_engine_select', 0)
     endif
 endif
 " ------------------------------
-" complete_engine
+" complete_engine install
 " ------------------------------
 if g:complete_engine == 'cmp'
     PlugAdd 'hrsh7th/nvim-cmp'
@@ -142,7 +157,7 @@ elseif g:complete_engine == 'coc'
     PlugAddOpt 'coc-fzf'
 endif
 " ------------------------------
-" snippets
+" snippets install
 " ------------------------------
 if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'rafamadriz/friendly-snippets'
@@ -154,7 +169,7 @@ if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 " ------------------------------
-" AI engine
+" AI engine install
 " ------------------------------
 if Require('copilot_plus') ||
     \  exists('$XAI_API_KEY') ||
@@ -198,7 +213,7 @@ elseif has('patch-9.0.0185') || has('nvim')
     endif
 endif
 " ------------------------------
-" lsp && linter tool
+" lsp && linter tool install
 " ------------------------------
 if PlannedLsp()
     let g:lint_tool = 'lsp'
@@ -233,7 +248,7 @@ if g:lint_tool == 'ale'
     PlugAdd 'maximbaz/lightline-ale'
 endif
 " ------------------------------
-" debug tool
+" debug tool install
 " ------------------------------
 if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !PlannedLsp())
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
@@ -245,11 +260,11 @@ elseif has('nvim-0.9.5') && Require('debug')
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
 endif
 " -----------------------
-" format
+" format install
 " -----------------------
 PlugAdd 'sbdchd/neoformat'
 " ------------------------------
-" textobj
+" textobj install
 " ------------------------------
 if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX())
     PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
