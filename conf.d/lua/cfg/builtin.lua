@@ -1,5 +1,8 @@
 -- Neovim 0.11 内置补全 + friendly snippets 配置
 
+-- 局部变量定义
+local map = vim.keymap.set
+
 -- 设置补全选项
 vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'fuzzy'}
 vim.opt.pumheight = 20
@@ -221,8 +224,7 @@ local function expand_snippet()
   processed_body = processed_body:gsub('%$%{(%d+):([^}]*)%}', function(num, default)
     local placeholder_num = tonumber(num)
     placeholders[placeholder_num] = {
-      text = default,
-      positions = {}
+      text = default
     }
     return default
   end)
@@ -232,11 +234,11 @@ local function expand_snippet()
     local placeholder_num = tonumber(num)
     if placeholder_num == 0 then
       -- $0 是最终光标位置
-      placeholders[0] = {text = '', positions = {}}
+      placeholders[0] = {text = ''}
       return ''
     else
       if not placeholders[placeholder_num] then
-        placeholders[placeholder_num] = {text = '', positions = {}}
+        placeholders[placeholder_num] = {text = ''}
       end
       return placeholders[placeholder_num].text
     end
@@ -303,12 +305,20 @@ local function expand_snippet()
             vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_start})
             vim.cmd('normal! v')
             vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_end})
+            -- 延迟进入插入模式
+            vim.defer_fn(function()
+              vim.cmd('startinsert')
+            end, 50)
           end)
         end, 20)
       else
         pcall(function()
           vim.cmd('normal! v')
           vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_end})
+          -- 延迟进入插入模式
+          vim.defer_fn(function()
+            vim.cmd('startinsert')
+          end, 50)
         end)
       end
     end, 10)
@@ -359,12 +369,20 @@ local function jump_to_next_placeholder()
                   vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
                   vim.cmd('normal! v')
                   vim.api.nvim_win_set_cursor(0, {row, end_col})
+                  -- 延迟进入插入模式
+                  vim.defer_fn(function()
+                    vim.cmd('startinsert')
+                  end, 50)
                 end)
               end, 20)
             else
               pcall(function()
                 vim.cmd('normal! v')
                 vim.api.nvim_win_set_cursor(0, {row, end_col})
+                -- 延迟进入插入模式
+                vim.defer_fn(function()
+                  vim.cmd('startinsert')
+                end, 50)
               end)
             end
           end, 10)
@@ -414,12 +432,20 @@ local function jump_to_prev_placeholder()
                   vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
                   vim.cmd('normal! v')
                   vim.api.nvim_win_set_cursor(0, {row, end_col})
+                  -- 延迟进入插入模式
+                  vim.defer_fn(function()
+                    vim.cmd('startinsert')
+                  end, 50)
                 end)
               end, 20)
             else
               pcall(function()
                 vim.cmd('normal! v')
                 vim.api.nvim_win_set_cursor(0, {row, end_col})
+                -- 延迟进入插入模式
+                vim.defer_fn(function()
+                  vim.cmd('startinsert')
+                end, 50)
               end)
             end
           end, 10)
@@ -478,7 +504,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- Tab 键：只用于补全和 snippet 展开
-vim.keymap.set('i', '<Tab>', function()
+map('i', '<Tab>', function()
   if vim.fn.pumvisible() == 1 then
     -- 菜单可见，先选择第一个项目再确认（这样会触发 completed_item）
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n><C-y>', true, true, true), 'n', false)
@@ -494,7 +520,7 @@ vim.keymap.set('i', '<Tab>', function()
 end, {expr = true, silent = true})
 
 -- Shift-Tab 只用于补全菜单向前选择
-vim.keymap.set('i', '<S-Tab>', function()
+map('i', '<S-Tab>', function()
   if vim.fn.pumvisible() == 1 then
     return vim.api.nvim_replace_termcodes('<C-p>', true, true, true)
   else
@@ -504,23 +530,18 @@ end, {expr = true, silent = true})
 
 
 
--- 回车键确认并展开
-vim.keymap.set('i', '<CR>', function()
+-- 回车键确认选择（不展开snippet）
+map('i', '<CR>', function()
   if vim.fn.pumvisible() == 1 then
-    -- 确认选择
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-y>', true, true, true), 'n', false)
-    -- 尝试展开 snippet
-    vim.defer_fn(function()
-      expand_snippet()
-    end, 10)
-    return ''
+    -- 直接确认选择并上屏，不展开snippet
+    return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
   else
     return vim.api.nvim_replace_termcodes('<CR>', true, true, true)
   end
 end, {expr = true, silent = true})
 
 -- Ctrl-Space 手动触发补全（包含 snippets）
-vim.keymap.set('i', '<C-Space>', function()
+map('i', '<C-Space>', function()
   if vim.fn.pumvisible() == 1 then
     return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
   else
@@ -625,7 +646,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- 占位符跳转快捷键 - 只在 snippet 模式下生效
-vim.keymap.set({'i', 's'}, '<C-f>', function()
+map({'i', 's', 'n', 'v'}, '<C-f>', function()
   if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
     local success = jump_to_next_placeholder()
     if not success then
@@ -637,7 +658,7 @@ vim.keymap.set({'i', 's'}, '<C-f>', function()
   end
 end, {expr = true, silent = true})
 
-vim.keymap.set({'i', 's'}, '<C-b>', function()
+map({'i', 's', 'n', 'v'}, '<C-b>', function()
   if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
     jump_to_prev_placeholder()
     return ''
@@ -647,7 +668,7 @@ vim.keymap.set({'i', 's'}, '<C-b>', function()
 end, {expr = true, silent = true})
 
 -- 其他补全相关快捷键 - 只在补全菜单可见时生效
-vim.keymap.set('i', '<Down>', function()
+map('i', '<Down>', function()
   if vim.fn.pumvisible() == 1 then
     return vim.api.nvim_replace_termcodes('<C-n>', true, true, true)
   else
@@ -655,7 +676,7 @@ vim.keymap.set('i', '<Down>', function()
   end
 end, {expr = true, silent = true})
 
-vim.keymap.set('i', '<Up>', function()
+map('i', '<Up>', function()
   if vim.fn.pumvisible() == 1 then
     return vim.api.nvim_replace_termcodes('<C-p>', true, true, true)
   else
@@ -673,7 +694,7 @@ vim.api.nvim_create_autocmd({'InsertLeave', 'BufLeave'}, {
 })
 
 -- ESC 键退出 snippet 模式
-vim.keymap.set({'i', 's'}, '<Esc>', function()
+map({'i', 's', 'v'}, '<Esc>', function()
   if snippet_mode_active then
     snippet_mode_active = false
     current_snippet_placeholders = {}
