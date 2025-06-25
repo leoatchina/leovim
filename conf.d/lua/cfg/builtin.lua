@@ -1,10 +1,6 @@
--- Neovim 0.11 内置补全 + friendly snippets 配置
-
+-- Neovim 0.11 内置补全 + friendly snippets + buffer + path 配置
 -- 局部变量定义
 local map = vim.keymap.set
-
-
-
 -- 补全菜单样式
 vim.api.nvim_set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
 vim.api.nvim_set_hl(0, 'PmenuSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
@@ -12,7 +8,6 @@ vim.api.nvim_set_hl(0, 'PmenuKind', {bg = '#3b4252', fg = '#88c0d0'})
 vim.api.nvim_set_hl(0, 'PmenuKindSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
 vim.api.nvim_set_hl(0, 'PmenuExtra', {bg = '#3b4252', fg = '#8fbcbb'})
 vim.api.nvim_set_hl(0, 'PmenuExtraSel', {bg = '#81a1c1', fg = '#2e3440'})
-
 -- 解析 VSCode 格式的 snippet
 local function parse_vscode_snippets(file_path)
   local snippets = {}
@@ -47,7 +42,6 @@ local function parse_vscode_snippets(file_path)
       })
     end
   end
-
   return snippets
 end
 
@@ -59,10 +53,8 @@ local function load_snippets_for_filetype(filetype)
   if snippet_cache[filetype] then
     return snippet_cache[filetype]
   end
-
   local snippets = {}
   local snippets_base_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-snippets/snippets')
-
   -- 检查 snippets 目录是否存在
   if vim.fn.isdirectory(snippets_base_dir) == 0 then
     snippet_cache[filetype] = {}
@@ -70,7 +62,6 @@ local function load_snippets_for_filetype(filetype)
   end
 
   local snippet_files = {}
-
   -- 查找全局 snippets
   local global_file = snippets_base_dir .. '/global.json'
   if vim.fn.filereadable(global_file) == 1 then
@@ -386,7 +377,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   local can_omni = can_trigger_omni()
   local can_path = should_complete_path()
   local before_cursor = line:sub(1, col)
-  
+
   print("=== 补全调试信息 ===")
   print("文件类型: " .. vim.bo.filetype)
   print("当前行: '" .. line .. "'")
@@ -398,7 +389,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   print("可触发路径: " .. tostring(can_path))
   print("buffer补全条件: " .. tostring(#prefix >= 1))
   print("omnifunc: " .. vim.bo.omnifunc)
-  
+
   -- 测试路径模式匹配
   print("\n=== 路径模式测试 ===")
   local path_patterns = {
@@ -408,7 +399,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
     '~[^%s]*$',           -- 家目录路径
     '[%w_%-%.]+/[^%s]*$', -- 目录/文件路径
   }
-  
+
   for i, pattern in ipairs(path_patterns) do
     local matches = before_cursor:match(pattern)
     print("模式" .. i .. " '" .. pattern .. "': " .. tostring(matches ~= nil))
@@ -416,10 +407,10 @@ vim.api.nvim_create_user_command('DebugComplete', function()
       print("  匹配内容: '" .. matches .. "'")
     end
   end
-  
+
   -- 测试各种补全类型
   print("\n=== 测试补全类型 ===")
-  
+
   -- 测试buffer补全
   if #prefix >= 1 then
     local current_buf = vim.api.nvim_get_current_buf()
@@ -442,7 +433,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   else
     print("Buffer补全：前缀长度不足 (#prefix=" .. #prefix .. ")")
   end
-  
+
   -- 测试路径补全
   if can_path then
     local dir_part = path_prefix:match('^(.*/)')
@@ -450,7 +441,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
     print("路径分析:")
     print("  dir_part: '" .. (dir_part or "nil") .. "'")
     print("  file_part: '" .. file_part .. "'")
-    
+
     if not dir_part then
       dir_part = './'
       file_part = path_prefix
@@ -469,7 +460,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   else
     print("路径补全：不满足触发条件")
   end
-  
+
   print("\n手动触发补全...")
   builtin_complete_unified()
 end, {})
@@ -771,9 +762,7 @@ vim.api.nvim_create_autocmd('FileType', {
       css = 'csscomplete#CompleteCSS',
       java = 'javacomplete#Complete',
     }
-
     local omni_func = nil
-
     -- Python 特殊处理：检查是否有 python3 支持
     if ft == 'python' then
       if vim.fn.has('python3') == 1 then
@@ -784,34 +773,26 @@ vim.api.nvim_create_autocmd('FileType', {
     end
 
     if omni_func then
-      -- 有有效的 omnifunc，直接设置
+      -- 有有效的 omnifunc，直接设置，不使用字典补全
       vim.bo[args.buf].omnifunc = omni_func
     else
-      -- 没有有效的 omnifunc，使用 syntaxcomplete + dict
+      -- 没有有效的 omnifunc，使用 syntaxcomplete
       vim.bo[args.buf].omnifunc = 'syntaxcomplete#Complete'
 
-      -- 设置字典文件支持
-      local dict_files = {
-        python = 'python.dict',
-        javascript = 'javascript.dict',
-        typescript = 'javascript.dict',
-        lua = 'lua.dict',
-        vim = 'vim.dict',
-        c = 'c.dict',
-        cpp = 'cpp.dict',
-        html = 'html.dict',
-        css = 'css.dict',
-        java = 'java.dict',
+      -- 对于没有专门omnifunc的文件类型，设置通用字典文件
+      local generic_dict_files = {
+        text = 'english.dict',
+        markdown = 'english.dict',
+        txt = 'english.dict',
+        -- 其他通用文件类型可以在这里添加
       }
-
-      if dict_files[ft] then
-        local dict_path = vim.fn.expand('~/.leovim/pack/clone/opt/vim-dict/dict/' .. dict_files[ft])
+      if generic_dict_files[ft] then
+        local dict_path = vim.fn.expand('~/.leovim/pack/clone/opt/vim-dict/dict/' .. generic_dict_files[ft])
         if vim.fn.filereadable(dict_path) == 1 then
           vim.bo[args.buf].dictionary = dict_path
         end
       end
     end
-
     -- 预加载该文件类型的 snippets
     load_snippets_for_filetype(ft)
   end
@@ -876,7 +857,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
           local col = vim.api.nvim_win_get_cursor(0)[2]
           local prefix = line:sub(1, col):match('[%w_]*$') or ''
           local should_trigger = false
-          
+
           -- 1. 检查buffer词汇匹配（降低门槛到1个字符）
           if #prefix >= 1 then
             local current_buf = vim.api.nvim_get_current_buf()
@@ -891,12 +872,12 @@ vim.api.nvim_create_autocmd('BufEnter', {
               if should_trigger then break end
             end
           end
-          
+
           -- 2. 检查路径补全
           if not should_trigger and should_complete_path() then
             should_trigger = true
           end
-          
+
           -- 触发补全
           if should_trigger then
             vim.defer_fn(function()
@@ -966,7 +947,7 @@ vim.api.nvim_create_autocmd('FileType', {
           local col = vim.api.nvim_win_get_cursor(0)[2]
           local prefix = line:sub(1, col):match('[%w_]*$') or ''
           local should_trigger = false
-          
+
           -- 检查是否应该触发补全
           if #prefix >= 2 then
             -- 1. 检查 snippet 匹配
@@ -977,7 +958,7 @@ vim.api.nvim_create_autocmd('FileType', {
                 break
               end
             end
-            
+
             -- 2. 如果没有snippet匹配，检查是否有buffer词汇匹配
             if not should_trigger then
               local current_buf = vim.api.nvim_get_current_buf()
@@ -993,12 +974,12 @@ vim.api.nvim_create_autocmd('FileType', {
               end
             end
           end
-          
+
           -- 3. 检查路径补全
           if not should_trigger and should_complete_path() then
             should_trigger = true
           end
-          
+
           -- 触发补全
           if should_trigger then
             vim.defer_fn(function()
