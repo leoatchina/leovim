@@ -157,7 +157,11 @@ end
 vim.api.nvim_create_user_command('DebugSnippets', function()
   local filetype = vim.bo.filetype
   local snippets = load_snippets_for_filetype(filetype)
-  print(filetype .. ": " .. #snippets .. " snippets, mode: " .. (snippet_mode_active and "on" or "off"))
+  local has_lsp = vim.lsp.get_clients({bufnr = 0})[1] ~= nil
+  local omni_func = vim.bo.omnifunc
+  local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
+  local strategy = (has_lsp or has_omni) and "omni" or "syntax+dict"
+  print(filetype .. ": " .. #snippets .. " snippets, mode: " .. (snippet_mode_active and "on" or "off") .. ", strategy: " .. strategy)
 end, {})
 
 -- 添加清空 snippet 状态的命令
@@ -478,6 +482,27 @@ vim.api.nvim_create_autocmd('FileType', {
     
     -- 预加载该文件类型的 snippets
     load_snippets_for_filetype(ft)
+    
+    -- 设置字典文件支持
+    local dict_files = {
+      python = 'python.dict',
+      javascript = 'javascript.dict',
+      typescript = 'javascript.dict',
+      lua = 'lua.dict',
+      vim = 'vim.dict',
+      c = 'c.dict',
+      cpp = 'cpp.dict',
+      html = 'html.dict',
+      css = 'css.dict',
+      java = 'java.dict',
+    }
+    
+    if dict_files[ft] then
+      local dict_path = vim.fn.expand('~/.leovim/pack/clone/opt/vim-dict/dict/' .. dict_files[ft])
+      if vim.fn.filereadable(dict_path) == 1 then
+        vim.bo[args.buf].dictionary = dict_path
+      end
+    end
   end
 })
 
@@ -516,7 +541,7 @@ map('i', '<CR>', function()
   end
 end, {expr = true, silent = true})
 
--- Ctrl-Space 手动触发补全（包含 snippets）
+-- Ctrl-Space 手动触发补全（智能策略：有omni时不用dict，无omni时用syntaxcomplete+dict）
 map('i', '<C-Space>', function()
   if vim.fn.pumvisible() == 1 then
     return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
@@ -525,15 +550,78 @@ map('i', '<C-Space>', function()
     builtin_complete_with_snippets()
     vim.defer_fn(function()
       if vim.fn.pumvisible() == 0 then
-        -- 如果没有 snippet 匹配，尝试其他补全
-        if vim.lsp.get_clients({bufnr = 0})[1] then
-          vim.lsp.completion.trigger()
+        local has_lsp = vim.lsp.get_clients({bufnr = 0})[1] ~= nil
+        local omni_func = vim.bo.omnifunc
+        local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
+        
+        if has_lsp or has_omni then
+          -- 有LSP或omni补全：snippet -> omni -> buffer -> path
+          if has_lsp then
+            vim.lsp.completion.trigger()
+          else
+            vim.api.nvim_feedkeys(
+              vim.api.nvim_replace_termcodes('<C-X><C-O>', true, true, true),
+              'n',
+              false
+            )
+          end
+          vim.defer_fn(function()
+            if vim.fn.pumvisible() == 0 then
+              -- buffer 补全
+              vim.api.nvim_feedkeys(
+                vim.api.nvim_replace_termcodes('<C-X><C-N>', true, true, true),
+                'n',
+                false
+              )
+              vim.defer_fn(function()
+                if vim.fn.pumvisible() == 0 then
+                  -- path 补全
+                  vim.api.nvim_feedkeys(
+                    vim.api.nvim_replace_termcodes('<C-X><C-F>', true, true, true),
+                    'n',
+                    false
+                  )
+                end
+              end, 50)
+            end
+          end, 50)
         else
+          -- 无LSP和omni补全：snippet -> syntaxcomplete -> buffer -> path -> dict
           vim.api.nvim_feedkeys(
             vim.api.nvim_replace_termcodes('<C-X><C-O>', true, true, true),
             'n',
             false
           )
+          vim.defer_fn(function()
+            if vim.fn.pumvisible() == 0 then
+              -- buffer 补全
+              vim.api.nvim_feedkeys(
+                vim.api.nvim_replace_termcodes('<C-X><C-N>', true, true, true),
+                'n',
+                false
+              )
+              vim.defer_fn(function()
+                if vim.fn.pumvisible() == 0 then
+                  -- path 补全
+                  vim.api.nvim_feedkeys(
+                    vim.api.nvim_replace_termcodes('<C-X><C-F>', true, true, true),
+                    'n',
+                    false
+                  )
+                  vim.defer_fn(function()
+                    if vim.fn.pumvisible() == 0 then
+                      -- dict 补全
+                      vim.api.nvim_feedkeys(
+                        vim.api.nvim_replace_termcodes('<C-X><C-K>', true, true, true),
+                        'n',
+                        false
+                      )
+                    end
+                  end, 50)
+                end
+              end, 50)
+            end
+          end, 50)
         end
       end
     end, 50)
@@ -573,14 +661,47 @@ vim.api.nvim_create_autocmd('FileType', {
               if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
                 local col = vim.api.nvim_win_get_cursor(0)[2]
                 if col > 0 then
-                  if vim.lsp.get_clients({bufnr = 0})[1] then
-                    vim.lsp.completion.trigger()
+                  local has_lsp = vim.lsp.get_clients({bufnr = 0})[1] ~= nil
+                  local omni_func = vim.bo.omnifunc
+                  local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
+                  
+                  if has_lsp or has_omni then
+                    -- 有LSP或omni补全
+                    if has_lsp then
+                      vim.lsp.completion.trigger()
+                    else
+                      vim.api.nvim_feedkeys(
+                        vim.api.nvim_replace_termcodes('<C-X><C-O>', true, true, true),
+                        'n',
+                        false
+                      )
+                    end
+                    -- 如果没有补全结果，尝试 buffer 补全
+                    vim.defer_fn(function()
+                      if vim.fn.pumvisible() == 0 then
+                        vim.api.nvim_feedkeys(
+                          vim.api.nvim_replace_termcodes('<C-X><C-N>', true, true, true),
+                          'n',
+                          false
+                        )
+                      end
+                    end, 100)
                   else
+                    -- 无LSP和omni补全，使用 syntaxcomplete + buffer
                     vim.api.nvim_feedkeys(
                       vim.api.nvim_replace_termcodes('<C-X><C-O>', true, true, true),
                       'n',
                       false
                     )
+                    vim.defer_fn(function()
+                      if vim.fn.pumvisible() == 0 then
+                        vim.api.nvim_feedkeys(
+                          vim.api.nvim_replace_termcodes('<C-X><C-N>', true, true, true),
+                          'n',
+                          false
+                        )
+                      end
+                    end, 100)
                   end
                 end
               end
