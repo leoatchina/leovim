@@ -10,8 +10,8 @@ vim.api.nvim_set_hl(0, 'PmenuExtra', {bg = '#3b4252', fg = '#8fbcbb'})
 vim.api.nvim_set_hl(0, 'PmenuExtraSel', {bg = '#81a1c1', fg = '#2e3440'})
 
 -- 设置base_dir
-local dict_base_dir = vim.fn.expand('$HOME/.leovim/pack/clone/opt/vim-dict/dict')
-local snippets_base_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-snippets/snippets')
+local dict_base_dir = vim.fn.expand('$HOME/.leovim/pack/clone/opt/vim-dict/dict') .. '/'
+local snippets_base_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-snippets/snippets') .. '/'
 -- 解析 VSCode 格式的 snippet
 local function parse_vscode_snippets(file_path)
   local snippets = {}
@@ -65,20 +65,20 @@ local function load_snippets_for_filetype(filetype)
 
   local snippet_files = {}
   -- 查找全局 snippets
-  local global_file = snippets_base_dir .. '/global.json'
+  local global_file = snippets_base_dir .. 'global.json'
   if vim.fn.filereadable(global_file) == 1 then
     table.insert(snippet_files, global_file)
   end
 
   -- 查找文件类型特定的 snippets - 优先检查子目录
-  local ft_dir = snippets_base_dir .. '/' .. filetype
+  local ft_dir = snippets_base_dir .. filetype
   if vim.fn.isdirectory(ft_dir) == 1 then
     -- 有子目录，加载所有 json 文件
     local ft_dir_files = vim.fn.glob(ft_dir .. '/*.json', true, true)
     vim.list_extend(snippet_files, ft_dir_files)
   else
     -- 没有子目录，检查直接的 json 文件
-    local ft_file = snippets_base_dir .. '/' .. filetype .. '.json'
+    local ft_file = snippets_base_dir .. filetype .. '.json'
     if vim.fn.filereadable(ft_file) == 1 then
       table.insert(snippet_files, ft_file)
     end
@@ -93,13 +93,13 @@ local function load_snippets_for_filetype(filetype)
 
   if aliases[filetype] then
     for _, alias in ipairs(aliases[filetype]) do
-      local alias_file = snippets_base_dir .. '/' .. alias .. '.json'
+      local alias_file = snippets_base_dir .. alias .. '.json'
       if vim.fn.filereadable(alias_file) == 1 then
         table.insert(snippet_files, alias_file)
       end
 
       -- 检查别名的子目录
-      local alias_dir = snippets_base_dir .. '/' .. alias
+      local alias_dir = snippets_base_dir .. alias
       if vim.fn.isdirectory(alias_dir) == 1 then
         local alias_dir_files = vim.fn.glob(alias_dir .. '/*.json', true, true)
         vim.list_extend(snippet_files, alias_dir_files)
@@ -360,145 +360,7 @@ function _G.builtin_complete_with_snippets()
   return _G.builtin_complete_unified()
 end
 
--- 添加调试命令
-vim.api.nvim_create_user_command('DebugSnippets', function()
-  local filetype = vim.bo.filetype
-  local snippets = load_snippets_for_filetype(filetype)
-  local omni_func = vim.bo.omnifunc
-  local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
-  local strategy = has_omni and "omni[O]" or "syntax[Y]+dict[D]"
-  print(filetype .. ": " .. #snippets .. " snippets[S], mode: " .. (snippet_mode_active and "on" or "off") .. ", strategy: " .. strategy)
-end, {})
 
--- 添加补全调试命令
-vim.api.nvim_create_user_command('DebugComplete', function()
-  local line = vim.api.nvim_get_current_line()
-  local col = vim.api.nvim_win_get_cursor(0)[2]
-  local prefix = line:sub(1, col):match('[%w_]*$') or ''
-  local path_prefix = line:sub(1, col):match('[^%s]*$') or ''
-  local can_omni = can_trigger_omni()
-  local can_path = should_complete_path()
-  local before_cursor = line:sub(1, col)
-
-  print("=== 补全调试信息 ===")
-  print("文件类型: " .. vim.bo.filetype)
-  print("当前行: '" .. line .. "'")
-  print("光标位置: " .. col)
-  print("光标前文本: '" .. before_cursor .. "'")
-  print("前缀: '" .. prefix .. "' (长度: " .. #prefix .. ")")
-  print("路径前缀: '" .. path_prefix .. "' (长度: " .. #path_prefix .. ")")
-  print("可触发omni: " .. tostring(can_omni))
-  print("可触发路径: " .. tostring(can_path))
-  print("buffer补全条件: " .. tostring(#prefix >= 1))
-  print("omnifunc: " .. vim.bo.omnifunc)
-  print("字典文件: " .. (vim.bo.dictionary or "无"))
-
-  -- 测试路径模式匹配
-  print("\n=== 路径模式测试 ===")
-  local path_patterns = {
-    '/[^%s]*$',           -- 绝对路径
-    '%./[^%s]*$',         -- 相对路径 ./
-    '%.%./[^%s]*$',       -- 相对路径 ../
-    '~[^%s]*$',           -- 家目录路径
-    '[%w_%-%.]+/[^%s]*$', -- 目录/文件路径
-  }
-
-  for i, pattern in ipairs(path_patterns) do
-    local matches = before_cursor:match(pattern)
-    print("模式" .. i .. " '" .. pattern .. "': " .. tostring(matches ~= nil))
-    if matches then
-      print("  匹配内容: '" .. matches .. "'")
-    end
-  end
-
-    -- 测试各种补全类型
-  print("\n=== 测试补全类型 ===")
-
-  -- 测试字典补全[D]
-  if vim.bo.dictionary and vim.bo.dictionary ~= '' and #prefix > 0 then
-    print("测试字典补全[D]，前缀: '" .. prefix .. "'")
-    local dict_matches = 0
-    local dict_files = vim.split(vim.bo.dictionary, ',')
-    for _, dict_file in ipairs(dict_files) do
-      dict_file = vim.trim(dict_file)
-      if vim.fn.filereadable(dict_file) == 1 then
-        local lines = vim.fn.readfile(dict_file, '', 100) -- 只读前100行用于测试
-        for _, word in ipairs(lines) do
-          word = vim.trim(word)
-          if word ~= '' and word:lower():find(prefix:lower(), 1, true) == 1 then
-            dict_matches = dict_matches + 1
-            if dict_matches <= 3 then  -- 只显示前3个
-              print("  [D]字典匹配: '" .. word .. "'")
-            end
-          end
-        end
-      end
-    end
-    print("[D]字典匹配数量: " .. dict_matches)
-  else
-    print("[D]字典补全：" .. (vim.bo.dictionary and "前缀为空" or "无字典文件"))
-  end
-
-  -- 测试buffer补全[B]
-  if #prefix >= 1 then
-    local current_buf = vim.api.nvim_get_current_buf()
-    local lines = vim.api.nvim_buf_get_lines(current_buf, 0, -1, false)
-    local found_words = {}
-    print("测试buffer补全[B]，前缀: '" .. prefix .. "'")
-    for line_num, buf_line in ipairs(lines) do
-      for word in buf_line:gmatch('[%w_]+') do
-        if #word >= 2 and word:lower():find(prefix:lower(), 1, true) == 1 and word ~= prefix then
-          if not found_words[word] then
-            found_words[word] = true
-            print("  [B]找到匹配词: '" .. word .. "' 在第" .. line_num .. "行")
-          end
-        end
-      end
-    end
-    local count = 0
-    for _ in pairs(found_words) do count = count + 1 end
-    print("[B]Buffer词汇匹配数量: " .. count)
-  else
-    print("[B]Buffer补全：前缀长度不足 (#prefix=" .. #prefix .. ")")
-  end
-
-  -- 测试路径补全[P]
-  if can_path then
-    local dir_part = path_prefix:match('^(.*/)')
-    local file_part = path_prefix:match('([^/]*)$')
-    print("路径补全[P]分析:")
-    print("  dir_part: '" .. (dir_part or "nil") .. "'")
-    print("  file_part: '" .. file_part .. "'")
-
-    if not dir_part then
-      dir_part = './'
-      file_part = path_prefix
-    end
-    local pattern = dir_part .. file_part .. '*'
-    print("[P]路径glob模式: '" .. pattern .. "'")
-    local glob_results = vim.fn.glob(pattern, false, true)
-    print("[P]路径匹配数量: " .. #glob_results)
-    if #glob_results > 0 then
-      for i, path in ipairs(glob_results) do
-        if i <= 3 then  -- 只显示前3个
-          print("  [P]" .. i .. ": " .. path)
-        end
-      end
-    end
-  else
-    print("[P]路径补全：不满足触发条件")
-  end
-
-  print("\n手动触发补全...")
-  builtin_complete_unified()
-end, {})
-
--- 添加清空 snippet 状态的命令
-vim.api.nvim_create_user_command('ClearSnippet', function()
-  current_snippet_placeholders = {}
-  current_placeholder_index = 0
-  snippet_mode_active = false
-end, {})
 
 -- 全局变量存储当前 snippet 状态
 local current_snippet_placeholders = {}
@@ -1090,3 +952,147 @@ map({'i', 's', 'v'}, '<Esc>', function()
   end
   return vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
 end, {expr = true, silent = true})
+
+-- ============================================================================
+-- 调试命令
+-- ============================================================================
+
+-- 添加调试命令
+vim.api.nvim_create_user_command('DebugSnippets', function()
+  local filetype = vim.bo.filetype
+  local snippets = load_snippets_for_filetype(filetype)
+  local omni_func = vim.bo.omnifunc
+  local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
+  local strategy = has_omni and "omni[O]" or "syntax[Y]+dict[D]"
+  print(filetype .. ": " .. #snippets .. " snippets[S], mode: " .. (snippet_mode_active and "on" or "off") .. ", strategy: " .. strategy)
+end, {})
+
+-- 添加补全调试命令
+vim.api.nvim_create_user_command('DebugComplete', function()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local prefix = line:sub(1, col):match('[%w_]*$') or ''
+  local path_prefix = line:sub(1, col):match('[^%s]*$') or ''
+  local can_omni = can_trigger_omni()
+  local can_path = should_complete_path()
+  local before_cursor = line:sub(1, col)
+
+  print("=== 补全调试信息 ===")
+  print("文件类型: " .. vim.bo.filetype)
+  print("当前行: '" .. line .. "'")
+  print("光标位置: " .. col)
+  print("光标前文本: '" .. before_cursor .. "'")
+  print("前缀: '" .. prefix .. "' (长度: " .. #prefix .. ")")
+  print("路径前缀: '" .. path_prefix .. "' (长度: " .. #path_prefix .. ")")
+  print("可触发omni: " .. tostring(can_omni))
+  print("可触发路径: " .. tostring(can_path))
+  print("buffer补全条件: " .. tostring(#prefix >= 1))
+  print("omnifunc: " .. vim.bo.omnifunc)
+  print("字典文件: " .. (vim.bo.dictionary or "无"))
+
+  -- 测试路径模式匹配
+  print("\n=== 路径模式测试 ===")
+  local path_patterns = {
+    '/[^%s]*$',           -- 绝对路径
+    '%./[^%s]*$',         -- 相对路径 ./
+    '%.%./[^%s]*$',       -- 相对路径 ../
+    '~[^%s]*$',           -- 家目录路径
+    '[%w_%-%.]+/[^%s]*$', -- 目录/文件路径
+  }
+
+  for i, pattern in ipairs(path_patterns) do
+    local matches = before_cursor:match(pattern)
+    print("模式" .. i .. " '" .. pattern .. "': " .. tostring(matches ~= nil))
+    if matches then
+      print("  匹配内容: '" .. matches .. "'")
+    end
+  end
+
+    -- 测试各种补全类型
+  print("\n=== 测试补全类型 ===")
+
+  -- 测试字典补全[D]
+  if vim.bo.dictionary and vim.bo.dictionary ~= '' and #prefix > 0 then
+    print("测试字典补全[D]，前缀: '" .. prefix .. "'")
+    local dict_matches = 0
+    local dict_files = vim.split(vim.bo.dictionary, ',')
+    for _, dict_file in ipairs(dict_files) do
+      dict_file = vim.trim(dict_file)
+      if vim.fn.filereadable(dict_file) == 1 then
+        local lines = vim.fn.readfile(dict_file, '', 100) -- 只读前100行用于测试
+        for _, word in ipairs(lines) do
+          word = vim.trim(word)
+          if word ~= '' and word:lower():find(prefix:lower(), 1, true) == 1 then
+            dict_matches = dict_matches + 1
+            if dict_matches <= 3 then  -- 只显示前3个
+              print("  [D]字典匹配: '" .. word .. "'")
+            end
+          end
+        end
+      end
+    end
+    print("[D]字典匹配数量: " .. dict_matches)
+  else
+    print("[D]字典补全：" .. (vim.bo.dictionary and "前缀为空" or "无字典文件"))
+  end
+
+  -- 测试buffer补全[B]
+  if #prefix >= 1 then
+    local current_buf = vim.api.nvim_get_current_buf()
+    local lines = vim.api.nvim_buf_get_lines(current_buf, 0, -1, false)
+    local found_words = {}
+    print("测试buffer补全[B]，前缀: '" .. prefix .. "'")
+    for line_num, buf_line in ipairs(lines) do
+      for word in buf_line:gmatch('[%w_]+') do
+        if #word >= 2 and word:lower():find(prefix:lower(), 1, true) == 1 and word ~= prefix then
+          if not found_words[word] then
+            found_words[word] = true
+            print("  [B]找到匹配词: '" .. word .. "' 在第" .. line_num .. "行")
+          end
+        end
+      end
+    end
+    local count = 0
+    for _ in pairs(found_words) do count = count + 1 end
+    print("[B]Buffer词汇匹配数量: " .. count)
+  else
+    print("[B]Buffer补全：前缀长度不足 (#prefix=" .. #prefix .. ")")
+  end
+
+  -- 测试路径补全[P]
+  if can_path then
+    local dir_part = path_prefix:match('^(.*/)')
+    local file_part = path_prefix:match('([^/]*)$')
+    print("路径补全[P]分析:")
+    print("  dir_part: '" .. (dir_part or "nil") .. "'")
+    print("  file_part: '" .. file_part .. "'")
+
+    if not dir_part then
+      dir_part = './'
+      file_part = path_prefix
+    end
+    local pattern = dir_part .. file_part .. '*'
+    print("[P]路径glob模式: '" .. pattern .. "'")
+    local glob_results = vim.fn.glob(pattern, false, true)
+    print("[P]路径匹配数量: " .. #glob_results)
+    if #glob_results > 0 then
+      for i, path in ipairs(glob_results) do
+        if i <= 3 then  -- 只显示前3个
+          print("  [P]" .. i .. ": " .. path)
+        end
+      end
+    end
+  else
+    print("[P]路径补全：不满足触发条件")
+  end
+
+  print("\n手动触发补全...")
+  builtin_complete_unified()
+end, {})
+
+-- 添加清空 snippet 状态的命令
+vim.api.nvim_create_user_command('ClearSnippet', function()
+  current_snippet_placeholders = {}
+  current_placeholder_index = 0
+  snippet_mode_active = false
+end, {})
