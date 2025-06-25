@@ -49,15 +49,33 @@ let g:nvim_treesitter_install = UNIX()
 " let g:openai_compatible_url = ''
 " let g:openai_compatible_model = ''
 
-if has('nvim') && HAS_GUI()
+if has('nvim')
+    " if HAS_GUI()
+        " if exists('g:neovide')
+        "     call AddRequire('blink')
+        " else
+        "     call AddRequire('cmp')
+        " endif
+    " else
+        " call AddRequire('builtin')
+    " endif
+else
+    " call AddRequire('coc')
     " set guifont=Cascadia\ Code:h10.5
     " set guifont=CascadiaCode\ Nerd\ Font:h11.5
 endif
 
+" if HAS_GUI()
+    " set guifont=Cascadia\ Code:h10.5
+    " set guifont=CascadiaCode\ Nerd\ Font:h11.5
+" endif
+
 if WINDOWS()
     " let g:python3_host_prog='C:\\Python37\\python.exe'
-    " let &pythonthreedll='C:\\Python37\\python37.dll'
+
     " let &pythonthreehome='C:\\Python37'
+    " let &pythonthreedll='C:\\Python37\\python37.dll'
+
     " let g:code_user_dir = 'C:\Users\Admin\AppData\Roaming\Code\User'
     " let g:trae_user_dir = 'C:\Users\Admin\AppData\Roaming\Trae\User'
     " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
@@ -65,6 +83,7 @@ if WINDOWS()
     " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
 elseif UNIX()
     " let g:python3_host_prog=exepath('python3')
+
     " let g:code_user_dir = expand("$HOME/.config/Code/User")
     " let g:trae_user_dir = expand("$HOME/.config/Trae/User")
     " let g:cursor_user_dir = expand("$HOME/.config/Cursor/User")

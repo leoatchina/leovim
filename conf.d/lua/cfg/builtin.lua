@@ -124,43 +124,210 @@ local function load_snippets_for_filetype(filetype)
   return snippets
 end
 
--- 自定义补全函数，包含 snippets
-function _G.builtin_complete_with_snippets()
+-- 检查是否需要路径补全
+local function should_complete_path()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local before_cursor = line:sub(1, col)
+  
+  -- 检查路径模式
+  local path_patterns = {
+    '/[^%s]*$',           -- 绝对路径
+    '%./[^%s]*$',         -- 相对路径 ./
+    '%.%./[^%s]*$',       -- 相对路径 ../
+    '~[^%s]*$',           -- 家目录路径
+    '[%w_%-%.]+/[^%s]*$', -- 目录/文件路径
+  }
+  
+  for _, pattern in ipairs(path_patterns) do
+    if before_cursor:match(pattern) then
+      return true
+    end
+  end
+  
+  return false
+end
+
+-- 统一补全函数（按优先级：snippet -> omni/dict -> buffer -> path）
+function _G.builtin_complete_unified()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local prefix = line:sub(1, col):match('[%w_]*$') or ''
+  local path_prefix = line:sub(1, col):match('[^%s]*$') or ''
   
-  if #prefix == 0 then
+  if #prefix == 0 and not should_complete_path() then
     return ''
   end
   
   local filetype = vim.bo.filetype
-  local snippets = load_snippets_for_filetype(filetype)
+  local all_matches = {}
+  local start_col = col - #prefix + 1
   
-  -- 过滤匹配的 snippets
-  local matches = {}
-  for _, snippet in ipairs(snippets) do
-    if snippet.word:lower():find(prefix:lower(), 1, true) == 1 then
-      table.insert(matches, snippet)
+  -- 如果是路径补全，调整起始列
+  if should_complete_path() and #path_prefix > #prefix then
+    start_col = col - #path_prefix + 1
+  end
+  
+  -- 1. 添加 snippet 补全
+  if #prefix > 0 then
+    local snippets = load_snippets_for_filetype(filetype)
+    for _, snippet in ipairs(snippets) do
+      if snippet.word:lower():find(prefix:lower(), 1, true) == 1 then
+        table.insert(all_matches, snippet)
+      end
     end
   end
   
-  if #matches > 0 then
-    local start_col = col - #prefix + 1
-    vim.fn.complete(start_col, matches)
+  -- 2. 添加 omni 或 dict + syntax 补全
+  if #prefix > 0 then
+    local omni_func = vim.bo.omnifunc
+    local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
+    
+    if has_omni then
+      -- 使用 omni 补全
+      pcall(function()
+        local omni_base = vim.fn[omni_func](1, prefix)
+        if type(omni_base) == 'number' and omni_base >= 0 then
+          local omni_items = vim.fn[omni_func](0, prefix)
+          if type(omni_items) == 'table' then
+            for _, item in ipairs(omni_items) do
+              if type(item) == 'string' then
+                table.insert(all_matches, {word = item, menu = '[O]'})
+              elseif type(item) == 'table' and item.word then
+                item.menu = item.menu and (item.menu .. ' [O]') or '[O]'
+                table.insert(all_matches, item)
+              end
+            end
+          end
+        end
+      end)
+    else
+      -- 使用语法补全 + 字典补全
+      pcall(function()
+        local syntax_base = vim.fn['syntaxcomplete#Complete'](1, prefix)
+        if type(syntax_base) == 'number' and syntax_base >= 0 then
+          local syntax_items = vim.fn['syntaxcomplete#Complete'](0, prefix)
+          if type(syntax_items) == 'table' then
+            for _, item in ipairs(syntax_items) do
+              if type(item) == 'string' then
+                table.insert(all_matches, {word = item, menu = '[S]'})
+              elseif type(item) == 'table' and item.word then
+                item.menu = item.menu and (item.menu .. ' [S]') or '[S]'
+                table.insert(all_matches, item)
+              end
+            end
+          end
+        end
+      end)
+      
+      -- 添加字典补全
+      if vim.bo.dictionary and vim.bo.dictionary ~= '' then
+        local dict_words = {}
+        local dict_files = vim.split(vim.bo.dictionary, ',')
+        for _, dict_file in ipairs(dict_files) do
+          dict_file = vim.trim(dict_file)
+          if vim.fn.filereadable(dict_file) == 1 then
+            pcall(function()
+              local lines = vim.fn.readfile(dict_file, '', 1000) -- 限制读取行数
+              for _, word in ipairs(lines) do
+                word = vim.trim(word)
+                if word ~= '' and word:lower():find(prefix:lower(), 1, true) == 1 then
+                  if not dict_words[word] then
+                    dict_words[word] = true
+                    table.insert(all_matches, {word = word, menu = '[D]'})
+                  end
+                end
+              end
+            end)
+          end
+        end
+      end
+    end
+  end
+  
+  -- 3. 添加 buffer 补全
+  if #prefix >= 2 then
+    local buffer_words = {}
+    local current_buf = vim.api.nvim_get_current_buf()
+    local buffers = {current_buf} -- 优先当前buffer
+    
+    -- 添加其他已加载的buffer
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if buf ~= current_buf and vim.api.nvim_buf_is_loaded(buf) then
+        table.insert(buffers, buf)
+      end
+    end
+    
+    for _, buf in ipairs(buffers) do
+      pcall(function()
+        local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+        for _, buf_line in ipairs(lines) do
+          for word in buf_line:gmatch('[%w_]+') do
+            if #word >= 3 and word:lower():find(prefix:lower(), 1, true) == 1 and word ~= prefix then
+              if not buffer_words[word] then
+                buffer_words[word] = true
+                local menu = buf == current_buf and '[B]' or '[b]'
+                table.insert(all_matches, {word = word, menu = menu})
+              end
+            end
+          end
+        end
+      end)
+    end
+  end
+  
+  -- 4. 添加路径补全
+  if should_complete_path() then
+    pcall(function()
+      -- 处理路径补全
+      local dir_part = path_prefix:match('^(.*/)')
+      local file_part = path_prefix:match('([^/]*)$')
+      
+      if not dir_part then
+        dir_part = './'
+        file_part = path_prefix
+      end
+      
+      -- 使用glob进行文件匹配
+      local pattern = dir_part .. file_part .. '*'
+      local glob_results = vim.fn.glob(pattern, false, true)
+      
+      for _, path in ipairs(glob_results) do
+        local is_dir = vim.fn.isdirectory(path) == 1
+        local basename = vim.fn.fnamemodify(path, ':t')
+        
+        if basename ~= '' and basename:lower():find(file_part:lower(), 1, true) == 1 then
+          local display_name = basename .. (is_dir and '/' or '')
+          table.insert(all_matches, {
+            word = display_name,
+            menu = '[F]',
+            info = path
+          })
+        end
+      end
+    end)
+  end
+  
+  -- 显示补全菜单
+  if #all_matches > 0 then
+    vim.fn.complete(start_col, all_matches)
   end
   
   return ''
+end
+
+-- 向后兼容的别名
+function _G.builtin_complete_with_snippets()
+  return _G.builtin_complete_unified()
 end
 
 -- 添加调试命令
 vim.api.nvim_create_user_command('DebugSnippets', function()
   local filetype = vim.bo.filetype
   local snippets = load_snippets_for_filetype(filetype)
-  local has_lsp = vim.lsp.get_clients({bufnr = 0})[1] ~= nil
   local omni_func = vim.bo.omnifunc
   local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
-  local strategy = (has_lsp or has_omni) and "omni" or "syntax+dict"
+  local strategy = has_omni and "omni" or "syntax+dict"
   print(filetype .. ": " .. #snippets .. " snippets, mode: " .. (snippet_mode_active and "on" or "off") .. ", strategy: " .. strategy)
 end, {})
 
@@ -462,47 +629,48 @@ vim.api.nvim_create_autocmd('FileType', {
       java = 'javacomplete#Complete',
     }
     
+    local omni_func = nil
+    
     -- Python 特殊处理：检查是否有 python3 支持
     if ft == 'python' then
       if vim.fn.has('python3') == 1 then
-        vim.bo[args.buf].omnifunc = 'python3complete#Complete'
-      else
-        -- 如果没有 python3 支持，使用语法补全或 LSP
-        if vim.lsp.get_clients({bufnr = args.buf})[1] then
-          vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-        else
-          vim.bo[args.buf].omnifunc = 'syntaxcomplete#Complete'
-        end
+        omni_func = 'python3complete#Complete'
       end
     elseif omni_funcs[ft] then
-      vim.bo[args.buf].omnifunc = omni_funcs[ft]
+      omni_func = omni_funcs[ft]
+    end
+    
+    if omni_func then
+      -- 有有效的 omnifunc，直接设置
+      vim.bo[args.buf].omnifunc = omni_func
     else
+      -- 没有有效的 omnifunc，使用 syntaxcomplete + dict
       vim.bo[args.buf].omnifunc = 'syntaxcomplete#Complete'
+      
+      -- 设置字典文件支持
+      local dict_files = {
+        python = 'python.dict',
+        javascript = 'javascript.dict',
+        typescript = 'javascript.dict',
+        lua = 'lua.dict',
+        vim = 'vim.dict',
+        c = 'c.dict',
+        cpp = 'cpp.dict',
+        html = 'html.dict',
+        css = 'css.dict',
+        java = 'java.dict',
+      }
+      
+      if dict_files[ft] then
+        local dict_path = vim.fn.expand('~/.leovim/pack/clone/opt/vim-dict/dict/' .. dict_files[ft])
+        if vim.fn.filereadable(dict_path) == 1 then
+          vim.bo[args.buf].dictionary = dict_path
+        end
+      end
     end
     
     -- 预加载该文件类型的 snippets
     load_snippets_for_filetype(ft)
-    
-    -- 设置字典文件支持
-    local dict_files = {
-      python = 'python.dict',
-      javascript = 'javascript.dict',
-      typescript = 'javascript.dict',
-      lua = 'lua.dict',
-      vim = 'vim.dict',
-      c = 'c.dict',
-      cpp = 'cpp.dict',
-      html = 'html.dict',
-      css = 'css.dict',
-      java = 'java.dict',
-    }
-    
-    if dict_files[ft] then
-      local dict_path = vim.fn.expand('~/.leovim/pack/clone/opt/vim-dict/dict/' .. dict_files[ft])
-      if vim.fn.filereadable(dict_path) == 1 then
-        vim.bo[args.buf].dictionary = dict_path
-      end
-    end
   end
 })
 
@@ -542,89 +710,12 @@ map('i', '<CR>', function()
 end, {expr = true, silent = true})
 
 -- Ctrl-Space 手动触发补全（智能策略：有omni时不用dict，无omni时用syntaxcomplete+dict）
-map('i', '<C-Space>', function()
+map('i', '<C-@>', function()
   if vim.fn.pumvisible() == 1 then
     return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
   else
-    -- 首先尝试 snippet 补全
-    builtin_complete_with_snippets()
-    vim.defer_fn(function()
-      if vim.fn.pumvisible() == 0 then
-        local has_lsp = vim.lsp.get_clients({bufnr = 0})[1] ~= nil
-        local omni_func = vim.bo.omnifunc
-        local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
-        
-        if has_lsp or has_omni then
-          -- 有LSP或omni补全：snippet -> omni -> buffer -> path
-          if has_lsp then
-            vim.lsp.completion.trigger()
-          else
-            vim.api.nvim_feedkeys(
-              vim.api.nvim_replace_termcodes('<C-X><C-O>', true, true, true),
-              'n',
-              false
-            )
-          end
-          vim.defer_fn(function()
-            if vim.fn.pumvisible() == 0 then
-              -- buffer 补全
-              vim.api.nvim_feedkeys(
-                vim.api.nvim_replace_termcodes('<C-X><C-N>', true, true, true),
-                'n',
-                false
-              )
-              vim.defer_fn(function()
-                if vim.fn.pumvisible() == 0 then
-                  -- path 补全
-                  vim.api.nvim_feedkeys(
-                    vim.api.nvim_replace_termcodes('<C-X><C-F>', true, true, true),
-                    'n',
-                    false
-                  )
-                end
-              end, 50)
-            end
-          end, 50)
-        else
-          -- 无LSP和omni补全：snippet -> syntaxcomplete -> buffer -> path -> dict
-          vim.api.nvim_feedkeys(
-            vim.api.nvim_replace_termcodes('<C-X><C-O>', true, true, true),
-            'n',
-            false
-          )
-          vim.defer_fn(function()
-            if vim.fn.pumvisible() == 0 then
-              -- buffer 补全
-              vim.api.nvim_feedkeys(
-                vim.api.nvim_replace_termcodes('<C-X><C-N>', true, true, true),
-                'n',
-                false
-              )
-              vim.defer_fn(function()
-                if vim.fn.pumvisible() == 0 then
-                  -- path 补全
-                  vim.api.nvim_feedkeys(
-                    vim.api.nvim_replace_termcodes('<C-X><C-F>', true, true, true),
-                    'n',
-                    false
-                  )
-                  vim.defer_fn(function()
-                    if vim.fn.pumvisible() == 0 then
-                      -- dict 补全
-                      vim.api.nvim_feedkeys(
-                        vim.api.nvim_replace_termcodes('<C-X><C-K>', true, true, true),
-                        'n',
-                        false
-                      )
-                    end
-                  end, 50)
-                end
-              end, 50)
-            end
-          end, 50)
-        end
-      end
-    end, 50)
+    -- 使用统一补全函数
+    builtin_complete_unified()
     return ''
   end
 end, {expr = true, silent = true})
@@ -661,48 +752,11 @@ vim.api.nvim_create_autocmd('FileType', {
               if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
                 local col = vim.api.nvim_win_get_cursor(0)[2]
                 if col > 0 then
-                  local has_lsp = vim.lsp.get_clients({bufnr = 0})[1] ~= nil
                   local omni_func = vim.bo.omnifunc
                   local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
                   
-                  if has_lsp or has_omni then
-                    -- 有LSP或omni补全
-                    if has_lsp then
-                      vim.lsp.completion.trigger()
-                    else
-                      vim.api.nvim_feedkeys(
-                        vim.api.nvim_replace_termcodes('<C-X><C-O>', true, true, true),
-                        'n',
-                        false
-                      )
-                    end
-                    -- 如果没有补全结果，尝试 buffer 补全
-                    vim.defer_fn(function()
-                      if vim.fn.pumvisible() == 0 then
-                        vim.api.nvim_feedkeys(
-                          vim.api.nvim_replace_termcodes('<C-X><C-N>', true, true, true),
-                          'n',
-                          false
-                        )
-                      end
-                    end, 100)
-                  else
-                    -- 无LSP和omni补全，使用 syntaxcomplete + buffer
-                    vim.api.nvim_feedkeys(
-                      vim.api.nvim_replace_termcodes('<C-X><C-O>', true, true, true),
-                      'n',
-                      false
-                    )
-                    vim.defer_fn(function()
-                      if vim.fn.pumvisible() == 0 then
-                        vim.api.nvim_feedkeys(
-                          vim.api.nvim_replace_termcodes('<C-X><C-N>', true, true, true),
-                          'n',
-                          false
-                        )
-                      end
-                    end, 100)
-                  end
+                  -- 直接使用统一补全函数
+                  builtin_complete_unified()
                 end
               end
             end, 50)
@@ -720,7 +774,6 @@ vim.api.nvim_create_autocmd('FileType', {
           local line = vim.api.nvim_get_current_line()
           local col = vim.api.nvim_win_get_cursor(0)[2]
           local prefix = line:sub(1, col):match('[%w_]*$') or ''
-          
           -- 如果输入了2个字符以上，尝试匹配 snippet
           if #prefix >= 2 then
             local snippets = load_snippets_for_filetype(ft)
@@ -729,7 +782,7 @@ vim.api.nvim_create_autocmd('FileType', {
                 -- 找到匹配的 snippet，触发补全
                 vim.defer_fn(function()
                   if vim.fn.pumvisible() == 0 then
-                    builtin_complete_with_snippets()
+                    builtin_complete_unified()
                   end
                 end, 100)
                 break
@@ -743,7 +796,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- 占位符跳转快捷键 - 只在 snippet 模式下生效
-map({'i', 's', 'n', 'v'}, '<C-f>', function()
+map({'i', 's'}, '<C-f>', function()
   if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
     local success = jump_to_next_placeholder()
     if not success then
@@ -755,7 +808,7 @@ map({'i', 's', 'n', 'v'}, '<C-f>', function()
   end
 end, {expr = true, silent = true})
 
-map({'i', 's', 'n', 'v'}, '<C-b>', function()
+map({'i', 's'}, '<C-b>', function()
   if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
     jump_to_prev_placeholder()
     return ''
