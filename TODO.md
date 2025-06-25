@@ -109,15 +109,13 @@
 - [x] tab nr highlighting group
 - [x] ~~vim-fern in popup || floating_window~~
 - [x] git branch icons
-- [ ] nvim-lsp
+- [x] nvim-lsp
     - [x] require nvim-0.11
     - [x] nvim-java
     - [x] create .vim folder for neoconf
     - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
-    - [ ] optimize nvim-0.11 builtin completion
-- [ ] name vim-floaterm-repl to vim-floaterm-enhance
-    - [ ] Run is current tab related only, could not be used in other tabs, 
-    - [ ] using different idx for aider, repl
+- [x] optimize nvim-0.11 builtin completion
+- [ ] config formatter.nvim
 - [ ] Ai related 
     - [x] ~~yarepl.nvim + aider~~
     - [ ] copilot plus 
@@ -148,7 +146,13 @@
   - [x] mark content, and resend/show marked content if `quickui` installed
   - [x] README
   - [x] deploy to github
+- [x] name vim-floaterm-repl to vim-floaterm-enhance
+    - [x] intergrated with asyncrun.vim
+    - [ ] Run is current tab related only, could not be used in other tabs, 
+    - [ ] using different idx for aider, repl
+    - [ ] fork vim-floaterm
 ## Plenty of works
+- [x] ReWrite readme
 - [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
@@ -159,5 +163,4 @@
   - [ ] mix `vim-plug` and `vim-jetpack` together
 - [ ] vim-zeal
   - [ ] view document in (neo)vim
-- [ ] Rewrite readme
 - [ ] Introduce video
