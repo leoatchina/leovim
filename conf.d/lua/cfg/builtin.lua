@@ -148,6 +148,45 @@ local function should_complete_path()
   return false
 end
 
+-- 检查是否可以触发omni补全
+local function can_trigger_omni()
+  local omni_func = vim.bo.omnifunc
+  if omni_func == '' or omni_func == 'syntaxcomplete#Complete' then
+    return false
+  end
+  
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local before_cursor = line:sub(1, col)
+  local filetype = vim.bo.filetype
+  
+  -- 根据文件类型检查omni补全触发条件
+  local patterns = {
+    python = '[%w_]+%.$',           -- obj.
+    javascript = '[%w_]+%.$',       -- obj.
+    typescript = '[%w_]+%.$',       -- obj.
+    lua = '[%w_]+[%.:]$',          -- obj. 或 obj:
+    c = '[%w_]+%.%->$',            -- obj. 或 obj->
+    cpp = '[%w_]+[%.:]?:?%->$',    -- obj. 或 obj:: 或 obj->
+    vim = '[%w_]+:$',              -- obj:
+    html = '<[^>]*$',              -- <tag
+    xml = '<[^>]*$',               -- <tag
+    css = '[%w_%-]+:$',            -- property:
+  }
+  
+  local pattern = patterns[filetype]
+  if pattern and before_cursor:match(pattern) then
+    return true
+  end
+  
+  -- 通用模式：检查是否以点号、冒号、箭头结尾
+  if before_cursor:match('[%w_]+[%.:]$') or before_cursor:match('[%w_]+%->$') then
+    return true
+  end
+  
+  return false
+end
+
 -- 统一补全函数（按优先级：snippet -> omni/dict -> buffer -> path）
 function _G.builtin_complete_unified()
   local line = vim.api.nvim_get_current_line()
@@ -155,7 +194,10 @@ function _G.builtin_complete_unified()
   local prefix = line:sub(1, col):match('[%w_]*$') or ''
   local path_prefix = line:sub(1, col):match('[^%s]*$') or ''
   
-  if #prefix == 0 and not should_complete_path() then
+  -- 检查是否可以触发任何类型的补全
+  local can_omni = can_trigger_omni()
+  
+  if #prefix == 0 and not should_complete_path() and not can_omni then
     return ''
   end
   
@@ -178,30 +220,34 @@ function _G.builtin_complete_unified()
     end
   end
   
-  -- 2. 添加 omni 或 dict + syntax 补全
-  if #prefix > 0 then
+  -- 2. 添加 omni 补全
+  if can_omni then
     local omni_func = vim.bo.omnifunc
-    local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
-    
-    if has_omni then
-      -- 使用 omni 补全
-      pcall(function()
-        local omni_base = vim.fn[omni_func](1, prefix)
-        if type(omni_base) == 'number' and omni_base >= 0 then
-          local omni_items = vim.fn[omni_func](0, prefix)
-          if type(omni_items) == 'table' then
-            for _, item in ipairs(omni_items) do
-              if type(item) == 'string' then
-                table.insert(all_matches, {word = item, menu = '[O]'})
-              elseif type(item) == 'table' and item.word then
-                item.menu = item.menu and (item.menu .. ' [O]') or '[O]'
-                table.insert(all_matches, item)
-              end
+    -- 使用 omni 补全
+    pcall(function()
+      local omni_base = vim.fn[omni_func](1, prefix)
+      if type(omni_base) == 'number' and omni_base >= 0 then
+        local omni_items = vim.fn[omni_func](0, prefix)
+        if type(omni_items) == 'table' then
+          for _, item in ipairs(omni_items) do
+            if type(item) == 'string' then
+              table.insert(all_matches, {word = item, menu = '[O]'})
+            elseif type(item) == 'table' and item.word then
+              item.menu = item.menu and (item.menu .. ' [O]') or '[O]'
+              table.insert(all_matches, item)
             end
           end
         end
-      end)
-    else
+      end
+    end)
+  end
+  
+  -- 3. 添加语法和字典补全（当有前缀但没有omni补全时）
+  if #prefix > 0 and not can_omni then
+    local omni_func = vim.bo.omnifunc
+    local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
+    
+    if not has_omni then
       -- 使用语法补全 + 字典补全
       pcall(function()
         local syntax_base = vim.fn['syntaxcomplete#Complete'](1, prefix)
@@ -245,7 +291,7 @@ function _G.builtin_complete_unified()
     end
   end
   
-  -- 3. 添加 buffer 补全
+  -- 4. 添加 buffer 补全
   if #prefix >= 2 then
     local buffer_words = {}
     local current_buf = vim.api.nvim_get_current_buf()
@@ -276,7 +322,7 @@ function _G.builtin_complete_unified()
     end
   end
   
-  -- 4. 添加路径补全
+  -- 5. 添加路径补全
   if should_complete_path() then
     pcall(function()
       -- 处理路径补全
@@ -329,6 +375,30 @@ vim.api.nvim_create_user_command('DebugSnippets', function()
   local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
   local strategy = has_omni and "omni" or "syntax+dict"
   print(filetype .. ": " .. #snippets .. " snippets, mode: " .. (snippet_mode_active and "on" or "off") .. ", strategy: " .. strategy)
+end, {})
+
+-- 添加补全调试命令
+vim.api.nvim_create_user_command('DebugComplete', function()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local prefix = line:sub(1, col):match('[%w_]*$') or ''
+  local can_omni = can_trigger_omni()
+  
+  print("=== 补全调试信息 ===")
+  print("文件类型: " .. vim.bo.filetype)
+  print("当前行: '" .. line .. "'")
+  print("光标位置: " .. col)
+  print("前缀: '" .. prefix .. "'")
+  print("可触发omni: " .. tostring(can_omni))
+  print("omnifunc: " .. vim.bo.omnifunc)
+  print("Python3支持: " .. vim.fn.has('python3'))
+  
+  if can_omni then
+    print("手动触发omni补全...")
+    builtin_complete_unified()
+  else
+    print("不满足omni补全条件")
+  end
 end, {})
 
 -- 添加清空 snippet 状态的命令
