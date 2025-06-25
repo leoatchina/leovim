@@ -349,7 +349,10 @@ function _G.builtin_complete_unified()
 
   -- 显示补全菜单
   if #all_matches > 0 then
-    vim.fn.complete(start_col, all_matches)
+    -- 确保只在插入模式下调用 complete()
+    if vim.fn.mode() == 'i' then
+      vim.fn.complete(start_col, all_matches)
+    end
   end
 
   return ''
@@ -782,7 +785,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
           -- 触发补全
           if should_trigger then
             vim.defer_fn(function()
-              if vim.fn.pumvisible() == 0 then
+              if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
                 builtin_complete_unified()
               end
             end, 150)
@@ -884,7 +887,7 @@ vim.api.nvim_create_autocmd('FileType', {
           -- 触发补全
           if should_trigger then
             vim.defer_fn(function()
-              if vim.fn.pumvisible() == 0 then
+              if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
                 builtin_complete_unified()
               end
             end, 100)
@@ -1087,7 +1090,11 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   end
 
   print("\n手动触发补全...")
-  builtin_complete_unified()
+  if vim.fn.mode() == 'i' then
+    builtin_complete_unified()
+  else
+    print("注意：只能在插入模式下触发补全")
+  end
 end, {})
 
 -- 添加清空 snippet 状态的命令
