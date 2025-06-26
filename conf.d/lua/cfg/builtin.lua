@@ -824,7 +824,7 @@ end, {expr = true, silent = true})
 map('i', '<Down>', function()
   if vim.fn.pumvisible() == 1 then
     return vim.api.nvim_replace_termcodes('<C-n>', true, true, true)
-  else/
+  else
     return vim.api.nvim_replace_termcodes('<Down>', true, true, true)
   end
 end, {expr = true, silent = true})
