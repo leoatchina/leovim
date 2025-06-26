@@ -45,8 +45,12 @@ elseif Require('mcm')
     let g:complete_engine = 'mcm'
 elseif Require('builtin') && has('nvim-0.11')
     let g:complete_engine = 'builtin'
-elseif PlannedCoc()
-    let g:complete_engine = 'coc'
+elseif Require('coc')
+    if g:node_version >= 16.18 && has('nvim-0.8')
+        let g:complete_engine = 'coc'
+    else
+        let s:smart_engine_select = 1
+    endif
 elseif Require('cmp')
     if has('nvim-0.11')
         let g:complete_engine = 'cmp'
@@ -64,10 +68,8 @@ else
 endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.11')
-        call AddRequire('blink.lua')
-        let g:complete_engine = 'blink'
-    elseif g:node_version >= 16.18 && has('nvim-0.8')
-        let g:complete_engine = 'coc'
+        call AddRequire('builtin')
+        let g:complete_engine = 'builtin'
     else
         let g:complete_engine = 'mcm'
     endif
