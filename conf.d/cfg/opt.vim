@@ -9,20 +9,20 @@ let g:nvim_treesitter_install = UNIX()
 "     call AddRequire('notags')
 " endif
 
-" call AddRequire('r')
 " call AddRequire('web')
 " call AddRequire('wubi')
 " call AddRequire('pinyin')
 " call AddRequire('query')
 " call AddRequire('bioinfo')
-" call AddRequire('markdown')
 
+" call AddRequire('r')
 " call AddRequire('c')
 " call AddRequire('go')
 " call AddRequire('rust')
+" call AddRequire('java')
+" call AddRequire('markdown')
 
 " call AddRequire('debug')
-" call AddRequire('java')
 " call AddRequire('neoconf')
 
 " call AddRequire('aider')
@@ -98,7 +98,6 @@ endif
 " endif
 
 " let g:vimtex_view_method = 'zathura'
-
 
 " let g:header_field_author = ''
 " let g:header_field_author_email = ''
