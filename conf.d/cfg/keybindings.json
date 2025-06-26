@@ -386,23 +386,6 @@
     "command": "editor.action.jumpToBracket",
     "when": "editorTextFocus"
   },
-  // split
-  {
-    "key": "ctrl+\\",
-    "command": "-workbench.action.splitEditor"
-  },
-  {
-    "key": "ctrl+k ctrl+\\",
-    "command": "-workbench.action.splitEditorDown"
-  },
-  {
-    "key": "alt+]",
-    "command": "workbench.action.splitEditor"
-  },
-  {
-    "key": "alt+[",
-    "command": "workbench.action.splitEditorDown"
-  },
   // markdown
   {
     "key": "ctrl+alt+r",
@@ -492,7 +475,7 @@
     "key": "ctrl+alt+meta+n",
     "command": "-welcome.showNewFileEntries"
   },
-  // open keybindings ---------------------------
+  // open keybindings
   {
     "key": "ctrl+k ctrl+s",
     "command": "-workbench.action.openGlobalKeybindings"
@@ -509,25 +492,70 @@
     "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
   },
-  //----------------- NOTE: AI editors ------------------
+  // split
+  {
+    "key": "ctrl+\\",
+    "command": "-workbench.action.splitEditor"
+  },
+  {
+    "key": "ctrl+k ctrl+\\",
+    "command": "-workbench.action.splitEditorDown"
+  },
+  {
+    "key": "ctrl+m ctrl+\\",
+    "command": "-workbench.action.splitEditorDown"
+  },
+  {
+    "key": "alt+]",
+    "command": "workbench.action.splitEditor"
+  },
+  {
+    "key": "alt+[",
+    "command": "workbench.action.splitEditorDown"
+  },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
-  //---------------- vscode positron trae ---------------
-  // tongyi
-  {
-    "key": "ctrl+`",
-    "command": "tongyi.show.panel.chat",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  // kilocode
+  //----------------------- AI plugins ------------------
+  // lingma
   {
     "key": "ctrl+\\ e",
     "command": "-vscode-neovim.send-cmdline",
     "when": "neovim.init && neovim.mode == 'cmdline'"
   },
   {
+    "key": "ctrl+shift+l",
+    "command": "-tongyi.show.panel.chat",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
     "key": "ctrl+\\",
-    "command": "workbench.view.extension.kilo-code-ActivityBar"
+    "command": "tongyi.show.panel.chat",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+alt+\\",
+    "command": "tongyi.action.inlineSuggest.acceptNextLine",
+    "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
+  },
+  {
+    "key": "ctrl+down",
+    "command": "-tongyi.action.inlineSuggest.acceptNextLine",
+    "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+alt+i",
+    "command": "tongyi.action.inlineSuggest.trigger",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  {
+    "key": "alt+p",
+    "command": "-tongyi.action.inlineSuggest.trigger",
+    "when": "TongyiLingMa.Chat.active"
+  },
+  // kilocode
+  {
+    "key": "ctrl+`",
+    "command": "kilo-code.SidebarProvider.focus"
   },
   // continue
   {
@@ -537,25 +565,5 @@
   {
     "key": "alt+a",
     "command": "-continue.applyCodeFromChat"
-  },
-  {
-    "key": "alt+p",
-    "command": "-tongyi.action.inlineSuggest.trigger",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
-    "key": "ctrl+shift+alt+l",
-    "command": "tongyi.action.inlineSuggest.trigger",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
-    "key": "ctrl+shift+alt+i",
-    "command": "tongyi.action.inlineSuggest.acceptNextLine",
-    "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
-  },
-  {
-    "key": "ctrl+down",
-    "command": "-tongyi.action.inlineSuggest.acceptNextLine",
-    "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
   }
 ]
