@@ -115,6 +115,7 @@
     - [x] create .vim folder for neoconf
     - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
 - [x] optimize nvim-0.11 builtin completion
+- [ ] gtags without cscope
 - [ ] config formatter.nvim
 - [ ] Ai related 
     - [x] ~~yarepl.nvim + aider~~

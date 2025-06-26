@@ -40,7 +40,7 @@ if get(g:, 'ctags_type', '') != ''
     else
         call s:add_symbol("ctrlptags")
     endif
-    if v:version >= 800 && g:complete_engine != 'apm'
+    if v:version >= 800
         call s:add_symbol("gutentags")
         if get(g:, 'gtags_version', 0) > 6.0606
             if executable('gtags-cscope') && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
