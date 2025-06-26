@@ -5,25 +5,25 @@
 -- GLOBAL VARIABLES AND CONFIGURATION
 -- ============================================================================
 local map = vim.keymap.set
-
+local set_hl = vim.api.nvim_set_hl
 -- Completion menu styling
-vim.api.nvim_set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
-vim.api.nvim_set_hl(0, 'PmenuSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
-vim.api.nvim_set_hl(0, 'PmenuKind', {bg = '#3b4252', fg = '#88c0d0'})
-vim.api.nvim_set_hl(0, 'PmenuKindSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
-vim.api.nvim_set_hl(0, 'PmenuExtra', {bg = '#3b4252', fg = '#8fbcbb'})
-vim.api.nvim_set_hl(0, 'PmenuExtraSel', {bg = '#81a1c1', fg = '#2e3440'})
+set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
+set_hl(0, 'PmenuSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
+set_hl(0, 'PmenuKind', {bg = '#3b4252', fg = '#88c0d0'})
+set_hl(0, 'PmenuKindSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
+set_hl(0, 'PmenuExtra', {bg = '#3b4252', fg = '#8fbcbb'})
+set_hl(0, 'PmenuExtraSel', {bg = '#81a1c1', fg = '#2e3440'})
 
 -- Base directories
 local dict_base_dir = vim.fn.expand('$HOME/.leovim/pack/clone/opt/vim-dict/dict') .. '/'
 local snippets_base_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-snippets/snippets') .. '/'
 
--- Global variables for current snippet state
+-- Local variables for current snippet state
 local current_snippet_placeholders = {}
 local current_placeholder_index = 0
 local snippet_mode_active = false
 
--- Global caches
+-- Local caches
 local snippet_cache = {}
 local buffer_cache = {}
 
@@ -379,7 +379,7 @@ end
 -- ============================================================================
 
 -- Enhanced check if omni completion can be triggered
-local function can_trigger_omni()
+local function omni_available()
   local omni_func = vim.bo.omnifunc
   if omni_func == '' or omni_func == 'syntaxcomplete#Complete' then
     return false
@@ -433,7 +433,7 @@ local function get_omni_completions(prefix)
   local omni_func = vim.bo.omnifunc
   local matches = {}
 
-  if not can_trigger_omni() then
+  if not omni_available() then
     return matches
   end
 
@@ -561,7 +561,7 @@ end
 -- ============================================================================
 
 -- Check if path completion can be triggered
-local function can_trigger_path()
+local function path_available()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local before_cursor = line:sub(1, col)
@@ -586,7 +586,7 @@ end
 local function get_path_completions(path_prefix)
   local matches = {}
 
-  if not can_trigger_path() then
+  if not path_available() then
     return matches
   end
 
@@ -624,16 +624,16 @@ end
 -- ============================================================================
 
 -- Main unified completion function with new priority: snippet -> omni -> buffer -> dict -> path
-function _G.builtin_complete_unified()
+function _G.builtin_completion()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local prefix = line:sub(1, col):match('[%w_]*$') or ''
   local path_prefix = line:sub(1, col):match('[^%s]*$') or ''
 
-  local can_omni = can_trigger_omni()
-  local can_path = can_trigger_path()
+  local omni_can_trigger = omni_available()
+  local path_can_trigger = path_available()
 
-  if #prefix == 0 and not can_path and not can_omni then
+  if #prefix == 0 and not path_can_trigger and not omni_can_trigger then
     return ''
   end
 
@@ -642,7 +642,7 @@ function _G.builtin_complete_unified()
   local start_col = col - #prefix + 1
 
   -- Adjust start column for path completion
-  if can_path and #path_prefix > #prefix then
+  if path_can_trigger and #path_prefix > #prefix then
     start_col = col - #path_prefix + 1
   end
 
@@ -663,7 +663,7 @@ function _G.builtin_complete_unified()
   vim.list_extend(all_matches, dict_matches)
 
   -- 5. PATH COMPLETION (lowest priority)
-  if can_path then
+  if path_can_trigger then
     local path_matches = get_path_completions(path_prefix)
     vim.list_extend(all_matches, path_matches)
   end
@@ -793,7 +793,7 @@ map('i', '<C-@>', function()
   if vim.fn.pumvisible() == 1 then
     return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
   else
-    builtin_complete_unified()
+    builtin_completion()
     return ''
   end
 end, {expr = true, silent = true})
@@ -863,23 +863,23 @@ vim.api.nvim_create_autocmd('BufEnter', {
           local line = vim.api.nvim_get_current_line()
           local col = vim.api.nvim_win_get_cursor(0)[2]
           local prefix = line:sub(1, col):match('[%w_]*$') or ''
-          local can_trigger = false
+          local trigger_completion = false
 
           -- Check buffer word matching (lowered threshold to 1 character)
           if #prefix >= 1 and buffer_has_matches(prefix) then
-            can_trigger = true
+            trigger_completion = true
           end
 
           -- Check path completion
-          if not can_trigger and can_trigger_path() then
-            can_trigger = true
+          if not trigger_completion and path_available() then
+            trigger_completion = true
           end
 
           -- Trigger completion
-          if can_trigger then
+          if trigger_completion then
             vim.defer_fn(function()
               if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
-                builtin_complete_unified()
+                builtin_completion()
               end
             end, 150)
           end
@@ -923,7 +923,7 @@ vim.api.nvim_create_autocmd('FileType', {
               if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
                 local col = vim.api.nvim_win_get_cursor(0)[2]
                 if col > 0 then
-                  builtin_complete_unified()
+                  builtin_completion()
                 end
               end
             end, 50)
@@ -941,31 +941,30 @@ vim.api.nvim_create_autocmd('FileType', {
           local line = vim.api.nvim_get_current_line()
           local col = vim.api.nvim_win_get_cursor(0)[2]
           local prefix = line:sub(1, col):match('[%w_]*$') or ''
-          local can_trigger = false
+          local trigger_completion = false
 
           if #prefix >= 2 then
             -- 1. Check snippet matches
-            local snippet_matches = get_snippet_completions(prefix, ft)
-            if #snippet_matches > 0 then
-              can_trigger = true
+            if #get_snippet_completions(prefix, ft) > 0 then
+              trigger_completion = true
             end
 
             -- 2. Check buffer word matches
-            if not can_trigger and buffer_has_matches(prefix) then
-              can_trigger = true
+            if not trigger_completion and buffer_has_matches(prefix) then
+              trigger_completion = true
             end
           end
 
           -- 3. Check path completion
-          if not can_trigger and can_trigger_path() then
-            can_trigger = true
+          if not trigger_completion and path_available() then
+            trigger_completion = true
           end
 
           -- Trigger completion
-          if can_trigger then
+          if trigger_completion then
             vim.defer_fn(function()
               if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
-                builtin_complete_unified()
+                builtin_completion()
               end
             end, 100)
           end
@@ -1004,10 +1003,11 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local prefix = line:sub(1, col):match('[%w_]*$') or ''
   local path_prefix = line:sub(1, col):match('[^%s]*$') or ''
-  local can_omni = can_trigger_omni()
-  local can_path = can_trigger_path()
   local before_cursor = line:sub(1, col)
   local filetype = vim.bo.filetype
+
+  local omni_can_trigger = omni_available()
+  local path_can_trigger = path_available()
 
   print("=== Enhanced Completion Debug Info ===")
   print("File type: " .. filetype)
@@ -1016,8 +1016,8 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   print("Text before cursor: '" .. before_cursor .. "'")
   print("Prefix: '" .. prefix .. "' (length: " .. #prefix .. ")")
   print("Path prefix: '" .. path_prefix .. "' (length: " .. #path_prefix .. ")")
-  print("Can trigger omni: " .. tostring(can_omni))
-  print("Can trigger path: " .. tostring(can_path))
+  print("Can trigger omni: " .. tostring(omni_can_trigger))
+  print("Can trigger path: " .. tostring(path_can_trigger))
   print("Omnifunc: " .. vim.bo.omnifunc)
   print("Dictionary file: " .. (vim.bo.dictionary or "none"))
 
@@ -1071,7 +1071,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
 
   print("\nTriggering manual completion...")
   if vim.fn.mode() == 'i' then
-    builtin_complete_unified()
+    builtin_completion()
   else
     print("Note: Can only trigger completion in insert mode")
   end
