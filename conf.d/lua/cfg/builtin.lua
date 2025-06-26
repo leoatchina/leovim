@@ -717,29 +717,29 @@ vim.api.nvim_create_autocmd('FileType', {
     else
       -- Use syntaxcomplete as fallback
       vim.bo[args.buf].omnifunc = 'syntaxcomplete#Complete'
+    end
 
-      -- Set up dictionary files (separate from omni)
-      local dict_file = dict_base_dir .. ft .. '.dict'
-      if vim.fn.filereadable(dict_file) == 1 then
-        vim.bo[args.buf].dictionary = dict_file
-      else
-        -- Fallback dictionary mappings
-        local fallback_dict_files = {
-          text = 'text.dict',
-          markdown = 'text.dict',
-          txt = 'text.dict',
-          typescript = 'javascript.dict',
-          bash = 'sh.dict',
-          zsh = 'sh.dict',
-          fish = 'sh.dict',
-          shell = 'sh.dict',
-        }
+    -- Set up dictionary files (always available, separate from omni)
+    local dict_file = dict_base_dir .. ft .. '.dict'
+    if vim.fn.filereadable(dict_file) == 1 then
+      vim.bo[args.buf].dictionary = dict_file
+    else
+      -- Fallback dictionary mappings
+      local fallback_dict_files = {
+        text = 'text.dict',
+        markdown = 'text.dict',
+        txt = 'text.dict',
+        typescript = 'javascript.dict',
+        bash = 'sh.dict',
+        zsh = 'sh.dict',
+        fish = 'sh.dict',
+        shell = 'sh.dict',
+      }
 
-        if fallback_dict_files[ft] then
-          local fallback_dict_file = dict_base_dir .. fallback_dict_files[ft]
-          if vim.fn.filereadable(fallback_dict_file) == 1 then
-            vim.bo[args.buf].dictionary = fallback_dict_file
-          end
+      if fallback_dict_files[ft] then
+        local fallback_dict_file = dict_base_dir .. fallback_dict_files[ft]
+        if vim.fn.filereadable(fallback_dict_file) == 1 then
+          vim.bo[args.buf].dictionary = fallback_dict_file
         end
       end
     end
