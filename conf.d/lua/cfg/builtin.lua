@@ -388,12 +388,12 @@ end
 local function omni_available()
   local omni_func = vim.bo.omnifunc
   local filetype = vim.bo.filetype
-
+  
   -- Special handling for Python: if no python3 support, disable omni completion
   if filetype == 'python' and vim.fn.has('python3') == 0 then
     return false
   end
-
+  
   if omni_func == '' or omni_func == 'syntaxcomplete#Complete' then
     return false
   end
@@ -863,13 +863,9 @@ map({'i', 's', 'v'}, '<Esc>', function()
   return vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
 end, {expr = true, silent = true})
 
-
-
 -- ============================================================================
 -- AUTO-TRIGGER LOGIC
 -- ============================================================================
-
-
 
 -- Filetype-specific auto-trigger
 vim.api.nvim_create_autocmd('FileType', {
@@ -899,7 +895,7 @@ vim.api.nvim_create_autocmd('FileType', {
       buffer = args.buf,
       callback = function()
         local char = vim.v.char
-
+        
         -- Check for special trigger characters
         for _, trigger in ipairs(triggers) do
           if char == trigger then
@@ -914,8 +910,8 @@ vim.api.nvim_create_autocmd('FileType', {
             return
           end
         end
-
-                -- Smart auto-completion for word characters after 2+ chars
+        
+        -- Smart auto-completion for word characters after 2+ chars
         if char:match('[%w_]') then
           vim.defer_fn(function()
             if not pumvisible() and vim.fn.mode() == 'i' then
@@ -941,8 +937,6 @@ vim.api.nvim_create_autocmd('FileType', {
         end
       end
     })
-
-
   end
 })
 
