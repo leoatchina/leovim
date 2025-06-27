@@ -23,6 +23,8 @@ local current_snippet_placeholders = {}
 local current_placeholder_index = 0
 local snippet_mode_active = false
 
+
+
 -- Local caches
 local snippet_cache = {}
 local buffer_cache = {}
@@ -823,17 +825,17 @@ end, {expr = true, silent = true})
 -- Other completion navigation - only when menu is visible
 map('i', '<Down>', function()
   if vim.fn.pumvisible() == 1 then
-    return vim.api.nvim_replace_termcodes('<C-n>', true, true, true)
+    return '<C-n>'
   else
-    return vim.api.nvim_replace_termcodes('<Down>', true, true, true)
+    return '<Down>'
   end
 end, {expr = true, silent = true})
 
 map('i', '<Up>', function()
   if vim.fn.pumvisible() == 1 then
-    return vim.api.nvim_replace_termcodes('<C-p>', true, true, true)
+    return '<C-p>'
   else
-    return vim.api.nvim_replace_termcodes('<Up>', true, true, true)
+    return '<Up>'
   end
 end, {expr = true, silent = true})
 
@@ -847,47 +849,13 @@ map({'i', 's', 'v'}, '<Esc>', function()
   return vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
 end, {expr = true, silent = true})
 
+
+
 -- ============================================================================
 -- AUTO-TRIGGER LOGIC
 -- ============================================================================
 
--- General auto-trigger for all buffers
-vim.api.nvim_create_autocmd('BufEnter', {
-  pattern = '*',
-  callback = function(args)
-    -- Generic TextChangedI auto-trigger
-    vim.api.nvim_create_autocmd('TextChangedI', {
-      buffer = args.buf,
-      callback = function()
-        if vim.fn.pumvisible() == 0 then
-          local line = vim.api.nvim_get_current_line()
-          local col = vim.api.nvim_win_get_cursor(0)[2]
-          local prefix = line:sub(1, col):match('[%w_]*$') or ''
-          local trigger_completion = false
 
-          -- Check buffer word matching (lowered threshold to 1 character)
-          if #prefix >= 1 and buffer_has_matches(prefix) then
-            trigger_completion = true
-          end
-
-          -- Check path completion
-          if not trigger_completion and path_available() then
-            trigger_completion = true
-          end
-
-          -- Trigger completion
-          if trigger_completion then
-            vim.defer_fn(function()
-              if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
-                builtin_completion()
-              end
-            end, 150)
-          end
-        end
-      end
-    })
-  end
-})
 
 -- Filetype-specific auto-trigger
 vim.api.nvim_create_autocmd('FileType', {
@@ -912,11 +880,13 @@ vim.api.nvim_create_autocmd('FileType', {
 
     local triggers = ft_triggers[ft] or ft_triggers.default
 
-    -- Character-triggered completion
+    -- Character-triggered completion and smart auto-complete
     vim.api.nvim_create_autocmd('InsertCharPre', {
       buffer = args.buf,
       callback = function()
         local char = vim.v.char
+        
+        -- Check for special trigger characters
         for _, trigger in ipairs(triggers) do
           if char == trigger then
             vim.defer_fn(function()
@@ -927,50 +897,38 @@ vim.api.nvim_create_autocmd('FileType', {
                 end
               end
             end, 50)
-            break
+            return
           end
         end
-      end
-    })
-
-    -- Enhanced TextChangedI for filetype-specific completion
-    vim.api.nvim_create_autocmd('TextChangedI', {
-      buffer = args.buf,
-      callback = function()
-        if vim.fn.pumvisible() == 0 then
-          local line = vim.api.nvim_get_current_line()
-          local col = vim.api.nvim_win_get_cursor(0)[2]
-          local prefix = line:sub(1, col):match('[%w_]*$') or ''
-          local trigger_completion = false
-
-          if #prefix >= 2 then
-            -- 1. Check snippet matches
-            if #get_snippet_completions(prefix, ft) > 0 then
-              trigger_completion = true
-            end
-
-            -- 2. Check buffer word matches
-            if not trigger_completion and buffer_has_matches(prefix) then
-              trigger_completion = true
-            end
-          end
-
-          -- 3. Check path completion
-          if not trigger_completion and path_available() then
-            trigger_completion = true
-          end
-
-          -- Trigger completion
-          if trigger_completion then
-            vim.defer_fn(function()
-              if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
-                builtin_completion()
+        
+        -- Smart auto-completion for word characters after 2+ chars
+        if char:match('[%w_]') then
+          vim.defer_fn(function()
+            if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
+              local line = vim.api.nvim_get_current_line()
+              local col = vim.api.nvim_win_get_cursor(0)[2]
+              local prefix = line:sub(1, col):match('[%w_]*$') or ''
+              
+              if #prefix >= 2 then
+                -- Check for snippet matches
+                if #get_snippet_completions(prefix, ft) > 0 then
+                  builtin_completion()
+                  return
+                end
+                
+                -- Check for buffer word matches
+                if buffer_has_matches(prefix) then
+                  builtin_completion()
+                  return
+                end
               end
-            end, 100)
-          end
+            end
+          end, 100)
         end
       end
     })
+
+
   end
 })
 
