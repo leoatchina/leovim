@@ -12,13 +12,18 @@ local function pumvisible()
   return vim.fn.pumvisible() == 1
 end
 
+-- Local function for getting current mode
+local function mode()
+  return vim.fn.mode()
+end
+
 -- Completion menu styling
-set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
-set_hl(0, 'PmenuSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
-set_hl(0, 'PmenuKind', {bg = '#3b4252', fg = '#88c0d0'})
-set_hl(0, 'PmenuKindSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
-set_hl(0, 'PmenuExtra', {bg = '#3b4252', fg = '#8fbcbb'})
-set_hl(0, 'PmenuExtraSel', {bg = '#81a1c1', fg = '#2e3440'})
+-- set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
+-- set_hl(0, 'PmenuSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
+-- set_hl(0, 'PmenuKind', {bg = '#3b4252', fg = '#88c0d0'})
+-- set_hl(0, 'PmenuKindSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
+-- set_hl(0, 'PmenuExtra', {bg = '#3b4252', fg = '#8fbcbb'})
+-- set_hl(0, 'PmenuExtraSel', {bg = '#81a1c1', fg = '#2e3440'})
 
 -- Base directories
 local dict_base_dir = vim.fn.expand('$HOME/.leovim/pack/clone/opt/vim-dict/dict') .. '/'
@@ -237,8 +242,8 @@ local function expand_snippet()
   if first_placeholder_pos then
     vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_start})
     vim.defer_fn(function()
-      local mode = vim.fn.mode()
-      if mode == 'i' then
+      local current_mode = mode()
+      if current_mode == 'i' then
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
         vim.defer_fn(function()
           pcall(function()
@@ -290,8 +295,8 @@ local function jump_to_next_placeholder()
           local end_col = start_pos + #current_snippet_placeholders[i].text - 1
 
           vim.defer_fn(function()
-            local mode = vim.fn.mode()
-            if mode == 'i' then
+            local current_mode = mode()
+            if current_mode == 'i' then
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
               vim.defer_fn(function()
                 pcall(function()
@@ -344,8 +349,8 @@ local function jump_to_prev_placeholder()
           local end_col = start_pos + #current_snippet_placeholders[i].text - 1
 
           vim.defer_fn(function()
-            local mode = vim.fn.mode()
-            if mode == 'i' then
+            local current_mode = mode()
+            if current_mode == 'i' then
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
               vim.defer_fn(function()
                 pcall(function()
@@ -682,7 +687,7 @@ function _G.builtin_completion()
 
   -- Show completion menu
   if #all_matches > 0 then
-    if vim.fn.mode() == 'i' then
+    if mode() == 'i' then
       vim.fn.complete(start_col, all_matches)
     end
   end
@@ -772,8 +777,15 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Tab key: completion and snippet expansion
 map('i', '<Tab>', function()
   if pumvisible() then
-    -- Menu visible, select first item and confirm (triggers completed_item)
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n><C-y>', true, true, true), 'n', false)
+    -- Check if an item is already selected
+    local completed_item = vim.v.completed_item or {}
+    if vim.tbl_isempty(completed_item) then
+      -- No item selected, select first item and confirm
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n><C-y>', true, true, true), 'n', false)
+    else
+      -- Item already selected, just confirm it
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-y>', true, true, true), 'n', false)
+    end
     -- Delay snippet expansion
     vim.defer_fn(function()
       expand_snippet()
@@ -854,7 +866,7 @@ map('i', '<Up>', function()
 end, {expr = true, silent = true})
 
 -- ESC key: exit snippet mode
-map({'i', 's', 'v'}, '<Esc>', function()
+map({'i', 's'}, '<Esc>', function()
   if snippet_mode_active then
     snippet_mode_active = false
     current_snippet_placeholders = {}
@@ -900,7 +912,7 @@ vim.api.nvim_create_autocmd('FileType', {
         for _, trigger in ipairs(triggers) do
           if char == trigger then
             vim.defer_fn(function()
-              if not pumvisible() and vim.fn.mode() == 'i' then
+              if not pumvisible() and mode() == 'i' then
                 local col = vim.api.nvim_win_get_cursor(0)[2]
                 if col > 0 then
                   builtin_completion()
@@ -914,7 +926,7 @@ vim.api.nvim_create_autocmd('FileType', {
         -- Smart auto-completion for word characters after 2+ chars
         if char:match('[%w_]') then
           vim.defer_fn(function()
-            if not pumvisible() and vim.fn.mode() == 'i' then
+            if not pumvisible() and mode() == 'i' then
               local line = vim.api.nvim_get_current_line()
               local col = vim.api.nvim_win_get_cursor(0)[2]
               local prefix = line:sub(1, col):match('[%w_]*$') or ''
@@ -1036,7 +1048,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   end
 
   print("\nTriggering manual completion...")
-  if vim.fn.mode() == 'i' then
+  if mode() == 'i' then
     builtin_completion()
   else
     print("Note: Can only trigger completion in insert mode")
