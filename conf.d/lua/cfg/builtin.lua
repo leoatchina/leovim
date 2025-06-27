@@ -6,6 +6,12 @@
 -- ============================================================================
 local map = vim.keymap.set
 local set_hl = vim.api.nvim_set_hl
+
+-- Local function for checking popup menu visibility
+local function pumvisible()
+  return vim.fn.pumvisible() == 1
+end
+
 -- Completion menu styling
 set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
 set_hl(0, 'PmenuSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
@@ -22,8 +28,6 @@ local snippets_base_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-s
 local current_snippet_placeholders = {}
 local current_placeholder_index = 0
 local snippet_mode_active = false
-
-
 
 -- Local caches
 local snippet_cache = {}
@@ -383,6 +387,13 @@ end
 -- Enhanced check if omni completion can be triggered
 local function omni_available()
   local omni_func = vim.bo.omnifunc
+  local filetype = vim.bo.filetype
+
+  -- Special handling for Python: if no python3 support, disable omni completion
+  if filetype == 'python' and vim.fn.has('python3') == 0 then
+    return false
+  end
+
   if omni_func == '' or omni_func == 'syntaxcomplete#Complete' then
     return false
   end
@@ -390,7 +401,6 @@ local function omni_available()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local before_cursor = line:sub(1, col)
-  local filetype = vim.bo.filetype
 
   -- Enhanced patterns for different file types
   local patterns = {
@@ -708,6 +718,10 @@ vim.api.nvim_create_autocmd('FileType', {
     if ft == 'python' then
       if vim.fn.has('python3') == 1 then
         omni_func = 'python3complete#Complete'
+      else
+        -- For Python without python3 support, don't set omnifunc or syntaxcomplete
+        -- This will force the system to use dictionary completion directly
+        vim.bo[args.buf].omnifunc = ''
       end
     elseif omni_funcs[ft] then
       omni_func = omni_funcs[ft]
@@ -716,8 +730,8 @@ vim.api.nvim_create_autocmd('FileType', {
     if omni_func then
       -- Set valid omnifunc
       vim.bo[args.buf].omnifunc = omni_func
-    else
-      -- Use syntaxcomplete as fallback
+    elseif ft ~= 'python' then
+      -- Use syntaxcomplete as fallback for non-Python files
       vim.bo[args.buf].omnifunc = 'syntaxcomplete#Complete'
     end
 
@@ -757,7 +771,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 -- Tab key: completion and snippet expansion
 map('i', '<Tab>', function()
-  if vim.fn.pumvisible() == 1 then
+  if pumvisible() then
     -- Menu visible, select first item and confirm (triggers completed_item)
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n><C-y>', true, true, true), 'n', false)
     -- Delay snippet expansion
@@ -773,7 +787,7 @@ end, {expr = true, silent = true})
 
 -- Shift-Tab: previous selection in completion menu
 map('i', '<S-Tab>', function()
-  if vim.fn.pumvisible() == 1 then
+  if pumvisible() then
     return vim.api.nvim_replace_termcodes('<C-p>', true, true, true)
   else
     return vim.api.nvim_replace_termcodes('<S-Tab>', true, true, true)
@@ -782,7 +796,7 @@ end, {expr = true, silent = true})
 
 -- Enter key: confirm selection (no snippet expansion)
 map('i', '<CR>', function()
-  if vim.fn.pumvisible() == 1 then
+  if pumvisible() then
     -- Directly confirm selection without expanding snippet
     return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
   else
@@ -792,7 +806,7 @@ end, {expr = true, silent = true})
 
 -- Ctrl-Space: manual completion trigger
 map('i', '<C-@>', function()
-  if vim.fn.pumvisible() == 1 then
+  if pumvisible() then
     return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
   else
     builtin_completion()
@@ -824,7 +838,7 @@ end, {expr = true, silent = true})
 
 -- Other completion navigation - only when menu is visible
 map('i', '<Down>', function()
-  if vim.fn.pumvisible() == 1 then
+  if pumvisible() then
     return '<C-n>'
   else
     return '<Down>'
@@ -832,7 +846,7 @@ map('i', '<Down>', function()
 end, {expr = true, silent = true})
 
 map('i', '<Up>', function()
-  if vim.fn.pumvisible() == 1 then
+  if pumvisible() then
     return '<C-p>'
   else
     return '<Up>'
@@ -885,12 +899,12 @@ vim.api.nvim_create_autocmd('FileType', {
       buffer = args.buf,
       callback = function()
         local char = vim.v.char
-        
+
         -- Check for special trigger characters
         for _, trigger in ipairs(triggers) do
           if char == trigger then
             vim.defer_fn(function()
-              if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
+              if not pumvisible() and vim.fn.mode() == 'i' then
                 local col = vim.api.nvim_win_get_cursor(0)[2]
                 if col > 0 then
                   builtin_completion()
@@ -900,11 +914,11 @@ vim.api.nvim_create_autocmd('FileType', {
             return
           end
         end
-        
-        -- Smart auto-completion for word characters after 2+ chars
+
+                -- Smart auto-completion for word characters after 2+ chars
         if char:match('[%w_]') then
           vim.defer_fn(function()
-            if vim.fn.pumvisible() == 0 and vim.fn.mode() == 'i' then
+            if not pumvisible() and vim.fn.mode() == 'i' then
               local line = vim.api.nvim_get_current_line()
               local col = vim.api.nvim_win_get_cursor(0)[2]
               local prefix = line:sub(1, col):match('[%w_]*$') or ''
