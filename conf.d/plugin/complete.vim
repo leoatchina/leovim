@@ -97,9 +97,9 @@ if Planned('vim-vsnip')
     let g:vsnip_snippet_dir = expand("~/.leovim/conf.d/snippets")
     nnoremap <M-h>e :VsnipOpen<Cr>
     if PlannedLeaderf()
-        nnoremap <M-h>s :Leaderf file --no-sort ~/.leovim/conf.d/snippets<Cr>
+        nnoremap <M-h>s :Leaderf file --no-sort ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
     elseif PlannedFzf()
-        nnoremap <M-h>s :FzfFiles ~/.leovim/conf.d/snippets<Cr>
+        nnoremap <M-h>s :FzfFiles ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
     endif
     if InstalledCoc()
         call coc#config("snippets.userSnippetsDirectory", Expand("~/.leovim/conf.d/snippets"))

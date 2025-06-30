@@ -107,11 +107,9 @@ endif
 " ------------------------------
 if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'rafamadriz/friendly-snippets'
-    if index(['mcm', 'cmp'], g:complete_engine) >= 0
-        PlugAdd 'hrsh7th/vim-vsnip'
-        if g:complete_engine == 'mcm'
-            PlugAdd 'hrsh7th/vim-vsnip-integ'
-        endif
+    PlugAdd 'hrsh7th/vim-vsnip'
+    if g:complete_engine == 'mcm'
+        PlugAdd 'hrsh7th/vim-vsnip-integ'
     endif
 endif
 " ------------------------------

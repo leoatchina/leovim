@@ -1,0 +1,11 @@
+{
+  "get_current_work_dir": {
+    "prefix": "gcwd",
+    "body": [
+      "def get_current_work_dir():",
+      "\tdef fake():",
+      "\t\tpass",
+      "\treturn os.path.abspath(os.path.dirname(fake.__code__.co_filename))"
+    ]
+  }
+}
