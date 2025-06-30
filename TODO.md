@@ -1,4 +1,4 @@
-# TODO:
+ TODO:
 ## config:
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
@@ -115,6 +115,7 @@
     - [x] create .vim folder for neoconf
     - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
 - [x] optimize nvim-0.11 builtin completion
+- [ ] builtin的snippets问题
 - [ ] gtags without cscope
 - [ ] config formatter.nvim
 - [ ] Ai related 
