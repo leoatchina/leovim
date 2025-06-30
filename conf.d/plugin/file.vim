@@ -279,7 +279,6 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>k :call TabeOpen("$CFG_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>v :call TabeOpen("$CFG_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$CFG_DIR/opt.vim")<Cr>
-    nnoremap <silent><M-h>f :call TabeOpen("$CONF_D_DIR/plugin/file.vim")<Cr>
     if PlannedLeaderf()
         nnoremap <silent><M-h>a :Leaderf file --regex --no-sort ~/.leovim/conf.d/autoload<Cr>
         nnoremap <silent><M-h>p :Leaderf file --regex --no-sort ~/.leovim/conf.d/plugin<Cr>
