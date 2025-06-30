@@ -584,11 +584,13 @@ local function path_available()
   local before_cursor = line:sub(1, col)
 
   local path_patterns = {
-    '/[^%s]*$',           -- Absolute path
-    '%./[^%s]*$',         -- Relative path ./
-    '%.%./[^%s]*$',       -- Relative path ../
-    '~[^%s]*$',           -- Home directory path
-    '[%w_%-%.]+/[^%s]*$', -- Directory/file path
+    '/[^%s"\']*$',                    -- Absolute path
+    '%./[^%s"\']*$',                  -- Relative path ./
+    '%.%./[^%s"\']*$',                -- Relative path ../
+    '~[^%s"\']*$',                    -- Home directory path
+    '[%w_%-%.]+/[^%s"\']*$',          -- Directory/file path
+    '"[^"]*$',                        -- Path inside double quotes
+    '\'[^\']*$',                      -- Path inside single quotes
   }
 
   for _, pattern in ipairs(path_patterns) do
@@ -623,9 +625,17 @@ local function get_path_completions(path_prefix)
       local is_dir = vim.fn.isdirectory(path) == 1
       local basename = vim.fn.fnamemodify(path, ':t')
       if basename ~= '' and basename:lower():find(file_part:lower(), 1, true) == 1 then
-        local display_name = basename .. (is_dir and '/' or '')
+        -- 使用完整路径作为word，而不仅仅是basename
+        local full_path = path .. (is_dir and '/' or '')
+        -- 对于相对路径，保持原始的路径前缀格式
+        local word = full_path
+        if dir_part == './' and not path_prefix:match('^%.%./') then
+          -- 如果原始输入没有 ./，则去掉 ./
+          word = word:gsub('^%./', '')
+        end
+        
         table.insert(matches, {
-          word = display_name,
+          word = word,
           menu = '[P]',
           info = path
         })
@@ -640,12 +650,40 @@ end
 -- UNIFIED COMPLETION FUNCTION
 -- ============================================================================
 
+-- Extract path prefix for path completion
+local function extract_path_prefix(line, col)
+  local before_cursor = line:sub(1, col)
+  
+  -- Try to extract path from quotes first
+  local quoted_path = before_cursor:match('"([^"]*)$') or before_cursor:match('\'([^\']*)$')
+  if quoted_path then
+    return quoted_path
+  end
+  
+  -- Extract regular path patterns
+  local path_patterns = {
+    '([/~][^%s"\']*$)',                -- Absolute path or home path
+    '(%.%./[^%s"\']*$)',               -- Relative path ../
+    '(%./[^%s"\']*$)',                 -- Relative path ./
+    '([%w_%-%.]+/[^%s"\']*$)',         -- Directory/file path
+  }
+  
+  for _, pattern in ipairs(path_patterns) do
+    local path = before_cursor:match(pattern)
+    if path then
+      return path
+    end
+  end
+  
+  return before_cursor:match('[^%s]*$') or ''
+end
+
 -- Main unified completion function with new priority: snippet -> omni -> buffer -> dict -> path
 function _G.builtin_completion()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local prefix = line:sub(1, col):match('[%w_]*$') or ''
-  local path_prefix = line:sub(1, col):match('[^%s]*$') or ''
+  local path_prefix = extract_path_prefix(line, col)
 
   local omni_can_trigger = omni_available()
   local path_can_trigger = path_available()
@@ -885,19 +923,19 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
     local ft = vim.bo[args.buf].filetype
     local ft_triggers = {
-      lua = { '.', ':' },
-      python = { '.', ':' },
-      javascript = { '.', ':' },
-      typescript = { '.', ':' },
-      cpp = { '.', '::', '->' },
-      c = { '.', '->' },
-      html = { '<', '/', '>' },
-      css = { ':', ';' },
-      vim = { ':' },
-      java = { '.', ':' },
-      php = { '.', '->', '::' },
-      go = { '.', ':' },
-      default = { '.', ':', '>' },
+      lua = { '.', ':', '/', '~' },
+      python = { '.', ':', '/', '~' },
+      javascript = { '.', ':', '/', '~' },
+      typescript = { '.', ':', '/', '~' },
+      cpp = { '.', '::', '->', '/', '~' },
+      c = { '.', '->', '/', '~' },
+      html = { '<', '/', '>', '~' },
+      css = { ':', ';', '/', '~' },
+      vim = { ':', '/', '~' },
+      java = { '.', ':', '/', '~' },
+      php = { '.', '->', '::', '/', '~' },
+      go = { '.', ':', '/', '~' },
+      default = { '.', ':', '>', '/', '~' },
     }
 
     local triggers = ft_triggers[ft] or ft_triggers.default
@@ -921,6 +959,18 @@ vim.api.nvim_create_autocmd('FileType', {
             end, 50)
             return
           end
+        end
+        
+        -- Check for path completion triggers after inputting the character
+        if char:match('[%w%._%-]') then
+          vim.defer_fn(function()
+            if not pumvisible() and mode() == 'i' then
+              if path_available() then
+                builtin_completion()
+                return
+              end
+            end
+          end, 50)
         end
         
         -- Smart auto-completion for word characters after 2+ chars
@@ -980,7 +1030,7 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local prefix = line:sub(1, col):match('[%w_]*$') or ''
-  local path_prefix = line:sub(1, col):match('[^%s]*$') or ''
+  local path_prefix = extract_path_prefix(line, col)
   local before_cursor = line:sub(1, col)
   local filetype = vim.bo.filetype
 
