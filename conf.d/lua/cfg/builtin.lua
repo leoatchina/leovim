@@ -854,8 +854,8 @@ map('i', '<CR>', function()
   end
 end, {expr = true, silent = true})
 
--- Ctrl-Space: manual completion trigger
-map('i', '<C-@>', function()
+-- Ctrl-L: manual completion trigger
+map('i', '<C-l>', function()
   if pumvisible() then
     return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
   else
