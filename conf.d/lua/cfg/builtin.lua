@@ -17,6 +17,11 @@ local function mode()
   return vim.fn.mode()
 end
 
+-- Local function for checking if running on Windows
+local function is_windows()
+  return vim.loop.os_uname().sysname:find("Windows") ~= nil or vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
+end
+
 -- Completion menu styling
 -- set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
 -- set_hl(0, 'PmenuSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
@@ -577,27 +582,116 @@ end
 -- PATH COMPLETION FUNCTIONS
 -- ============================================================================
 
+-- Extract path prefix for path completion
+local function extract_path_prefix(line, col)
+  local before_cursor = line:sub(1, col)
+  
+  -- Try to extract path from quotes first
+  local quoted_path = before_cursor:match('"([^"]*)$') or before_cursor:match('\'([^\']*)$')
+  if quoted_path then
+    return quoted_path
+  end
+  
+  -- Extract regular path patterns
+  local path_patterns
+  if is_windows() then
+    path_patterns = {
+      -- Windows patterns
+      '([A-Za-z]:[/\\][^%s"\']*$)',        -- Windows absolute path (C:\ or C:/)
+      '([/~][^%s"\']*$)',                  -- Unix-style absolute path or home path
+      '(%.%.[/\\][^%s"\']*$)',             -- Relative path ..\ or ../
+      '(%.[/\\][^%s"\']*$)',               -- Relative path .\ or ./
+      '([%w_%-%.]+[/\\][^%s"\']*$)',       -- Directory/file path with \ or /
+      -- Enhanced patterns for directory names without separators
+      '([%w_%-%.]+$)',                     -- Simple directory/file name
+    }
+  else
+    path_patterns = {
+      -- Unix patterns
+      '([/~][^%s"\']*$)',                  -- Absolute path or home path
+      '(%.%./[^%s"\']*$)',                 -- Relative path ../
+      '(%./[^%s"\']*$)',                   -- Relative path ./
+      '([%w_%-%.]+/[^%s"\']*$)',           -- Directory/file path
+      -- Enhanced patterns for directory names without separators
+      '([%w_%-%.]+$)',                     -- Simple directory/file name
+    }
+  end
+  
+  for _, pattern in ipairs(path_patterns) do
+    local path = before_cursor:match(pattern)
+    if path then
+      -- Additional check for directory names: if it's a known directory, include it
+      if not path:match('[/\\]') then
+        -- Check if this looks like a directory name
+        if vim.fn.isdirectory(path) == 1 then
+          return path
+        end
+        -- Check if there are similar directory names starting with this prefix
+        local glob_pattern = path .. '*'
+        local matches = vim.fn.glob(glob_pattern, false, true)
+        for _, match in ipairs(matches) do
+          if vim.fn.isdirectory(match) == 1 then
+            return path
+          end
+        end
+      else
+        return path
+      end
+    end
+  end
+  
+  return before_cursor:match('[^%s]*$') or ''
+end
+
 -- Check if path completion can be triggered
 local function path_available()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local before_cursor = line:sub(1, col)
 
-  local path_patterns = {
-    '/[^%s"\']*$',                    -- Absolute path
-    '%./[^%s"\']*$',                  -- Relative path ./
-    '%.%./[^%s"\']*$',                -- Relative path ../
-    '~[^%s"\']*$',                    -- Home directory path
-    '[%w_%-%.]+/[^%s"\']*$',          -- Directory/file path
-    '"[^"]*$',                        -- Path inside double quotes
-    '\'[^\']*$',                      -- Path inside single quotes
-  }
+  local path_patterns
+  if is_windows() then
+    path_patterns = {
+      -- Windows patterns
+      '[A-Za-z]:[/\\][^%s"\']*$',         -- Windows absolute path (C:\ or C:/)
+      '/[^%s"\']*$',                      -- Unix-style absolute path on Windows
+      '%./[^%s"\']*$',                    -- Relative path ./
+      '%.%./[^%s"\']*$',                  -- Relative path ../
+      '%.[/\\][^%s"\']*$',                -- Relative path .\ or ./
+      '%.%.[/\\][^%s"\']*$',              -- Relative path ..\ or ../
+      '~[/\\][^%s"\']*$',                 -- Home directory path with \ or /
+      '[%w_%-%.]+[/\\][^%s"\']*$',        -- Directory/file path with \ or /
+      '"[^"]*$',                          -- Path inside double quotes
+      '\'[^\']*$',                        -- Path inside single quotes
+    }
+  else
+    path_patterns = {
+      -- Unix patterns
+      '/[^%s"\']*$',                      -- Absolute path
+      '%./[^%s"\']*$',                    -- Relative path ./
+      '%.%./[^%s"\']*$',                  -- Relative path ../
+      '~[^%s"\']*$',                      -- Home directory path
+      '[%w_%-%.]+/[^%s"\']*$',            -- Directory/file path
+      '"[^"]*$',                          -- Path inside double quotes
+      '\'[^\']*$',                        -- Path inside single quotes
+    }
+  end
 
   for _, pattern in ipairs(path_patterns) do
     if before_cursor:match(pattern) then
       return true
     end
   end
+  
+  -- Enhanced check: also consider if we're at the end of a known directory name
+  local potential_path = extract_path_prefix(line, col)
+  if potential_path and #potential_path > 0 then
+    local path_without_quotes = potential_path:gsub('^[\'"]', ''):gsub('[\'"]$', '')
+    if vim.fn.isdirectory(path_without_quotes) == 1 then
+      return true
+    end
+  end
+  
   return false
 end
 
@@ -610,34 +704,91 @@ local function get_path_completions(path_prefix)
   end
 
   pcall(function()
-    local dir_part = path_prefix:match('^(.*/)')
-    local file_part = path_prefix:match('([^/]*)$')
-
-    if not dir_part then
-      dir_part = './'
-      file_part = path_prefix
+    local dir_part, file_part
+    local path_sep = is_windows() and '[/\\]' or '/'
+    local preferred_sep = is_windows() and '\\' or '/'
+    
+    -- Enhanced path parsing for better directory navigation
+    local path_without_quotes = path_prefix:gsub('^[\'"]', ''):gsub('[\'"]$', '')
+    
+    if is_windows() then
+      -- Windows path parsing - handle both / and \ separators
+      dir_part = path_without_quotes:match('^(.*[/\\])')
+      file_part = path_without_quotes:match('([^/\\]*)$')
+    else
+      -- Unix path parsing
+      dir_part = path_without_quotes:match('^(.*/)')
+      file_part = path_without_quotes:match('([^/]*)$')
     end
 
-    local pattern = dir_part .. file_part .. '*'
+    -- Special handling for directory completion
+    if not dir_part and vim.fn.isdirectory(path_without_quotes) == 1 then
+      -- If the path is a directory without trailing separator, treat it as dir_part
+      dir_part = path_without_quotes .. preferred_sep
+      file_part = ''
+    elseif not dir_part then
+      dir_part = '.' .. preferred_sep
+      file_part = path_without_quotes
+    end
+
+    -- Normalize path separators for glob
+    local normalized_dir = dir_part:gsub('\\', '/')
+    local pattern = normalized_dir .. file_part .. '*'
     local glob_results = vim.fn.glob(pattern, false, true)
+
+    -- Sort results: directories first, then files
+    table.sort(glob_results, function(a, b)
+      local a_is_dir = vim.fn.isdirectory(a) == 1
+      local b_is_dir = vim.fn.isdirectory(b) == 1
+      if a_is_dir and not b_is_dir then
+        return true
+      elseif not a_is_dir and b_is_dir then
+        return false
+      else
+        return a < b
+      end
+    end)
 
     for _, path in ipairs(glob_results) do
       local is_dir = vim.fn.isdirectory(path) == 1
       local basename = vim.fn.fnamemodify(path, ':t')
-      if basename ~= '' and basename:lower():find(file_part:lower(), 1, true) == 1 then
-        -- 使用完整路径作为word，而不仅仅是basename
-        local full_path = path .. (is_dir and '/' or '')
-        -- 对于相对路径，保持原始的路径前缀格式
-        local word = full_path
-        if dir_part == './' and not path_prefix:match('^%.%./') then
-          -- 如果原始输入没有 ./，则去掉 ./
-          word = word:gsub('^%./', '')
+      if basename ~= '' and (file_part == '' or basename:lower():find(file_part:lower(), 1, true) == 1) then
+        -- 使用完整路径作为word，但保持用户输入的路径分隔符风格
+        local full_path = path
+        
+        -- Convert path separators to match user's input style
+        if is_windows() then
+          if path_prefix:find('\\') then
+            -- User prefers backslashes
+            full_path = full_path:gsub('/', '\\')
+          elseif path_prefix:find('/') then
+            -- User prefers forward slashes
+            full_path = full_path:gsub('\\', '/')
+          end
         end
+        
+        -- Add directory separator for directories
+        if is_dir then
+          local sep = is_windows() and (path_prefix:find('\\') and '\\' or '/') or '/'
+          full_path = full_path .. sep
+        end
+        
+        -- Handle relative path formatting
+        local word = full_path
+        if dir_part == ('./' .. (is_windows() and '' or '')) or dir_part == ('.' .. preferred_sep) then
+          if not path_prefix:match('^%.') then
+            -- Remove ./ or .\ prefix if user didn't type it
+            word = word:gsub('^%.' .. (is_windows() and '[/\\]' or '/'), '')
+          end
+        end
+        
+        -- Enhanced menu indication for directories
+        local menu = is_dir and '[P/]' or '[P]'
         
         table.insert(matches, {
           word = word,
-          menu = '[P]',
-          info = path
+          menu = menu,
+          info = path .. (is_dir and ' (directory)' or '')
         })
       end
     end
@@ -649,34 +800,6 @@ end
 -- ============================================================================
 -- UNIFIED COMPLETION FUNCTION
 -- ============================================================================
-
--- Extract path prefix for path completion
-local function extract_path_prefix(line, col)
-  local before_cursor = line:sub(1, col)
-  
-  -- Try to extract path from quotes first
-  local quoted_path = before_cursor:match('"([^"]*)$') or before_cursor:match('\'([^\']*)$')
-  if quoted_path then
-    return quoted_path
-  end
-  
-  -- Extract regular path patterns
-  local path_patterns = {
-    '([/~][^%s"\']*$)',                -- Absolute path or home path
-    '(%.%./[^%s"\']*$)',               -- Relative path ../
-    '(%./[^%s"\']*$)',                 -- Relative path ./
-    '([%w_%-%.]+/[^%s"\']*$)',         -- Directory/file path
-  }
-  
-  for _, pattern in ipairs(path_patterns) do
-    local path = before_cursor:match(pattern)
-    if path then
-      return path
-    end
-  end
-  
-  return before_cursor:match('[^%s]*$') or ''
-end
 
 -- Main unified completion function with new priority: snippet -> omni -> buffer -> dict -> path
 function _G.builtin_completion()
@@ -726,7 +849,10 @@ function _G.builtin_completion()
   -- Show completion menu
   if #all_matches > 0 then
     if mode() == 'i' then
-      vim.fn.complete(start_col, all_matches)
+      -- Use pcall to safely call complete function
+      pcall(function()
+        vim.fn.complete(start_col, all_matches)
+      end)
     end
   end
 
@@ -854,12 +980,52 @@ map('i', '<CR>', function()
   end
 end, {expr = true, silent = true})
 
--- Ctrl-L: manual completion trigger
+-- Ctrl-L: enhanced manual completion trigger with directory navigation
 map('i', '<C-l>', function()
   if pumvisible() then
     return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
   else
-    builtin_completion()
+    -- Enhanced path completion trigger
+    vim.defer_fn(function()
+      if mode() == 'i' and not pumvisible() then
+        local line = vim.api.nvim_get_current_line()
+        local col = vim.api.nvim_win_get_cursor(0)[2]
+        local before_cursor = line:sub(1, col)
+        
+        -- Check if we're in a potential path context
+        local potential_path = extract_path_prefix(line, col)
+        
+        -- If we have a potential path, enhance it for directory completion
+        if potential_path and #potential_path > 0 then
+          -- Check if path looks like a directory (ends with separator or is a known directory)
+          local is_dir_path = false
+          local path_without_quotes = potential_path:gsub('^[\'"]', ''):gsub('[\'"]$', '')
+          
+          -- Check if path ends with separator
+          if path_without_quotes:match('[/\\]$') then
+            is_dir_path = true
+          else
+            -- Check if it's an existing directory
+            if vim.fn.isdirectory(path_without_quotes) == 1 then
+              is_dir_path = true
+              -- Auto-append separator for directory navigation
+              local sep = is_windows() and '\\' or '/'
+              -- Determine user's preferred separator style
+              if is_windows() and before_cursor:find('/') and not before_cursor:find('\\') then
+                sep = '/'
+              end
+              vim.api.nvim_put({sep}, 'c', true, true)
+              -- Update cursor position
+              local new_col = vim.api.nvim_win_get_cursor(0)[2]
+              vim.api.nvim_win_set_cursor(0, {vim.api.nvim_win_get_cursor(0)[1], new_col})
+            end
+          end
+        end
+        
+        -- Trigger completion
+        builtin_completion()
+      end
+    end, 10)
     return ''
   end
 end, {expr = true, silent = true})
@@ -937,6 +1103,14 @@ vim.api.nvim_create_autocmd('FileType', {
       go = { '.', ':', '/', '~' },
       default = { '.', ':', '>', '/', '~' },
     }
+    
+    -- Add Windows backslash triggers if on Windows
+    if is_windows() then
+      for ft, triggers in pairs(ft_triggers) do
+        -- Add backslash to each filetype's triggers
+        table.insert(triggers, '\\')
+      end
+    end
 
     local triggers = ft_triggers[ft] or ft_triggers.default
 
