@@ -115,7 +115,8 @@
     - [x] create .vim folder for neoconf
     - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
 - [x] optimize nvim-0.11 builtin completion
-- [ ] builtin的snippets问题
+- [x] builtin的snippets问题
+- [ ] windows gvim add DETACH to  winbar 
 - [ ] gtags without cscope
 - [ ] config formatter.nvim
 - [ ] Ai related 
