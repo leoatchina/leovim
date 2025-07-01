@@ -33,6 +33,7 @@ end
 -- Base directories
 local dict_base_dir = vim.fn.expand('$HOME/.leovim/pack/clone/opt/vim-dict/dict') .. '/'
 local snippets_base_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-snippets/snippets') .. '/'
+local user_snippets_base_dir = vim.fn.expand('$HOME/.leovim/conf.d/snippets') .. '/'
 
 -- Local variables for current snippet state
 local current_snippet_placeholders = {}
@@ -96,21 +97,29 @@ local function load_snippets_for_filetype(filetype)
   end
 
   local snippet_files = {}
-  -- Load global snippets
-  local global_file = snippets_base_dir .. 'global.json'
-  if vim.fn.filereadable(global_file) == 1 then
-    table.insert(snippet_files, global_file)
-  end
 
-  -- Load filetype-specific snippets - prioritize subdirectories
-  local ft_dir = snippets_base_dir .. filetype
-  if vim.fn.isdirectory(ft_dir) == 1 then
-    local ft_dir_files = vim.fn.glob(ft_dir .. '/*.json', true, true)
-    vim.list_extend(snippet_files, ft_dir_files)
-  else
-    local ft_file = snippets_base_dir .. filetype .. '.json'
-    if vim.fn.filereadable(ft_file) == 1 then
-      table.insert(snippet_files, ft_file)
+  -- Load snippets from both directories: friendly-snippets and user snippets
+  local snippet_dirs = {snippets_base_dir, user_snippets_base_dir}
+
+  for _, base_dir in ipairs(snippet_dirs) do
+    if vim.fn.isdirectory(base_dir) == 1 then
+      -- Load global snippets
+      local global_file = base_dir .. 'global.json'
+      if vim.fn.filereadable(global_file) == 1 then
+        table.insert(snippet_files, global_file)
+      end
+
+      -- Load filetype-specific snippets - prioritize subdirectories
+      local ft_dir = base_dir .. filetype
+      if vim.fn.isdirectory(ft_dir) == 1 then
+        local ft_dir_files = vim.fn.glob(ft_dir .. '/*.json', true, true)
+        vim.list_extend(snippet_files, ft_dir_files)
+      else
+        local ft_file = base_dir .. filetype .. '.json'
+        if vim.fn.filereadable(ft_file) == 1 then
+          table.insert(snippet_files, ft_file)
+        end
+      end
     end
   end
 
@@ -122,16 +131,20 @@ local function load_snippets_for_filetype(filetype)
   }
 
   if aliases[filetype] then
-    for _, alias in ipairs(aliases[filetype]) do
-      local alias_file = snippets_base_dir .. alias .. '.json'
-      if vim.fn.filereadable(alias_file) == 1 then
-        table.insert(snippet_files, alias_file)
-      end
+    for _, base_dir in ipairs(snippet_dirs) do
+      if vim.fn.isdirectory(base_dir) == 1 then
+        for _, alias in ipairs(aliases[filetype]) do
+          local alias_file = base_dir .. alias .. '.json'
+          if vim.fn.filereadable(alias_file) == 1 then
+            table.insert(snippet_files, alias_file)
+          end
 
-      local alias_dir = snippets_base_dir .. alias
-      if vim.fn.isdirectory(alias_dir) == 1 then
-        local alias_dir_files = vim.fn.glob(alias_dir .. '/*.json', true, true)
-        vim.list_extend(snippet_files, alias_dir_files)
+          local alias_dir = base_dir .. alias
+          if vim.fn.isdirectory(alias_dir) == 1 then
+            local alias_dir_files = vim.fn.glob(alias_dir .. '/*.json', true, true)
+            vim.list_extend(snippet_files, alias_dir_files)
+          end
+        end
       end
     end
   end
@@ -185,25 +198,69 @@ local function expand_snippet()
 
   local processed_body = body
   local placeholders = {}
+  local first_placeholder_num = nil
 
-  -- Process ${n:default} format placeholders
-  processed_body = processed_body:gsub('%$%{(%d+):([^}]*)%}', function(num, default)
-    local placeholder_num = tonumber(num)
-    placeholders[placeholder_num] = {text = default}
-    return default
-  end)
+  -- Recursive function to process nested placeholders from innermost to outermost
+  local function process_placeholders_recursive(text)
+    local changed = true
+    local result = text
 
-  -- Process simple $n format placeholders
+    while changed do
+      changed = false
+
+      -- First pass: Process innermost placeholders (no nested ${} inside)
+      result = result:gsub('%$%{(%d+):([^{}]*)%}', function(num, default)
+        changed = true
+        local placeholder_num = tonumber(num)
+        placeholders[placeholder_num] = {text = default, has_content = #default > 0}
+        if not first_placeholder_num or placeholder_num < first_placeholder_num then
+          first_placeholder_num = placeholder_num
+        end
+
+        if #default > 0 then
+          return default
+        else
+          return '___PLACEHOLDER_' .. placeholder_num .. '___'
+        end
+      end)
+
+      -- Second pass: Process ${n} format (no content)
+      result = result:gsub('%$%{(%d+)%}', function(num)
+        changed = true
+        local placeholder_num = tonumber(num)
+        if placeholder_num == 0 then
+          placeholders[0] = {text = '', has_content = false}
+          return ''
+        else
+          placeholders[placeholder_num] = {text = '', has_content = false}
+          if not first_placeholder_num or placeholder_num < first_placeholder_num then
+            first_placeholder_num = placeholder_num
+          end
+          return '___PLACEHOLDER_' .. placeholder_num .. '___'
+        end
+      end)
+    end
+
+    return result
+  end
+
+  -- Process all placeholders recursively
+  processed_body = process_placeholders_recursive(processed_body)
+
+  -- Final pass: Process simple $n format placeholders
   processed_body = processed_body:gsub('%$(%d+)', function(num)
     local placeholder_num = tonumber(num)
     if placeholder_num == 0 then
-      placeholders[0] = {text = ''}
+      placeholders[0] = {text = '', has_content = false}
       return ''
     else
       if not placeholders[placeholder_num] then
-        placeholders[placeholder_num] = {text = ''}
+        placeholders[placeholder_num] = {text = '', has_content = false}
+        if not first_placeholder_num or placeholder_num < first_placeholder_num then
+          first_placeholder_num = placeholder_num
+        end
       end
-      return placeholders[placeholder_num].text
+      return '___PLACEHOLDER_' .. placeholder_num .. '___'
     end
   end)
 
@@ -224,24 +281,41 @@ local function expand_snippet()
 
   vim.api.nvim_buf_set_lines(0, row - 1, row, false, new_lines)
 
-  -- Find first placeholder position
+  -- Find first placeholder position using our markers
   local first_placeholder_pos = nil
-  for line_idx, line_content in ipairs(new_lines) do
-    for placeholder_num = 1, 10 do
-      if placeholders[placeholder_num] and placeholders[placeholder_num].text ~= '' then
-        local start_pos = line_content:find(placeholders[placeholder_num].text, 1, true)
+  if first_placeholder_num then
+    local marker = '___PLACEHOLDER_' .. first_placeholder_num .. '___'
+    for line_idx, line_content in ipairs(new_lines) do
+      local start_pos = line_content:find(marker, 1, true)
+      if start_pos then
+        -- Replace the marker with empty string
+        local escaped_marker = marker:gsub('([%(%)%.%+%-%*%?%[%]%^%$%%])', '%%%1')
+        local updated_line = line_content:gsub(escaped_marker, '')
+        new_lines[line_idx] = updated_line
+        vim.api.nvim_buf_set_lines(0, row - 1 + line_idx - 1, row - 1 + line_idx, false, {updated_line})
+
+        first_placeholder_pos = {
+          row = row - 1 + line_idx - 1,
+          col_start = start_pos - 1,
+          col_end = start_pos - 1,
+          text = ''
+        }
+        break
+      elseif placeholders[first_placeholder_num] and placeholders[first_placeholder_num].has_content then
+        -- For placeholders with content, find by text
+        local placeholder_text = placeholders[first_placeholder_num].text
+        local start_pos = line_content:find(placeholder_text, 1, true)
         if start_pos then
           first_placeholder_pos = {
             row = row - 1 + line_idx - 1,
             col_start = start_pos - 1,
-            col_end = start_pos + #placeholders[placeholder_num].text - 1,
-            text = placeholders[placeholder_num].text
+            col_end = start_pos + #placeholder_text - 1,
+            text = placeholder_text
           }
           break
         end
       end
     end
-    if first_placeholder_pos then break end
   end
 
   if first_placeholder_pos then
@@ -291,40 +365,56 @@ local function jump_to_next_placeholder()
   current_placeholder_index = current_placeholder_index + 1
 
   for i = current_placeholder_index, 10 do
-    if current_snippet_placeholders[i] and current_snippet_placeholders[i].text ~= '' then
+    if current_snippet_placeholders[i] then
       local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-      for row, line in ipairs(lines) do
-        local start_pos = line:find(current_snippet_placeholders[i].text, 1, true)
-        if start_pos then
-          vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
-          local end_col = start_pos + #current_snippet_placeholders[i].text - 1
+      local marker = '___PLACEHOLDER_' .. i .. '___'
 
-          vim.defer_fn(function()
-            local current_mode = mode()
-            if current_mode == 'i' then
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
-              vim.defer_fn(function()
+      for row, line in ipairs(lines) do
+        local start_pos = line:find(marker, 1, true)
+        if start_pos then
+          -- Replace the marker with empty string and position cursor
+          local escaped_marker = marker:gsub('([%(%)%.%+%-%*%?%[%]%^%$%%])', '%%%1')
+          local updated_line = line:gsub(escaped_marker, '')
+          vim.api.nvim_buf_set_text(0, row - 1, 0, row - 1, -1, {updated_line})
+
+          vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+          current_placeholder_index = i
+          return true
+        elseif current_snippet_placeholders[i].has_content then
+          -- For placeholders with content, find by text
+          local placeholder_text = current_snippet_placeholders[i].text
+          local start_pos = line:find(placeholder_text, 1, true)
+          if start_pos then
+            local end_col = start_pos + #placeholder_text - 1
+            vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+
+            vim.defer_fn(function()
+              local current_mode = mode()
+              if current_mode == 'i' then
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
+                vim.defer_fn(function()
+                  pcall(function()
+                    vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+                    vim.cmd('normal! v')
+                    vim.api.nvim_win_set_cursor(0, {row, end_col})
+                    vim.defer_fn(function()
+                      vim.cmd('startinsert')
+                    end, 50)
+                  end)
+                end, 20)
+              else
                 pcall(function()
-                  vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
                   vim.cmd('normal! v')
                   vim.api.nvim_win_set_cursor(0, {row, end_col})
                   vim.defer_fn(function()
                     vim.cmd('startinsert')
                   end, 50)
                 end)
-              end, 20)
-            else
-              pcall(function()
-                vim.cmd('normal! v')
-                vim.api.nvim_win_set_cursor(0, {row, end_col})
-                vim.defer_fn(function()
-                  vim.cmd('startinsert')
-                end, 50)
-              end)
-            end
-          end, 10)
-          current_placeholder_index = i
-          return true
+              end
+            end, 10)
+            current_placeholder_index = i
+            return true
+          end
         end
       end
     end
@@ -345,40 +435,56 @@ local function jump_to_prev_placeholder()
   current_placeholder_index = current_placeholder_index - 1
 
   for i = current_placeholder_index, 1, -1 do
-    if current_snippet_placeholders[i] and current_snippet_placeholders[i].text ~= '' then
+    if current_snippet_placeholders[i] then
       local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-      for row, line in ipairs(lines) do
-        local start_pos = line:find(current_snippet_placeholders[i].text, 1, true)
-        if start_pos then
-          vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
-          local end_col = start_pos + #current_snippet_placeholders[i].text - 1
+      local marker = '___PLACEHOLDER_' .. i .. '___'
 
-          vim.defer_fn(function()
-            local current_mode = mode()
-            if current_mode == 'i' then
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
-              vim.defer_fn(function()
+      for row, line in ipairs(lines) do
+        local start_pos = line:find(marker, 1, true)
+        if start_pos then
+          -- Replace the marker with empty string and position cursor
+          local escaped_marker = marker:gsub('([%(%)%.%+%-%*%?%[%]%^%$%%])', '%%%1')
+          local updated_line = line:gsub(escaped_marker, '')
+          vim.api.nvim_buf_set_text(0, row - 1, 0, row - 1, -1, {updated_line})
+
+          vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+          current_placeholder_index = i
+          return true
+        elseif current_snippet_placeholders[i].has_content then
+          -- For placeholders with content, find by text
+          local placeholder_text = current_snippet_placeholders[i].text
+          local start_pos = line:find(placeholder_text, 1, true)
+          if start_pos then
+            local end_col = start_pos + #placeholder_text - 1
+            vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+
+            vim.defer_fn(function()
+              local current_mode = mode()
+              if current_mode == 'i' then
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
+                vim.defer_fn(function()
+                  pcall(function()
+                    vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
+                    vim.cmd('normal! v')
+                    vim.api.nvim_win_set_cursor(0, {row, end_col})
+                    vim.defer_fn(function()
+                      vim.cmd('startinsert')
+                    end, 50)
+                  end)
+                end, 20)
+              else
                 pcall(function()
-                  vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
                   vim.cmd('normal! v')
                   vim.api.nvim_win_set_cursor(0, {row, end_col})
                   vim.defer_fn(function()
                     vim.cmd('startinsert')
                   end, 50)
                 end)
-              end, 20)
-            else
-              pcall(function()
-                vim.cmd('normal! v')
-                vim.api.nvim_win_set_cursor(0, {row, end_col})
-                vim.defer_fn(function()
-                  vim.cmd('startinsert')
-                end, 50)
-              end)
-            end
-          end, 10)
-          current_placeholder_index = i
-          return true
+              end
+            end, 10)
+            current_placeholder_index = i
+            return true
+          end
         end
       end
     end
@@ -398,12 +504,12 @@ end
 local function omni_available()
   local omni_func = vim.bo.omnifunc
   local filetype = vim.bo.filetype
-  
+
   -- Special handling for Python: if no python3 support, disable omni completion
   if filetype == 'python' and vim.fn.has('python3') == 0 then
     return false
   end
-  
+
   if omni_func == '' or omni_func == 'syntaxcomplete#Complete' then
     return false
   end
@@ -585,13 +691,13 @@ end
 -- Extract path prefix for path completion
 local function extract_path_prefix(line, col)
   local before_cursor = line:sub(1, col)
-  
+
   -- Try to extract path from quotes first
   local quoted_path = before_cursor:match('"([^"]*)$') or before_cursor:match('\'([^\']*)$')
   if quoted_path then
     return quoted_path
   end
-  
+
   -- Extract regular path patterns
   local path_patterns
   if is_windows() then
@@ -616,7 +722,7 @@ local function extract_path_prefix(line, col)
       '([%w_%-%.]+$)',                     -- Simple directory/file name
     }
   end
-  
+
   for _, pattern in ipairs(path_patterns) do
     local path = before_cursor:match(pattern)
     if path then
@@ -639,7 +745,7 @@ local function extract_path_prefix(line, col)
       end
     end
   end
-  
+
   return before_cursor:match('[^%s]*$') or ''
 end
 
@@ -682,7 +788,7 @@ local function path_available()
       return true
     end
   end
-  
+
   -- Enhanced check: also consider if we're at the end of a known directory name
   local potential_path = extract_path_prefix(line, col)
   if potential_path and #potential_path > 0 then
@@ -691,7 +797,7 @@ local function path_available()
       return true
     end
   end
-  
+
   return false
 end
 
@@ -707,10 +813,10 @@ local function get_path_completions(path_prefix)
     local dir_part, file_part
     local path_sep = is_windows() and '[/\\]' or '/'
     local preferred_sep = is_windows() and '\\' or '/'
-    
+
     -- Enhanced path parsing for better directory navigation
     local path_without_quotes = path_prefix:gsub('^[\'"]', ''):gsub('[\'"]$', '')
-    
+
     if is_windows() then
       -- Windows path parsing - handle both / and \ separators
       dir_part = path_without_quotes:match('^(.*[/\\])')
@@ -755,7 +861,7 @@ local function get_path_completions(path_prefix)
       if basename ~= '' and (file_part == '' or basename:lower():find(file_part:lower(), 1, true) == 1) then
         -- 使用完整路径作为word，但保持用户输入的路径分隔符风格
         local full_path = path
-        
+
         -- Convert path separators to match user's input style
         if is_windows() then
           if path_prefix:find('\\') then
@@ -766,13 +872,13 @@ local function get_path_completions(path_prefix)
             full_path = full_path:gsub('\\', '/')
           end
         end
-        
+
         -- Add directory separator for directories
         if is_dir then
           local sep = is_windows() and (path_prefix:find('\\') and '\\' or '/') or '/'
           full_path = full_path .. sep
         end
-        
+
         -- Handle relative path formatting
         local word = full_path
         if dir_part == ('./' .. (is_windows() and '' or '')) or dir_part == ('.' .. preferred_sep) then
@@ -781,10 +887,10 @@ local function get_path_completions(path_prefix)
             word = word:gsub('^%.' .. (is_windows() and '[/\\]' or '/'), '')
           end
         end
-        
+
         -- Enhanced menu indication for directories
         local menu = is_dir and '[P/]' or '[P]'
-        
+
         table.insert(matches, {
           word = word,
           menu = menu,
@@ -991,16 +1097,16 @@ map('i', '<C-l>', function()
         local line = vim.api.nvim_get_current_line()
         local col = vim.api.nvim_win_get_cursor(0)[2]
         local before_cursor = line:sub(1, col)
-        
+
         -- Check if we're in a potential path context
         local potential_path = extract_path_prefix(line, col)
-        
+
         -- If we have a potential path, enhance it for directory completion
         if potential_path and #potential_path > 0 then
           -- Check if path looks like a directory (ends with separator or is a known directory)
           local is_dir_path = false
           local path_without_quotes = potential_path:gsub('^[\'"]', ''):gsub('[\'"]$', '')
-          
+
           -- Check if path ends with separator
           if path_without_quotes:match('[/\\]$') then
             is_dir_path = true
@@ -1021,7 +1127,7 @@ map('i', '<C-l>', function()
             end
           end
         end
-        
+
         -- Trigger completion
         builtin_completion()
       end
@@ -1103,7 +1209,7 @@ vim.api.nvim_create_autocmd('FileType', {
       go = { '.', ':', '/', '~' },
       default = { '.', ':', '>', '/', '~' },
     }
-    
+
     -- Add Windows backslash triggers if on Windows
     if is_windows() then
       for ft, triggers in pairs(ft_triggers) do
@@ -1119,7 +1225,7 @@ vim.api.nvim_create_autocmd('FileType', {
       buffer = args.buf,
       callback = function()
         local char = vim.v.char
-        
+
         -- Check for special trigger characters
         for _, trigger in ipairs(triggers) do
           if char == trigger then
@@ -1134,7 +1240,7 @@ vim.api.nvim_create_autocmd('FileType', {
             return
           end
         end
-        
+
         -- Check for path completion triggers after inputting the character
         if char:match('[%w%._%-]') then
           vim.defer_fn(function()
@@ -1146,7 +1252,7 @@ vim.api.nvim_create_autocmd('FileType', {
             end
           end, 50)
         end
-        
+
         -- Smart auto-completion for word characters after 2+ chars
         if char:match('[%w_]') then
           vim.defer_fn(function()
@@ -1154,14 +1260,14 @@ vim.api.nvim_create_autocmd('FileType', {
               local line = vim.api.nvim_get_current_line()
               local col = vim.api.nvim_win_get_cursor(0)[2]
               local prefix = line:sub(1, col):match('[%w_]*$') or ''
-              
+
               if #prefix >= 2 then
                 -- Check for snippet matches
                 if #get_snippet_completions(prefix, ft) > 0 then
                   builtin_completion()
                   return
                 end
-                
+
                 -- Check for buffer word matches
                 if buffer_has_matches(prefix) then
                   builtin_completion()
