@@ -448,28 +448,6 @@ let g:NERDTrimTrailingWhitespace = 1
 let g:NERDToggleCheckAllLines = 1
 PlugAddOpt 'nerdcommenter'
 " ------------------------
-" quick jump in buffer
-" ------------------------
-nnoremap ; <Nop>
-nnoremap , <Nop>
-let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
-if has('nvim-0.8')
-    PlugAddOpt 'flash.nvim'
-    lua require("cfg/flash")
-    nmap SJ vt<Space><Cr>S
-    nmap SK vT<Space><Cr>S
-else
-    let g:clever_f_smart_case = 1
-    let g:clever_f_repeat_last_char_inputs = ['<Tab>']
-    PlugAddOpt 'clever-f.vim'
-    nmap ;s <Plug>(clever-f-repeat-forward)
-    xmap ;s <Plug>(clever-f-repeat-forward)
-    nmap ,s <Plug>(clever-f-repeat-back)
-    xmap ,s <Plug>(clever-f-repeat-back)
-    nmap SJ vt<Space>S
-    nmap SK vT<Space>S
-endif
-" ------------------------
 " surround
 " ------------------------
 nmap SW viw<Plug>VSurround
@@ -781,6 +759,41 @@ nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 " ------------------------
+" quick jump in buffer
+" ------------------------
+nnoremap ; <Nop>
+nnoremap , <Nop>
+let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
+if has('nvim-0.8')
+    PlugAddOpt 'flash.nvim'
+    lua require("cfg/flash")
+    nmap SJ vt<Space><Cr>S
+    nmap SK vT<Space><Cr>S
+else
+    let g:clever_f_smart_case = 1
+    let g:clever_f_repeat_last_char_inputs = ['<Tab>']
+    PlugAddOpt 'clever-f.vim'
+    nmap ;s <Plug>(clever-f-repeat-forward)
+    xmap ;s <Plug>(clever-f-repeat-forward)
+    nmap ,s <Plug>(clever-f-repeat-back)
+    xmap ,s <Plug>(clever-f-repeat-back)
+    nmap SJ vt<Space>S
+    nmap SK vT<Space>S
+endif
+if exists('g:vscode')
+    imap <C-a> <ESC>ggVG
+    xmap <C-a> <ESC>ggVG
+    nmap <C-a> ggVG
+    imap <C-x> <C-o>"*
+    xmap <C-x> "*x
+    nmap <C-x> "*x
+    PlugAddOpt 'hop.nvim'
+    lua require("cfg/hop")
+else
+    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
+    source $CFG_DIR/easymotion.vim
+endif
+" ------------------------
 " set optional
 " ------------------------
 if filereadable(expand("~/.vimrc.opt"))
@@ -861,18 +874,8 @@ nnoremap <silent>gx :OpenLink<cr>
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------
 if exists('g:vscode')
-    imap <C-a> <ESC>ggVG
-    xmap <C-a> <ESC>ggVG
-    nmap <C-a> ggVG
-    imap <C-x> <C-o>"*
-    xmap <C-x> "*x
-    nmap <C-x> "*x
-    PlugAddOpt 'hop.nvim'
-    lua require("cfg/hop")
     source $CFG_DIR/vscode.vim
 else
-    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
-    source $CFG_DIR/easymotion.vim
     source $CFG_DIR/main.vim
 endif
 let g:leovim_loaded = 1
