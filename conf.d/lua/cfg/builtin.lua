@@ -44,6 +44,10 @@ local snippet_mode_active = false
 local snippet_cache = {}
 local buffer_cache = {}
 
+-- Simple performance optimization
+local pending_timers = {}
+local completion_active = true
+
 -- ============================================================================
 -- SNIPPET COMPLETION FUNCTIONS
 -- ============================================================================
@@ -909,6 +913,11 @@ end
 
 -- Main unified completion function with new priority: snippet -> omni -> buffer -> dict -> path
 function _G.builtin_completion()
+  -- Early exit if completion is disabled
+  if not completion_active then
+    return ''
+  end
+
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local prefix = line:sub(1, col):match('[%w_]*$') or ''
@@ -1226,37 +1235,46 @@ vim.api.nvim_create_autocmd('FileType', {
       callback = function()
         local char = vim.v.char
 
+                -- Early exit if completion is disabled
+        if not completion_active then
+          return
+        end
+
         -- Check for special trigger characters
         for _, trigger in ipairs(triggers) do
           if char == trigger then
-            vim.defer_fn(function()
-              if not pumvisible() and mode() == 'i' then
+            local timer_id = vim.defer_fn(function()
+              if completion_active and not pumvisible() and mode() == 'i' then
                 local col = vim.api.nvim_win_get_cursor(0)[2]
                 if col > 0 then
                   builtin_completion()
                 end
               end
-            end, 50)
+              pending_timers[timer_id] = nil
+            end, 30)  -- Faster response for trigger chars
+            pending_timers[timer_id] = true
             return
           end
         end
 
         -- Check for path completion triggers after inputting the character
         if char:match('[%w%._%-]') then
-          vim.defer_fn(function()
-            if not pumvisible() and mode() == 'i' then
+          local timer_id = vim.defer_fn(function()
+            if completion_active and not pumvisible() and mode() == 'i' then
               if path_available() then
                 builtin_completion()
                 return
               end
             end
-          end, 50)
+            pending_timers[timer_id] = nil
+          end, 40)  -- Reduced delay
+          pending_timers[timer_id] = true
         end
 
         -- Smart auto-completion for word characters after 2+ chars
         if char:match('[%w_]') then
-          vim.defer_fn(function()
-            if not pumvisible() and mode() == 'i' then
+          local timer_id = vim.defer_fn(function()
+            if completion_active and not pumvisible() and mode() == 'i' then
               local line = vim.api.nvim_get_current_line()
               local col = vim.api.nvim_win_get_cursor(0)[2]
               local prefix = line:sub(1, col):match('[%w_]*$') or ''
@@ -1275,19 +1293,60 @@ vim.api.nvim_create_autocmd('FileType', {
                 end
               end
             end
-          end, 100)
+            pending_timers[timer_id] = nil
+          end, 80)  -- Reduced delay
+          pending_timers[timer_id] = true
         end
       end
     })
   end
 })
 
--- Auto-clear snippet state
-vim.api.nvim_create_autocmd({'InsertLeave', 'BufLeave'}, {
+-- Auto-clear snippet state and stop all completion tasks
+vim.api.nvim_create_autocmd({'InsertLeave'}, {
   callback = function()
     current_snippet_placeholders = {}
     current_placeholder_index = 0
     snippet_mode_active = false
+
+    -- Clear all pending timers to ensure clean Normal mode
+    for timer_id, _ in pairs(pending_timers) do
+      if timer_id and type(timer_id) == 'number' then
+        -- The timer will clean itself up, just mark as inactive
+        pending_timers[timer_id] = nil
+      end
+    end
+    pending_timers = {}
+
+    -- Temporarily disable completion in Normal mode for better performance
+    completion_active = false
+
+    -- Re-enable after a short delay when entering Insert mode again
+    vim.defer_fn(function()
+      completion_active = true
+    end, 100)
+  end
+})
+
+-- Clean up on buffer leave
+vim.api.nvim_create_autocmd({'BufLeave'}, {
+  callback = function()
+    current_snippet_placeholders = {}
+    current_placeholder_index = 0
+    snippet_mode_active = false
+
+    -- Clear timers
+    for timer_id, _ in pairs(pending_timers) do
+      pending_timers[timer_id] = nil
+    end
+    pending_timers = {}
+  end
+})
+
+-- Ensure completion is active when entering Insert mode
+vim.api.nvim_create_autocmd({'InsertEnter'}, {
+  callback = function()
+    completion_active = true
   end
 })
 
@@ -1391,4 +1450,32 @@ vim.api.nvim_create_user_command('ClearSnippet', function()
   current_placeholder_index = 0
   snippet_mode_active = false
   print("Snippet state cleared")
+end, {})
+
+-- Performance management commands
+vim.api.nvim_create_user_command('ToggleBuiltinCompletion', function()
+  completion_active = not completion_active
+  if not completion_active then
+    -- Clear all pending timers
+    for timer_id, _ in pairs(pending_timers) do
+      pending_timers[timer_id] = nil
+    end
+    pending_timers = {}
+    print("Builtin completion DISABLED")
+  else
+    print("Builtin completion ENABLED")
+  end
+end, {})
+
+vim.api.nvim_create_user_command('BuiltinCompletionStatus', function()
+  local status = completion_active and "ENABLED" or "DISABLED"
+  local timer_count = 0
+  for _, _ in pairs(pending_timers) do
+    timer_count = timer_count + 1
+  end
+
+  print("=== Builtin Completion Status ===")
+  print("Status: " .. status)
+  print("Pending timers: " .. timer_count)
+  print("Snippet mode: " .. (snippet_mode_active and "ON" or "OFF"))
 end, {})
