@@ -702,6 +702,25 @@ local function extract_path_prefix(line, col)
     return quoted_path
   end
 
+  -- Try to extract path from shell variable assignment (=path)
+  local assignment_path
+  if is_windows() then
+    assignment_path = before_cursor:match('=([A-Za-z]:[/\\][^%s"\']*)$') or   -- =C:/path
+                      before_cursor:match('=([/~][^%s"\']*)$') or             -- =/path or =~/path  
+                      before_cursor:match('=(%.%.[/\\][^%s"\']*)$') or        -- =../path
+                      before_cursor:match('=(%.[/\\][^%s"\']*)$') or          -- =./path
+                      before_cursor:match('=([%w_%-%.]+[/\\][^%s"\']*)$')      -- =dir/path
+  else
+    assignment_path = before_cursor:match('=([/~][^%s"\']*)$') or             -- =/path or =~/path
+                      before_cursor:match('=(%.%./[^%s"\']*)$') or            -- =../path
+                      before_cursor:match('=(%./[^%s"\']*)$') or              -- =./path
+                      before_cursor:match('=([%w_%-%.]+/[^%s"\']*)$')         -- =dir/path
+  end
+
+  if assignment_path then
+    return assignment_path
+  end
+
   -- Extract regular path patterns
   local path_patterns
   if is_windows() then
@@ -773,6 +792,13 @@ local function path_available()
       '[%w_%-%.]+[/\\][^%s"\']*$',        -- Directory/file path with \ or /
       '"[^"]*$',                          -- Path inside double quotes
       '\'[^\']*$',                        -- Path inside single quotes
+      -- Shell variable assignment patterns
+      '=[A-Za-z]:[/\\][^%s"\']*$',        -- =C:/path or =C:\path
+      '=/[^%s"\']*$',                     -- =/absolute/path
+      '=%.%./[^%s"\']*$',                 -- =../relative/path
+      '=%./[^%s"\']*$',                   -- =./relative/path
+      '=~[/\\][^%s"\']*$',                -- =~/home/path
+      '=[%w_%-%.]+[/\\][^%s"\']*$',       -- =dir/path
     }
   else
     path_patterns = {
@@ -784,6 +810,12 @@ local function path_available()
       '[%w_%-%.]+/[^%s"\']*$',            -- Directory/file path
       '"[^"]*$',                          -- Path inside double quotes
       '\'[^\']*$',                        -- Path inside single quotes
+      -- Shell variable assignment patterns
+      '=/[^%s"\']*$',                     -- =/absolute/path
+      '=%.%./[^%s"\']*$',                 -- =../relative/path
+      '=%./[^%s"\']*$',                   -- =./relative/path
+      '=~[^%s"\']*$',                     -- =~/home/path
+      '=[%w_%-%.]+/[^%s"\']*$',           -- =dir/path
     }
   end
 
@@ -911,7 +943,9 @@ end
 -- UNIFIED COMPLETION FUNCTION
 -- ============================================================================
 
--- Main unified completion function with new priority: snippet -> omni -> buffer -> dict -> path
+-- Main unified completion function with intelligent priority adjustment
+-- For files with omni: snippet -> omni -> dict -> buffer -> path
+-- For files without omni: snippet -> dict -> buffer -> path
 function _G.builtin_completion()
   -- Early exit if completion is disabled
   if not completion_active then
@@ -939,26 +973,113 @@ function _G.builtin_completion()
     start_col = col - #path_prefix + 1
   end
 
-  -- 1. SNIPPET COMPLETION (highest priority)
-  local snippet_matches = get_snippet_completions(prefix, filetype)
-  vim.list_extend(all_matches, snippet_matches)
+  -- Intelligent completion priority based on omni availability and context
+  
+  -- Check if omni completion is effectively available
+  local omni_func = vim.bo.omnifunc
+  local has_effective_omni = omni_can_trigger and omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
 
-  -- 2. OMNI COMPLETION
-  local omni_matches = get_omni_completions(prefix)
-  vim.list_extend(all_matches, omni_matches)
-
-  -- 3. BUFFER COMPLETION
-  local buffer_matches = get_buffer_completions(prefix)
-  vim.list_extend(all_matches, buffer_matches)
-
-  -- 4. DICTIONARY COMPLETION (separate from omni)
-  local dict_matches = get_dictionary_completions(prefix)
-  vim.list_extend(all_matches, dict_matches)
-
-  -- 5. PATH COMPLETION (lowest priority)
+  -- Check if we're in a strong path context (higher priority for path completion)
+  local strong_path_context = false
   if path_can_trigger then
+    local before_cursor = line:sub(1, col)
+    -- Strong path context: shell variable assignment, quoted paths, or clear path patterns
+    if before_cursor:match('=[/~%.]') or 
+       before_cursor:match('["\'][^"\']*$') or
+       before_cursor:match('/[^%s]*$') or
+       before_cursor:match('~[^%s]*$') then
+      strong_path_context = true
+    end
+  end
+
+  if strong_path_context then
+    -- PRIORITY FOR STRONG PATH CONTEXT: snippet -> path -> dict -> buffer
+    
+    -- 1. SNIPPET COMPLETION (always highest priority, unlimited)
+    local snippet_matches = get_snippet_completions(prefix, filetype)
+    vim.list_extend(all_matches, snippet_matches)
+
+    -- 2. PATH COMPLETION (high priority in path context)
     local path_matches = get_path_completions(path_prefix)
     vim.list_extend(all_matches, path_matches)
+
+    -- 3. DICTIONARY COMPLETION (limited in path context)
+    local dict_matches = get_dictionary_completions(prefix)
+    local dict_limited = {}
+    for i = 1, math.min(#dict_matches, 3) do
+      table.insert(dict_limited, dict_matches[i])
+    end
+    vim.list_extend(all_matches, dict_limited)
+
+    -- 4. BUFFER COMPLETION (very limited in path context)
+    local buffer_matches = get_buffer_completions(prefix)
+    local buffer_limited = {}
+    for i = 1, math.min(#buffer_matches, 1) do
+      table.insert(buffer_limited, buffer_matches[i])
+    end
+    vim.list_extend(all_matches, buffer_limited)
+
+  else
+    -- NORMAL PRIORITY: snippet -> omni/dict -> buffer -> path
+    
+    -- 1. SNIPPET COMPLETION (always highest priority, unlimited)
+    local snippet_matches = get_snippet_completions(prefix, filetype)
+    vim.list_extend(all_matches, snippet_matches)
+  
+    if has_effective_omni then
+      -- STRATEGY 1: Has real omni completion
+      -- Priority: snippet -> omni -> dict -> buffer -> path
+      
+      -- 2. OMNI COMPLETION (limit to 3 items)
+      local omni_matches = get_omni_completions(prefix)
+      local omni_limited = {}
+      for i = 1, math.min(#omni_matches, 3) do
+        table.insert(omni_limited, omni_matches[i])
+      end
+      vim.list_extend(all_matches, omni_limited)
+
+      -- 3. DICTIONARY COMPLETION (limit to 5 items)
+      local dict_matches = get_dictionary_completions(prefix)
+      local dict_limited = {}
+      for i = 1, math.min(#dict_matches, 5) do
+        table.insert(dict_limited, dict_matches[i])
+      end
+      vim.list_extend(all_matches, dict_limited)
+
+      -- 4. BUFFER COMPLETION (limit to 2 items)
+      local buffer_matches = get_buffer_completions(prefix)
+      local buffer_limited = {}
+      for i = 1, math.min(#buffer_matches, 2) do
+        table.insert(buffer_limited, buffer_matches[i])
+      end
+      vim.list_extend(all_matches, buffer_limited)
+      
+    else
+      -- STRATEGY 2: No real omni completion (dict files, shell scripts, etc.)
+      -- Priority: snippet -> dict -> buffer -> path (dict gets higher priority)
+      
+      -- 2. DICTIONARY COMPLETION (higher priority, limit to 8 items)
+      local dict_matches = get_dictionary_completions(prefix)
+      local dict_limited = {}
+      for i = 1, math.min(#dict_matches, 8) do
+        table.insert(dict_limited, dict_matches[i])
+      end
+      vim.list_extend(all_matches, dict_limited)
+
+      -- 3. BUFFER COMPLETION (limit to 3 items)
+      local buffer_matches = get_buffer_completions(prefix)
+      local buffer_limited = {}
+      for i = 1, math.min(#buffer_matches, 3) do
+        table.insert(buffer_limited, buffer_matches[i])
+      end
+      vim.list_extend(all_matches, buffer_limited)
+    end
+
+    -- 5. PATH COMPLETION (lowest priority in normal context)
+    if path_can_trigger then
+      local path_matches = get_path_completions(path_prefix)
+      vim.list_extend(all_matches, path_matches)
+    end
   end
 
   -- Show completion menu
@@ -1240,7 +1361,16 @@ vim.api.nvim_create_autocmd('FileType', {
           return
         end
 
-        -- Check for special trigger characters
+                -- Clear any existing pending timers to avoid conflicts
+                
+        for timer_id, _ in pairs(pending_timers) do
+          if timer_id then
+            pending_timers[timer_id] = nil
+          end
+        end
+        pending_timers = {}
+
+        -- Check for special trigger characters (highest priority)
         for _, trigger in ipairs(triggers) do
           if char == trigger then
             local timer_id = vim.defer_fn(function()
@@ -1250,42 +1380,42 @@ vim.api.nvim_create_autocmd('FileType', {
                   builtin_completion()
                 end
               end
-              pending_timers[timer_id] = nil
+              -- Safe cleanup
+              if timer_id and pending_timers[timer_id] then
+                pending_timers[timer_id] = nil
+              end
             end, 30)  -- Faster response for trigger chars
-            pending_timers[timer_id] = true
-            return
+            
+            -- Only track valid timer IDs
+            if timer_id then
+              pending_timers[timer_id] = true
+            end
+            return  -- Exit early to avoid other completions
           end
         end
-
-        -- Check for path completion triggers after inputting the character
-        if char:match('[%w%._%-]') then
+        
+        -- Check for path completion triggers (second priority)
+        if char:match('[%w%._%-/\\]') then
           local timer_id = vim.defer_fn(function()
             if completion_active and not pumvisible() and mode() == 'i' then
               if path_available() then
                 builtin_completion()
                 return
               end
-            end
-            pending_timers[timer_id] = nil
-          end, 40)  -- Reduced delay
-          pending_timers[timer_id] = true
-        end
-
-        -- Smart auto-completion for word characters after 2+ chars
-        if char:match('[%w_]') then
-          local timer_id = vim.defer_fn(function()
-            if completion_active and not pumvisible() and mode() == 'i' then
+              
+              -- If no path available, check for smart completion as fallback
               local line = vim.api.nvim_get_current_line()
               local col = vim.api.nvim_win_get_cursor(0)[2]
               local prefix = line:sub(1, col):match('[%w_]*$') or ''
-
-              if #prefix >= 2 then
+              
+              if #prefix >= 2 and char:match('[%w_]') then
+                local ft = vim.bo.filetype
                 -- Check for snippet matches
                 if #get_snippet_completions(prefix, ft) > 0 then
                   builtin_completion()
                   return
                 end
-
+                
                 -- Check for buffer word matches
                 if buffer_has_matches(prefix) then
                   builtin_completion()
@@ -1293,9 +1423,16 @@ vim.api.nvim_create_autocmd('FileType', {
                 end
               end
             end
-            pending_timers[timer_id] = nil
-          end, 80)  -- Reduced delay
-          pending_timers[timer_id] = true
+            -- Safe cleanup
+            if timer_id and pending_timers[timer_id] then
+              pending_timers[timer_id] = nil
+            end
+          end, 40)  -- Reduced delay for path completion
+          
+          -- Only track valid timer IDs
+          if timer_id then
+            pending_timers[timer_id] = true
+          end
         end
       end
     })
@@ -1311,8 +1448,7 @@ vim.api.nvim_create_autocmd({'InsertLeave'}, {
 
     -- Clear all pending timers to ensure clean Normal mode
     for timer_id, _ in pairs(pending_timers) do
-      if timer_id and type(timer_id) == 'number' then
-        -- The timer will clean itself up, just mark as inactive
+      if timer_id then
         pending_timers[timer_id] = nil
       end
     end
@@ -1335,9 +1471,11 @@ vim.api.nvim_create_autocmd({'BufLeave'}, {
     current_placeholder_index = 0
     snippet_mode_active = false
 
-    -- Clear timers
+    -- Clear timers safely
     for timer_id, _ in pairs(pending_timers) do
-      pending_timers[timer_id] = nil
+      if timer_id then
+        pending_timers[timer_id] = nil
+      end
     end
     pending_timers = {}
   end
@@ -1359,9 +1497,87 @@ vim.api.nvim_create_user_command('DebugSnippets', function()
   local filetype = vim.bo.filetype
   local snippets = load_snippets_for_filetype(filetype)
   local omni_func = vim.bo.omnifunc
-  local has_omni = omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
-  local strategy = has_omni and "omni[O]" or "dict[D]"
-  print(filetype .. ": " .. #snippets .. " snippets[S], mode: " .. (snippet_mode_active and "on" or "off") .. ", strategy: " .. strategy)
+  local omni_can_trigger = omni_available()
+  local has_effective_omni = omni_can_trigger and omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
+  
+  -- Check current path context
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local before_cursor = line:sub(1, col)
+  local path_can_trigger = path_available()
+  local strong_path_context = false
+  if path_can_trigger then
+    if before_cursor:match('=[/~%.]') or 
+       before_cursor:match('["\'][^"\']*$') or
+       before_cursor:match('/[^%s]*$') or
+       before_cursor:match('~[^%s]*$') then
+      strong_path_context = true
+    end
+  end
+  
+  local strategy, priority
+  if strong_path_context then
+    strategy = "S->P->D->B"
+    priority = "path-priority"
+  elseif has_effective_omni then
+    strategy = "S->O->D->B->P"
+    priority = "omni-priority"
+  else
+    strategy = "S->D->B->P"
+    priority = "dict-priority"
+  end
+  
+  print(filetype .. ": " .. #snippets .. " snippets[S], mode: " .. (snippet_mode_active and "on" or "off") .. ", strategy: " .. strategy .. " (" .. priority .. ")")
+  print("omnifunc: " .. omni_func .. ", dict: " .. (vim.bo.dictionary or "none"))
+  print("current context: path=" .. tostring(path_can_trigger) .. ", strong_path=" .. tostring(strong_path_context))
+end, {})
+
+-- Debug path completion command
+vim.api.nvim_create_user_command('DebugPath', function()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local before_cursor = line:sub(1, col)
+  local path_prefix = extract_path_prefix(line, col)
+  local path_can_trigger = path_available()
+  
+  print('=== PATH DEBUG ===')
+  print('Line: ' .. line)
+  print('Col: ' .. col)
+  print('Before cursor: "' .. before_cursor .. '"')
+  print('Path prefix: "' .. (path_prefix or 'nil') .. '"')
+  print('Path available: ' .. tostring(path_can_trigger))
+  
+  -- Test each pattern
+  local path_patterns = {
+    '/[^%s"\']*$',                      -- Absolute path
+    '%./[^%s"\']*$',                    -- Relative path ./
+    '%.%./[^%s"\']*$',                  -- Relative path ../
+    '~[^%s"\']*$',                      -- Home directory path
+    '[%w_%-%.]+/[^%s"\']*$',            -- Directory/file path
+    '"[^"]*$',                          -- Path inside double quotes
+    '\'[^\']*$',                        -- Path inside single quotes
+    -- Shell variable assignment patterns
+    '=/[^%s"\']*$',                     -- =/absolute/path
+    '=%.%./[^%s"\']*$',                 -- =../relative/path
+    '=%./[^%s"\']*$',                   -- =./relative/path
+    '=~[^%s"\']*$',                     -- =~/home/path
+    '=[%w_%-%.]+/[^%s"\']*$',           -- =dir/path
+  }
+  
+  for i, pattern in ipairs(path_patterns) do
+    local match = before_cursor:match(pattern)
+    print('Pattern ' .. i .. ' (' .. pattern .. '): ' .. (match or 'no match'))
+  end
+  
+  if path_can_trigger then
+    local path_matches = get_path_completions(path_prefix)
+    print('Path matches: ' .. #path_matches)
+    for i, match in ipairs(path_matches) do
+      if i <= 5 then  -- Show first 5 matches
+        print('  ' .. i .. ': ' .. match.word)
+      end
+    end
+  end
 end, {})
 
 -- Debug completion command
@@ -1388,10 +1604,36 @@ vim.api.nvim_create_user_command('DebugComplete', function()
   print("Omnifunc: " .. vim.bo.omnifunc)
   print("Dictionary file: " .. (vim.bo.dictionary or "none"))
 
-  print("\n=== Completion Results (Priority Order) ===")
+  -- Check intelligent priority strategy
+  local omni_func = vim.bo.omnifunc
+  local has_effective_omni = omni_can_trigger and omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
+  
+  -- Check path context
+  local strong_path_context = false
+  if path_can_trigger then
+    if before_cursor:match('=[/~%.]') or 
+       before_cursor:match('["\'][^"\']*$') or
+       before_cursor:match('/[^%s]*$') or
+       before_cursor:match('~[^%s]*$') then
+      strong_path_context = true
+    end
+  end
+  
+  local strategy
+  if strong_path_context then
+    strategy = "S->P->D->B (path-priority)"
+  elseif has_effective_omni then
+    strategy = "S->O->D->B->P (omni-priority)"
+  else
+    strategy = "S->D->B->P (dict-priority)"
+  end
+  print("Strategy: " .. strategy)
+  print("Strong path context: " .. tostring(strong_path_context))
 
-  -- Test each completion type in priority order
-  print("1. SNIPPET COMPLETION [S]:")
+  print("\n=== Completion Results (Intelligent Priority Order) ===")
+
+  -- Test each completion type in intelligent priority order
+  print("1. SNIPPET COMPLETION [S] (always first):")
   local snippet_matches = get_snippet_completions(prefix, filetype)
   print("  Found " .. #snippet_matches .. " matches")
   for i, match in ipairs(snippet_matches) do
@@ -1400,39 +1642,89 @@ vim.api.nvim_create_user_command('DebugComplete', function()
     end
   end
 
-  print("2. OMNI COMPLETION [O]:")
-  local omni_matches = get_omni_completions(prefix)
-  print("  Found " .. #omni_matches .. " matches")
-  for i, match in ipairs(omni_matches) do
-    if i <= 3 then
-      print("  - " .. match.word)
+  if strong_path_context then
+    print("2. PATH COMPLETION [P] (high priority in path context):")
+    local path_matches = get_path_completions(path_prefix)
+    print("  Found " .. #path_matches .. " matches")
+    for i, match in ipairs(path_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
+    end
+
+    print("3. DICTIONARY COMPLETION [D] (limited in path context):")
+    local dict_matches = get_dictionary_completions(prefix)
+    print("  Found " .. #dict_matches .. " matches (showing max 3)")
+    for i, match in ipairs(dict_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
+    end
+
+    print("4. BUFFER COMPLETION [B] (very limited in path context):")
+    local buffer_matches = get_buffer_completions(prefix)
+    print("  Found " .. #buffer_matches .. " matches (showing max 1)")
+    for i, match in ipairs(buffer_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
+    end
+
+  elseif has_effective_omni then
+    print("2. OMNI COMPLETION [O] (has effective omni):")
+    local omni_matches = get_omni_completions(prefix)
+    print("  Found " .. #omni_matches .. " matches")
+    for i, match in ipairs(omni_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
+    end
+
+    print("3. DICTIONARY COMPLETION [D]:")
+    local dict_matches = get_dictionary_completions(prefix)
+    print("  Found " .. #dict_matches .. " matches (showing max 5)")
+    for i, match in ipairs(dict_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
+    end
+
+    print("4. BUFFER COMPLETION [B]:")
+    local buffer_matches = get_buffer_completions(prefix)
+    print("  Found " .. #buffer_matches .. " matches (showing max 2)")
+    for i, match in ipairs(buffer_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
+    end
+  else
+    print("2. DICTIONARY COMPLETION [D] (higher priority - no effective omni):")
+    local dict_matches = get_dictionary_completions(prefix)
+    print("  Found " .. #dict_matches .. " matches (showing max 8)")
+    for i, match in ipairs(dict_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
+    end
+
+    print("3. BUFFER COMPLETION [B]:")
+    local buffer_matches = get_buffer_completions(prefix)
+    print("  Found " .. #buffer_matches .. " matches (showing max 3)")
+    for i, match in ipairs(buffer_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
     end
   end
 
-  print("3. BUFFER COMPLETION [B]:")
-  local buffer_matches = get_buffer_completions(prefix)
-  print("  Found " .. #buffer_matches .. " matches")
-  for i, match in ipairs(buffer_matches) do
-    if i <= 3 then
-      print("  - " .. match.word)
-    end
-  end
-
-  print("4. DICTIONARY COMPLETION [D]:")
-  local dict_matches = get_dictionary_completions(prefix)
-  print("  Found " .. #dict_matches .. " matches")
-  for i, match in ipairs(dict_matches) do
-    if i <= 3 then
-      print("  - " .. match.word)
-    end
-  end
-
-  print("5. PATH COMPLETION [P]:")
-  local path_matches = get_path_completions(path_prefix)
-  print("  Found " .. #path_matches .. " matches")
-  for i, match in ipairs(path_matches) do
-    if i <= 3 then
-      print("  - " .. match.word)
+  if not strong_path_context then
+    print((has_effective_omni and "5" or "4") .. ". PATH COMPLETION [P] (lowest priority):")
+    local path_matches = get_path_completions(path_prefix)
+    print("  Found " .. #path_matches .. " matches")
+    for i, match in ipairs(path_matches) do
+      if i <= 3 then
+        print("  - " .. match.word)
+      end
     end
   end
 
@@ -1456,9 +1748,11 @@ end, {})
 vim.api.nvim_create_user_command('ToggleBuiltinCompletion', function()
   completion_active = not completion_active
   if not completion_active then
-    -- Clear all pending timers
+    -- Clear all pending timers safely
     for timer_id, _ in pairs(pending_timers) do
-      pending_timers[timer_id] = nil
+      if timer_id then
+        pending_timers[timer_id] = nil
+      end
     end
     pending_timers = {}
     print("Builtin completion DISABLED")
