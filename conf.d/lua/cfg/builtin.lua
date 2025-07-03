@@ -22,14 +22,6 @@ local function is_windows()
   return vim.loop.os_uname().sysname:find("Windows") ~= nil or vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 end
 
--- Completion menu styling
--- set_hl(0, 'Pmenu', {bg = '#3b4252', fg = '#d8dee9'})
--- set_hl(0, 'PmenuSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
--- set_hl(0, 'PmenuKind', {bg = '#3b4252', fg = '#88c0d0'})
--- set_hl(0, 'PmenuKindSel', {bg = '#81a1c1', fg = '#2e3440', bold = true})
--- set_hl(0, 'PmenuExtra', {bg = '#3b4252', fg = '#8fbcbb'})
--- set_hl(0, 'PmenuExtraSel', {bg = '#81a1c1', fg = '#2e3440'})
-
 -- Base directories
 local dict_base_dir = vim.fn.expand('$HOME/.leovim/pack/clone/opt/vim-dict/dict') .. '/'
 local snippets_base_dir = vim.fn.expand('$HOME/.leovim.d/pack/add/opt/friendly-snippets/snippets') .. '/'
@@ -924,11 +916,15 @@ local function get_path_completions(path_prefix)
           end
         end
 
+        -- Important: For quoted paths, word should only contain the path part (no quotes)
+        -- The vim completion system will replace from start_col, which we've set to after the quote
+        -- So the word should not include quotes to avoid them being outside the quotes
+        
         -- Enhanced menu indication for directories
         local menu = is_dir and '[P/]' or '[P]'
 
         table.insert(matches, {
-          word = word,
+          word = word,  -- Pure path without quotes
           menu = menu,
           info = path .. (is_dir and ' (directory)' or '')
         })
@@ -970,7 +966,32 @@ function _G.builtin_completion()
 
   -- Adjust start column for path completion
   if path_can_trigger and #path_prefix > #prefix then
-    start_col = col - #path_prefix + 1
+    -- Special handling for quoted paths
+    local before_cursor = line:sub(1, col)
+    
+    -- Check if we're inside quotes by looking for quote patterns
+    local quote_match = before_cursor:match('["\']([^"\']*)$')
+    
+    if quote_match then
+      -- We're inside quotes, find the exact position after the opening quote
+      local quote_pos = nil
+      -- Look for the last quote before our current position
+      for i = col, 1, -1 do
+        local char = line:sub(i, i)
+        if char == '"' or char == "'" then
+          quote_pos = i
+          break
+        end
+      end
+      
+      if quote_pos then
+        start_col = quote_pos + 1  -- Start after the opening quote
+      else
+        start_col = col - #path_prefix + 1
+      end
+    else
+      start_col = col - #path_prefix + 1
+    end
   end
 
   -- Intelligent completion priority based on omni availability and context
@@ -1219,7 +1240,66 @@ end, {expr = true, silent = true})
 -- Ctrl-L: enhanced manual completion trigger with directory navigation
 map('i', '<C-l>', function()
   if pumvisible() then
-    return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
+    -- Confirm current selection and immediately retrigger completion
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-y>', true, true, true), 'n', false)
+    
+    -- Immediately retrigger completion after confirming selection
+    vim.defer_fn(function()
+      if mode() == 'i' and not pumvisible() then
+        local line = vim.api.nvim_get_current_line()
+        local col = vim.api.nvim_win_get_cursor(0)[2]
+        local before_cursor = line:sub(1, col)
+
+        -- Check if we're in a potential path context
+        local potential_path = extract_path_prefix(line, col)
+
+        -- If we have a potential path, enhance it for directory completion
+        if potential_path and #potential_path > 0 then
+          -- Check if path looks like a directory (ends with separator or is a known directory)
+          local is_dir_path = false
+          local path_without_quotes = potential_path:gsub('^[\'"]', ''):gsub('[\'"]$', '')
+
+          -- Check if path ends with separator
+          if path_without_quotes:match('[/\\]$') then
+            is_dir_path = true
+          else
+            -- Check if it's an existing directory
+            if vim.fn.isdirectory(path_without_quotes) == 1 then
+              is_dir_path = true
+              -- Auto-append separator for directory navigation
+              local sep = is_windows() and '\\' or '/'
+              -- Determine user's preferred separator style
+              if is_windows() and before_cursor:find('/') and not before_cursor:find('\\') then
+                sep = '/'
+              end
+              
+              -- Smart insertion that respects quote boundaries
+              local current_line = vim.api.nvim_get_current_line()
+              local current_col = vim.api.nvim_win_get_cursor(0)[2]
+              
+              -- Check if we're inside quotes
+              local quote_match = before_cursor:match('["\']([^"\']*)$')
+              if quote_match then
+                -- We're inside quotes, insert the separator at current position
+                -- (which should be at the end of the path inside quotes)
+                local new_line = current_line:sub(1, current_col) .. sep .. current_line:sub(current_col + 1)
+                vim.api.nvim_set_current_line(new_line)
+                vim.api.nvim_win_set_cursor(0, {vim.api.nvim_win_get_cursor(0)[1], current_col + #sep})
+              else
+                -- Not inside quotes, use the original method
+                vim.api.nvim_put({sep}, 'c', true, true)
+                local new_col = vim.api.nvim_win_get_cursor(0)[2]
+                vim.api.nvim_win_set_cursor(0, {vim.api.nvim_win_get_cursor(0)[1], new_col})
+              end
+            end
+          end
+        end
+
+        -- Trigger completion
+        builtin_completion()
+      end
+    end, 20)  -- Small delay to ensure the previous completion is properly closed
+    return ''
   else
     -- Enhanced path completion trigger
     vim.defer_fn(function()
@@ -1250,10 +1330,25 @@ map('i', '<C-l>', function()
               if is_windows() and before_cursor:find('/') and not before_cursor:find('\\') then
                 sep = '/'
               end
-              vim.api.nvim_put({sep}, 'c', true, true)
-              -- Update cursor position
-              local new_col = vim.api.nvim_win_get_cursor(0)[2]
-              vim.api.nvim_win_set_cursor(0, {vim.api.nvim_win_get_cursor(0)[1], new_col})
+              
+              -- Smart insertion that respects quote boundaries
+              local current_line = vim.api.nvim_get_current_line()
+              local current_col = vim.api.nvim_win_get_cursor(0)[2]
+              
+              -- Check if we're inside quotes
+              local quote_match = before_cursor:match('["\']([^"\']*)$')
+              if quote_match then
+                -- We're inside quotes, insert the separator at current position
+                -- (which should be at the end of the path inside quotes)
+                local new_line = current_line:sub(1, current_col) .. sep .. current_line:sub(current_col + 1)
+                vim.api.nvim_set_current_line(new_line)
+                vim.api.nvim_win_set_cursor(0, {vim.api.nvim_win_get_cursor(0)[1], current_col + #sep})
+              else
+                -- Not inside quotes, use the original method
+                vim.api.nvim_put({sep}, 'c', true, true)
+                local new_col = vim.api.nvim_win_get_cursor(0)[2]
+                vim.api.nvim_win_set_cursor(0, {vim.api.nvim_win_get_cursor(0)[1], new_col})
+              end
             end
           end
         end
@@ -1546,6 +1641,29 @@ vim.api.nvim_create_user_command('DebugPath', function()
   print('Before cursor: "' .. before_cursor .. '"')
   print('Path prefix: "' .. (path_prefix or 'nil') .. '"')
   print('Path available: ' .. tostring(path_can_trigger))
+  
+  -- Debug quote handling
+  local quote_match = before_cursor:match('["\']([^"\']*)$')
+  if quote_match then
+    print('Quote detected: inside quotes')
+    print('Quote content: "' .. quote_match .. '"')
+    
+    -- Find quote position
+    local quote_pos = nil
+    for i = col, 1, -1 do
+      local char = line:sub(i, i)
+      if char == '"' or char == "'" then
+        quote_pos = i
+        break
+      end
+    end
+    print('Quote position: ' .. (quote_pos or 'not found'))
+    if quote_pos then
+      print('Start col would be: ' .. (quote_pos + 1))
+    end
+  else
+    print('Quote detected: NOT inside quotes')
+  end
   
   -- Test each pattern
   local path_patterns = {
