@@ -1,7 +1,3 @@
-if ! command -v cargo &> /dev/null; then
-    echo "Please install rust toolchain including cargo to use neovim's plug blink.cmp"
-    exit 1
-fi
 if  [ -f "$HOME/.local/bin/nvim.appimage" ] && [ -x "$HOME/.local/bin/nvim.appimage" ];  then
   NVIMCMD="$HOME/.local/bin/nvim.appimage"
 elif [ -f "$HOME/.local/nvim-macos-arm64/bin/nvim" ] && [ -x "$HOME/.local/nvim-macos-arm64/bin/nvim" ]; then
@@ -18,4 +14,4 @@ else
   echo "nvim not executable"
   exit 1
 fi
-$NVIMCMD --cmd "let g:preset_group=['blink']" "$@"
+$NVIMCMD --cmd "let g:preset_group=['blink.lua']" "$@"

@@ -38,9 +38,9 @@ elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
     if Require('blink.lua')
-        call SetScheme('nightfly', 'codedark')
-    else
         call SetScheme('catppuccin-mocha', 'codedark')
+    else
+        call SetScheme('nightfly', 'codedark')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
