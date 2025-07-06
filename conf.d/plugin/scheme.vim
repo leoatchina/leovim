@@ -37,7 +37,7 @@ elseif g:complete_engine == 'builtin'
 elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
-    if Require('blink.lua')
+    if Require('blink.lua') || Require('blink') && !executable('cargo')
         call SetScheme('catppuccin-mocha', 'codedark')
     else
         call SetScheme('nightfly', 'codedark')

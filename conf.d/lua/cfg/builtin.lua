@@ -958,9 +958,12 @@ function _G.builtin_completion()
 
   local filetype = vim.bo.filetype
   local all_matches = {}
-  local start_col = col - #prefix + 1
-
-  -- Adjust start column for path completion
+  
+  -- 计算基础的start_col（用于snippet、dict、buffer补全）
+  local base_start_col = col - #prefix + 1
+  
+  -- 计算路径补全的start_col
+  local path_start_col = base_start_col
   if path_can_trigger and #path_prefix > #prefix then
     -- Special handling for quoted paths
     local before_cursor = line:sub(1, col)
@@ -981,12 +984,12 @@ function _G.builtin_completion()
       end
       
       if quote_pos then
-        start_col = quote_pos + 1  -- Start after the opening quote
+        path_start_col = quote_pos + 1  -- Start after the opening quote
       else
-        start_col = col - #path_prefix + 1
+        path_start_col = col - #path_prefix + 1
       end
     else
-      start_col = col - #path_prefix + 1
+      path_start_col = col - #path_prefix + 1
     end
   end
 
@@ -1009,39 +1012,43 @@ function _G.builtin_completion()
     end
   end
 
+  -- 分别收集不同类型的补全项目，使用对应的start_col
+  local base_matches = {}  -- snippet、dict、buffer补全
+  local path_matches_list = {}  -- 路径补全
+  
   if strong_path_context then
     -- 强路径上下文的优先级: 代码片段 -> 路径 -> 字典 -> 缓冲区
     
     -- 1. 代码片段补全（始终最高优先级，不限制数量）
     local snippet_matches = get_snippet_completions(prefix, filetype)
-    vim.list_extend(all_matches, snippet_matches)
+    vim.list_extend(base_matches, snippet_matches)
 
-         -- 2. 路径补全（在路径上下文中高优先级）
-     local path_matches = get_path_completions(path_prefix)
-     vim.list_extend(all_matches, path_matches)
+    -- 2. 路径补全（在路径上下文中高优先级）
+    local path_matches = get_path_completions(path_prefix)
+    vim.list_extend(path_matches_list, path_matches)
 
-     -- 3. 字典补全（在路径上下文中受限）
-     local dict_matches = get_dictionary_completions(prefix)
-     local dict_limited = {}
-     for i = 1, math.min(#dict_matches, 3) do
-       table.insert(dict_limited, dict_matches[i])
-     end
-     vim.list_extend(all_matches, dict_limited)
+    -- 3. 字典补全（在路径上下文中受限）
+    local dict_matches = get_dictionary_completions(prefix)
+    local dict_limited = {}
+    for i = 1, math.min(#dict_matches, 3) do
+      table.insert(dict_limited, dict_matches[i])
+    end
+    vim.list_extend(base_matches, dict_limited)
 
-     -- 4. 缓冲区补全（在路径上下文中严格受限）
-     local buffer_matches = get_buffer_completions(prefix)
-     local buffer_limited = {}
-     for i = 1, math.min(#buffer_matches, 1) do
-       table.insert(buffer_limited, buffer_matches[i])
-     end
-     vim.list_extend(all_matches, buffer_limited)
+    -- 4. 缓冲区补全（在路径上下文中严格受限）
+    local buffer_matches = get_buffer_completions(prefix)
+    local buffer_limited = {}
+    for i = 1, math.min(#buffer_matches, 1) do
+      table.insert(buffer_limited, buffer_matches[i])
+    end
+    vim.list_extend(base_matches, buffer_limited)
 
-   else
-     -- 普通优先级: 代码片段 -> omni/字典 -> 缓冲区 -> 路径
-     
-     -- 1. 代码片段补全（始终最高优先级，不限制数量）
+  else
+    -- 普通优先级: 代码片段 -> omni/字典 -> 缓冲区 -> 路径
+    
+    -- 1. 代码片段补全（始终最高优先级，不限制数量）
     local snippet_matches = get_snippet_completions(prefix, filetype)
-    vim.list_extend(all_matches, snippet_matches)
+    vim.list_extend(base_matches, snippet_matches)
   
     if has_effective_omni then
       -- STRATEGY 1: Has real omni completion
@@ -1053,7 +1060,7 @@ function _G.builtin_completion()
       for i = 1, math.min(#omni_matches, 3) do
         table.insert(omni_limited, omni_matches[i])
       end
-      vim.list_extend(all_matches, omni_limited)
+      vim.list_extend(base_matches, omni_limited)
 
       -- 3. DICTIONARY COMPLETION (limit to 5 items)
       local dict_matches = get_dictionary_completions(prefix)
@@ -1061,7 +1068,7 @@ function _G.builtin_completion()
       for i = 1, math.min(#dict_matches, 5) do
         table.insert(dict_limited, dict_matches[i])
       end
-      vim.list_extend(all_matches, dict_limited)
+      vim.list_extend(base_matches, dict_limited)
 
       -- 4. BUFFER COMPLETION (limit to 2 items)
       local buffer_matches = get_buffer_completions(prefix)
@@ -1069,7 +1076,7 @@ function _G.builtin_completion()
       for i = 1, math.min(#buffer_matches, 2) do
         table.insert(buffer_limited, buffer_matches[i])
       end
-      vim.list_extend(all_matches, buffer_limited)
+      vim.list_extend(base_matches, buffer_limited)
       
     else
       -- STRATEGY 2: No real omni completion (dict files, shell scripts, etc.)
@@ -1081,7 +1088,7 @@ function _G.builtin_completion()
       for i = 1, math.min(#dict_matches, 8) do
         table.insert(dict_limited, dict_matches[i])
       end
-      vim.list_extend(all_matches, dict_limited)
+      vim.list_extend(base_matches, dict_limited)
 
       -- 3. BUFFER COMPLETION (limit to 3 items)
       local buffer_matches = get_buffer_completions(prefix)
@@ -1089,25 +1096,32 @@ function _G.builtin_completion()
       for i = 1, math.min(#buffer_matches, 3) do
         table.insert(buffer_limited, buffer_matches[i])
       end
-      vim.list_extend(all_matches, buffer_limited)
+      vim.list_extend(base_matches, buffer_limited)
     end
 
     -- 5. PATH COMPLETION (lowest priority in normal context)
     if path_can_trigger then
       local path_matches = get_path_completions(path_prefix)
-      vim.list_extend(all_matches, path_matches)
+      vim.list_extend(path_matches_list, path_matches)
     end
   end
 
-     -- 显示补全菜单
-   if #all_matches > 0 then
-     if mode() == 'i' then
-       -- 使用pcall安全地调用补全函数
-       pcall(function()
-         vim.fn.complete(start_col, all_matches)
-       end)
-     end
-   end
+  -- 显示补全菜单 - 优先使用基础补全，如果没有则使用路径补全
+  if #base_matches > 0 then
+    if mode() == 'i' then
+      -- 使用基础start_col显示snippet、dict、buffer补全
+      pcall(function()
+        vim.fn.complete(base_start_col, base_matches)
+      end)
+    end
+  elseif #path_matches_list > 0 then
+    if mode() == 'i' then
+      -- 使用路径start_col显示路径补全
+      pcall(function()
+        vim.fn.complete(path_start_col, path_matches_list)
+      end)
+    end
+  end
 
   return ''
 end
