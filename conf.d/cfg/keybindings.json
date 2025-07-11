@@ -235,12 +235,12 @@
   },
   // focus on editor && split cell
   {
-    "key": "ctrl+shift+alt+e",
+    "key": "ctrl+alt+e",
     "command": "workbench.action.focusPanel",
     "when": "editorFoucs"
   },
   {
-    "key": "ctrl+shift+alt+e",
+    "key": "ctrl+alt+e",
     "command": "workbench.action.focusActiveEditorGroup",
     "when": "!editorFoucs"
   },
