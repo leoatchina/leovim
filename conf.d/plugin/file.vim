@@ -8,39 +8,6 @@ if get(g:, 'header_field_author', '') != ''
     let g:header_field_timestamp_format = '%Y.%m.%d'
     PlugAddOpt 'vim-header'
 endif
-" --------------------------
-" autoclose_ft_buf
-" --------------------------
-let g:autoclose_ft_buf = [
-            \ 'netrw', 'tagbar', 'vista', 'vista_kind',
-            \ 'qf', 'loclist', 'rg', 'outline',
-            \ 'leaderf', 'fzf', 'help', 'man', 'startify',
-            \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame', 'diff',
-            \ 'vimspector', 'vimspectorprompt',
-            \ 'terminal', 'floaterm', 'popup', 'undotree',
-            \ 'dropbar', 'dropbar_preview',
-            \ ]
-function! s:autoclose(...) abort
-    let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
-    let bt = tolower(getbufvar(winbufnr(winnr()), '&bt'))
-    if winnr("$") <= 1 && a:0 && a:1
-        return index(g:autoclose_ft_buf, ft) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
-    elseif !a:0 || a:1 == 0
-        return ft == '' || index(g:autoclose_ft_buf, ft) >= 0 || index(g:autoclose_ft_buf, bt) >= 0
-    else
-        return 0
-    endif
-endfunction
-function! FtBtIgnored() abort
-    return s:autoclose(0)
-endfunction
-function! AutoCloseLastWin() abort
-    return s:autoclose(1)
-endfunction
-augroup AutoCloseLastWin
-    autocmd!
-    autocmd BufWinEnter * if AutoCloseLastWin() | q! | endif
-augroup END
 "----------------------------------------------------------------------
 " Sudo
 "----------------------------------------------------------------------
