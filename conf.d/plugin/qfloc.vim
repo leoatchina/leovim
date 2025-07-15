@@ -122,9 +122,3 @@ else
         autocmd BufReadPost quickfix call QuickFixFormat()
     augroup END
 endif
-if Installed('quickfix.nvim')
-    let g:quickfix_mapping_filter_filename = 'f'
-    let g:quickfix_mapping_rfilter_filename = 'F'
-    let g:quickfix_mapping_filter_text = 'e'
-    let g:quickfix_mapping_rfilter_text = 'E'
-endif

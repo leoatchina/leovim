@@ -249,10 +249,9 @@ if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('n
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
 if has('nvim')
-    PlugAdd 'dstein64/nvim-scrollview'
-    PlugAdd 'wsdjeg/quickfix.nvim'
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'kevinhwang91/promise-async'
+    PlugAdd 'dstein64/nvim-scrollview'
     PlugAdd 'nvim-tree/nvim-web-devicons'
     if has('nvim-0.8')
         PlugAdd 'stevearc/quicker.nvim'
