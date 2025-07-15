@@ -1,12 +1,14 @@
 if WINDOWS()
     let s:code_user_dir = substitute(fnameescape(get(g:, "code_user_dir", "")), '/', '\', 'g')
     let s:trae_user_dir = substitute(fnameescape(get(g:, "trae_user_dir", "")), '/', '\', 'g')
+    let s:kiro_user_dir = substitute(fnameescape(get(g:, "kiro_user_dir", "")), '/', '\', 'g')
     let s:cursor_user_dir = substitute(fnameescape(get(g:, "cursor_user_dir", "")), '/', '\', 'g')
     let s:positron_user_dir = substitute(fnameescape(get(g:, "positron_user_dir", "")), '/', '\', 'g')
     let s:windsurf_user_dir = substitute(fnameescape(get(g:, "windsurf_user_dir", "")), '/', '\', 'g')
 else
     let s:code_user_dir = fnameescape(get(g:, "code_user_dir", ""))
     let s:trae_user_dir = fnameescape(get(g:, "trae_user_dir", ""))
+    let s:kiro_user_dir = fnameescape(get(g:, "kiro_user_dir", ""))
     let s:cursor_user_dir = fnameescape(get(g:, "cursor_user_dir", ""))
     let s:positron_user_dir = fnameescape(get(g:, "positron_user_dir", ""))
     let s:windsurf_user_dir = fnameescape(get(g:, "windsurf_user_dir", ""))
@@ -18,7 +20,7 @@ function! s:execute(cmd, ...) abort
     execute("!" . a:cmd)
 endfunction
 function! s:link() abort
-        for dir in [s:code_user_dir, s:trae_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
+        for dir in [s:code_user_dir, s:trae_user_dir, s:kiro_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
             if WINDOWS() && isdirectory(dir)
                 " rm
                 let delete_cmd = printf('del /Q /S %s\keybindings.json', dir)
@@ -28,7 +30,7 @@ function! s:link() abort
                 " mklink
                 let mklink_cmd = printf('mklink %s %s', dir . '\keybindings.json', $CFG_DIR . '\keybindings.json')
                 call s:execute(mklink_cmd)
-                let mklink_cmd = printf('mklink /d %s %s', dir . '\snippets', $LEOVIM_DIR . '\snippets')
+                let mklink_cmd = printf('mklink /d %s %s', dir . '\snippets', $CONF_D_DIR . '\snippets')
                 call s:execute(mklink_cmd)
             elseif isdirectory(dir)
                 " rm

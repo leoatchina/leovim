@@ -77,6 +77,7 @@ if WINDOWS()
     " let &pythonthreedll='C:\\Python37\\python37.dll'
 
     " let g:code_user_dir = 'C:\Users\Admin\AppData\Roaming\Code\User'
+    " let g:kiro_user_dir = 'C:\Users\Admin\AppData\Roaming\Kiro\User'
     " let g:trae_user_dir = 'C:\Users\Admin\AppData\Roaming\Trae\User'
     " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
     " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
@@ -85,6 +86,7 @@ elseif UNIX()
     " let g:python3_host_prog=exepath('python3')
 
     " let g:code_user_dir = expand("$HOME/.config/Code/User")
+    " let g:kiro_user_dir = expand("$HOME/.config/Kiro/User")
     " let g:trae_user_dir = expand("$HOME/.config/Trae/User")
     " let g:cursor_user_dir = expand("$HOME/.config/Cursor/User")
     " let g:windsurf_user_dir = expand("$HOME/.config/Windsurf/User")
