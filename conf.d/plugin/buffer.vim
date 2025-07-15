@@ -9,7 +9,7 @@ else
 endif
 " kill other buffers
 command! BdOther silent! execute "%bd|e#|bd#"
-nnoremap <silent><M-Q> :BdOther<Cr>
+nnoremap <silent><Leader>Q :BdOther<Cr>
 " Command ':Bclose' executes ':bd' to delete buffer in current window.
 if !exists('g:bclose_multiple')
     let g:bclose_multiple = 1
