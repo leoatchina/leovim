@@ -179,17 +179,13 @@ if PlannedLsp()
 elseif PlannedCoc()
     if g:python_version > 3.06 && Require('ale')
         let g:lint_tool = 'ale'
+        PlugAdd 'dense-analysis/ale'
+        PlugAdd 'maximbaz/lightline-ale'
     else
         let g:lint_tool = 'coc'
     endif
-elseif g:python_version > 3.06 && v:version >= 800
-    let g:lint_tool = 'ale'
 else
     let g:lint_tool = ''
-endif
-if g:lint_tool == 'ale'
-    PlugAdd 'dense-analysis/ale'
-    PlugAdd 'maximbaz/lightline-ale'
 endif
 " ------------------------------
 " debug tool install
