@@ -101,7 +101,61 @@ MV() {
         fi
     done
 }
-alias SYNC="rsync -avpL --progress --size-only --delete "
+
+
+SYNC() {
+    # 参数数量检查，至少两个参数
+    if [ "$#" -lt 2 ]; then
+        echo "Usage: SYNC source1 [source2 ...] target"
+        echo "       source can be file or directory"
+        echo "       syncs files/directories to target and removes extra files in target"
+        return 1
+    fi
+
+    # 取最后一个参数作为目标，并确保末尾没有斜杠
+    local target="${!#%/}"
+    # 目标必须是目录
+    if [ ! -d "$target" ]; then
+        echo "Error: target '$target' is not a directory"
+        return 2
+    fi
+
+    # 计算除最后外的源参数数量
+    local src_count=$(($# - 1))
+
+    # 遍历所有源参数
+    for ((i=1; i<=src_count; i++)); do
+        local src="${!i}"
+
+        # 检查源是否存在
+        if [ ! -e "$src" ]; then
+            echo "Warning: source '$src' does not exist, skipping."
+            continue
+        fi
+
+        # 处理源是文件的情况
+        if [ -f "$src" ]; then
+            echo "Syncing file '$src' to '$target' ..."
+            
+            # 使用 rsync 同步文件到目标目录，不删除源文件，但删除目标目录中多余的文件
+            rsync -avpL --progress --size-only --delete "$src" "$target"
+            echo "Finished syncing file '$src' to '$target'"
+        # 处理源是目录的情况
+        elif [ -d "$src" ]; then
+            src=${src%/}
+            echo "Syncing directory '$src' to '$target' ..."
+            
+            # 使用 rsync 同步目录内容到目标目录的子目录中，删除目标目录中多余的文件
+            rsync -avpL --progress --size-only --delete "$src" "$target"
+            
+            echo "Finished syncing directory '$src' to '$target'"
+        else
+            echo "Warning: source '$src' is neither a file nor a directory, skipping."
+        fi
+    done
+}
+
+
 
 alias CL="cd ~/.leovim"
 alias CO="cd ~/.leovim.d"
