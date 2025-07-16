@@ -42,8 +42,64 @@ export PATH=$HOME/.local/bin${PATH:+:${PATH}}
 
 alias ..="cd ../"
 
-alias MV="rsync -ravpzHogt --progress --size-only --remove-source-files "
-alias SYNC="rsync -ravpzHogt --progress --size-only --delete "
+MV() {
+    # 参数数量检查，至少两个参数
+    if [ "$#" -lt 2 ]; then
+        echo "Usage: MV source1 [source2 ...] target"
+        echo "       source can be file or directory"
+        return 1
+    fi
+
+    # 取最后一个参数作为目标
+    local target="${!#}"
+    # 目标必须是目录
+    if [ ! -d "$target" ]; then
+        echo "Error: target '$target' is not a directory"
+        return 2
+    fi
+
+    # 计算除最后外的源参数数量
+    local src_count=$(($# - 1))
+
+    # 遍历所有源参数
+    for ((i=1; i<=src_count; i++)); do
+        local src="${!i}"
+
+        # 检查源是否存在
+        if [ ! -e "$src" ]; then
+            echo "Warning: source '$src' does not exist, skipping."
+            continue
+        fi
+
+        # 处理源是文件的情况
+        if [ -f "$src" ]; then
+            echo "Moving file '$src' to '$target' ..."
+
+            # 使用 rsync 移动文件到目标目录，保持目录结构
+            rsync -avpL --remove-source-files --progress --size-only "$src" "$target/"
+            echo "Finished moving file '$src' to '$target/'"
+        # 处理源是目录的情况
+        elif [ -d "$src" ]; then
+            echo "Moving directory '$src' to '$target' ..."
+
+            # 使用 rsync 移动目录内容到目标目录的子目录中
+            rsync -avpL --remove-source-files --progress --size-only "${src%/}" "$target/"
+
+            # 删除源目录中的空目录
+            find "$src" -type d -empty -delete 2>/dev/null
+
+            # 如果源目录为空，删除它
+            if [ -d "$src" ] && [ -z "$(ls -A "$src" 2>/dev/null)" ]; then
+                rmdir "$src"
+            fi
+
+            echo "Finished moving directory '$src' to '$target'"
+        else
+            echo "Warning: source '$src' is neither a file nor a directory, skipping."
+        fi
+    done
+}
+alias SYNC="rsync -avpL --progress --size-only --delete "
 
 alias CL="cd ~/.leovim"
 alias CO="cd ~/.leovim.d"
