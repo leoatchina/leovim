@@ -57,6 +57,7 @@ MV() {
         echo "Error: target '$target' is not a directory"
         return 2
     fi
+    target=${target%/}
 
     # 计算除最后外的源参数数量
     local src_count=$(($# - 1))
@@ -76,14 +77,15 @@ MV() {
             echo "Moving file '$src' to '$target' ..."
 
             # 使用 rsync 移动文件到目标目录，保持目录结构
-            rsync -avpL --remove-source-files --progress --size-only "$src" "$target/"
+            rsync -avpL --remove-source-files --progress --size-only "$src" "$target"
             echo "Finished moving file '$src' to '$target/'"
         # 处理源是目录的情况
         elif [ -d "$src" ]; then
+            src=${src%/}
             echo "Moving directory '$src' to '$target' ..."
 
             # 使用 rsync 移动目录内容到目标目录的子目录中
-            rsync -avpL --remove-source-files --progress --size-only "${src%/}" "$target/"
+            rsync -avpL --remove-source-files --progress --size-only "$src" "$target"
 
             # 删除源目录中的空目录
             find "$src" -type d -empty -delete 2>/dev/null
