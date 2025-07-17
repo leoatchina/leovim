@@ -60,6 +60,10 @@ local function parse_vscode_snippets(file_path)
     if type(snippet) == 'table' and snippet.prefix and snippet.body and type(snippet.prefix) == 'string' then
       local body = type(snippet.body) == 'table' and table.concat(snippet.body, '\n') or snippet.body
       local description = snippet.description or name
+      -- 确保 description 是字符串
+      if type(description) == 'table' then
+        description = tostring(description)
+      end
 
       table.insert(snippets, {
         word = snippet.prefix,
