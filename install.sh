@@ -253,15 +253,6 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'z.lua' ]] && exit 0
     fi
-    # rust 
-    if [[ $mode == 'all' || $mode == 'rust' ]]; then
-        if program_exists cargo; then
-            info "Rust toolchain has been installed."
-        else
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-        fi
-        [[ $mode == 'rust' ]] && exit 0
-    fi
     # nodejs && nvm
     if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
         node_link=~/.local/node
@@ -297,6 +288,15 @@ if [ $# -gt 0 ]; then
             success "nvim install to $nvm_dir"
         fi
         exit 0
+    fi
+    # rust 
+    if [[ $mode == 'all' || $mode == 'rust' ]]; then
+        if program_exists cargo; then
+            info "Rust toolchain has been installed."
+        else
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        fi
+        [[ $mode == 'rust' ]] && exit 0
     fi
     # gvm 
     if [[ $mode == 'all' || $mode == 'gvm' ]]; then
@@ -340,17 +340,13 @@ if [ $installplug != 'no' ]; then
     fi
     # cmp
     setup_plug "$HOME/.local/bin/nv.sh"
+    # blink 
+    setup_plug "$HOME/.local/bin/nn.sh"
     # coc
     if program_exists node; then
         setup_plug "$HOME/.local/bin/ni.sh"
     else
         error "Please install node to use neovim's plug coc.nvim" 
-    fi
-    # blink 
-    if program_exists cargo; then
-        setup_plug "$HOME/.local/bin/nn.sh"
-    else
-        error "Please install rust toolchain including cargo to use neovim's plug blink.cmp" 
     fi
 fi
 ############################### copyright ##################################
