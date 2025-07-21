@@ -330,6 +330,40 @@ function tm() {
     fi
 }
 
+function ts() {
+    # 1. Check if we're already in a tmux session
+    if [ -z "$TMUX" ]; then
+        # 1.1 & 1.2: Not in tmux, check if sessions exist
+        if tmux has-session 2>/dev/null; then
+            # 1.1: Sessions exist, attach to first one
+            tmux attach-session
+        else
+            # 1.2: No sessions, create a new one
+            tmux new-session
+        fi
+    fi
+
+    # 2. Now we're in tmux, check if monsimp window exists
+    if tmux list-windows | grep -q "monsimp"; then
+        # 2.1: monitor window exists, switch to it
+        tmux select-window -t monsimp
+    else
+        # Create a new window named 'monsimp'
+        tmux new-window -t 0 -n monsimp
+        # Split the left pane horizontally
+        tmux select-pane -t 0
+        tmux split-window -v
+        # Adjust the vertical split to 2:1 ratio
+        tmux select-pane -t 1
+        tmux resize-pane -y 66%
+        # Run commands in each pane
+        tmux select-pane -t 1
+        tmux send-keys "btop" C-m
+        tmux select-pane -t 2
+        tmux send-keys "htop" C-m
+    fi
+}
+
 # ln and graphic card order
 if [ -f /usr/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
     mkdir -p $HOME/.local/bin
