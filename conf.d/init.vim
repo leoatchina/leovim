@@ -25,9 +25,6 @@ endfunction
 function! UNIX()
     return has('unix') && !has('win32unix')
 endfunction
-function! MACVIM()
-    return has('gui_running') && has('macunix')
-endfunction
 " --------------------------
 " gui_running && OS
 " --------------------------

@@ -47,7 +47,7 @@ endif
 if executable('git') && v:version >= 800 && g:git_version >= 1.85
     PlugAdd 'tpope/vim-fugitive'
     PlugAdd 'junegunn/gv.vim'
-    " NOTE: blamer.nvim installed when without virtual text
+    " blamer.nvim installed when without virtual text
     if g:has_popup_floating && UNIX() && (!Planned('leaderf') || Planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
         PlugAdd 'APZelos/blamer.nvim'
     endif
@@ -60,17 +60,10 @@ if has('nvim') && UNIX()
 endif
 PlugAddOpt 'undotree'
 " ------------------------------
-" translate && query
+" translate
 " ------------------------------
-if Require('query') && v:version >= 800
-    if g:python_version >= 3.06
-        PlugAdd 'voldikss/vim-translator'
-    endif
-    if MACOS()
-        PlugAdd 'rizzatti/dash.vim'
-    else
-        PlugAdd 'KabbAmine/zeavim.vim'
-    endif
+if Require('translate') && v:version >= 800 && g:python_version >= 3.06
+    PlugAdd 'voldikss/vim-translator'
 endif
 " ------------------------------
 " zfvim

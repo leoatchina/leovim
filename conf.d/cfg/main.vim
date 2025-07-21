@@ -5,7 +5,7 @@ endif
 " ------------------------------------
 " Meta key
 " ------------------------------------
-if MACVIM()
+if has('gui_running') && has('macunix'))
     set macmeta
 endif
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
