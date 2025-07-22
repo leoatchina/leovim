@@ -289,7 +289,7 @@ if [ $# -gt 0 ]; then
         fi
         exit 0
     fi
-    # rust 
+    # rust
     if [[ $mode == 'all' || $mode == 'rust' ]]; then
         if program_exists cargo; then
             info "Rust toolchain has been installed."
@@ -298,12 +298,12 @@ if [ $# -gt 0 ]; then
         fi
         [[ $mode == 'rust' ]] && exit 0
     fi
-    # gvm 
+    # gvm
     if [[ $mode == 'all' || $mode == 'gvm' ]]; then
         if program_exists gvm; then
             info "gvm has been installed."
         else
-            bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer) 
+            bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
         fi
         [[ $mode == 'gvm' ]] && exit 0
     fi
@@ -313,7 +313,7 @@ else
 fi
 
 
-############################### clone unix tools ################################### 
+############################### clone unix tools ###################################
 note "Install/update leovim.unix"
 if [ -d ~/.leovim.unix ]; then
     cd ~/.leovim.unix && git pull > /dev/null 2>&1
@@ -340,13 +340,11 @@ if [ $installplug != 'no' ]; then
     fi
     # cmp
     setup_plug "$HOME/.local/bin/nv.sh"
-    # blink 
+    # blink
     setup_plug "$HOME/.local/bin/nn.sh"
     # coc
     if program_exists node; then
         setup_plug "$HOME/.local/bin/ni.sh"
-    else
-        error "Please install node to use neovim's plug coc.nvim" 
     fi
 fi
 ############################### copyright ##################################
