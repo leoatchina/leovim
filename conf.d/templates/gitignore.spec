@@ -48,6 +48,7 @@ venv/
 .vim/
 .nim/
 .vscode/
+.vercel/
 .vs/
 .ccls-cache/
 __pycache__/
