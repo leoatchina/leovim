@@ -1,15 +1,12 @@
-local config = {}
+local config
+local enabled_ft = {'lua', 'vim', 'python', 'r', 'c', 'cpp', 'rust', 'go', 'java', 'javascript', 'typescript'}
 if InstalledLsp() then
-  if not InstalledBlink() and not InstalledCmp then
-    local enabled_ft = {'lua', 'vim', 'python', 'r', 'c', 'cpp', 'rust', 'go', 'java', 'javascript', 'typescript'}
-    config = {
-      lsp = {
-        enabled_ft = enabled_ft ,
-        -- Enables automatic completion triggering using `vim.lsp.completion.enable`
-        enabled_auto_trigger_ft = enabled_ft
-      }
+  config = {
+    lsp = {
+      enabled_ft = enabled_ft,
+      enabled_auto_trigger_ft = enabled_ft
     }
-  end
+  }
 else
   config = {
     virtualtext = {
@@ -21,7 +18,7 @@ else
         accept_line = '<M-:>',
         -- accept n lines (prompts for number)
         -- e.g. "M-z 2 CR" will accept 2 lines
-        accept_n_lines = '<M-}>',
+        accept_n_lines = '<M-z>',
         -- Cycle to prev completion item, or manually invoke completion
         prev = '<M-,>',
         -- Cycle to next completion item, or manually invoke completion
