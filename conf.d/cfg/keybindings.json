@@ -515,6 +515,15 @@
   },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
+  //----------------------- kiro ------------------------
+  {
+    "key": "ctrl+l",
+    "command": "kiroAgent.focusContinueInputWithoutClear"
+  },
+  {
+    "key": "ctrl+shift+l",
+    "command": "-kiroAgent.focusContinueInputWithoutClear"
+  },
   //----------------------- AI plugins ------------------
   // lingma
   {
@@ -524,13 +533,11 @@
   },
   {
     "key": "ctrl+shift+l",
-    "command": "-tongyi.show.panel.chat",
-    "when": "TongyiLingMa.Chat.active"
+    "command": "-tongyi.show.panel.chat"
   },
   {
     "key": "ctrl+\\",
-    "command": "tongyi.show.panel.chat",
-    "when": "TongyiLingMa.Chat.active"
+    "command": "tongyi.show.panel.chat"
   },
   {
     "key": "ctrl+shift+alt+\\",
