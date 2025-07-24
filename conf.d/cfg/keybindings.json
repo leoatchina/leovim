@@ -540,9 +540,14 @@
     "command": "tongyi.show.panel.chat"
   },
   {
-    "key": "ctrl+shift+alt+\\",
+    "key": "ctrl+shift+\\",
     "command": "tongyi.action.inlineSuggest.acceptNextLine",
     "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
+  },
+  {
+    "key": "ctrl+shift+alt+\\",
+    "command": "tongyi.action.inlineSuggest.trigger",
+    "when": "TongyiLingMa.Chat.active"
   },
   {
     "key": "ctrl+down",
@@ -550,19 +555,9 @@
     "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
   },
   {
-    "key": "ctrl+shift+alt+i",
-    "command": "tongyi.action.inlineSuggest.trigger",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
     "key": "alt+p",
     "command": "-tongyi.action.inlineSuggest.trigger",
     "when": "TongyiLingMa.Chat.active"
-  },
-  // kilocode
-  {
-    "key": "ctrl+`",
-    "command": "kilo-code.SidebarProvider.focus"
   },
   // continue
   {
