@@ -516,47 +516,33 @@
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
   //----------------------- kiro ------------------------
-  {
-    "key": "ctrl+`",
-    "command": "kiroAgent.focusContinueInputWithoutClear"
-  },
-  {
-    "key": "ctrl+shift+l",
-    "command": "-kiroAgent.focusContinueInputWithoutClear"
-  },
-  //----------------------- AI plugins ------------------
-  // lingma
-  {
-    "key": "ctrl+\\ e",
-    "command": "-vscode-neovim.send-cmdline",
-    "when": "neovim.init && neovim.mode == 'cmdline'"
-  },
+  //----------------------- lingma ------------------
   {
     "key": "ctrl+shift+l",
     "command": "-tongyi.show.panel.chat"
   },
   {
-    "key": "ctrl+\\",
+    "key": "ctrl+`",
     "command": "tongyi.show.panel.chat"
   },
   {
-    "key": "ctrl+shift+\\",
-    "command": "tongyi.action.inlineSuggest.acceptNextLine",
-    "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
+    "key": "ctrl+shift+i",
+    "command": "-tongyi.inline.edit",
+    "when": "Lingma.Chat.active"
   },
   {
-    "key": "ctrl+shift+alt+\\",
-    "command": "tongyi.action.inlineSuggest.trigger",
-    "when": "TongyiLingMa.Chat.active"
-  },
-  {
-    "key": "ctrl+down",
-    "command": "-tongyi.action.inlineSuggest.acceptNextLine",
-    "when": "TongyiLingMa.Chat.active && inlineSuggestionVisible && !editorReadonly"
+    "key": "ctrl+\\",
+    "command": "tongyi.inline.edit",
+    "when": "Lingma.Chat.active"
   },
   {
     "key": "alt+p",
     "command": "-tongyi.action.inlineSuggest.trigger",
-    "when": "TongyiLingMa.Chat.active"
+    "command": "tongyi.action.inlineSuggest.trigger",
+    "when": "Lingma.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+\\",
+    "when": "Lingma.Chat.active"
   }
 ]
