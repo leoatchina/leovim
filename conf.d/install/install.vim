@@ -141,7 +141,7 @@ if g:ai_api_key
     endif
 endif
 " AI complete
-if has('nvim-0.10') && (
+if has('nvim-0.10') && Require('minuet-ai') && (
     \  exists('$OPENAI_API_KEY') ||
     \  exists('$GEMINI_API_KEY') ||
     \  exists('$ANTHROPIC_API_KEY') ||
