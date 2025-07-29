@@ -40,9 +40,9 @@ elseif g:symbol_tool =~ 'fzftags' && executable('perl')
 elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
-" f<Cr>
+" f<Cr> to useing native functions show
 PlugAddOpt 'vim-funky'
-if Installed('fzf', 'fzf.vim') && (!has('nvim') || WINDOWS())
+if Installed('fzf', 'fzf.vim')
     command! FzfFunky call funky#fzf#show()
     nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
 else
