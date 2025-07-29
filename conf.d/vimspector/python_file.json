@@ -1,22 +1,26 @@
-"python-file": {
-  "adapter": "debugpy",
-  "filetypes": [ "python" ],
-  "breakpoints": {
-    "exception": {
-      "raised": "",
-      "uncaught": "",
-      "userUnhandled": ""
+{
+  "configurations": {
+    "python-file": {
+      "adapter": "debugpy",
+      "filetypes": [ "python" ],
+      "breakpoints": {
+        "exception": {
+          "raised": "",
+          "uncaught": "",
+          "userUnhandled": ""
+        }
+      },
+      "configuration": {
+        "name": "python: Launch",
+        "type": "python",
+        "request": "launch",
+        "stopOnEntry": false,
+        "console": "integratedTerminal",
+        "python": "~/miniconda3/bin/python3",
+        "cwd": "${fileDirname}",
+        "program": "${file}",
+        "args": []
+      }
     }
-  },
-  "configuration": {
-    "name": "python: Launch",
-    "type": "python",
-    "request": "launch",
-    "stopOnEntry": false,
-    "console": "integratedTerminal",
-    "python": "~/miniconda3/bin/python3",
-    "cwd": "${fileDirname}",
-    "program": "${file}",
-    "args": []
   }
 }

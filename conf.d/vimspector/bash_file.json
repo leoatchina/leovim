@@ -1,10 +1,14 @@
-"bash:file": {
-  "adapter": "vscode-bash",
-  "configuration": {
-    "name": "bashdb",
-    "type": "bashdb",
-    "request": "lauch",
-    "stopOnEntry": false,
-    "program": "$file"
+{
+  "configurations": {
+    "bash:file": {
+      "adapter": "vscode-bash",
+      "configuration": {
+        "name": "bashdb",
+        "type": "bashdb",
+        "request": "lauch",
+        "stopOnEntry": false,
+        "program": "$file"
+      }
+    }
   }
 }
