@@ -80,6 +80,7 @@ function! funky#fzf#show(...)
     let options += ['--expect', join(keys(get(g:, 'fzf_action', ['ctrl-x', 'ctrl-v', 'ctrl-t'])), ',')]
     let options += ['--preview-window', get(get(g:, 'fzf_vim'), 'preview_window', ['right,45%'])[0] . ',+{2}-/2']
     let options = fzf#vim#with_preview({'options': options, 'placeholder': ' {1}:{2}'}).options
+    sleep 128m
     call fzf#run(fzf#wrap('funky', {
                 \ 'source': funky#fzf#funky(a:0 && a:1 > 0 ? funky#funky(1) : funky#funky(0)),
                 \ 'sink*': function('s:fzf_accept'),

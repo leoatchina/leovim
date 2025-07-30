@@ -1,6 +1,7 @@
 setlocal nowrap
 setlocal norelativenumber
 setlocal foldcolumn=0 colorcolumn= cursorline
+inoremap <silent><buffer><C-c> <ESC>
 nnoremap <silent><buffer>q :q!<Cr>
 nnoremap <silent><buffer>Q :q!<Cr>
 nnoremap <silent><buffer>J <Nop>
@@ -20,6 +21,7 @@ nnoremap <buffer>W :cfdo up
 if Installed('nvim-bqf')
     nmap <silent><buffer>i zf
     nmap <silent><buffer>K :BqfToggle<Cr>
+    nmap <silent><buffer><C-o> zf
 else
     nnoremap <silent><buffer><C-p> :PreviewQuickfix<Cr>
     nnoremap <silent><buffer><C-m> :PreviewQuickfix e<Cr>
