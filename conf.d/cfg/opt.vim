@@ -24,6 +24,7 @@ let g:nvim_treesitter_install = UNIX()
 
 " call AddRequire('debug')
 " call AddRequire('neoconf')
+" call AddRequire('minuet-ai')
 
 " call AddRequire('aider')
 " call AddRequire('codecompanion')
