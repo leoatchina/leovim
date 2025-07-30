@@ -1,6 +1,7 @@
 setlocal nowrap
 setlocal norelativenumber
 setlocal foldcolumn=0 colorcolumn= cursorline
+inoremap <silent><buffer><C-c> <ESC>
 nnoremap <silent><buffer>q :q!<Cr>
 nnoremap <silent><buffer>Q :q!<Cr>
 nnoremap <silent><buffer>J <Nop>
