@@ -20,6 +20,7 @@ nnoremap <buffer>W :cfdo up
 if Installed('nvim-bqf')
     nmap <silent><buffer>i zf
     nmap <silent><buffer>K :BqfToggle<Cr>
+    nmap <silent><buffer><C-o> zf
 else
     nnoremap <silent><buffer><C-p> :PreviewQuickfix<Cr>
     nnoremap <silent><buffer><C-m> :PreviewQuickfix e<Cr>

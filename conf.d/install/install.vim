@@ -199,10 +199,6 @@ elseif has('nvim-0.9.5') && Require('debug')
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
 endif
-" -----------------------
-" format install
-" -----------------------
-PlugAdd 'sbdchd/neoformat'
 " ------------------------------
 " textobj install
 " ------------------------------
@@ -218,6 +214,10 @@ elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
     PlugAdd 'gcmt/wildfire.vim'
 endif
+" -----------------------
+" format install
+" -----------------------
+PlugAdd 'sbdchd/neoformat'
 " ----------------------------
 " scheme
 " ----------------------------
@@ -237,7 +237,7 @@ endif
 " ------------------------------
 " backbone plugins.
 " ------------------------------
-if exists('*systemlist') && has('patch-7.4.1304')
+if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
     PlugAdd 'junegunn/fzf.vim'
     if WINDOWS()
         PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
@@ -251,24 +251,20 @@ endif
 if has('nvim')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'kevinhwang91/promise-async'
-    PlugAdd 'dstein64/nvim-scrollview'
     PlugAdd 'nvim-tree/nvim-web-devicons'
-    if has('nvim-0.8')
-        PlugAdd 'stevearc/quicker.nvim'
-        if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
-            PlugAdd 'Bekaboo/dropbar.nvim'
-            if UNIX()
-                PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
-            endif
+    if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
+        PlugAdd 'Bekaboo/dropbar.nvim'
+        if UNIX()
+            PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
         endif
+    endif
+    if PlannedLsp() || Planned('nvim-dap')
+        PlugAdd 'mason-org/mason.nvim'
     endif
     if PlannedLsp() || Planned('nvim-dap') || Planned('codecompanion.nvim') || Planned('minuet-ai.nvim')
         PlugAdd 'MunifTanjim/nui.nvim'
         PlugAdd 'nvim-lua/plenary.nvim'
         PlugAdd 'stevearc/dressing.nvim'
-    endif
-    if PlannedLsp() || Planned('nvim-dap')
-        PlugAdd 'mason-org/mason.nvim'
     endif
 elseif v:version >= 800
     PlugAdd 'ryanoasis/vim-devicons'
