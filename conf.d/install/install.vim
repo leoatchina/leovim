@@ -144,6 +144,7 @@ endif
 if has('nvim-0.10') && Require('minuet-ai') && (
     \  exists('$OPENAI_API_KEY') ||
     \  exists('$GEMINI_API_KEY') ||
+    \  exists('$DEEPSEEK_API_KEY') ||
     \  exists('$ANTHROPIC_API_KEY') ||
     \  exists('$CODESTRAL_API_KEY') ||
     \  g:ai_api_key == 1
@@ -255,7 +256,7 @@ if has('nvim')
     if has('nvim-0.8')
         PlugAdd 'stevearc/quicker.nvim'
     endif
-    if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
+    if PlannedLsp() || has('nvim-0.10') && Planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
         if UNIX()
             PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
