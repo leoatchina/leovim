@@ -17,7 +17,11 @@ nnoremap <silent><buffer><M-'> <Nop>
 nnoremap <silent><buffer><M-"> <Nop>
 " replace
 nnoremap <buffer>r :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
-nnoremap <buffer>W :cfdo up
+if Installed('quicker.nvim')
+    nnoremap <buffer>W :write
+else
+    nnoremap <buffer>W :cfdo up
+endif
 if Installed('nvim-bqf')
     nmap <silent><buffer>i zf
     nmap <silent><buffer>K :BqfToggle<Cr>

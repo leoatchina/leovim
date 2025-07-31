@@ -252,6 +252,9 @@ if has('nvim')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'nvim-tree/nvim-web-devicons'
+    if has('nvim-0.8')
+        PlugAdd 'stevearc/quicker.nvim'
+    endif
     if has('nvim-0.10') && (!PlannedCoc() || PlannedCoc() && Planned('nvim-treesitter'))
         PlugAdd 'Bekaboo/dropbar.nvim'
         if UNIX()
