@@ -11,40 +11,6 @@ else
     nnoremap <nowait><M-l><M-l> :CtrlPLine<Cr>
 endif
 " ----------------------------
-" buffer search
-" ----------------------------
-function! s:search_cur(...)
-    try
-        if a:0 == 0
-            let g:grepper_word = expand('<cword>')
-        else
-            let g:grepper_word = a:1
-        endif
-    catch /.*/
-        let g:grepper_word = ""
-    endtry
-    if empty(g:grepper_word)
-        call preview#errmsg("No search word offered")
-    else
-        try
-            execute 'vimgrep /' . Escape(g:grepper_word) . "/j %"
-            copen
-        catch /.*/
-            call preview#errmsg("vimgrep errors")
-        endtry
-    endif
-endfunction
-command! -nargs=? SearchCurrBuf call s:search_cur(<f-args>)
-nnoremap z/ :SearchCurrBuf <C-r><C-w><Cr>
-xnoremap z/ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
-nnoremap z\ :SearchCurrBuf <C-r><C-w>
-xnoremap z\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
-nnoremap z? :SearchCurrBuf <C-r>=@"<Cr><Cr>
-" repeat search
-command! -nargs=0 SearchRepeat call s:search_cur(get(g:, 'grepper_word', ''))
-nnoremap z. :SearchRepeat<CR>
-xnoremap z. :<C-u>SearchRepeat<CR>
-" ----------------------------
 " grepsearch search
 " ----------------------------
 if executable('rg')
@@ -91,18 +57,50 @@ command! -nargs=1 Grep call s:grep(<q-args>, 1)
 command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
 " search
-nnoremap s/ :Grep <C-r><C-w><Cr>
-xnoremap s/ :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
-nnoremap s. :GrepLast<Cr>
-nnoremap s\ :Grep <C-r><C-w>
-xnoremap s\ :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
+nnoremap s<Cr> :Grep <C-r><C-w><Cr>
+xnoremap s<Cr> :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s[ :GrepLast<Cr>
+nnoremap s] :Grep <C-r><C-w>
+xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
 " searchall
-nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
-nnoremap s[ :GrepAllLast<Cr>
-nnoremap s] :GrepAll <C-r><C-w>
-xnoremap s] :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
+nnoremap s/ :GrepAll <C-r><C-w><Cr>
+xnoremap s/ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s. :GrepAllLast<Cr>
+nnoremap s\ :GrepAll <C-r><C-w>
+xnoremap s\ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
 nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
+" ----------------------------
+" buffer search
+" ----------------------------
+function! s:search_cur(...)
+    try
+        if a:0 == 0
+            let g:grepper_word = expand('<cword>')
+        else
+            let g:grepper_word = a:1
+        endif
+    catch /.*/
+        let g:grepper_word = ""
+    endtry
+    if empty(g:grepper_word)
+        call preview#errmsg("No search word offered")
+    else
+        try
+            execute 'vimgrep /' . Escape(g:grepper_word) . "/j %"
+            copen
+        catch /.*/
+            call preview#errmsg("vimgrep errors")
+        endtry
+    endif
+endfunction
+command! -nargs=? SearchCurrBuf call s:search_cur(<f-args>)
+command! -nargs=0 SearchRepeat call s:search_cur(get(g:, 'grepper_word', ''))
+nnoremap z/ :SearchCurrBuf <C-r><C-w><Cr>
+xnoremap z/ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
+nnoremap z. :SearchRepeat<CR>
+nnoremap z\ :SearchCurrBuf <C-r><C-w>
+xnoremap z\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
+nnoremap z? :SearchCurrBuf <C-r>=@"<Cr><Cr>
 " --------------------------
 " FzfSearch
 " --------------------------
@@ -267,21 +265,20 @@ if PlannedLeaderf() && executable('rg')
     command! -nargs=* LeaderfSearchAll call s:leaderf_search(<f-args>)
     " map LeaderfSearch
     let g:search_all_cmd = 'LeaderfSearchAll'
-    nnoremap <nowait><C-f>] :LeaderfSearchAll <C-r><C-w>
-    xnoremap <nowait><C-f>] :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><C-f><Cr> :LeaderfSearchAll <C-r><C-w><Cr>
-    xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr><Cr>
-    nnoremap <nowait><C-f><C-]> :LeaderfSearch <C-r><C-w>
-    xnoremap <nowait><C-f><C-]> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
-    nnoremap <nowait><C-f><C-f> :LeaderfSearch <C-r><C-w><Cr>
-    xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr><Cr>
+    nnoremap <nowait><C-f>/ :LeaderfSearchAll <C-r><C-w><Cr>
+    xnoremap <nowait><C-f>/ :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr><Cr>
+    nnoremap <nowait><C-f>\ :LeaderfSearchAll <C-r><C-w>
+    xnoremap <nowait><C-f>\ :<C-u>LeaderfSearchAll <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><C-f>? :Leaderf rg --no-ignore --auto-preview -L -S <C-r>=@"<Cr>
+    nnoremap <nowait><C-f><Cr> :LeaderfSearch <C-r><C-w><Cr>
+    xnoremap <nowait><C-f><Cr> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr><Cr>
+    nnoremap <nowait><C-f><C-f> :LeaderfSearch <C-r><C-w>
+    xnoremap <nowait><C-f><C-f> :<C-u>LeaderfSearch <C-r>=GetVisualSelection()<Cr>
     " flygrep
-    nnoremap <nowait><C-f>/ :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f<Cr>
-    nnoremap <nowait><C-f>? :Leaderf rg --no-ignore --auto-preview -L -S<Cr>
-    nnoremap <nowait><C-f>\ :Leaderf rg --no-ignore --auto-preview -L -S --cword<Cr>
-    xnoremap <nowait><C-f>\ :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
-    nnoremap <nowait><C-f><C-\> :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
-    xnoremap <nowait><C-f><C-\> :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
+    nnoremap <nowait><C-f>] :Leaderf rg --no-ignore --auto-preview -L -S --cword<Cr>
+    xnoremap <nowait><C-f>] :<C-u>Leaderf rg --no-ignore --auto-preview -L -S "<C-r>=GetVisualSelection()<Cr>"<Cr>
+    nnoremap <nowait><C-f><C-]> :Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f --cword<Cr>
+    xnoremap <nowait><C-f><C-]> :<C-u>Leaderf rg --no-ignore --auto-preview -L -S --wd-mode=f "<C-r>=GetVisualSelection()<Cr>"<Cr>
 elseif exists(":FzfSearchAll")
     let g:search_all_cmd = 'FzfSearchAll'
     nnoremap <nowait><C-f><Cr> :FzfSearchAll <C-r><C-w><Cr>

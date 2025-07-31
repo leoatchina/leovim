@@ -329,7 +329,6 @@ nnoremap zr zR
 nnoremap z= zT
 nnoremap z- zB
 nnoremap ZT zt
-nnoremap zt z<CR>
 " bs tab
 nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
 nnoremap <C-m> <C-i>

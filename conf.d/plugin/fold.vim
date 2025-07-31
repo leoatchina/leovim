@@ -2,8 +2,8 @@ set foldenable
 set foldlevel=99
 set foldlevelstart=99
 " basic fold
-nnoremap z<Cr> zM
-nnoremap z<Tab> zR
+nnoremap z<BS> zM
+nnoremap z<Cr> zR
 " special fold
 nmap <leader>za za
 nmap <Tab>za zA
