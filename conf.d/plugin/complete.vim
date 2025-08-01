@@ -8,7 +8,7 @@ let g:max_tokens = get(g:, 'max_tokens', 8192)
 if Installed('minuet-ai.nvim')
     lua require('cfg/minuet')
     let g:ai_complete_engine = 'minuet'
-elseif Installed('codeium.vim')
+elseif Installed('windsurf.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
     imap <script><silent><nowait><expr> <M-i> codeium#Accept()

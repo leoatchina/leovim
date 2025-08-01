@@ -152,7 +152,7 @@ if has('nvim-0.10') && Require('minuet-ai') && (
     PlugAdd 'milanglacier/minuet-ai.nvim'
 elseif has('patch-9.0.0185') || has('nvim')
     if Require('codeium')
-        PlugAdd 'Exafunction/codeium.vim'
+        PlugAdd 'Exafunction/windsurf.vim'
     elseif Require('copilot') && !Require('copilot_plus') && g:node_version > 18
         PlugAdd 'github/copilot.vim'
     endif
