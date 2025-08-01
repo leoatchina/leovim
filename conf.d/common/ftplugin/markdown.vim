@@ -22,6 +22,11 @@ if Installed('preview-markdown.vim')
 endif
 if Installed('render-markdown.nvim')
     nnoremap <silent><buffer><M-B> :RenderMarkdown buf_toggle<Cr>
+    augroup SetupRenderMarkdown
+        autocmd!
+        autocmd User codecompanion.nvim,mini.pick ++once lua require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
+        autocmd FileType markdown,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
+    augroup END
 endif
 if Installed('markdown-preview.nvim') || Installed('markdown-preview.vim')
     nnoremap <silent><buffer><M-F> :MarkdownPreview<Cr>

@@ -106,11 +106,11 @@ endif
 " ------------------------------
 " markdown
 " ------------------------------
+if has('nvim-0.10.3')
+    PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
+endif
 if executable(get(g:, 'preview_markdown_parser', 'mdr')) && (has('nvim') || has('patch-8.1.1401'))
     PlugAddOpt 'preview-markdown.vim'
-endif
-if has('nvim-0.10.3') && Require('markdown')
-    PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
 endif
 if Require('markdown')
     PlugAdd 'leoatchina/vim-table-mode'

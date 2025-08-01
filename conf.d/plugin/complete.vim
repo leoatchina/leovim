@@ -18,7 +18,7 @@ elseif Installed('windsurf.vim')
     imap <M-.> <Plug>(codeium-complete)
     imap <M-;> <Plug>(codeium-next)
     imap <M-,> <Plug>(codeium-previous)
-    let g:ai_complete_engine = 'codeium'
+    let g:ai_complete_engine = 'windsurf'
 elseif Installed('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
     let g:copilot_no_tab_map = v:true
@@ -41,18 +41,6 @@ elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>
     inoremap <M-i> <Nop>
-endif
-if Installed('nvim-ctx-ingest')
-    lua require("nvim-ctx-ingest").setup({})
-    nnoremap <silent><M-i>e <Cmd>CtxIngest<Cr>
-endif
-" NOTE: render-markdown is related with ai tools
-if Installed('render-markdown.nvim')
-    augroup SetupRenderMarkdown
-        autocmd!
-        autocmd User codecompanion.nvim,mini.pick ++once lua require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
-        autocmd FileType markdown,vimwiki ++once lua require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
-    augroup END
 endif
 " -----------------------------
 " lsp && vista_default_executive
