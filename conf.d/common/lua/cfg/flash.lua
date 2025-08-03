@@ -27,7 +27,27 @@ require("flash").setup({
   }
 })
 local map = vim.keymap.set
-map({ 'n', 'x', 'o' }, 'ss', function() require("flash").jump() end, { silent = true })
-map({ 'n', 'x', 'o' }, 'sj', function() require("flash").jump({search = { forward = true,  wrap = false, multi_window = false }}) end, { silent = true })
-map({ 'n', 'x', 'o' }, 'sk', function() require("flash").jump({search = { forward = false, wrap = false, multi_window = false }}) end, { silent = true })
-map({ 'o' }, 'r', function() require("flash").remote() end, { silent = true })
+-- omap
+map({ 'o' }, 'r', function()
+  require("flash").remote()
+end, { silent = true })
+-- buffer jump
+map({ 'n', 'x', 'o' }, 'ss', function()
+  require("flash").jump()
+end, { silent = true })
+-- jump forward
+map({ 'n', 'x', 'o' }, 'sj', function()
+  require("flash").jump({search = { forward = true,  wrap = false, multi_window = false }})
+end, { silent = true })
+-- jump backward
+map({ 'n', 'x', 'o' }, 'sk', function()
+  require("flash").jump({search = { forward = false, wrap = false, multi_window = false }})
+end, { silent = true })
+-- yank remote
+map({ 'n', 'x', 'o' }, 'yr', function()
+  require("flash").jump({remote_op = { restore = true, motion = true}})
+end,  { silent = true })
+-- yank remote
+map({ 'n', 'x', 'o' }, 'ys', function()
+  require("flash").jump({remote_op = { restore = true, motion = nil}})
+end, { silent = true })
