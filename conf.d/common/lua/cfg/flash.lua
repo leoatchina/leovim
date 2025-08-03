@@ -19,6 +19,7 @@ require("flash").setup({
     },
     char = {
       jump_labels = true,
+      multi_window = true,
       keys = {'f', 'F', 't', 'T'},
     },
     treesitter = {
@@ -27,27 +28,34 @@ require("flash").setup({
   }
 })
 local map = vim.keymap.set
--- omap
-map({ 'o' }, 'r', function()
-  require("flash").remote()
-end, { silent = true })
 -- buffer jump
-map({ 'n', 'x', 'o' }, 'ss', function()
+map({ 'n', 'x'}, 'ss', function()
+  require("flash").jump()
+end, { silent = true })
+map({ 'o' }, 's', function()
   require("flash").jump()
 end, { silent = true })
 -- jump forward
-map({ 'n', 'x', 'o' }, 'sj', function()
+map({ 'n', 'x'}, 'sj', function()
   require("flash").jump({search = { forward = true,  wrap = false, multi_window = false }})
 end, { silent = true })
+map({ 'o' }, 'j', function()
+  require("flash").remote({search = { forward = true,  wrap = false, multi_window = false }})
+end, { silent = true })
 -- jump backward
-map({ 'n', 'x', 'o' }, 'sk', function()
+map({ 'n', 'x' }, 'sk', function()
   require("flash").jump({search = { forward = false, wrap = false, multi_window = false }})
 end, { silent = true })
--- yank remote
-map({ 'n', 'x', 'o' }, 'yr', function()
-  require("flash").jump({remote_op = { restore = true, motion = true}})
-end,  { silent = true })
--- yank remote
-map({ 'n', 'x', 'o' }, 'ys', function()
-  require("flash").jump({remote_op = { restore = true, motion = nil}})
+map({ 'o' }, 'k', function()
+  require("flash").remote({search = { forward = false, wrap = false, multi_window = false }})
 end, { silent = true })
+-- remote
+map({ 'o' }, 'r', function()
+  require("flash").remote()
+end,  { silent = true })
+-- treesitter_search
+if Installed('nvim-treesitter') then
+  map({ 'x', 'o' }, 'R', function()
+    require("flash").treesitter_search()
+  end, { silent = true })
+end
