@@ -46,7 +46,7 @@ elseif Require('mcm')
 elseif Require('builtin') && has('nvim-0.11')
     let g:complete_engine = 'builtin'
 elseif Require('coc')
-    if g:node_version >= 16.18 && has('nvim-0.8')
+    if g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.043'))
         let g:complete_engine = 'coc'
     else
         let s:smart_engine_select = 1
