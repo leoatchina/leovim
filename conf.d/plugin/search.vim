@@ -11,65 +11,6 @@ else
     nnoremap <nowait><M-l><M-l> :CtrlPLine<Cr>
 endif
 " ----------------------------
-" grepsearch search
-" ----------------------------
-if executable('rg')
-    set grepprg=rg\ --line-number\ --no-heading\ --smart-case
-    set grepformat=%f:%l:%m,%f:%l,%f:%m,%f
-endif
-function! s:grep(...)
-    if a:0 == 0
-        return
-    elseif a:000[-1] == 1
-        if a:0 == 1
-            let g:grepper_word = get(g:, 'grep_last', '')
-        else
-            let g:grepper_word = Escape(a:1)
-            let g:grep_last = g:grepper_word
-        endif
-        if executable('rg')
-            let cmd = printf('silent! grep! %s', g:grepper_word)
-        else
-            let cmd = printf('vimgrep /%s/j **/*', g:grepper_word)
-        endif
-    elseif a:000[-1] == 2
-        if a:0 == 1
-            let g:grepper_word = get(g:, 'grepall_last', '')
-        else
-            let g:grepper_word = Escape(a:1)
-            let g:grepall_last = g:grepper_word
-        endif
-        if executable('rg')
-            let cmd = printf('silent! grep! %s %s', g:grepper_word, GetRootDir())
-        else
-            let cmd = printf('vimgrep /%s/j %s/**/*', g:grepper_word, GetRootDir())
-        endif
-    else
-        return
-    endif
-    execute cmd
-    if len(getqflist())
-        copen
-    endif
-endfunction
-command! GrepLast call s:grep(1)
-command! -nargs=1 Grep call s:grep(<q-args>, 1)
-command! GrepAllLast call s:grep(2)
-command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
-" search
-nnoremap s<Cr> :Grep <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
-nnoremap s[ :GrepLast<Cr>
-nnoremap s] :Grep <C-r><C-w>
-xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
-" searchall
-nnoremap s/ :GrepAll <C-r><C-w><Cr>
-xnoremap s/ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
-nnoremap s. :GrepAllLast<Cr>
-nnoremap s\ :GrepAll <C-r><C-w>
-xnoremap s\ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
-nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
-" ----------------------------
 " buffer search
 " ----------------------------
 function! s:search_cur(...)
@@ -101,6 +42,74 @@ nnoremap z. :SearchRepeat<CR>
 nnoremap z\ :SearchCurrBuf <C-r><C-w>
 xnoremap z\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
 nnoremap z? :SearchCurrBuf <C-r>=@"<Cr><Cr>
+" ----------------------------
+" grep search
+" ----------------------------
+if executable('rg')
+    set grepprg=rg\ --line-number\ --no-heading\ --smart-case
+    set grepformat=%f:%l:%m,%f:%l,%f:%m,%f
+endif
+function! s:grep(...)
+    if a:0 == 0
+        return
+    elseif a:000[-1] == 1
+        if a:0 == 1
+            let g:grepper_word = get(g:, 'grep_last', '')
+        else
+            let g:grepper_word = Escape(a:1)
+            let g:grep_last = g:grepper_word
+        endif
+        if executable('rg')
+            let cmd = printf('silent! grep %s', g:grepper_word)
+        else
+            let cmd = printf('vimgrep /%s/j **/*', g:grepper_word)
+        endif
+    elseif a:000[-1] == 2
+        if a:0 == 1
+            let g:grepper_word = get(g:, 'grepall_last', '')
+        else
+            let g:grepper_word = Escape(a:1)
+            let g:grepall_last = g:grepper_word
+        endif
+        if executable('rg')
+            let cmd = printf('silent! grep %s %s', g:grepper_word, GetRootDir())
+        else
+            let cmd = printf('vimgrep /%s/j %s/**/*', g:grepper_word, GetRootDir())
+        endif
+    else
+        return
+    endif
+    execute cmd
+    if len(getqflist())
+        copen
+    endif
+endfunction
+command! GrepLast call s:grep(1)
+command! -nargs=1 Grep call s:grep(<q-args>, 1)
+command! GrepAllLast call s:grep(2)
+command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
+" search
+nnoremap s<Cr> :Grep <C-r><C-w><Cr>
+xnoremap s<Cr> :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s[ :GrepLast<Cr>
+nnoremap s] :Grep <C-r><C-w>
+xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
+" searchall
+nnoremap s/ :GrepAll <C-r><C-w><Cr>
+xnoremap s/ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s. :GrepAllLast<Cr>
+nnoremap s\ :GrepAll <C-r><C-w>
+xnoremap s\ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr>
+nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
+" --------------------------
+" replace in filetype qf
+" --------------------------
+au Filetype qf nnoremap r :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
+if Installed('quicker.nvim')
+    au Filetype qf nnoremap W :write
+else
+    au Filetype qf nnoremap W :cfdo up
+endif
 " --------------------------
 " FzfSearch
 " --------------------------
