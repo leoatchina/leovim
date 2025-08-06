@@ -67,12 +67,15 @@ if InstalledLsp()
     endif
 elseif InstalledCoc()
     source $CFG_DIR/coc.vim
-elseif g:complete_engine == 'builtin'
-    lua require("cfg/builtin")
 elseif g:complete_engine != ''
-    let g:complete_engine = 'mcm'
-    PlugAddOpt 'vim-dict'
-    source $CFG_DIR/mcm.vim
+    if g:complete_engine == 'builtin' || has('nvim-0.11')
+        let g:complete_engine = 'builtin'
+        lua require("cfg/builtin")
+    else
+        let g:complete_engine = 'mcm'
+        PlugAddOpt 'vim-dict'
+        source $CFG_DIR/mcm.vim
+    endif
 endif
 " ------------------------------
 " vsnip
