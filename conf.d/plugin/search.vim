@@ -104,11 +104,11 @@ nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
 " --------------------------
 " replace in filetype qf
 " --------------------------
-au Filetype qf nnoremap r :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
+au Filetype qf <buffer>nnoremap r :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
 if Installed('quicker.nvim')
-    au Filetype qf nnoremap W :write
+    au Filetype qf <buffer>nnoremap W :write
 else
-    au Filetype qf nnoremap W :cfdo up
+    au Filetype qf <buffer>nnoremap W :cfdo up
 endif
 " --------------------------
 " FzfSearch
