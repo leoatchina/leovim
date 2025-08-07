@@ -58,7 +58,10 @@ map({ 'o' }, 'o', function()
 end,  { silent = true })
 -- treesitter_search
 if Installed('nvim-treesitter') then
-  map({ 'x', 'o' }, 'R', function()
+  map({ 'x', 'n' }, 'SO', function()
+    require("flash").treesitter_search()
+  end, { silent = true })
+  map({ 'o' }, 'O', function()
     require("flash").treesitter_search()
   end, { silent = true })
 end
