@@ -59,7 +59,7 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap , :WhichKey ','<Cr>
     nnoremap ; :WhichKey ';'<Cr>
     nnoremap \ :WhichKey '\'<Cr>
-    nnoremap yo :WhichKey 'yo'<Cr>
+    nnoremap yu :WhichKey 'yu'<Cr>
     xnoremap <Space> :WhichKeyVisual ' '<Cr>
     xnoremap , :WhichKeyVisual ','<Cr>
     xnoremap ; :WhichKeyVisual ';'<Cr>

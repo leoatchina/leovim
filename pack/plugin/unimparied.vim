@@ -138,7 +138,7 @@ function! s:cursor_options() abort
 endfunction
 
 function! s:option_map(letter, option, mode) abort
-    call s:map('n', 'yo'.a:letter, ':'.a:mode.' <C-R>=<SID>toggle("'.a:option.'")<CR><CR>')
+    call s:map('n', 'yu'.a:letter, ':'.a:mode.' <C-R>=<SID>toggle("'.a:option.'")<CR><CR>')
 endfunction
 
 call s:option_map('c', 'cursorline', 'setlocal')
@@ -152,10 +152,10 @@ call s:option_map('n', 'number', 'setlocal')
 call s:option_map('r', 'relativenumber', 'setlocal')
 call s:option_map('s', 'spell', 'setlocal')
 call s:option_map('w', 'wrap', 'setlocal')
-call s:map('n', 'yob', ':set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>')
-call s:map('n', 'yod', ':<C-R>=&diff ? "diffoff" : "diffthis"<CR><CR>')
-call s:map('n', 'yov', ':set <C-R>=(&virtualedit =~# "all") ? "virtualedit-=all" : "virtualedit+=all"<CR><CR>')
-call s:map('n', 'yox', ':set <C-R>=<SID>cursor_options()<CR><CR>')
+call s:map('n', 'yub', ':set background=<C-R>=&background == "dark" ? "light" : "dark"<CR><CR>')
+call s:map('n', 'yud', ':<C-R>=&diff ? "diffoff" : "diffthis"<CR><CR>')
+call s:map('n', 'yuv', ':set <C-R>=(&virtualedit =~# "all") ? "virtualedit-=all" : "virtualedit+=all"<CR><CR>')
+call s:map('n', 'yux', ':set <C-R>=<SID>cursor_options()<CR><CR>')
 
 function! s:legacy_option_map(letter) abort
     let y = get(get(g:, 'nremap', {}), 'y', 'y')
@@ -185,7 +185,7 @@ function! s:setup_paste() abort
     augroup END
 endfunction
 nnoremap <silent> <Plug>unimpairedPaste :call <SID>setup_paste()<CR>
-call s:map('n', 'yop', ':call <SID>setup_paste()<CR>0C', '<silent>')
+call s:map('n', 'yup', ':call <SID>setup_paste()<CR>0C', '<silent>')
 
 " Section: Line operations
 

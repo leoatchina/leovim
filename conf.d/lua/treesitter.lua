@@ -81,7 +81,7 @@ if Installed("nvim-treesitter-textobjects") then
         },
         -- https://tree-sitter.github.io/tree-sitter/using-parsers#pattern-matching-with-queries
         goto_previous_start = {
-          ["so"] = { query = { "@block.outer", "@function.outer", "@class.outer" } },
+          ["st"] = { query = { "@block.outer", "@function.outer", "@class.outer" } },
           [",f"] = "@function.outer",
           [",c"] = "@class.outer",
           [",l"] = "@loop.*",

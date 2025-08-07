@@ -50,7 +50,10 @@ map({ 'o' }, 'k', function()
   require("flash").remote({search = { forward = false, wrap = false, multi_window = false }})
 end, { silent = true })
 -- remote
-map({ 'o' }, 'r', function()
+map({ 'x', 'n' }, 'so', function()
+  require("flash").remote()
+end,  { silent = true })
+map({ 'o' }, 'o', function()
   require("flash").remote()
 end,  { silent = true })
 -- treesitter_search
