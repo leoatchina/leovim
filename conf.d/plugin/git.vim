@@ -82,6 +82,7 @@ endfunction
 if Planned('vim-fugitive')
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
+    nnoremap <silent><M-g><M-u> :Git push<CR>
     nnoremap <silent><M-g><Cr> :Git commit -av<Cr>
     nnoremap <M-G>  :Git
     nnoremap <M-g>U :Git push<Space>
