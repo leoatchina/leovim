@@ -4,6 +4,7 @@
 
 REM mkdir necesarry
 call md "%HOME%\AppData\local\nvim"
+call md "%HOME%\AppData\Roaming\Zed"
 
 REM mklink of conf.d dir
 IF "%APP_PATH%" == "%HOME%\.leovim" (
@@ -17,7 +18,7 @@ echo
 
 REM delete files
 call del "%HOME%\.vimrc"
-call del "%HOME%\AppData\local\nvim\init.vim"
+
 
 REM create vimrc
 echo if filereadable(expand("~/.vimrc.local")) > "%HOME%\.vimrc"
@@ -27,9 +28,14 @@ echo    source ~/.leovim/conf.d/init.vim >> "%HOME%\.vimrc"
 echo endif >> "%HOME%\.vimrc"
 
 REM cp vimrc
+call del "%HOME%\AppData\local\nvim\init.vim"
 call copy "%HOME%\.vimrc" "%HOME%\AppData\local\nvim\init.vim"
 
-REM create gvimrc 
+REM mklink keymap for zed
+call del "%HOME%\AppData\Roaming\Zed\keymap.json"
+call mklink "%HOME%\AppData\Roaming\Zed\keymap.json" "%APP_PATH%\scripts\keymap.json"
+
+REM create gvimrc
 IF NOT EXIST "%HOME%\.gvimrc" (
     copy "%HOME%\.leovim\scripts\gvimrc" "%HOME%\.gvimrc"
 )
