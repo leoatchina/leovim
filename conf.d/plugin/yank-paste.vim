@@ -17,7 +17,7 @@ inoremap <S-Insert> <C-r>"
 inoremap <M-x> <Del>
 cnoremap <M-x> <Del>
 " switch 2 words
-xnoremap <M-V> <Esc>`.``gvp``P
+xnoremap X <Esc>`.``gvp``P
 " ------------------------------------
 " registers plugins with fzf
 " ------------------------------------
