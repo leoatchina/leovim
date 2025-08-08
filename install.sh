@@ -100,12 +100,15 @@ if [ "$OS" = "Darwin" ]; then
     fi
 fi
 
-mkdir -p "$HOME/.config/nvim"
-mkdir -p "$HOME/.local/bin"
+# mkdir 
+mkdir -p "$HOME/.config/nvim" "$HOME/.local/bin"
+
+# zed config
+mkdir -p "$HOME/.config/zed"
+ln -s $APP_PATH/scripts/keymap.json $HOME/.config/zed
 
 # z scripts is for history file browser
 cp_n $APP_PATH/scripts/z.sh $HOME/.local/bin
-
 # enhanced config
 cp_n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp_n $APP_PATH/scripts/configrc $HOME/.configrc
