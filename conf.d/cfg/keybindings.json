@@ -522,10 +522,6 @@
     "command": "-tongyi.show.panel.chat"
   },
   {
-    "key": "ctrl+`",
-    "command": "tongyi.show.panel.chat"
-  },
-  {
     "key": "ctrl+shift+i",
     "command": "-tongyi.inline.edit",
     "when": "Lingma.Chat.active"
@@ -544,5 +540,13 @@
   {
     "key": "ctrl+shift+\\",
     "when": "Lingma.Chat.active"
+  },
+  {
+    "key": "ctrl+`",
+    "command": "workbench.view.extension.Lingma"
+  },
+  {
+    "key": "ctrl+shift+alt+\\",
+    "command": "tongyi.command.generateCommitMessage"
   }
 ]
