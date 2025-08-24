@@ -1,26 +1,20 @@
-if WINDOWS()
-    let s:code_user_dir = substitute(fnameescape(get(g:, "code_user_dir", "")), '/', '\', 'g')
-    let s:trae_user_dir = substitute(fnameescape(get(g:, "trae_user_dir", "")), '/', '\', 'g')
-    let s:kiro_user_dir = substitute(fnameescape(get(g:, "kiro_user_dir", "")), '/', '\', 'g')
-    let s:cursor_user_dir = substitute(fnameescape(get(g:, "cursor_user_dir", "")), '/', '\', 'g')
-    let s:positron_user_dir = substitute(fnameescape(get(g:, "positron_user_dir", "")), '/', '\', 'g')
-    let s:windsurf_user_dir = substitute(fnameescape(get(g:, "windsurf_user_dir", "")), '/', '\', 'g')
-else
-    let s:code_user_dir = fnameescape(get(g:, "code_user_dir", ""))
-    let s:trae_user_dir = fnameescape(get(g:, "trae_user_dir", ""))
-    let s:kiro_user_dir = fnameescape(get(g:, "kiro_user_dir", ""))
-    let s:cursor_user_dir = fnameescape(get(g:, "cursor_user_dir", ""))
-    let s:positron_user_dir = fnameescape(get(g:, "positron_user_dir", ""))
-    let s:windsurf_user_dir = fnameescape(get(g:, "windsurf_user_dir", ""))
-endif
 function! s:execute(cmd, ...) abort
     if a:0 && a:1 > 0
         execute("!echo " . a:cmd)
     endif
     execute("!" . a:cmd)
 endfunction
+let s:editor_dirs = []
+let s:editor_names = ["code", "trae", "kiro", "qoder", "cursor", "windsurf", "positron"]
+for editor in s:editor_names
+    let dir = fnameescape(get(g:, editor . "_user_dir", ""))
+    if WINDOWS()
+        let dir = substitute(dir, '/', '\', 'g')
+    endif
+    call add(s:editor_dirs, dir)
+endfor
 function! s:link() abort
-        for dir in [s:code_user_dir, s:trae_user_dir, s:kiro_user_dir, s:cursor_user_dir, s:windsurf_user_dir, s:positron_user_dir]
+        for dir in s:editor_dirs
             if WINDOWS() && isdirectory(dir)
                 " rm
                 let delete_cmd = printf('del /Q /S %s\keybindings.json', dir)
