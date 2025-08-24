@@ -485,10 +485,6 @@
     "command": "-workbench.action.openGlobalKeybindings"
   },
   {
-    "key": "ctrl+shift+alt+,",
-    "command": "workbench.action.openGlobalKeybindingsFile"
-  },
-  {
     "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
   },
@@ -547,6 +543,11 @@
   },
   {
     "key": "ctrl+shift+alt+\\",
-    "command": "tongyi.command.generateCommitMessage"
+    "command": "tongyi.command.generateCommitMessage",
+    "when": "Lingma.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+alt+\\",
+    "command": "aicoding.command.generateCommitMessage"
   }
 ]
