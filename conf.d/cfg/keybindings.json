@@ -545,13 +545,11 @@
     "command": "workbench.view.extension.Lingma"
   },
   {
-    "key": "ctrl+shift+alt+\\",
-    "command": "tongyi.command.generateCommitMessage",
-    "when": "extension.installed('Alibaba.tongyi-lingma')"
+    "key": "ctrl+shift+alt+c",
+    "command": "aicoding.command.generateCommitMessage"
   },
   {
     "key": "ctrl+shift+alt+\\",
-    "command": "aicoding.command.generateCommitMessage",
-    "when": "!extension.installed('Alibaba.tongyi-lingma')"
+    "command": "tongyi.command.generateCommitMessage"
   }
 ]
