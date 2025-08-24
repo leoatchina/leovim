@@ -11,7 +11,7 @@
   "abspath": {
     "prefix": "absp",
     "body": [
-      "def absdir(*p):",
+      "def abspath(*p):",
       "\treturn os.path.abspath(os.path.join(*p))"
     ]
   }
