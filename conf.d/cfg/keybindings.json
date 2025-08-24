@@ -534,7 +534,6 @@
   {
     "key": "alt+p",
     "command": "-tongyi.action.inlineSuggest.trigger",
-    "command": "tongyi.action.inlineSuggest.trigger",
     "when": "Lingma.Chat.active"
   },
   {
@@ -548,10 +547,11 @@
   {
     "key": "ctrl+shift+alt+\\",
     "command": "tongyi.command.generateCommitMessage",
-    "when": "Lingma.Chat.active"
+    "when": "extension.installed('Alibaba.tongyi-lingma')"
   },
   {
     "key": "ctrl+shift+alt+\\",
-    "command": "aicoding.command.generateCommitMessage"
+    "command": "aicoding.command.generateCommitMessage",
+    "when": "!extension.installed('Alibaba.tongyi-lingma')"
   }
 ]
