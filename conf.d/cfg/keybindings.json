@@ -545,11 +545,11 @@
     "command": "workbench.view.extension.Lingma"
   },
   {
-    "key": "ctrl+shift+alt+c",
-    "command": "aicoding.command.generateCommitMessage"
-  },
-  {
     "key": "ctrl+shift+alt+\\",
     "command": "tongyi.command.generateCommitMessage"
+  },
+  {
+    "key": "shift+alt+\\",
+    "command": "aicoding.command.generateCommitMessage"
   }
 ]
