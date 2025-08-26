@@ -366,11 +366,6 @@
     "command": "jupyter.runAndDebugCell",
     "when": "isWorkspaceTrusted && jupyter.ispythonnotebook && !notebookKernel && notebookCellType == 'code' || isWorkspaceTrusted && jupyter.ispythonnotebook && notebookCellType == 'code' && notebookKernel =~ /^ms-toolsai.jupyter\\// && resource not in 'jupyter.notebookeditor.debugDocuments'"
   },
-  {
-    "key": "alt+enter",
-    "command": "jupyter.execSelectionInteractive",
-    "when": "editorFocus && editorLangId == 'python'"
-  },
   // bracket jump
   {
     "key": "ctrl+j",
@@ -432,11 +427,6 @@
     "key": "alt+a",
     "command": "codelens.showLensesInCurrentLine",
     "when": "editorFocus"
-  },
-  // reload current file
-  {
-    "key": "ctrl+shift+alt+enter",
-    "command": "multiCommand.reloadFile"
   },
   // transparency or glassit
   {
