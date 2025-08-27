@@ -183,11 +183,13 @@ endif
 if has('nvim') || has('patch-9.0.0438')
     hi! link CocCodeLens CocListBgGrey
     call coc#config('codeLens.enable', v:true)
+    call coc#config('codeLens.display', v:true)
     nnoremap <leader>C :CocCommand document.toggleCodeLens<Cr>
 else
     call coc#config('codeLens.enable', v:false)
 endif
 nmap <silent><F2> <Plug>(coc-rename)
+nmap <silent><M-a> <Plug>(coc-codelens-action)
 xmap <silent><leader>X <Plug>(coc-fix-current)
 nmap <silent><leader>X <Plug>(coc-fix-current)
 nmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
@@ -197,7 +199,6 @@ xmap <silent><leader>a <Plug>(coc-codeaction-selected)
 nmap <silent><leader>ar <Plug>(coc-codeaction-refactor)
 nmap <silent><leader>as <Plug>(coc-codeaction-source)
 nmap <silent><leader>ac <Plug>(coc-codeaction-cursor)
-nmap <silent><M-a> <Plug>(coc-codelens-action)
 nmap <silent><leader>A :CocFzfList actions<Cr>
 " ------------------------
 " coc git
