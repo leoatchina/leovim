@@ -146,17 +146,17 @@
   {
     "key": "ctrl+g",
     "command": "editor.action.revealDefinition",
-    "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"
+    "when": "editorTextFocus && !isInEmbeddedEditor"
   },
   {
     "key": "ctrl+]",
     "command": "editor.action.revealDefinitionAside",
-    "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"
+    "when": "editorTextFocus && !isInEmbeddedEditor"
   },
   {
     "key": "alt+c",
     "command": "editor.action.peekDefinition",
-    "when": "editorHasDefinitionProvider && editorTextFocus && !isInEmbeddedEditor"
+    "when": "editorTextFocus && !isInEmbeddedEditor"
   },
   // declaration && find source code
   {
@@ -507,6 +507,11 @@
     "key": "alt+[",
     "command": "workbench.action.splitEditorDown"
   },
+  /// commit message using AI
+  {
+    "key": "ctrl+shift+alt+g",
+    "command": "AI.generateCommitMessage"
+  },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
   //----------------------- kiro ------------------------
@@ -537,14 +542,5 @@
   {
     "key": "ctrl+`",
     "command": "workbench.view.extension.Lingma"
-  },
-  {
-    "key": "ctrl+shift+alt+\\",
-    "command": "tongyi.command.generateCommitMessage"
-  },
-  //----------------------- qocder ------------------
-  {
-    "key": "shift+alt+\\",
-    "command": "aicoding.command.generateCommitMessage"
   }
 ]
