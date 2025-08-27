@@ -383,11 +383,6 @@
   },
   // markdown
   {
-    "key": "ctrl+alt+r",
-    "command": "markdown-preview-enhanced.openPreviewToTheSide",
-    "when": "editorLangId == 'markdown'"
-  },
-  {
     "key": "f5",
     "command": "markdown-preview-enhanced.openPreviewToTheSide",
     "when": "editorLangId == 'markdown'"
@@ -441,6 +436,15 @@
   {
     "key": "ctrl+alt+r",
     "command": "code-runner.run"
+  },
+  {
+    "key": "ctrl+alt+r",
+    "command": "markdown-preview-enhanced.openPreviewToTheSide",
+    "when": "editorLangId == 'markdown'"
+  },
+  {
+    "key": "ctrl+shift+alt+r",
+    "command": "multiCommand.reloadFile"
   },
   // ctrl n
   {
@@ -538,6 +542,7 @@
     "key": "ctrl+shift+alt+\\",
     "command": "tongyi.command.generateCommitMessage"
   },
+  // Qoder
   {
     "key": "shift+alt+\\",
     "command": "aicoding.command.generateCommitMessage"
