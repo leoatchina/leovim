@@ -189,9 +189,12 @@ else
     call coc#config('codeLens.enable', v:false)
 endif
 nmap <silent><F2> <Plug>(coc-rename)
-nmap <silent><M-a> <Plug>(coc-codelens-action)
+nmap <silent><M-a> :CocFzfList actions<Cr>
+nmap <silent><leader>A <Plug>(coc-codelens-action)
+xmap <silent><leader>A <Plug>(coc-codelens-action)
 xmap <silent><leader>X <Plug>(coc-fix-current)
 nmap <silent><leader>X <Plug>(coc-fix-current)
+" codeaction
 nmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
 xmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
 nmap <silent><leader>a <Plug>(coc-codeaction-selected)
@@ -199,7 +202,6 @@ xmap <silent><leader>a <Plug>(coc-codeaction-selected)
 nmap <silent><leader>ar <Plug>(coc-codeaction-refactor)
 nmap <silent><leader>as <Plug>(coc-codeaction-source)
 nmap <silent><leader>ac <Plug>(coc-codeaction-cursor)
-nmap <silent><leader>A :CocFzfList actions<Cr>
 " ------------------------
 " coc git
 " ------------------------
