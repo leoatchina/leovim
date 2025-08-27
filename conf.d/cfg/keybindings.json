@@ -542,7 +542,7 @@
     "key": "ctrl+shift+alt+\\",
     "command": "tongyi.command.generateCommitMessage"
   },
-  // Qoder
+  //----------------------- qocder ------------------
   {
     "key": "shift+alt+\\",
     "command": "aicoding.command.generateCommitMessage"
