@@ -238,7 +238,9 @@ end
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
-    local nx = { 'n', 'x' }
+    local nx = { "n", "x" }
+    local n = { "n" }
+    local x = { "x" }
     local bufnr = args.bufnr
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
@@ -249,12 +251,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if lsp_capabilities and lsp_capabilities.definitionProvider then
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
     end
+    -- signature_help
+    map("i", "<C-x><C-x>", function() vim.lsp.buf.signature_help { border = 'single' } end, opts_silent)
     -- lsp info/restart
     map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
     map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
     -- code action
-    map('n', "<F2>", vim.lsp.buf.rename, opts_echo)
-    map('n', "<M-a>", vim.lsp.buf.code_action, opts_silent)
+    map(n, "<F2>", vim.lsp.buf.rename, opts_echo)
+    map(n, "<leader>a", vim.lsp.buf.code_action, opts_echo)
     -- vista
     map(nx, "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
     -- call-graph
@@ -271,7 +275,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "K", function() vim.lsp.buf.hover { border = "rounded" } end, opts_silent)
     map(nx, "<leader>W", vim.lsp.buf.workspace_symbol, opts_silent)
     map(nx, "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
-    map('i', "<C-x><C-x>", function() vim.lsp.buf.signature_help { border = 'single' } end, opts_silent)
     -- diagnostic
     map(nx, "<leader>o", toggle_diagnostics, opts_silent)
     map(nx, "<leader>O", toggle_virtual_text, opts_silent)
@@ -283,13 +286,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
-      map('n', "<M-s>", require('lsp-selection-range').trigger, opts_silent)
-      map('x', "<M-s>", require('lsp-selection-range').expand, opts_silent)
+      map(n, "<M-s>", require('lsp-selection-range').trigger, opts_silent)
+      map(x, "<M-s>", require('lsp-selection-range').expand, opts_silent)
     end
     -- inlay_hint
     if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
       map(nx, "<leader>i", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
+    else
+      map(nx, "<leader>i", [[<Cmd>echo "No inlay_hint for current buffer. "<Cr>]], opts_echo)
     end
     -- codelens
     if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
@@ -305,9 +310,54 @@ vim.api.nvim_create_autocmd('LspAttach', {
       end
       M.codelens_toggle()
       map(nx, "<leader>C", require("lsp").codelens_toggle, opts_echo)
-      map(nx, "<leader>a", vim.lsp.codelens.run, opts_echo)
+      map(nx, "<M-a>", vim.lsp.codelens.run, opts_echo)
+    else
+      map(nx, "<leader>C", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
+      map(nx, "<M-a>", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
     end
+    -- symbol-usage
     map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
+    ------------------------------------
+    -- AutoCmd for different filetypes
+    ------------------------------------
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = {'python'},
+      callback = function()
+        map(nx, "<leader>A", require("lspimport").import, opts_silent)
+        local ok, venv = pcall(require, "rj.extras.venv")
+        if ok then
+          venv.setup()
+        end
+        local root = vim.fs.root(0, {
+          "pyproject.toml",
+          "setup.py",
+          "setup.cfg",
+          "requirements.txt",
+          "Pipfile",
+          "pyrightconfig.json",
+          ".git",
+          vim.uv.cwd(),
+        })
+        local client = vim.lsp.start(vim.tbl_extend("force", vim.lsp.config.pyright, { root_dir = root }), { attach = false })
+        if client then
+          vim.lsp.buf_attach_client(0, client)
+        end
+      end,
+    })
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = {"java"},
+      callback = function()
+        map(nx, "<leader>A", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts_silent)
+        map(n, "sev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
+        map(n, "sec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
+        map(n, "stc", "<Cmd>lua require'jdtls'.test_class()<CR>", opts_silent)
+        map(n, "stm", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts_silent)
+        -- Visual 模式下的映射
+        map(x, "sev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
+        map(x, "sec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
+        map(x, "sem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
+      end,
+    })
     ---------------------------
     -- semantic token highlight
     ---------------------------
@@ -327,50 +377,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.lsp.semantic_tokens.start(bufnr, client)
       end
     end
-    ---------------------------
-    -- Filetypes
-    ---------------------------
-    vim.api.nvim_create_autocmd('FileType', {
-      pattern = {'python'},
-      callback = function()
-        local ok, venv = pcall(require, "rj.extras.venv")
-        if ok then
-          venv.setup()
-        end
-        local root = vim.fs.root(0, {
-          "pyproject.toml",
-          "setup.py",
-          "setup.cfg",
-          "requirements.txt",
-          "Pipfile",
-          "pyrightconfig.json",
-          ".git",
-          vim.uv.cwd(),
-        })
-        local client =
-        vim.lsp.start(vim.tbl_extend("force", vim.lsp.config.pyright, { root_dir = root }), { attach = false })
-        if client then
-          vim.lsp.buf_attach_client(0, client)
-        end
-        map(nx, "<leader>A", require("lspimport").import, opts_silent)
-      end,
-    })
-    vim.api.nvim_create_autocmd("FileType", {
-      pattern = "java",
-      callback = function()
-        local opts = { buffer = true }
-        -- Normal 模式下的映射
-        vim.keymap.set("n", "<leader>A", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts_silent)
-        vim.keymap.set("n", "sev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
-        vim.keymap.set("n", "sec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
-        vim.keymap.set("n", "stc", "<Cmd>lua require'jdtls'.test_class()<CR>", opts_silent)
-        vim.keymap.set("n", "stm", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts_silent)
-        -- Visual 模式下的映射
-        vim.keymap.set("x", "sev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
-        vim.keymap.set("x", "sec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
-        vim.keymap.set("x", "sem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
-      end,
-    })
   end
 })
 -- Start

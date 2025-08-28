@@ -184,21 +184,22 @@ if has('nvim') || has('patch-9.0.0438')
     hi! link CocCodeLens CocListBgGrey
     call coc#config('codeLens.enable', v:true)
     call coc#config('codeLens.display', v:true)
-    nnoremap <leader>C :CocCommand document.toggleCodeLens<Cr>
+    nmap <leader>C :CocCommand document.toggleCodeLens<Cr>
+    nmap <M-a> <Plug>(coc-codelens-action)
 else
     call coc#config('codeLens.enable', v:false)
 endif
 nmap <silent><F2> <Plug>(coc-rename)
-nmap <silent><M-a> :CocFzfList actions<Cr>
-nmap <silent><leader>A <Plug>(coc-codelens-action)
-xmap <silent><leader>A <Plug>(coc-codelens-action)
-xmap <silent><leader>X <Plug>(coc-fix-current)
-nmap <silent><leader>X <Plug>(coc-fix-current)
-" codeaction
-nmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
+nmap <silent><Leader>A :CocFzfList actions<Cr>
+" codeaction-refactor
 xmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
-nmap <silent><leader>a <Plug>(coc-codeaction-selected)
-xmap <silent><leader>a <Plug>(coc-codeaction-selected)
+nmap <silent><leader>R <Plug>(coc-codeaction-refactor)
+" fix
+nmap <silent><leader>X <Plug>(coc-fix-current)
+xmap <silent><leader>X <Plug>(coc-fix-current)
+" codeaction
+xmap <silent><leader>a  <Plug>(coc-codeaction-selected)
+nmap <silent><leader>a  <Plug>(coc-codeaction)
 nmap <silent><leader>ar <Plug>(coc-codeaction-refactor)
 nmap <silent><leader>as <Plug>(coc-codeaction-source)
 nmap <silent><leader>ac <Plug>(coc-codeaction-cursor)
