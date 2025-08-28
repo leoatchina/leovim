@@ -483,7 +483,7 @@
     "command": "workbench.action.openGlobalKeybindings"
   },
   {
-    "key": "ctrl+shift+alt+,",
+    "key": "shift+alt+,",
     "command": "workbench.action.openGlobalKeybindingsFile"
   },
   // split
@@ -509,7 +509,7 @@
   },
   /// commit message using AI
   {
-    "key": "ctrl+shift+alt+g",
+    "key": "ctrl+shift+alt+,",
     "command": "AI.generateCommitMessage"
   },
   //----------------------- windsurf --------------------

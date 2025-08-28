@@ -1,4 +1,7 @@
 local M = {}
+local n = { "n" }
+local x = { "x" }
+local nx = { "n", "x" }
 local map = vim.keymap.set
 local autocmd = vim.api.nvim_create_autocmd
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -238,9 +241,6 @@ end
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
-    local nx = { "n", "x" }
-    local n = { "n" }
-    local x = { "x" }
     local bufnr = args.bufnr
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
@@ -317,47 +317,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
     -- symbol-usage
     map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
-    ------------------------------------
-    -- AutoCmd for different filetypes
-    ------------------------------------
-    vim.api.nvim_create_autocmd('FileType', {
-      pattern = {'python'},
-      callback = function()
-        map(nx, "<leader>A", require("lspimport").import, opts_silent)
-        local ok, venv = pcall(require, "rj.extras.venv")
-        if ok then
-          venv.setup()
-        end
-        local root = vim.fs.root(0, {
-          "pyproject.toml",
-          "setup.py",
-          "setup.cfg",
-          "requirements.txt",
-          "Pipfile",
-          "pyrightconfig.json",
-          ".git",
-          vim.uv.cwd(),
-        })
-        local client = vim.lsp.start(vim.tbl_extend("force", vim.lsp.config.pyright, { root_dir = root }), { attach = false })
-        if client then
-          vim.lsp.buf_attach_client(0, client)
-        end
-      end,
-    })
-    vim.api.nvim_create_autocmd("FileType", {
-      pattern = {"java"},
-      callback = function()
-        map(nx, "<leader>A", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts_silent)
-        map(n, "sev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
-        map(n, "sec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
-        map(n, "stc", "<Cmd>lua require'jdtls'.test_class()<CR>", opts_silent)
-        map(n, "stm", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts_silent)
-        -- Visual 模式下的映射
-        map(x, "sev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
-        map(x, "sec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
-        map(x, "sem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
-      end,
-    })
     ---------------------------
     -- semantic token highlight
     ---------------------------
@@ -449,6 +408,33 @@ vim.api.nvim_create_user_command("LspInfo", function()
   vim.cmd("silent checkhealth vim.lsp")
 end, {
   desc = "Get all the information about all LSP attached",
+})
+------------------------------------
+-- AutoCmd for different filetypes
+------------------------------------
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {'python'},
+  callback = function()
+    map(nx, "<leader>A", require("lspimport").import, opts_silent)
+    local ok, venv = pcall(require, "rj.extras.venv")
+    if ok then
+      venv.setup()
+    end
+  end,
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"java"},
+  callback = function()
+    map(nx, "<leader>A", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts_silent)
+    map(n, "sev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
+    map(n, "sec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
+    map(n, "stc", "<Cmd>lua require'jdtls'.test_class()<CR>", opts_silent)
+    map(n, "stm", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts_silent)
+    -- Visual 模式下的映射
+    map(x, "sev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
+    map(x, "sec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
+    map(x, "sem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
+  end,
 })
 ---------------------------
 -- other related plugins
