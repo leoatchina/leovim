@@ -1,17 +1,9 @@
+let g:ensure_installed = ['basedpyright', 'ruff']
 if g:node_version > 16
-    let g:ensure_installed = ['vimls', 'lua_ls', 'bashls']
-else
-    let g:ensure_installed = []
-endif
-if g:node_version > 16
-    if g:python_version > 3.06
-        let g:ensure_installed += ['basedpyright', 'ruff']
-    else
-        let g:ensure_installed += ['pyright']
+    let g:ensure_installed += ['vimls', 'lua_ls', 'bashls']
+    if Require('web')
+        let g:ensure_installed += ['cssls', 'eslint', 'html', 'vuels', 'angularls']
     endif
-endif
-if Require('web') && g:node_version > 16
-    let g:ensure_installed += ['cssls', 'eslint', 'html', 'vuels', 'angularls']
 endif
 if Require('R') && g:R_exe != ''
     let g:ensure_installed += ['r_language_server']
