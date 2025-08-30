@@ -1,6 +1,5 @@
-let g:test0 = $PATH
 if g:node_version > 16
-    let g:ensure_installed = ['vimls', 'lua_ls']
+    let g:ensure_installed = ['vimls', 'lua_ls', 'bashls']
 else
     let g:ensure_installed = []
 endif
