@@ -61,14 +61,19 @@ if has('nvim')
         " call AddRequire('builtin')
     " endif
 else
-    " call AddRequire('coc')
-    " set guifont=Cascadia\ Code:h10.5
-    " set guifont=CascadiaCode\ Nerd\ Font:h11.5
+    " if HAS_GUI()
+        " call AddRequire('coc')
+    " else
+        " call AddRequire('mcm')
+    " endif
 endif
 
 " if HAS_GUI()
+    " set guifont=Cascadia\ Code\ NF:h11.5
+    " set guifont=Cascadia\ Mono\ NF:h11.5
+" else
     " set guifont=Cascadia\ Code:h10.5
-    " set guifont=CascadiaCode\ Nerd\ Font:h11.5
+    " set guifont=Cascadia\ Mono:h10.5
 " endif
 
 if WINDOWS()
