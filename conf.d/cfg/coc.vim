@@ -32,8 +32,9 @@ let g:coc_global_extensions = [
             \ 'coc-xml',
             \ 'coc-sh',
             \ 'coc-vimlsp',
-            \ 'coc-pyright',
+            \ 'coc-basedpyright',
             \ ]
+" \ '@yaegassy/coc-ruff',
 if UNIX()
     let g:coc_global_extensions += ['coc-lua']
 elseif WINDOWS()
