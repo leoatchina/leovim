@@ -1,6 +1,14 @@
-let g:ensure_installed = ['basedpyright', 'ruff']
+if executable('unzip')
+    let g:ensure_installed = ['basedpyright', 'debugpy', 'ruff']
+else
+    let g:ensure_installed = ['basedpyright', 'debugpy']
+endif
 if g:node_version > 16
-    let g:ensure_installed += ['vimls', 'lua_ls', 'bashls']
+    if executable('unzip')
+        let g:ensure_installed += ['vimls', 'lua_ls', 'bashls']
+    else
+        let g:ensure_installed += ['vimls']
+    endif
     if Require('web')
         let g:ensure_installed += ['cssls', 'eslint', 'html', 'vuels', 'angularls']
     endif
