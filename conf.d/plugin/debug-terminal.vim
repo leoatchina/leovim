@@ -61,6 +61,9 @@ let g:floaterm_open_command = 'drop'
 let g:floaterm_wintype  = 'split'
 let g:floaterm_position = 'belowright'
 let g:floaterm_height = 0.3
+if WINDOWS()
+    let g:floaterm_shell = 'powershell.exe'
+endif
 PlugAddOpt 'vim-floaterm'
 " ---------------------------------------------------------
 " enhanced functions and commands
