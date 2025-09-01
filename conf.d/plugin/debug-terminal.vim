@@ -63,6 +63,8 @@ let g:floaterm_position = 'belowright'
 let g:floaterm_height = 0.3
 if WINDOWS()
     let g:floaterm_shell = 'powershell.exe'
+elseif executable('zsh') && has('nvim')
+    let g:floaterm_shell = 'zsh'
 endif
 PlugAddOpt 'vim-floaterm'
 " ---------------------------------------------------------
