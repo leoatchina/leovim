@@ -11,27 +11,27 @@
 
 function! vista#ftplugin#Set() abort
   setlocal
-        \ nonumber
-        \ norelativenumber
-        \ nopaste
-        \ nomodeline
-        \ noswapfile
-        \ nocursorline
-        \ nocursorcolumn
-        \ colorcolumn=
-        \ nobuflisted
-        \ buftype=nofile
-        \ bufhidden=hide
-        \ nomodifiable
-        \ signcolumn=no
-        \ textwidth=0
-        \ nolist
-        \ winfixwidth
-        \ winfixheight
-        \ nospell
-        \ nofoldenable
-        \ foldcolumn=0
-        \ nowrap
+    \ nonumber
+    \ norelativenumber
+    \ nopaste
+    \ nomodeline
+    \ noswapfile
+    \ nocursorline
+    \ nocursorcolumn
+    \ colorcolumn=
+    \ nobuflisted
+    \ buftype=nofile
+    \ bufhidden=hide
+    \ nomodifiable
+    \ signcolumn=no
+    \ textwidth=0
+    \ nolist
+    \ winfixwidth
+    \ winfixheight
+    \ nospell
+    \ nofoldenable
+    \ foldcolumn=0
+    \ nowrap
 
   setlocal foldmethod=expr
   setlocal foldexpr=vista#fold#Expr()
@@ -45,7 +45,7 @@ function! vista#ftplugin#Set() abort
     nnoremap <buffer> <silent> q    :close<CR>
     nnoremap <buffer> <silent> <CR> :<c-u>call vista#cursor#FoldOrJump()<CR>
     nnoremap <buffer> <silent> <2-LeftMouse>
-          \ :<c-u>call vista#cursor#FoldOrJump()<CR>
+                                  \ :<c-u>call vista#cursor#FoldOrJump()<CR>
     nnoremap <buffer> <silent> s    :<c-u>call vista#Sort()<CR>
     nnoremap <buffer> <silent> p    :<c-u>call vista#cursor#TogglePreview()<CR>
   endif

@@ -62,12 +62,12 @@ function! s:RunAsync() abort
   call vista#SetProvider(s:provider)
   for server in s:servers
     call lsp#send_request(server, {
-          \ 'method': 'textDocument/documentSymbol',
-          \ 'params': {
-          \   'textDocument': lsp#get_text_document_identifier(),
-          \ },
-          \ 'on_notification': function('s:HandleLSPResponse', [server, s:last_req_id, 'documentSymbol']),
-          \ })
+        \ 'method': 'textDocument/documentSymbol',
+        \ 'params': {
+        \   'textDocument': lsp#get_text_document_identifier(),
+        \ },
+        \ 'on_notification': function('s:HandleLSPResponse', [server, s:last_req_id, 'documentSymbol']),
+        \ })
     let s:fetching = v:true
   endfor
 endfunction

@@ -6,10 +6,10 @@
 " ============================================================================
 
 if exists('g:loaded_floaterm')
-  finish
+    finish
 elseif !has('nvim') && !has('terminal')
-  call floaterm#util#show_msg("floaterm requires vim to be compiled with 'terminal'", "error")
-  finish
+    call floaterm#util#show_msg("floaterm requires vim to be compiled with 'terminal'", "error")
+    finish
 endif
 let g:loaded_floaterm = 1
 
@@ -30,19 +30,19 @@ let g:floaterm_titleposition    = get(g:, 'floaterm_titleposition', 'left')
 
 
 command! -nargs=* -complete=customlist,floaterm#cmdline#complete -bang -range
-      \ FloatermNew    call floaterm#run('new', <bang>0, [visualmode(), <range>, <line1>, <line2>], <q-args>)
+            \ FloatermNew    call floaterm#run('new', <bang>0, [visualmode(), <range>, <line1>, <line2>], <q-args>)
 command! -nargs=* -complete=customlist,floaterm#cmdline#complete
-      \ FloatermUpdate call floaterm#run('update', 0, [], <q-args>)
+            \ FloatermUpdate call floaterm#run('update', 0, [], <q-args>)
 command! -nargs=? -count=0 -bang -complete=customlist,floaterm#cmdline#complete_names1
-      \ FloatermShow   call floaterm#show(<bang>0, <count>, <q-args>)
+            \ FloatermShow   call floaterm#show(<bang>0, <count>, <q-args>)
 command! -nargs=? -count=0 -bang -complete=customlist,floaterm#cmdline#complete_names1
-      \ FloatermHide   call floaterm#hide(<bang>0, <count>, <q-args>)
+            \ FloatermHide   call floaterm#hide(<bang>0, <count>, <q-args>)
 command! -nargs=? -count=0 -bang -complete=customlist,floaterm#cmdline#complete_names1
-      \ FloatermKill   call floaterm#kill(<bang>0, <count>, <q-args>)
+            \ FloatermKill   call floaterm#kill(<bang>0, <count>, <q-args>)
 command! -nargs=? -count=0 -bang -complete=customlist,floaterm#cmdline#complete_names1
-      \ FloatermToggle call floaterm#toggle(<bang>0, <count>, <q-args>)
+            \ FloatermToggle call floaterm#toggle(<bang>0, <count>, <q-args>)
 command! -nargs=? -range   -bang -complete=customlist,floaterm#cmdline#complete_names2
-      \ FloatermSend   call floaterm#send(<bang>0, visualmode(), <range>, <line1>, <line2>, <q-args>)
+            \ FloatermSend   call floaterm#send(<bang>0, visualmode(), <range>, <line1>, <line2>, <q-args>)
 command! -nargs=0           FloatermPrev   call floaterm#prev()
 command! -nargs=0           FloatermNext   call floaterm#next()
 command! -nargs=0           FloatermFirst  call floaterm#first()
@@ -63,10 +63,10 @@ let g:floaterm_keymap_kill   = get(g:, 'floaterm_keymap_kill', '')
 let g:floaterm_keymap_toggle = get(g:, 'floaterm_keymap_toggle', '')
 
 function! s:bind_keymap(mapvar, command) abort
-  if !empty(a:mapvar)
-    execute printf('nnoremap <silent> %s :%s<CR>', a:mapvar, a:command)
-    execute printf('tnoremap <silent> %s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
-  endif
+    if !empty(a:mapvar)
+        execute printf('nnoremap <silent> %s :%s<CR>', a:mapvar, a:command)
+        execute printf('tnoremap <silent> %s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
+    endif
 endfunction
 call s:bind_keymap(g:floaterm_keymap_new,    'FloatermNew')
 call s:bind_keymap(g:floaterm_keymap_prev,   'FloatermPrev')

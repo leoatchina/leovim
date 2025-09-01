@@ -1,5 +1,5 @@
 if exists('b:current_syntax')
-    finish
+  finish
 endif
 let b:current_syntax = 'which_key'
 

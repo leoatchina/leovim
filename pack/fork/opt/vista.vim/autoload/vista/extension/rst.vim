@@ -40,7 +40,7 @@ function! s:GatherHeaderMetadata() abort
       let idx += 1
     endif
     let idx += 1
-  endwhile
+ endwhile
 
   return headers
 endfunction

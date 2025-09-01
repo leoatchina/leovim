@@ -195,12 +195,12 @@ if has('nvim')
 
   " Run ctags asynchronously given the cmd
   function! s:ApplyRunAsync(cmd) abort
-    " job is job id in neovim
-    let jobid = jobstart(a:cmd, {
-          \ 'stdout_buffered': 1,
-          \ 'stderr_buffered': 1,
-          \ 'on_exit': function('s:on_exit')
-          \ })
+      " job is job id in neovim
+      let jobid = jobstart(a:cmd, {
+              \ 'stdout_buffered': 1,
+              \ 'stderr_buffered': 1,
+              \ 'on_exit': function('s:on_exit')
+              \ })
     return jobid > 0 ? jobid : 0
   endfunction
 else

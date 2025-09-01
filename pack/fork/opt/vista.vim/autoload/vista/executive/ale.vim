@@ -55,10 +55,10 @@ function! s:RunAsync() abort
   let method = 'textDocument/documentSymbol'
   let bufnr = g:vista.source.bufnr
   let params = {
-        \   'textDocument': {
-        \       'uri': ale#path#ToFileURI(expand('#' . bufnr . ':p')),
-        \   }
-        \}
+    \   'textDocument': {
+    \       'uri': ale#path#ToFileURI(expand('#' . bufnr . ':p')),
+    \   }
+    \}
   let message = [0, method, params]
   let Callback = function('s:HandleLSPResponse')
 
