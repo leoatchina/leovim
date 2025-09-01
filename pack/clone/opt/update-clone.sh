@@ -66,7 +66,7 @@ git clone --depth 1 https://github.com/wellle/targets.vim
 
 # vindent.vim
 rm -rf vindent.vim
-git clone --depth 1 https://github.com/jessekelighine/vindent.vim 
+git clone --depth 1 https://github.com/jessekelighine/vindent.vim
 
 # tmux
 rm -rf vim-tmux-navigator
@@ -81,6 +81,10 @@ git clone --depth 1 https://github.com/itchyny/lightline.vim.git
 # startify
 rm -rf vim-startify
 git clone --depth 1 https://github.com/mhinz/vim-startify.git
+
+# marks
+rm -rf vim-bookmarks
+git clone --depth 1 https://github.com/MattesGroeger/vim-bookmarks.git
 
 # asyncrun
 rm -rf asyncrun.vim
@@ -99,7 +103,7 @@ rm -rf vim-choosewin
 git clone --depth 1 https://github.com/t9md/vim-choosewin.git
 
 # undotree
-rm -rf undotree 
+rm -rf undotree
 git clone --depth 1 https://github.com/mbbill/undotree.git
 
 # fern
