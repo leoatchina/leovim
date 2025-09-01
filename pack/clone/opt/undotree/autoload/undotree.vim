@@ -518,7 +518,7 @@ function! s:undotree.SetTargetFocus() abort
     for winnr in range(1, winnr('$')) "winnr starts from 1
         if getwinvar(winnr,'undotree_id') == self.targetid
             if winnr() != winnr
-                call s:exec("norm! ".winnr."\<c-w>\<c-w>")
+                call s:exec_silent("norm! ".winnr."\<c-w>\<c-w>")
                 return 1
             endif
         endif
@@ -607,7 +607,9 @@ function! s:undotree.Show() abort
         setlocal nocursorline
     endif
     setlocal nomodifiable
-    setlocal statusline=%!t:undotree.GetStatusLine()
+    if g:undotree_StatusLine
+        setlocal statusline=%!t:undotree.GetStatusLine()
+    endif
     setfiletype undotree
 
     call self.BindKey()
@@ -635,6 +637,11 @@ function! s:undotree.Update() abort
     endif
     " do nothing if we're in the undotree or diff panel
     if exists('b:isUndotreeBuffer')
+        return
+    endif
+    " let the user disable undotree for chosen filetypes
+    if index(g:undotree_DisabledFiletypes, &filetype) != -1
+        call s:log("undotree.Update() disabled filetype")
         return
     endif
     if (&bt != '' && &bt != 'acwrite') || (&modifiable == 0) || (mode() != 'n')
@@ -1359,7 +1366,9 @@ function! s:diffpanel.Show() abort
     setlocal norelativenumber
     setlocal nocursorline
     setlocal nomodifiable
-    setlocal statusline=%!t:diffpanel.GetStatusLine()
+    if g:undotree_StatusLine
+        setlocal statusline=%!t:diffpanel.GetStatusLine()
+    endif
 
     let &eventignore = ei_bak
 
