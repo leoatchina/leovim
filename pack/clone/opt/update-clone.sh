@@ -135,8 +135,11 @@ find . -type f | grep -i \.avi$ | xargs rm -f
 find . -type f | grep -i \.tag$ | xargs rm -f
 find . -type f | grep -i \.tags$ | xargs rm -f
 find . -type f | grep -i \.gitignore$ | xargs rm -f
+find . -type f | grep -i \.lock$ | xargs rm -f
 # delete dirs
-find . -type d | grep -i \.github$ | xargs rm -rf
-find . -type d | grep -i \.git$    | xargs rm -rf
-find . -type d | grep -i \/test$   | xargs rm -rf
-find . -type d | grep -i \/tests$  | xargs rm -rf
+find . -type d | grep -i \.github$   | xargs rm -rf
+find . -type d | grep -i \.git$      | xargs rm -rf
+find . -type d | grep -i \/test$     | xargs rm -rf
+find . -type d | grep -i \/tests$    | xargs rm -rf
+find . -type d | grep -i \/example*$ | xargs rm -rf
+find . -type d | grep -i \/t$        | xargs rm -rf

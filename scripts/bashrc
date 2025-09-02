@@ -34,40 +34,6 @@ shopt -s checkwinsize
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
 [ -f /usr/local/etc/bash_completion ] && bash /usr/local/etc/bash_completion
-
-command_exists() {
-    command -v "$@" > /dev/null 2>&1
-}
-
-if command_exists "git" ; then
-    function git_branch {
-        branch="`git branch 2>/dev/null | grep "^\*" | sed -e "s/^\*\ //"`"
-        if [ "${branch}" != "" ];then
-            if [ "${branch}" = "(no branch)" ];then
-                branch="(`git rev-parse --short HEAD`...)"
-            fi
-            if [[ `git status --porcelain` ]] ; then
-                branch=$branch" x"
-            else
-                branch=$branch" o"
-            fi
-            echo " $branch"
-        fi
-    }
-    export PS1="\[\e[31;1m\]\u\[\e[0m\]@\[\e[33;1m\]\h\[\e[0m\]:\[\e[36;1m\]\w\[\e[0m\]\[\e[26;1m\]\$(git_branch)\[\e[0m\]\n\$ "
-else
-    export PS1="\[\e[31;1m\]\u\[\e[0m\]@\[\e[33;1m\]\h\[\e[0m\]:\[\e[36;1m\]\w\[\e[0m\]\n\$ "
-fi
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
 
 [ -f ~/.configrc ] && source ~/.configrc
