@@ -64,7 +64,6 @@ function _G.toggle_virtual_text()
   })
 end
 vim.lsp.config("*", {
-  capabilities = lsp_capabilities,
   on_attach = function(client, bufnr)
     local ok, diag = pcall(require, "rj.extras.workspace-diagnostic")
     if ok then
@@ -142,7 +141,9 @@ require('symbol-usage').setup({
 -- mason lspconfig
 -------------------------
 require("mason-lspconfig").setup({
-  ensure_installed = vim.g.ensure_installed,
+  ensure_installed = vim.g.ensure_installed and vim.tbl_filter(function(server)
+    return server ~= "debugpy" -- 过滤掉 debugpy，它是 DAP 而不是 LSP
+  end, vim.g.ensure_installed) or {},
   automatic_enable = true
 })
 ---------------------
@@ -241,15 +242,15 @@ end
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
-    local bufnr = args.bufnr
+    local bufnr = tonumber(args.bufnr)
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
     local opts_silent = { noremap = true, silent = true, nowait = true, buffer = bufnr }
-    if lsp_capabilities and lsp_capabilities.completionProvider then
-      vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+    if client.server_capabilities.completionProvider then
+      vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", {scope = 'local', buf = bufnr})
     end
-    if lsp_capabilities and lsp_capabilities.definitionProvider then
-      vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+    if client.server_capabilities.definitionProvider then
+      vim.api.nvim_set_option_value("tagfunc", "v:lua.vim.lsp.tagfunc", {scope = 'local', buf = bufnr})
     end
     -- signature_help
     map("i", "<C-x><C-x>", function() vim.lsp.buf.signature_help { border = 'single' } end, opts_silent)
@@ -290,14 +291,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
       map(x, "<M-s>", require('lsp-selection-range').expand, opts_silent)
     end
     -- inlay_hint
-    if client.supports_method("textDocument/inlayHint", { bufnr = bufnr }) then
+    if client.server_capabilities.inlayHintProvider then
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
       map(nx, "<leader>i", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
     else
-      map(nx, "<leader>i", [[<Cmd>echo "No inlay_hint for current buffer. "<Cr>]], opts_echo)
+      map(nx, "<leader>i", [[<Cmd>echo "No inlay_hint for current buffer"<Cr>]], opts_echo)
     end
     -- codelens
-    if client.supports_method("textDocument/codeLens", { bufnr = bufnr }) then
+    if client.server_capabilities.codeLensProvider then
       vim.api.nvim_set_hl(0, 'LspCodeLens', { fg = '#888888', bg = '#432345', italic = false })
       function M.codelens_toggle()
         if vim.b.codelens_enable == nil or vim.b.codelens_enable == false then
@@ -324,7 +325,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.treesitter.get_parser(bufnr)
     end, bufnr)
     if not ok then
-      if lsp_capabilities and lsp_capabilities.semanticTokensProvider and lsp_capabilities.semanticTokensProvider.full then
+      if client.server_capabilities.semanticTokensProvider then
         autocmd("TextChanged", {
           group = vim.api.nvim_create_augroup("SemanticTokens", {}),
           buffer = bufnr,
@@ -338,10 +339,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
   end
 })
--- Start
-vim.api.nvim_create_user_command("LspStart", function()
-  vim.cmd.e()
-end, { desc = "Starts LSP clients in the current buffer" })
 -- Stop
 vim.api.nvim_create_user_command("LspStop", function(opts)
   for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
