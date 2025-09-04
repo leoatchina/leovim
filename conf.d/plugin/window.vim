@@ -181,10 +181,6 @@ if has('patch-8.0.1129') && !has('nvim')
         autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * OpenWinBar
         autocmd WinClosed,WinLeave,TabClosed,TabLeave,BufLeave * CloseWinBar
     augroup END
-elseif Installed('dropbar.nvim')
-    lua vim.keymap.set('n', 'sb', require('dropbar.api').pick, { desc = 'Pick symbols in dropbar' })
-    lua vim.keymap.set('n', ',s', require('dropbar.api').goto_context_start, { desc = 'Go to start of current context' })
-    lua vim.keymap.set('n', ';s', require('dropbar.api').select_next_context, { desc = 'Select next context' })
 elseif has('nvim') && InstalledCoc()
     lua require('cfg/coc_symboline')
 endif

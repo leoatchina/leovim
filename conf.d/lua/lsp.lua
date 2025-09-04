@@ -281,6 +281,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "<leader>O", toggle_virtual_text, opts_silent)
     map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
     map(nx, "<leader>D", [[<Cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<Cr>]], opts_silent)
+    -- diagnostic
+    map(n, 'ss', require('dropbar.api').pick, opts_silent)
+    map(n, ',s', require('dropbar.api').goto_context_start, opts_silent)
+    map(n, ';s', require('dropbar.api').select_next_context, opts_silent)
     -- select range
     local ok
     ok, _ = pcall(function()
@@ -292,11 +296,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
     -- inlay_hint
     if client.server_capabilities.inlayHintProvider then
-      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      map(nx, "<leader>i", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
-    else
-      map(nx, "<leader>i", [[<Cmd>echo "No inlay_hint for current buffer"<Cr>]], opts_echo)
+      vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
     end
+    map(nx, "<leader>i", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
     -- codelens
     if client.server_capabilities.codeLensProvider then
       vim.api.nvim_set_hl(0, 'LspCodeLens', { fg = '#888888', bg = '#432345', italic = false })

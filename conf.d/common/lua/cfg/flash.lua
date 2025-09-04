@@ -28,13 +28,6 @@ require("flash").setup({
   }
 })
 local map = vim.keymap.set
--- buffer jump
-map({ 'n', 'x'}, 'ss', function()
-  require("flash").jump()
-end, { silent = true })
-map({ 'o' }, 's', function()
-  require("flash").jump()
-end, { silent = true })
 -- jump forward
 map({ 'n', 'x'}, 'sj', function()
   require("flash").jump({search = { forward = true,  wrap = false, multi_window = false }})
