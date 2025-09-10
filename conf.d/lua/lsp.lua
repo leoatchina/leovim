@@ -274,7 +274,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- native lsp
     map(nx, "<C-q>", [[<Cmd>FormatWrite<Cr>]], opts_echo)
     map(nx, "K", function() vim.lsp.buf.hover { border = "rounded" } end, opts_silent)
-    map(nx, "<leader>W", vim.lsp.buf.workspace_symbol, opts_silent)
+    -- get workspace_symbol
+    map(n, "<leader>W", ":lua vim.lsp.buf.workspace_symbol('<C-r><C-w>')<left><left>", opts_silent)
+    map(x, "<leader>W", "y:lua vim.lsp.buf.workspace_symbol('<C-r>\"')<left><left>", opts_silent)
     map(nx, "cdL", [[<Cmd>lua vim.print(vim.lsp.buf.list_workspace_folders())<Cr>]], opts_silent)
     -- diagnostic
     map(nx, "<leader>o", toggle_diagnostics, opts_silent)

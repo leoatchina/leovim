@@ -131,6 +131,8 @@ nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 " symbol
 nnoremap <silent><leader>t :Vista finder coc<Cr>
 inoremap <silent><C-x><C-x> <C-r>=CocActionAsync('showSignatureHelp')<Cr>
+nnoremap <leader>W :CocFzfList symbols <C-r><C-w>
+xnoremap <leader>W :<C-u>CocFzfList symbols <C-r>=GetVisualSelection()<Cr>
 " completion map
 function! s:has_backspace() abort
     let col = col('.') - 1
@@ -229,7 +231,6 @@ omap ac <Plug>(coc-classobj-a)
 " ------------------------
 if has('nvim')
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
-    nnoremap <Leader>W :CocFzfList symbols<Cr>
 else
     call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
 endif
