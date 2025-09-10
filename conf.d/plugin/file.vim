@@ -281,14 +281,12 @@ endif
 "----------------------------------------------------------------------
 " save
 "----------------------------------------------------------------------
-nnoremap <nowait><Leader>w :wa!<Cr>
 if v:version >= 800 || has('nvim')
     nnoremap <C-s> :w!<Cr>
     xnoremap <C-s> <ESC>:w!<Cr>gv
     cnoremap <C-s> w!<Cr>
     inoremap <C-s> <C-o>:w!<Cr>
     nnoremap <C-w><C-s> :redraw \| wa!<Cr>
-    nnoremap <C-w><C-v> :redraw \| wa!<Cr>
 endif
 function! s:toggle_modify() abort
     if &modifiable
