@@ -17,6 +17,8 @@ if WINDOWS()
 else
     let g:coc_data_home = $DEPLOY_DIR . "/coc"
 endif
+call coc#config('python.pythonPath', g:python_prog)
+call coc#config('python.venvPath', ['.venv', 'venv', '../venv', '../.venv'])
 " ------------------------
 " coc-global-extensions
 " ------------------------
@@ -173,8 +175,6 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " ----------------------------
 " inlayHint/codeLens/codeaction
 " ----------------------------
-call coc#config('python.pythonPath', g:python_prog)
-call coc#config('python.venvPath', ['.venv', 'venv', '../venvl', '../.venv'])
 if has('nvim') || has('patch-9.0.0252')
     call coc#config('inlayHint.enable', v:true)
     nnoremap <silent><leader>i :CocCommand document.toggleInlayHint<Cr>
