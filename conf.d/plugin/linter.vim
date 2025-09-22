@@ -28,15 +28,35 @@ if Installed('coc.nvim')
     if g:lint_tool == 'ale'
         call coc#config('diagnostic.displayByAle', v:true)
     else
-        function! s:Diagnostics()
-            CocDiagnostics
+        function! s:Diagnostics(kind) abort
+            if a:kind ==# 'error'
+                let l:all = CocAction('diagnosticList')
+                if type(l:all) != type([])
+                    echo "No diagnostics"
+                    return
+                endif
+                let l:errs = filter(copy(l:all), {_, d -> has_key(d, 'severity') && (d.severity ==# 'Error' || d.severity ==# 'error' || d.severity ==# 'E' || d.severity ==# 1)})
+                if empty(l:errs)
+                    echo "No errors"
+                    call setqflist([], 'r')
+                    cclose
+                    return
+                endif
+                let l:items = map(l:errs, {_, d -> {'filename': d.file, 'lnum': d.lnum, 'col': d.col, 'text': d.message, 'type': 'E'}})
+                call setqflist(l:items, 'r')
+                copen
+            else
+                CocDiagnostics
+            endif
             if PlannedLeaderf() && !has('nvim')
                 LeaderfQfLoc
             endif
         endfunction
-        command! Diagnostics call s:Diagnostics()
+        command! Diagnostics call s:Diagnostics('all')
+        command! DiagnosticsError call s:Diagnostics('error')
         nnoremap <silent><leader>d :Diagnostics<Cr>
         nnoremap <silent><leader>D :CocFzfList diagnostics<CR>
+        nnoremap <silent><leader>e :DiagnosticsError<Cr>
         nmap <silent>;d <Plug>(coc-diagnostic-next)
         nmap <silent>,d <Plug>(coc-diagnostic-prev)
         nmap <silent>;e <Plug>(coc-diagnostic-next-error)

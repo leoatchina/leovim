@@ -283,6 +283,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "<leader>O", toggle_virtual_text, opts_silent)
     map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
     map(nx, "<leader>D", [[<Cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<Cr>]], opts_silent)
+    map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
+    map(nx, "<leader>e", [[<Cmd>lua vim.diagnostic.setloclist({open=true, severity=vim.diagnostic.severity.ERROR})<Cr>]], opts_silent)
     -- diagnostic
     map(n, 'ss', require('dropbar.api').pick, opts_silent)
     map(n, ',s', require('dropbar.api').goto_context_start, opts_silent)

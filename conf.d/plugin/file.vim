@@ -92,16 +92,16 @@ if Installed('vim-floaterm')
             exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
         endfunction
         command! CocFile call s:coc_file()
-        nnoremap <silent><nowait><leader>e :CocFile<Cr>
+        nnoremap <silent><nowait>\ff :CocFile<Cr>
     elseif executable('yazi')
         command! FloatermYazi call s:floaterm_float('yazi')
-        nnoremap <silent><nowait><leader>e :FloatermYazi<Cr>
+        nnoremap <silent><nowait>\ff :FloatermYazi<Cr>
     elseif executable('ranger')
         command! FloatermRanger call s:floaterm_float('ranger')
-        nnoremap <silent><nowait><leader>e :FloatermRanger<Cr>
+        nnoremap <silent><nowait>\ff :FloatermRanger<Cr>
     elseif executable('lf')
         command! FloatermLF call s:floaterm_float('lf')
-        nnoremap <silent><nowait><leader>e :FloatermLF<Cr>
+        nnoremap <silent><nowait>\ff :FloatermLF<Cr>
     endif
 endif
 "------------------------
