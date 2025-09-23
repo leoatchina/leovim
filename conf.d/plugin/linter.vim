@@ -28,8 +28,8 @@ if Installed('coc.nvim')
     if g:lint_tool == 'ale'
         call coc#config('diagnostic.displayByAle', v:true)
     else
-        function! s:Diagnostics(kind) abort
-            if a:kind ==# 'error'
+        function! s:Diagnostics(...) abort
+            if a0 && a:1 ==# 'error'
                 let l:all = CocAction('diagnosticList')
                 if type(l:all) != type([])
                     echo "No diagnostics"
@@ -52,7 +52,7 @@ if Installed('coc.nvim')
                 LeaderfQfLoc
             endif
         endfunction
-        command! Diagnostics call s:Diagnostics('all')
+        command! Diagnostics call s:Diagnostics()
         command! DiagnosticsError call s:Diagnostics('error')
         nnoremap <silent><leader>d :Diagnostics<Cr>
         nnoremap <silent><leader>D :CocFzfList diagnostics<CR>
@@ -70,8 +70,6 @@ if Installed('coc.nvim')
                     \ "--max-line-length=200",
                     \ "--ignore=" . s:python_lint_ignore,
                     \ ])
-        " show diagnostic
-        nmap <M-l>d <Plug>(coc-diagnostic-info)
         " toggle diagnostic
         function! s:CocDiagnosticToggleBuffer()
             call CocAction('diagnosticToggleBuffer')
@@ -138,8 +136,8 @@ if Planned('ale')
     command! -bang -nargs=* ALEDiag call s:ale_diag()
     if !Installed('coc.nvim')
         nnoremap <silent><leader>d :ALELint<Cr>
-        nnoremap <silent><leader>o :ALEToggle<Cr>
-        nnoremap <silent><leader>O :ALECommands<Cr>
+        nnoremap <silent><leader>o :ALEToggleBuffer<Cr>
+        nnoremap <silent><leader>O :ALEToggle<Cr>
         nmap ;d <Plug>(ale_next)
         nmap ,d <Plug>(ale_previous)
         nmap ;e <Plug>(ale_next_error)
