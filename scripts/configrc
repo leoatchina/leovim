@@ -1,4 +1,7 @@
 # ------------------------------------------------------------------------
+command_exists() {
+    command -v "$@" > /dev/null 2>&1
+}
 export EDITOR=vim
 export TERM=xterm-256color
 # enable color support of ls and also add handy aliases
