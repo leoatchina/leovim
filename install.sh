@@ -215,12 +215,12 @@ if [ $# -gt 0 ]; then
         note "Install softwares"
     fi
     # neovim
-    if [[ $mode == 'all' || $mode == 'neovim' ]]; then
-        if [ $os == 'macos-arm64' ] && [ -d ~/.local/nvim-macos-arm64 ] && [ $mode == 'all' ]; then
+    if [[ $mode == 'all' || $mode == 'basic'|| $mode == 'neovim' ]]; then
+        if [ $os == 'macos-arm64' ] && [ -d ~/.local/nvim-macos-arm64 ] && [ $mode != 'neovim' ]; then
             info "neovim already installed"
-        elif [ $os == 'macos-x64' ] && [ -d ~/.local/nvim-macos-x86_64 ] && [ $mode == 'all' ]; then
+        elif [ $os == 'macos-x64' ] && [ -d ~/.local/nvim-macos-x86_64 ] && [ $mode != 'neovim' ]; then
             info "neovim already installed"
-        elif [ $os == 'linux' ] && [ -d ~/.local/nvim-linux-x86_64 ] && [ $mode == 'all' ]; then
+        elif [ $os == 'linux' ] && [ -d ~/.local/nvim-linux-x86_64 ] && [ $mode != 'neovim' ]; then
             info "neovim already installed"
         else
             cd ~/.local
@@ -243,10 +243,10 @@ if [ $# -gt 0 ]; then
             rm nvim-*.tar.gz
             success "neovim installed"
         fi
-        [[ $mode == 'neovim' ]] && exit 0
+        [ $mode == 'neovim' ] && exit 0
     fi
     # z.lua
-    if [[ $mode == 'all' || $mode == 'z.lua' ]]; then
+    if [[ $mode == 'all' || $mode == 'basic' || $mode == 'z.lua' ]]; then
         if [ -d ~/z.lua ]; then
             info "z.lua already installed."
             cd ~/z.lua && git pull
@@ -254,12 +254,12 @@ if [ $# -gt 0 ]; then
             git clone https://github.com/skywind3000/z.lua ~/z.lua
             success "z.lua installed"
         fi
-        [[ $mode == 'z.lua' ]] && exit 0
+        [ $mode == 'z.lua' ] && exit 0
     fi
     # nodejs && nvm
-    if [[ $mode == 'all' || $mode == 'nodejs' ]]; then
+    if [[ $mode == 'all' || $mode == 'basic' || $mode == 'nodejs' ]]; then
         node_link=~/.local/node
-        if [ -L $node_link ] && [ $mode == 'all' ]; then
+        if [ -L $node_link ] && [ $mode != 'nodejs' ]; then
             info "$node_link already linked"
         else
             cd ~/.local
@@ -299,7 +299,7 @@ if [ $# -gt 0 ]; then
         else
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
         fi
-        [[ $mode == 'rust' ]] && exit 0
+        [ $mode == 'rust' ] && exit 0
     fi
     # gvm
     if [[ $mode == 'all' || $mode == 'gvm' ]]; then
@@ -308,7 +308,7 @@ if [ $# -gt 0 ]; then
         else
             bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
         fi
-        [[ $mode == 'gvm' ]] && exit 0
+        [ $mode == 'gvm' ] && exit 0
     fi
 else
     mode=normal
