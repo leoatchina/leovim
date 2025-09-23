@@ -9,6 +9,8 @@ let g:nvim_treesitter_install = UNIX()
 "     call AddRequire('notags')
 " endif
 
+" call AddRequire('fzfbin')
+
 " call AddRequire('web')
 " call AddRequire('wubi')
 " call AddRequire('pinyin')

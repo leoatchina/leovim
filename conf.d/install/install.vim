@@ -243,7 +243,11 @@ if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
     if WINDOWS()
         PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': Expand('$HOME\\AppData\\Local\\fzf')}
     else
-        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
+        if Require('fzfbin)'
+            PlugAdd 'junegunn/fzf', {'do': './install --bin', 'dir': Expand('~/.local/fzf')}
+        else
+            PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': Expand('~/.local/fzf')}
+        endif
     endif
 endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('noleaderf') && !Require('no-leaderf')
