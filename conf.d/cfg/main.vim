@@ -1,7 +1,3 @@
-set rtp^=$CONF_D_DIR
-if !has('nvim-0.11')
-    let &termencoding=&enc
-endif
 " ------------------------------------
 " Meta key
 " ------------------------------------
@@ -23,6 +19,13 @@ for k in s:metacode_group
     let mkey = "<M-" . k . ">"
     exec printf("map %s <Nop>", mkey)
 endfor
+" ------------------------------------
+" basic setting
+" ------------------------------------
+if !has('nvim-0.11')
+    let &termencoding=&enc
+endif
+set rtp^=$CONF_D_DIR
 " ------------------------------------
 " map enhance
 " ------------------------------------
