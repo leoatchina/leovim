@@ -9,13 +9,6 @@ if has('gui_running') && has('macunix')
     set macmeta
 endif
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
-if has('nvim') || HAS_GUI()
-    for k in s:metacode_group
-        let mkey = "<M-" . k . ">"
-        exec printf("map %s <Nop>", mkey)
-    endfor
-endif
-" NOTE: add metacode_group must be execute after map to nop
 for i in range(10)
     " 48 is ascii of 0
     call add(s:metacode_group, nr2char(48 + i))
@@ -25,6 +18,10 @@ for i in range(26)
     call add(s:metacode_group, nr2char(65 + i))
     " 97 is ascii of a
     call add(s:metacode_group, nr2char(97 + i))
+endfor
+for k in s:metacode_group
+    let mkey = "<M-" . k . ">"
+    exec printf("map %s <Nop>", mkey)
 endfor
 " ------------------------------------
 " map enhance
