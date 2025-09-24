@@ -87,6 +87,8 @@ if WINDOWS()
     " let g:code_user_dir = 'C:\Users\Admin\AppData\Roaming\Code\User'
     " let g:kiro_user_dir = 'C:\Users\Admin\AppData\Roaming\Kiro\User'
     " let g:trae_user_dir = 'C:\Users\Admin\AppData\Roaming\Trae\User'
+    " let g:qoder_user_dir = 'C:\Users\Admin\AppData\Roaming\Qoder\User'
+    " let g:lingma_user_dir = 'C:\Users\Admin\AppData\Roaming\Lingma\User'
     " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
     " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
     " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
@@ -96,6 +98,8 @@ elseif UNIX()
     " let g:code_user_dir = expand("$HOME/.config/Code/User")
     " let g:kiro_user_dir = expand("$HOME/.config/Kiro/User")
     " let g:trae_user_dir = expand("$HOME/.config/Trae/User")
+    " let g:qoder_user_dir = expand("$HOME/.config/Qoder/User")
+    " let g:lingma_user_dir = expand("$HOME/.config/Lingma/User")
     " let g:cursor_user_dir = expand("$HOME/.config/Cursor/User")
     " let g:windsurf_user_dir = expand("$HOME/.config/Windsurf/User")
     " let g:positron_user_dir = expand("$HOME/.config/Positron/User")
