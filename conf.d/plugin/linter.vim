@@ -29,7 +29,7 @@ if Installed('coc.nvim')
         call coc#config('diagnostic.displayByAle', v:true)
     else
         function! s:Diagnostics(...) abort
-            if a0 && a:1 ==# 'error'
+            if a:0 && a:1 ==# 'error'
                 let l:all = CocAction('diagnosticList')
                 if type(l:all) != type([])
                     echo "No diagnostics"
@@ -47,9 +47,6 @@ if Installed('coc.nvim')
                 copen
             else
                 CocDiagnostics
-            endif
-            if PlannedLeaderf() && !has('nvim')
-                LeaderfQfLoc
             endif
         endfunction
         command! Diagnostics call s:Diagnostics()
