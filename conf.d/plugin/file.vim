@@ -247,16 +247,12 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>v :call TabeOpen("$CFG_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$CFG_DIR/opt.vim")<Cr>
     if PlannedLeaderf()
-        nnoremap <silent><M-h>a :Leaderf file --regex --no-sort ~/.leovim/conf.d/autoload<Cr>
-        nnoremap <silent><M-h>p :Leaderf file --regex --no-sort ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --regex --no-sort ~/.leovim<Cr>
         if UNIX()
             nnoremap <silent><M-h>L :Leaderf file --regex --no-sort ~/.local/bin<Cr>
         endif
     elseif PlannedFzf()
-        nnoremap <silent><M-h>a :FzfFiles ~/.leovim/conf.d/autoload<Cr>
-        nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
         if UNIX()
@@ -267,8 +263,8 @@ if get(g:, 'leovim_openmap', 1)
     if filereadable(expand("~/.leovim.d/after.vim"))
         source ~/.leovim.d/after.vim
     endif
-    nnoremap <silent><M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
-    nnoremap <silent><M-h>P :call <SID>open_or_create_file("~/.leovim.d/pack.vim")<Cr>
+    nnoremap <silent><M-h>a :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
+    nnoremap <silent><M-h>p :call <SID>open_or_create_file("~/.leovim.d/pack.vim")<Cr>
 endif
 " ------------------
 " delete tmp files
