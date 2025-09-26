@@ -15,10 +15,6 @@ for i in range(26)
     " 97 is ascii of a
     call add(s:metacode_group, nr2char(97 + i))
 endfor
-for k in s:metacode_group
-    let mkey = "<M-" . k . ">"
-    exec printf("map %s <Nop>", mkey)
-endfor
 " ------------------------------------
 " basic setting
 " ------------------------------------
@@ -426,6 +422,10 @@ endif
 function! s:set_metacode(key)
     exec "set <M-".a:key.">=\e".a:key
 endfunction
-for c in s:metacode_group
-    call s:set_metacode(c)
+for k in s:metacode_group
+    call s:set_metacode(k)
+    let mkey = "<M-" . k . ">"
+    if hasmapto(mkey)
+        exec printf("map %s <Nop>", mkey)
+    endif
 endfor
