@@ -260,8 +260,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- code action
     map(n, "<F2>", vim.lsp.buf.rename, opts_echo)
     map(n, "<leader>a", vim.lsp.buf.code_action, opts_echo)
-    -- vista
-    map(nx, "<leader>t", [[<Cmd>Vista finder nvim_lsp<Cr>]], opts_silent)
+    -- aerial
+    map(nx, "<leader>t", [[<Cmd>AerialNavToggle<Cr>]], opts_silent)
     -- call-graph
     map(nx, "gr", [[<Cmd>CallGraphR<Cr>]], opts_silent)
     map(nx, "gh", [[<Cmd>CallGraphI<Cr>]], opts_silent)

@@ -15,16 +15,15 @@ endfunction
 " ------------------------------
 if PlannedLsp()
     call s:add_symbol('nvimlsp')
+    call s:add_symbol('aerial')
     call s:add_symbol('vista')
 elseif g:complete_engine == 'coc'
     call s:add_symbol('coc')
     call s:add_symbol('vista')
-elseif g:complete_engine == 'mcm'
-    if v:version >= 800 && get(g:, 'ctags_type', '') =~ 'Universal'
-        call s:add_symbol('vista')
-    elseif get(g:, 'ctags_type', '') != ''
-        call s:add_symbol('tagbar')
-    endif
+elseif v:version >= 800 && get(g:, 'ctags_type', '') =~ 'Universal'
+    call s:add_symbol('vista')
+elseif get(g:, 'ctags_type', '') != ''
+    call s:add_symbol('tagbar')
 endif
 " ------------------------------
 " tags
@@ -57,6 +56,9 @@ if s:planned_symbol('gutentags')
 endif
 if s:planned_symbol('plus')
     PlugAdd 'skywind3000/gutentags_plus'
+endif
+if s:planned_symbol('aerial')
+    PlugAdd 'stevearc/aerial.nvim'
 endif
 if s:planned_symbol('vista')
     PlugAddOpt 'vista.vim'

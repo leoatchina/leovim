@@ -28,6 +28,7 @@ function! InstalledLsp() abort
                 \ 'nvim-lsp-selection-range',
                 \ 'formatter.nvim',
                 \ 'dropbar.nvim',
+                \ 'aerial.nvim',
                 \ )
 endfunction
 function! InstalledCoc() abort

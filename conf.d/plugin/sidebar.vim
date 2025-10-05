@@ -22,7 +22,7 @@ if Installed('vista.vim')
     if g:ctags_type != ''
         let g:vista_executive_for.go = 'ctags'
     endif
-    if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
+    if get(g:, 'ctags_type', '') =~ 'Universal'
         function! s:check_vista_kind(nr) abort
             return s:check_buf_ft('vista_kind', a:nr)
         endfunction
@@ -33,6 +33,22 @@ if Installed('vista.vim')
                     \ 'close': 'Vista!!'
                     \ }
         nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
+    endif
+endif
+if Installed('aerial.nvim')
+    lua require('cfg/aerial')
+    function! s:check_aerial(nr) abort
+        return tolower(getwinvar(a:nr, '&filetype')) =~ 'aerial'
+    endfunction
+    let g:sidebars.aerial = {
+                \ 'position': 'left',
+                \ 'check_win': function('s:check_aerial'),
+                \ 'open': 'AerialOpen',
+                \ 'close': 'AerialClose'
+                \ }
+    nnoremap <silent><C-t> :call sidebar#toggle('aerial')<CR>
+elseif Installed('vista.vim')
+    if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort
             return tolower(getwinvar(a:nr, '&filetype')) =~ 'vista'
         endfunction
