@@ -105,7 +105,7 @@ mkdir -p "$HOME/.config/nvim" "$HOME/.local/bin"
 
 # zed config
 mkdir -p "$HOME/.config/zed"
-ln -s $APP_PATH/scripts/keymap.json $HOME/.config/zed
+ln -sf $APP_PATH/scripts/keymap.json $HOME/.config/zed/keymap.json
 
 # z scripts is for history file browser
 cp_n $APP_PATH/scripts/z.sh $HOME/.local/bin
