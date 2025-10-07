@@ -1,11 +1,40 @@
-vim.keymap.set("n", "<M-i><M-a>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
-vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionChat<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], { noremap = true, silent = true })
+vim.keymap.set("n", "<M-i><M-i>", [[<Cmd>CodeCompanionChat<Cr>]], { noremap = true, silent = true })
+local diff = require("mini.diff")
+diff.setup({
+  -- Disabled by default
+  source = diff.gen_source.none(),
+})
 require("codecompanion").setup({
   opts = {
     log_level = "DEBUG",
     language = vim.g.codecompanion_language or 'Chinese'
   },
   adapters = {
+    gemini = function()
+      return require("codecompanion.adapters").extend("gemini", {
+        env = {
+          api_key = vim.env.GEMINI_API_KEY
+        },
+        schema = {
+          model = {
+            default = vim.g.gemini_model_model
+          },
+        },
+      })
+    end,
+    deepseek = function()
+      return require("codecompanion.adapters").extend("deepseek", {
+        env = {
+          api_key = vim.env.DEEPSEEK_API_KEY
+        },
+        schema = {
+          model = {
+            default = vim.g.deepseek_model
+          },
+        },
+      })
+    end,
     xai = function()
       return require("codecompanion.adapters").extend("xai", {
         env = {
@@ -30,18 +59,6 @@ require("codecompanion").setup({
         },
       })
     end,
-    gemini = function()
-      return require("codecompanion.adapters").extend("gemini", {
-        env = {
-          api_key = vim.env.GEMINI_API_KEY
-        },
-        schema = {
-          model = {
-            default = vim.g.gemini_model_model
-          },
-        },
-      })
-    end,
     openai = function()
       return require("codecompanion.adapters").extend("openai", {
         env = {
@@ -50,18 +67,6 @@ require("codecompanion").setup({
         schema = {
           model = {
             default = vim.g.openai_model
-          },
-        },
-      })
-    end,
-    deepseek = function()
-      return require("codecompanion.adapters").extend("deepseek", {
-        env = {
-          api_key = vim.env.DEEPSEEK_API_KEY
-        },
-        schema = {
-          model = {
-            default = vim.g.deepseek_model
           },
         },
       })
@@ -146,6 +151,14 @@ require("codecompanion").setup({
     }
   },
   extensions = {
+    mcphub = {
+      callback = "mcphub.extensions.codecompanion",
+      opts = {
+        make_vars = true,
+        make_slash_commands = true,
+        show_result_in_chat = true
+      }
+    },
     history = {
       enabled = true,
       opts = {

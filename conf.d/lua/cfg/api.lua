@@ -5,10 +5,10 @@ vim.g.openai_url = ''
 vim.g.xai_model = vim.g.xai_model or "grok-beta"
 vim.g.deepseek_model = vim.g.deepseek_model or "deepseek-chat"
 vim.g.mistral_model = vim.g.mistral_model or "mistral-large-latest"
-vim.g.huggingface_model = vim.g.huggingface_model or "Qwen/Qwen2.5-72B-Instruct"
 vim.g.openai_model = vim.g.openai_model or "gpt4o"
-vim.g.gemini_model = vim.g.gemini_model or "gemini-1.5-pro"
-vim.g.claude_model = vim.g.claude_model or "claude-3.5-sonnet"
+vim.g.gemini_model = vim.g.gemini_model or "gemini-2.0-flash"
+vim.g.claude_model = vim.g.claude_model or "claude-3.7-sonnet"
+vim.g.huggingface_model = vim.g.huggingface_model or "Qwen/Qwen2.5-72B-Instruct"
 -- key
 if vim.env.XAI_API_KEY then
   vim.g.ai_provider = 'xai'

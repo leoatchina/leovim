@@ -113,6 +113,21 @@ if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 " ------------------------------
+" textobj install
+" ------------------------------
+if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX())
+    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
+    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
+    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
+    PlugAdd 'm-demare/hlargs.nvim'
+elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
+    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
+    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
+    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+    PlugAdd 'gcmt/wildfire.vim'
+endif
+" ------------------------------
 " AI engine install
 " ------------------------------
 if Require('copilot_plus') ||
@@ -131,10 +146,12 @@ elseif get(g:, 'openai_compatible_api_key', '') != '' &&
 else
     let g:ai_api_key = 0
 endif
-if g:ai_api_key && Planned('nvim-treesitter') && executable('curl') && PlannedLsp() && Require('codecompanion')
+if g:ai_api_key > 0 && Planned('nvim-treesitter') && executable('curl') && PlannedLsp() && Require('codecompanion')
     PlugAdd 'olimorris/codecompanion.nvim'
     PlugAdd 'ravitemer/codecompanion-history.nvim'
-    PlugAdd 'echasnovski/mini.pick'
+    PlugAdd 'franco-ruggeri/codecompanion-spinner.nvim'
+    PlugAdd 'ravitemer/mcphub.nvim'
+    PlugAdd 'echasnovski/mini.diff'
 endif
 " AI complete
 if has('nvim-0.10') && Require('minuet-ai') && (
@@ -195,21 +212,6 @@ elseif has('nvim-0.9.5') && Require('debug')
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
-endif
-" ------------------------------
-" textobj install
-" ------------------------------
-if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', UNIX())
-    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
-    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
-    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
-    PlugAdd 'm-demare/hlargs.nvim'
-elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
-    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
-    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
-    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
-    PlugAdd 'gcmt/wildfire.vim'
 endif
 " -----------------------
 " format install

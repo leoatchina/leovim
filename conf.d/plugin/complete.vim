@@ -6,8 +6,10 @@ endif
 " ------------------------------
 let g:max_tokens = get(g:, 'max_tokens', 8192)
 if Installed('minuet-ai.nvim')
+    lua require("cfg/api")
     lua require('cfg/minuet')
     let g:ai_complete_engine = 'minuet'
+    let s:api_required = 1
 elseif Installed('windsurf.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
@@ -31,11 +33,10 @@ elseif Installed('copilot.vim')
     imap <silent><nowait><M-:> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 endif
-if Installed("yarepl.nvim")
-    lua require("cfg/api")
-    lua require("cfg/yarepl")
-elseif Installed('codecompanion.nvim', 'codecompanion-history.nvim')
-    lua require("cfg/api")
+if Installed('codecompanion.nvim', 'codecompanion-history.nvim', 'mcphub.nvim', 'mini.diff')
+    if !get(s:, 'api_required', 0)
+        lua require("cfg/api")
+    endif
     lua require("cfg/codecompanion")
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>

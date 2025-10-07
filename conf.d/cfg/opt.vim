@@ -45,7 +45,7 @@ let g:nvim_treesitter_install = UNIX()
 " let g:xai_model = 'grok-beta'
 " let g:openai_model = 'gpt4o'
 " let g:claude_model = 'claude-3.5-sonnet'
-" let g:gemini_model = 'gemini-1.5-pro'
+" let g:gemini_model = 'gemini-2.5-flash'
 " let g:deepseek_model = 'deepseek-chat'
 
 " let g:openai_compatible_api_key = ''
