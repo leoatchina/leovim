@@ -116,13 +116,13 @@ endif
 " AI engine install
 " ------------------------------
 if Require('copilot_plus') ||
+    \  exists('$GEMINI_API_KEY') ||
     \  exists('$XAI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
     \  exists('$MISTRAL_API_KEY') ||
     \  exists('$HUGGINGFACE_API_KEY') ||
     \  exists('$OPENAI_API_KEY') ||
-    \  exists('$ANTHROPIC_API_KEY') ||
-    \  exists('$GEMINI_API_KEY')
+    \  exists('$ANTHROPIC_API_KEY')
     let g:ai_api_key = 2
 elseif get(g:, 'openai_compatible_api_key', '') != '' &&
     \  get(g:, 'openai_compatible_model', '') != '' &&
@@ -131,22 +131,18 @@ elseif get(g:, 'openai_compatible_api_key', '') != '' &&
 else
     let g:ai_api_key = 0
 endif
-if g:ai_api_key
-    if has('nvim-0.9') && Require('aider') && executable('aider') && g:ai_api_key
-        PlugAdd 'milanglacier/yarepl.nvim'
-    elseif Planned('nvim-treesitter') && executable('curl') && PlannedLsp() && Require('codecompanion')
-        PlugAdd 'olimorris/codecompanion.nvim'
-        PlugAdd 'ravitemer/codecompanion-history.nvim'
-        PlugAdd 'echasnovski/mini.pick'
-    endif
+if g:ai_api_key && Planned('nvim-treesitter') && executable('curl') && PlannedLsp() && Require('codecompanion')
+    PlugAdd 'olimorris/codecompanion.nvim'
+    PlugAdd 'ravitemer/codecompanion-history.nvim'
+    PlugAdd 'echasnovski/mini.pick'
 endif
 " AI complete
 if has('nvim-0.10') && Require('minuet-ai') && (
-    \  exists('$OPENAI_API_KEY') ||
     \  exists('$GEMINI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
-    \  exists('$ANTHROPIC_API_KEY') ||
+    \  exists('$OPENAI_API_KEY') ||
     \  exists('$CODESTRAL_API_KEY') ||
+    \  exists('$ANTHROPIC_API_KEY') ||
     \  g:ai_api_key == 1
     \  )
     PlugAdd 'milanglacier/minuet-ai.nvim'
