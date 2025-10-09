@@ -1,7 +1,11 @@
-if executable('unzip')
-    let g:ensure_installed = ['basedpyright', 'debugpy', 'ruff']
+if g:python_version > 3
+    if executable('unzip')
+        let g:ensure_installed = ['basedpyright', 'debugpy', 'ruff']
+    else
+        let g:ensure_installed = ['basedpyright', 'debugpy']
+    endif
 else
-    let g:ensure_installed = ['basedpyright', 'debugpy']
+    let g:ensure_installed = []
 endif
 if g:node_version > 16
     if executable('unzip')
