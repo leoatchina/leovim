@@ -150,8 +150,8 @@ if g:ai_api_key > 0 && Planned('nvim-treesitter') && executable('curl') && Plann
     PlugAdd 'olimorris/codecompanion.nvim'
     PlugAdd 'ravitemer/codecompanion-history.nvim'
     PlugAdd 'franco-ruggeri/codecompanion-spinner.nvim'
+    PlugAdd 'Davidyz/VectorCode'
     PlugAdd 'ravitemer/mcphub.nvim'
-    PlugAdd 'echasnovski/mini.diff'
 endif
 " AI complete
 if has('nvim-0.10') && Require('minuet-ai') && (
@@ -260,6 +260,7 @@ if has('nvim')
     endif
     if PlannedLsp() || has('nvim-0.10') && Planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
+        PlugAdd 'echasnovski/mini.diff'
         if UNIX()
             PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
         endif
