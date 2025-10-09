@@ -1,6 +1,10 @@
 local config
 local enabled_ft = {'lua', 'vim', 'python', 'r', 'c', 'cpp', 'rust', 'go', 'java', 'javascript', 'typescript'}
-if InstalledLsp() then
+if InstalledBlink() or InstalledCmp() then
+  config = {
+    provider = vim.g.ai_provider,
+  }
+elseif InstalledLsp() then
   config = {
     provider = vim.g.ai_provider,
     lsp = {
@@ -8,6 +12,21 @@ if InstalledLsp() then
       enabled_auto_trigger_ft = enabled_ft
     }
   }
+  vim.api.nvim_create_autocmd('LspAttach', {
+      callback = function(args)
+          local client_id = args.data.client_id
+          local bufnr = args.buf
+          local client = vim.lsp.get_client_by_id(client_id)
+          if not client then
+              return
+          end
+
+          if client.server_capabilities.completionProvider and client.name ~= 'minuet' then
+              vim.lsp.completion.enable(true, client_id, bufnr, { autotrigger = true })
+          end
+      end,
+      desc = 'Enable built-in auto completion',
+  })
 else
   config = {
     provider = vim.g.ai_provider,
@@ -33,19 +52,3 @@ end
 require('minuet').setup (
   config
 )
-
-vim.api.nvim_create_autocmd('LspAttach', {
-    callback = function(args)
-        local client_id = args.data.client_id
-        local bufnr = args.buf
-        local client = vim.lsp.get_client_by_id(client_id)
-        if not client then
-            return
-        end
-
-        if client.server_capabilities.completionProvider and client.name ~= 'minuet' then
-            vim.lsp.completion.enable(true, client_id, bufnr, { autotrigger = true })
-        end
-    end,
-    desc = 'Enable built-in auto completion',
-})
