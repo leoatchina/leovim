@@ -1,4 +1,5 @@
 local opt = { noremap = true, silent = true }
+vim.keymap.set("n", "<M-I>", [[<Cmd>CodeCompanion<Cr>]], opt)
 vim.keymap.set("n", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], opt)
 vim.keymap.set("n", "<M-i><M-i>", [[<Cmd>CodeCompanionChat<Cr>]], opt)
 vim.keymap.set("x", "<M-I>", [[<Cmd>CodeCompanion<Cr>]], opt)

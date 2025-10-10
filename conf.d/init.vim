@@ -419,8 +419,8 @@ let g:conflict_marker_enable_mappings = 0
 PlugAddOpt 'conflict-marker.vim'
 nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
 nnoremap <leader>co :ConflictMarkerOurselves<Cr>
-nnoremap <leader>cN :ConflictMarkerNone<Cr>
-nnoremap <leader>cB :ConflictMarkerBoth<Cr>
+nnoremap <leader>cx :ConflictMarkerNone<Cr>
+nnoremap <leader>c. :ConflictMarkerBoth<Cr>
 nnoremap <leader>c; :ConflictMarkerNextHunk<Cr>
 nnoremap <leader>c, :ConflictMarkerPrevHunk<Cr>
 " ------------------------------

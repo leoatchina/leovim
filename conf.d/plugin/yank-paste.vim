@@ -58,8 +58,8 @@ nnoremap <leader>yw mp_"*yg_`p
 " ------------------------
 " pastemode toggle
 " ------------------------
-inoremap <M-I> <C-\><C-o>:set nopaste \| echo "nopaste"<Cr>
-nnoremap <M-I> :set nopaste! nopaste?<CR>
+inoremap <C-w>i <C-\><C-o>:set nopaste \| echo "nopaste"<Cr>
+nnoremap <C-w>i :set nopaste! nopaste?<CR>
 " -------------------------------
 " clipboard from remote to local
 " -------------------------------
