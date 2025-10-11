@@ -150,8 +150,10 @@ if g:ai_api_key > 0 && Planned('nvim-treesitter') && executable('curl') && Plann
     PlugAdd 'olimorris/codecompanion.nvim'
     PlugAdd 'ravitemer/codecompanion-history.nvim'
     PlugAdd 'franco-ruggeri/codecompanion-spinner.nvim'
-    PlugAdd 'Davidyz/VectorCode'
     PlugAdd 'ravitemer/mcphub.nvim'
+    if executable('vectorcode')
+        PlugAdd 'Davidyz/VectorCode'
+    endif
 endif
 " AI complete
 if has('nvim-0.10') && Require('minuet-ai') && (
