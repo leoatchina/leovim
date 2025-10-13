@@ -178,6 +178,8 @@ function! UpdateLightline() abort
         let g:lightline.colorscheme = g:colors_name
     elseif colors_name =~ 'catppuccin'
         let g:lightline.colorscheme = "catppuccin"
+    elseif colors_name =~ 'gruvbox'
+        let g:lightline.colorscheme = "gruvboxdark"
     elseif colors_name =~ 'tokyonight'
         let g:lightline.colorscheme = "tokyonight"
     elseif colors_name == 'space-vim-dark'

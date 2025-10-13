@@ -154,16 +154,16 @@ endif
 " common maps
 " --------------------------------
 if PrefFzf()
-    nnoremap <silent><M-k>c :FzfColors<Cr>
-    nnoremap <silent><M-k>t :FzfFiletypes<Cr>
+    nnoremap <silent><M-k>t :FzfColors<Cr>
+    nnoremap <silent><M-k>f :FzfFiletypes<Cr>
     nnoremap <silent><M-k><M-k> :FzfCommands<Cr>
 elseif PlannedLeaderf()
-    nnoremap <silent><M-k>c :LeaderfColorscheme<Cr>
-    nnoremap <silent><M-k>t :LeaderfFiletype<Cr>
+    nnoremap <silent><M-k>t :LeaderfColorscheme<Cr>
+    nnoremap <silent><M-k>f :LeaderfFiletype<Cr>
     nnoremap <silent><M-k><M-k> :LeaderfCommand<Cr>
 else
-    nnoremap <M-k>c :colorscheme<Space>
-    nnoremap <M-k>t :filetype<Space>
+    nnoremap <M-k>t :colorscheme<Space>
+    nnoremap <M-k>f :filetype<Space>
     nnoremap <M-k><M-k> :command<Space>
 endif
 if PlannedFzf() && executable('perl')

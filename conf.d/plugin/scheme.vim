@@ -29,11 +29,16 @@ endfunction
 " set scheme for different complete_engine
 let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
+let g:gruvbox_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
     call SetScheme('edge', 'one')
 elseif g:complete_engine == 'builtin'
-    call SetScheme('carbonfox', 'wombat')
+    if has('nvim')
+        call SetScheme('carbonfox', 'wombat')
+    else
+        call SetScheme('gruvbox-material', 'gruvbox')
+    endif
 elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
