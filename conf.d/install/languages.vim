@@ -89,7 +89,7 @@ endif
 " nvim-java && neoconf
 " ------------------------------
 if PlannedLsp() && Require('java') && Planned('nvim-dap')
-    PlugAdd 'droes19/nvim-java', {'branch': 'enhance-get-installed-version'}
+    PlugAdd 'nvim-java/nvim-java'
     PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'nvim-java/nvim-java-dap'
     PlugAdd 'nvim-java/nvim-java-core'
