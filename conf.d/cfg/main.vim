@@ -425,7 +425,7 @@ endfunction
 for k in s:metacode_group
     call s:set_metacode(k)
     let mkey = "<M-" . k . ">"
-    for mode in ['n', 'x', 'i']
+    for mode in ['n', 'x']
         if !hasmapto(mkey, mode)
             exec printf(mode . "map %s <Nop>", mkey)
         endif

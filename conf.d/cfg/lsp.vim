@@ -1,4 +1,13 @@
-if g:python_version > 3
+if executable('delance-langserver') && g:complete_engine == 'cmp'
+    let g:ensure_installed = ['pyright']
+    if g:python_version > 3
+        if executable('unzip')
+            let g:ensure_installed += ['debugpy', 'ruff']
+        else
+            let g:ensure_installed += ['debugpy']
+        endif
+    endif
+elseif g:python_version > 3
     if executable('unzip')
         let g:ensure_installed = ['basedpyright', 'debugpy', 'ruff']
     else

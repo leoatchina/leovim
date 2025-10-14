@@ -1,6 +1,7 @@
 return {
   name = 'pyright',
   filetypes = { "python" },
+  cmd = executable("delance-langserver") and {"delance-langserver", "--stdio"} or {"pyright-langserver", "--stdio"},
   settings = {
     pyright = {
       disableOrganizeImports = false,
