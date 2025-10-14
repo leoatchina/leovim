@@ -1,4 +1,4 @@
-if executable('delance-langserver') && g:complete_engine == 'cmp'
+if (executable('delance-langserver') || g:node_version > 18) && g:complete_engine == 'cmp'
     let g:ensure_installed = ['pyright']
     if g:python_version > 3
         if executable('unzip')
@@ -16,7 +16,7 @@ elseif g:python_version > 3
 else
     let g:ensure_installed = []
 endif
-if g:node_version > 16
+if g:node_version > 18
     if executable('unzip')
         let g:ensure_installed += ['vimls', 'lua_ls', 'bashls']
     else
