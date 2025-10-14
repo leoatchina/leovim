@@ -407,7 +407,7 @@ endfor
 " ------------------------------
 " set mason PATH
 " ------------------------------
-let mason_bin = Expand('~/.leovim.d/mason/bin')
+let mason_bin = Expand('~/.leovim.d/mason/cmp/bin')
 if !Planned('mason.nvim') && get(g:, 'leovim_loaded', 0) ==0
 if WINDOWS()
         let $PATH = mason_bin . ';' . $PATH
@@ -418,16 +418,6 @@ endif
 " ------------------------------
 " <M-Key> map
 " ------------------------------
-" NOTE: must be set affer all plugins are installed
-function! s:set_metacode(key)
-    exec "set <M-".a:key.">=\e".a:key
-endfunction
 for k in s:metacode_group
-    call s:set_metacode(k)
-    let mkey = "<M-" . k . ">"
-    for mode in ['n', 'x']
-        if !hasmapto(mkey, mode)
-            exec printf(mode . "map %s <Nop>", mkey)
-        endif
-    endfor
+    exec "set <M-".k.">=\e".k
 endfor
