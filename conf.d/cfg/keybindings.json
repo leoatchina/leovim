@@ -161,7 +161,7 @@
   // declaration && find source code
   {
     "key": "shift+alt+c",
-    "command": "editor.action.revealDeclaration",
+    "command": "editor.action.peekDeclaration",
     "when": "editorTextFocus && !isInEmbeddedEditor"
   },
   {
@@ -181,14 +181,20 @@
     "command": "-auto-close-tag.closeTag"
   },
   {
+    "key": "shfit+alt+f12",
+    "command": "jdk.java.goto.super.implementation",
+    "when": "editorHasCodeActionsProvider && editorTextFocus && editorLangId == 'java'"
+  }
+  {
     "key": "alt+.",
-    "command": "references-view.findImplementations"
-  },
+    "command": "editor.action.peekImplementation",
+    "when": "editorHasImplementationProvider && editorTextFocus && !isInEmbeddedEditor"
+  }
   // references
   {
     "key": "alt+/",
-    "command": "references-view.findReferences",
-    "when": "editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
+    "command": "editor.action.goToReferences",
+    "when": "editorHasReferenceProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
   },
   // comment
   {
