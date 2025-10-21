@@ -375,3 +375,88 @@ elif [ -f /usr/local/bin/batcat ] && [ ! -f $HOME/.local/bin/bat ]; then
     ln -sf /usr/local/bin/batcat $HOME/.local/bin/bat
 fi
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
+
+
+# Function to link the latest qoder to ~/.local/bin
+ln_qoder() {
+    local qoder_base="$HOME/.qoder-server"
+    local target_dir="$HOME/.local/bin"
+
+    # Check if qoder-server directory exists
+    if [ ! -d "$qoder_base" ]; then
+        echo "Error: $qoder_base directory not found"
+        return 1
+    fi
+
+    # Find the latest directory in qoder-server
+    local latest_dir=$(ls -td "$qoder_base/bin"/*/ 2>/dev/null | head -n 1)
+
+    if [ -z "$latest_dir" ]; then
+        echo "Error: No directories found in $qoder_base"
+        return 1
+    fi
+
+    # Construct the qoder path
+    local qoder_path="${latest_dir}bin/remote-cli/qoder"
+
+    if [ ! -f "$qoder_path" ]; then
+        echo "Error: qoder not found at $qoder_path"
+        return 1
+    fi
+
+    # Create target directory if it doesn't exist
+    mkdir -p "$target_dir"
+
+    # Create or update the symbolic link
+    ln -sf "$qoder_path" "$target_dir/qoder"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully linked: $qoder_path -> $target_dir/qoder"
+        echo "Latest qoder directory: $(basename "$latest_dir")"
+    else
+        echo "Error: Failed to create symbolic link"
+        return 1
+    fi
+}
+
+# Function to link the latest vscode-server code to ~/.local/bin
+ln_code() {
+    local vscode_base="$HOME/.vscode-server/cli/servers"
+    local target_dir="$HOME/.local/bin"
+
+    # Check if vscode-server directory exists
+    if [ ! -d "$vscode_base" ]; then
+        echo "Error: $vscode_base directory not found"
+        return 1
+    fi
+
+    # Find the latest directory in vscode-server
+    local latest_dir=$(ls -td "$vscode_base"/*/ 2>/dev/null | head -n 1)
+
+    if [ -z "$latest_dir" ]; then
+        echo "Error: No directories found in $vscode_base"
+        return 1
+    fi
+
+    # Construct the code path
+    local code_path="${latest_dir}server/bin/remote-cli/code"
+
+    if [ ! -f "$code_path" ]; then
+        echo "Error: code not found at $code_path"
+        return 1
+    fi
+
+    # Create target directory if it doesn't exist
+    mkdir -p "$target_dir"
+
+    # Create or update the symbolic link
+    ln -sf "$code_path" "$target_dir/code"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully linked: $code_path -> $target_dir/code"
+        echo "Latest vscode directory: $(basename "$latest_dir")"
+    else
+        echo "Error: Failed to create symbolic link"
+        return 1
+    fi
+}
