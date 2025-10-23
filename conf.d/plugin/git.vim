@@ -143,9 +143,9 @@ if PlannedLeaderf()
     nnoremap <silent><M-g>i :Leaderf git<Cr>
     nnoremap <silent><M-g>h :Leaderf git diff HEAD --directly<Cr>
     nnoremap <silent><M-g>l :Leaderf git log<Cr>
-    nnoremap <silent><M-g>o :Leaderf git log --current-file<Cr>
+    nnoremap <silent><M-g>c :Leaderf git log --current-file<Cr>
     nnoremap <silent>g\| :Leaderf git diff --current-file --side-by-side<Cr>
-endf
+endif
 " inline blame
 if Installed('blamer.nvim')
     let g:blamer_date_format = '%Y/%m/%d'
