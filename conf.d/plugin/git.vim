@@ -17,14 +17,18 @@ endfunction
 function! GitRootDir()
     return get(b:, 'git_root_dir', '')
 endfunction
-function! AutoLcdGit() abort
+function! LcdAndGitUpdate() abort
     if FtBtIgnored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
         return
     endif
-    let l:cur_dir = AbsDir()
-    if l:cur_dir != ''
-        execute 'lcd ' . l:cur_dir
-    endif
+    try
+        let l:cur_dir = AbsDir()
+        if l:cur_dir != ''
+            execute 'lcd ' . l:cur_dir
+        endif
+    catch
+        return
+    endtry
     if g:git_version > 1.8
         try
             let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
@@ -51,9 +55,9 @@ function! AutoLcdGit() abort
         let b:git_branch = ''
     endif
 endfunction
-augroup AutoLcdGit
+augroup LcdAndGitUpdate
     au!
-    autocmd BufWinEnter * call AutoLcdGit()
+    autocmd BufWinEnter * call LcdAndGitUpdate()
 augroup END
 " ----------------------
 " relative dir && path
@@ -110,13 +114,14 @@ if Planned('vim-fugitive')
         au FileType GV nmap <buffer><nowait>Q q
         au FileType GV nmap <buffer><nowait>, gb
     endif
-    " buffer map
-    au FileType fugitiveblame nnoremap <buffer><silent><nowait><Cr> o
+    " buffer map, nnoremap
     au FileType fugitiveblame nnoremap <buffer><silent><nowait>q :quit<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait>q :q!<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
     au FileType fugitive nnoremap <buffer><nowait>gg gg
+    " buffer map, nmap
+    au FileType fugitiveblame nmap <buffer><silent><nowait><Cr> o
     au FileType fugitive nmap <buffer><nowait><Space> =
     au FileType fugitive nmap <buffer><nowait><Tab> -
     au FileType fugitive nmap <buffer><nowait>, g?
@@ -144,6 +149,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-g>h :Leaderf git diff HEAD --directly<Cr>
     nnoremap <silent><M-g>l :Leaderf git log<Cr>
     nnoremap <silent><M-g>c :Leaderf git log --current-file<Cr>
+    nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
     nnoremap <silent>g\| :Leaderf git diff --current-file --side-by-side<Cr>
 endif
 " inline blame
