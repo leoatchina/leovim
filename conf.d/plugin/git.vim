@@ -127,8 +127,6 @@ if Planned('vim-fugitive')
     au FileType fugitive nmap <buffer><nowait>, g?
     au FileType fugitive nmap <buffer><nowait>\ c?
 else
-    nnoremap <silent><M-g>v :vdiffsplit<Cr>
-    nnoremap <silent><M-g>s :diffsplit<Cr>
     if Installed('asyncrun.vim') && g:has_terminal && UNIX()
         nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 add -A<Cr>
         nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
