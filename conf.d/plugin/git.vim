@@ -80,6 +80,7 @@ endfunction
 " fugitve and others
 "------------------------
 if Planned('vim-fugitive')
+    nnoremap <silent>g<Tab> :Git blame<Cr>
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
     nnoremap <silent><M-g><M-u> :Git push<CR>
@@ -110,6 +111,7 @@ if Planned('vim-fugitive')
         au FileType GV nmap <buffer><nowait>, gb
     endif
     " buffer map
+    au FileType fugitiveblame nnoremap <buffer><silent><nowait><Cr> o
     au FileType fugitiveblame nnoremap <buffer><silent><nowait>q :quit<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait>q :q!<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
@@ -143,10 +145,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-g>l :Leaderf git log<Cr>
     nnoremap <silent><M-g>o :Leaderf git log --current-file<Cr>
     nnoremap <silent>g\| :Leaderf git diff --current-file --side-by-side<Cr>
-    nnoremap <silent>g<Tab> :Leaderf git blame<Cr>
-elseif Installed('vim-fugitive')
-    nnoremap <silent>g<Tab> :Git blame<Cr>
-endif
+endf
 " inline blame
 if Installed('blamer.nvim')
     let g:blamer_date_format = '%Y/%m/%d'
