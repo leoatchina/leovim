@@ -263,7 +263,6 @@ if has('nvim')
     endif
     if PlannedLsp() || has('nvim-0.10') && Planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
-        PlugAdd 'echasnovski/mini.diff'
         if UNIX()
             PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
         endif

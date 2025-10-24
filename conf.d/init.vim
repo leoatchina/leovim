@@ -272,6 +272,21 @@ function! GetVisualSelection(...) abort
         return join(lines, "\n")
     endif
 endfunction
+function! AbsDir()
+    return Expand('%:p:h', 1)
+endfunction
+function! AbsPath()
+    return Expand('%:p', 1)
+endfunction
+function! FileName()
+    return Expand('%:t', 1)
+endfunction
+function! FileNameNoEXT()
+    return Expand('%:t:r', 1)
+endfunction
+function! FileReadonly()
+    return &readonly && &filetype !=# 'help' ? 'RO' : ''
+endfunction
 " -----------------------------------
 " filetypes definition
 " -----------------------------------

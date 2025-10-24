@@ -5,11 +5,6 @@ vim.keymap.set("n", "<M-i><M-i>", [[<Cmd>CodeCompanionChat<Cr>]], opt)
 vim.keymap.set("x", "<M-I>", [[<Cmd>CodeCompanion<Cr>]], opt)
 vim.keymap.set("x", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], opt)
 vim.keymap.set("x", "<M-i><M-i>", [[<Cmd>CodeCompanionChat Add<Cr>]], opt)
-local diff = require("mini.diff")
-diff.setup({
-  -- Disabled by default
-  source = diff.gen_source.none(),
-})
 require("codecompanion").setup({
   opts = {
     log_level = "DEBUG",

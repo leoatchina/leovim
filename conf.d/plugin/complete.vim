@@ -33,7 +33,7 @@ elseif Installed('copilot.vim')
     imap <silent><nowait><M-:> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 endif
-if Installed('codecompanion.nvim', 'codecompanion-history.nvim', 'mcphub.nvim', 'mini.diff')
+if Installed('codecompanion.nvim', 'codecompanion-history.nvim', 'mcphub.nvim')
     if !get(s:, 'api_required', 0)
         lua require("cfg/api")
     endif
