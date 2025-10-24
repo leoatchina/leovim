@@ -8,7 +8,7 @@ else
     set nocompatible
 endif
 " --------------------------
-" system check functions
+" system functions
 " --------------------------
 function! WINDOWS()
     return has('win32') || has('win64')
@@ -24,6 +24,110 @@ function! LINUX()
 endfunction
 function! UNIX()
     return has('unix') && !has('win32unix')
+endfunction
+function! AbsDir()
+    return Expand('%:p:h', 1)
+endfunction
+function! AbsPath()
+    return Expand('%:p', 1)
+endfunction
+function! FileName()
+    return Expand('%:t', 1)
+endfunction
+function! FileNameNoEXT()
+    return Expand('%:t:r', 1)
+endfunction
+function! FileReadonly()
+    return &readonly && &filetype !=# 'help' ? 'RO' : ''
+endfunction
+" ----------------------------
+" enhance functions
+" ----------------------------
+function! Trim(str) abort
+    return substitute(a:str, "^\s\+\|\s\+$", "", "g")
+endfunction
+function! Expand(path, ...) abort
+    if a:0 && a:1
+        return substitute(fnameescape(expand(a:path)), '\', '/', 'g')
+    else
+        return fnameescape(expand(a:path))
+    endif
+endfunction
+function! Execute(cmd)
+    if exists("*execute")
+        return execute(a:cmd)
+    else
+        redir => output
+        silent! execute a:cmd
+        redir END
+        return output
+    endif
+endfunction
+function! StringToFloat(str, ...) abort
+    let str = a:str
+    if a:0 == 0
+        let digit = 1
+    else
+        let digit = a:1
+    endif
+    let lst = split(str, "\\.")
+    if len(lst)
+        let rst = []
+        for each in lst[1:]
+            if len(each) >= digit
+                let e = each[:digit]
+            else
+                let e = repeat('0', digit - len(each)) . each
+            endif
+            call add(rst, e)
+        endfor
+        return str2float(lst[0] . '.' . join(rst, ''))
+    else
+        return str2float(str)
+    endif
+endfunction
+" trip last space
+function! TripTrailingWhiteSpace() abort
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " do the business:
+    %s/\s\+$//e
+    " clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+augroup TripSpaces
+    autocmd FileType vim,c,cpp,java,go,php,javascript,typescript,python,rust,twig,xml,yml,perl,sql,r,conf,lua
+                \ autocmd! BufWritePre <buffer> :call TripTrailingWhiteSpace()
+augroup END
+nnoremap <silent>d<space> :call TripTrailingWhiteSpace()<Cr>
+" enhance escape
+function! Escape(param)
+    return substitute(escape(a:param, '/\.*$^~[#'), '\n', '\\n', 'g')
+endfunction
+xnoremap / "yy/<C-r>=Escape(@y)<CR><Cr>
+xnoremap ? "yy?<C-r>=Escape(@y)<CR><Cr>
+xnoremap s "yy:%s/<C-r>=Escape(@y)<CR>/<C-r>=Escape(@y)<CR>/gc<Left><Left><Left>
+xnoremap <Cr> "yy:%s/<C-r>=Escape(@y)<CR>//gc<Left><Left><Left>
+" GetVisualSelection only in one line
+function! GetVisualSelection(...) abort
+    " call with visualmode() as the argument
+    let [line_start, column_start] = [line("'<"), charcol("'<")]
+    let [line_end, column_end]     = [line("'>"), charcol("'>")]
+    let lines = getline(line_start, line_end)
+    if len(lines) != 1
+        return ""
+    endif
+    let inclusive = (&selection == 'inclusive')? 1 : 2
+    " Must trim the end before the start, the begin will shift left.
+    let lines[-1] = list2str(str2list(lines[-1])[:column_end - inclusive])
+    let lines[0] = list2str(str2list(lines[0])[column_start - 1:])
+    if a:0 && a:1
+        return Escape(join(lines, "\n"))
+    else
+        return join(lines, "\n")
+    endif
 endfunction
 " --------------------------
 " gui_running && OS
@@ -182,110 +286,6 @@ function! Installed(...)
         endif
     endfor
     return 1
-endfunction
-" ----------------------------
-" functions
-" ----------------------------
-function! Trim(str) abort
-    return substitute(a:str, "^\s\+\|\s\+$", "", "g")
-endfunction
-function! Expand(path, ...) abort
-    if a:0 && a:1
-        return substitute(fnameescape(expand(a:path)), '\', '/', 'g')
-    else
-        return fnameescape(expand(a:path))
-    endif
-endfunction
-function! Execute(cmd)
-    if exists("*execute")
-        return execute(a:cmd)
-    else
-        redir => output
-        silent! execute a:cmd
-        redir END
-        return output
-    endif
-endfunction
-function! StringToFloat(str, ...) abort
-    let str = a:str
-    if a:0 == 0
-        let digit = 1
-    else
-        let digit = a:1
-    endif
-    let lst = split(str, "\\.")
-    if len(lst)
-        let rst = []
-        for each in lst[1:]
-            if len(each) >= digit
-                let e = each[:digit]
-            else
-                let e = repeat('0', digit - len(each)) . each
-            endif
-            call add(rst, e)
-        endfor
-        return str2float(lst[0] . '.' . join(rst, ''))
-    else
-        return str2float(str)
-    endif
-endfunction
-" trip last space
-function! TripTrailingWhiteSpace() abort
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " do the business:
-    %s/\s\+$//e
-    " clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
-augroup TripSpaces
-    autocmd FileType vim,c,cpp,java,go,php,javascript,typescript,python,rust,twig,xml,yml,perl,sql,r,conf,lua
-                \ autocmd! BufWritePre <buffer> :call TripTrailingWhiteSpace()
-augroup END
-nnoremap <silent>d<space> :call TripTrailingWhiteSpace()<Cr>
-" enhance escape
-function! Escape(param)
-    return substitute(escape(a:param, '/\.*$^~[#'), '\n', '\\n', 'g')
-endfunction
-xnoremap / "yy/<C-r>=Escape(@y)<CR><Cr>
-xnoremap ? "yy?<C-r>=Escape(@y)<CR><Cr>
-xnoremap s "yy:%s/<C-r>=Escape(@y)<CR>/<C-r>=Escape(@y)<CR>/gc<Left><Left><Left>
-xnoremap <Cr> "yy:%s/<C-r>=Escape(@y)<CR>//gc<Left><Left><Left>
-" GetVisualSelection only in one line
-function! GetVisualSelection(...) abort
-    " call with visualmode() as the argument
-    let [line_start, column_start] = [line("'<"), charcol("'<")]
-    let [line_end, column_end]     = [line("'>"), charcol("'>")]
-    let lines = getline(line_start, line_end)
-    if len(lines) != 1
-        return ""
-    endif
-    let inclusive = (&selection == 'inclusive')? 1 : 2
-    " Must trim the end before the start, the begin will shift left.
-    let lines[-1] = list2str(str2list(lines[-1])[:column_end - inclusive])
-    let lines[0] = list2str(str2list(lines[0])[column_start - 1:])
-    if a:0 && a:1
-        return Escape(join(lines, "\n"))
-    else
-        return join(lines, "\n")
-    endif
-endfunction
-function! AbsDir()
-    return Expand('%:p:h', 1)
-endfunction
-function! AbsPath()
-    return Expand('%:p', 1)
-endfunction
-function! FileName()
-    return Expand('%:t', 1)
-endfunction
-function! FileNameNoEXT()
-    return Expand('%:t:r', 1)
-endfunction
-function! FileReadonly()
-    return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
 " -----------------------------------
 " filetypes definition
@@ -659,8 +659,6 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------------------
 " clipboard
 " ------------------------------------
-" Copy file path
-nnoremap <leader>YP :let @"=AbsPath()<cr>:echo '-= File path copied=-'<Cr>
 " Copy file dir
 nnoremap <leader>YD :let @"=AbsDir()<cr>:echo '-= File path copied=-'<Cr>
 " Copy file name
@@ -676,7 +674,6 @@ if has('clipboard')
             set clipboard=
         endif
         xnoremap Y "+y:echo 'Yank selection to x11 clipboard.'<Cr>
-        nnoremap <leader>yp :let @+=AbsPath()<cr>:echo '-= File path copied to x11 clipboard=-'<Cr>
         nnoremap <leader>yd :let @+=AbsDir()<cr>:echo '-= File dir copied to x11 clipboard=-'<Cr>
         nnoremap <leader>yf :let @+=FileName()<cr>:echo '-= File name copied to x11 clipboard=-'<Cr>
         nnoremap <leader>ym :let @+=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to x11 clipboard=-'<cr>'
@@ -688,7 +685,6 @@ if has('clipboard')
             set clipboard=
         endif
         xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
-        nnoremap <leader>yp :let @*=AbsPath()<cr>:echo '-= File path copied to system clipboard=-'<Cr>
         nnoremap <leader>yd :let @*=AbsDir()<cr>:echo '-= File dir copied to system clipboard=-'<Cr>
         nnoremap <leader>yf :let @*=FileName()<cr>:echo '-= File name copied to system clipboard=-'<Cr>
         nnoremap <leader>ym :let @*=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to system clipboard=-'<cr>'
@@ -752,7 +748,7 @@ command! YankFromLineBegin call s:yank_border(2)
 command! YankToLineEnd call s:yank_border(1)
 command! YankWord call s:yank_border()
 nnoremap <silent>gY :YankWord<Cr>
-nnoremap <silent>yY :YankFile<Cr>
+nnoremap <silent><leader>YY :YankFile<Cr>
 nnoremap <silent><leader>yy :YankLine<Cr>
 if exists('g:vscode')
     nnoremap <silent>Y :YankToLineEnd<Cr>

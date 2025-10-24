@@ -104,12 +104,10 @@ function! which_key#mappings#parse(key, dict, visual) " {{{
 
     " eval the expression as the final {rhs}
     try
-        let temp = mapd
         if mapd.expr
           let mapd.rhs = eval(mapd.rhs)
         endif
     catch /.*/
-        echomsg temp
         continue
     endtry
 

@@ -345,7 +345,7 @@ endfunction
 " lsp or tag
 " ---------------
 " tags
-nnoremap <silent>g/ :call <SID>lsp_tag_search("tags", "list")<Cr>
+nnoremap <silent>g<Cr> :call <SID>lsp_tag_search("tags", "list")<Cr>
 " preview
 nnoremap <silent><C-h> :call <SID>lsp_tag_search("preview")<Cr>
 " definition

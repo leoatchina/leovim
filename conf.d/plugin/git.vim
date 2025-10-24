@@ -84,7 +84,7 @@ endfunction
 " fugitve and others
 "------------------------
 if Planned('vim-fugitive')
-    nnoremap <silent>g<Tab> :Git blame<Cr>
+    nnoremap <silent><Tab><Tab> :Git blame<Cr>
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
     nnoremap <silent><M-g><M-u> :Git push<CR>
@@ -156,11 +156,11 @@ if Installed('blamer.nvim')
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '
     let g:blamer_delay = 500
-    nnoremap <silent>g<Cr> :BlamerToggle<Cr>
+    nnoremap <silent><Tab><Cr> :BlamerToggle<Cr>
     command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
 elseif PlannedLeaderf()
     if has('patch-9.0.200') || has('nvim')
-        nnoremap <silent>g<Cr> :LeaderfGitInlineBlameToggle<Cr>
+        nnoremap <silent><Tab><Cr> :LeaderfGitInlineBlameToggle<Cr>
         command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['Gutentag', 'Grep', 'Get'])
     else
         command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
