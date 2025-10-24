@@ -51,10 +51,6 @@ for i in range(4)
 endfor
 nnoremap \p` viw"0p
 xnoremap \p` "0p
-" Yank a line without leading whitespaces and line break
-nnoremap <leader>yu mp_yg_`p
-" Copy a line without leading whitespaces and line break to clipboard
-nnoremap <leader>yw mp_"*yg_`p
 " ------------------------
 " pastemode toggle
 " ------------------------
