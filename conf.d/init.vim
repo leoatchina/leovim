@@ -720,7 +720,7 @@ function! s:yank_border(...) abort
     endif
     if yankmode == 6
         let action = '%'
-        let target = ' whole file'
+        let target = 'whole file'
     elseif yankmode == 5
         let action = '0v$'
         let target = 'line'
