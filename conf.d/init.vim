@@ -659,6 +659,8 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------------------
 " clipboard
 " ------------------------------------
+" Copy file path
+nnoremap <leader>YP :let @"=AbsPath()<cr>:echo '-= File path copied=-'<Cr>
 " Copy file dir
 nnoremap <leader>YD :let @"=AbsDir()<cr>:echo '-= File path copied=-'<Cr>
 " Copy file name
@@ -674,6 +676,7 @@ if has('clipboard')
             set clipboard=
         endif
         xnoremap Y "+y:echo 'Yank selection to x11 clipboard.'<Cr>
+        nnoremap <leader>yp :let @+=AbsPath()<cr>:echo '-= File path copied to x11 clipboard=-'<Cr>
         nnoremap <leader>yd :let @+=AbsDir()<cr>:echo '-= File dir copied to x11 clipboard=-'<Cr>
         nnoremap <leader>yf :let @+=FileName()<cr>:echo '-= File name copied to x11 clipboard=-'<Cr>
         nnoremap <leader>ym :let @+=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to x11 clipboard=-'<cr>'
@@ -685,6 +688,7 @@ if has('clipboard')
             set clipboard=
         endif
         xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
+        nnoremap <leader>yp :let @*=AbsPath()<cr>:echo '-= File path copied to system clipboard=-'<Cr>
         nnoremap <leader>yd :let @*=AbsDir()<cr>:echo '-= File dir copied to system clipboard=-'<Cr>
         nnoremap <leader>yf :let @*=FileName()<cr>:echo '-= File name copied to system clipboard=-'<Cr>
         nnoremap <leader>ym :let @*=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to system clipboard=-'<cr>'
