@@ -829,7 +829,7 @@ function! s:open_in_other()
     endif
 endfunction
 command! OpenInOther call s:open_in_other()
-nnoremap <silent><nowait>gc :OpenInOther<Cr>
+nnoremap <silent><nowait>g<tab> :OpenInOther<Cr>
 " ------------------------
 " open url/file under cursor
 " ------------------------
@@ -865,15 +865,20 @@ function! s:open_link_in_editor(text, col)
     endif
     " location 0: file, 1: row, 2: column
     let location = s:get_cursor_pos(a:text, a:col)
-    if location[0] != '' && filereadable(location[0])
+    try
+        let fl = location[0]
+    catch /.*/
+        let fl = ''
+    endtry
+    if fl != '' && filereadable(fl)
         if location[1] != ''
             if location[2] != ''
-                exec "!" . editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
+                exec "!" . editor . " " . fl . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
             else
-                exec "!" . editor . " " . location[0] . ":" . str2nr(location[1])
+                exec "!" . editor . " " . fl . ":" . str2nr(location[1])
             endif
         else
-            exec "!" . editor . " " . location[0]
+            exec "!" . editor . " " . fl
         endif
     else
         echo "Neigher URL nor file path under cursor."
