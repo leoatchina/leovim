@@ -1,14 +1,9 @@
-" -----------------------------------
-" choosewin
-" -----------------------------------
-PlugAddOpt 'vim-choosewin'
-nmap <silent><Tab><Cr> <Plug>(choosewin)
 " ---------------------------------------
 " choose tab using fuzzy_findeer
 " ---------------------------------------
 if PlannedFzf()
     PlugAddOpt 'fzf-tabs'
-    nnoremap <silent><Tab><Tab> :FzfTabs<Cr>
+    nnoremap <silent>gt :FzfTabs<Cr>
 endif
 " ------------------------
 " tab control
