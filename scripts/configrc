@@ -460,3 +460,238 @@ ln_code() {
         return 1
     fi
 }
+
+
+
+# Function to link the latest cursor-server cursor to ~/.local/bin
+ln_cursor() {
+    local cursor_base="$HOME/.cursor-server/cli/servers"
+    local target_dir="$HOME/.local/bin"
+
+    if [ ! -d "$cursor_base" ]; then
+        echo "Error: $cursor_base directory not found"
+        return 1
+    fi
+
+    local latest_dir=$(ls -td "$cursor_base"/*/ 2>/dev/null | head -n 1)
+
+    if [ -z "$latest_dir" ]; then
+        echo "Error: No directories found in $cursor_base"
+        return 1
+    fi
+
+    local cursor_path="${latest_dir}server/bin/remote-cli/cursor"
+
+    if [ ! -f "$cursor_path" ]; then
+        echo "Error: cursor not found at $cursor_path"
+        return 1
+    fi
+
+    mkdir -p "$target_dir"
+    ln -sf "$cursor_path" "$target_dir/cursor"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully linked: $cursor_path -> $target_dir/cursor"
+        echo "Latest cursor directory: $(basename "$latest_dir")"
+    else
+        echo "Error: Failed to create symbolic link"
+        return 1
+    fi
+}
+
+# Function to link the latest positron-server positron to ~/.local/bin
+ln_positron() {
+    local positron_base="$HOME/.positron-server/bin"
+    local target_dir="$HOME/.local/bin"
+
+    if [ ! -d "$positron_base" ]; then
+        echo "Error: $positron_base directory not found"
+        return 1
+    fi
+
+    local latest_dir=$(ls -td "$positron_base"/*/ 2>/dev/null | head -n 1)
+
+    if [ -z "$latest_dir" ]; then
+        echo "Error: No directories found in $positron_base"
+        return 1
+    fi
+
+    local positron_path="${latest_dir}bin/remote-cli/positron"
+
+    if [ ! -f "$positron_path" ]; then
+        echo "Error: positron not found at $positron_path"
+        return 1
+    fi
+
+    mkdir -p "$target_dir"
+    ln -sf "$positron_path" "$target_dir/positron"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully linked: $positron_path -> $target_dir/positron"
+        echo "Latest positron directory: $(basename "$latest_dir")"
+    else
+        echo "Error: Failed to create symbolic link"
+        return 1
+    fi
+}
+
+# Function to link the latest windsurf-server windsurf to ~/.local/bin
+ln_windsurf() {
+    local windsurf_base="$HOME/.windsurf-server/bin"
+    local target_dir="$HOME/.local/bin"
+
+    if [ ! -d "$windsurf_base" ]; then
+        echo "Error: $windsurf_base directory not found"
+        return 1
+    fi
+
+    local latest_dir=$(ls -td "$windsurf_base"/*/ 2>/dev/null | head -n 1)
+
+    if [ -z "$latest_dir" ]; then
+        echo "Error: No directories found in $windsurf_base"
+        return 1
+    fi
+
+    local windsurf_path="${latest_dir}bin/remote-cli/windsurf"
+
+    if [ ! -f "$windsurf_path" ]; then
+        echo "Error: windsurf not found at $windsurf_path"
+        return 1
+    fi
+
+    mkdir -p "$target_dir"
+    ln -sf "$windsurf_path" "$target_dir/windsurf"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully linked: $windsurf_path -> $target_dir/windsurf"
+        echo "Latest windsurf directory: $(basename "$latest_dir")"
+    else
+        echo "Error: Failed to create symbolic link"
+        return 1
+    fi
+}
+
+# Function to link the latest windsurf-server surf to ~/.local/bin
+ln_surf() {
+    local windsurf_base="$HOME/.windsurf-server/bin"
+    local target_dir="$HOME/.local/bin"
+
+    if [ ! -d "$windsurf_base" ]; then
+        echo "Error: $windsurf_base directory not found"
+        return 1
+    fi
+
+    local latest_dir=$(ls -td "$windsurf_base"/*/ 2>/dev/null | head -n 1)
+
+    if [ -z "$latest_dir" ]; then
+        echo "Error: No directories found in $windsurf_base"
+        return 1
+    fi
+
+    local surf_path="${latest_dir}bin/remote-cli/surf"
+
+    if [ ! -f "$surf_path" ]; then
+        echo "Error: surf not found at $surf_path"
+        return 1
+    fi
+
+    mkdir -p "$target_dir"
+    ln -sf "$surf_path" "$target_dir/surf"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully linked: $surf_path -> $target_dir/surf"
+        echo "Latest surf directory: $(basename "$latest_dir")"
+    else
+        echo "Error: Failed to create symbolic link"
+        return 1
+    fi
+}
+
+# Function to link the latest trae-server trae to ~/.local/bin
+ln_trae() {
+    local trae_base="$HOME/.trae-server/bin"
+    local target_dir="$HOME/.local/bin"
+
+    if [ ! -d "$trae_base" ]; then
+        echo "Error: $trae_base directory not found"
+        return 1
+    fi
+
+    local latest_dir=$(ls -td "$trae_base"/*/ 2>/dev/null | head -n 1)
+
+    if [ -z "$latest_dir" ]; then
+        echo "Error: No directories found in $trae_base"
+        return 1
+    fi
+
+    local trae_path="${latest_dir}bin/remote-cli/trae"
+
+    if [ ! -f "$trae_path" ]; then
+        echo "Error: trae not found at $trae_path"
+        return 1
+    fi
+
+    mkdir -p "$target_dir"
+    ln -sf "$trae_path" "$target_dir/trae"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully linked: $trae_path -> $target_dir/trae"
+        echo "Latest trae directory: $(basename "$latest_dir")"
+    else
+        echo "Error: Failed to create symbolic link"
+        return 1
+    fi
+}
+
+# Function to link the latest trae-cn-server trae to ~/.local/bin/trae-cn
+ln_trae_cn() {
+    local trae_cn_base="$HOME/.trae-cn-server/bin"
+    local target_dir="$HOME/.local/bin"
+
+    if [ ! -d "$trae_cn_base" ]; then
+        echo "Error: $trae_cn_base directory not found"
+        return 1
+    fi
+
+    local latest_dir=$(ls -td "$trae_cn_base"/*/ 2>/dev/null | head -n 1)
+
+    if [ -z "$latest_dir" ]; then
+        echo "Error: No directories found in $trae_cn_base"
+        return 1
+    fi
+
+    local trae_cn_path="${latest_dir}bin/remote-cli/trae"
+
+    if [ ! -f "$trae_cn_path" ]; then
+        echo "Error: trae not found at $trae_cn_path"
+        return 1
+    fi
+
+    mkdir -p "$target_dir"
+    ln -sf "$trae_cn_path" "$target_dir/trae-cn"
+
+    if [ $? -eq 0 ]; then
+        echo "Successfully linked: $trae_cn_path -> $target_dir/trae-cn"
+        echo "Latest trae-cn directory: $(basename "$latest_dir")"
+    else
+        echo "Error: Failed to create symbolic link"
+        return 1
+    fi
+}
+
+# Function to link all available CLI tools
+ln_all_clis() {
+    echo "=== Linking all available CLI tools ==="
+    echo ""
+
+    [ -d "$HOME/.qoder-server" ] && { echo "[ qoder ]"; ln_qoder; echo ""; }
+    [ -d "$HOME/.vscode-server" ] && { echo "[ code ]"; ln_code; echo ""; }
+    [ -d "$HOME/.cursor-server" ] && { echo "[ cursor ]"; ln_cursor; echo ""; }
+    [ -d "$HOME/.positron-server" ] && { echo "[ positron ]"; ln_positron; echo ""; }
+    [ -d "$HOME/.windsurf-server" ] && { echo "[ windsurf ]"; ln_windsurf; echo ""; }
+    [ -d "$HOME/.windsurf-server" ] && { echo "[ surf ]"; ln_surf; echo ""; }
+    [ -d "$HOME/.trae-server" ] && { echo "[ trae ]"; ln_trae; echo ""; }
+    [ -d "$HOME/.trae-cn-server" ] && { echo "[ trae-cn ]"; ln_trae_cn; echo ""; }
+
+    echo "=== All available CLI tools linked ==="
+}

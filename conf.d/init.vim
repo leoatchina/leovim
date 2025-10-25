@@ -40,6 +40,45 @@ endfunction
 function! FileReadonly()
     return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
+" gui
+if has('gui_running')
+    let s:gui_running = 1
+    if get(g:, 'leovim_loaded', 0) == 0
+        set guioptions-=e
+        set guioptions-=T
+        set guioptions-=r
+        set guioptions-=R
+        set guioptions-=l
+        set guioptions-=L
+        set guioptions-=m
+        set guioptions-=
+    endif
+elseif has('nvim')
+    if has('gui_vimr')
+        let s:gui_running = 1
+    elseif exists('g:neovide')
+        let s:gui_running = 1
+        let g:neovide_cursor_animation_length = 0
+    elseif exists('g:vscode')
+        let s:gui_running = 0
+    else
+        if exists('g:GuiLoaded') && g:GuiLoaded != 0
+            let s:gui_running = 1
+        elseif exists('*nvim_list_uis') && len(nvim_list_uis()) > 0
+            let uis = nvim_list_uis()[0]
+            let s:gui_running = get(uis, 'ext_termcolors', 0)? 0 : 1
+        elseif exists("+termguicolors") && (&termguicolors) != 0
+            let s:gui_running = 1
+        else
+            let s:gui_running = 0
+        endif
+    endif
+else
+    let s:gui_running = 0
+endif
+function! HAS_GUI()
+    return s:gui_running
+endfunction
 " ----------------------------
 " enhance functions
 " ----------------------------
@@ -132,44 +171,6 @@ endfunction
 " --------------------------
 " gui_running && OS
 " --------------------------
-if has('gui_running')
-    let s:gui_running = 1
-    if get(g:, 'leovim_loaded', 0) == 0
-        set guioptions-=e
-        set guioptions-=T
-        set guioptions-=r
-        set guioptions-=R
-        set guioptions-=l
-        set guioptions-=L
-        set guioptions-=m
-        set guioptions-=
-    endif
-elseif has('nvim')
-    if has('gui_vimr')
-        let s:gui_running = 1
-    elseif exists('g:neovide')
-        let s:gui_running = 1
-        let g:neovide_cursor_animation_length = 0
-    elseif exists('g:vscode')
-        let s:gui_running = 0
-    else
-        if exists('g:GuiLoaded') && g:GuiLoaded != 0
-            let s:gui_running = 1
-        elseif exists('*nvim_list_uis') && len(nvim_list_uis()) > 0
-            let uis = nvim_list_uis()[0]
-            let s:gui_running = get(uis, 'ext_termcolors', 0)? 0 : 1
-        elseif exists("+termguicolors") && (&termguicolors) != 0
-            let s:gui_running = 1
-        else
-            let s:gui_running = 0
-        endif
-    endif
-else
-    let s:gui_running = 0
-endif
-function! HAS_GUI()
-    return s:gui_running
-endfunction
 if exists('g:vscode') && !has('nvim-0.10')
     echoe "vscode-neovim required nvim-0.10+!"
     finish
@@ -660,38 +661,31 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 " Copy file path
-nnoremap <leader>YP :let @"=AbsPath()<cr>:echo '-= File path copied=-'<Cr>
+nnoremap <leader>YP :let @"=AbsPath()<Cr>:echo '-= File path copied=-'<Cr>
 " Copy file dir
-nnoremap <leader>YD :let @"=AbsDir()<cr>:echo '-= File path copied=-'<Cr>
+nnoremap <leader>YD :let @"=AbsDir()<Cr>:echo '-= File dir copied=-'<Cr>
 " Copy file name
-nnoremap <leader>YF :let @"=FileName()<cr>:echo '-= File name copied=-'<Cr>
+nnoremap <leader>YF :let @"=FileName()<Cr>:echo '-= File name copied=-'<Cr>
 " Copy bookmark position reference
-nnoremap <leader>YM :let @"=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
+nnoremap <leader>YM :let @"=AbsPath().':'.line(".").':'.col(".")<Cr>:echo '-= Cursor bookmark copied=-'<Cr>'
 if has('clipboard')
+    function! s:setup_clipboard(register, mode, label) abort
+        let s:clipboard = a:mode
+        if exists('g:vscode')
+            execute 'set clipboard=' . a:mode
+        else
+            set clipboard=
+        endif
+        execute 'xnoremap Y "' . a:register . 'y:echo ''Yank selection to ' . a:label . ' clipboard.''<Cr>'
+        execute 'nnoremap <leader>yp :let @' . a:register . '=AbsPath()<cr>:echo ''-= File path copied to ' . a:label . ' clipboard=-''<Cr>'
+        execute 'nnoremap <leader>yd :let @' . a:register . '=AbsDir()<cr>:echo ''-= File dir copied to ' . a:label . ' clipboard=-''<Cr>'
+        execute 'nnoremap <leader>yf :let @' . a:register . '=FileName()<cr>:echo ''-= File name copied to ' . a:label . ' clipboard=-''<Cr>'
+        execute 'nnoremap <leader>ym :let @' . a:register . "=AbsPath().':'.line(\".\").':'.col(\".\")<cr>:echo ''-= Cursor bookmark copied to " . a:label . " clipboard=-''<cr>'"
+    endfunction
     if LINUX() && (exists('g:vscode') || exists('$TMUX'))
-        let s:clipboard = 'unnamedplus'
-        if exists('g:vscode')
-            set clipboard=unnamedplus
-        else
-            set clipboard=
-        endif
-        xnoremap Y "+y:echo 'Yank selection to x11 clipboard.'<Cr>
-        nnoremap <leader>yp :let @+=AbsPath()<cr>:echo '-= File path copied to x11 clipboard=-'<Cr>
-        nnoremap <leader>yd :let @+=AbsDir()<cr>:echo '-= File dir copied to x11 clipboard=-'<Cr>
-        nnoremap <leader>yf :let @+=FileName()<cr>:echo '-= File name copied to x11 clipboard=-'<Cr>
-        nnoremap <leader>ym :let @+=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to x11 clipboard=-'<cr>'
+        call s:setup_clipboard('+', 'unnamedplus', 'x11')
     else
-        let s:clipboard = 'unnamed'
-        if exists('g:vscode')
-            set clipboard=unnamed
-        else
-            set clipboard=
-        endif
-        xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
-        nnoremap <leader>yp :let @*=AbsPath()<cr>:echo '-= File path copied to system clipboard=-'<Cr>
-        nnoremap <leader>yd :let @*=AbsDir()<cr>:echo '-= File dir copied to system clipboard=-'<Cr>
-        nnoremap <leader>yf :let @*=FileName()<cr>:echo '-= File name copied to system clipboard=-'<Cr>
-        nnoremap <leader>ym :let @*=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to system clipboard=-'<cr>'
+        call s:setup_clipboard('*', 'unnamed', 'system')
     endif
 else
     let s:clipboard = ""
@@ -702,10 +696,10 @@ endif
 " special yank
 " ------------------------
 function! s:yank_border(...) abort
-    if a:0
-        let yankmode = a:1
+    if a:0 == 0
+        let mode = 'word'
     else
-        let yankmode = 0
+        let mode = a:1
     endif
     let original_cursor_position = getpos('.')
     if s:clipboard ==# 'unnamedplus'
@@ -718,22 +712,22 @@ function! s:yank_border(...) abort
         let yank = 'y'
         let tclip = 'to internal clipboard.'
     endif
-    if yankmode == 6
+    if mode ==# 'file'
         let action = '%'
         let target = 'whole file'
-    elseif yankmode == 5
+    elseif mode ==# 'line'
         let action = '0v$'
         let target = 'line'
-    elseif yankmode == 4
+    elseif mode ==# 'from_file_begin'
         let action = 'vgg0o'
         let target = 'from file begin'
-    elseif yankmode == 3
+    elseif mode ==# 'to_file_end'
         let action = 'vG'
         let target = 'to file end'
-    elseif yankmode == 2
+    elseif mode ==# 'from_line_begin'
         let action = 'v^'
         let target = 'from line begin'
-    elseif yankmode == 1
+    elseif mode ==# 'to_line_end'
         let action = 'v$'
         let target = 'to line end'
     else
@@ -744,13 +738,13 @@ function! s:yank_border(...) abort
     call setpos('.', original_cursor_position)
     echo 'Yank ' . target . ' ' . tclip
 endfunction
-command! YankFile call s:yank_border(6)
-command! YankLine call s:yank_border(5)
-command! YankFromFileBegin call s:yank_border(4)
-command! YankToFileEnd call s:yank_border(3)
-command! YankFromLineBegin call s:yank_border(2)
-command! YankToLineEnd call s:yank_border(1)
-command! YankWord call s:yank_border()
+command! YankFile call s:yank_border('file')
+command! YankLine call s:yank_border('line')
+command! YankFromFileBegin call s:yank_border('from_file_begin')
+command! YankToFileEnd call s:yank_border('to_file_end')
+command! YankFromLineBegin call s:yank_border('from_line_begin')
+command! YankToLineEnd call s:yank_border('to_line_end')
+command! YankWord call s:yank_border('word')
 nnoremap <silent>gY :YankWord<Cr>
 nnoremap <silent><leader>YY :YankFile<Cr>
 nnoremap <silent><leader>yy :YankLine<Cr>
@@ -769,6 +763,124 @@ endif
 nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
+" --------------------------------------------
+" yank command and position to editors
+" --------------------------------------------
+function s:yank_position_to_editor(editor)
+    if index(['cursor', 'code', 'windsurf', 'qoder', 'trae', 'positron', 'zed'], a:editor) >= 0
+        let editor = a:editor
+        let register = (s:clipboard ==# 'unnamedplus') ? '+' : (s:clipboard ==# 'unnamed') ? '*' : ''
+    else
+        return
+    endif
+    if editor == 'zed'
+        let cmd = printf("zed %s:%d:%d", AbsPath(), line("."), col("."))
+    else
+        let cmd = printf("%s --goto %s:%d:%d", editor, AbsPath(), line("."), col("."))
+    endif
+    if register == '+'
+        let @+ = cmd
+    elseif register == '*'
+        let @* = cmd
+    else
+        let @" = cmd
+    endif
+    if editor == 'code'
+        let editor = 'vscode'
+    endif
+    echo 'Yank position to ' . editor
+endfunction
+command! YankPositionToCursor   call s:yank_position_to_editor('cursor')
+command! YankPositionToVSCode   call s:yank_position_to_editor('code')
+command! YankPositionToWindsurf call s:yank_position_to_editor('windsurf')
+command! YankPositionToQoder    call s:yank_position_to_editor('qoder')
+command! YankPositionToTrae     call s:yank_position_to_editor('trae')
+command! YankPositionToPositron call s:yank_position_to_editor('positron')
+command! YankPositionToZed      call s:yank_position_to_editor('zed')
+nnoremap <silent><leader>yc :YankPositionToCursor<Cr>
+nnoremap <silent><leader>yv :YankPositionToVSCode<Cr>
+nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
+nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
+nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
+nnoremap <silent><leader>yo :YankPositionToPositron<Cr>
+nnoremap <silent><leader>yz :YankPositionToZed<Cr>
+" ------------------------
+" open_in_other
+" ------------------------
+function! s:open_in_other()
+    if !has('nvim')
+        return
+    endif
+    if exists('g:vscode') && executable(get(g:, 'open_neovim', ''))
+        call VSCodeNotify('copyFilePath')
+        let p = fnameescape(@*)
+        execute printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
+    elseif !exists('g:vscode') && executable(get(g:, 'open_editor', 'code'))
+        let editor = get(g:, 'open_editor', 'code')
+        silent! exec printf("!%s --goto %s:%d:%d", editor, AbsPath(), line("."), col("."))
+    else
+        echom "Cannot open current file in other editor."
+    endif
+endfunction
+command! OpenInOther call s:open_in_other()
+nnoremap <silent><nowait>g<tab> :OpenInOther<Cr>
+" ------------------------
+" open url/file under cursor
+" ------------------------
+function! s:get_cursor_pos(text, col)
+    " Find the start location
+    let col = a:col
+    while col >= 0 && a:text[col] =~ '\f'
+        let col = col - 1
+    endwhile
+    let col = col + 1
+    " Match file name and position
+    let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
+    if len(m) > 0
+        return [m[1], m[2], m[3]]
+    endif
+    return []
+endfunction
+function! s:open_link_in_editor(text, col)
+    let l:url = textobj#uri#open_uri()
+    redraw!
+    if exists('l:url') && len(l:url)
+        echom 'Opening "' . l:url . '"'
+        return
+    elseif a:text == ''
+        echom "No file under cursor"
+        return
+    endif
+    if executable(get(g:, 'open_edior', 'code'))
+        let editor = get(g:, 'open_edior', 'code') . ' --goto'
+    else
+        echom "Neither URL nor file found, and no editor executable"
+        return
+    endif
+    " location 0: file, 1: row, 2: column
+    let location = s:get_cursor_pos(a:text, a:col)
+    try
+        let fl = location[0]
+    catch /.*/
+        let fl = ''
+    endtry
+    if fl != '' && filereadable(fl)
+        if location[1] != ''
+            if location[2] != ''
+                exec "!" . editor . " " . fl . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
+            else
+                exec "!" . editor . " " . fl . ":" . str2nr(location[1])
+            endif
+        else
+            exec "!" . editor . " " . fl
+        endif
+    else
+        echo "Neigher URL nor file path under cursor."
+    endif
+endfunction
+command! OpenLink call s:open_link_in_editor(getline("."), col("."))
+nnoremap <silent>gx :OpenLink<cr>
+
 " ------------------------
 " quick jump in buffer
 " ------------------------
@@ -810,77 +922,6 @@ endif
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
-" ------------------------
-" open_in_other
-" ------------------------
-function! s:open_in_other()
-    if !has('nvim')
-        return
-    endif
-    if exists('g:vscode') && executable(get(g:, 'open_neovim', ''))
-        call VSCodeNotify('copyFilePath')
-        let p = fnameescape(@*)
-        execute printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
-    elseif !exists('g:vscode') && executable(get(g:, 'open_editor', 'code'))
-        let editor = get(g:, 'open_editor', 'code')
-        silent! exec printf("!%s --goto %s:%d", editor, Expand("%:p"), line("."))
-    else
-        echom "Cannot open current file in other editor."
-    endif
-endfunction
-command! OpenInOther call s:open_in_other()
-nnoremap <silent><nowait>gc :OpenInOther<Cr>
-" ------------------------
-" open url/file under cursor
-" ------------------------
-function! s:get_cursor_pos(text, col)
-    " Find the start location
-    let col = a:col
-    while col >= 0 && a:text[col] =~ '\f'
-        let col = col - 1
-    endwhile
-    let col = col + 1
-    " Match file name and position
-    let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
-    if len(m) > 0
-        return [m[1], m[2], m[3]]
-    endif
-    return []
-endfunction
-function! s:open_link_in_editor(text, col)
-    let l:url = textobj#uri#open_uri()
-    redraw!
-    if exists('l:url') && len(l:url)
-        echom 'Opening "' . l:url . '"'
-        return
-    elseif a:text == ''
-        echom "No file under cursor"
-        return
-    endif
-    if executable(get(g:, 'open_edior', 'code'))
-        let editor = get(g:, 'open_edior', 'code') . ' --goto'
-    else
-        echom "Neither URL nor file found, and no editor executable"
-        return
-    endif
-    " location 0: file, 1: row, 2: column
-    let location = s:get_cursor_pos(a:text, a:col)
-    if location[0] != '' && filereadable(location[0])
-        if location[1] != ''
-            if location[2] != ''
-                exec "!" . editor . " " . location[0] . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
-            else
-                exec "!" . editor . " " . location[0] . ":" . str2nr(location[1])
-            endif
-        else
-            exec "!" . editor . " " . location[0]
-        endif
-    else
-        echo "Neigher URL nor file path under cursor."
-    endif
-endfunction
-command! OpenLink call s:open_link_in_editor(getline("."), col("."))
-nnoremap <silent>gx :OpenLink<cr>
 " --------------------------------------------
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------

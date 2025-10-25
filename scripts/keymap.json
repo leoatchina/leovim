@@ -7,6 +7,14 @@
 // from the command palette.
 [
   {
+    "bindings": {
+      "alt--": "workspace::ToggleBottomDock",
+      "alt-_": "workspace::CloseActiveDock",
+      "alt-=": "workspace::OpenInTerminal",
+      "alt-+": "workspace::NewTerminal"
+    }
+  },
+  {
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
       "M": "vim::MiddleOfLine",
