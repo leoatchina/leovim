@@ -767,8 +767,8 @@ xnoremap zP "_c<ESC>P"
 " yank command and position to editors
 " --------------------------------------------
 if s:clipboard != ''
-    function s:yank_postion_to_editor(editor)
-        if index(['cursor', 'code', 'windsurf', 'qoder', 'trae'], a:editor) >= 0
+    function s:yank_position_to_editor(editor)
+        if index(['cursor', 'code', 'windsurf', 'qoder', 'trae', 'positron'], a:editor) >= 0
             let editor = a:editor
             let register = (s:clipboard ==# 'unnamedplus') ? '+' : '*'
         else
@@ -785,16 +785,18 @@ if s:clipboard != ''
         endif
         echo 'Yank positon to ' . editor
     endfunction
-    command! YankPostionToCursor   call s:yank_postion_to_editor('cursor')
-    command! YankPostionToVSCode   call s:yank_postion_to_editor('code')
-    command! YankPostionToWindsurf call s:yank_postion_to_editor('windsurf')
-    command! YankPostionToQoder    call s:yank_postion_to_editor('qoder')
-    command! YankPostionToTrae     call s:yank_postion_to_editor('trae')
-    nnoremap <silent><leader>yc :YankPostionToCursor<Cr>
-    nnoremap <silent><leader>yv :YankPostionToVSCode<Cr>
-    nnoremap <silent><leader>yw :YankPostionToWindsurf<Cr>
-    nnoremap <silent><leader>yq :YankPostionToQoder<Cr>
-    nnoremap <silent><leader>yt :YankPostionToTrae<Cr>
+    command! YankPositionToCursor   call s:yank_position_to_editor('cursor')
+    command! YankPositionToVSCode   call s:yank_position_to_editor('code')
+    command! YankPositionToWindsurf call s:yank_position_to_editor('windsurf')
+    command! YankPositionToQoder    call s:yank_position_to_editor('qoder')
+    command! YankPositionToTrae     call s:yank_position_to_editor('trae')
+    command! YankPositionToPositron call s:yank_position_to_editor('positron')
+    nnoremap <silent><leader>yc :YankPositionToCursor<Cr>
+    nnoremap <silent><leader>yv :YankPositionToVSCode<Cr>
+    nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
+    nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
+    nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
+    nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
 endif
 " ------------------------
 " open_in_other
