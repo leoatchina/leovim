@@ -661,13 +661,13 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 " Copy file path
-nnoremap <leader>YP :let @"=AbsPath()<Cr>:echo '-= File path copied=-'<Cr>
+nnoremap <leader>YP :let @"=AbsPath()<Cr>:echo "-= File path copied=-"<Cr>
 " Copy file dir
-nnoremap <leader>YD :let @"=AbsDir()<Cr>:echo '-= File dir copied=-'<Cr>
+nnoremap <leader>YD :let @"=AbsDir()<Cr>:echo "-= File dir copied=-"<Cr>
 " Copy file name
-nnoremap <leader>YF :let @"=FileName()<Cr>:echo '-= File name copied=-'<Cr>
+nnoremap <leader>YF :let @"=FileName()<Cr>:echo "-= File name copied=-"<Cr>
 " Copy bookmark position reference
-nnoremap <leader>YM :let @"=AbsPath().':'.line(".").':'.col(".")<Cr>:echo '-= Cursor bookmark copied=-'<Cr>'
+nnoremap <leader>YM :let @"=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Cursor bookmark copied=-"<Cr>
 if has('clipboard')
     function! s:setup_clipboard(register, mode, label) abort
         let s:clipboard = a:mode
@@ -676,11 +676,11 @@ if has('clipboard')
         else
             set clipboard=
         endif
-        execute 'xnoremap Y "' . a:register . 'y:echo ''Yank selection to ' . a:label . ' clipboard.''<Cr>'
-        execute 'nnoremap <leader>yp :let @' . a:register . '=AbsPath()<cr>:echo ''-= File path copied to ' . a:label . ' clipboard=-''<Cr>'
-        execute 'nnoremap <leader>yd :let @' . a:register . '=AbsDir()<cr>:echo ''-= File dir copied to ' . a:label . ' clipboard=-''<Cr>'
-        execute 'nnoremap <leader>yf :let @' . a:register . '=FileName()<cr>:echo ''-= File name copied to ' . a:label . ' clipboard=-''<Cr>'
-        execute 'nnoremap <leader>ym :let @' . a:register . "=AbsPath().':'.line(\".\").':'.col(\".\")<cr>:echo ''-= Cursor bookmark copied to " . a:label . " clipboard=-''<cr>'"
+        execute 'xnoremap Y "' . a:register . 'y:echo "Yank selection to ' . a:label . ' clipboard."<Cr>'
+        execute 'nnoremap <leader>yp :let @' . a:register . '=AbsPath()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>yd :let @' . a:register . '=AbsDir()<Cr>:echo "-= File dir copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>yf :let @' . a:register . '=FileName()<Cr>:echo "-= File name copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>ym :let @' . a:register . '=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Cursor bookmark copied to ' . a:label . ' clipboard=-"<Cr>'
     endfunction
     if LINUX() && (exists('g:vscode') || exists('$TMUX'))
         call s:setup_clipboard('+', 'unnamedplus', 'x11')
