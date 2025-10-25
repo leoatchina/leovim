@@ -766,44 +766,44 @@ xnoremap zP "_c<ESC>P"
 " --------------------------------------------
 " yank command and position to editors
 " --------------------------------------------
-if s:clipboard != ''
-    function s:yank_position_to_editor(editor)
-        if index(['cursor', 'code', 'windsurf', 'qoder', 'trae', 'positron', 'zed'], a:editor) >= 0
-            let editor = a:editor
-            let register = (s:clipboard ==# 'unnamedplus') ? '+' : '*'
-        else
-            return
-        endif
-        if editor == 'zed'
-            let cmd = printf("zed %s:%d:%d", AbsPath(), line("."), col("."))
-        else
-            let cmd = printf("%s --goto %s:%d:%d", editor, AbsPath(), line("."), col("."))
-        endif
-        if register == '+'
-            let @+ = cmd
-        else
-            let @* = cmd
-        endif
-        if editor == 'code'
-            let editor = 'vscode'
-        endif
-        echo 'Yank position to ' . editor
-    endfunction
-    command! YankPositionToCursor   call s:yank_position_to_editor('cursor')
-    command! YankPositionToVSCode   call s:yank_position_to_editor('code')
-    command! YankPositionToWindsurf call s:yank_position_to_editor('windsurf')
-    command! YankPositionToQoder    call s:yank_position_to_editor('qoder')
-    command! YankPositionToTrae     call s:yank_position_to_editor('trae')
-    command! YankPositionToPositron call s:yank_position_to_editor('positron')
-    command! YankPositionToZed      call s:yank_position_to_editor('zed')
-    nnoremap <silent><leader>yc :YankPositionToCursor<Cr>
-    nnoremap <silent><leader>yv :YankPositionToVSCode<Cr>
-    nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
-    nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
-    nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
-    nnoremap <silent><leader>yo :YankPositionToPositron<Cr>
-    nnoremap <silent><leader>yz :YankPositionToZed<Cr>
-endif
+function s:yank_position_to_editor(editor)
+    if index(['cursor', 'code', 'windsurf', 'qoder', 'trae', 'positron', 'zed'], a:editor) >= 0
+        let editor = a:editor
+        let register = (s:clipboard ==# 'unnamedplus') ? '+' : (s:clipboard ==# 'unnamed') ? '*' : ''
+    else
+        return
+    endif
+    if editor == 'zed'
+        let cmd = printf("zed %s:%d:%d", AbsPath(), line("."), col("."))
+    else
+        let cmd = printf("%s --goto %s:%d:%d", editor, AbsPath(), line("."), col("."))
+    endif
+    if register == '+'
+        let @+ = cmd
+    elseif register == '*'
+        let @* = cmd
+    else
+        let @" = cmd
+    endif
+    if editor == 'code'
+        let editor = 'vscode'
+    endif
+    echo 'Yank position to ' . editor
+endfunction
+command! YankPositionToCursor   call s:yank_position_to_editor('cursor')
+command! YankPositionToVSCode   call s:yank_position_to_editor('code')
+command! YankPositionToWindsurf call s:yank_position_to_editor('windsurf')
+command! YankPositionToQoder    call s:yank_position_to_editor('qoder')
+command! YankPositionToTrae     call s:yank_position_to_editor('trae')
+command! YankPositionToPositron call s:yank_position_to_editor('positron')
+command! YankPositionToZed      call s:yank_position_to_editor('zed')
+nnoremap <silent><leader>yc :YankPositionToCursor<Cr>
+nnoremap <silent><leader>yv :YankPositionToVSCode<Cr>
+nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
+nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
+nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
+nnoremap <silent><leader>yo :YankPositionToPositron<Cr>
+nnoremap <silent><leader>yz :YankPositionToZed<Cr>
 " ------------------------
 " open_in_other
 " ------------------------
