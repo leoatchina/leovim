@@ -40,6 +40,45 @@ endfunction
 function! FileReadonly()
     return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
+" gui
+if has('gui_running')
+    let s:gui_running = 1
+    if get(g:, 'leovim_loaded', 0) == 0
+        set guioptions-=e
+        set guioptions-=T
+        set guioptions-=r
+        set guioptions-=R
+        set guioptions-=l
+        set guioptions-=L
+        set guioptions-=m
+        set guioptions-=
+    endif
+elseif has('nvim')
+    if has('gui_vimr')
+        let s:gui_running = 1
+    elseif exists('g:neovide')
+        let s:gui_running = 1
+        let g:neovide_cursor_animation_length = 0
+    elseif exists('g:vscode')
+        let s:gui_running = 0
+    else
+        if exists('g:GuiLoaded') && g:GuiLoaded != 0
+            let s:gui_running = 1
+        elseif exists('*nvim_list_uis') && len(nvim_list_uis()) > 0
+            let uis = nvim_list_uis()[0]
+            let s:gui_running = get(uis, 'ext_termcolors', 0)? 0 : 1
+        elseif exists("+termguicolors") && (&termguicolors) != 0
+            let s:gui_running = 1
+        else
+            let s:gui_running = 0
+        endif
+    endif
+else
+    let s:gui_running = 0
+endif
+function! HAS_GUI()
+    return s:gui_running
+endfunction
 " ----------------------------
 " enhance functions
 " ----------------------------
@@ -132,44 +171,6 @@ endfunction
 " --------------------------
 " gui_running && OS
 " --------------------------
-if has('gui_running')
-    let s:gui_running = 1
-    if get(g:, 'leovim_loaded', 0) == 0
-        set guioptions-=e
-        set guioptions-=T
-        set guioptions-=r
-        set guioptions-=R
-        set guioptions-=l
-        set guioptions-=L
-        set guioptions-=m
-        set guioptions-=
-    endif
-elseif has('nvim')
-    if has('gui_vimr')
-        let s:gui_running = 1
-    elseif exists('g:neovide')
-        let s:gui_running = 1
-        let g:neovide_cursor_animation_length = 0
-    elseif exists('g:vscode')
-        let s:gui_running = 0
-    else
-        if exists('g:GuiLoaded') && g:GuiLoaded != 0
-            let s:gui_running = 1
-        elseif exists('*nvim_list_uis') && len(nvim_list_uis()) > 0
-            let uis = nvim_list_uis()[0]
-            let s:gui_running = get(uis, 'ext_termcolors', 0)? 0 : 1
-        elseif exists("+termguicolors") && (&termguicolors) != 0
-            let s:gui_running = 1
-        else
-            let s:gui_running = 0
-        endif
-    endif
-else
-    let s:gui_running = 0
-endif
-function! HAS_GUI()
-    return s:gui_running
-endfunction
 if exists('g:vscode') && !has('nvim-0.10')
     echoe "vscode-neovim required nvim-0.10+!"
     finish
@@ -668,30 +669,23 @@ nnoremap <leader>YF :let @"=FileName()<cr>:echo '-= File name copied=-'<Cr>
 " Copy bookmark position reference
 nnoremap <leader>YM :let @"=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
 if has('clipboard')
+    function! s:setup_clipboard(register, mode, label) abort
+        let s:clipboard = a:mode
+        if exists('g:vscode')
+            execute 'set clipboard=' . a:mode
+        else
+            set clipboard=
+        endif
+        execute 'xnoremap Y "' . a:register . 'y:echo ''Yank selection to ' . a:label . ' clipboard.''<Cr>'
+        execute 'nnoremap <leader>yp :let @' . a:register . '=AbsPath()<cr>:echo ''-= File path copied to ' . a:label . ' clipboard=-''<Cr>'
+        execute 'nnoremap <leader>yd :let @' . a:register . '=AbsDir()<cr>:echo ''-= File dir copied to ' . a:label . ' clipboard=-''<Cr>'
+        execute 'nnoremap <leader>yf :let @' . a:register . '=FileName()<cr>:echo ''-= File name copied to ' . a:label . ' clipboard=-''<Cr>'
+        execute 'nnoremap <leader>ym :let @' . a:register . "=AbsPath().':'.line(\".\").':'.col(\".\")<cr>:echo ''-= Cursor bookmark copied to " . a:label . " clipboard=-''<cr>'"
+    endfunction
     if LINUX() && (exists('g:vscode') || exists('$TMUX'))
-        let s:clipboard = 'unnamedplus'
-        if exists('g:vscode')
-            set clipboard=unnamedplus
-        else
-            set clipboard=
-        endif
-        xnoremap Y "+y:echo 'Yank selection to x11 clipboard.'<Cr>
-        nnoremap <leader>yp :let @+=AbsPath()<cr>:echo '-= File path copied to x11 clipboard=-'<Cr>
-        nnoremap <leader>yd :let @+=AbsDir()<cr>:echo '-= File dir copied to x11 clipboard=-'<Cr>
-        nnoremap <leader>yf :let @+=FileName()<cr>:echo '-= File name copied to x11 clipboard=-'<Cr>
-        nnoremap <leader>ym :let @+=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to x11 clipboard=-'<cr>'
+        call s:setup_clipboard('+', 'unnamedplus', 'x11')
     else
-        let s:clipboard = 'unnamed'
-        if exists('g:vscode')
-            set clipboard=unnamed
-        else
-            set clipboard=
-        endif
-        xnoremap Y "*y:echo 'Yank selection to system clipboard.'<Cr>
-        nnoremap <leader>yp :let @*=AbsPath()<cr>:echo '-= File path copied to system clipboard=-'<Cr>
-        nnoremap <leader>yd :let @*=AbsDir()<cr>:echo '-= File dir copied to system clipboard=-'<Cr>
-        nnoremap <leader>yf :let @*=FileName()<cr>:echo '-= File name copied to system clipboard=-'<Cr>
-        nnoremap <leader>ym :let @*=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied to system clipboard=-'<cr>'
+        call s:setup_clipboard('*', 'unnamed', 'system')
     endif
 else
     let s:clipboard = ""
@@ -770,47 +764,6 @@ nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
 " ------------------------
-" quick jump in buffer
-" ------------------------
-nnoremap ; <Nop>
-nnoremap , <Nop>
-let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
-if has('nvim-0.8')
-    PlugAddOpt 'flash.nvim'
-    lua require("cfg/flash")
-    nmap SJ vt<Space><Cr>S
-    nmap SK vT<Space><Cr>S
-else
-    let g:clever_f_smart_case = 1
-    let g:clever_f_repeat_last_char_inputs = ['<Tab>']
-    PlugAddOpt 'clever-f.vim'
-    nmap ;s <Plug>(clever-f-repeat-forward)
-    xmap ;s <Plug>(clever-f-repeat-forward)
-    nmap ,s <Plug>(clever-f-repeat-back)
-    xmap ,s <Plug>(clever-f-repeat-back)
-    nmap SJ vt<Space>S
-    nmap SK vT<Space>S
-endif
-if exists('g:vscode')
-    imap <C-a> <ESC>ggVG
-    xmap <C-a> <ESC>ggVG
-    nmap <C-a> ggVG
-    imap <C-x> <C-o>"*
-    xmap <C-x> "*x
-    nmap <C-x> "*x
-    PlugAddOpt 'hop.nvim'
-    lua require("cfg/hop")
-else
-    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
-    source $CFG_DIR/easymotion.vim
-endif
-" ------------------------
-" set optional
-" ------------------------
-if filereadable(expand("~/.vimrc.opt"))
-    source $HOME/.vimrc.opt
-endif
-" ------------------------
 " open_in_other
 " ------------------------
 function! s:open_in_other()
@@ -886,6 +839,48 @@ function! s:open_link_in_editor(text, col)
 endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
 nnoremap <silent>gx :OpenLink<cr>
+
+" ------------------------
+" quick jump in buffer
+" ------------------------
+nnoremap ; <Nop>
+nnoremap , <Nop>
+let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
+if has('nvim-0.8')
+    PlugAddOpt 'flash.nvim'
+    lua require("cfg/flash")
+    nmap SJ vt<Space><Cr>S
+    nmap SK vT<Space><Cr>S
+else
+    let g:clever_f_smart_case = 1
+    let g:clever_f_repeat_last_char_inputs = ['<Tab>']
+    PlugAddOpt 'clever-f.vim'
+    nmap ;s <Plug>(clever-f-repeat-forward)
+    xmap ;s <Plug>(clever-f-repeat-forward)
+    nmap ,s <Plug>(clever-f-repeat-back)
+    xmap ,s <Plug>(clever-f-repeat-back)
+    nmap SJ vt<Space>S
+    nmap SK vT<Space>S
+endif
+if exists('g:vscode')
+    imap <C-a> <ESC>ggVG
+    xmap <C-a> <ESC>ggVG
+    nmap <C-a> ggVG
+    imap <C-x> <C-o>"*
+    xmap <C-x> "*x
+    nmap <C-x> "*x
+    PlugAddOpt 'hop.nvim'
+    lua require("cfg/hop")
+else
+    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
+    source $CFG_DIR/easymotion.vim
+endif
+" ------------------------
+" set optional
+" ------------------------
+if filereadable(expand("~/.vimrc.opt"))
+    source $HOME/.vimrc.opt
+endif
 " --------------------------------------------
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------
