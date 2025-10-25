@@ -661,13 +661,13 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 " Copy file path
-nnoremap <leader>YP :let @"=AbsPath()<cr>:echo '-= File path copied=-'<Cr>
+nnoremap <leader>YP :let @"=AbsPath()<Cr>:echo '-= File path copied=-'<Cr>
 " Copy file dir
-nnoremap <leader>YD :let @"=AbsDir()<cr>:echo '-= File path copied=-'<Cr>
+nnoremap <leader>YD :let @"=AbsDir()<Cr>:echo '-= File dir copied=-'<Cr>
 " Copy file name
-nnoremap <leader>YF :let @"=FileName()<cr>:echo '-= File name copied=-'<Cr>
+nnoremap <leader>YF :let @"=FileName()<Cr>:echo '-= File name copied=-'<Cr>
 " Copy bookmark position reference
-nnoremap <leader>YM :let @"=AbsPath().':'.line(".").':'.col(".")<cr>:echo '-= Cursor bookmark copied=-'<cr>'
+nnoremap <leader>YM :let @"=AbsPath().':'.line(".").':'.col(".")<Cr>:echo '-= Cursor bookmark copied=-'<Cr>'
 if has('clipboard')
     function! s:setup_clipboard(register, mode, label) abort
         let s:clipboard = a:mode
@@ -783,7 +783,7 @@ if s:clipboard != ''
         if editor == 'code'
             let editor = 'vscode'
         endif
-        echo 'Yank positon to ' . editor
+        echo 'Yank position to ' . editor
     endfunction
     command! YankPositionToCursor   call s:yank_position_to_editor('cursor')
     command! YankPositionToVSCode   call s:yank_position_to_editor('code')
@@ -796,7 +796,7 @@ if s:clipboard != ''
     nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
     nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
     nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
-    nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
+    nnoremap <silent><leader>yo :YankPositionToPositron<Cr>
 endif
 " ------------------------
 " open_in_other
