@@ -763,6 +763,39 @@ endif
 nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 xnoremap zp "_c<ESC>p"
 xnoremap zP "_c<ESC>P"
+" --------------------------------------------
+" yank command and position to editors
+" --------------------------------------------
+if s:clipboard != ''
+    function s:yank_postion_to_editor(editor)
+        if index(['cursor', 'code', 'windsurf', 'qoder', 'trae'], a:editor) >= 0
+            let editor = a:editor
+            let register = (s:clipboard ==# 'unnamedplus') ? '+' : '*'
+        else
+            return
+        endif
+        let cmd = printf("%s --goto %s:%d:%d", editor, AbsPath(), line("."), col("."))
+        if register == '+'
+            let @+ = cmd
+        else
+            let @* = cmd
+        endif
+        if editor == 'code'
+            let editor = 'vscode'
+        endif
+        echo 'Yank positon to ' . editor
+    endfunction
+    command! YankPostionToCursor   call s:yank_postion_to_editor('cursor')
+    command! YankPostionToVSCode   call s:yank_postion_to_editor('code')
+    command! YankPostionToWindsurf call s:yank_postion_to_editor('windsurf')
+    command! YankPostionToQoder    call s:yank_postion_to_editor('qoder')
+    command! YankPostionToTrae     call s:yank_postion_to_editor('trae')
+    nnoremap <silent><leader>yc :YankPostionToCursor<Cr>
+    nnoremap <silent><leader>yv :YankPostionToVSCode<Cr>
+    nnoremap <silent><leader>yw :YankPostionToWindsurf<Cr>
+    nnoremap <silent><leader>yq :YankPostionToQoder<Cr>
+    nnoremap <silent><leader>yt :YankPostionToTrae<Cr>
+endif
 " ------------------------
 " open_in_other
 " ------------------------
@@ -776,7 +809,7 @@ function! s:open_in_other()
         execute printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
     elseif !exists('g:vscode') && executable(get(g:, 'open_editor', 'code'))
         let editor = get(g:, 'open_editor', 'code')
-        silent! exec printf("!%s --goto %s:%d", editor, Expand("%:p"), line("."))
+        silent! exec printf("!%s --goto %s:%d:%d", editor, AbsPath(), line("."), col("."))
     else
         echom "Cannot open current file in other editor."
     endif
