@@ -696,10 +696,10 @@ endif
 " special yank
 " ------------------------
 function! s:yank_border(...) abort
-    if a:0
-        let yankmode = a:1
+    if a:0 == 0
+        let mode = 'word'
     else
-        let yankmode = 0
+        let mode = a:1
     endif
     let original_cursor_position = getpos('.')
     if s:clipboard ==# 'unnamedplus'
@@ -712,22 +712,22 @@ function! s:yank_border(...) abort
         let yank = 'y'
         let tclip = 'to internal clipboard.'
     endif
-    if yankmode == 6
+    if mode ==# 'file'
         let action = '%'
-        let target = ' whole file'
-    elseif yankmode == 5
+        let target = 'whole file'
+    elseif mode ==# 'line'
         let action = '0v$'
         let target = 'line'
-    elseif yankmode == 4
+    elseif mode ==# 'from_file_begin'
         let action = 'vgg0o'
         let target = 'from file begin'
-    elseif yankmode == 3
+    elseif mode ==# 'to_file_end'
         let action = 'vG'
         let target = 'to file end'
-    elseif yankmode == 2
+    elseif mode ==# 'from_line_begin'
         let action = 'v^'
         let target = 'from line begin'
-    elseif yankmode == 1
+    elseif mode ==# 'to_line_end'
         let action = 'v$'
         let target = 'to line end'
     else
@@ -738,13 +738,13 @@ function! s:yank_border(...) abort
     call setpos('.', original_cursor_position)
     echo 'Yank ' . target . ' ' . tclip
 endfunction
-command! YankFile call s:yank_border(6)
-command! YankLine call s:yank_border(5)
-command! YankFromFileBegin call s:yank_border(4)
-command! YankToFileEnd call s:yank_border(3)
-command! YankFromLineBegin call s:yank_border(2)
-command! YankToLineEnd call s:yank_border(1)
-command! YankWord call s:yank_border()
+command! YankFile call s:yank_border('file')
+command! YankLine call s:yank_border('line')
+command! YankFromFileBegin call s:yank_border('from_file_begin')
+command! YankToFileEnd call s:yank_border('to_file_end')
+command! YankFromLineBegin call s:yank_border('from_line_begin')
+command! YankToLineEnd call s:yank_border('to_line_end')
+command! YankWord call s:yank_border('word')
 nnoremap <silent>gY :YankWord<Cr>
 nnoremap <silent><leader>YY :YankFile<Cr>
 nnoremap <silent><leader>yy :YankLine<Cr>
