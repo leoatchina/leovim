@@ -667,7 +667,9 @@ nnoremap <leader>YD :let @"=AbsDir()<Cr>:echo "-= File dir copied=-"<Cr>
 " Copy file name
 nnoremap <leader>YF :let @"=FileName()<Cr>:echo "-= File name copied=-"<Cr>
 " Copy bookmark position reference
-nnoremap <leader>YM :let @"=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Cursor bookmark copied=-"<Cr>
+nnoremap <leader>YM :let @"=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied=-"<Cr>
+" Yank a line without leading whitespaces and line break
+nnoremap <leader>YU _yg_:echo "-= Yanked line without leading whitespaces and line break=-"<Cr>
 if has('clipboard')
     function! s:setup_clipboard(register, mode, label) abort
         let s:clipboard = a:mode
@@ -680,7 +682,8 @@ if has('clipboard')
         execute 'nnoremap <leader>yp :let @' . a:register . '=AbsPath()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yd :let @' . a:register . '=AbsDir()<Cr>:echo "-= File dir copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yf :let @' . a:register . '=FileName()<Cr>:echo "-= File name copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>ym :let @' . a:register . '=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Cursor bookmark copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>ym :let @' . a:register . '=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>yu _"' . a:register . 'yg_:echo "-= Yanked line without leading whitespaces and line break to ' . a:label . ' clipboard=-"<Cr>'
     endfunction
     if LINUX() && (exists('g:vscode') || exists('$TMUX'))
         call s:setup_clipboard('+', 'unnamedplus', 'x11')
