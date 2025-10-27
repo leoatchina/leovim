@@ -8,10 +8,10 @@
 [
   {
     "bindings": {
-      "alt--": "workspace::ToggleBottomDock",
+      "alt--": "terminal_panel::Toggle",
       "alt-_": "workspace::CloseActiveDock",
-      "alt-=": "workspace::OpenInTerminal",
-      "alt-+": "workspace::NewTerminal"
+      "alt-=": "terminal_panel::ToggleFocus",
+      "alt-+": "workspace::OpenInTerminal"
     }
   },
   {
