@@ -43,15 +43,15 @@ elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
     if Require('blink.lua') || Require('blink') && !executable('cargo')
-        call SetScheme('catppuccin-mocha', 'codedark')
+        call SetScheme('terafox', 'hybrid')
     else
-        call SetScheme('nightfly', 'codedark')
+        call SetScheme('nightfox', 'hybrid')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('duskfox', 'hybrid')
+        call SetScheme('catppuccin', 'codedark')
     else
-        call SetScheme('sonokai', 'sublime')
+        call SetScheme('nightfly', 'codedark')
     endif
 else
     colorscheme slate
