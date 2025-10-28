@@ -32,20 +32,20 @@ let g:edge_better_performance = 1
 let g:gruvbox_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call SetScheme('edge', 'one')
+    call SetScheme('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'builtin'
     if has('nvim')
-        call SetScheme('carbonfox', 'wombat')
+        call SetScheme('terafox', 'wombat')
     else
-        call SetScheme('gruvbox-material', 'gruvbox')
+        call SetScheme('sonokai', 'sublime')
     endif
 elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
     if Require('blink.lua') || Require('blink') && !executable('cargo')
-        call SetScheme('terafox', 'hybrid')
-    else
         call SetScheme('nightfox', 'hybrid')
+    else
+        call SetScheme('duskfox', 'hybrid')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
@@ -54,7 +54,7 @@ elseif g:complete_engine == 'coc'
         call SetScheme('nightfly', 'codedark')
     endif
 else
-    colorscheme slate
+    call SetScheme('edge', 'one')
 endif
 " --------------------------
 " nvim-web-devicons
