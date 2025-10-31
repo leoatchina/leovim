@@ -5,7 +5,7 @@ function! PlannedFzf() abort
     return Planned('fzf', 'fzf.vim')
 endfunction
 function! PlannedCoc() abort
-    return Require('coc') && g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
+    return Require('coc') && g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438'))
 endfunction
 function! PlannedLsp() abort
     return (Require('cmp') || Require('blink') || Require('blink.lua')) && has('nvim-0.11')

@@ -8,7 +8,7 @@ else
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
-elseif Require('nvim-r') && (has('nvim-0.8') || v:version >= 802) && executable(g:R_exe)
+elseif Require('nvim-r') && (has('nvim') || v:version >= 802) && executable(g:R_exe)
     PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
 " ------------------------------
