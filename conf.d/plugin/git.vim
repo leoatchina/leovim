@@ -84,7 +84,7 @@ endfunction
 " fugitve and others
 "------------------------
 if Planned('vim-fugitive')
-    nnoremap <silent><Tab><Tab> :Git blame<Cr>
+    nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
     nnoremap <silent><M-g><M-u> :Git push<CR>
