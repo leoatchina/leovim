@@ -26,7 +26,7 @@ endif
 " ----------------------------
 " indentLine plugins
 " ----------------------------
-if has('nvim-0.8')
+if has('nvim')
     PlugAdd 'lukas-reineke/indent-blankline.nvim'
 elseif has('conceal')
     PlugAdd 'Yggdroot/indentLine'

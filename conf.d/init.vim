@@ -1,8 +1,8 @@
 if v:version <= 703 || v:version == 704 && !has('patch399')
     echoe 'vim 7.4.399 is at least required when using leovim.'
     finish
-elseif !has('nvim-0.7.2') && has('nvim')
-    echoe 'neovim 0.7.2 is at least required when using leovim.'
+elseif !has('nvim-0.8') && has('nvim')
+    echoe 'neovim-0.8 is at least required to use leovim.'
     finish
 else
     set nocompatible
@@ -178,7 +178,7 @@ elseif WINDOWS()
     if !has('nvim') && v:version < 900
         echoe "In windows, please update to vim9.0+."
         finish
-    elseif has('nvim') && !has('nvim-0.8')
+    elseif has('nvim') && !has('nvim')
         echoe 'neovim 0.8 is at least required when uing leovim in windows.'
         finish
     endif
@@ -890,7 +890,7 @@ nnoremap <silent>gx :OpenLink<cr>
 nnoremap ; <Nop>
 nnoremap , <Nop>
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
-if has('nvim-0.8')
+if has('nvim')
     PlugAddOpt 'flash.nvim'
     lua require("cfg/flash")
     nmap SJ vt<Space><Cr>S

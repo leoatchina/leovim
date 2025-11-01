@@ -8,7 +8,7 @@ else
 endif
 if has('nvim') && Require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
-elseif Require('nvim-r') && (has('nvim-0.8') || v:version >= 802) && executable(g:R_exe)
+elseif Require('nvim-r') && (has('nvim') || v:version >= 802) && executable(g:R_exe)
     PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
 " ------------------------------
@@ -88,13 +88,13 @@ endif
 " ------------------------------
 " nvim-java && neoconf
 " ------------------------------
-if PlannedLsp() && Require('java') && Planned('nvim-dap')
+if PlannedLsp() && Require('java')
     PlugAdd 'nvim-java/nvim-java'
-    PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'nvim-java/nvim-java-dap'
     PlugAdd 'nvim-java/nvim-java-core'
     PlugAdd 'nvim-java/nvim-java-test'
     PlugAdd 'nvim-java/nvim-java-refactor'
+    PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'JavaHello/spring-boot.nvim'
 endif
 " ------------------------------
