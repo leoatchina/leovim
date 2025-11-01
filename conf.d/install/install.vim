@@ -43,7 +43,7 @@ if Require('nocomplete') || Require('noc')
     let g:complete_engine = ''
 elseif Require('mcm')
     let g:complete_engine = 'mcm'
-elseif Require('builtin') && has('nvim-0.11')
+elseif Require('builtin') && (has('nvim-0.11') || has('patch-9.1.1590'))
     let g:complete_engine = 'builtin'
 elseif Require('coc')
     if g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
