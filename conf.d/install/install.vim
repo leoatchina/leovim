@@ -228,13 +228,13 @@ endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
     PlugAdd 'leoatchina/gruvbox-material'
-    PlugAdd 'bluz71/vim-nightfly-colors'
     if has('nvim')
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'EdenEast/nightfox.nvim'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
     else
         PlugAdd 'sainnhe/sonokai'
+        PlugAdd 'bluz71/vim-nightfly-colors'
     endif
 endif
 " ------------------------------
