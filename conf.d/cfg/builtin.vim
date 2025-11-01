@@ -23,13 +23,10 @@ func SmartTab()
 	endif
 	return "\<c-y>"
 endfunc
-
 inoremap <silent><expr> <tab> SmartTab()
 inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 inoremap <silent><expr> <PageDown> exists("*preinserted") && preinserted() ? "\<c-y>" : "\<PageDown>"
-
 hi link PreInsert LineNr
-
 
 set cpt+=FAbbrevCompletor
 def! g:AbbrevCompletor(findstart: number, base: string): any
