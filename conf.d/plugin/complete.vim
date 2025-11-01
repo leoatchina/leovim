@@ -78,6 +78,10 @@ elseif g:complete_engine != ''
     elseif has('patch-9.1.1590')
         let g:complete_engine = 'builtin'
         source $CFG_DIR/builtin.vim
+    else
+        let g:complete_engine = 'mcm'
+        PlugAddOpt 'vim-dict'
+        source $CFG_DIR/mcm.vim
     endif
 endif
 " ------------------------------

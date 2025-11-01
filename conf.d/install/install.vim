@@ -227,13 +227,14 @@ if !Planned('nvim-treesitter') && Require('c') && PlannedAdvCompEng()
 endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
-    PlugAdd 'sainnhe/sonokai'
     PlugAdd 'leoatchina/gruvbox-material'
     PlugAdd 'bluz71/vim-nightfly-colors'
     if has('nvim')
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'EdenEast/nightfox.nvim'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
+    else
+        PlugAdd 'sainnhe/sonokai'
     endif
 endif
 " ------------------------------
