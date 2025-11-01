@@ -88,13 +88,13 @@ endif
 " ------------------------------
 " nvim-java && neoconf
 " ------------------------------
-if PlannedLsp() && Require('java') && Planned('nvim-dap')
+if PlannedLsp() && Require('java')
     PlugAdd 'nvim-java/nvim-java'
-    PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'nvim-java/nvim-java-dap'
     PlugAdd 'nvim-java/nvim-java-core'
     PlugAdd 'nvim-java/nvim-java-test'
     PlugAdd 'nvim-java/nvim-java-refactor'
+    PlugAdd 'nvim-java/lua-async-await'
     PlugAdd 'JavaHello/spring-boot.nvim'
 endif
 " ------------------------------
