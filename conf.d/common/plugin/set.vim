@@ -75,7 +75,7 @@ endif
 " --------------------------
 if has('nvim') || has('jumpoptions')
     set jumpoptions=stack
-    if has('nvim-0.8')
+    if has('nvim')
         set jumpoptions+=view
     endif
 endif

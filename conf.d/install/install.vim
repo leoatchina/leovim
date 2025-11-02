@@ -43,10 +43,10 @@ if Require('nocomplete') || Require('noc')
     let g:complete_engine = ''
 elseif Require('mcm')
     let g:complete_engine = 'mcm'
-elseif Require('builtin') && has('nvim-0.11')
+elseif Require('builtin') && (has('nvim-0.11') || has('patch-9.1.1590'))
     let g:complete_engine = 'builtin'
 elseif Require('coc')
-    if g:node_version >= 16.18 && (has('nvim-0.8') || has('patch-9.0.0438'))
+    if g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438'))
         let g:complete_engine = 'coc'
     else
         let s:smart_engine_select = 1
@@ -206,10 +206,10 @@ endif
 " ------------------------------
 " debug tool install
 " ------------------------------
-if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim-0.8') && !PlannedLsp())
+if g:python_version >= 3.1 && Require('debug') && (has('patch-8.2.4797') || has('nvim') && !PlannedLsp())
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
-elseif has('nvim-0.9.5') && Require('debug')
+elseif has('nvim-0.9.5') && Require('debug') || PlannedLsp() && Require('java')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'rcarriga/nvim-dap-ui'
@@ -227,13 +227,14 @@ if !Planned('nvim-treesitter') && Require('c') && PlannedAdvCompEng()
 endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
-    PlugAdd 'sainnhe/sonokai'
     PlugAdd 'leoatchina/gruvbox-material'
-    PlugAdd 'bluz71/vim-nightfly-colors'
-    if has('nvim-0.8')
+    if has('nvim')
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'EdenEast/nightfox.nvim'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
+    else
+        PlugAdd 'sainnhe/sonokai'
+        PlugAdd 'bluz71/vim-nightfly-colors'
     endif
 endif
 " ------------------------------
@@ -258,7 +259,7 @@ if has('nvim')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'nvim-tree/nvim-web-devicons'
-    if has('nvim-0.8')
+    if has('nvim')
         PlugAdd 'stevearc/quicker.nvim'
     endif
     if PlannedLsp() || has('nvim-0.10') && Planned('nvim-treesitter')

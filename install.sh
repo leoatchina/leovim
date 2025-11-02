@@ -100,7 +100,7 @@ if [ "$OS" = "Darwin" ]; then
     fi
 fi
 
-# mkdir 
+# mkdir
 mkdir -p "$HOME/.config/nvim" "$HOME/.local/bin"
 
 # zed config
@@ -141,21 +141,6 @@ cp_n $APP_PATH/scripts/nn.sh $HOME/.local/bin
 # dirdiff
 cp_n $APP_PATH/scripts/dirdiff $HOME/.local/bin
 
-# leovim command
-if [ $os == 'linux' ]; then
-    # 检测 $SHELL 中是否包含 bash 或 zsh
-    if [[ "$SHELL" == *bash* ]]; then
-        shell=bash
-    elif [[ "$SHELL" == *zsh* ]]; then
-        shell=zsh
-    else
-        # 默认使用 bash
-        shell=bash
-        bash
-    fi
-else
-    shell=zsh
-fi
 
 ########################### install softwares #####################################
 
@@ -181,19 +166,20 @@ if [ $# -gt 0 ]; then
         fi
     # copy configrc
     elif [[ $mode == 'rc' ]]; then
-        if [ -f ~/.bashrc ] && [ $os == 'linux' ]; then
-            read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                mv -f ~/.bashrc ~/.bashrc.bak
-                success "~/.bashrc moved."
-            else
-                info "~/.bashrc not moved."
+        if [ $os == 'linux' ]; then
+            if [ -f ~/.bashrc ]; then
+                read -p "Do you want to move .bashrc? (y/n) " -n 1 -r
+                echo
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    mv -f ~/.bashrc ~/.bashrc.bak
+                    success "~/.bashrc moved."
+                else
+                    info "~/.bashrc not moved."
+                fi
             fi
-            if  [ ! -f ~/.bashrc ] && [ $os == 'linux' ]; then
+            if  [ ! -f ~/.bashrc ]; then
                 cp $APP_PATH/scripts/bashrc $HOME/.bashrc
                 success "bashrc copied."
-                $shell
             fi
         elif [ -f ~/.zshrc ]; then
             read -p "Do you want to move .zshrc? (y/n) " -n 1 -r
@@ -207,7 +193,6 @@ if [ $# -gt 0 ]; then
             if [ ! -f ~/.zshrc ] && program_exists zsh; then
                 cp $APP_PATH/scripts/zshrc $HOME/.zshrc
                 success "zshrc copied."
-                $shell
             fi
         fi
         exit 0
