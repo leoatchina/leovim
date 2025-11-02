@@ -390,25 +390,11 @@ for [plug, value] in items(g:plugs)
     endif
 endfor
 " ------------------------------
-" set mason PATH
-" ------------------------------
-let mason_bin = Expand('~/.leovim.d/mason/cmp/bin')
-if !Planned('mason.nvim') && get(g:, 'leovim_loaded', 0) ==0
-if WINDOWS()
-        let $PATH = mason_bin . ';' . $PATH
-    else
-        let $PATH = mason_bin . ':' . $PATH
-    endif
-endif
-" ------------------------------
 " <M-Key> map
 " ------------------------------
 for k in s:metacode_group
     let mkey = '<M-'. k . ">"
     exec "set " . mkey . "=\e" . k
-    if k == 'f' || k == 'b'
-        continue
-    endif
     if !hasmapto(mkey, 'n')
         exec("nmap " . mkey . " <Nop>")
     endif
@@ -419,3 +405,19 @@ for k in s:metacode_group
         exec("omap " . mkey . " <Nop>")
     endif
 endfor
+" ------------------------------
+" easymotion
+" ------------------------------
+source $CFG_DIR/easymotion.vim
+" ------------------------------
+" set mason PATH
+" ------------------------------
+let mason_bin = Expand('~/.leovim.d/mason/cmp/bin')
+if !Planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
+    if WINDOWS()
+        let $PATH = mason_bin . ';' . $PATH
+    else
+        let $PATH = mason_bin . ':' . $PATH
+    endif
+endif
+

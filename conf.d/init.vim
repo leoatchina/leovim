@@ -917,7 +917,6 @@ if exists('g:vscode')
     lua require("cfg/hop")
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
-    source $CFG_DIR/easymotion.vim
 endif
 " ------------------------
 " set optional
