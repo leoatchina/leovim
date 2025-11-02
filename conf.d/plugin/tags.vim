@@ -15,7 +15,7 @@ if g:has_popup_floating
 else
     let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
 endif
-nnoremap <silent>m<Cr> :MatchupWhereAmI??<Cr>
+nnoremap <silent>M :MatchupWhereAmI??<Cr>
 PlugAddOpt 'vim-matchup'
 " --------------------------
 " fuzzy_finder intergrated

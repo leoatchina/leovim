@@ -242,7 +242,7 @@ endif
 " ------------------------
 " mapleader
 " ------------------------
-nnoremap M q
+nnoremap Q q
 nnoremap q <Nop>
 let g:mapleader = ' '
 let g:maplocalleader = 'q'

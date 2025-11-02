@@ -2,10 +2,10 @@ if Planned('vim-signature')
     let g:SignatureMap = {
                 \ 'Leader'           : "m",
                 \ 'ToggleMarkAtLine' : "m.",
-                \ 'PlaceNextMark'    : "m;",
+                \ 'PlaceNextMark'    : "m<Cr>",
                 \ 'PurgeMarksAtLine' : "m,",
-                \ 'PurgeMarks'       : "m<Bs>",
-                \ 'PurgeMarkers'     : "m-",
+                \ 'PurgeMarks'       : "m;",
+                \ 'PurgeMarkers'     : "m<Bs>",
                 \ 'DeleteMark'       : "dm",
                 \ 'ListBufferMarks'   : "m/",
                 \ 'ListBufferMarkers' : "m?",
