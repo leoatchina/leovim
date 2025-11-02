@@ -1,6 +1,6 @@
 " open in vsplit/split
-nnoremap <Tab>v :vsplit<Space>
-nnoremap <Tab>s :split<Space>
+nnoremap <Tab>] :vsplit<Space>
+nnoremap <Tab>[ :split<Space>
 " ------------------------
 " Previous Window Control
 " ------------------------

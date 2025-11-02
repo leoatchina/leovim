@@ -404,5 +404,18 @@ endif
 " <M-Key> map
 " ------------------------------
 for k in s:metacode_group
-    exec "set <M-".k.">=\e".k
+    let mkey = '<M-'. k . ">"
+    exec "set " . mkey . "=\e" . k
+    if k == 'f' || k == 'b'
+        continue
+    endif
+    if !hasmapto(mkey, 'n')
+        exec("nmap " . mkey . " <Nop>")
+    endif
+    if !hasmapto(mkey, 'x')
+        exec("xmap " . mkey . " <Nop>")
+    endif
+    if !hasmapto(mkey, 'o')
+        exec("omap " . mkey . " <Nop>")
+    endif
 endfor
