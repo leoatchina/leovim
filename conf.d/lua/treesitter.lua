@@ -5,7 +5,7 @@ require("hlargs").setup({
 vim.opt.runtimepath:prepend(vim.fn.expand("~/.leovim.d/treesitter"))
 require("nvim-treesitter.install").prefer_git = true
 require("nvim-treesitter.configs").setup({
-  ensure_installed = {'python', 'vimdoc', 'markdown', 'markdown_inline'},
+  ensure_installed = {'python', 'vimdoc', 'markdown', 'markdown_inline', 'java', 'javadoc', 'r', 'c', 'cpp', 'rust', 'typescript', 'javascript'},
   sync_install = true,
   highlight = {
     enable = true,
