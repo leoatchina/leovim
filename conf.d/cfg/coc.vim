@@ -13,9 +13,9 @@ autocmd BufAdd * if getfsize(expand('<afile>')) > 1024*1024 |
 " ----------------------------
 let g:coc_config_home = expand("$CFG_DIR")
 if WINDOWS()
-    let g:coc_data_home = $DEPLOY_DIR . "\\coc"
+    let g:coc_data_home = $LEOVIMD_DIR . "\\coc"
 else
-    let g:coc_data_home = $DEPLOY_DIR . "/coc"
+    let g:coc_data_home = $LEOVIMD_DIR . "/coc"
 endif
 call coc#config('python.pythonPath', g:python_prog)
 call coc#config('python.venvPath', ['.venv', 'venv', '../venv', '../.venv'])
