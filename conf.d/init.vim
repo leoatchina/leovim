@@ -187,6 +187,7 @@ endif
 " set dirs
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')
+let $LEOVIMD_DIR = expand("~/.leovim.d")
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
 let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
 let $COMMON_DIR = expand($CONF_D_DIR . '/common')

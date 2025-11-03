@@ -357,9 +357,8 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " ===============================================================================================================
 " install begin
 " ===============================================================================================================
-let $DEPLOY_DIR = Expand("~/.leovim.d")
-call plug#begin(Expand("$DEPLOY_DIR/pack/add/opt"))
-if filereadable(Expand("$DEPLOY_DIR/pack.vim"))
+call plug#begin(Expand("$LEOVIMD_DIR/pack/add/opt"))
+if filereadable(Expand("$LEOVIMD_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
 for vim in split(glob("$INSTALL_DIR/*.vim"), "\n")
@@ -420,4 +419,3 @@ if !Planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
         let $PATH = mason_bin . ':' . $PATH
     endif
 endif
-
