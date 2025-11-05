@@ -62,7 +62,11 @@ let g:floaterm_wintype  = 'split'
 let g:floaterm_position = 'belowright'
 let g:floaterm_height = 0.3
 if WINDOWS()
-    let g:floaterm_shell = 'pwsh.exe'
+    if has('nvim')
+        let g:floaterm_shell = 'pwsh.exe'
+    else
+        let g:floaterm_shell = 'cmd.exe'
+    endif
 elseif executable('zsh') && has('nvim') && InstalledAdv()
     let g:floaterm_shell = 'zsh'
 endif
