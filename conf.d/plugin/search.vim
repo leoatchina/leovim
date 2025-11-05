@@ -23,18 +23,18 @@ endif
 function! s:search_cur(...)
     try
         if a:0 == 0
-            let g:grepper_word = expand('<cword>')
+            let g:grep_word = expand('<cword>')
         else
-            let g:grepper_word = a:1
+            let g:grep_word = a:1
         endif
     catch /.*/
-        let g:grepper_word = ""
+        let g:grep_word = ""
     endtry
-    if empty(g:grepper_word)
+    if empty(g:grep_word)
         call preview#errmsg("No search word offered")
     else
         try
-            execute 'vimgrep /' . Escape(g:grepper_word) . "/j %"
+            execute 'vimgrep /' . Escape(g:grep_word) . "/j %"
             if len(getqflist())
                 copen
             endif
@@ -44,7 +44,7 @@ function! s:search_cur(...)
     endif
 endfunction
 command! -nargs=? GrepBuf call s:search_cur(<f-args>)
-command! -nargs=0 GrepBufLast call s:search_cur(get(g:, 'grepper_word', ''))
+command! -nargs=0 GrepBufLast call s:search_cur(get(g:, 'grep_word', ''))
 nnoremap z/ :GrepBuf <C-r><C-w><Cr>
 xnoremap z/ :<C-u>GrepBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
 nnoremap z. :GrepBufLast<CR>
@@ -59,20 +59,20 @@ function! s:grep(...)
         return
     elseif a:000[-1] == 1
         if a:0 == 1
-            let g:grepper_word = get(g:, 'grep_last', '')
+            let g:grep_word = get(g:, 'grepdir_last', '')
         else
-            let g:grepper_word = Escape(a:1)
-            let g:grep_last = g:grepper_word
+            let g:grep_word = Escape(a:1)
+            let g:grepdir_last = g:grep_word
         endif
-        let cmd = printf('vimgrep /%s/j **/* ', g:grepper_word)
+        let cmd = printf('vimgrep /%s/j **/* ', g:grep_word)
     elseif a:000[-1] == 2
         if a:0 == 1
-            let g:grepper_word = get(g:, 'grepall_last', '')
+            let g:grep_word = get(g:, 'grepall_last', '')
         else
-            let g:grepper_word = Escape(a:1)
-            let g:grepall_last = g:grepper_word
+            let g:grep_word = Escape(a:1)
+            let g:grepall_last = g:grep_word
         endif
-        let cmd = printf('vimgrep /%s/j %s/**/* ', g:grepper_word, GetRootDir())
+        let cmd = printf('vimgrep /%s/j %s/**/* ', g:grep_word, GetRootDir())
     else
         return
     endif
@@ -105,7 +105,7 @@ nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
 " --------------------------
 " replace in filetype qf
 " --------------------------
-au Filetype qf nnoremap <buffer>r :cdo s/<C-r>=get(g:, 'grepper_word', '')<Cr>//gc<Left><Left><Left>
+au Filetype qf nnoremap <buffer>r :cdo s/<C-r>=get(g:, 'grep_word', '')<Cr>//gc<Left><Left><Left>
 if Installed('quicker.nvim')
     au Filetype qf nnoremap <buffer>W :write
 else
