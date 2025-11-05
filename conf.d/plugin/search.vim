@@ -43,14 +43,14 @@ function! s:search_cur(...)
         endtry
     endif
 endfunction
-command! -nargs=? SearchCurrBuf call s:search_cur(<f-args>)
-command! -nargs=0 SearchRepeat call s:search_cur(get(g:, 'grepper_word', ''))
-nnoremap z/ :SearchCurrBuf <C-r><C-w><Cr>
-xnoremap z/ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
-nnoremap z. :SearchRepeat<CR>
-nnoremap z\ :SearchCurrBuf <C-r><C-w>
-xnoremap z\ :<C-u>SearchCurrBuf <C-r>=GetVisualSelection(1)<Cr>
-nnoremap z? :SearchCurrBuf <C-r>=@"<Cr><Cr>
+command! -nargs=? GrepBuf call s:search_cur(<f-args>)
+command! -nargs=0 GrepBufLast call s:search_cur(get(g:, 'grepper_word', ''))
+nnoremap z/ :GrepBuf <C-r><C-w><Cr>
+xnoremap z/ :<C-u>GrepBuf <C-r>=GetVisualSelection(1)<Cr><Cr>
+nnoremap z. :GrepBufLast<CR>
+nnoremap z\ :GrepBuf <C-r><C-w>
+xnoremap z\ :<C-u>GrepBuf <C-r>=GetVisualSelection(1)<Cr>
+nnoremap z? :GrepBuf <C-r>=@"<Cr><Cr>
 " ----------------------------
 " grep search
 " ----------------------------
@@ -85,16 +85,16 @@ function! s:grep(...)
         call preview#errmsg("vimgrep error")
     endtry
 endfunction
-command! GrepLast call s:grep(1)
-command! -nargs=1 Grep call s:grep(<q-args>, 1)
+command! GrepDirLast call s:grep(1)
+command! -nargs=1 GrepDir call s:grep(<q-args>, 1)
 command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
 " search
-nnoremap s<Cr> :Grep <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>Grep <C-r>=GetVisualSelection()<Cr><Cr>
-nnoremap s[ :GrepLast<Cr>
-nnoremap s] :Grep <C-r><C-w>
-xnoremap s] :<C-u>Grep <C-r>=GetVisualSelection()<Cr>
+nnoremap s<Cr> :GrepDir <C-r><C-w><Cr>
+xnoremap s<Cr> :<C-u>GrepDir <C-r>=GetVisualSelection()<Cr><Cr>
+nnoremap s[ :GrepDirLast<Cr>
+nnoremap s] :GrepDir <C-r><C-w>
+xnoremap s] :<C-u>GrepDir <C-r>=GetVisualSelection()<Cr>
 " searchall
 nnoremap s/ :GrepAll <C-r><C-w><Cr>
 xnoremap s/ :<C-u>GrepAll <C-r>=GetVisualSelection()<Cr><Cr>
