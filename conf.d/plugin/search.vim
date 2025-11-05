@@ -83,6 +83,9 @@ function! s:grep(...)
     if len(getqflist())
         copen
     endif
+    if !has(nvim)
+        redraw
+    endif
 endfunction
 command! GrepLast call s:grep(1)
 command! -nargs=1 Grep call s:grep(<q-args>, 1)
