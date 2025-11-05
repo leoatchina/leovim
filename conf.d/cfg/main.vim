@@ -357,9 +357,8 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " ===============================================================================================================
 " install begin
 " ===============================================================================================================
-let $DEPLOY_DIR = Expand("~/.leovim.d")
-call plug#begin(Expand("$DEPLOY_DIR/pack/add/opt"))
-if filereadable(Expand("$DEPLOY_DIR/pack.vim"))
+call plug#begin(Expand("$LEOVIMD_DIR/pack/add/opt"))
+if filereadable(Expand("$LEOVIMD_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
 for vim in split(glob("$INSTALL_DIR/*.vim"), "\n")
@@ -412,12 +411,16 @@ source $CFG_DIR/easymotion.vim
 " ------------------------------
 " set mason PATH
 " ------------------------------
-let mason_bin = Expand('~/.leovim.d/mason/cmp/bin')
+let mason_dirs  = [Expand('~/.leovim.d/mason/cmp/bin'), Expand('~/.leovim.d/mason/blink/bin')]
 if !Planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
-    if WINDOWS()
-        let $PATH = mason_bin . ';' . $PATH
-    else
-        let $PATH = mason_bin . ':' . $PATH
-    endif
+    for mason_dir in mason_dirs
+        if isdirectory(mason_dir)
+            if WINDOWS()
+                let $PATH = mason_dir . ';' . $PATH
+            else
+                let $PATH = mason_dir . ':' . $PATH
+            endif
+            break
+        endif
+    endfor
 endif
-
