@@ -59,7 +59,7 @@ function! s:grep(...)
             let g:grepper_word = Escape(a:1)
             let g:grep_last = g:grepper_word
         endif
-        if executable('rg') && has('nvim')
+        if executable('rg') && has('nvim') && UNIX()
             let cmd = printf('silent! grep %s | copen', g:grepper_word)
         else
             let cmd = printf('vimgrep /%s/j **/* | copen', g:grepper_word)
@@ -71,7 +71,7 @@ function! s:grep(...)
             let g:grepper_word = Escape(a:1)
             let g:grepall_last = g:grepper_word
         endif
-        if executable('rg') && has('nvim')
+        if executable('rg') && has('nvim') && UNIX()
             let cmd = printf('silent! grep %s %s | copen', g:grepper_word, GetRootDir())
         else
             let cmd = printf('vimgrep /%s/j %s/**/* | copen', g:grepper_word, GetRootDir())
