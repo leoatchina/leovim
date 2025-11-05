@@ -448,11 +448,7 @@
     "command": "markdown-preview-enhanced.openPreviewToTheSide",
     "when": "editorLangId == 'markdown'"
   },
-  {
-    "key": "ctrl+shift+alt+r",
-    "command": "multiCommand.reloadFile"
-  },
-  // ctrl n
+  // ctrl+n
   {
     "key": "ctrl+n",
     "command": "-workbench.action.files.newUntitledFile"
@@ -513,14 +509,17 @@
     "key": "alt+[",
     "command": "workbench.action.splitEditorDown"
   },
-  /// commit message using AI
+  // multicommand
+  {
+    "key": "ctrl+shift+alt+enter",
+    "command": "multiCommand.reloadFile"
+  },
   {
     "key": "ctrl+shift+alt+,",
     "command": "AI.generateCommitMessage"
   },
   //----------------------- windsurf --------------------
   //----------------------- cursor ----------------------
-  //----------------------- kiro ------------------------
   //----------------------- lingma ------------------
   {
     "key": "ctrl+shift+l",
@@ -532,17 +531,8 @@
     "when": "Lingma.Chat.active"
   },
   {
-    "key": "ctrl+\\",
-    "command": "tongyi.inline.edit",
-    "when": "Lingma.Chat.active"
-  },
-  {
     "key": "alt+p",
     "command": "-tongyi.action.inlineSuggest.trigger",
-    "when": "Lingma.Chat.active"
-  },
-  {
-    "key": "ctrl+shift+\\",
     "when": "Lingma.Chat.active"
   },
   {
