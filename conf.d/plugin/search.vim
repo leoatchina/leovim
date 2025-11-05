@@ -35,9 +35,11 @@ function! s:search_cur(...)
     else
         try
             execute 'vimgrep /' . Escape(g:grepper_word) . "/j %"
-            copen
+            if len(getqflist())
+                copen
+            endif
         catch /.*/
-            call preview#errmsg("vimgrep errors")
+            call preview#errmsg("vimgrep error")
         endtry
     endif
 endfunction
@@ -62,7 +64,7 @@ function! s:grep(...)
             let g:grepper_word = Escape(a:1)
             let g:grep_last = g:grepper_word
         endif
-        let cmd = printf('vimgrep /%s/j **/* | copen', g:grepper_word)
+        let cmd = printf('vimgrep /%s/j **/* ', g:grepper_word)
     elseif a:000[-1] == 2
         if a:0 == 1
             let g:grepper_word = get(g:, 'grepall_last', '')
@@ -70,11 +72,18 @@ function! s:grep(...)
             let g:grepper_word = Escape(a:1)
             let g:grepall_last = g:grepper_word
         endif
-        let cmd = printf('vimgrep /%s/j %s/**/* | copen', g:grepper_word, GetRootDir())
+        let cmd = printf('vimgrep /%s/j %s/**/* ', g:grepper_word, GetRootDir())
     else
         return
     endif
-    execute cmd
+    try
+        execute cmd
+        if len(getqflist())
+            copen
+        endif
+    catch
+        call preview#errmsg("vimgrep error")
+    endtry
 endfunction
 command! GrepLast call s:grep(1)
 command! -nargs=1 Grep call s:grep(<q-args>, 1)
