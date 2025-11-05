@@ -259,7 +259,7 @@ if has('nvim')
     PlugAdd 'kevinhwang91/nvim-bqf'
     PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'nvim-tree/nvim-web-devicons'
-    if has('nvim') && UNIX()
+    if has('nvim')
         PlugAdd 'stevearc/quicker.nvim'
     endif
     if PlannedLsp() || has('nvim-0.10') && Planned('nvim-treesitter')

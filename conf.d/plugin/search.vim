@@ -11,6 +11,13 @@ else
     nnoremap <nowait><M-l><M-l> :CtrlPLine<Cr>
 endif
 " ----------------------------
+" using rg
+" ----------------------------
+if executable('rg')
+    set grepprg=rg\ --line-number\ --no-heading\ --smart-case
+    set grepformat=%f:%l:%m,%f:%l,%f:%m,%f
+endif
+" ----------------------------
 " buffer search
 " ----------------------------
 function! s:search_cur(...)
@@ -45,10 +52,6 @@ nnoremap z? :SearchCurrBuf <C-r>=@"<Cr><Cr>
 " ----------------------------
 " grep search
 " ----------------------------
-if executable('rg')
-    set grepprg=rg\ --line-number\ --no-heading\ --smart-case
-    set grepformat=%f:%l:%m,%f:%l,%f:%m,%f
-endif
 function! s:grep(...)
     if a:0 == 0
         return
@@ -59,11 +62,7 @@ function! s:grep(...)
             let g:grepper_word = Escape(a:1)
             let g:grep_last = g:grepper_word
         endif
-        if executable('rg') && has('nvim') && UNIX()
-            let cmd = printf('silent! grep %s | copen', g:grepper_word)
-        else
-            let cmd = printf('vimgrep /%s/j **/* | copen', g:grepper_word)
-        endif
+        let cmd = printf('vimgrep /%s/j **/* | copen', g:grepper_word)
     elseif a:000[-1] == 2
         if a:0 == 1
             let g:grepper_word = get(g:, 'grepall_last', '')
@@ -71,11 +70,7 @@ function! s:grep(...)
             let g:grepper_word = Escape(a:1)
             let g:grepall_last = g:grepper_word
         endif
-        if executable('rg') && has('nvim') && UNIX()
-            let cmd = printf('silent! grep %s %s | copen', g:grepper_word, GetRootDir())
-        else
-            let cmd = printf('vimgrep /%s/j %s/**/* | copen', g:grepper_word, GetRootDir())
-        endif
+        let cmd = printf('vimgrep /%s/j %s/**/* | copen', g:grepper_word, GetRootDir())
     else
         return
     endif
