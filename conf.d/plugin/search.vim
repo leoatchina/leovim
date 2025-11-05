@@ -83,7 +83,7 @@ function! s:grep(...)
     if len(getqflist())
         copen
     endif
-    if !has(nvim)
+    if !has('nvim')
         redraw
     endif
 endfunction
