@@ -60,9 +60,9 @@ function! s:grep(...)
             let g:grep_last = g:grepper_word
         endif
         if executable('rg') && (!has('nvim') && WINDOWS() || UNIX())
-            let cmd = printf('silent! grep %s', g:grepper_word)
+            let cmd = printf('silent! grep %s | copen', g:grepper_word)
         else
-            let cmd = printf('vimgrep /%s/j **/*', g:grepper_word)
+            let cmd = printf('vimgrep /%s/j **/* | copen', g:grepper_word)
         endif
     elseif a:000[-1] == 2
         if a:0 == 1
@@ -72,17 +72,17 @@ function! s:grep(...)
             let g:grepall_last = g:grepper_word
         endif
         if executable('rg') && (!has('nvim') && WINDOWS() || UNIX())
-            let cmd = printf('silent! grep %s %s', g:grepper_word, GetRootDir())
+            let cmd = printf('silent! grep %s %s | copen', g:grepper_word, GetRootDir())
         else
-            let cmd = printf('vimgrep /%s/j %s/**/*', g:grepper_word, GetRootDir())
+            let cmd = printf('vimgrep /%s/j %s/**/* | copen', g:grepper_word, GetRootDir())
         endif
     else
         return
     endif
     execute cmd
-    if len(getqflist())
-        copen
-    endif
+    " if len(getqflist())
+    "     copen
+    " endif
     if !has('nvim')
         redraw
     endif
