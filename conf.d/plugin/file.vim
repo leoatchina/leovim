@@ -99,9 +99,6 @@ if Installed('vim-floaterm')
     elseif executable('ranger')
         command! FloatermRanger call s:floaterm_float('ranger')
         nnoremap <silent><nowait>\ff :FloatermRanger<Cr>
-    elseif executable('lf')
-        command! FloatermLF call s:floaterm_float('lf')
-        nnoremap <silent><nowait>\ff :FloatermLF<Cr>
     endif
 endif
 "------------------------
