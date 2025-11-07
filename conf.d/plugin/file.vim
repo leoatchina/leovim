@@ -74,6 +74,10 @@ nnoremap <leader>E :tabe <C-r>=GetRootDir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
+if Installed('oil.nvim')
+    lua require('cfg/oil')
+    nnoremap <silent><nowait><leader>fo <Cmd>Oil --float<Cr>
+endif
 if Installed('vim-floaterm')
     function! s:floaterm_float(prg)
         let prg = a:prg
@@ -87,13 +91,7 @@ if Installed('vim-floaterm')
             endif
         endif
     endfunction
-    if InstalledCoc() && has('nvim')
-        function! s:coc_file() abort
-            exec("CocCommand explorer --toggle --position floating --floating-width " . float2nr(&columns * 0.8) . " --floating-height " . float2nr(&lines * 0.8))
-        endfunction
-        command! CocFile call s:coc_file()
-        nnoremap <silent><nowait>\ff :CocFile<Cr>
-    elseif executable('yazi')
+    if executable('yazi')
         command! FloatermYazi call s:floaterm_float('yazi')
         nnoremap <silent><nowait>\ff :FloatermYazi<Cr>
     elseif executable('ranger')
@@ -292,69 +290,3 @@ function! s:toggle_modify() abort
 endfunction
 command! ToggleModity call s:toggle_modify()
 nnoremap <M-k><space> :ToggleModity<Cr>
-" -------------------------
-" confirem quit
-" -------------------------
-function! s:confirm_quit(type) abort
-    let type = a:type
-    if &ft == 'floaterm'
-        FloatermKill
-    elseif (&ft == '' || Expand('%') == '' || FtBtIgnored()) && type == 0
-        q!
-    else
-        if type == 'all'
-            let choices = ['Quit All']
-            let title = "Do you want to quit all buffers? Ctrl+C to cancel"
-        elseif type == 'direct'
-            if &modified
-                let choices = ['Save And Quit', 'Quit Only']
-                let title = "Do you want to quit without save? Ctrl+C to cancel""
-            else
-                UndotreeHide
-                q!
-                return
-            endif
-        else
-            let title = "Do you want to quit? Ctrl+C to cancel""
-            if &modified
-                let choices = ['Save And Quit', 'Quit Only']
-            else
-                let choices = ['Quit']
-            endif
-        endif
-        if &modified && type == 'check'
-            let choice = ChooseOne(choices, title, 0, 'Cancel')
-            if choice =~# '^Save'
-                UndotreeHide
-                wq!
-            elseif choice =~# '^Quit'
-                UndotreeHide
-                q!
-            endif
-        else
-            let choice = ChooseOne(choices, title, 0, 'Cancel')
-            if choice =~# '^Quit'
-                if type == 'all'
-                    UndotreeHide
-                    if exists(':cquit')
-                        cquit
-                    else
-                        qall!
-                    endif
-                else
-                    UndotreeHide
-                    q!
-                endif
-            elseif choice =~# '^Save'
-                UndotreeHide
-                wq!
-            endif
-        endif
-    endif
-endfun
-command! ConfirmQuit call s:confirm_quit('check')
-nnoremap <silent><M-q> :ConfirmQuit<Cr>
-command! ConfirmQuitAll call s:confirm_quit('all')
-nnoremap <silent><leader><BS> :ConfirmQuitAll<Cr>
-command! Quit call s:confirm_quit('direct')
-nnoremap <silent><leader>q :Quit<Cr>
