@@ -7,6 +7,8 @@ let g:nvim_treesitter_install = UNIX()
 
 " if v:version < 800
 "     call AddRequire('notags')
+" else
+"     call AddRequire('tags')
 " endif
 
 " call AddRequire('fzfbin')
