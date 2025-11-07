@@ -26,6 +26,7 @@ let g:coc_global_extensions = [
             \ 'coc-lists',
             \ 'coc-marketplace',
             \ 'coc-snippets',
+            \ 'coc-explorer',
             \ 'coc-yank',
             \ 'coc-highlight',
             \ 'coc-git',
