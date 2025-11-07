@@ -26,10 +26,10 @@ function! UNIX()
     return has('unix') && !has('win32unix')
 endfunction
 function! AbsDir()
-    return Expand('%:p:h', 1)
+    return substitute(Expand('%:p:h', 1), '^vscode-remote://ssh-remote/%2B[^/]\+', '', '')
 endfunction
 function! AbsPath()
-    return Expand('%:p', 1)
+    return substitute(Expand('%:p', 1), '^vscode-remote://ssh-remote/%2B[^/]\+', '', '')
 endfunction
 function! FileName()
     return Expand('%:t', 1)
