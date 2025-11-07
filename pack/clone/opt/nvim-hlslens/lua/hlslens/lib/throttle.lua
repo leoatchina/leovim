@@ -1,5 +1,7 @@
 local uv = vim.loop
 
+local utils = require('hlslens.utils')
+
 ---@class HlslensThrottle
 ---@field timer userdata
 ---@field fn function
@@ -17,14 +19,12 @@ local Throttle = {}
 ---@param noTrailing? boolean
 ---@return HlslensThrottle
 function Throttle:new(fn, limit, noLeading, noTrailing)
-    vim.validate({
-        fn = {fn, 'function'},
-        limit = {limit, 'number'},
-        noLeading = {noLeading, 'boolean', true},
-        noTrailing = {noTrailing, 'boolean', true}
-    })
-    assert(not (noLeading and noTrailing),
-        [[The values of noLeading and noTrailing can't be all true]])
+    utils.validate('fn', fn, 'function')
+    utils.validate('limit', limit, 'number')
+    utils.validate('noLeading', noLeading, 'boolean', true)
+    utils.validate('noTrailing', noTrailing, 'boolean', true)
+
+    assert(not (noLeading and noTrailing), [[The values of noLeading and noTrailing can't be all true]])
     local o = setmetatable({}, self)
     o.timer = nil
     o.fn = vim.schedule_wrap(fn)

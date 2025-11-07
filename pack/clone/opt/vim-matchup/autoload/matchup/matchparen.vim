@@ -508,8 +508,7 @@ endfunction
 
 if has('nvim')
   function s:pumvisible() abort
-    return pumvisible() || luaeval('pcall(require, "cmp")')
-          \ && luaeval('require"cmp".visible()')
+    return pumvisible() || luaeval('(function() local ok, cmp = pcall(require, "cmp") if ok and type(cmp.visible) == "function" then return cmp.visible() else return false end end)()')
   endfunction
 else
   function s:pumvisible() abort
@@ -833,7 +832,12 @@ function! s:do_offscreen_popup_nvim(offscreen) abort " {{{1
     else
       let l:bufnr = bufnr('%')
     endif
-    silent let s:float_id = nvim_open_win(l:bufnr, v:false, l:win_cfg)
+    try
+      silent let s:float_id = nvim_open_win(l:bufnr, v:false, l:win_cfg)
+    catch /E242:/
+      " Ignore errors when trying to open a window while closing another
+      return
+    endtry
 
     if has_key(g:matchup_matchparen_offscreen, 'highlight')
       call nvim_win_set_option(s:float_id, 'winhighlight',
@@ -896,7 +900,7 @@ function! s:populate_floating_win(offscreen, text_method) abort " {{{1
       let l:width += wincol()-virtcol('.')
       let l:width = min([l:width, winwidth(0) - 1])
     endif
-    call nvim_win_set_width(s:float_id, l:width + 1)
+    call nvim_win_set_width(s:float_id, l:width + 1 + strlen(line('$')))
 
     if &winminheight != 1
       let l:save_wmh = &winminheight

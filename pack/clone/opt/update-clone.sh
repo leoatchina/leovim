@@ -98,10 +98,6 @@ git clone --depth 1 https://github.com/skywind3000/asynctasks.vim.git
 rm -rf vim-mucomplete
 git clone --depth 1 https://github.com/lifepillar/vim-mucomplete.git
 
-# vim-choosewin
-rm -rf vim-choosewin
-git clone --depth 1 https://github.com/t9md/vim-choosewin.git
-
 # undotree
 rm -rf undotree
 git clone --depth 1 https://github.com/mbbill/undotree.git

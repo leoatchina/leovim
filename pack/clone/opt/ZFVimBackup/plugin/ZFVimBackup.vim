@@ -165,9 +165,9 @@ function! CygpathFix_absPath(path)
 endfunction
 
 " param1: filePath
-" param2: options: {
+" param2: option: {
 "   'maxFileSize' : '',
-"   'includeTempname' : '',
+"   'tempnameFilter' : '1/0',
 "   'backupFilter' : {},
 " }
 function! ZFBackupSave(...)
@@ -223,11 +223,24 @@ function! ZFBackup_clean()
     endfor
 endfunction
 
+function! ZFBackup_saveAction(path)
+    let option = {}
+    if !get(g:, 'ZFBackup_maxFileSizeEnableForSave', 0)
+        let option['maxFileSize'] = -1
+    endif
+    if !get(g:, 'ZFBackup_tempnameFilterEnableForSave', 0)
+        let option['tempnameFilter'] = 0
+    endif
+    if !get(g:, 'ZFBackup_backupFilterEnableForSave', 0)
+        let option['backupFilter'] = {}
+    endif
+    silent! call ZFBackupSave(a:path, option)
+endfunction
 function! ZFBackup_enable()
     augroup ZFBackup_enable_augroup
         autocmd!
-        autocmd BufWritePre * silent! call ZFBackupSave(expand('<afile>'))
-        autocmd BufWritePost * silent! call ZFBackupSave(expand('<afile>'))
+        autocmd BufWritePre * call ZFBackup_saveAction(expand('<afile>'))
+        autocmd BufWritePost * call ZFBackup_saveAction(expand('<afile>'))
     augroup END
 endfunction
 function! ZFBackup_disable()
@@ -430,16 +443,16 @@ endfunction
 
 " ============================================================
 
-function! s:backupSave(filePath, options)
+function! s:backupSave(filePath, option)
     let filePath = a:filePath
-    let options = a:options
+    let option = a:option
     if empty(filePath)
         let filePath = expand('%')
     endif
     if empty(filePath)
         return
     endif
-    let maxFileSize = get(options, 'maxFileSize', get(g:, 'ZFBackup_maxFileSize', 2 * 1024 * 1024))
+    let maxFileSize = get(option, 'maxFileSize', get(g:, 'ZFBackup_maxFileSize', 2 * 1024 * 1024))
     if ZFBackup_isInBackupDir(filePath)
                 \ || !filereadable(filePath)
                 \ || (maxFileSize > 0 && getfsize(filePath) >= maxFileSize)
@@ -450,7 +463,7 @@ function! s:backupSave(filePath, options)
     let backupDir = ZFBackup_backupDir()
 
     " ignore file created by tempname()
-    if !get(options, 'includeTempname', get(g:, 'ZFBackup_includeTempname', 0))
+    if get(option, 'tempnameFilter', get(g:, 'ZFBackup_tempnameFilter', 1))
         if !exists('s:tempDir')
             let s:tempDir = CygpathFix_absPath(fnamemodify(tempname(), ':h'))
         endif
@@ -459,7 +472,7 @@ function! s:backupSave(filePath, options)
         endif
     endif
 
-    let backupFilter = get(options, 'backupFilter', g:ZFBackup_backupFilter)
+    let backupFilter = get(option, 'backupFilter', g:ZFBackup_backupFilter)
     if !empty(backupFilter)
         for Filter in values(backupFilter)
             let filterResult = Filter(absPath)

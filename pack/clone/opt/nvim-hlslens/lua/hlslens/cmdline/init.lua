@@ -226,6 +226,8 @@ function CmdLine:didChange()
     local range
     if self.parser:validatePattern() then
         range = self:searchRange(self.parser.pattern)
+    elseif not self.isSubstitute and self.parser.pattern == '' then -- fix #83
+        self.searchStart = self.parser.originCursor
     end
     if range then
         self:doRender(range[1], range[2])

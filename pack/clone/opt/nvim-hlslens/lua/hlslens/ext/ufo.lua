@@ -55,7 +55,9 @@ end
 ---@param ... any
 ---@return boolean, number
 function Ufo:nN(char, ...)
-    vim.validate({char = {char, function(c) return c == 'n' or c == 'N' end, [['n' or 'N']]}})
+    utils.validate('char', char, function(c)
+        return c == 'n' or c == 'N'
+    end, [['n' or 'N']])
     local winid
     local ok, msg = pcall(cmd, 'norm!' .. vim.v.count1 .. char)
     if not ok then
@@ -159,7 +161,7 @@ function Ufo:initialize(module)
                 local priority = textInfo.priority
                 render:setVirtText(bufnr, s, hlsVirtText, {
                     virt_text_win_col = width,
-                    priority = type(priority) == 'number' and priority + 1 or 100
+                    priority = type(priority) == 'number' and priority + 1 or 100,
                 })
             end
         end
