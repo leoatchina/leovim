@@ -662,7 +662,7 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 " Copy file path
-nnoremap <leader>YP :let @"=AbsPath()<Cr>:echo "-= File path copied=-"<Cr>
+nnoremap <leader>YA :let @"=AbsPath()<Cr>:echo "-= File path copied=-"<Cr>
 " Copy file dir
 nnoremap <leader>YD :let @"=AbsDir()<Cr>:echo "-= File dir copied=-"<Cr>
 " Copy file name
@@ -680,7 +680,7 @@ if has('clipboard')
             set clipboard=
         endif
         execute 'xnoremap Y "' . a:register . 'y:echo "Yank selection to ' . a:label . ' clipboard."<Cr>'
-        execute 'nnoremap <leader>yp :let @' . a:register . '=AbsPath()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>ya :let @' . a:register . '=AbsPath()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yd :let @' . a:register . '=AbsDir()<Cr>:echo "-= File dir copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yf :let @' . a:register . '=FileName()<Cr>:echo "-= File name copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>ym :let @' . a:register . '=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied to ' . a:label . ' clipboard=-"<Cr>'
@@ -806,7 +806,7 @@ nnoremap <silent><leader>yv :YankPositionToVSCode<Cr>
 nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
 nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
 nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
-nnoremap <silent><leader>yo :YankPositionToPositron<Cr>
+nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
 nnoremap <silent><leader>yz :YankPositionToZed<Cr>
 " ------------------------
 " open_in_other
