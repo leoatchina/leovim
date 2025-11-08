@@ -61,17 +61,14 @@ elseif has('nvim')
         let g:neovide_cursor_animation_length = 0
     elseif exists('g:vscode')
         let s:gui_running = 0
+    elseif exists('g:GuiLoaded') && g:GuiLoaded != 0
+        let s:gui_running = 1
+    elseif exists('*nvim_list_uis') && len(nvim_list_uis()) > 0
+        let s:gui_running = get(nvim_list_uis()[0], 'ext_termcolors', 0)? 0 : 1
+    elseif exists("+termguicolors") && (&termguicolors) != 0
+        let s:gui_running = 1
     else
-        if exists('g:GuiLoaded') && g:GuiLoaded != 0
-            let s:gui_running = 1
-        elseif exists('*nvim_list_uis') && len(nvim_list_uis()) > 0
-            let uis = nvim_list_uis()[0]
-            let s:gui_running = get(uis, 'ext_termcolors', 0)? 0 : 1
-        elseif exists("+termguicolors") && (&termguicolors) != 0
-            let s:gui_running = 1
-        else
-            let s:gui_running = 0
-        endif
+        let s:gui_running = 0
     endif
 else
     let s:gui_running = 0
