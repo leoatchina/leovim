@@ -45,7 +45,6 @@ cnoremap <M-w> <ESC>
 " basic set
 nnoremap <M-k>z :set nofoldenable! nofoldenable?<Cr>
 nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
-nnoremap <M-z> :set nowrap! nowrap?<Cr>
 if has('nvim')
     nnoremap <M-k>U :UpdateRemotePlugins<Cr>
 endif
@@ -394,15 +393,13 @@ endfor
 for k in s:metacode_group
     let mkey = '<M-'. k . ">"
     exec "set " . mkey . "=\e" . k
-    if !hasmapto(mkey, 'n')
-        exec("nmap " . mkey . " <Nop>")
-    endif
-    if !hasmapto(mkey, 'x')
-        exec("xmap " . mkey . " <Nop>")
-    endif
-    if !hasmapto(mkey, 'o')
-        exec("omap " . mkey . " <Nop>")
-    endif
+    let modes = ['n', 'i', 'x', 'o']
+    for mode in modes
+        " maparg 返回非空字符串 → 存在该模式下的映射
+        if empty(maparg(mkey, mode))
+            exec(mode . "map " . mkey . " <Nop>")
+        endif
+    endfor
 endfor
 " ------------------------------
 " easymotion
