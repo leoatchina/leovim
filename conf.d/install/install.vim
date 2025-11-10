@@ -256,12 +256,12 @@ if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !Require('n
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
 if has('nvim')
-    PlugAdd 'kevinhwang91/nvim-bqf'
-    PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'nvim-tree/nvim-web-devicons'
-    if has('nvim')
-        PlugAdd 'stevearc/quicker.nvim'
-    endif
+    PlugAdd 'kevinhwang91/promise-async'
+    PlugAdd 'kevinhwang91/nvim-bqf'
+    PlugAdd 'stevearc/quicker.nvim'
+    PlugAdd 'stevearc/oil.nvim'
+    PlugAdd 'benomahony/oil-git.nvim'
     if PlannedLsp() || has('nvim-0.10') && Planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
         if UNIX()

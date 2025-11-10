@@ -66,7 +66,6 @@ Install the plugin with your preferred package manager:
   event = "VeryLazy",
   ---@type Flash.Config
   opts = {},
-  -- stylua: ignore
   keys = {
     { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
     { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
@@ -330,6 +329,7 @@ Install the plugin with your preferred package manager:
     prefix = { { "⚡", "FlashPromptIcon" } },
     win_config = {
       relative = "editor",
+      border = "none",
       width = 1, -- when <=1 it's a percentage of the editor width
       height = 1,
       row = -1, -- when negative it's an offset from the bottom
@@ -378,7 +378,6 @@ Install the plugin with your preferred package manager:
   - arround your matches, all the surrounding Treesitter nodes will be labeled.
   - select a label to perform the operator on the new selection
 - **remote**: `require("flash").remote(opts?)` opens **flash** in **remote** mode
-
   - equivalent to:
 
     ```lua
@@ -575,6 +574,24 @@ Use the options below:
     }
   }
 }
+```
+
+</details>
+
+<details><summary>Treesitter incremental selection</summary>
+
+The [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter/tree/main) **main** rewrite no
+longer includes incremental selection. You can use **flash.nvim** instead.
+
+```lua
+vim.keymap.set({"n", "x", "o"}, "<c-space>", function()
+  require("flash").treesitter({
+    actions = {
+      ["<c-space>"] = "next",
+      ["<BS>"] = "prev"
+    }
+  })
+end, { desc = "Treesitter incremental selection" })
 ```
 
 </details>

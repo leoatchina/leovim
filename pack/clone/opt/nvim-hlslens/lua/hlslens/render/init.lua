@@ -354,6 +354,7 @@ function Render.clear(hl, bufnr, floated)
     if floated then
         floatwin:close()
     end
+    vim.schedule(vim.cmd.redraw)
 end
 
 function Render.clearAll()

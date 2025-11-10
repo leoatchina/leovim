@@ -1,5 +1,7 @@
 local api = vim.api
 
+local utils = require('hlslens.utils')
+
 ---@class HlslensRenderExtmark
 local Extmark = {
     bufs = {},
@@ -7,8 +9,7 @@ local Extmark = {
 }
 
 function Extmark:listVirtEol(bufnr, row, endRow)
-    local marks = api.nvim_buf_get_extmarks(bufnr, self.ns, {row, 0}, {endRow, -1},
-        {details = true})
+    local marks = api.nvim_buf_get_extmarks(bufnr, self.ns, {row, 0}, {endRow, -1}, {details = true})
     local res = {}
     for _, mark in ipairs(marks) do
         local details = mark[4]
@@ -42,14 +43,10 @@ end
 ---@return number[]
 function Extmark:setHighlight(bufnr, hlGroup, start, finish, opts)
     local function doUnPack(pos)
-        vim.validate({
-            pos = {pos,
-                function(p)
-                    local t = type(p)
-                    return t == 'table' or t == 'number'
-                end, 'must be table or number type'
-            }
-        })
+        utils.validate('pos', pos, function(p)
+            local t = type(p)
+            return t == 'table' or t == 'number'
+        end, 'must be table or number type')
         local row, col
         if type(pos) == 'table' then
             row, col = unpack(pos)

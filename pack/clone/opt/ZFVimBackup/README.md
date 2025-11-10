@@ -86,9 +86,12 @@ or [buy me a coffee](https://github.com/ZSaberLv0/ZSaberLv0)
                     \   },
                     \ }
         ```
+    * `g:ZFBackup_backupFilterEnableForSave` : whether enable filter for file saving, default: `0`
 
-* `g:ZFBackup_includeTempname` : whether backup files created by `tempname()`, default: `0`
+* `g:ZFBackup_tempnameFilter` : whether exclude files created by `tempname()`, default: `1`
+    * `g:ZFBackup_tempnameFilterEnableForSave` : whether enable tempname filter for file saving, default: `0`
 * `g:ZFBackup_maxFileSize` : if file large than this size, do not backup, default: `2 * 1024 * 1024` (2MB)
+    * `g:ZFBackup_maxFileSizeEnableForSave` : whether enable file size filter for file saving, default: `0`
 * `g:ZFBackup_maxBackupPerFile` : max number of backups for one file, default: `10`
 * `g:ZFBackup_maxBackup` : max number of backups, default: `500`
 * `g:ZFBackup_autoClean` : auto clean outdated backup, use 0 to disable auto clean, default: `7 * 24 * 60 * 60` (7 day)

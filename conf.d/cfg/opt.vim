@@ -80,12 +80,14 @@ endif
     " set guifont=Cascadia\ Mono:h10.5
 " endif
 
+
 if WINDOWS()
-    " let g:python3_host_prog='C:\\Python37\\python.exe'
-
-    " let &pythonthreehome='C:\\Python37'
-    " let &pythonthreedll='C:\\Python37\\python37.dll'
-
+    if has('nvim')
+        " let g:python3_host_prog='C:\\Python37\\python.exe'
+    else
+        " In Vim, set pythonthreedll=C:\\Python37\\python37.dll or similar,
+        " See :help +python3/dyn-stable.
+    endif
     " let g:code_user_dir = 'C:\Users\Admin\AppData\Roaming\Code\User'
     " let g:kiro_user_dir = 'C:\Users\Admin\AppData\Roaming\Kiro\User'
     " let g:trae_user_dir = 'C:\Users\Admin\AppData\Roaming\Trae\User'
@@ -95,8 +97,13 @@ if WINDOWS()
     " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
     " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
 elseif UNIX()
-    " let g:python3_host_prog=exepath('python3')
-
+    if has('nvim')
+        " let g:python3_host_prog=exepath('python3')
+    else
+        " In Vim, set pythonthreedll=libpython3.10.so or similar,
+        " use the shell command sudo ldconfig -p | grep libpython3 to find the library name.
+        " See :help +python3/dyn-stable.
+    endif
     " let g:code_user_dir = expand("$HOME/.config/Code/User")
     " let g:kiro_user_dir = expand("$HOME/.config/Kiro/User")
     " let g:trae_user_dir = expand("$HOME/.config/Trae/User")

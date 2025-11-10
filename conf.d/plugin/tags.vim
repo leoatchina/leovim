@@ -295,20 +295,24 @@ function! s:lsp_tag_search(method, ...) abort
                     \ 'references' : 'jumpReferences',
                     \ }
         let jump_command = commands_dict[method]
-        if open_action == 'list'
-            let symbol_found = CocAction(jump_command, v:false)
-        else
-            if open_action == 'edit'
-                let symbol_found = CocAction(jump_command)
+        try
+            if open_action == 'list'
+                let symbol_found = CocAction(jump_command, v:false)
             else
-                let symbol_found = CocAction(jump_command, open_action)
+                if open_action == 'edit'
+                    let symbol_found = CocAction(jump_command)
+                else
+                    let symbol_found = CocAction(jump_command, open_action)
+                endif
+                if symbol_found
+                    call s:settagstack(winnr, tagname, pos)
+                    call feedkeys("zz", "n")
+                    echo "Found by coc " . jump_command
+                endif
             endif
-            if symbol_found
-                call s:settagstack(winnr, tagname, pos)
-                call feedkeys("zz", "n")
-                echo "found by coc " . jump_command
-            endif
-        endif
+        catch /.*/
+            let symbol_found = 0
+        endtry
     " --------------------------
     " lsp
     " --------------------------

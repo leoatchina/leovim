@@ -98,6 +98,8 @@ function CmdLineParser:doParse()
                 elseif #self.range == 1 then
                     table.insert(self.range, self.range[1])
                 end
+            else
+                self.name, self.range = nil, nil
             end
             if #parsed.args == 0 or not self.name then
                 return false

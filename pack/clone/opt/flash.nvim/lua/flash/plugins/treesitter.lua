@@ -77,7 +77,7 @@ function M.get_nodes(win, pos)
       match.end_pos[1] = match.end_pos[1] - 1
       match.end_pos[2] = #line
     end
-    local id = table.concat(vim.tbl_flatten({ match.pos, match.end_pos }), ".")
+    local id = table.concat({ match.pos[1], match.pos[2], match.end_pos[1], match.end_pos[2] }, ":")
     if not done[id] then
       done[id] = true
       ret[#ret + 1] = match
@@ -133,10 +133,12 @@ function M.jump(opts)
       Util.exit()
     end,
     actions = {
-      [";"] = function()
+      [";"] = "next",
+      [","] = "prev",
+      ["next"] = function()
         current = state:jump({ match = current, forward = false })
       end,
-      [","] = function()
+      ["prev"] = function()
         current = state:jump({ forward = true, match = current })
       end,
       [Util.CR] = function()
