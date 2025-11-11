@@ -24,7 +24,9 @@ require('bqf').setup({
     end
   },
   func_map = {
-    ptogglemode = 'K',
+    ptogglemode = 'P',
+    ptoggleitem = 'p',
+    ptoggleauto = 'K',
     pscrollup   = '<C-b>',
     pscrolldown = '<C-f>',
     split       = '<C-x>',
@@ -33,8 +35,9 @@ require('bqf').setup({
     tabc    = 't',
     tabb    = 'T',
     tabdrop = 'O',
-    drop  = 'o',
-    openc = '<C-g>',
-    open  = '<Cr>',
+    drop    = 'o',
+    openc   = '<C-g>',
+    open    = '<Cr>',
+    fzffilter = 'i'
   },
 })

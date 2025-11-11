@@ -5,6 +5,7 @@ inoremap <silent><buffer><C-c> <ESC>
 nnoremap <silent><buffer>q :q!<Cr>
 nnoremap <silent><buffer>Q :q!<Cr>
 nnoremap <silent><buffer>J <Nop>
+nnoremap <silent><buffer>K <Nop>
 nnoremap <silent><buffer>p <Nop>
 nnoremap <silent><buffer>P <Nop>
 nnoremap <silent><buffer><C-h> <Nop>
@@ -15,12 +16,8 @@ nnoremap <silent><buffer><M-/> <Nop>
 nnoremap <silent><buffer><M-?> <Nop>
 nnoremap <silent><buffer><M-'> <Nop>
 nnoremap <silent><buffer><M-"> <Nop>
-if Installed('nvim-bqf')
-    nmap <silent><buffer>i zf
-    nmap <silent><buffer>K :BqfToggle<Cr>
-    nmap <silent><buffer><C-o> zf
-else
-    nnoremap <silent><buffer><C-p> :PreviewQuickfix<Cr>
+if !Installed('nvim-bqf')
+    nnoremap <silent><buffer>P :PreviewQuickfix<Cr>
     nnoremap <silent><buffer><C-m> :PreviewQuickfix e<Cr>
     nnoremap <silent><buffer><C-g> :PreviewQuickfix e<Cr>:QuickfixClose<Cr>
     nnoremap <silent><buffer><C-]> :PreviewQuickfix vsplit<Cr>
@@ -41,7 +38,5 @@ else
         hi def link qfLineNr	LineNr
         hi def link qfSeparator	VertSplit
         let b:current_syntax = 'qf'
-    else
-        nnoremap <buffer>K <Nop>
     endif
 endif
