@@ -785,10 +785,7 @@ function s:yank_position_to_editor(editor)
     else
         let @" = cmd
     endif
-    if editor == 'code'
-        let editor = 'vscode'
-    endif
-    echo 'Yank position to ' . editor
+    echo '=== Yank current position to ' . editor . ' editor ==='
 endfunction
 command! YankPositionToCode call s:yank_position_to_editor('code')
 command! YankPositionToZed  call s:yank_position_to_editor('zed')
