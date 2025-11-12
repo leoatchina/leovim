@@ -157,13 +157,28 @@ if [ $# -gt 0 ]; then
         if [ -d ~/.leotmux ]; then
             info "leotmux already installed."
             cd ~/.leotmux && git pull
-            exit 0
         else
             git clone https://gitee.com/leoatchina/leotmux.git ~/.leotmux > /dev/null 2>&1
             ln -sf ~/.leotmux/tmux.conf ~/.tmux.conf
             success "leotmux installed"
-            exit 0
         fi
+        if [ -d ~/.tmux/plugins/tpm ]; then
+            info "tpm already installed."
+            cd ~/.tmux/plugins/tpm
+            git pull
+        else
+            git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+            success "tpm installed"
+        fi
+        if [ -d ~/.tmux/plugins/tmux-fzf ]; then
+            info "tmux-fzf already installed."
+            cd ~/.tmux/plugins/tmux-fzf
+            git pull
+        else
+            git clone https://github.com/sainnhe/tmux-fzf ~/.tmux/plugins/tmux-fzf
+            success "tmux-fzf installed"
+        fi
+        exit 0
     # copy configrc
     elif [[ $mode == 'rc' ]]; then
         if [ $os == 'linux' ]; then
