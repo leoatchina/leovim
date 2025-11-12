@@ -1,5 +1,4 @@
-autocmd! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-let $FZF_DEFAULT_OPTS = ' --reverse --info=inline --bind ctrl-b:preview-up,ctrl-f:preview-down,ctrl-a:select-all'
+let $FZF_DEFAULT_OPTS='--layout=reverse --inline-info --bind ctrl-b:preview-up,ctrl-f:preview-down,ctrl-a:select-all'
 let g:fzf_vim = {}
 au FileType fzf tnoremap <buffer> <C-j> <Down>
 au FileType fzf tnoremap <buffer> <C-k> <Up>
@@ -31,16 +30,15 @@ if has('nvim') || has('patch-8.2.191')
         else
             let g:fzf_vim.preview_window = ['up,40%', 'ctrl-l']
         endif
-        let g:coc_fzf_preview = g:fzf_vim.preview_window
         let g:vista_fzf_preview = g:fzf_vim.preview_window
-        let g:fzf_lsp_preview_window = g:fzf_vim.preview_window
+        let g:coc_fzf_preview = g:fzf_vim.preview_window
     endfunction
     call s:fzf_updata_position()
     au VimResized * call s:fzf_updata_position()
 else
     let g:fzf_layout = {'down': '~30%'}
-    let g:fzf_vim.preview_window = ['right,45%', 'ctrl-l']
     let g:vista_fzf_preview = g:fzf_vim.preview_window
+    let g:fzf_vim.preview_window = ['right,45%', 'ctrl-l']
 endif
 " 使用 fzf 查看高亮配置
 function! s:get_highlight_list()
@@ -149,3 +147,4 @@ function FzfCallCommands(prompt, ...)
                 \ 'options': printf('+m --ansi --header-lines=1 --expect=ctrl-e --tiebreak=index --prompt "%s> "', prompt)
                 \ }, l:fzf_layout), 0)
 endfunction
+autocmd! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
