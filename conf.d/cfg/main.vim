@@ -401,6 +401,7 @@ for k in s:metacode_group
         endif
     endfor
 endfor
+nnoremap <M-z> :set nowrap! nowrap?<Cr>
 " ------------------------------
 " easymotion
 " ------------------------------
