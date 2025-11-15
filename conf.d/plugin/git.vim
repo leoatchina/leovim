@@ -146,9 +146,8 @@ if PlannedLeaderf()
     nnoremap <silent><M-g>i :Leaderf git<Cr>
     nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
     nnoremap <silent><M-g>. :Leaderf git log --side-by-side --current-file<Cr>
-    nnoremap <silent><M-g>l :Leaderf git log<Cr>
+    nnoremap <silent><M-g>l :Leaderf git log --side-by-side<Cr>
     nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
-    nnoremap <silent>g\| :Leaderf git diff --current-file --side-by-side<Cr>
 endif
 " inline blame
 if Installed('blamer.nvim')
