@@ -144,9 +144,10 @@ endif
 " blamer on left
 if PlannedLeaderf()
     nnoremap <silent><M-g>i :Leaderf git<Cr>
-    nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
-    nnoremap <silent><M-g>. :Leaderf git log --side-by-side --current-file<Cr>
     nnoremap <silent><M-g>l :Leaderf git log --side-by-side<Cr>
+    nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
+    nnoremap <silent><M-g>f :Leaderf git log --side-by-side --current-file<Cr>
+    nnoremap <silent><M-g>L :Leaderf git log --side-by-side --current-line<Cr>
     nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
     nnoremap <silent><M-g>s :Leaderf git status<Cr>
 endif
