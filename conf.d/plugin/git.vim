@@ -148,6 +148,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-g>. :Leaderf git log --side-by-side --current-file<Cr>
     nnoremap <silent><M-g>l :Leaderf git log --side-by-side<Cr>
     nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
+    nnoremap <silent><M-g>s :Leaderf git status<Cr>
 endif
 " inline blame
 if Installed('blamer.nvim')
