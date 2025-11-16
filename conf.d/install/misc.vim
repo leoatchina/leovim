@@ -47,6 +47,7 @@ endif
 if executable('git') && v:version >= 800 && g:git_version >= 1.85
     PlugAdd 'tpope/vim-fugitive'
     PlugAdd 'junegunn/gv.vim'
+    PlugAdd 'skywind3000/vim-git-diffview'
     " blamer.nvim installed when without virtual text
     if g:has_popup_floating && UNIX() && (!Planned('leaderf') || Planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
         PlugAdd 'APZelos/blamer.nvim'
