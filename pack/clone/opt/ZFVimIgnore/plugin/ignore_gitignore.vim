@@ -100,16 +100,18 @@ function! ZFIgnoreParseGitignore(ignoreData, gitignoreFilePath)
             continue
         endif
 
-        " wild card not supported
+        " recursive wildcard not supported
         "   `aa/*/bb`
         "   `aa/**/bb`
         if match(pattern, '/[\*]\+/') >= 0
+                    \ || match(pattern, '\*\*') >= 0
             continue
         endif
 
         " complex regex not supported
         "   `(xxx)`
-        if match(pattern, '[()]') >= 0
+        "   `[xxx]`
+        if match(pattern, '[()\[\]]') >= 0
             continue
         endif
 

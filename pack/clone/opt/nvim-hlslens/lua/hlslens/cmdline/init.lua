@@ -234,6 +234,9 @@ function CmdLine:didChange()
     else
         self:resetState()
         render.clear(true, 0, true)
+        if self.parser.pattern == '' then
+            vim.schedule(vim.cmd.redraw)
+        end
     end
 end
 

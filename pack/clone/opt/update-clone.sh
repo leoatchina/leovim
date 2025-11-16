@@ -78,10 +78,6 @@ git clone --depth 1 https://github.com/roxma/vim-tmux-clipboard.git
 rm -rf lightline.vim
 git clone --depth 1 https://github.com/itchyny/lightline.vim.git
 
-# startify
-rm -rf vim-startify
-git clone --depth 1 https://github.com/mhinz/vim-startify.git
-
 # marks
 rm -rf vim-bookmarks
 git clone --depth 1 https://github.com/MattesGroeger/vim-bookmarks.git
@@ -112,6 +108,10 @@ git clone --depth 1 https://github.com/lambdalisue/vim-nerdfont
 git clone --depth 1 https://github.com/lambdalisue/vim-glyph-palette
 git clone --depth 1 https://github.com/LumaKernel/fern-mapping-fzf.vim
 git clone --depth 1 https://github.com/yuki-yano/fern-preview.vim
+
+# quickui
+rm -rf vim-quickui
+git clone --depth 1 https://github.com/leoatchina/vim-quickui
 
 # zfvim
 rm -rf ZFVim*
