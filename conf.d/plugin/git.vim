@@ -108,7 +108,6 @@ if Planned('vim-fugitive')
         nnoremap <silent><M-g>? :GV?<Cr>
         xnoremap <silent><M-g>v :GV<Cr>
         xnoremap <silent><M-g>? :GV?<Cr>
-        au FileType GV nmap <buffer><nowait><Space> .
         au FileType GV nmap <buffer><nowait><Tab> O
         au FileType GV nmap <buffer><nowait><M-q> q
         au FileType GV nmap <buffer><nowait>Q q
