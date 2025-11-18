@@ -111,9 +111,11 @@ if Planned('vim-fugitive')
         au FileType GV nmap <buffer><nowait><M-q> q
         au FileType GV nmap <buffer><nowait>Q q
     endif
+    if Planned('vim-git-diffview')
+        let g:gdv_keymap = 'df'
+    endif
     " buffer map, nnoremap
-    au FileType fugitiveblame nnoremap <buffer><silent><nowait>q :quit<Cr>
-    au FileType fugitive,git nnoremap <silent><buffer><nowait>q :q!<Cr>
+    au FileType fugitive,git,fugitiveblame nnoremap <silent><buffer><nowait>q :q!<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
     au FileType fugitive nnoremap <buffer><nowait>gg gg
