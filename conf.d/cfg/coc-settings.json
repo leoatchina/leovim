@@ -23,14 +23,14 @@
     "previousKeymap": "<C-k>",
     "extendedSearchMode": true,
     "insertMappings": {
-      "<C-n>": "",
-      "<C-p>": "",
+      "<C-n>": off,
+      "<C-p>": off,
       "<C-j>": "normal:j",
       "<C-k>": "normal:k"
     },
     "normalMappings": {
-      "<C-n>": "",
-      "<C-p>": "",
+      "<C-n>": off,
+      "<C-p>": off,
       "<C-j>": "normal:next",
       "<C-k>": "normal:previous"
     }
@@ -142,56 +142,5 @@
     "typescript": [
       "javascript"
     ]
-  },
-  "explorer.icon.enableNerdfont": true,
-  "explorer.keyMappings.global": {
-    "\\": "actionMenu",
-    "<Tab>": "toggleSelection",
-    "<bs>": "gotoParent",
-    "<cr>": "open",
-    "<F2>": "rename",
-    "<C-t>": "open:tab",
-    "<C-]>": "open:vsplit",
-    "<C-x>": "open:split",
-    "<C-h>": "collapse",
-    "<C-l>": "expand",
-    "<space>": "expandOrCollapse",
-    "<C-j>": [
-      "normal:j"
-    ],
-    "<C-k>": [
-      "normal:k"
-    ],
-    "J": [
-      "toggleSelection",
-      "normal:j"
-    ],
-    "K": [
-      "toggleSelection",
-      "normal:k"
-    ],
-    "c": "copyFilepath",
-    "C": "copyFilename",
-    "y": "copyFile",
-    "m": "cutFile",
-    "p": "pasteFile",
-    "d": "delete",
-    "D": "deleteForever",
-    "a": "addFile",
-    "A": "addDirectory",
-    "?": "help",
-    "H": "toggleHidden",
-    "<C-l>": "refresh",
-    "q": "quit",
-    "X": "systemExecute",
-    "f": "search",
-    "F": "searchRecursive",
-    "gl": "expandRecursive",
-    "gh": "collapseRecursive",
-    "gp": "diagnosticPrev",
-    "gn": "diagnosticNext",
-    "gd": "listDrive",
-    ">>": "gitStage",
-    "<<": "gitUnstage"
   }
 }
