@@ -37,7 +37,7 @@ require("nvim-treesitter.configs").setup({
   },
   parser_install_dir = vim.fn.expand("~/.leovim.d/treesitter")
 })
-map("n", "<M-l>T", ":TSUpdate ", { noremap = true, silent = false })
+map("n", "<M-l>U", ":TSUpdate ", { noremap = true, silent = false })
 map("n", "<M-l>I", ":TSInstall ", { noremap = true, silent = false })
 map({ 'n', 'x', 'o' }, 'sv', function() require("flash").treesitter() end, { noremap = true, silent = true })
 map({ 'x', 'o' }, 'm', function() require("flash").treesitter_search() end, { noremap = true, silent = true })
