@@ -12,6 +12,11 @@
   },
   {
     "key": "ctrl+shift+i",
+    "command": "-tongyi.inline.edit",
+    "when": "Lingma.Chat.active"
+  },
+  {
+    "key": "ctrl+shift+i",
     "command": "-workbench.action.toggleDevTools",
     "when": "isDevelopment"
   },
@@ -535,15 +540,15 @@
   },
   // ---------------------- windsurf --------------------
   // ---------------------- cursor ----------------------
+  {
+    "key": "ctrl+shift+alt+s",
+    "command": "workbench.action.toggleUnifiedSidebar",
+    "when": "cursor.agentIdeUnification.enabled"
+  },
   // ---------------------- lingma ------------------
   {
     "key": "ctrl+shift+l",
     "command": "-tongyi.show.panel.chat"
-  },
-  {
-    "key": "ctrl+shift+i",
-    "command": "-tongyi.inline.edit",
-    "when": "Lingma.Chat.active"
   },
   {
     "key": "alt+p",
