@@ -5,6 +5,11 @@
     "command": "-Notes.newNote"
   },
   {
+    "key": "ctrl+shift+s",
+    "command": "-workbench.action.toggleUnifiedSidebar",
+    "when": "cursor.agentIdeUnification.enabled && !isAuxiliaryWindowFocusedContext"
+  },
+  {
     "key": "ctrl+shift+i",
     "command": "-workbench.action.toggleDevTools",
     "when": "isDevelopment"
