@@ -259,10 +259,10 @@ if [ $# -gt 0 ]; then
     # fnm 
     if [[ $mode == 'all' || $mode == 'basic' || $mode == 'fnm' ]]; then
         if [[ -f $HOME/.local/share/fnm/fnm ]]; then
-            info "nodejs version tool fnm allready installed"
+            info "fnm version tool fnm allready installed"
         else
             curl -fsSL https://fnm.vercel.app/install | bash
-            info "nodejs version tool fnm newly installed"
+            info "fnm version tool fnm newly installed"
         fi 
         $HOME/.local/share/fnm/fnm ls
         exit 0
