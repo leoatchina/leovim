@@ -58,8 +58,8 @@ inoremap <C-w>i <C-\><C-o>:set nopaste \| echo "nopaste"<Cr>
 nnoremap <C-w>i :set nopaste! nopaste?<CR>
 augroup AutoPasteMode
     autocmd!
-    autocmd InsertEnter,CmdlineEnter * set nopaste
-    autocmd InsertLeave,CmdlineLeave * set paste
+    autocmd InsertEnter,CmdlineEnter * set paste
+    autocmd InsertLeave,CmdlineLeave * set nopaste
 augroup END
 " -------------------------------
 " clipboard from remote to local
