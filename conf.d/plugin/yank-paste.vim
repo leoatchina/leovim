@@ -54,8 +54,10 @@ xnoremap \p` "0p
 " ------------------------
 " pastemode toggle
 " ------------------------
-inoremap <C-w>i <C-\><C-o>:set nopaste \| echo "nopaste"<Cr>
-nnoremap <C-w>i :set nopaste! nopaste?<CR>
+" onoremap <C-w>i :set nopaste! nopaste?<CR>
+inoremap <C-w><C-i> <C-\><C-o>:set nopaste! nopaste?<Cr>
+nnoremap <C-w><C-i> :set nopaste! nopaste?<CR>
+onoremap <C-w><C-i> :set nopaste! nopaste?<CR>
 augroup AutoPasteMode
     autocmd!
     autocmd InsertEnter,CmdlineEnter * set paste

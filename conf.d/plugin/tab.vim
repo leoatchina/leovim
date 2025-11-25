@@ -14,10 +14,10 @@ set tabpagemax=10
 nnoremap <silent><Tab>n :tabm +1<CR>
 nnoremap <silent><Tab>p :tabm -1<CR>
 nnoremap <Tab>m :tabm<Space>
+" round tab
+nnoremap <C-w><C-r> <C-w>r
 " move current buffer to tab
 nnoremap <C-w><Cr> <C-w>T
-" round current buffer
-nnoremap <C-w><Tab> <C-w>r
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
 " ------------------------------------
