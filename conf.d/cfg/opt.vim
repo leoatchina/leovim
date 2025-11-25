@@ -1,6 +1,5 @@
 let g:require_group = copy(get(g:, 'preset_group', []))
 
-let g:leovim_osc52_yank = 1
 let g:leovim_whichkey = 1
 let g:leovim_openmap = 1
 let g:nvim_treesitter_install = UNIX()
