@@ -199,7 +199,7 @@ endfunction
 augroup UpdateLightline
     autocmd!
     autocmd ColorScheme * call UpdateLightline()
-    autocmd BufCreate,BufEnter,BufWinEnter,VimEnter,WinEnter,BufWritePost * call lightline#update()
+    autocmd BufCreate,BufEnter,BufWinEnter,WinEnter,BufWritePost,InsertLeave,CmdlineLeave * call lightline#update()
     if InstalledCoc()
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
