@@ -265,9 +265,7 @@ if [ $# -gt 0 ]; then
             info "fnm version tool fnm newly installed"
         fi 
         $HOME/.local/share/fnm/fnm ls
-        if [ $mode == 'fnm' ]; then
-            exit 0
-        fi
+        [ $mode == 'fnm' ] && exit 0
     fi
     # rust
     if [[ $mode == 'all' || $mode == 'rust' ]]; then
