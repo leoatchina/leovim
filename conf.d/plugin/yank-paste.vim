@@ -54,14 +54,13 @@ xnoremap \p` "0p
 " ------------------------
 " pastemode toggle
 " ------------------------
-" onoremap <C-w>i :set nopaste! nopaste?<CR>
-inoremap <C-w><C-i> <C-\><C-o>:set nopaste! nopaste?<Cr>
-nnoremap <C-w><C-i> :set nopaste! nopaste?<CR>
-onoremap <C-w><C-i> :set nopaste! nopaste?<CR>
+inoremap <C-x><C-i> <C-\><C-o>:set paste<Cr>
+onoremap <C-w><C-i> :set paste<CR>
+nnoremap <C-w><C-i> :set paste<Cr>
+xnoremap <C-w><C-i> :set paste<Cr>
 augroup AutoPasteMode
     autocmd!
-    autocmd InsertEnter,CmdlineEnter * setlocal paste
-    autocmd InsertLeave,CmdlineLeave * setlocal nopaste
+    autocmd InsertLeave,CmdlineLeave * set nopaste
 augroup END
 " -------------------------------
 " clipboard from remote to local
