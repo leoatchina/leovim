@@ -296,6 +296,10 @@
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
   {
+    "key": "ctrl+`",
+    "command": "workbench.action.terminal.openNativeConsole"
+  },
+  {
     "key": "alt+=",
     "command": "workbench.action.terminal.toggleTerminal",
     "when": "terminal.active"
@@ -556,28 +560,8 @@
     "when": "Lingma.Chat.active"
   },
   {
-    "key": "ctrl+`",
-    "command": "workbench.view.extension.Lingma"
-  },
-  // ----------------- cline ----------------
-  {
-  "key": "ctrl+oem_7",
-    "command": "-cline.addToChat",
-    "when": "editorHasSelection"
-  },
-  {
-    "key": "ctrl+oem_7",
-    "command": "-cline.focusChatInput",
-    "when": "!editorHasSelection"
-  },
-  {
-  "key": "ctrl+oem_5",
-    "command": "cline.addToChat",
-    "when": "editorHasSelection"
-  },
-  {
     "key": "ctrl+oem_5",
-    "command": "cline.focusChatInput",
-    "when": "!editorHasSelection"
+    "command": "workbench.view.extension.Lingma"
   }
+  // ----------------- cline ----------------
 ]
