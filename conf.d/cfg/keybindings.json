@@ -296,7 +296,7 @@
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
   {
-    "key": "ctrl+`",
+    "key": "ctrl+shift+`",
     "command": "workbench.action.terminal.openNativeConsole"
   },
   {
@@ -560,8 +560,62 @@
     "when": "Lingma.Chat.active"
   },
   {
-    "key": "ctrl+oem_5",
+    "key": "ctrl+`",
     "command": "workbench.view.extension.Lingma"
-  }
+  },
   // ----------------- cline ----------------
+  // ----------------- kilocode ----------------
+  {
+    "key": "ctrl+y",
+    "command": "-kilo-code.addToContext",
+    "when": "editorHasSelection && editorTextFocus"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "-kilo-code.addToContextAndFocus",
+    "when": "editorTextFocus && kilocode.ghost.enableQuickInlineTaskKeybinding && !github.copilot.completions.enabled"
+  },
+  {
+    "key": "ctrl+shift+a",
+    "command": "-kilo-code.focusChatInput"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "-kilo-code.ghost.generateSuggestions",
+    "when": "editorTextFocus && kilocode.ghost.enableSmartInlineTaskKeybinding && !editorTabMovesFocus && !github.copilot.completions.enabled && !inSnippetMode"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "-kilo-code.ghost.showIncompatibilityExtensionPopup",
+    "when": "editorTextFocus && github.copilot.completions.enabled && kilocode.ghost.enableSmartInlineTaskKeybinding && !editorTabMovesFocus && !inSnippetMode"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "-kilo-code.ghost.showIncompatibilityExtensionPopup",
+    "when": "editorTextFocus && github.copilot.completions.enabled && kilocode.ghost.enableQuickInlineTaskKeybinding"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-kilo-code.generateTerminalCommand"
+  },
+  {
+    "key": "ctrl+alt+a",
+    "command": "-kilo-code.toggleAutoApprove"
+  },
+  {
+    "key": "ctrl+shift+oem_5",
+    "command": "kilo-code.focusChatInput"
+  },
+  {
+    "key": "ctrl+alt+oem_5",
+    "command": "kilo-code.ghost.generateSuggestions"
+  },
+  {
+    "key": "ctrl+shift+alt+oem_5",
+    "command": "kilo-code.terminalAddToContext"
+  },
+  {
+    "key": "ctrl+oem_5",
+    "command": "kilo-code.addToContext"
+  }
 ]
