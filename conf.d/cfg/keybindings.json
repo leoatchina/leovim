@@ -272,10 +272,6 @@
   },
   {
     "key": "ctrl+shift+oem_minus",
-    "command": "gitlens.graph.switchToPanelLayout"
-  },
-  {
-    "key": "ctrl+shift+alt+oem_minus",
     "command": "gitlens.toggleMaximizedGraph"
   },
   {
