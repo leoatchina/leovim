@@ -113,6 +113,10 @@
     "command": "workbench.view.scm",
     "when": "workbench.scm.active"
   },
+  {
+    "key": "ctrl+shift+oem_minus",
+    "command": "gitlens.toggleMaximizedGraph"
+  },
   // ctrl o
   {
     "key": "ctrl+o",
@@ -269,10 +273,6 @@
     "key": "ctrl+alt+e",
     "command": "workbench.action.focusActiveEditorGroup",
     "when": "!editorFoucs"
-  },
-  {
-    "key": "ctrl+shift+oem_minus",
-    "command": "gitlens.toggleMaximizedGraph"
   },
   {
     "key": "shift+alt+s",
