@@ -271,9 +271,12 @@
     "when": "!editorFoucs"
   },
   {
-    "key": "ctrl+shift+-",
-    "command": "workbench.files.action.focusOpenEditorsView",
-    "when": "workbench.explorer.openEditorsView.active"
+    "key": "ctrl+shift+oem_minus",
+    "command": "gitlens.graph.switchToPanelLayout"
+  },
+  {
+    "key": "ctrl+shift+alt+oem_minus",
+    "command": "gitlens.toggleMaximizedGraph"
   },
   {
     "key": "shift+alt+s",
@@ -309,12 +312,12 @@
     "command": "workbench.action.terminal.newWithProfile"
   },
   {
-    "key": "ctrl+shift+=",
+    "key": "alt+]",
     "command": "workbench.action.terminal.split",
-    "when": "terminalFocus && terminalProcessSupported || terminalFocus && terminalWebExtensionContributedProfile"
+    "when": "terminalFocus"
   },
   {
-    "key": "shift+alt+=",
+    "key": "alt+shift+=",
     "command": "workbench.action.terminal.new",
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
@@ -527,7 +530,8 @@
   },
   {
     "key": "alt+]",
-    "command": "workbench.action.splitEditor"
+    "command": "workbench.action.splitEditor",
+    "when": "editorTextFocus"
   },
   {
     "key": "alt+[",
