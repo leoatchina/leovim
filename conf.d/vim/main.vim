@@ -21,9 +21,6 @@ endfor
 if !has('nvim-0.11')
     let &termencoding=&enc
 endif
-if has('nvim')
-    set rtp^=$NEOVIM_DIR
-endif
 set rtp^=$VIM_DIR
 " ------------------------------------
 " map enhance
