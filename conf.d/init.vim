@@ -183,14 +183,13 @@ endif
 " --------------------------
 " set dirs
 " --------------------------
-let $LEOVIM_DIR = expand('~/.leovim')
 let $LEOVIMD_DIR = expand("~/.leovim.d")
+let $LEOVIM_DIR = expand('~/.leovim')
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
-let $INSTALL_DIR = expand($CONF_D_DIR . '/install')
 let $COMMON_DIR = expand($CONF_D_DIR . '/common')
-let $NEOVIM_DIR = expand($CONF_D_DIR . '/neovim')
-let $VIM_DIR = expand($CONF_D_DIR . '/vim')
-let $CFG_DIR = expand($VIM_DIR . '/cfg')
+let $MODULE_DIR = expand($CONF_D_DIR . '/module')
+let $CONFIG_DIR = expand($CONF_D_DIR . '/config')
+let $CFG_DIR = expand($CONFIG_DIR . '/cfg')
 " opt dirs
 let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
 let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
@@ -932,6 +931,6 @@ endif
 if exists('g:vscode')
     source $COMMON_DIR/vscode.vim
 else
-    source $VIM_DIR/main.vim
+    source $CONFIG_DIR/main.vim
 endif
 let g:leovim_loaded = 1

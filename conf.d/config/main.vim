@@ -21,7 +21,7 @@ endfor
 if !has('nvim-0.11')
     let &termencoding=&enc
 endif
-set rtp^=$VIM_DIR
+set rtp^=$CONFIG_DIR
 " ------------------------------------
 " map enhance
 " ------------------------------------
@@ -360,7 +360,7 @@ call plug#begin(Expand("$LEOVIMD_DIR/pack/add/opt"))
 if filereadable(Expand("$LEOVIMD_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
-for vim in split(glob("$INSTALL_DIR/*.vim"), "\n")
+for vim in split(glob("$MODULE_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 function! s:plug_update() abort

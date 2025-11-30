@@ -1,5 +1,4 @@
 if Installed('nvim-treesitter', 'hlargs.nvim')
-    " parser_install_dir
     if WINDOWS()
         function! s:cleanup_ts() abort
             let dir = $HOME . '\.leovim.d\pack\add\opt\nvim-treesitter'
