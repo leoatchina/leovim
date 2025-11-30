@@ -194,18 +194,18 @@ function! s:open_or_create_file(file, ...) abort
         endtry
     endif
 endfunction
-" bashrc
-nnoremap <M-h>b :call <SID>open_or_create_file("~/.bashrc")<Cr>
-" zshrc
-nnoremap <M-h>z :call <SID>open_or_create_file("~/.zshrc")<Cr>
-" configrc
-nnoremap <M-h>c :call <SID>open_or_create_file("~/.configrc")<Cr>
 " ssh/config
 nnoremap <M-h>C :call <SID>open_or_create_file("~/.ssh/config")<Cr>
-" xinitrc
-nnoremap <M-h>x :call <SID>open_or_create_file("~/.xinitrc")<Cr>
 " gitconfig
 nnoremap <M-h>G :call <SID>open_or_create_file("~/.gitconfig")<Cr>
+if UNIX()
+    " bashrc
+    nnoremap <M-h>b :call <SID>open_or_create_file("~/.bashrc")<Cr>
+    " zshrc
+    nnoremap <M-h>z :call <SID>open_or_create_file("~/.zshrc")<Cr>
+    " configrc
+    nnoremap <M-h>c :call <SID>open_or_create_file("~/.configrc")<Cr>
+endif
 " ------------------
 " create root file
 " ------------------
