@@ -131,7 +131,7 @@ endfunction
 " funzzy finder
 " --------------------------------
 if PlannedFzf()
-    source $CFG_DIR/fzf.vim
+    source $PRESET_DIR/fzf.vim
     nmap m<tab> <plug>(fzf-maps-n)
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
@@ -144,10 +144,10 @@ if PlannedLeaderf()
     nnoremap <silent><leader>; :Leaderf --next<Cr>
     nnoremap <silent><leader>, :Leaderf --previous<Cr>
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
-    source $CFG_DIR/leaderf.vim
+    source $PRESET_DIR/leaderf.vim
 endif
 if !PlannedLeaderf() && !PlannedFzf()
-    source $CFG_DIR/ctrlp.vim
+    source $PRESET_DIR/ctrlp.vim
     PlugAddOpt 'ctrlp.vim'
 endif
 " --------------------------------

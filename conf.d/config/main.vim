@@ -405,7 +405,7 @@ nnoremap <M-z> :set nowrap! nowrap?<Cr>
 " ------------------------------
 " easymotion
 " ------------------------------
-source $CFG_DIR/easymotion.vim
+source $PRESET_DIR/easymotion.vim
 " ------------------------------
 " set mason PATH
 " ------------------------------

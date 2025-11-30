@@ -189,7 +189,7 @@ let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
 let $COMMON_DIR = expand($CONF_D_DIR . '/common')
 let $MODULE_DIR = expand($CONF_D_DIR . '/module')
 let $CONFIG_DIR = expand($CONF_D_DIR . '/config')
-let $CFG_DIR = expand($CONFIG_DIR . '/cfg')
+let $PRESET_DIR = expand($CONFIG_DIR . '/preset')
 " opt dirs
 let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
 let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
