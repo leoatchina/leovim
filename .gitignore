@@ -26,6 +26,9 @@ __pycache__
 .vs
 .fleet
 .idea
+.claude
+.opencode
+.gemini
 .root
 .svn
 .hg
