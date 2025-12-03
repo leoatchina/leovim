@@ -275,9 +275,9 @@ function! s:define_commands()
     command! -nargs=* -bar -bang -complete=customlist,s:names PlugUpdate  call s:update(<bang>0, [<f-args>])
     command! -nargs=0 -bar -bang PlugClean call s:clean(<bang>0)
     command! -nargs=0 -bar PlugUpgrade if s:upgrade() | execute 'source' s:esc(s:me) | endif
-command! -nargs=0 -bar PlugStatus  call s:status()
-command! -nargs=0 -bar PlugDiff    call s:diff()
-command! -nargs=? -bar -bang -complete=file PlugSnapshot call s:snapshot(<bang>0, <f-args>)
+    command! -nargs=0 -bar PlugStatus  call s:status()
+    command! -nargs=0 -bar PlugDiff    call s:diff()
+    command! -nargs=? -bar -bang -complete=file PlugSnapshot call s:snapshot(<bang>0, <f-args>)
 endfunction
 
 function! s:to_a(v)
