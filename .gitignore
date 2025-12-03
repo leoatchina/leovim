@@ -16,6 +16,11 @@
 __pycache__
 .netrwhist
 .vscode
+.cursr
+.windsurf
+.surf
+.trae
+.qoder
 .vercel
 .theia
 .vs
@@ -27,6 +32,7 @@ __pycache__
 .vim
 .github
 .tasks
+.npm
 core
 core.[0-9]*
 Gemfile
