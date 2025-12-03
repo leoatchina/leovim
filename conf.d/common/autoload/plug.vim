@@ -252,11 +252,11 @@ function! plug#begin(...)
     let g:plugs = {}
     let g:plugs_order = []
     let s:triggers = {}
-    call s:define_commands()
+    call plug#define_commands()
     return 1
 endfunction
 
-function! s:define_commands()
+function! plug#define_commands()
     command! -nargs=+ -bar Plug call plug#(<args>)
     if !executable('git')
         return s:err('`git` executable not found. Most commands will not be available. To suppress this message, prepend `silent!` to `call plug#begin(...)`.')
@@ -2138,7 +2138,7 @@ let s:last_rtp  = s:escrtp(get(s:split_rtp(), -1, ''))
 if exists('g:plugs')
     let g:plugs_order = get(g:, 'plugs_order', keys(g:plugs))
     call s:upgrade_specs()
-    call s:define_commands()
+    call plug#define_commands()
 endif
 
 let &cpo = s:cpo_save
