@@ -51,6 +51,11 @@ augroup NoAddComment
     autocmd!
     autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 augroup END
+" trim
+augroup TripSpaces
+    autocmd FileType vim,c,cpp,java,go,php,javascript,typescript,python,rust,twig,xml,yml,perl,sql,r,conf,lua
+                \ autocmd! BufWritePre <buffer> :call TripTrailingWhiteSpace()
+augroup END
 " --------------------------
 " file templates
 " --------------------------

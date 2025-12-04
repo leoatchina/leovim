@@ -8,6 +8,20 @@ else
     set nocompatible
 endif
 " --------------------------
+" set dirs
+" --------------------------
+let $LEOVIMD_DIR = expand("~/.leovim.d")
+let $LEOVIM_DIR = expand('~/.leovim')
+let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
+let $COMMON_DIR = expand($CONF_D_DIR . '/common')
+let $MODULE_DIR = expand($CONF_D_DIR . '/module')
+let $CONFIG_DIR = expand($CONF_D_DIR . '/config')
+let $PRESET_DIR = expand($CONFIG_DIR . '/preset')
+" opt dirs
+let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
+let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
+let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
+" --------------------------
 " system functions
 " --------------------------
 function! WINDOWS()
@@ -133,10 +147,6 @@ function! TripTrailingWhiteSpace() abort
     let @/=_s
     call cursor(l, c)
 endfunction
-augroup TripSpaces
-    autocmd FileType vim,c,cpp,java,go,php,javascript,typescript,python,rust,twig,xml,yml,perl,sql,r,conf,lua
-                \ autocmd! BufWritePre <buffer> :call TripTrailingWhiteSpace()
-augroup END
 nnoremap <silent>d<space> :call TripTrailingWhiteSpace()<Cr>
 " enhance escape
 function! Escape(param)
@@ -180,20 +190,6 @@ elseif WINDOWS()
         finish
     endif
 endif
-" --------------------------
-" set dirs
-" --------------------------
-let $LEOVIMD_DIR = expand("~/.leovim.d")
-let $LEOVIM_DIR = expand('~/.leovim')
-let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
-let $COMMON_DIR = expand($CONF_D_DIR . '/common')
-let $MODULE_DIR = expand($CONF_D_DIR . '/module')
-let $CONFIG_DIR = expand($CONF_D_DIR . '/config')
-let $PRESET_DIR = expand($CONFIG_DIR . '/preset')
-" opt dirs
-let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
-let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
-let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
 " --------------------------
 " set rtp && pack path
 " --------------------------
