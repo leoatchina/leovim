@@ -1036,7 +1036,7 @@ function! plug#do(pull, force, todo)
         let updated = installed ? 0 :
                     \ (a:pull && index(s:update.errors, name) < 0 && plug#is_updated(spec.dir))
         if a:force || installed || updated
-            execute 'cd' s:esc(spec.dir)
+            execute 'cd' plug#esc(spec.dir)
             call append(3, '- Post-update hook for '. name .' ... ')
             let error = ''
             let type = type(spec.do)
@@ -1052,7 +1052,7 @@ function! plug#do(pull, force, todo)
                     catch
                         let error = v:exception
                     endtry
-                    if !s:plug_window_exists()
+                    if !plug#plug_window_exists()
                         cd -
                         throw 'Warning: vim-plug was terminated by the post-update hook of '.name
                     endif
