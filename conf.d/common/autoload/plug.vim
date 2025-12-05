@@ -465,7 +465,7 @@ function! plug#git_version_requirement(...)
 endfunction
 
 function! plug#progress_opt(base)
-    return a:base && !plug#is_win &&
+    return a:base && !s:is_win &&
                 \ plug#git_version_requirement(1, 7, 1) ? '--progress' : ''
 endfunction
 
@@ -983,7 +983,7 @@ endfunction
 
 function! plug#chsh(swap)
     let prev = [&shell, &shellcmdflag, &shellredir]
-    if !plug#is_win
+    if !s:is_win
         set shell=sh
     endif
     if a:swap
@@ -1003,15 +1003,15 @@ function! plug#bang(cmd, ...)
         " FIXME: Escaping is incomplete. We could use shellescape with eval,
         "        but it won't work on Windows.
         let cmd = a:0 ? plug#with_cd(a:cmd, a:1) : a:cmd
-        if plug#is_win
+        if s:is_win
             let [batchfile, cmd] = plug#batchfile(cmd)
         endif
-        let g:_plug_bang = (plug#is_win && has('gui_running') ? 'silent ' : '').'!'.escape(cmd, '#!%')
+        let g:_plug_bang = (s:is_win && has('gui_running') ? 'silent ' : '').'!'.escape(cmd, '#!%')
         execute "normal! :execute g:_plug_bang\<cr>\<cr>"
     finally
         unlet g:_plug_bang
         let [&shell, &shellcmdflag, &shellredir] = [sh, shellcmdflag, shrd]
-        if plug#is_win && filereadable(batchfile)
+        if s:is_win && filereadable(batchfile)
             call delete(batchfile)
         endif
     endtry
@@ -1163,7 +1163,7 @@ function! plug#update_impl(pull, force, args) abort
         return plug#warn('echo', 'No plugin to '. (a:pull ? 'update' : 'install'))
     endif
 
-    if !plug#is_win && plug#git_version_requirement(2, 3)
+    if !s:is_win && plug#git_version_requirement(2, 3)
         let s:git_terminal_prompt = exists('$GIT_TERMINAL_PROMPT') ? $GIT_TERMINAL_PROMPT : ''
         let $GIT_TERMINAL_PROMPT = 0
         for plug in values(todo)
@@ -1185,7 +1185,7 @@ function! plug#update_impl(pull, force, args) abort
         call plug#warn('echom', '[vim-plug] Update Neovim for parallel installer')
     endif
 
-    let use_job = plug#nvim || plug#vim8
+    let use_job = s:nvim || s:vim8
 
     let s:update = {
                 \ 'start':   reltime(),
@@ -1297,14 +1297,14 @@ function! plug#update_finish()
 endfunction
 
 function! plug#job_abort()
-    if (!plug#nvim && !plug#vim8) || !exists('s:jobs')
+    if (!s:nvim && !s:vim8) || !exists('s:jobs')
         return
     endif
 
     for [name, j] in items(s:jobs)
-        if plug#nvim
+        if s:nvim
             silent! call jobstop(j.jobid)
-        elseif plug#vim8
+        elseif s:vim8
             silent! call job_stop(j.jobid)
         endif
         if j.new
@@ -1364,7 +1364,7 @@ function! plug#spawn(name, cmd, opts)
                 \ 'new': get(a:opts, 'new', 0) }
     let s:jobs[a:name] = job
 
-    if plug#nvim
+    if s:nvim
         if has_key(a:opts, 'dir')
             let job.cwd = a:opts.dir
         endif
@@ -1383,13 +1383,13 @@ function! plug#spawn(name, cmd, opts)
             let job.lines   = [jid < 0 ? argv[0].' is not executable' :
                         \ 'Invalid arguments (or job table is full)']
         endif
-    elseif plug#vim8
+    elseif s:vim8
         let cmd = join(map(copy(a:cmd), 'plug#shellescape(v:val, {"script": 0})'))
         if has_key(a:opts, 'dir')
             let cmd = plug#with_cd(cmd, a:opts.dir, 0)
         endif
-        let argv = plug#is_win ? ['cmd', '/s', '/c', '"'.cmd.'"'] : ['sh', '-c', cmd]
-        let jid = job_start(plug#is_win ? join(argv, ' ') : argv, {
+        let argv = s:is_win ? ['cmd', '/s', '/c', '"'.cmd.'"'] : ['sh', '-c', cmd]
+        let jid = job_start(s:is_win ? join(argv, ' ') : argv, {
                     \ 'out_cb':   function('plug#job_cb', ['plug#job_out_cb',  job]),
                     \ 'err_cb':   function('plug#job_cb', ['plug#job_out_cb',  job]),
                     \ 'exit_cb':  function('plug#job_cb', ['plug#job_exit_cb', job]),
@@ -1479,7 +1479,7 @@ endfunction
 
 function! plug#tick()
     let pull = s:update.pull
-    let prog = plug#progress_opt(plug#nvim || plug#vim8)
+    let prog = plug#progress_opt(s:nvim || s:vim8)
     while 1 " Without TCO, Vim stack is bound to explode
         if empty(s:update.todo)
             if empty(s:jobs) && !s:update.fin
@@ -1566,7 +1566,7 @@ function! plug#shellescape(arg, ...)
         return a:arg
     endif
     let opts = a:0 > 0 && type(a:1) == s:TYPE.dict ? a:1 : {}
-    let shell = get(opts, 'shell', plug#is_win ? 'cmd.exe' : 'sh')
+    let shell = get(opts, 'shell', s:is_win ? 'cmd.exe' : 'sh')
     let script = get(opts, 'script', 1)
     if shell =~# 'cmd\(\.exe\)\?$'
         return plug#shellesc_cmd(a:arg, script)
@@ -1607,7 +1607,7 @@ endfunction
 
 function! plug#with_cd(cmd, dir, ...)
     let script = a:0 > 0 ? a:1 : 1
-    return printf('cd%s %s && %s', plug#is_win ? ' /d' : '', plug#shellescape(a:dir, {'script': script}), a:cmd)
+    return printf('cd%s %s && %s', s:is_win ? ' /d' : '', plug#shellescape(a:dir, {'script': script}), a:cmd)
 endfunction
 
 function! plug#system(cmd, ...)
@@ -1631,13 +1631,13 @@ function! plug#system(cmd, ...)
         if a:0 > 0
             let cmd = plug#with_cd(cmd, a:1, type(a:cmd) != s:TYPE.list)
         endif
-        if plug#is_win && type(a:cmd) != s:TYPE.list
+        if s:is_win && type(a:cmd) != s:TYPE.list
             let [batchfile, cmd] = plug#batchfile(cmd)
         endif
         return system(cmd)
     finally
         let [&shell, &shellcmdflag, &shellredir] = [sh, shellcmdflag, shrd]
-        if plug#is_win && filereadable(batchfile)
+        if s:is_win && filereadable(batchfile)
             call delete(batchfile)
         endif
     endtry
@@ -1711,7 +1711,7 @@ endfunction
 
 function! plug#rm_rf(dir)
     if isdirectory(a:dir)
-        return plug#system(plug#is_win
+        return plug#system(s:is_win
                     \ ? 'rmdir /S /Q '.plug#shellescape(a:dir)
                     \ : ['rm', '-rf', a:dir])
     endif
@@ -1985,13 +1985,13 @@ function! plug#preview_commit()
     try
         let [sh, shellcmdflag, shrd] = plug#chsh(1)
         let cmd = 'cd '.plug#shellescape(g:plugs[name].dir).' && '.command
-        if plug#is_win
+        if s:is_win
             let [batchfile, cmd] = plug#batchfile(cmd)
         endif
         execute 'silent %!' cmd
     finally
         let [&shell, &shellcmdflag, &shellredir] = [sh, shellcmdflag, shrd]
-        if plug#is_win && filereadable(batchfile)
+        if s:is_win && filereadable(batchfile)
             call delete(batchfile)
         endif
     endtry
