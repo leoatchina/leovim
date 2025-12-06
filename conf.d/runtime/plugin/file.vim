@@ -236,11 +236,11 @@ if get(g:, 'leovim_openmap', 1)
         exec "tabe " . f
     endfunction
     nnoremap <silent><M-h>i :call TabeOpen("$CONF_D_DIR/init.vim")<Cr>
-    nnoremap <silent><M-h>O :call TabeOpen("$RTP_DIR/opt.vim")<Cr>
-    nnoremap <silent><M-h>v :call TabeOpen("$RTP_DIR/vscode.vim")<Cr>
-    nnoremap <silent><M-h>k :call TabeOpen("$RTP_DIR/keybindings.json")<Cr>
-    nnoremap <silent><M-h>m :call TabeOpen("$RTP_DIR/main.vim")<Cr>
+    nnoremap <silent><M-h>v :call TabeOpen("$CONF_D_DIR/vscode.vim")<Cr>
+    nnoremap <silent><M-h>k :call TabeOpen("$CONF_D_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>I :call TabeOpen("$MODULE_DIR/install.vim")<Cr>
+    nnoremap <silent><M-h>O :call TabeOpen("$RTP_DIR/opt.vim")<Cr>
+    nnoremap <silent><M-h>m :call TabeOpen("$RTP_DIR/main.vim")<Cr>
     if PlannedLeaderf()
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --regex --no-sort ~/.leovim<Cr>
