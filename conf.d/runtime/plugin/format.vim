@@ -30,7 +30,7 @@ function! BuiltInFormat(visual)
     call cursor(line, col)
     call preview#cmdmsg("Using vim's builtin formatprg.", 1)
 endfunction
-if utils#is_planned('neoformat')
+if pack#planned('neoformat')
     " NOTE:  the two functions below is copied from neoformat.vim
     function! s:autoload_func_exists(func_name) abort
         try
@@ -85,7 +85,7 @@ endif
 " ----------------------------
 " table_mode
 " ----------------------------
-if utils#is_planned("vim-table-mode")
+if pack#planned("vim-table-mode")
     let g:table_mode_map_prefix      = '<M-t>'
     let g:table_mode_tableize_d_map  = '<M-T>'
     let g:table_mode_corner          = '|'

@@ -219,7 +219,7 @@ inoremap <silent><C-j> <C-\><C-n>:call utils#move_to_end_and_add_semicolon()<CR>
 " select and search
 " ------------------------
 " VIW moved to utils.vim
-nnoremap SS :call utils#viw()<Cr>
+nnoremap SS :call textobj#vim()<Cr>
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------
@@ -321,9 +321,9 @@ if exists('*search') && exists('*getpos')
     " TextObj functions moved to utils.vim
     call textobj#user#plugin('line', {
                 \   '-': {
-                \     'select-a-function': 'utils#current_line_a',
+                \     'select-a-function': 'textobj#current_lina_a',
                 \     'select-a': 'ak',
-                \     'select-i-function': 'utils#current_line_i',
+                \     'select-i-function': 'textobj#current_line_i',
                 \     'select-i': 'ik',
                 \   },
                 \ })
@@ -338,9 +338,9 @@ if exists('*search') && exists('*getpos')
     " Block TextObj functions moved to utils.vim
     call textobj#user#plugin('block', {
                 \ 'block': {
-                \  'select-a-function': 'utils#block_a',
+                \  'select-a-function': 'textobj#block_a',
                 \  'select-a': 'av',
-                \  'select-i-function': 'utils#block_i',
+                \  'select-i-function': 'textobj#block_i',
                 \  'select-i': 'iv',
                 \  'region-type': 'V'
                 \ },

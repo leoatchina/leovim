@@ -22,31 +22,31 @@ if g:node_version > 18
     else
         let g:ensure_installed += ['vimls']
     endif
-    if utils#is_require('web')
+    if pack#require('web')
         let g:ensure_installed += ['cssls', 'eslint', 'html', 'vuels', 'angularls']
     endif
 endif
-if utils#is_require('R') && g:R_exe != ''
+if pack#require('R') && g:R_exe != ''
     let g:ensure_installed += ['r_language_server']
 endif
-if utils#is_require('c')
+if pack#require('c')
     let g:ensure_installed += ['cmake']
     if g:clangd_exe != ''
         let g:ensure_installed += ['clangd']
     endif
 endif
-if utils#is_require('rust') && g:cargo_exe != ''
+if pack#require('rust') && g:cargo_exe != ''
     let g:ensure_installed += ['rust_analyzer']
 endif
-if utils#is_require('go') && g:gobin_exe != ''
+if pack#require('go') && g:gobin_exe != ''
     let g:gobin_exe_version = matchstr(utils#execute(printf('!%s version', g:gobin_exe)), '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
     let g:gobin_exe_version = utils#string_to_float(gobin_exe_version, 2)
     let g:ensure_installed += ['gopls']
 endif
-if utils#is_installed('spring-boot.nvim')
-    lua utils#is_require('cfg/springboot')
+if pack#installed('spring-boot.nvim')
+    lua pack#require('cfg/springboot')
 endif
-if utils#is_installed('nvim-java', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'nvim-java-dap', 'lua-async-await')
-    lua utils#is_require('java').setup()
+if pack#installed('nvim-java', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'nvim-java-dap', 'lua-async-await')
+    lua pack#require('java').setup()
 endif
-lua utils#is_require("lsp")
+lua pack#require("lsp")

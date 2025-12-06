@@ -54,7 +54,7 @@ nnoremap <leader>sd :SDelete<Space>
 " --------------------------------
 " Session management with fzf
 " --------------------------------
-if utils#is_planned_fzf()
+if pack#planned_fzf()
     function! s:session_list()
         let lines = split(globpath(g:startify_session_dir, '*'), '\n')
         if len(lines) > 1

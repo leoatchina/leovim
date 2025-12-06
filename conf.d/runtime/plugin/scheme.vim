@@ -42,7 +42,7 @@ elseif g:complete_engine == 'builtin'
 elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
-    if utils#is_require('blink.lua') || utils#is_require('blink') && !executable('cargo')
+    if pack#require('blink.lua') || pack#require('blink') && !executable('cargo')
         call SetScheme('nightfox', 'hybrid')
     else
         call SetScheme('duskfox', 'hybrid')
@@ -59,6 +59,6 @@ endif
 " --------------------------
 " nvim-web-devicons
 " --------------------------
-if utils#is_installed('nvim-web-devicons')
+if pack#installed('nvim-web-devicons')
     lua require('nvim-web-devicons').setup({})
 endif

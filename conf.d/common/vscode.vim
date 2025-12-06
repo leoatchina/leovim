@@ -1,40 +1,40 @@
 " ------------------------
 " basic enhanced shortcut
 " ------------------------
-nnoremap \| <Cmd>lua utils#is_require('vscode-neovim').action("git.openChange")<CR>
-nnoremap <Cr> <Cmd>lua utils#is_require('vscode-neovim').action("workbench.action.navigateForward")<CR>
-xnoremap <C-c> <Cmd>lua utils#is_require('vscode-neovim').action('editor.action.clipboardCopyAction')<CR><ESC>
-nnoremap <C-s> <Cmd>lua utils#is_require('vscode-neovim').action('workbench.action.files.save')<CR>
-nnoremap <C-h> <Cmd>lua utils#is_require('vscode-neovim').action("editor.action.startFindReplaceAction")<CR>
-nnoremap <C-n> <Cmd>lua utils#is_require('vscode-neovim').action("editor.action.addSelectionToNextFindMatch")<CR>
-nnoremap s<Cr> <Cmd>lua utils#is_require('vscode-neovim').action('workbench.action.findInFiles', {args = {query = vim.fn.utils#expand('<cword>')}})<CR>
-nnoremap <C-a> <Cmd>lua utils#is_require('vscode-neovim').action("editor.action.selectAll")<Cr>
+nnoremap \| <Cmd>lua require('vscode-neovim').action("git.openChange")<CR>
+nnoremap <Cr> <Cmd>lua require('vscode-neovim').action("workbench.action.navigateForward")<CR>
+xnoremap <C-c> <Cmd>lua require('vscode-neovim').action('editor.action.clipboardCopyAction')<CR><ESC>
+nnoremap <C-s> <Cmd>lua require('vscode-neovim').action('workbench.action.files.save')<CR>
+nnoremap <C-h> <Cmd>lua require('vscode-neovim').action("editor.action.startFindReplaceAction")<CR>
+nnoremap <C-n> <Cmd>lua require('vscode-neovim').action("editor.action.addSelectionToNextFindMatch")<CR>
+nnoremap s<Cr> <Cmd>lua require('vscode-neovim').action('workbench.action.findInFiles', {args = {query = vim.fn.utils#expand('<cword>')}})<CR>
+nnoremap <C-a> <Cmd>lua require('vscode-neovim').action("editor.action.selectAll")<Cr>
 xnoremap <C-x> <Cmd>call VSCodeNotifyVisual("editor.action.clipboardCutAction", 1)<Cr>
 nnoremap <C-x> x
 " quickfix
-nnoremap <C-.> <Cmd>lua utils#is_require('vscode-neovim').action("keyboard-quickfix.openQuickFix")<CR>
+nnoremap <C-.> <Cmd>lua require('vscode-neovim').action("keyboard-quickfix.openQuickFix")<CR>
 " open mru view
-nnoremap <leader>m <Cmd>lua utils#is_require('vscode-neovim').action("workbench.action.openRecent")<Cr>
+nnoremap <leader>m <Cmd>lua require('vscode-neovim').action("workbench.action.openRecent")<Cr>
 " open view
-nnoremap <leader>s <Cmd>lua utils#is_require('vscode-neovim').action("workbench.action.openView")<Cr>
+nnoremap <leader>s <Cmd>lua require('vscode-neovim').action("workbench.action.openView")<Cr>
 " open file
-nnoremap <leader>b <Cmd>lua utils#is_require('vscode-neovim').action("workbench.action.quickOpen")<Cr>
+nnoremap <leader>b <Cmd>lua require('vscode-neovim').action("workbench.action.quickOpen")<Cr>
 " marker
-nnoremap <leader>; <Cmd>lua utils#is_require('vscode-neovim').action("editor.action.marker.nextInFiles")<Cr>
-nnoremap <leader>, <Cmd>lua utils#is_require('vscode-neovim').action("editor.action.marker.prevInFiles")<Cr>
+nnoremap <leader>; <Cmd>lua require('vscode-neovim').action("editor.action.marker.nextInFiles")<Cr>
+nnoremap <leader>, <Cmd>lua require('vscode-neovim').action("editor.action.marker.prevInFiles")<Cr>
 " codeaction
-nnoremap <leader>a <Cmd>lua utils#is_require('vscode-neovim').action("editor.action.sourceAction")<Cr>
+nnoremap <leader>a <Cmd>lua require('vscode-neovim').action("editor.action.sourceAction")<Cr>
 " symbol
-nnoremap <leader>t <Cmd>lua utils#is_require('vscode-neovim').action("workbench.action.gotoSymbol")<Cr>
-nnoremap <leader>e <Cmd>lua utils#is_require('vscode-neovim').action("editor.action.accessibleViewGoToSymbol")<Cr>
+nnoremap <leader>t <Cmd>lua require('vscode-neovim').action("workbench.action.gotoSymbol")<Cr>
+nnoremap <leader>e <Cmd>lua require('vscode-neovim').action("editor.action.accessibleViewGoToSymbol")<Cr>
 " incoming/outgoing calls
-nnoremap <leader>l <Cmd>lua utils#is_require('vscode-neovim').action("references-view.showOutgoingCalls")<Cr>
-nnoremap <leader>h <Cmd>lua utils#is_require('vscode-neovim').action("references-view.showIncomingCalls")<Cr>
+nnoremap <leader>l <Cmd>lua require('vscode-neovim').action("references-view.showOutgoingCalls")<Cr>
+nnoremap <leader>h <Cmd>lua require('vscode-neovim').action("references-view.showIncomingCalls")<Cr>
 " ------------------------
 " format
 " ------------------------
-xnoremap M <Cmd>lua utils#is_require('vscode-neovim').action('editor.action.formatSelection')<CR>
-nnoremap M <Cmd>lua utils#is_require('vscode-neovim').action('editor.action.formatDocument.multiple')<CR>
+xnoremap M <Cmd>lua require('vscode-neovim').action('editor.action.formatSelection')<CR>
+nnoremap M <Cmd>lua require('vscode-neovim').action('editor.action.formatDocument.multiple')<CR>
 " ------------------------
 " vscode speicially mapping
 " ------------------------
@@ -49,19 +49,19 @@ function! VSCodeNotifyVisual(cmd, leaveSelection, ...)
         let endPos = getpos('.')
         call VSCodeNotifyRangePos(a:cmd, startPos[1], endPos[1], startPos[2], endPos[2] + 1, a:leaveSelection, a:000)
     else
-        lua utils#is_require('vscode-neovim').action(a:cmd, a:000)
+        lua require('vscode-neovim').action(a:cmd, a:000)
     endif
 endfunction
 xnoremap <C-S-P> <Cmd>call VSCodeNotifyVisual("workbench.action.showCommands", 1)<CR>
-nnoremap <C-o> <Cmd>lua utils#is_require('vscode-neovim').action("workbench.action.navigateBack")<CR>
-nnoremap <C-f> <Cmd>lua utils#is_require('vscode-neovim').action("actions.find")<CR>
+nnoremap <C-o> <Cmd>lua require('vscode-neovim').action("workbench.action.navigateBack")<CR>
+nnoremap <C-f> <Cmd>lua require('vscode-neovim').action("actions.find")<CR>
 " -------------------------------------
 " for debug or repl send or run
 " -------------------------------------
-nnoremap J <Cmd>lua utils#is_require('vscode-neovim').action("editor.debug.action.showDebugHover")<Cr>
+nnoremap J <Cmd>lua require('vscode-neovim').action("editor.debug.action.showDebugHover")<Cr>
 nnoremap <S-Cr> viB<C-Cr>
-nnoremap <leader>] <Cmd>lua utils#is_require('vscode-neovim').action("editor.debug.action.goToNextBreakpoint")<Cr>
-nnoremap <leader>[ <Cmd>lua utils#is_require('vscode-neovim').action("editor.debug.action.goToPreviousBreakpoint")<Cr>
+nnoremap <leader>] <Cmd>lua require('vscode-neovim').action("editor.debug.action.goToNextBreakpoint")<Cr>
+nnoremap <leader>[ <Cmd>lua require('vscode-neovim').action("editor.debug.action.goToPreviousBreakpoint")<Cr>
 " ------------------------
 " window
 " ------------------------

@@ -1,5 +1,5 @@
 setlocal commentstring=#\ %s
-if utils#is_installed('nvim-r')
+if pack#installed('nvim-r')
     let R_assign_map     = '<M-->'
     let R_rmdchunk       = '``'
     let R_objbr_place    = 'RIGHT'

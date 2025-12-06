@@ -64,7 +64,7 @@ function! utils#file_name_no_ext() abort
     return utils#expand('%:t:r', 1)
 endfunction
 
-function! utils#is_file_readonly() abort
+function! utils#file_readonly() abort
     return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
 
@@ -94,7 +94,6 @@ function! utils#get_root_dir(...) abort
     endwhile
 endfunction
 
-
 " ----------------------------------------
 " String Utility Functions
 " ----------------------------------------
@@ -117,6 +116,7 @@ function! utils#mode()
     endif
     return m
 endfunction
+
 function! utils#trim(str) abort
     return substitute(a:str, "^\s\+\|\s\+$", "", "g")
 endfunction
@@ -212,183 +212,6 @@ function! utils#move_to_end_and_add_semicolon() abort
     endif
 endfunction
 
-function! utils#viw() abort
-    set iskeyword-=_ iskeyword-=#
-    call timer_start(300, {-> execute("set iskeyword+=_  iskeyword+=#")})
-    call feedkeys("viwo",'n')
-endfunction
-
-" ----------------------------------------
-" Package Management Functions
-" ----------------------------------------
-function! utils#is_require(pack) abort
-    return count(g:require_group, a:pack) > 0
-endfunction
-
-function! utils#add_require(...) abort
-    if a:0 == 0
-        return
-    endif
-    for require in a:000
-        if !utils#is_require(require)
-            call add(g:require_group, require)
-        endif
-    endfor
-endfunction
-
-function! utils#is_planned(...) abort
-    if empty(a:000)
-        return 0
-    endif
-    for pack in a:000
-        let pack = tolower(pack)
-        if !has_key(g:leovim_installed, pack)
-            return 0
-        endif
-    endfor
-    return 1
-endfunction
-
-function! utils#is_installed(...) abort
-    if empty(a:000)
-        return 0
-    endif
-    for pack in a:000
-        let pack = tolower(pack)
-        if !has_key(g:leovim_installed, pack) || get(g:leovim_installed, pack, 0) == 0
-            return 0
-        endif
-    endfor
-    return 1
-endfunction
-
-" ----------------------------------------
-" Extended Check Functions (from check.vim)
-" ----------------------------------------
-function! utils#is_planned_fzf() abort
-    return utils#is_planned('fzf', 'fzf.vim')
-endfunction
-
-function! utils#is_planned_coc() abort
-    return utils#is_require('coc') && g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438'))
-endfunction
-
-function! utils#is_planned_lsp() abort
-    return (utils#is_require('cmp') || utils#is_require('blink') || utils#is_require('blink.lua')) && has('nvim-0.11')
-endfunction
-
-function! utils#is_planned_adv_comp_eng() abort
-    return utils#is_planned_coc() || utils#is_planned_lsp()
-endfunction
-
-function! utils#is_planned_leaderf() abort
-    return utils#is_planned('leaderf')
-endfunction
-
-function! utils#pref_fzf() abort
-    return utils#is_planned_fzf() && (get(g:, 'prefer_fzf', utils#is_unix()) || !utils#is_planned_leaderf())
-endfunction
-
-function! utils#is_installed_lsp() abort
-    return utils#is_installed(
-                \ 'nvim-lspconfig',
-                \ 'mason-lspconfig.nvim',
-                \ 'call-graph.nvim',
-                \ 'symbol-usage.nvim',
-                \ 'nvim-lsp-selection-range',
-                \ 'formatter.nvim',
-                \ 'dropbar.nvim',
-                \ 'aerial.nvim',
-                \ )
-endfunction
-
-function! utils#is_installed_coc() abort
-    return utils#is_installed('coc.nvim', 'coc-fzf', 'friendly-snippets') && utils#is_planned_fzf()
-endfunction
-
-function! utils#is_installed_blink() abort
-    return utils#is_installed('blink.cmp', 'friendly-snippets', 'nvim-autopairs')
-endfunction
-
-function! utils#is_installed_cmp() abort
-    return utils#is_installed(
-                \ 'nvim-cmp',
-                \ 'cmp-nvim-lsp',
-                \ 'cmp-nvim-lua',
-                \ 'cmp-buffer',
-                \ 'cmp-cmdline',
-                \ 'cmp-vsnip',
-                \ 'cmp-nvim-lsp-signature-help',
-                \ 'cmp-async-path',
-                \ 'lspkind-nvim',
-                \ 'colorful-menu.nvim',
-                \ 'friendly-snippets',
-                \ 'nvim-autopairs',
-                \ )
-endfunction
-
-function! utils#is_installed_adv() abort
-    return utils#is_installed('coc.nvim') || utils#is_installed_lsp()
-endfunction
-
-" ----------------------------------------
-" Text Object Functions (from init.vim)
-" ----------------------------------------
-function! utils#current_line_a() abort
-    normal! ^
-    let head_pos = getpos('.')
-    normal! $
-    let tail_pos = getpos('.')
-    return ['v', head_pos, tail_pos]
-endfunction
-
-function! utils#current_line_i() abort
-    normal! ^
-    let head_pos = getpos('.')
-    normal! g_
-    let tail_pos = getpos('.')
-    let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
-    return
-                \ non_blank_char_exists_p
-                \ ? ['v', head_pos, tail_pos]
-                \ : 0
-endfunction
-
-function! utils#block_a() abort
-    let s:block_str = '^# In\[\d*\]\|^# %%\|^# STEP\d\+'
-    let beginline = search(s:block_str, 'ebW')
-    if beginline == 0
-        normal! gg
-    endif
-    let head_pos = getpos('.')
-    let endline  = search(s:block_str, 'eW')
-    if endline == 0
-        normal! G
-    endif
-    let tail_pos = getpos('.')
-    return ['V', head_pos, tail_pos]
-endfunction
-
-function! utils#block_i() abort
-    let s:block_str = '^# In\[\d*\]\|^# %%\|^# STEP\d\+'
-    let beginline = search(s:block_str, 'ebW')
-    if beginline == 0
-        normal! gg
-        let beginline = 1
-    else
-        normal! j
-    endif
-    let head_pos = getpos('.')
-    let endline = search(s:block_str, 'eW')
-    if endline == 0
-        normal! G
-    elseif endline > beginline
-        normal! k
-    endif
-    let tail_pos = getpos('.')
-    return ['V', head_pos, tail_pos]
-endfunction
-
 " ----------------------------------------
 " GUI Functions (from main.vim)
 " ----------------------------------------
@@ -436,72 +259,3 @@ function! utils#mode() abort
     return m
 endfunction
 
-" ----------------------------------------
-" Git Functions (from git.vim)
-" ----------------------------------------
-function! utils#git_branch() abort
-    return get(b:, 'git_branch', '')
-endfunction
-
-function! utils#git_root_dir() abort
-    return get(b:, 'git_root_dir', '')
-endfunction
-
-function! utils#lcd_and_git_update() abort
-    if FtBtIgnored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
-        return
-    endif
-    try
-        let l:cur_dir = utils#abs_dir()
-        if l:cur_dir != ''
-            execute 'lcd ' . l:cur_dir
-        endif
-    catch
-        return
-    endtry
-    if g:git_version > 1.8
-        try
-            let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
-            let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
-            if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
-                let b:git_root_dir = ''
-                let b:git_branch = ''
-            else
-                let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
-                " TODO: change branch icon according to branch status, referring https://www.nerdfonts.com/cheat-sheet
-                let icon = ' '
-                let b:git_branch = icon . substitute(l:branch, '\n\+$', '', '')
-                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
-                    let b:git_root_dir = ''
-                    let b:git_branch = ''
-                endif
-            endif
-        catch
-            let b:git_root_dir = ''
-            let b:git_branch = ''
-        endtry
-    else
-        let b:git_root_dir = ''
-        let b:git_branch = ''
-    endif
-endfunction
-
-function! utils#relative_dir() abort
-    let absdir = utils#abs_dir()
-    let gitroot = utils#git_root_dir()
-    if gitroot != '' && len(absdir) > len(gitroot)
-        return gitroot
-    else
-        return absdir
-    endif
-endfunction
-
-function! utils#relative_path() abort
-    let abspath = utils#abs_path()
-    let gitroot = utils#git_root_dir()
-    if gitroot != '' && len(abspath) > len(gitroot)
-        return abspath[len(gitroot)+1:]
-    else
-        return utils#expand("%:t", 1)
-    endif
-endfunction

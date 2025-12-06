@@ -34,30 +34,30 @@ if exists('+pumwidth')
 endif
 " 如果补全功能不够完善，在Unix下使用mcm作为备选
 if !has('patch-7.4.775') && utils#is_unix()
-    call utils#add_require('mcm')
+    call pack#add_require('mcm')
 endif
 " ------------------------------
 " complete_engine select
 " ------------------------------
-if utils#is_require('nocomplete') || utils#is_require('noc')
+if pack#require('nocomplete') || pack#require('noc')
     let g:complete_engine = ''
-elseif utils#is_require('mcm')
+elseif pack#require('mcm')
     let g:complete_engine = 'mcm'
-elseif utils#is_require('builtin') && (has('nvim-0.11') || has('patch-9.1.1590'))
+elseif pack#require('builtin') && (has('nvim-0.11') || has('patch-9.1.1590'))
     let g:complete_engine = 'builtin'
-elseif utils#is_require('coc')
+elseif pack#require('coc')
     if g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438'))
         let g:complete_engine = 'coc'
     else
         let s:smart_engine_select = 1
     endif
-elseif utils#is_require('cmp')
+elseif pack#require('cmp')
     if has('nvim-0.11')
         let g:complete_engine = 'cmp'
     else
         let s:smart_engine_select = 1
     endif
-elseif utils#is_require('blink') || utils#is_require('blink.lua')
+elseif pack#require('blink') || pack#require('blink.lua')
     if has('nvim-0.11')
         let g:complete_engine = 'blink'
     else
@@ -68,7 +68,7 @@ else
 endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.11')
-        call utils#add_require('builtin')
+        call pack#add_require('builtin')
         let g:complete_engine = 'builtin'
     else
         let g:complete_engine = 'mcm'
@@ -89,7 +89,7 @@ if g:complete_engine == 'cmp'
     PlugAdd 'onsails/lspkind-nvim'
     PlugAdd 'xzbdmw/colorful-menu.nvim'
 elseif g:complete_engine == 'blink'
-    if executable('cargo') && !utils#is_require('blink.lua')
+    if executable('cargo') && !pack#require('blink.lua')
         PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release'}
     else
         PlugAdd 'Saghen/blink.cmp'
@@ -130,7 +130,7 @@ endif
 " ------------------------------
 " AI engine install
 " ------------------------------
-if utils#is_require('copilot_plus') ||
+if pack#require('copilot_plus') ||
     \  exists('$GEMINI_API_KEY') ||
     \  exists('$XAI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
@@ -146,7 +146,7 @@ elseif get(g:, 'openai_compatible_api_key', '') != '' &&
 else
     let g:ai_api_key = 0
 endif
-if g:ai_api_key > 0 && utils#is_planned('nvim-treesitter') && executable('curl') && utils#is_planned_lsp() && utils#is_require('codecompanion')
+if g:ai_api_key > 0 && pack#planned('nvim-treesitter') && executable('curl') && pack#planned_lsp() && pack#require('codecompanion')
     PlugAdd 'olimorris/codecompanion.nvim'
     PlugAdd 'ravitemer/codecompanion-history.nvim'
     PlugAdd 'franco-ruggeri/codecompanion-spinner.nvim'
@@ -156,7 +156,7 @@ if g:ai_api_key > 0 && utils#is_planned('nvim-treesitter') && executable('curl')
     endif
 endif
 " AI complete
-if has('nvim-0.10') && utils#is_require('minuet-ai') && (
+if has('nvim-0.10') && pack#require('minuet-ai') && (
     \  exists('$GEMINI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
     \  exists('$OPENAI_API_KEY') ||
@@ -166,16 +166,16 @@ if has('nvim-0.10') && utils#is_require('minuet-ai') && (
     \  )
     PlugAdd 'milanglacier/minuet-ai.nvim'
 elseif has('patch-9.0.0185') || has('nvim')
-    if utils#is_require('codeium')
+    if pack#require('codeium')
         PlugAdd 'Exafunction/windsurf.vim'
-    elseif utils#is_require('copilot') && !utils#is_require('copilot_plus') && g:node_version > 18
+    elseif pack#require('copilot') && !pack#require('copilot_plus') && g:node_version > 18
         PlugAdd 'github/copilot.vim'
     endif
 endif
 " ------------------------------
 " lsp && linter tool install
 " ------------------------------
-if utils#is_planned('lsp')
+if pack#planned('lsp')
     let g:lint_tool = 'lsp'
     " lsp related
     PlugAdd 'mason-org/mason-lspconfig.nvim'
@@ -189,11 +189,11 @@ if utils#is_planned('lsp')
     " lspimport is only for pyright
     PlugAdd 'leoatchina/nvim-lspimport'
     " neoconf
-    if utils#is_require('neoconf')
+    if pack#require('neoconf')
         PlugAdd 'folke/neoconf.nvim'
     endif
-elseif utils#is_planned('coc')
-    if g:python_version > 3.06 && utils#is_require('ale')
+elseif pack#planned('coc')
+    if g:python_version > 3.06 && pack#require('ale')
         let g:lint_tool = 'ale'
         PlugAdd 'dense-analysis/ale'
         PlugAdd 'maximbaz/lightline-ale'
@@ -206,10 +206,10 @@ endif
 " ------------------------------
 " debug tool install
 " ------------------------------
-if g:python_version >= 3.1 && utils#is_require('debug') && (has('patch-8.2.4797') || has('nvim') && !utils#is_planned('lsp'))
+if g:python_version >= 3.1 && pack#require('debug') && (has('patch-8.2.4797') || has('nvim') && !pack#planned('lsp'))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
-elseif has('nvim-0.9.5') && utils#is_require('debug') || utils#is_planned('lsp') && utils#is_require('java')
+elseif has('nvim-0.9.5') && pack#require('debug') || pack#planned('lsp') && pack#require('java')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'rcarriga/nvim-dap-ui'
@@ -222,7 +222,7 @@ PlugAdd 'sbdchd/neoformat'
 " ----------------------------
 " scheme
 " ----------------------------
-if !utils#is_planned('nvim-treesitter') && utils#is_require('c') && utils#is_planned('advcompeng')
+if !pack#planned('nvim-treesitter') && pack#require('c') && pack#planned('advcompeng')
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
@@ -245,14 +245,14 @@ if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
     if utils#is_windows()
         PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\AppData\\Local\\fzf')}
     else
-        if utils#is_require('fzfbin')
+        if pack#require('fzfbin')
             PlugAdd 'junegunn/fzf', {'do': './install --bin', 'dir': utils#expand('~/.local/fzf')}
         else
             PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf')}
         endif
     endif
 endif
-if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !utils#is_require('noleaderf') && !utils#is_require('no-leaderf')
+if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !pack#require('noleaderf') && !pack#require('no-leaderf')
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
 if has('nvim')
@@ -262,16 +262,16 @@ if has('nvim')
     PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/oil.nvim'
     PlugAdd 'benomahony/oil-git.nvim'
-    if utils#is_planned('lsp') || has('nvim-0.10') && utils#is_planned('nvim-treesitter')
+    if pack#planned('lsp') || has('nvim-0.10') && pack#planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()
             PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
         endif
     endif
-    if utils#is_planned('lsp') || utils#is_planned('nvim-dap')
+    if pack#planned('lsp') || pack#planned('nvim-dap')
         PlugAdd 'mason-org/mason.nvim'
     endif
-    if utils#is_planned('lsp') || utils#is_planned('nvim-dap') || utils#is_planned('codecompanion.nvim') || utils#is_planned('minuet-ai.nvim')
+    if pack#planned('lsp') || pack#planned('nvim-dap') || pack#planned('codecompanion.nvim') || pack#planned('minuet-ai.nvim')
         PlugAdd 'MunifTanjim/nui.nvim'
         PlugAdd 'nvim-lua/plenary.nvim'
         PlugAdd 'stevearc/dressing.nvim'

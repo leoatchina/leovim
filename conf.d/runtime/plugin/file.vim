@@ -44,24 +44,24 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-if utils#pref_fzf()
+if pack#pref_fzf()
     nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
-elseif utils#is_planned_leaderf()
+elseif pack#planned_leaderf()
     nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
 else
     nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
 endif
-if utils#pref_fzf()
+if pack#pref_fzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>p  :FzfGitFiles<Cr>
-elseif utils#is_planned_leaderf()
+elseif pack#planned_leaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
     nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
 endif
-if utils#pref_fzf()
+if pack#pref_fzf()
     nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
     xnoremap <nowait>\g :<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
 endif
@@ -74,11 +74,11 @@ nnoremap <leader>E :tabe <C-r>=GetRootDir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
-if utils#is_installed('oil.nvim')
+if pack#installed('oil.nvim')
     lua require('cfg/oil')
     nnoremap <silent><nowait><leader>fo <Cmd>Oil --float<Cr>
 endif
-if utils#is_installed('vim-floaterm')
+if pack#installed('vim-floaterm')
     function! s:floaterm_float(prg)
         let prg = a:prg
         if g:has_popup_floating
@@ -241,7 +241,7 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>I :call TabeOpen("$MODULE_DIR/install.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$RTP_DIR/opt.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$RTP_DIR/main.vim")<Cr>
-    if utils#is_planned_leaderf()
+    if pack#planned_leaderf()
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --regex --no-sort ~/.leovim<Cr>
         if utils#is_unix()

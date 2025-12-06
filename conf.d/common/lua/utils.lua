@@ -69,31 +69,31 @@ end
 
 -- Package management functions (using utils#)
 function _G.is_require(...)
-  return fn['utils#is_require'](...) > 0
+  return fn['pack#require'](...) > 0
 end
 
 function _G.is_installed(...)
-  return fn['utils#is_installed'](...) > 0
+  return fn['pack#installed'](...) > 0
 end
 
 function _G.is_planned(...)
-  return fn['utils#is_planned'](...) > 0
+  return fn['pack#planned'](...) > 0
 end
 
 function _G.is_installed_lsp()
-  return fn['utils#is_installed_lsp']() > 0
+  return fn['pack#installed_lsp']() > 0
 end
 
 function _G.is_installed_cmp()
-  return fn['utils#is_installed_cmp']() > 0
+  return fn['pack#installed_cmp']() > 0
 end
 
 function _G.is_installed_blink()
-  return fn['utils#is_installed_blink']() > 0
+  return fn['pack#installed_blink']() > 0
 end
 
 function _G.is_installed_coc()
-  return fn['utils#is_installed_coc']() > 0
+  return fn['pack#installed_coc']() > 0
 end
 
 

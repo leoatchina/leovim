@@ -6,7 +6,7 @@ endfunction
 " --------------------------
 " symbol
 " --------------------------
-if utils#is_installed('vista.vim')
+if pack#installed('vista.vim')
     let g:vista#renderer#ctags = 'kind'
     let g:vista_update_on_text_changed = 1
     let g:vista_sidebar_position = 'vertical topleft'
@@ -35,19 +35,19 @@ if utils#is_installed('vista.vim')
         nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
     endif
 endif
-if utils#is_installed('aerial.nvim')
-    lua utils#is_require('cfg/aerial')
+if pack#installed('aerial.nvim')
+    lua pack#require('cfg/aerial')
     function! s:check_aerial(nr) abort
         return tolower(getwinvar(a:nr, '&filetype')) =~ 'aerial'
     endfunction
     let g:sidebars.aerial = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_aerial'),
-                \ 'open': 'lua utils#is_require("aerial").open({focus=false})',
+                \ 'open': 'lua pack#require("aerial").open({focus=false})',
                 \ 'close': 'AerialClose'
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('aerial')<CR>
-elseif utils#is_installed('vista.vim')
+elseif pack#installed('vista.vim')
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort
             return tolower(getwinvar(a:nr, '&filetype')) =~ 'vista'
@@ -70,7 +70,7 @@ elseif utils#is_installed('vista.vim')
                     \ }
     endif
     nnoremap <silent><C-t> :call sidebar#toggle('vista')<CR>
-elseif utils#is_installed('tagbar')
+elseif pack#installed('tagbar')
     let g:tagbar_position = 'leftabove vertical'
     let g:tagbar_sort  = 0
     let g:tagbar_width = 35

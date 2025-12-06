@@ -5,32 +5,32 @@ let g:leovim_openmap = 1
 let g:nvim_treesitter_install = utils#is_unix()
 
 " if v:version < 800
-"     call utils#add_require('notags')
+"     call pack#add_require('notags')
 " else
-"     call utils#add_require('tags')
+"     call pack#add_require('tags')
 " endif
 
-" call utils#add_require('fzfbin')
+" call pack#add_require('fzfbin')
 
-" call utils#add_require('web')
-" call utils#add_require('wubi')
-" call utils#add_require('pinyin')
-" call utils#add_require('bioinfo')
-" call utils#add_require('translate')
+" call pack#add_require('web')
+" call pack#add_require('wubi')
+" call pack#add_require('pinyin')
+" call pack#add_require('bioinfo')
+" call pack#add_require('translate')
 
-" call utils#add_require('r')
-" call utils#add_require('c')
-" call utils#add_require('go')
-" call utils#add_require('rust')
-" call utils#add_require('java')
-" call utils#add_require('markdown')
+" call pack#add_require('r')
+" call pack#add_require('c')
+" call pack#add_require('go')
+" call pack#add_require('rust')
+" call pack#add_require('java')
+" call pack#add_require('markdown')
 
-" call utils#add_require('debug')
-" call utils#add_require('neoconf')
-" call utils#add_require('minuet-ai')
+" call pack#add_require('debug')
+" call pack#add_require('neoconf')
+" call pack#add_require('minuet-ai')
 
-" call utils#add_require('aider')
-" call utils#add_require('codecompanion')
+" call pack#add_require('aider')
+" call pack#add_require('codecompanion')
 
 " let g:open_editor="code.exe"
 " let g:open_neovim="nvim.exe"
@@ -56,18 +56,18 @@ let g:nvim_treesitter_install = utils#is_unix()
 if has('nvim')
     " if utils#has_gui()
         " if exists('g:neovide')
-        "     call utils#add_require('blink')
+        "     call pack#add_require('blink')
         " else
-        "     call utils#add_require('cmp')
+        "     call pack#add_require('cmp')
         " endif
     " else
-        " call utils#add_require('builtin')
+        " call pack#add_require('builtin')
     " endif
 else
     " if utils#has_gui()
-        " call utils#add_require('coc')
+        " call pack#add_require('coc')
     " else
-        " call utils#add_require('mcm')
+        " call pack#add_require('mcm')
     " endif
 endif
 

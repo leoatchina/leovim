@@ -1,7 +1,7 @@
 " ---------------------------------------
 " choose tab using fuzzy_findeer
 " ---------------------------------------
-if utils#is_planned_fzf()
+if pack#planned_fzf()
     PlugOpt 'fzf-tabs'
     nnoremap <silent>gt :FzfTabs<Cr>
 endif

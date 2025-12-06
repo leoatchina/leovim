@@ -45,7 +45,7 @@ endif
 if has('nvim')
     let g:coc_global_extensions += ['coc-symbol-line']
 endif
-if utils#is_require('web')
+if pack#require('web')
     let g:coc_global_extensions += [
                 \ 'coc-html',
                 \ 'coc-css',
@@ -56,13 +56,13 @@ if utils#is_require('web')
                 \ 'coc-vetur',
                 \ ]
 endif
-if utils#is_require('c')
+if pack#require('c')
     let g:coc_global_extensions += ['coc-cmake']
     if g:clangd_exe != ''
         let g:coc_global_extensions += ['coc-clangd']
     endif
 endif
-if utils#is_require('ccls') && g:ccls_exe != ''
+if pack#require('ccls') && g:ccls_exe != ''
     call coc#config('languageserver.ccls', {
                 \ "command": "ccls",
                 \ "filetypes": g:c_filetypes,
@@ -72,19 +72,19 @@ if utils#is_require('ccls') && g:ccls_exe != ''
                 \ "directory": $HOME . "/.leovim.d/ccls"
                 \ }}})
 endif
-if utils#is_require('R') && g:R_exe != ''
+if pack#require('R') && g:R_exe != ''
     let g:coc_global_extensions += ['coc-r-lsp']
 endif
-if utils#is_require('rust') && g:cargo_exe != ''
+if pack#require('rust') && g:cargo_exe != ''
     let g:coc_global_extensions += ['coc-rust-analyzer']
 endif
-if utils#is_require('java') && executable('java')
+if pack#require('java') && executable('java')
     let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
 endif
-if utils#is_require('go') && g:gobin_exe != ''
+if pack#require('go') && g:gobin_exe != ''
     let g:coc_global_extensions += ['coc-go']
 endif
-if utils#is_require('writing')
+if pack#require('writing')
     let g:coc_global_extensions += ['coc-vimtex']
 endif
 " ------------------------
@@ -111,9 +111,9 @@ augroup END
 " ------------------------
 " icons
 " ------------------------
-if utils#is_planned('nvim-web-devicons')
+if pack#planned('nvim-web-devicons')
     call coc#config('explorer.icon.source', 'nvim-web-devicons')
-elseif utils#is_planned('vim-devicons')
+elseif pack#planned('vim-devicons')
     call coc#config('explorer.icon.source', 'vim-devicons')
 endif
 " ----------------------------

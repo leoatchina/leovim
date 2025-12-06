@@ -1,11 +1,11 @@
-if utils#is_planned_fzf() && executable('rg')
+if pack#planned_fzf() && executable('rg')
     nnoremap <nowait><M-l><M-l> :FzfBLines<Cr>
-elseif utils#is_planned_leaderf()
+elseif pack#planned_leaderf()
     nnoremap <nowait><M-l><M-l> :Leaderf line --fuzzy --no-sort<Cr>
 endif
-if utils#is_planned_leaderf()
+if pack#planned_leaderf()
     nnoremap <nowait><M-l><M-a> :Leaderf line --fuzzy --all --no-sort<Cr>
-elseif utils#is_planned_fzf()
+elseif pack#planned_fzf()
     nnoremap <nowait><M-l><M-a> :FzfLines<Cr>
 else
     nnoremap <nowait><M-l><M-l> :CtrlPLine<Cr>
@@ -106,7 +106,7 @@ nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
 " replace in filetype qf
 " --------------------------
 au Filetype qf nnoremap <buffer>r :cdo s/<C-r>=get(g:, 'grep_word', '')<Cr>//gc<Left><Left><Left>
-if utils#is_installed('quicker.nvim')
+if pack#installed('quicker.nvim')
     au Filetype qf nnoremap <buffer>W :write
 else
     au Filetype qf nnoremap <buffer>W :cfdo up
@@ -114,7 +114,7 @@ endif
 " --------------------------
 " FzfSearch
 " --------------------------
-if utils#is_planned_fzf()
+if pack#planned_fzf()
     if executable('rg')
         command! -bang -nargs=* FzfBLines call fzf#vim#grep(
                     \ 'rg --with-filename --column --line-number --no-heading --smart-case . ' . fnameescape(utils#expand('%:p')),
@@ -211,7 +211,7 @@ endif
 " ----------------------------
 " leaderf search commands
 " ----------------------------
-if utils#is_planned_leaderf() && executable('rg')
+if pack#planned_leaderf() && executable('rg')
     let g:Lf_DefaultExternalTool = "rg"
     " LeaderfLast
     nnoremap <nowait><C-f>. :Leaderf rg --recal<Cr>
@@ -299,15 +299,15 @@ endif
 " --------------------------------------
 " search path && dir, ans set search-tool
 " --------------------------------------
-if utils#is_planned_leaderf()
-    if utils#is_planned_fzf()
+if pack#planned_leaderf()
+    if pack#planned_fzf()
         let g:search_tool = "leaderf-fzf-grep"
     else
         let g:search_tool = "leaderf-grep"
     endif
     nnoremap <nowait>\f/ :LeaderfSearchAll <C-r>=FileNameNoEXT()<Cr><Cr>
     nnoremap <nowait>\f\ :LeaderfSearchAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
-elseif utils#is_planned_fzf()
+elseif pack#planned_fzf()
     let g:search_tool = "fzf-grep"
     nnoremap <nowait>\f/ :FzfSearchAll <C-r>=FileNameNoEXT()<Cr><Cr>
     nnoremap <nowait>\f\ :FzfSearchAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
@@ -316,7 +316,7 @@ else
     nnoremap <nowait>\f/ :GrepAll <C-r>=FileNameNoEXT()<Cr><Cr>
     nnoremap <nowait>\f\ :GrepAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
 endif
-if utils#is_planned_fzf()
+if pack#planned_fzf()
     nnoremap <nowait><leader>f/ :FzfSearch <C-r>=FileNameNoEXT()<Cr><Cr>
     nnoremap <nowait><leader>f\ :FzfSearch <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
     nnoremap <nowait><Tab>f/ :FzfSearchGit <C-r>=FileNameNoEXT()<Cr><Cr>

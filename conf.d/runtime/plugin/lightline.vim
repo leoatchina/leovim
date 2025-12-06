@@ -8,7 +8,7 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
-    let left = &columns - len(utils#is_file_readonly() . RelativeDir() . RelativePath() . GitBranch() . utils#mode())
+    let left = &columns - len(utils#file_readonly() . git#relative_dir() . git#relative_path() . git#git_branch() . utils#mode())
     return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
@@ -34,7 +34,7 @@ let g:lightline = {
                     \ 'lineinfo': '%l/%L:%c'
                     \ },
                 \ 'component_function': {
-                    \ 'readonly': 'utils#is_file_readonly',
+                    \ 'readonly': 'utils#file_readonly',
                     \ 'mode': 'utils#mode',
                     \ 'abspath': 'utils#abs_dir',
                     \ },
@@ -52,7 +52,7 @@ let g:lightline = {
 let g:lightline.active.right = [['filetype', 'fileencoding', 'lineinfo']]
 let g:lightline.inactive.right = [['filetype', 'fileencoding', 'lineinfo']]
 let s:component_type = {}
-if utils#is_installed('lightline-ale')
+if pack#installed('lightline-ale')
     let g:lightline.component_expand =  {
                 \ 'linter_checking': 'lightline#ale#checking',
                 \ 'linter_errors': 'lightline#ale#errors',
@@ -65,7 +65,7 @@ if utils#is_installed('lightline-ale')
                 \ }
     let lint_info = ['linter_checking', 'linter_errors', 'linter_warnings']
     let g:lightline.active.right += [lint_info]
-elseif utils#is_installed('nvim-lightline-lsp')
+elseif pack#installed('nvim-lightline-lsp')
     let g:lightline.component_expand ={
                 \ 'lsp_warnings': 'lightline#lsp#warnings',
                 \ 'lsp_errors': 'lightline#lsp#errors',
@@ -83,7 +83,7 @@ elseif utils#is_installed('nvim-lightline-lsp')
                 \ }
     let lint_info = ['lsp_ok', 'lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings']
     let g:lightline.active.right += [lint_info]
-elseif utils#is_installed_coc()
+elseif pack#installed_coc()
     function! CocDiagnostic()
         let info = get(b:, 'coc_diagnostic_info', {})
         if empty(info) | return get(b:, 'coc_git_status', '')  | endif
@@ -181,7 +181,7 @@ augroup UpdateLightline
     autocmd!
     autocmd ColorScheme * call UpdateLightline()
     autocmd BufCreate,BufEnter,BufWinEnter,WinEnter,BufWritePost,InsertLeave,CmdlineLeave * call lightline#update()
-    if utils#is_installed_coc()
+    if pack#installed_coc()
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
 augroup END
