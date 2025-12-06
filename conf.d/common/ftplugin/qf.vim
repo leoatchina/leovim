@@ -16,14 +16,14 @@ nnoremap <silent><buffer><M-/> <Nop>
 nnoremap <silent><buffer><M-?> <Nop>
 nnoremap <silent><buffer><M-'> <Nop>
 nnoremap <silent><buffer><M-"> <Nop>
-if !Installed('nvim-bqf')
+if !utils#is_installed('nvim-bqf')
     nnoremap <silent><buffer>P :PreviewQuickfix<Cr>
     nnoremap <silent><buffer><C-m> :PreviewQuickfix e<Cr>
     nnoremap <silent><buffer><C-g> :PreviewQuickfix e<Cr>:QuickfixClose<Cr>
     nnoremap <silent><buffer><C-]> :PreviewQuickfix vsplit<Cr>
     nnoremap <silent><buffer><C-x> :PreviewQuickfix split<Cr>
     nnoremap <silent><buffer><C-t> :PreviewQuickfix tabe<Cr>
-    if Installed('vim-quickui')
+    if utils#is_installed('vim-quickui')
         nnoremap <silent><buffer>K :call quickui#tools#preview_quickfix()<Cr>
         nnoremap <silent><buffer>n j:call quickui#tools#preview_quickfix()<Cr>
         nnoremap <silent><buffer>p k:call quickui#tools#preview_quickfix()<Cr>
@@ -31,7 +31,7 @@ if !Installed('nvim-bqf')
             finish
         endif
         syn match	qfFileName	"^[^│]*" contains=qfLineNr
-        syn match	qfSeparator	"│"
+        syn match	qfSeparator	"�?
         syn match	qfLineNr	":\d*" contained
         " The default highlighting.
         hi def link qfFileName	Directory

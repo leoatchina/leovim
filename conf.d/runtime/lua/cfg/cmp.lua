@@ -13,10 +13,10 @@ end
 -----------------
 local unpack = table.unpack or unpack
 local fn = vim.fn
-local cmp = require('cmp')
+local cmp = is_require('cmp')
 local compare = cmp.config.compare
-local keymap = require('cmp.utils.keymap')
-local lspkind = require('lspkind')
+local keymap = is_require('cmp.utils.keymap')
+local lspkind = is_require('lspkind')
 local sources = {
   { name = 'nvim_lua', priority = 10 },
   { name = 'vsnip', priority = 9 },
@@ -24,10 +24,10 @@ local sources = {
   { name = 'buffer', priority = 2 },
   { name = 'async_path', priority = 1 },
 }
-if Installed('minuet-ai.nvim') then
+if is_installed('minuet-ai.nvim') then
   table.insert(sources, 1, { name = 'minuet', priority = 6})
 end
-if Installed('jupynium.nvim') then
+if is_installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 7})
 end
 -----------------
@@ -67,8 +67,8 @@ cmp.setup({
   },
   mapping = {
     ["<M-.>"] = function()
-      if Installed('minuet-ai.nvim') then
-        require('minuet').make_cmp_map()
+      if is_installed('minuet-ai.nvim') then
+        is_require('minuet').make_cmp_map()
       end
     end,
     -- cmdline only mapping
@@ -211,7 +211,7 @@ cmp.setup({
         end
       end,
       s = function(fallback)
-        if Installed('vim-vsnip') then
+        if is_installed('vim-vsnip') then
           vim.fn['vsnip#expand']()
         elseif has_words_before() then
           cmp.complete()
@@ -236,7 +236,7 @@ cmp.setup({
       show_labelDetails = true,
       before = function(entry, vim_item)
         -- colorful-menu
-        local highlights_info = require("colorful-menu").cmp_highlights(entry)
+        local highlights_info = is_require("colorful-menu").cmp_highlights(entry)
         -- if highlight_info==nil, which means missing ts parser, let's fallback to use default `vim_item.abbr`.
         -- What this plugin offers is two fields: `vim_item.abbr_hl_group` and `vim_item.abbr`.
         local content
@@ -276,5 +276,5 @@ cmp.setup.cmdline(':', {
 ----------------------------------
 -- autopairs
 ----------------------------------
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+local cmp_autopairs = is_require('nvim-autopairs.completion.cmp')
 cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())

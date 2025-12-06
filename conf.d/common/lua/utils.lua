@@ -20,41 +20,82 @@ function _G.executable(...)
   return fn.executable(...) > 0
 end
 
-function _G.Require(...)
-  return fn['Require'](...) > 0
+-- File path functions
+function _G.abs_path()
+  return fn['utils#abs_path']()
 end
 
-function _G.Installed(...)
-  return fn['Installed'](...) > 0
+function _G.abs_dir()
+  return fn['utils#abs_dir']()
 end
 
-function _G.InstalledLsp()
-  return fn['InstalledLsp']() > 0
+function _G.file_name()
+  return fn['utils#file_name']()
 end
 
-function _G.InstalledCmp()
-  return fn['InstalledCmp']() > 0
+function _G.get_root_dir(...)
+  return fn['utils#get_root_dir'](...)
 end
 
-function _G.InstalledBlink()
-  return fn['InstalledBlink']() > 0
+-- String utility functions
+function _G.trim(str)
+  return fn['utils#trim'](str)
 end
 
-function _G.InstalledCoc()
-  return fn['InstalledCoc']() > 0
+function _G.expand_path(path, ...)
+  return fn['utils#expand'](path, ...)
 end
 
-function _G.WINDOWS()
-  return fn['WINDOWS']() > 0
+-- System detection functions (using utils#)
+function _G.is_windows()
+  return fn['utils#is_windows']() > 0
 end
 
-function _G.LINUX()
-  return fn['LINUX']() > 0
+function _G.is_linux()
+  return fn['utils#is_linux']() > 0
 end
 
-function _G.UNIX()
-  return fn['UNIX']() > 0
+function _G.is_unix()
+  return fn['utils#is_unix']() > 0
 end
+
+function _G.is_macos()
+  return fn['utils#is_macos']() > 0
+end
+
+function _G.has_gui()
+  return fn['utils#has_gui']() > 0
+end
+
+-- Package management functions (using utils#)
+function _G.is_require(...)
+  return fn['utils#is_require'](...) > 0
+end
+
+function _G.is_installed(...)
+  return fn['utils#is_installed'](...) > 0
+end
+
+function _G.is_planned(...)
+  return fn['utils#is_planned'](...) > 0
+end
+
+function _G.is_installed_lsp()
+  return fn['utils#is_installed_lsp']() > 0
+end
+
+function _G.is_installed_cmp()
+  return fn['utils#is_installed_cmp']() > 0
+end
+
+function _G.is_installed_blink()
+  return fn['utils#is_installed_blink']() > 0
+end
+
+function _G.is_installed_coc()
+  return fn['utils#is_installed_coc']() > 0
+end
+
 
 vim.ui.select = function(items, opts, on_choice)
   vim.validate({

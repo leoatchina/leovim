@@ -36,7 +36,7 @@ local function new_git_status()
 end
 local git_status = new_git_status()
 -- Clear git status cache on refresh
-local refresh = require("oil.actions").refresh
+local refresh = is_require("oil.actions").refresh
 local orig_refresh = refresh.callback
 refresh.callback = function(...)
   git_status = new_git_status()
@@ -44,23 +44,23 @@ refresh.callback = function(...)
 end
 -- setup
 local detail = false
-require("oil").setup({
+is_require("oil").setup({
   keymaps = {
     ["gd"] = {
       desc = "Toggle file detail view",
       callback = function()
         detail = not detail
         if detail then
-          require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
+          is_require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
         else
-          require("oil").set_columns({ "icon" })
+          is_require("oil").set_columns({ "icon" })
         end
       end,
     },
   },
   view_options = {
     is_hidden_file = function(name, bufnr)
-      local dir = require("oil").get_current_dir(bufnr)
+      local dir = is_require("oil").get_current_dir(bufnr)
       local is_dotfile = vim.startswith(name, ".") and name ~= ".."
       -- if no local directory (e.g. for ssh connections), just hide dotfiles
       if not dir then

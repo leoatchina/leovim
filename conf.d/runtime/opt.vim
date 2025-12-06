@@ -2,35 +2,35 @@ let g:require_group = copy(get(g:, 'preset_group', []))
 
 let g:leovim_whichkey = 1
 let g:leovim_openmap = 1
-let g:nvim_treesitter_install = UNIX()
+let g:nvim_treesitter_install = utils#is_unix()
 
 " if v:version < 800
-"     call AddRequire('notags')
+"     call utils#add_require('notags')
 " else
-"     call AddRequire('tags')
+"     call utils#add_require('tags')
 " endif
 
-" call AddRequire('fzfbin')
+" call utils#add_require('fzfbin')
 
-" call AddRequire('web')
-" call AddRequire('wubi')
-" call AddRequire('pinyin')
-" call AddRequire('bioinfo')
-" call AddRequire('translate')
+" call utils#add_require('web')
+" call utils#add_require('wubi')
+" call utils#add_require('pinyin')
+" call utils#add_require('bioinfo')
+" call utils#add_require('translate')
 
-" call AddRequire('r')
-" call AddRequire('c')
-" call AddRequire('go')
-" call AddRequire('rust')
-" call AddRequire('java')
-" call AddRequire('markdown')
+" call utils#add_require('r')
+" call utils#add_require('c')
+" call utils#add_require('go')
+" call utils#add_require('rust')
+" call utils#add_require('java')
+" call utils#add_require('markdown')
 
-" call AddRequire('debug')
-" call AddRequire('neoconf')
-" call AddRequire('minuet-ai')
+" call utils#add_require('debug')
+" call utils#add_require('neoconf')
+" call utils#add_require('minuet-ai')
 
-" call AddRequire('aider')
-" call AddRequire('codecompanion')
+" call utils#add_require('aider')
+" call utils#add_require('codecompanion')
 
 " let g:open_editor="code.exe"
 " let g:open_neovim="nvim.exe"
@@ -54,24 +54,24 @@ let g:nvim_treesitter_install = UNIX()
 " let g:openai_compatible_model = ''
 
 if has('nvim')
-    " if HAS_GUI()
+    " if utils#has_gui()
         " if exists('g:neovide')
-        "     call AddRequire('blink')
+        "     call utils#add_require('blink')
         " else
-        "     call AddRequire('cmp')
+        "     call utils#add_require('cmp')
         " endif
     " else
-        " call AddRequire('builtin')
+        " call utils#add_require('builtin')
     " endif
 else
-    " if HAS_GUI()
-        " call AddRequire('coc')
+    " if utils#has_gui()
+        " call utils#add_require('coc')
     " else
-        " call AddRequire('mcm')
+        " call utils#add_require('mcm')
     " endif
 endif
 
-" if HAS_GUI()
+" if utils#has_gui()
     " set guifont=Cascadia\ Code\ NF:h11.5
     " set guifont=Cascadia\ Mono\ NF:h11.5
 " else
@@ -80,7 +80,7 @@ endif
 " endif
 
 
-if WINDOWS()
+if utils#is_windows()
     if has('nvim')
         " let g:python3_host_prog='C:\\Python37\\python.exe'
     else
@@ -95,7 +95,7 @@ if WINDOWS()
     " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
     " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
     " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
-elseif UNIX()
+elseif utils#is_unix()
     if has('nvim')
         " let g:python3_host_prog=exepath('python3')
     else
@@ -103,22 +103,22 @@ elseif UNIX()
         " use the shell command sudo ldconfig -p | grep libpython3 to find the library name.
         " See :help +python3/dyn-stable.
     endif
-    " let g:code_user_dir = expand("$HOME/.config/Code/User")
-    " let g:kiro_user_dir = expand("$HOME/.config/Kiro/User")
-    " let g:trae_user_dir = expand("$HOME/.config/Trae/User")
-    " let g:qoder_user_dir = expand("$HOME/.config/Qoder/User")
-    " let g:lingma_user_dir = expand("$HOME/.config/Lingma/User")
-    " let g:cursor_user_dir = expand("$HOME/.config/Cursor/User")
-    " let g:windsurf_user_dir = expand("$HOME/.config/Windsurf/User")
-    " let g:positron_user_dir = expand("$HOME/.config/Positron/User")
+    " let g:code_user_dir = utils#expand("$HOME/.config/Code/User")
+    " let g:kiro_user_dir = utils#expand("$HOME/.config/Kiro/User")
+    " let g:trae_user_dir = utils#expand("$HOME/.config/Trae/User")
+    " let g:qoder_user_dir = utils#expand("$HOME/.config/Qoder/User")
+    " let g:lingma_user_dir = utils#expand("$HOME/.config/Lingma/User")
+    " let g:cursor_user_dir = utils#expand("$HOME/.config/Cursor/User")
+    " let g:windsurf_user_dir = utils#expand("$HOME/.config/Windsurf/User")
+    " let g:positron_user_dir = utils#expand("$HOME/.config/Positron/User")
 endif
 
 " NOTE: visit https://ftp.gnu.org/pub/gnu/global/
 " wget https://ftp.gnu.org/pub/gnu/global/global-6.6.12.tar.gz && tar xvf global-6.6.12.tar.gz && cd global-6.6.12
 " ./configure --prefix ~/.local/gtags --disable-gtagscscope && make && make install && cd ~/.local/gtags
 " ./configure --prefix ~/.local/gtags && make && make install && cd ~/.local/gtags
-" if executable('gtags') && UNIX()
-    " let $GTAGSCONF=expand($HOME."/.local/gtags/share/gtags/gtags.conf")
+" if executable('gtags') && utils#is_unix()
+    " let $GTAGSCONF=utils#expand($HOME."/.local/gtags/share/gtags/gtags.conf")
 " endif
 
 " let g:vimtex_view_method = 'zathura'

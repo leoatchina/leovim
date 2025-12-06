@@ -3,7 +3,7 @@
 " ---------------------------------------
 set autoread
 autocmd BufRead acwrite set ma
-if has('nvim') || !HAS_GUI()
+if has('nvim') || !utils#has_gui()
     autocmd FocusGained * :silent! !
 endif
 " -----------------------------------

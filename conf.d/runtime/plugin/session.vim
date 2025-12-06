@@ -25,9 +25,9 @@ let g:startify_custom_header = [
 let g:startify_files_number = 10
 let g:startify_session_number = 10
 let g:startify_list_order = [
-            \ ['   最近项目:'],
+            \ ['   最近项�?'],
             \ 'sessions',
-            \ ['   最近文件:'],
+            \ ['   最近文�?'],
             \ 'files',
             \ ['   快捷命令:'],
             \ 'commands',
@@ -39,9 +39,9 @@ let g:startify_commands = [
             \ {'V': ['基本信息', 'version']},
             \ ]
 if has('nvim')
-    let g:startify_session_dir = Expand("~/.vim/session.nvim")
+    let g:startify_session_dir = utils#expand("~/.vim/session.nvim")
 else
-    let g:startify_session_dir = Expand("~/.vim/session.vim")
+    let g:startify_session_dir = utils#expand("~/.vim/session.vim")
 endif
 if !isdirectory(g:startify_session_dir)
     silent! call mkdir(g:startify_session_dir, "p")
@@ -54,7 +54,7 @@ nnoremap <leader>sd :SDelete<Space>
 " --------------------------------
 " Session management with fzf
 " --------------------------------
-if PlannedFzf()
+if utils#is_planned_fzf()
     function! s:session_list()
         let lines = split(globpath(g:startify_session_dir, '*'), '\n')
         if len(lines) > 1

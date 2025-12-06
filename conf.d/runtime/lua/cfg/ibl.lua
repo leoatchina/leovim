@@ -1,4 +1,4 @@
-local ibl = require("ibl")
+local ibl = is_require("ibl")
 local config = require "ibl.config"
 ibl.setup({
   enabled = false

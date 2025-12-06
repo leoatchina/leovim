@@ -16,14 +16,14 @@ endfunction
 if has('nvim') || has('timers') && has('channel') && has('job')
     let g:asyncrun_rootmarks = g:root_patterns
     let s:run_command = "AsyncRun"
-    if WINDOWS()
+    if utils#is_windows()
         let g:asyncrun_encs = get(g:, 'asyncrun_encs', 'gbk')
     else
         let g:asyncrun_encs = get(g:, 'asyncrun_encs', 'utf-8')
     endif
     PlugOpt 'asyncrun.vim'
-    if UNIX()
-        silent! call mkdir(Expand("$HOME/.cache/build"), "p")
+    if utils#is_unix()
+        silent! call mkdir(utils#expand("$HOME/.cache/build"), "p")
         if executable('gcc')
             let g:asyncrun_gcc_cmd = 'gcc -Wall -O2 $(VIM_FILEPATH) -o ~/.cache/build/$(VIM_FILENOEXT) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
@@ -33,7 +33,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
         if executable('rustc')
             let g:asyncrun_rustc_cmd = 'rustc -o ~/.cache/build/$(VIM_FILENOEXT) $(VIM_FILEPATH) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
-    elseif WINDOWS()
+    elseif utils#is_windows()
         if executable('gcc')
             let g:asyncrun_gcc_cmd = 'gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
@@ -45,7 +45,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
         endif
     endif
     nnoremap ! :AsyncRun<Space>
-    xnoremap ! :<C-u>AsyncRun <C-R>=GetVisualSelection()<Cr>
+    xnoremap ! :<C-u>AsyncRun <C-R>=utils#get_visual_selection()<Cr>
     nnoremap <Tab>q :AsyncStop!<CR>
     nnoremap <Tab>Q :AsyncStop<CR>
     xnoremap <M-r> :AsyncRun -raw<Space>
@@ -53,7 +53,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
 else
     let s:run_command = "!"
     nnoremap ! :!
-    xnoremap ! :<C-u>!<C-R>=GetVisualSelection()<Cr>
+    xnoremap ! :<C-u>!<C-R>=utils#get_visual_selection()<Cr>
 endif
 function! s:asyncrun(...)
     let ft = &ft
@@ -106,7 +106,7 @@ function! s:asyncrun(...)
         endif
     endif
     let ft = &ft
-    if ft ==# 'dosbatch' && WINDOWS()
+    if ft ==# 'dosbatch' && utils#is_windows()
         let run_cmd = s:run_command . params. ' %'
     elseif (ft ==# 'sh' || ft ==# 'bash') && executable('bash')
         let run_cmd = s:run_command . params . ' bash %'
@@ -132,17 +132,17 @@ function! s:asyncrun(...)
         let run_cmd = s:run_command . params . ' node %'
     " c && cpp
     elseif ft ==# 'c' && get(g:, 'asyncrun_gcc_cmd', '') != ''
-        if WINDOWS()
+        if utils#is_windows()
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:asyncrun_gcc_cmd
     elseif ft ==# 'cpp' && get(g:, 'asyncrun_gpp_cmd', '') != ''
-        if WINDOWS()
+        if utils#is_windows()
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:asyncrun_gpp_cmd
     elseif ft ==# 'rust' && get(g:, 'asyncrun_rustc_cmd', '') != ''
-        if WINDOWS()
+        if utils#is_windows()
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:asyncrun_rustc_cmd
@@ -152,7 +152,7 @@ function! s:asyncrun(...)
     if empty(run_cmd)
         if ft ==# 'vim'
             echo "source current vim file"
-            execute("source %")
+            utils#execute("source %")
         else
             call preview#errmsg('FileType ' . ft . ' could not be runned.')
         endif
@@ -191,7 +191,7 @@ if has('nvim') || v:version >= 801
             return 0
         endif
         for task in tasks
-            if trim(task['name']) == a:task_name
+            if utils#trim(task['name']) == a:task_name
                 return 1
             endif
         endfor
@@ -201,7 +201,7 @@ if has('nvim') || v:version >= 801
         let task_name = a:task_name
         let pos = a:pos
         if s:task_check(task_name)
-            execute('AsyncTask ' . task_name)
+            utils#execute('AsyncTask ' . task_name)
         else
             if !has('nvim') && pos == 'floaterm_float' || pos == 'qf'
                 RunQfSilent
@@ -231,7 +231,7 @@ else
     nnoremap <silent><M-R> :RunQfRight<CR>
     nnoremap <silent><M-F> :RunQfSilent<CR>
 endif
-if WINDOWS() || executable('gnome-terminal') && HAS_GUI()
+if utils#is_windows() || executable('gnome-terminal') && utils#has_gui()
     command! RunExternal call s:asyncrun('external')
     nnoremap <silent><M-"> :RunExternal<CR>
 endif
@@ -307,7 +307,7 @@ if has('nvim') || v:version >= 801
     command! AsyncTaskProfileLoop call s:asynctasks_profile_loop()
     nnoremap <leader>rp :<C-u>AsyncTaskProfileLoop<CR>
     nnoremap <leader>rP :<C-u>AsyncTaskProfile<CR>
-    if PlannedFzf()
+    if utils#is_planned_fzf()
         function! s:fzf_sink(what)
             let p1 = stridx(a:what, '<')
             if p1 >= 0

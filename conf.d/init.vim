@@ -23,41 +23,24 @@ let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
 let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
 let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
 " --------------------------
+" set rtp && pack path
+" --------------------------
+set rtp^=$COMMON_DIR
+if utils#is_windows()
+    set rtp^=$LEOVIM_DIR\pack
+else
+    set rtp^=$LEOVIM_DIR/pack
+endif
+if exists(':packadd')
+    set packpath^=$LEOVIM_DIR
+endif
+" --------------------------
 " system functions
 " --------------------------
-function! WINDOWS()
-    return has('win32') || has('win64')
-endfunction
-function! MACOS()
-    return has('macunix')
-endfunction
-function! WIN32UNIX()
-    return has('win32unix') && !has('macunix')
-endfunction
-function! LINUX()
-    return has('unix') && !has('macunix') && !has('win32unix')
-endfunction
-function! UNIX()
-    return has('unix') && !has('win32unix')
-endfunction
-function! AbsDir()
-    return substitute(Expand('%:p:h', 1), '^vscode-remote://[^/]\+/%2B[^/]\+', '', '')
-endfunction
-function! AbsPath()
-    return substitute(Expand('%:p', 1), '^vscode-remote://[^/]\+/%2B[^/]\+', '', '')
-endfunction
-function! FileName()
-    return Expand('%:t', 1)
-endfunction
-function! FileNameNoEXT()
-    return Expand('%:t:r', 1)
-endfunction
-function! FileReadonly()
-    return &readonly && &filetype !=# 'help' ? 'RO' : ''
-endfunction
-" gui
+" System detection functions moved to utils.vim
+" File path functions moved to utils.vim
+" gui - GUI detection moved to utils.vim
 if has('gui_running')
-    let s:gui_running = 1
     if get(g:, 'leovim_loaded', 0) == 0
         set guioptions-=e
         set guioptions-=T
@@ -68,121 +51,29 @@ if has('gui_running')
         set guioptions-=m
         set guioptions-=
     endif
-elseif has('nvim')
-    if has('gui_vimr')
-        let s:gui_running = 1
-    elseif exists('g:neovide')
-        let s:gui_running = 1
-        let g:neovide_cursor_animation_length = 0
-    elseif exists('g:vscode')
-        let s:gui_running = 0
-    elseif exists('g:GuiLoaded') && g:GuiLoaded != 0
-        let s:gui_running = 1
-    elseif exists('*nvim_list_uis') && len(nvim_list_uis()) > 0
-        let s:gui_running = get(nvim_list_uis()[0], 'ext_termcolors', 0)? 0 : 1
-    elseif exists("+termguicolors") && (&termguicolors) != 0
-        let s:gui_running = 1
-    else
-        let s:gui_running = 0
-    endif
-else
-    let s:gui_running = 0
+elseif has('nvim') && exists('g:neovide')
+    let g:neovide_cursor_animation_length = 0
 endif
-function! HAS_GUI()
-    return s:gui_running
-endfunction
 " ----------------------------
 " enhance functions
 " ----------------------------
-function! Trim(str) abort
-    return substitute(a:str, "^\s\+\|\s\+$", "", "g")
-endfunction
-function! Expand(path, ...) abort
-    if a:0 && a:1
-        return substitute(fnameescape(expand(a:path)), '\', '/', 'g')
-    else
-        return fnameescape(expand(a:path))
-    endif
-endfunction
-function! Execute(cmd)
-    if exists("*execute")
-        return execute(a:cmd)
-    else
-        redir => output
-        silent! execute a:cmd
-        redir END
-        return output
-    endif
-endfunction
-function! StringToFloat(str, ...) abort
-    let str = a:str
-    if a:0 == 0
-        let digit = 1
-    else
-        let digit = a:1
-    endif
-    let lst = split(str, "\\.")
-    if len(lst)
-        let rst = []
-        for each in lst[1:]
-            if len(each) >= digit
-                let e = each[:digit]
-            else
-                let e = repeat('0', digit - len(each)) . each
-            endif
-            call add(rst, e)
-        endfor
-        return str2float(lst[0] . '.' . join(rst, ''))
-    else
-        return str2float(str)
-    endif
-endfunction
-" trip last space
-function! TripTrailingWhiteSpace() abort
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " do the business:
-    %s/\s\+$//e
-    " clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
-nnoremap <silent>d<space> :call TripTrailingWhiteSpace()<Cr>
+" Trailing whitespace function moved to utils.vim
+nnoremap <silent>d<space> :call utils#trip_trailing_whitespace()<Cr>
 " enhance escape
-function! Escape(param)
-    return substitute(escape(a:param, '/\.*$^~[#'), '\n', '\\n', 'g')
-endfunction
-xnoremap / "yy/<C-r>=Escape(@y)<CR><Cr>
-xnoremap ? "yy?<C-r>=Escape(@y)<CR><Cr>
-xnoremap s "yy:%s/<C-r>=Escape(@y)<CR>/<C-r>=Escape(@y)<CR>/gc<Left><Left><Left>
-xnoremap <Cr> "yy:%s/<C-r>=Escape(@y)<CR>//gc<Left><Left><Left>
+" Escape function moved to utils.vim
+xnoremap / "yy/<C-r>=utils#escape(@y)<CR><Cr>
+xnoremap ? "yy?<C-r>=utils#escape(@y)<CR><Cr>
+xnoremap s "yy:%s/<C-r>=utils#escape(@y)<CR>/<C-r>=utils#escape(@y)<CR>/gc<Left><Left><Left>
+xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
 " GetVisualSelection only in one line
-function! GetVisualSelection(...) abort
-    " call with visualmode() as the argument
-    let [line_start, column_start] = [line("'<"), charcol("'<")]
-    let [line_end, column_end]     = [line("'>"), charcol("'>")]
-    let lines = getline(line_start, line_end)
-    if len(lines) != 1
-        return ""
-    endif
-    let inclusive = (&selection == 'inclusive')? 1 : 2
-    " Must trim the end before the start, the begin will shift left.
-    let lines[-1] = list2str(str2list(lines[-1])[:column_end - inclusive])
-    let lines[0] = list2str(str2list(lines[0])[column_start - 1:])
-    if a:0 && a:1
-        return Escape(join(lines, "\n"))
-    else
-        return join(lines, "\n")
-    endif
-endfunction
+" Visual selection function moved to utils.vim
 " --------------------------
 " gui_running && OS
 " --------------------------
 if exists('g:vscode') && !has('nvim-0.10')
     echoe "vscode-neovim required nvim-0.10+!"
     finish
-elseif WINDOWS()
+elseif utils#is_windows()
     if !has('nvim') && v:version < 900
         echoe "In windows, please update to vim9.0+."
         finish
@@ -190,18 +81,6 @@ elseif WINDOWS()
         echoe 'neovim 0.8 is at least required when uing leovim in windows.'
         finish
     endif
-endif
-" --------------------------
-" set rtp && pack path
-" --------------------------
-if WINDOWS()
-    set rtp^=$LEOVIM_DIR\pack
-else
-    set rtp^=$LEOVIM_DIR/pack
-endif
-set rtp^=$COMMON_DIR
-if exists(':packadd')
-    set packpath^=$LEOVIM_DIR
 endif
 " --------------------------
 " init directories
@@ -248,43 +127,6 @@ let g:maplocalleader = 'q'
 " ------------------------
 let g:require_group = []
 let g:leovim_installed = {}
-function! Require(pack)
-    return count(g:require_group, a:pack) > 0
-endfunction
-function! AddRequire(...) abort
-    if a:0 == 0
-        return
-    endif
-    for require in a:000
-        if !Require(require)
-            call add(g:require_group, require)
-        endif
-    endfor
-endfunction
-function! Planned(...)
-    if empty(a:000)
-        return 0
-    endif
-    for pack in a:000
-        let pack = tolower(pack)
-        if !has_key(g:leovim_installed, pack)
-            return 0
-        endif
-    endfor
-    return 1
-endfunction
-function! Installed(...)
-    if empty(a:000)
-        return 0
-    endif
-    for pack in a:000
-        let pack = tolower(pack)
-        if !has_key(g:leovim_installed, pack) || get(g:leovim_installed, pack, 0) == 0
-            return 0
-        endif
-    endfor
-    return 1
-endfunction
 " -----------------------------------
 " filetypes definition
 " -----------------------------------
@@ -371,29 +213,13 @@ onoremap $ g_
 nnoremap g_ $
 xnoremap g_ $
 onoremap g_ $
-function! MoveToEndAndAddSemicolon() abort
-    execute "normal! :s/\\s\\+$//e\\r"
-    normal! g_
-    if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php', 'javascript', 'typescript', 'go', 'r'], &ft) >= 0
-        if index([';', '{', '}'], getline('.')[col('.') - 1]) >= 0
-            normal! a
-        else
-            normal! a;
-        endif
-    else
-        normal! a
-    endif
-endfunction
-inoremap <silent><C-j> <C-\><C-n>:call MoveToEndAndAddSemicolon()<CR>
+" MoveToEndAndAddSemicolon moved to utils.vim
+inoremap <silent><C-j> <C-\><C-n>:call utils#move_to_end_and_add_semicolon()<CR>
 " ------------------------
 " select and search
 " ------------------------
-function! VIW()
-    set iskeyword-=_ iskeyword-=#
-    call timer_start(300, {-> execute("set iskeyword+=_  iskeyword+=#")})
-    call feedkeys("viwo",'n')
-endfunction
-nnoremap SS :call VIW()<Cr>
+" VIW moved to utils.vim
+nnoremap SS :call utils#viw()<Cr>
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------
@@ -492,32 +318,15 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vn vin
     nmap <leader>vN vaN
     " find line
+    " TextObj functions moved to utils.vim
     call textobj#user#plugin('line', {
                 \   '-': {
-                \     'select-a-function': 'CurrentLineA',
+                \     'select-a-function': 'utils#current_line_a',
                 \     'select-a': 'ak',
-                \     'select-i-function': 'CurrentLineI',
+                \     'select-i-function': 'utils#current_line_i',
                 \     'select-i': 'ik',
                 \   },
                 \ })
-    function! CurrentLineA()
-        normal! ^
-        let head_pos = getpos('.')
-        normal! $
-        let tail_pos = getpos('.')
-        return ['v', head_pos, tail_pos]
-    endfunction
-    function! CurrentLineI()
-        normal! ^
-        let head_pos = getpos('.')
-        normal! g_
-        let tail_pos = getpos('.')
-        let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
-        return
-                    \ non_blank_char_exists_p
-                    \ ? ['v', head_pos, tail_pos]
-                    \ : 0
-    endfunction
     vnoremap ik ^o$h
     onoremap ik :normal vik<Cr>
     vnoremap ak ^o$
@@ -526,43 +335,12 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vK vak
     " find block
     let s:block_str = '^# In\[\d*\]\|^# %%\|^# STEP\d\+'
-    function! BlockA()
-        let beginline = search(s:block_str, 'ebW')
-        if beginline == 0
-            normal! gg
-        endif
-        let head_pos = getpos('.')
-        let endline  = search(s:block_str, 'eW')
-        if endline == 0
-            normal! G
-        endif
-        let tail_pos = getpos('.')
-        return ['V', head_pos, tail_pos]
-    endfunction
-    function! BlockI()
-        let beginline = search(s:block_str, 'ebW')
-        if beginline == 0
-            normal! gg
-            let beginline = 1
-        else
-            normal! j
-        endif
-        let head_pos = getpos('.')
-        let endline = search(s:block_str, 'eW')
-        if endline == 0
-            normal! G
-        elseif endline > beginline
-            normal! k
-        endif
-        let tail_pos = getpos('.')
-        return ['V', head_pos, tail_pos]
-    endfunction
-    " select a block
+    " Block TextObj functions moved to utils.vim
     call textobj#user#plugin('block', {
                 \ 'block': {
-                \  'select-a-function': 'BlockA',
+                \  'select-a-function': 'utils#block_a',
                 \  'select-a': 'av',
-                \  'select-i-function': 'BlockI',
+                \  'select-i-function': 'utils#block_i',
                 \  'select-i': 'iv',
                 \  'region-type': 'V'
                 \ },
@@ -658,13 +436,13 @@ xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " clipboard
 " ------------------------------------
 " Copy file path
-nnoremap <leader>YA :let @"=AbsPath()<Cr>:echo "-= File path copied=-"<Cr>
+nnoremap <leader>YA :let @"=utils#abs_path()<Cr>:echo "-= File path copied=-"<Cr>
 " Copy file dir
-nnoremap <leader>YD :let @"=AbsDir()<Cr>:echo "-= File dir copied=-"<Cr>
+nnoremap <leader>YD :let @"=utils#abs_dir()<Cr>:echo "-= File dir copied=-"<Cr>
 " Copy file name
-nnoremap <leader>YF :let @"=FileName()<Cr>:echo "-= File name copied=-"<Cr>
+nnoremap <leader>YF :let @"=utils#file_name()<Cr>:echo "-= File name copied=-"<Cr>
 " Copy bookmark position reference
-nnoremap <leader>YM :let @"=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied=-"<Cr>
+nnoremap <leader>YM :let @"=utils#abs_path().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied=-"<Cr>
 " Yank a line without leading whitespaces and line break
 nnoremap <leader>YU _yg_:echo "-= Yanked line without leading whitespaces and line break=-"<Cr>
 if has('clipboard')
@@ -676,13 +454,13 @@ if has('clipboard')
             set clipboard=
         endif
         execute 'xnoremap Y "' . a:register . 'y:echo "Yank selection to ' . a:label . ' clipboard."<Cr>'
-        execute 'nnoremap <leader>ya :let @' . a:register . '=AbsPath()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>yd :let @' . a:register . '=AbsDir()<Cr>:echo "-= File dir copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>yf :let @' . a:register . '=FileName()<Cr>:echo "-= File name copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>ym :let @' . a:register . '=AbsPath().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>ya :let @' . a:register . '=utils#abs_path()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>yd :let @' . a:register . '=utils#abs_dir()<Cr>:echo "-= File dir copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>yf :let @' . a:register . '=utils#file_name()<Cr>:echo "-= File name copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>ym :let @' . a:register . '=utils#abs_path().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yu _"' . a:register . 'yg_:echo "-= Yanked line without leading whitespaces and line break to ' . a:label . ' clipboard=-"<Cr>'
     endfunction
-    if LINUX() && (exists('g:vscode') || exists('$TMUX'))
+    if utils#is_linux() && (exists('g:vscode') || exists('$TMUX'))
         call s:setup_clipboard('+', 'unnamedplus', 'x11')
     else
         call s:setup_clipboard('*', 'unnamed', 'system')
@@ -774,11 +552,11 @@ function s:yank_position_to_editor(editor)
         return
     endif
     if editor == 'zed'
-        let cmd = printf('zed %s:%d:%d', AbsPath(), line("."), col("."))
+        let cmd = printf('zed %s:%d:%d', utils#abs_path(), line("."), col("."))
     elseif editor == 'vim'
-        let cmd = printf(' %s | call cursor(%d, %d)', AbsPath(), line("."), col("."))
+        let cmd = printf(' %s | call cursor(%d, %d)', utils#abs_path(), line("."), col("."))
     else
-        let cmd = printf('%s --goto %s:%d:%d', editor, AbsPath(), line("."), col("."))
+        let cmd = printf('%s --goto %s:%d:%d', editor, utils#abs_path(), line("."), col("."))
     endif
     if register == '+'
         let @+ = cmd
@@ -818,7 +596,7 @@ function! s:open_in_other()
         execute printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
     elseif !exists('g:vscode') && executable(get(g:, 'open_editor', 'code'))
         let editor = get(g:, 'open_editor', 'code')
-        silent! exec printf("!%s --goto %s:%d:%d", editor, AbsPath(), line("."), col("."))
+        silent! exec printf("!%s --goto %s:%d:%d", editor, utils#abs_path(), line("."), col("."))
     else
         echom "Cannot open current file in other editor."
     endif

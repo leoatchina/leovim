@@ -1,4 +1,4 @@
-if UNIX() && HAS_GUI() == 0 && executable('tmux') && v:version >= 800
+if utils#is_unix() && utils#has_gui() == 0 && executable('tmux') && v:version >= 800
     let g:tmux_navigator_no_mappings = 1
     PlugOpt 'vim-tmux-navigator'
     PlugOpt 'vim-tmux-clipboard'

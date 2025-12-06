@@ -12,13 +12,13 @@ PlugOpt 'vim-preview'
 if v:version >= 802 || has('nvim')
     let g:quickui_border_style = 2
     if has('nvim')
-        if HAS_GUI()
+        if utils#utils#has_gui()
             let g:quickui_color_scheme = 'gruvbox'
         else
             let g:quickui_color_scheme = 'papercol dark'
         endif
     else
-        if HAS_GUI()
+        if utils#utils#has_gui()
             let g:quickui_color_scheme = 'borland'
         else
             let g:quickui_color_scheme = 'papercol light'
@@ -35,7 +35,7 @@ if v:version >= 802 || has('nvim')
     nnoremap <Tab>o :PreviewPopupFile
     nnoremap <F13> :call quickui#preview#scroll(1)<Cr>
     nnoremap <F14> :call quickui#preview#scroll(-1)<Cr>
-    if InstalledCoc()
+    if utils#is_installed_coc()
         nmap <silent><expr><C-j> coc#float#has_scroll() ? coc#float#scroll(1) : quickui#preview#visible() > 0 ? "\<F13>" : "\%"
         nmap <silent><expr><C-k> coc#float#has_scroll() ? coc#float#scroll(0) : quickui#preview#visible() > 0 ? "\<F14>" : "\g%"
     else
@@ -106,7 +106,7 @@ function! ChooseOne(lst, ...) abort
             call add(lines, cmd)
         endif
     endfor
-    if Planned('vim-quickui')
+    if utils#is_planned('vim-quickui')
         let opts = {'title': title, 'index':g:quickui#listbox#cursor, 'w': 64}
         let idx = quickui#listbox#inputlist(lines, opts)
         if idx >= 0
@@ -130,7 +130,7 @@ endfunction
 " --------------------------------
 " funzzy finder
 " --------------------------------
-if PlannedFzf()
+if utils#is_planned_fzf()
     source $CFG_DIR/fzf.vim
     nmap m<tab> <plug>(fzf-maps-n)
     xmap m<tab> <plug>(fzf-maps-x)
@@ -146,7 +146,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
     source $CFG_DIR/leaderf.vim
 endif
-if !PlannedLeaderf() && !PlannedFzf()
+if !PlannedLeaderf() && !utils#is_planned_fzf()
     source $CFG_DIR/ctrlp.vim
     PlugOpt 'ctrlp.vim'
 endif
@@ -166,7 +166,7 @@ else
     nnoremap <M-k>f :filetype<Space>
     nnoremap <M-k><M-k> :command<Space>
 endif
-if PlannedFzf() && executable('perl')
+if utils#is_planned_fzf() && executable('perl')
     nnoremap <silent><M-h><M-h> :FzfHelptags<Cr>
 elseif PlannedLeaderf()
     nnoremap <silent><M-h><M-h> :LeaderfHelp<Cr>

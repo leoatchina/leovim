@@ -18,9 +18,9 @@ function! SetScheme(scheme, ...) abort
     let defaultscheme = get(a:, 1, 'slate')
     try
         if g:has_truecolor
-            execute('colorscheme '. scheme)
+            utils#execute('colorscheme '. scheme)
         else
-            execute('colorscheme '. defaultscheme)
+            utils#execute('colorscheme '. defaultscheme)
         endif
     catch
         colorscheme slate
@@ -42,7 +42,7 @@ elseif g:complete_engine == 'builtin'
 elseif g:complete_engine == 'cmp'
     call SetScheme('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
-    if Require('blink.lua') || Require('blink') && !executable('cargo')
+    if utils#is_require('blink.lua') || utils#is_require('blink') && !executable('cargo')
         call SetScheme('nightfox', 'hybrid')
     else
         call SetScheme('duskfox', 'hybrid')
@@ -59,6 +59,6 @@ endif
 " --------------------------
 " nvim-web-devicons
 " --------------------------
-if Installed('nvim-web-devicons')
-    lua require('nvim-web-devicons').setup({})
+if utils#is_installed('nvim-web-devicons')
+    lua utils#is_require('nvim-web-devicons').setup({})
 endif

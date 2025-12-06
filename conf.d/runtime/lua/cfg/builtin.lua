@@ -16,10 +16,8 @@ local function mode()
   return vim.fn.mode()
 end
 
--- 检查是否为Windows系统
-local function is_windows()
-  return vim.loop.os_uname().sysname:find("Windows") ~= nil or vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
-end
+-- 使用全局 is_windows 函数（从 utils.lua）
+local is_windows = _G.is_windows
 
 -- 基础目录配置
 local dict_base_dir = vim.fn.expand('$HOME/.leovim/pack/clone/opt/vim-dict/dict') .. '/'

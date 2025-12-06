@@ -6,11 +6,11 @@ inoremap !! !=
 " --------------------
 function! s:diag_or_errmsg(diagnostic)
     if a:diagnostic
-        if Planned('ale')
+        if utils#is_planned('ale')
             ALEDetail
-        elseif InstalledCoc()
+        elseif utils#is_installed_coc()
             call CocActionAsync('diagnosticInfo')
-        elseif InstalledLsp()
+        elseif utils#is_installed_lsp()
             lua vim.diagnostic.open_float()
         else
             call preview#errmsg('Please select lines to merge!') | sleep 2
@@ -43,7 +43,7 @@ tmap <expr><C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
 " open terminal
 " --------------------------
 if has('nvim')
-    command! TermPackD tabe | call termopen([&shell], {'cwd': expand('~/.leovim.d')})
+    command! TermPackD tabe | call termopen([&shell], {'cwd': utils#expand('~/.leovim.d')})
     nnoremap <silent><M-h>D :TermPackD<Cr>i
     nnoremap <silent>_ :tabnew<Cr>:terminal<Cr>i
 else
@@ -61,13 +61,13 @@ let g:floaterm_open_command = 'drop'
 let g:floaterm_wintype  = 'split'
 let g:floaterm_position = 'belowright'
 let g:floaterm_height = 0.3
-if WINDOWS()
+if utils#is_windows()
     if has('nvim')
         let g:floaterm_shell = 'pwsh.exe'
     else
         let g:floaterm_shell = 'cmd.exe'
     endif
-elseif executable('zsh') && has('nvim') && InstalledAdv()
+elseif executable('zsh') && has('nvim') && utils#is_installed_adv()
     let g:floaterm_shell = 'zsh'
 endif
 PlugOpt 'vim-floaterm'
@@ -104,7 +104,7 @@ function! s:floaterm_list() abort
     let cnt = len(bufs)
     if cnt == 0
         let no_msg = "No floaterm windows"
-        if Installed('vim-quickui')
+        if utils#is_installed('vim-quickui')
             call quickui#textbox#open([no_msg], {})
         else
             call preview#errmsg(no_msg)
@@ -123,7 +123,7 @@ function! s:floaterm_list() abort
         let wintype = getbufvar(bufnr, 'floaterm_wintype')
         let cmd     = getbufvar(bufnr, 'floaterm_cmd')
         let open_cmd = printf('call floaterm#terminal#open_existing(%s)', bufnr)
-        if Installed('vim-quickui')
+        if utils#is_installed('vim-quickui')
             let title = title . "@" . wintype . '/' .  postion . ' ' .  cmd
             let line = [title, open_cmd]
         else
@@ -135,7 +135,7 @@ function! s:floaterm_list() abort
         endif
         call add(content, line)
     endfor
-    if Installed('vim-quickui')
+    if utils#is_installed('vim-quickui')
         let opts = {'title': 'All floaterm buffers', 'w': 64}
         call quickui#listbox#open(content, opts)
     else
@@ -147,7 +147,7 @@ command! FloatermList call s:floaterm_list()
 " ---------------------------------
 " debug: load_json
 " ---------------------------------
-if PlannedFzf()
+if utils#is_planned_fzf()
     function! s:load_json(dap, ...)
         let dap = a:dap
         if a:0 && filereadable(a:1)
@@ -199,19 +199,19 @@ endif
 " -----------------
 " vimspector
 " -----------------
-if Planned('vimspector')
+if utils#is_planned('vimspector')
     let g:debug_tool = "vimspector"
     let g:vimspector_enable_auto_hover = 0
-    let g:vimspector_base_dir = Expand("~/.leovim.d/vimspector")
+    let g:vimspector_base_dir = utils#expand("~/.leovim.d/vimspector")
     " load template
-    if PlannedFzf()
+    if utils#is_planned_fzf()
         function! ReadVimspectorTemplate(template_file) abort
             call s:load_json(0, a:template_file)
         endfunction
         function! s:load_vimspector()
             let options = ['--prompt', 'VimspectorTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('vimspector',{
-                        \ 'source': WINDOWS() ? 'dir /B /S ' . $CONF_D_DIR . '\\vimspector\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/vimspector/*.json',
+                        \ 'source': utils#is_windows() ? 'dir /B /S ' . $CONF_D_DIR . '\\vimspector\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/vimspector/*.json',
                         \ 'sink': function('ReadVimspectorTemplate'),
                         \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
                         \ })
@@ -343,18 +343,18 @@ if Planned('vimspector')
     nmap <silent><F1> <Plug>VimspectorDisassemble
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
-elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
+elseif utils#is_installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
-    lua require("cfg/dap")
+    lua utils#is_require("cfg/dap")
     " load template
-    if PlannedFzf()
+    if utils#is_planned_fzf()
         function! ReadDapTemplate(template_file) abort
             call s:load_json(1, a:template_file)
         endfunction
         function! s:load_dap() abort
             let options = ['--prompt', 'DapTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('dap',{
-                        \ 'source': WINDOWS() ? 'dir /B /S ' . $CONF_D_DIR . '\\dap\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/dap/*.json',
+                        \ 'source': utils#is_windows() ? 'dir /B /S ' . $CONF_D_DIR . '\\dap\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/dap/*.json',
                         \ 'sink': function('ReadDapTemplate'),
                         \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
                         \ })
@@ -402,17 +402,17 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-d>u <cmd>lua require"dap".up()<Cr>
     nnoremap <silent><M-d>d <cmd>lua require"dap".down()<Cr>
     " auto attach
-    au FileType dap-repl lua require('dap.ext.autocompl').attach()
+    au FileType dap-repl lua utils#is_require('dap.ext.autocompl').attach()
     " --------------------------------------
     " nvim-dap-ui
     " ---------------------------------------
-    nnoremap <M-m>l :lua require("dapui").
+    nnoremap <M-m>l :lua utils#is_require("dapui").
     " watch
-    nnoremap <silent><M-m>s <cmd>lua require("dapui").float_element('scopes')<Cr>
-    nnoremap <silent><M-m>w <cmd>lua require("dapui").float_element('watches')<Cr>
-    nnoremap <silent><M-m>t <cmd>lua require("dapui").float_element('stacks')<Cr>
-    nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
-    nnoremap <silent><M-m>r <cmd>lua require("dapui").float_element('repl')<Cr>
+    nnoremap <silent><M-m>s <cmd>lua utils#is_require("dapui").float_element('scopes')<Cr>
+    nnoremap <silent><M-m>w <cmd>lua utils#is_require("dapui").float_element('watches')<Cr>
+    nnoremap <silent><M-m>t <cmd>lua utils#is_require("dapui").float_element('stacks')<Cr>
+    nnoremap <silent><M-m>c <cmd>lua utils#is_require("dapui").float_element('console')<Cr>
+    nnoremap <silent><M-m>r <cmd>lua utils#is_require("dapui").float_element('repl')<Cr>
     function! GoToDAPWindows(name) abort
         try
             let windowNr = bufwinnr(a:name)
@@ -438,17 +438,17 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     function! s:dap_or_floaterm(type)
         if a:type == "eval"
             if luaeval('require"dap".session() ~= nil')
-                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
+                lua utils#is_require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
             else
                 call s:diag_or_errmsg(1)
             endif
         elseif s:dapui_opened()
             if a:type == "console"
-                lua require("dapui").float_element('console')
+                lua utils#is_require("dapui").float_element('console')
             elseif a:type == "repl"
-                lua require("dapui").float_element('repl')
+                lua utils#is_require("dapui").float_element('repl')
             elseif a:type == "element"
-                lua require("dapui").float_element()
+                lua utils#is_require("dapui").float_element()
             else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
@@ -471,7 +471,7 @@ elseif Installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvi
     nnoremap <silent><M-=> :FloatElementOrFloatermList<Cr>
     " view variables
     nnoremap <silent>J :DapUIEval<Cr>
-elseif v:version >= 801 && !has('nvim') && Require('termdebug')
+elseif v:version >= 801 && !has('nvim') && utils#is_require('termdebug')
     let g:debug_tool = 'termdebug'
     let g:termdebug_map_K = 1
     let g:termdebug_use_prompt = 1
@@ -510,12 +510,12 @@ elseif v:version >= 801 && !has('nvim') && Require('termdebug')
 endif
 " watch Variable
 function! s:watch() range
-    if Installed('nvim-dap')
+    if utils#is_installed('nvim-dap')
         if !s:dapui_opened()
             call preview#errmsg("Please start nvim-dap session first.")
             return
         endif
-    elseif Installed('vimspector')
+    elseif utils#is_installed('vimspector')
         if !s:vimspector_opened()
             call preview#errmsg("Please start vimspector session first.")
             return
@@ -544,17 +544,17 @@ function! s:watch() range
         endif
     else
         " Handle normal mode (word under cursor)
-        let l:selected_text = expand('<cword>')
+        let l:selected_text = utils#expand('<cword>')
     endif
     " Trim whitespace
-    let l:selected_text = trim(l:selected_text)
+    let l:selected_text = utils#trim(l:selected_text)
     if !empty(l:selected_text)
         try
-            if Installed('vimspector')
+            if utils#is_installed('vimspector')
                 call vimspector#AddWatch(l:selected_text)
-            elseif Installed('nvim-dap')
+            elseif utils#is_installed('nvim-dap')
                 let cmd = "lua require'dapui'.elements.watches.add(" .  l:selected_text . ")"
-                execute(cmd)
+                utils#execute(cmd)
             endif
         catch
             call preview#errmsg("Failed to add watch for reason: " . v:exception)
@@ -617,14 +617,14 @@ nnoremap <silent><M-e>S :FloatermReplQuickuiMark<Cr>
 " ---------------------------------------
 " jupynvim
 " ---------------------------------------
-if Installed('jupynium.nvim')
+if utils#is_installed('jupynium.nvim')
     " set url
     let g:jupynium_ip = get(g:, 'jupynium_ip', 'localhost')
     let g:jupynium_port = get(g:, 'jupynium_port', 9999)
     let g:jupynium_protocal = get(g:, 'jupynium_protocal', 'http')
     let g:jupynium_url = get(g:, 'jupynium_url', printf("%s://%s:%d/nbclassic", g:jupynium_protocal, g:jupynium_ip, g:jupynium_port))
     " setup
-    lua require("jupynium").setup({ default_notebook_URL = vim.g.jupynium_url, use_default_keybindings = false })
+    lua utils#is_require("jupynium").setup({ default_notebook_URL = vim.g.jupynium_url, use_default_keybindings = false })
     " self defined function
     function! s:jupynium_run(...)
         let jupynium_urls = get(g:, 'jupynium_urls', [g:jupynium_url])

@@ -5,16 +5,16 @@ PlugAdd 'kshenoy/vim-signature'
 " ----------------------------
 " pairs && wilder
 " ----------------------------
-if PlannedLsp()
+if utils#is_planned_lsp()
     PlugAdd 'windwp/nvim-autopairs'
 else
-    if g:python_version > 3 && has('nvim') && UNIX()
+    if g:python_version > 3 && has('nvim') && utils#is_unix()
         function! UpdateRemotePlugins(...)
             let &rtp=&rtp
             UpdateRemotePlugins
         endfunction
         Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
-    elseif !has('nvim') && v:version >= 801 || has('nvim') && !WINDOWS()
+    elseif !has('nvim') && v:version >= 801 || has('nvim') && !utils#is_windows()
         PlugAdd 'gelguy/wilder.nvim'
     endif
     if v:version >= 800
@@ -34,7 +34,7 @@ endif
 " ------------------------------
 " fullscreen
 " ------------------------------
-if LINUX() && HAS_GUI() && executable('wmctrl')
+if utils#is_linux() && utils#has_gui() && executable('wmctrl')
     PlugAdd 'lambdalisue/vim-fullscreen'
     if has('nvim')
         let g:fullscreen#start_command = "call rpcnotify(0, 'Gui', 'WindowFullScreen', 1)"
@@ -50,7 +50,7 @@ if executable('git') && v:version >= 800 && g:git_version >= 1.85
     " blamer.nvim installed when without virtual text or without leaderf
     if g:has_popup_floating
         PlugAdd 'skywind3000/vim-git-diffview'
-        if UNIX() && (!Planned('leaderf') || Planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
+        if utils#is_unix() && (!utils#is_planned('leaderf') || utils#is_planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
             PlugAdd 'APZelos/blamer.nvim'
         endif
     endif
@@ -58,22 +58,22 @@ endif
 " ------------------------------
 " undo
 " ------------------------------
-if has('nvim') && UNIX()
+if has('nvim') && utils#is_unix()
     PlugAdd 'kevinhwang91/nvim-fundo'
 endif
 PlugOpt 'undotree'
 " ------------------------------
 " translate
 " ------------------------------
-if Require('translate') && v:version >= 800 && g:python_version >= 3.06
+if utils#is_require('translate') && v:version >= 800 && g:python_version >= 3.06
     PlugAdd 'voldikss/vim-translator'
 endif
 " ------------------------------
 " zfvim
 " ------------------------------
-if (Require('wubi') || Require('pinyin')) && g:has_terminal && UNIX()
+if (utils#is_require('wubi') || utils#is_require('pinyin')) && g:has_terminal && utils#is_unix()
     PlugAdd 'ZSaberLv0/ZFVimIM'
-    if Require('wubi')
+    if utils#is_require('wubi')
         PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'
         let g:input_method = 'zfvim_wubi'
     else

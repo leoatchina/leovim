@@ -1,5 +1,5 @@
 let s:python_lint_ignore = "E101,E302,E251,E231,E226,E221,E127,E126,E123,E402,E501,W291,F405,F403"
-if Installed('coc.nvim')
+if utils#is_installed('coc.nvim')
     " highlight group
     let g:diagnostic_virtualtext_underline = v:false
     highlight def link CocErrorHighlight   NONE
@@ -80,7 +80,7 @@ if Installed('coc.nvim')
         nnoremap <silent><leader>o :CocDiagnosticToggleBuffer<Cr>
     endif
 endif
-if Planned('ale')
+if utils#is_planned('ale')
     " basic settings
     let g:ale_disable_lsp = 'auto'
     let g:ale_set_balloons = 0
@@ -89,7 +89,7 @@ if Planned('ale')
     let g:ale_use_neovim_diagnostics_api = 0
     let g:ale_warn_about_trailing_blank_lines = 0
     " show message type
-    let g:ale_virtualtext_prefix = ' „Äê%type%„Äë: '
+    let g:ale_virtualtext_prefix = ' „Ä?type%„Ä? '
     let g:ale_hover_cursor = 0
     if g:has_popup_floating
         let g:ale_virtualtext_cursor = 1
@@ -131,7 +131,7 @@ if Planned('ale')
     " map
     command! ALECommands call FzfCallCommands('ALECommands', 'ALE')
     command! -bang -nargs=* ALEDiag call s:ale_diag()
-    if !Installed('coc.nvim')
+    if !utils#is_installed('coc.nvim')
         nnoremap <silent><leader>d :ALELint<Cr>
         nnoremap <silent><leader>o :ALEToggleBuffer<Cr>
         nnoremap <silent><leader>O :ALEToggle<Cr>

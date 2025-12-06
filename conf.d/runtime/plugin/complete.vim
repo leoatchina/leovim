@@ -1,16 +1,16 @@
-if Installed('mason.nvim')
-    lua require("cfg/mason")
+if utils#is_installed('mason.nvim')
+    lua utils#is_require("cfg/mason")
 endif
 " ------------------------------
 " AI complete
 " ------------------------------
 let g:max_tokens = get(g:, 'max_tokens', 8192)
-if Installed('minuet-ai.nvim')
-    lua require("cfg/api")
-    lua require('cfg/minuet')
+if utils#is_installed('minuet-ai.nvim')
+    lua utils#is_require("cfg/api")
+    lua utils#is_require('cfg/minuet')
     let g:ai_complete_engine = 'minuet'
     let s:api_required = 1
-elseif Installed('windsurf.vim')
+elseif utils#is_installed('windsurf.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
     imap <script><silent><nowait><expr> <M-i> codeium#Accept()
@@ -21,7 +21,7 @@ elseif Installed('windsurf.vim')
     imap <M-;> <Plug>(codeium-next)
     imap <M-,> <Plug>(codeium-previous)
     let g:ai_complete_engine = 'windsurf'
-elseif Installed('copilot.vim')
+elseif utils#is_installed('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
     let g:copilot_no_tab_map = v:true
     imap <silent><nowait><script><expr><M-i> copilot#Accept("\<CR>")
@@ -33,11 +33,11 @@ elseif Installed('copilot.vim')
     imap <silent><nowait><M-:> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 endif
-if Installed('codecompanion.nvim', 'codecompanion-history.nvim', 'mcphub.nvim')
+if utils#is_installed('codecompanion.nvim', 'codecompanion-history.nvim', 'mcphub.nvim')
     if !get(s:, 'api_required', 0)
-        lua require("cfg/api")
+        lua utils#is_require("cfg/api")
     endif
-    lua require("cfg/codecompanion")
+    lua utils#is_require("cfg/codecompanion")
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>
@@ -46,27 +46,27 @@ endif
 " -----------------------------
 " lsp && vista_default_executive
 " -----------------------------
-if Installed('neoconf.nvim')
-    lua require('cfg/neoconf')
+if utils#is_installed('neoconf.nvim')
+    lua utils#is_require('cfg/neoconf')
 endif
-if InstalledLsp()
+if utils#is_installed_lsp()
     let g:vista_default_executive = 'nvim_lsp'
     source $CFG_DIR/lsp.vim
-elseif InstalledCoc()
+elseif utils#is_installed_coc()
     let g:vista_default_executive = 'coc'
-elseif Planned('vista.vim')
+elseif utils#is_planned('vista.vim')
     let g:vista_default_executive = 'ctags'
 endif
 " ------------------------------
 " normal complete_engine
 " ------------------------------
-if InstalledLsp()
-    if InstalledBlink()
-        lua require("cfg/blink")
+if utils#is_installed_lsp()
+    if utils#is_installed_blink()
+        lua utils#is_require("cfg/blink")
     else
-        lua require("cfg/cmp")
+        lua utils#is_require("cfg/cmp")
     endif
-elseif InstalledCoc()
+elseif utils#is_installed_coc()
     source $CFG_DIR/coc.vim
 elseif g:complete_engine == 'mcm'
     PlugOpt 'vim-dict'
@@ -74,7 +74,7 @@ elseif g:complete_engine == 'mcm'
 elseif g:complete_engine != ''
     if has('nvim-0.11')
         let g:complete_engine = 'builtin'
-        lua require("cfg/builtin")
+        lua utils#is_require("cfg/builtin")
     elseif has('patch-9.1.1590')
         let g:complete_engine = 'builtin'
         source $CFG_DIR/builtin.vim
@@ -87,22 +87,22 @@ endif
 " ------------------------------
 " vsnip
 " ------------------------------
-if Planned('vim-vsnip')
+if utils#is_planned('vim-vsnip')
     fun! CtrlFSkipBracket()
         call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
         return ''
     endfunction
-    let g:vsnip_snippet_dir = expand("~/.leovim/conf.d/snippets")
+    let g:vsnip_snippet_dir = utils#expand("~/.leovim/conf.d/snippets")
     nnoremap <M-h>n :VsnipOpen<Cr>
     if PlannedLeaderf()
         nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
         nnoremap <silent><M-h>s :Leaderf file --no-sort ~/.leovim/conf.d/snippets<Cr>
-    elseif PlannedFzf()
+    elseif utils#is_planned_fzf()
         nnoremap <silent><M-h>f :FzfFiles ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
         nnoremap <silent><M-h>s :FzfFiles ~/.leovim/conf.d/snippets<Cr>
     endif
-    if InstalledCoc()
-        call coc#config("snippets.userSnippetsDirectory", Expand("~/.leovim/conf.d/snippets"))
+    if utils#is_installed_coc()
+        call coc#config("snippets.userSnippetsDirectory", utils#expand("~/.leovim/conf.d/snippets"))
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
         smap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'
@@ -120,16 +120,16 @@ endif
 " -----------------------
 " fzf snippet
 " -----------------------
-if PlannedFzf()
+if utils#is_planned_fzf()
     imap <c-x><c-l> <plug>(fzf-complete-line)
-    if UNIX()
+    if utils#is_unix()
         imap <c-x><c-f> <plug>(fzf-complete-path)
     endif
 endif
 " ------------------------------
 " wilder.nvim
 " ------------------------------
-if Installed('wilder.nvim')
+if utils#is_installed('wilder.nvim')
     " Default keys
     call wilder#setup({
                 \ 'modes': [':', '/', '?'],
@@ -150,7 +150,7 @@ if Installed('wilder.nvim')
     call wilder#set_option('renderer', wilder#popupmenu_renderer({
                 \ 'highlighter': wilder#basic_highlighter(),
                 \ }))
-elseif !InstalledAdv()
+elseif !utils#is_installed_adv()
     cnoremap <expr><C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
     cnoremap <expr><C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
     cnoremap <expr><C-n> pumvisible() ? "\<Down>" : "\<C-n>"
@@ -159,13 +159,13 @@ endif
 " ------------------------------
 " pairs
 " ------------------------------
-if Planned('pear-tree')
+if utils#is_planned('pear-tree')
     let g:pear_tree_map_special_keys = 0
 endif
 " ------------------------------
 " web
 " ------------------------------
-if Planned('emmet-vim')
+if utils#is_planned('emmet-vim')
     for c in ['n', 'x', 'i']
         let cmd = printf('au FileType %s %smap <M-y> <C-y>,', join(g:web_filetypes, ','), c)
         exec cmd
@@ -212,10 +212,10 @@ endif
 " ------------------------------
 " vim-go
 " ------------------------------
-if Planned('vim-go')
+if utils#is_planned('vim-go')
     let g:go_doc_balloon = 0
     let g:go_def_mapping_enabled = 0
-    if InstalledAdv()
+    if utils#is_installed_adv()
         let g:go_doc_keywordprg_enabled = 0
         let g:go_code_completion_enabled = 0
     else

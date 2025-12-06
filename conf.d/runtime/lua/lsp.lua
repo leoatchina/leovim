@@ -22,10 +22,10 @@ local config = {
   severity_sort = true,
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = "ÔÅó",
-      [vim.diagnostic.severity.WARN] = "ÔÅ±",
-      [vim.diagnostic.severity.HINT] = "ÔÅö",
-      [vim.diagnostic.severity.INFO] = "ÔÅô",
+      [vim.diagnostic.severity.ERROR] = "ÔÅ?,
+      [vim.diagnostic.severity.WARN] = "ÔÅ?,
+      [vim.diagnostic.severity.HINT] = "ÔÅ?,
+      [vim.diagnostic.severity.INFO] = "ÔÅ?,
     },
   },
   float = {
@@ -75,28 +75,28 @@ vim.lsp.config("*", {
 -- symbol icons
 -----------------------
 local icons = {
-  Class = "Ó≠õ ",
-  Color = "Ó≠ú ",
-  Constant = "Ó≠ù ",
-  Constructor = "Ó™ã ",
-  Enum = "Ó™ï ",
-  EnumMember = "Ó≠û ",
-  Event = "Ó™Ü ",
-  Field = "Ó≠ü ",
-  File = "Ó©ª ",
-  Folder = "Ó™É ",
+  Class = "Ó≠?",
+  Color = "Ó≠?",
+  Constant = "Ó≠?",
+  Constructor = "Ó™?",
+  Enum = "Ó™?",
+  EnumMember = "Ó≠?",
+  Event = "Ó™?",
+  Field = "Ó≠?",
+  File = "Ó©?",
+  Folder = "Ó™?",
   Function = "Û∞äï ",
-  Interface = "Ó≠° ",
-  Keyword = "Ó≠¢ ",
+  Interface = "Ó≠?",
+  Keyword = "Ó≠?",
   Method = "∆í ",
   Module = "Û∞èó ",
-  Property = "Ó≠• ",
-  Snippet = "Ó≠¶ ",
-  Struct = "Ó™ë ",
-  Text = "Ó≠© ",
-  Unit = "Ôëµ ",
-  Value = "Ó™ì ",
-  Variable = "Ó™à ",
+  Property = "Ó≠?",
+  Snippet = "Ó≠?",
+  Struct = "Ó™?",
+  Text = "Ó≠?",
+  Unit = "Ôë?",
+  Value = "Ó™?",
+  Variable = "Ó™?",
 }
 local completion_kinds = vim.lsp.protocol.CompletionItemKind
 for i, kind in ipairs(completion_kinds) do
@@ -116,8 +116,8 @@ vim.api.nvim_set_hl(0, 'SymbolUsageImpl', { fg = hl('@keyword').fg, bg = hl('Cur
 local function text_format(symbol)
   local res = {}
   if symbol.references then
-    local round_start = { 'ÓÇ∂', 'SymbolUsageRounding' }
-    local round_end = { 'ÓÇ¥', 'SymbolUsageRounding' }
+    local round_start = { 'ÓÇ?, 'SymbolUsageRounding' }
+    local round_end = { 'ÓÇ?, 'SymbolUsageRounding' }
     local num = symbol.references == 0 and 'no' or symbol.references
     local usage = symbol.references <= 1 and 'usage' or 'usages'
     table.insert(res, round_start)
@@ -127,7 +127,7 @@ local function text_format(symbol)
   end
   return res
 end
-require('symbol-usage').setup({
+is_require('symbol-usage').setup({
   text_format = text_format,
   references = { enabled = true, include_declaration = false },
   implementation = { enabled = true },
@@ -140,9 +140,9 @@ require('symbol-usage').setup({
 -------------------------
 -- mason lspconfig
 -------------------------
-require("mason-lspconfig").setup({
+is_require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed and vim.tbl_filter(function(server)
-    return server ~= "debugpy" -- ËøáÊª§Êéâ debugpyÔºåÂÆÉÊòØ DAP ËÄå‰∏çÊòØ LSP
+    return server ~= "debugpy" -- ËøáÊª§Êé?debugpyÔºåÂÆÉÊò?DAP ËÄå‰∏çÊò?LSP
   end, vim.g.ensure_installed) or {},
   automatic_enable = true
 })
@@ -286,17 +286,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
     map(nx, "<leader>e", [[<Cmd>lua vim.diagnostic.setloclist({open=true, severity=vim.diagnostic.severity.ERROR})<Cr>]], opts_silent)
     -- diagnostic
-    map(n, 'ss', require('dropbar.api').pick, opts_silent)
-    map(n, ',s', require('dropbar.api').goto_context_start, opts_silent)
-    map(n, ';s', require('dropbar.api').select_next_context, opts_silent)
+    map(n, 'ss', is_require('dropbar.api').pick, opts_silent)
+    map(n, ',s', is_require('dropbar.api').goto_context_start, opts_silent)
+    map(n, ';s', is_require('dropbar.api').select_next_context, opts_silent)
     -- select range
     local ok
     ok, _ = pcall(function()
       vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
     end, bufnr)
     if not ok then
-      map(n, "<M-s>", require('lsp-selection-range').trigger, opts_silent)
-      map(x, "<M-s>", require('lsp-selection-range').expand, opts_silent)
+      map(n, "<M-s>", is_require('lsp-selection-range').trigger, opts_silent)
+      map(x, "<M-s>", is_require('lsp-selection-range').expand, opts_silent)
     end
     -- inlay_hint
     if client.server_capabilities.inlayHintProvider then
@@ -316,14 +316,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end
       end
       M.codelens_toggle()
-      map(nx, "<leader>C", require("lsp").codelens_toggle, opts_echo)
+      map(nx, "<leader>C", is_require("lsp").codelens_toggle, opts_echo)
       map(nx, "<M-a>", vim.lsp.codelens.run, opts_echo)
     else
       map(nx, "<leader>C", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
       map(nx, "<M-a>", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
     end
     -- symbol-usage
-    map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
+    map(nx, "<leader>S", is_require('symbol-usage').toggle, opts_echo)
     ---------------------------
     -- semantic token highlight
     ---------------------------
@@ -418,7 +418,7 @@ end, {
 vim.api.nvim_create_autocmd('FileType', {
   pattern = {'python'},
   callback = function()
-    map(nx, "<leader>A", require("lspimport").import, opts_silent)
+    map(nx, "<leader>A", is_require("lspimport").import, opts_silent)
     local ok, venv = pcall(require, "rj.extras.venv")
     if ok then
       venv.setup()
@@ -429,23 +429,23 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = {"java"},
   callback = function()
     map(nx, "<leader>A", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts_silent)
-    map(n, "sev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
-    map(n, "sec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
+    map(n, "sev", "<Cmd>lua is_require('jdtls').extract_variable()<CR>", opts_silent)
+    map(n, "sec", "<Cmd>lua is_require('jdtls').extract_constant()<CR>", opts_silent)
     map(n, "stc", "<Cmd>lua require'jdtls'.test_class()<CR>", opts_silent)
     map(n, "stm", "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", opts_silent)
     -- Visual Ê®°Âºè‰∏ãÁöÑÊò†Â∞Ñ
-    map(x, "sev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
-    map(x, "sec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
-    map(x, "sem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
+    map(x, "sev", "<Esc><Cmd>lua is_require('jdtls').extract_variable(true)<CR>", opts_silent)
+    map(x, "sec", "<Esc><Cmd>lua is_require('jdtls').extract_constant(true)<CR>", opts_silent)
+    map(x, "sem", "<Esc><Cmd>lua is_require('jdtls').extract_method(true)<CR>", opts_silent)
   end,
 })
 ---------------------------
 -- other related plugins
 ---------------------------
-require("nvim-autopairs").setup({
+is_require("nvim-autopairs").setup({
   disable_filetype = {}
 })
-require('call_graph').setup({
+is_require('call_graph').setup({
   log_level = "info",
   reuse_buf = true,
   auto_toggle_hl = true,

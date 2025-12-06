@@ -22,8 +22,8 @@ PlugOpt 'vim-matchup'
 " --------------------------
 if get(g:, 'ctags_type', '') != ''
     let lst = g:root_patterns + ['lib', '.cache', 'package-lock.json']
-    if WINDOWS()
-        let s:fzf_tags_command = Expand("~/.leovim.windows/tools/ctags.exe")
+    if utils#is_windows()
+        let s:fzf_tags_command = utils#expand("~/.leovim.windows/tools/ctags.exe")
     else
         let s:fzf_tags_command = 'ctags'
     endif
@@ -43,16 +43,16 @@ endif
 " f<Cr> to useing native functions show
 PlugOpt 'vim-funky'
 command! QfFunky call funky#qf#show()
-if Installed('fzf', 'fzf.vim')
+if utils#is_installed('fzf', 'fzf.vim')
     command! FzfFunky call funky#fzf#show()
     nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
 else
     nnoremap <silent>f<Cr> :w!<Cr>:QfFunky<Cr>
 endif
 " t<Cr> for tags
-if g:complete_engine == 'coc' && UNIX() && g:ctags_type != ''
+if g:complete_engine == 'coc' && utils#is_unix() && g:ctags_type != ''
     nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
-elseif Installed('vista.vim') && g:ctags_type =~ 'Universal'
+elseif utils#is_installed('vista.vim') && g:ctags_type =~ 'Universal'
     nnoremap <silent>t<Cr> :Vista finder ctags<Cr>
 elseif g:symbol_tool =~ 'leaderftags'
     nnoremap <silent>t<Cr> :LeaderfBufTag<Cr>
@@ -65,13 +65,13 @@ endif
 " vim-gutentags
 " -------------------------------
 set tags=./tags;,tags,./.tags;,.tags
-let g:Lf_CacheDirectory = Expand("~/.vim", 1)
+let g:Lf_CacheDirectory = utils#expand("~/.vim", 1)
 let g:gutentags_cache_dir = g:Lf_CacheDirectory . '/LeaderF/gtags'
 if !isdirectory(g:gutentags_cache_dir)
     silent! call mkdir(g:gutentags_cache_dir, 'p')
 endif
 let g:gutentags_modules = []
-if Planned('vim-gutentags')
+if utils#is_planned('vim-gutentags')
     " exclude files
     let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", "node_modules", "*.vim/bundle/*", ".ccls_cache", "__pycache__"] + g:root_patterns
     " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
@@ -83,7 +83,7 @@ if Planned('vim-gutentags')
     " modules
     if g:ctags_type != ''
         let g:gutentags_modules += ['ctags']
-        " 配置 ctags 的参数
+        " 配置 ctags 的参�?
         let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=q', '--c-kinds=+px', '--c++-kinds=+pxl']
         if g:ctags_type =~ "Universal"
             let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
@@ -96,7 +96,7 @@ if Planned('vim-gutentags')
             let line = line('.')
             for [key, path] in items(b:gutentags_files)
                 if filereadable(path)
-                    if WINDOWS()
+                    if utils#is_windows()
                         let cmd = printf('!del %s /a /q' % path)
                     else
                         let cmd = printf('!rm -f %s' % path)
@@ -122,7 +122,7 @@ endif
 " --------------------------
 " gtags
 " --------------------------
-if Planned('gutentags_plus')
+if utils#is_planned('gutentags_plus')
     if has('+cscope') && executable('gtags-cscope')
         set cscopeprg=gtags-cscope
     elseif has('+cscope')
@@ -139,7 +139,7 @@ if Planned('gutentags_plus')
     nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><Cr>
     nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><Cr>
     nnoremap <silent><leader>gz :GscopeFind z <C-R><C-W><Cr>
-    if InstalledAdv()
+    if utils#is_installed_adv()
         nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><Cr>
         nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><Cr>
     else
@@ -147,13 +147,13 @@ if Planned('gutentags_plus')
         nnoremap <silent>gh :GscopeFind c <C-R><C-W><Cr>
     endif
     " file
-    nnoremap <silent><leader>gf :GscopeFind f <C-R>=expand("<cfile>")<Cr><Cr>
-    nnoremap <silent><leader>gi :GscopeFind i <C-R>=expand("<cfile>")<Cr><Cr>
+    nnoremap <silent><leader>gf :GscopeFind f <C-R>=utils#expand("<cfile>")<Cr><Cr>
+    nnoremap <silent><leader>gi :GscopeFind i <C-R>=utils#expand("<cfile>")<Cr><Cr>
     " kill
     nnoremap <silent><leader>gk :GscopeKill<Cr>
     " leaderfgtags
-    if PlannedLeaderf() && UNIX()
-        let g:Lf_Gtags = Expand(exepath('gtags'))
+    if PlannedLeaderf() && utils#is_unix()
+        let g:Lf_Gtags = utils#expand(exepath('gtags'))
         let g:Lf_Gtagsconf = $GTAGSCONF
         let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
         let g:Lf_GtagsGutentags = 1
@@ -192,7 +192,7 @@ function! s:settagstack(winnr, tagname, pos)
 endfunction
 function! s:find_with_ctags(...)
     if a:0 == 0
-        let tagname = expand('<cword>')
+        let tagname = utils#expand('<cword>')
         let action_pos = 'list'
     else
         let tagname = a:1
@@ -229,7 +229,7 @@ endfunction
 " use lsp or tag to find
 " --------------------------
 function! s:lsp_tag_search(method, ...) abort
-    let tagname = expand('<cword>')
+    let tagname = utils#expand('<cword>')
     if empty(tagname)
         call preview#errmsg("No symbol under cursor.")
         return
@@ -286,7 +286,7 @@ function! s:lsp_tag_search(method, ...) abort
     " --------------------------
     " coc
     " --------------------------
-    if Installed('coc.nvim') && lsp
+    if utils#is_installed('coc.nvim') && lsp
         let commands_dict = {
                     \ 'definition' : 'jumpDefinition',
                     \ 'declaration' : 'jumpDeclaration',
@@ -316,9 +316,9 @@ function! s:lsp_tag_search(method, ...) abort
     " --------------------------
     " lsp
     " --------------------------
-    elseif InstalledLsp() && lsp
-        let cmd = printf('lua require("lsp").LspAction("%s", "%s")', method, open_action)
-        call execute(cmd)
+    elseif utils#is_installed_lsp() && lsp
+        let cmd = printf('lua utils#is_require("lsp").LspAction("%s", "%s")', method, open_action)
+        call utils#execute(cmd)
         let symbol_found = get(g:, 'lsp_found', 0)
         if symbol_found
             call s:settagstack(winnr, tagname, pos)
@@ -363,7 +363,7 @@ nnoremap <silent><C-w><C-g> :call <SID>lsp_tag_search("definition", "tabe")<Cr>
 nnoremap <silent><C-w><C-]> :call <SID>lsp_tag_search("definition", "split")<Cr>
 " references
 nnoremap <silent><M-/> :call <SID>lsp_tag_search("references", "list")<Cr>
-if InstalledAdv()
+if utils#is_installed_adv()
     " declaration
     nnoremap <silent><M-C> :call <SID>lsp_tag_search("declaration", "list")<Cr>
     " implementation

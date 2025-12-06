@@ -1,5 +1,5 @@
-if Installed('nvim-treesitter', 'hlargs.nvim')
-    if WINDOWS()
+if utils#is_installed('nvim-treesitter', 'hlargs.nvim')
+    if utils#is_windows()
         function! s:cleanup_ts() abort
             let dir = $HOME . '\.leovim.d\pack\add\opt\nvim-treesitter'
             exec printf('!del %s\parser\*.* %s\parser-info\*.* /a /f /q', dir, dir)
@@ -11,7 +11,7 @@ if Installed('nvim-treesitter', 'hlargs.nvim')
         endfunction
     endif
     command! TSCleanup call s:cleanup_ts()
-    lua require("treesitter")
+    lua utils#is_require("treesitter")
 else
     nmap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
     xmap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
@@ -20,11 +20,11 @@ else
     nmap <silent>{{ [m
     nmap <silent>}] ]M
     nmap <silent>{[ [M
-    if InstalledCoc()
+    if utils#is_installed_coc()
         nmap <M-s> <Plug>(coc-range-select)
         xmap <M-s> <Plug>(coc-range-select)
         omap <M-s> <Plug>(coc-range-select)
-    elseif Installed('wildfire.vim')
+    elseif utils#is_installed('wildfire.vim')
         let g:wildfire_fuel_map = '<M-s>'
         let g:wildfire_water_map = '<M-S>'
         let g:wildfire_objects = get(g:, "wildfire_objects", split("iw i' i\" i] i) iL ii i}"))

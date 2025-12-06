@@ -1,9 +1,9 @@
 setlocal commentstring=//\ %s
-if Installed('rust.vim')
+if utils#is_installed('rust.vim')
     command! RustCommands call FzfCallCommands('RustCommands', 'RustLsp', 'Rust')
     nnoremap <buffer><silent><M-M> :RustCommands<Cr>
 endif
-if InstalledCoc()
+if utils#is_installed_coc()
     nnoremap <buffer>q<Cr> :CocCommand rust-analyzer.
 endif
 inoremap <buffer>!! !=

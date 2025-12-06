@@ -1,9 +1,9 @@
 ---------------------
 -- dap
 ---------------------
-local vscode = require("dap.ext.vscode")
-local dapui  = require("dapui")
-local dap    = require("dap")
+local vscode = is_require("dap.ext.vscode")
+local dapui  = is_require("dapui")
+local dap    = is_require("dap")
 local keymap = vim.keymap
 local api    = vim.api
 local fn     = vim.fn
@@ -13,16 +13,16 @@ fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl
 -------------------------------------
 -- mason
 -------------------------------------
-require("mason-nvim-dap").setup({
+is_require("mason-nvim-dap").setup({
   ensure_installed = { "bash" },
   handlers = {
     function(config)
-      require('mason-nvim-dap').default_setup(config)
+      is_require('mason-nvim-dap').default_setup(config)
     end
   }
 })
 ------------------------------------------------------------
--- 配置调试适配器
+-- 配置调试适配�?
 ------------------------------------------------------------
 local mason_dir = fn.expand("~/.leovim.d/mason")
 -- sh
@@ -71,7 +71,7 @@ local function load_json(dap_json)
   local type_to_filetypes = vscode.type_to_filetypes
   local configurations = vscode.getconfigs(dap_json)
   assert(configurations, "launch.json must have a 'configurations' key")
-  -- 使用表来跟踪已初始化的文件类型
+  -- 使用表来跟踪已初始化的文件类�?
   local dap_config_inited = {}
   for _, config in ipairs(configurations) do
     assert(config.name, "Configuration in launch.json must have a 'name' key")
@@ -168,7 +168,7 @@ end
 ---------------------------------
 ---@param dir "next"|"prev"
 local function goto_breakpoint(dir)
-	local breakpoints = require("dap.breakpoints").get()
+	local breakpoints = is_require("dap.breakpoints").get()
 	if #breakpoints == 0 then
 		vim.notify("No breakpoints set", vim.log.levels.WARN)
 		return
@@ -242,7 +242,7 @@ local function dapui_toggle(open)
   else
     open = result
   end
-  local windows = require("dapui.windows")
+  local windows = is_require("dapui.windows")
   -- width > height
   if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
     if windows.layouts[1]:is_open() or open then
@@ -271,7 +271,7 @@ keymap.set({"n", "x"}, "<M-m><M-m>",
 )
 -- 打开 dapui
 function _G.DapUIOpen()
-  local windows = require("dapui.windows")
+  local windows = is_require("dapui.windows")
   -- 根据屏幕宽高比选择合适的布局
   if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
     dapui.open(2)

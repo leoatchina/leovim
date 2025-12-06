@@ -34,7 +34,7 @@ nnoremap <M-j><M-r> :ZFBackupRemoveDir<Cr>
 function! s:zfbackup_cleanup() abort
     let confirm = ChooseOne(['yes', 'no'], "Cleanup all ZFBackup files?")
     if confirm == 'yes'
-        if WINDOWS()
+        if utils#is_windows()
             exec printf('!del %s\*.* /a /f /q', ZFBackup_backupDir())
         else
             exec printf('!rm -rf %s/*.*', ZFBackup_backupDir())
@@ -54,7 +54,7 @@ PlugOpt 'ZFVimBackup'
 " --------------------
 " ZFVimIM
 " --------------------
-if !Installed('ZFVimIM')
+if !utils#is_installed('ZFVimIM')
     finish
 endif
 let g:ZFVimIM_cachePath=$HOME.'/.vim/ZFVimIM'
@@ -81,13 +81,13 @@ function! s:show_input()
     if empty(get(g:, 'ZFVimIM_symbolMap', {}))
         let punctuation = '[Eng] punctuation'
     else
-        let punctuation = '„Äê‰∏≠Êñá„ÄëÊ†áÁÇπ'
+        let punctuation = '„Äê‰∏≠Êñá„ÄëÊ†áÁÇ?
     endif
     let msg = printf('%s with %s', ime_name, punctuation)
     call preview#cmdmsg(msg, 1)
 endfunction
 function! ZFVimIMELoop(...)
-    if Installed('ZFVimIM_wubi_base') && a:0 && a:1
+    if utils#is_installed('ZFVimIM_wubi_base') && a:0 && a:1
         if ZFVimIME_IMEName() == 'wubi'
             call ZFVimIME_keymap_next_n()
         elseif ZFVimIME_IMEName() == 'pinyin'
@@ -117,25 +117,25 @@ function! ZFVimPunctuation()
     if !exists('g:ZFVimIM_symbolMap') || empty(g:ZFVimIM_symbolMap)
         let g:ZFVimIM_symbolMap = {
                     \  '`' : ['¬∑'],
-                    \  '!' : ['ÔºÅ'],
-                    \  '$' : ['Ôø•'],
-                    \  '^' : ['‚Ä¶‚Ä¶'],
-                    \  '_' : ['‚Äî‚Äî'],
-                    \  '(' : ['Ôºà'],
-                    \  ')' : ['Ôºâ'],
-                    \  '[' : ['„Äê'],
-                    \  ']' : ['„Äë'],
-                    \  '<' : ['„Ää'],
-                    \  '>' : ['„Äã'],
-                    \  '\' : ['„ÄÅ'],
-                    \  '/' : ['„ÄÅ'],
-                    \  ';' : ['Ôºõ'],
-                    \  ':' : ['Ôºö'],
-                    \  ',' : ['Ôºå'],
-                    \  '.' : ['„ÄÇ'],
-                    \  '?' : ['Ôºü'],
-                    \  "'" : ['‚Äò', '‚Äô'],
-                    \  '"' : ['‚Äú', '‚Äù'],
+                    \  '!' : ['Ôº?],
+                    \  '$' : ['Ôø?],
+                    \  '^' : ['‚Ä¶‚Ä?],
+                    \  '_' : ['‚Äî‚Ä?],
+                    \  '(' : ['Ôº?],
+                    \  ')' : ['Ôº?],
+                    \  '[' : ['„Ä?],
+                    \  ']' : ['„Ä?],
+                    \  '<' : ['„Ä?],
+                    \  '>' : ['„Ä?],
+                    \  '\' : ['„Ä?],
+                    \  '/' : ['„Ä?],
+                    \  ';' : ['Ôº?],
+                    \  ':' : ['Ôº?],
+                    \  ',' : ['Ôº?],
+                    \  '.' : ['„Ä?],
+                    \  '?' : ['Ôº?],
+                    \  "'" : ['‚Ä?, '‚Ä?],
+                    \  '"' : ['‚Ä?, '‚Ä?],
                     \  ' ' : [''],
                     \  '-' : [''],
                     \  '0' : [''],
@@ -161,7 +161,7 @@ inoremap <silent>,; <C-o>:call ZFVimPunctuation()<Cr>
 " ----------------------------
 " dbinit
 " ----------------------------
-if Require('wubi')
+if utils#is_require('wubi')
     function! s:myLocalDb()
         let wubi = ZFVimIM_dbInit(
                     \ {

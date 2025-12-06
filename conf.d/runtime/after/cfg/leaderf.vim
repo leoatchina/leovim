@@ -7,7 +7,7 @@ let g:Lf_QuickSelect  = 0
 let g:Lf_PythonVersion = get(g:, 'Lf_PythonVersion', float2nr(g:python_version))
 let g:Lf_WorkingDirectoryMode = 'AF'
 " icons
-if Installed('nvim-web-devicons') || Installed('vim-devicons')
+if utils#is_installed('nvim-web-devicons') || utils#is_installed('vim-devicons')
     let g:Lf_ShowDevIcons = 1
 else
     let g:Lf_ShowDevIcons = 0
@@ -18,7 +18,7 @@ if g:has_popup_floating
     let g:Lf_WindowPosition = 'popup'
     let g:Lf_PopupColorscheme = 'default'
     let g:Lf_PopupShowBorder = 1
-    let g:Lf_PopupBorders = ["‚îÄ","‚îÇ","‚îÄ","‚îÇ","‚îå","‚îê","‚îò","‚îî"]
+    let g:Lf_PopupBorders = ["‚îÄ","‚î?,"‚îÄ","‚î?,"‚î?,"‚î?,"‚î?,"‚î?]
     let g:Lf_PopupHeight    = 0.7
     let g:Lf_PreviewInPopup = 1
     function s:Lf_Preview_Position()

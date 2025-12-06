@@ -1,5 +1,5 @@
 local registries
-if Installed('nvim-java') then
+if is_installed('nvim-java') then
   registries = {
     "github:nvim-java/mason-registry",
     "github:mason-org/mason-registry"
@@ -9,14 +9,14 @@ else
     "github:mason-org/mason-registry"
   }
 end
-require("mason").setup({
+is_require("mason").setup({
   registries = registries,
   install_root_dir = vim.fn.expand("~/.leovim.d/mason/" .. vim.g.complete_engine),
   ui = {
     icons = {
-      package_installed = "âœ“",
-      package_pending = "âžœ",
-      package_uninstalled = "âœ—",
+      package_installed = "âœ?,
+      package_pending = "âž?,
+      package_uninstalled = "âœ?,
     },
   },
 })

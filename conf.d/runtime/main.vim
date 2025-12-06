@@ -52,30 +52,9 @@ nnoremap = :<C-r>=
 " ------------------------------
 " file functions
 " ------------------------------
+" GetRootDir moved to utils.vim
 function! GetRootDir(...)
-    let init_dir = AbsDir()
-    let curr_dir = init_dir
-    if a:0
-        let l:root = a:000
-    else
-        let l:root = g:root_patterns + g:root_files
-    endif
-    while 1
-        if WINDOWS() && curr_dir[-2:-1] == ':/' || UNIX() && curr_dir ==# '/'
-            return init_dir
-        endif
-        for each in l:root
-            let chk_path = curr_dir . '/' . each
-            if isdirectory(chk_path) || filereadable(chk_path)
-                if a:0 && a:1 > 0
-                    return substitute(curr_dir, '/', '\', 'g')
-                else
-                    return curr_dir
-                endif
-            endif
-        endfor
-        let curr_dir = fnamemodify(curr_dir, ":h")
-    endwhile
+    return call('utils#get_root_dir', a:000)
 endfunction
 nnoremap <M-k>r :echo GetRootDir()<Cr>
 " --------------------------
@@ -122,15 +101,15 @@ let g:python_prog = get(g:, 'python_prog', s:python_prog())
 if has('nvim')
     let g:python3_host_prog = get(g:, 'python3_host_prog', g:python_prog)
 endif
-if WIN32UNIX()
+if utils#is_win32unix()
     let g:python_version = 0
 else
     " NOTE, 不能使用pyxeval/py3eval/pyeval, 否则neovim 没有pip安装相关包时，执行会出错.
     try
-        let py_version = Execute('py3 print(sys.version)')
+        let py_version = utils#execute('py3 print(sys.version)')
     catch
         try
-            let py_version = Execute('py print(sys.version)')
+            let py_version = utils#execute('py print(sys.version)')
         catch
             let py_version = ""
         endtry
@@ -139,7 +118,7 @@ else
     if py_version_match == ''
         let g:python_version = 0
     else
-        let g:python_version = StringToFloat(py_version_match, 2)
+        let g:python_version = utils#string_to_float(py_version_match, 2)
         if g:python_version > 3
             try
                 call py3eval('import pygments')
@@ -177,7 +156,7 @@ endif
 " ------------------------
 " has_truecolor
 " ------------------------
-if has('termguicolors') || WINDOWS() || HAS_GUI()
+if has('termguicolors') || utils#is_windows() || utils#utils#has_gui()
     try
         set termguicolors
         hi LineNr ctermbg=NONE guibg=NONE
@@ -198,7 +177,7 @@ endif
 " -----------------------------------
 if executable('git')
     let s:git_version_raw = matchstr(system('git --version'), '\v\zs\d{1,4}.\d{1,4}.\d{1,4}\ze')
-    let g:git_version = StringToFloat(s:git_version_raw)
+    let g:git_version = utils#string_to_float(s:git_version_raw)
 else
     let g:git_version = 0
 endif
@@ -207,14 +186,14 @@ endif
 " ------------------------------
 if executable('node') && executable('npm')
     let s:node_version_raw = matchstr(system('node --version'), '\vv\zs\d{1,4}.\d{1,4}\ze')
-    let g:node_version = StringToFloat(s:node_version_raw)
+    let g:node_version = utils#string_to_float(s:node_version_raw)
 else
     let g:node_version = 0
 endif
 " --------------------------
 " set PATH && term
 " --------------------------
-if WINDOWS()
+if utils#is_windows()
     if get(g:,'leovim_loaded',0) == 0
         if isdirectory($HOME . "\\.leovim.windows")
             let $PATH = $HOME . "\\.leovim.windows\\cppcheck;" . $PATH
@@ -223,35 +202,29 @@ if WINDOWS()
         endif
     endif
     set winaltkeys=no
-    if HAS_GUI()
+    if utils#utils#has_gui()
         set lines=999
         set columns=999
     endif
-    if has('libcall') && !has('nvim') && HAS_GUI()
-        let g:gvimfullscreendll = $HOME ."\\.leovim.windows\\tools\\gvimfullscreen.dll"
+    " ToggleFullScreen and SetAlpha moved to utils.vim
+    if has('libcall') && !has('nvim') && utils#utils#has_gui()
+        let g:gvimfullscreendll = $HOME ."\\. leovim.windows\\tools\\gvimfullscreen.dll"
         function! ToggleFullScreen()
-            call libcallnr(g:gvimfullscreendll, "ToggleFullScreen", -1)
+            call utils#toggle_fullscreen()
         endfunction
         nnoremap <C-cr> <ESC>:call ToggleFullScreen()<Cr>
         let g:VimAlpha = 255
         function! SetAlpha(alpha)
-            let g:VimAlpha = g:VimAlpha + a:alpha
-            if g:VimAlpha < 95
-                let g:VimAlpha = 95
-            endif
-            if g:VimAlpha > 255
-                let g:VimAlpha = 255
-            endif
-            call libcall(g:gvimfullscreendll, 'SetAlpha', g:VimAlpha)
+            call utils#set_alpha(a:alpha)
         endfunction
         nnoremap <silent><M-\>  :call SetAlpha(5)<Cr>
         nnoremap <silent><M-\|> :call SetAlpha(-5)<Cr>
     endif
 else
     if get(g:, 'leovim_loaded', 0) == 0 && isdirectory($HOME . "/.leovim.unix")
-        if LINUX()
+        if utils#is_linux()
             let $PATH = $HOME . "/.leovim.unix/linux:" . $PATH
-        elseif MACOS()
+        elseif utils#is_macos()
             if system('uname -m') =~? 'arm64'
                 let $PATH = $HOME . "/.leovim.unix/macos/arm64:" . $PATH
             else
@@ -273,7 +246,7 @@ else
     endif
     if has('nvim') && $TMUX != ''
         let $TERM = "xterm-256color"
-    elseif HAS_GUI() == 0 && !has('nvim')
+    elseif utils#utils#has_gui() == 0 && !has('nvim')
         if $TMUX != ''
             try
                 set term=xterm-256color
@@ -288,11 +261,11 @@ endif
 " ------------------------------
 " tags conf
 " ------------------------------
-if Require('notags')
+if utils#is_require('notags')
     let g:ctags_type = ''
     let g:gtags_version = 0
-elseif WINDOWS() && Require('tags') || UNIX()
-    if WINDOWS() && filereadable(Expand("~/.leovim.windows/tools/ctags.exe"))
+elseif utils#is_windows() && utils#is_require('tags') || utils#is_unix()
+    if utils#is_windows() && filereadable(utils#utils#expand("~/.leovim.windows/tools/ctags.exe"))
         let g:ctags_type = 'Universal-json'
     elseif executable('ctags')
         try
@@ -310,12 +283,12 @@ elseif WINDOWS() && Require('tags') || UNIX()
     else
         let g:ctags_type = ''
     endif
-    if WINDOWS()
-        let $GTAGSCONF = Expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
+    if utils#is_windows()
+        let $GTAGSCONF = utils#utils#expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
     endif
     if executable('gtags') && get(g:, 'ctags_type', '') != '' && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
         let s:gtags_version = matchstr(system('gtags --version'), '\v\zs\d{1,2}.\d{1,2}.\d{1,2}\ze')
-        let g:gtags_version = StringToFloat(s:gtags_version, 2)
+        let g:gtags_version = utils#string_to_float(s:gtags_version, 2)
         if get(g:, 'pygments_import', 0)
             let $GTAGSLABEL = 'native-pygments'
         else
@@ -356,15 +329,15 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " ===============================================================================================================
 " install begin
 " ===============================================================================================================
-call plug#begin(Expand("$LEOVIMD_DIR/pack/add/opt"))
-if filereadable(Expand("$LEOVIMD_DIR/pack.vim"))
+call plug#begin(utils#utils#expand("$LEOVIMD_DIR/pack/add/opt"))
+if filereadable(utils#utils#expand("$LEOVIMD_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
 for vim in split(glob("$MODULE_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 function! s:plug_update() abort
-    let vimrc_opt = Expand('~/.vimrc.opt')
+    let vimrc_opt = utils#utils#expand('~/.vimrc.opt')
     if filereadable(vimrc_opt)
         execute "source " . vimrc_opt
     endif
@@ -395,7 +368,7 @@ for k in s:metacode_group
     exec "set " . mkey . "=\e" . k
     let modes = ['n', 'i', 'x', 'o']
     for mode in modes
-        " maparg 返回非空字符串 → 存在该模式下的映射
+        " maparg 返回非空字符�?�?存在该模式下的映�?
         if empty(maparg(mkey, mode))
             exec(mode . "map " . mkey . " <Nop>")
         endif
@@ -409,11 +382,11 @@ source $CFG_DIR/easymotion.vim
 " ------------------------------
 " set mason PATH
 " ------------------------------
-let mason_dirs  = [Expand('~/.leovim.d/mason/cmp/bin'), Expand('~/.leovim.d/mason/blink/bin')]
-if !Planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
+let mason_dirs  = [utils#utils#expand('~/.leovim.d/mason/cmp/bin'), utils#utils#expand('~/.leovim.d/mason/blink/bin')]
+if !utils#is_planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
     for mason_dir in mason_dirs
         if isdirectory(mason_dir)
-            if WINDOWS()
+            if utils#is_windows()
                 let $PATH = mason_dir . ';' . $PATH
             else
                 let $PATH = mason_dir . ':' . $PATH

@@ -1,6 +1,6 @@
 if PlannedLeaderf()
     nnoremap <silent><leader>m :LeaderfMru<Cr>
-elseif PlannedFzf()
+elseif utils#is_planned_fzf()
     nnoremap <silent><leader>m :FzfHistory<Cr>
 else
     nnoremap <silent><leader>m :CtrlPMRU<Cr>
@@ -16,11 +16,11 @@ endtry
 " --------------------------
 " undo
 " --------------------------
-if Installed('nvim-fundo')
-    lua require('fundo').setup()
+if utils#is_installed('nvim-fundo')
+    lua utils#is_require('fundo').setup()
 endif
 " undotree
-if Planned('undotree')
+if utils#is_planned('undotree')
     let g:undotree_WindowLayout = 4
     nnoremap <silent><M-u> :UndotreeToggle<Cr>
 endif
@@ -34,9 +34,9 @@ if PrefFzf()
         let l:curpos = getcurpos()
         let l:l = matchlist(a:val, '\(>\?\)\s*\(\d*\)\s*\(\d*\)\s*\(\d*\) \?\(.*\)')
         let [l:mark, l:jump, l:line, l:col, l:content] = l:l[1:5]
-        if empty(Trim(l:mark)) | let l:mark = '-' | endif
-        if filereadable(Expand(fnameescape(l:content)))
-            let l:file_name = Expand(l:content)
+        if empty(utils#trim(l:mark)) | let l:mark = '-' | endif
+        if filereadable(utils#utils#expand(fnameescape(l:content)))
+            let l:file_name = utils#utils#expand(l:content)
             let l:bn = bufnr(l:file_name)
             if l:bn > -1 && buflisted(l:bn) > 0
                 let l:content = getbufline(l:bn, l:line)
@@ -44,8 +44,8 @@ if PrefFzf()
             else
                 let l:content = system("sed -n " . l:line . "p " . l:file_name)
             endif
-        elseif empty(Trim(l:content))
-            if empty(Trim(l:line))
+        elseif empty(utils#trim(l:content))
+            if empty(utils#trim(l:line))
                 let [l:line, l:col] = l:curpos[1:2]
             endif
             let l:content = getline(l:line, l:line)[0]
@@ -53,14 +53,14 @@ if PrefFzf()
         return l:mark . " " . l:file_name . ":" . l:line . ":" . l:col . " " . l:content
     endfunction
     function! s:jump_list() abort
-        let l:jl = Execute('jumps')
+        let l:jl = utils#execute('jumps')
         return map(reverse(split(l:jl, '\n')[1:]), 's:jump_list_format(v:val)')
     endfunction
     function! s:jump_handler(jp) abort
         let l:l = matchlist(a:jp, '\(.\)\s\(.*\):\(\d\+\):\(\d\+\)\(.*\)')
         let [l:file_name, l:line, l:col, l:content] = l:l[2:5]
         if empty(l:file_name) || empty(l:line) | return | endif
-        " 判断文件是否已经存在 buffer 中
+        " 判断文件是否已经存在 buffer �?
         let l:bn = bufnr(l:file_name)
         " 未打开
         if l:bn == -1
@@ -110,7 +110,7 @@ function! s:recent_project_files()
         endif
     endfor
     let old_files = fzf#vim#_uniq(map(old_files, 'fnamemodify(v:val, ":~:.")'))
-    let options = ['--header-lines', !empty(expand('%')), '--ansi', '--prompt', 'ProjectMru> ']
+    let options = ['--header-lines', !empty(utils#utils#expand('%')), '--ansi', '--prompt', 'ProjectMru> ']
     let options += ['--expect', join(keys(get(g:, 'fzf_action', ['ctrl-x', 'ctrl-v', 'ctrl-t'])), ',')]
     let options += ['--preview-window', get(get(g:, 'fzf_vim'), 'preview_window', ['right,45%'])[0] . ',+{2}-/2']
     let options = fzf#vim#with_preview({'options': options, 'placeholder': ' {1}'}).options

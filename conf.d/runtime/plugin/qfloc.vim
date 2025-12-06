@@ -78,7 +78,7 @@ endif
 " ----------------------------
 " bqf
 " ----------------------------
-if Installed('nvim-bqf')
+if utils#is_installed('nvim-bqf')
     hi default link BqfPreviewFloat Normal
     hi default link BqfPreviewBorder Normal
     hi default link BqfPreviewCursor Cursor
@@ -86,13 +86,13 @@ if Installed('nvim-bqf')
     hi link BqfPreviewRange Search
     hi default BqfSign ctermfg=14 guifg=Cyan
     hi BqfPreviewBorder guifg=#50a14f ctermfg=71
-    lua require("cfg/bqf")
+    lua utils#is_require("cfg/bqf")
 endif
 " ----------------------------
 " quickfix
 " ----------------------------
-if Installed('quicker.nvim')
-    lua require("cfg/quicker")
+if utils#is_installed('quicker.nvim')
+    lua utils#is_require("cfg/quicker")
 elseif exists('&quickfixtextfunc')
     function! QuickFixFormat(info)
         let qflist = getqflist({'id' : a:info.id, 'items' : 1}).items
@@ -102,7 +102,7 @@ elseif exists('&quickfixtextfunc')
                     \ 'strchars(v:val.filename . v:val.lnum)'))
         let fmt = '%-' . prefix_len . 's' . '%s'
         return map(qflist,
-                    \ 'printf(fmt, v:val.filename . ":" . v:val.lnum, "â”‚ " . v:val.text)')
+                    \ 'printf(fmt, v:val.filename . ":" . v:val.lnum, "â”?" . v:val.text)')
     endfunction
     set quickfixtextfunc=QuickFixFormat
 else
@@ -114,7 +114,7 @@ else
         let fmt = '%-' . prefix_len . 's' . '%s'
         setlocal modifiable
         call setline('1', map(qflist,
-                    \ 'printf(fmt, v:val.filename . ":" . v:val.lnum, "â”‚ " . v:val.text)')
+                    \ 'printf(fmt, v:val.filename . ":" . v:val.lnum, "â”?" . v:val.text)')
         setlocal nomodifiable nomodified
     endfunction
     augroup QuickFixFormat

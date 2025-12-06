@@ -1,4 +1,4 @@
-require("neoconf").setup({
+is_require("neoconf").setup({
   -- name of the local settings files
   local_settings = ".vim/neoconf.json",
   import = {
@@ -11,7 +11,7 @@ vim.keymap.set('n', "<M-l>l", [[<Cmd>Neoconf local<Cr>]], {noremap = true, silen
 vim.keymap.set('n', "<M-l>g", [[<Cmd>Neoconf glocal<Cr>]], {noremap = true, silent = true})
 vim.keymap.set('n', "<M-l>s", [[<Cmd>Neoconf show<Cr>]], {noremap = true, silent = true})
 vim.keymap.set('n', "<M-l>L", [[<Cmd>Neoconf lsp<Cr>]], {noremap = true, silent = true})
--- 打开或创建 neoconf.json 文件的函数
+-- 打开或创�?neoconf.json 文件的函�?
 function _G.OpenNeoconfJson()
   local vim_dir = vim.fn.GetRootDir() .. "/.vim"
   local neoconf_json = vim_dir .. "/neoconf.json"

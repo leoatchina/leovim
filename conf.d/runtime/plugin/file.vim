@@ -74,11 +74,11 @@ nnoremap <leader>E :tabe <C-r>=GetRootDir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
-if Installed('oil.nvim')
-    lua require('cfg/oil')
+if utils#is_installed('oil.nvim')
+    lua utils#is_require('cfg/oil')
     nnoremap <silent><nowait><leader>fo <Cmd>Oil --float<Cr>
 endif
-if Installed('vim-floaterm')
+if utils#is_installed('vim-floaterm')
     function! s:floaterm_float(prg)
         let prg = a:prg
         if g:has_popup_floating
@@ -107,7 +107,7 @@ nnoremap <M-j>t <C-w>gf
 nnoremap <M-j>] <C-w>f<C-w>L
 nnoremap <M-j>[ <C-w>f
 " using system file explorer
-if HAS_GUI() || WINDOWS()
+if utils#has_gui() || utils#is_windows()
     imap <M-O> <C-o>O
     nmap <M-O> O
     imap <M-o> <C-o>o
@@ -116,7 +116,7 @@ if HAS_GUI() || WINDOWS()
     nnoremap <silent><M-P> :tabm -1<Cr>
     nnoremap <M-]> :vsplit<Space>
     nnoremap <M-[> :split<Space>
-    if !has('nvim') && get(g:, 'use_system_browser', WINDOWS())
+    if !has('nvim') && get(g:, 'use_system_browser', utils#is_windows())
         let g:browsefilter = ''
         function! s:filter_push(desc, wildcard) abort
             let g:browsefilter .= a:desc . " (" . a:wildcard . ")\t" . a:wildcard . "\n"
@@ -153,7 +153,7 @@ endif
 " open or add file
 " --------------------------
 function! s:open_or_create_file(file, ...) abort
-    let file = Expand(a:file, 1)
+    let file = utils#expand(a:file, 1)
     if filereadable(file)
         try
             execute "tabe " . file
@@ -198,7 +198,7 @@ endfunction
 nnoremap <M-h>C :call <SID>open_or_create_file("~/.ssh/config")<Cr>
 " gitconfig
 nnoremap <M-h>G :call <SID>open_or_create_file("~/.gitconfig")<Cr>
-if UNIX()
+if utils#is_unix()
     " bashrc
     nnoremap <M-h>b :call <SID>open_or_create_file("~/.bashrc")<Cr>
     " zshrc
@@ -232,7 +232,7 @@ nnoremap <M-h><Cr> :source ~/.leovim/conf.d/init.vim<Cr>
 nnoremap <M-h>o :tabe ~/.vimrc.opt<Cr>
 if get(g:, 'leovim_openmap', 1)
     function! TabeOpen(f) abort
-        let f = expand(a:f)
+        let f = utils#expand(a:f)
         exec "tabe " . f
     endfunction
     nnoremap <silent><M-h>i :call TabeOpen("$CONF_D_DIR/init.vim")<Cr>
@@ -244,18 +244,18 @@ if get(g:, 'leovim_openmap', 1)
     if PlannedLeaderf()
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --regex --no-sort ~/.leovim<Cr>
-        if UNIX()
+        if utils#is_unix()
             nnoremap <silent><M-h>L :Leaderf file --regex --no-sort ~/.local/bin<Cr>
         endif
     elseif PlannedFzf()
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
-        if UNIX()
+        if utils#is_unix()
             nnoremap <silent><M-h>L :FzfFiles ~/.local/bin<Cr>
         endif
     endif
     " addtional vim config
-    if filereadable(expand("~/.leovim.d/after.vim"))
+    if filereadable(utils#expand("~/.leovim.d/after.vim"))
         source ~/.leovim.d/after.vim
     endif
     nnoremap <silent><M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
@@ -264,10 +264,10 @@ endif
 " ------------------
 " delete tmp files
 " ------------------
-if WINDOWS()
-    nnoremap <leader>x :!powershell <C-r>=Expand("~/_leovim.clean.cmd")<Cr><Cr> \| e %<Cr><C-o>
+if utils#is_windows()
+    nnoremap <leader>x :!powershell <C-r>=utils#expand("~/_leovim.clean.cmd")<Cr><Cr> \| e %<Cr><C-o>
 else
-    nnoremap <leader>x :!bash <C-r>=Expand("~/.leovim.clean")<Cr><Cr> \| e %<Cr><C-o>
+    nnoremap <leader>x :!bash <C-r>=utils#expand("~/.leovim.clean")<Cr><Cr> \| e %<Cr><C-o>
 endif
 "----------------------------------------------------------------------
 " save

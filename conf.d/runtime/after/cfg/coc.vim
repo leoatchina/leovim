@@ -5,14 +5,14 @@ let g:coc_fzf_location_delay = 100
 " ----------------------------
 " Disable file with size > 1MB
 " ----------------------------
-autocmd BufAdd * if getfsize(expand('<afile>')) > 1024*1024 |
+autocmd BufAdd * if getfsize(utils#expand('<afile>')) > 1024*1024 |
             \ let b:coc_enabled=0 |
             \ endif
 " ----------------------------
 " set coc data $PATH
 " ----------------------------
-let g:coc_config_home = expand("$CFG_DIR")
-if WINDOWS()
+let g:coc_config_home = utils#expand("$CFG_DIR")
+if utils#is_windows()
     let g:coc_data_home = $LEOVIMD_DIR . "\\coc"
 else
     let g:coc_data_home = $LEOVIMD_DIR . "/coc"
@@ -37,15 +37,15 @@ let g:coc_global_extensions = [
             \ 'coc-basedpyright',
             \ ]
 " \ '@yaegassy/coc-ruff',
-if UNIX()
+if utils#is_unix()
     let g:coc_global_extensions += ['coc-lua']
-elseif WINDOWS()
+elseif utils#is_windows()
     let g:coc_global_extensions += ['coc-powershell']
 endif
 if has('nvim')
     let g:coc_global_extensions += ['coc-symbol-line']
 endif
-if Require('web')
+if utils#is_require('web')
     let g:coc_global_extensions += [
                 \ 'coc-html',
                 \ 'coc-css',
@@ -56,13 +56,13 @@ if Require('web')
                 \ 'coc-vetur',
                 \ ]
 endif
-if Require('c')
+if utils#is_require('c')
     let g:coc_global_extensions += ['coc-cmake']
     if g:clangd_exe != ''
         let g:coc_global_extensions += ['coc-clangd']
     endif
 endif
-if Require('ccls') && g:ccls_exe != ''
+if utils#is_require('ccls') && g:ccls_exe != ''
     call coc#config('languageserver.ccls', {
                 \ "command": "ccls",
                 \ "filetypes": g:c_filetypes,
@@ -72,19 +72,19 @@ if Require('ccls') && g:ccls_exe != ''
                 \ "directory": $HOME . "/.leovim.d/ccls"
                 \ }}})
 endif
-if Require('R') && g:R_exe != ''
+if utils#is_require('R') && g:R_exe != ''
     let g:coc_global_extensions += ['coc-r-lsp']
 endif
-if Require('rust') && g:cargo_exe != ''
+if utils#is_require('rust') && g:cargo_exe != ''
     let g:coc_global_extensions += ['coc-rust-analyzer']
 endif
-if Require('java') && executable('java')
+if utils#is_require('java') && executable('java')
     let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
 endif
-if Require('go') && g:gobin_exe != ''
+if utils#is_require('go') && g:gobin_exe != ''
     let g:coc_global_extensions += ['coc-go']
 endif
-if Require('writing')
+if utils#is_require('writing')
     let g:coc_global_extensions += ['coc-vimtex']
 endif
 " ------------------------
@@ -111,9 +111,9 @@ augroup END
 " ------------------------
 " icons
 " ------------------------
-if Planned('nvim-web-devicons')
+if utils#is_planned('nvim-web-devicons')
     call coc#config('explorer.icon.source', 'nvim-web-devicons')
-elseif Planned('vim-devicons')
+elseif utils#is_planned('vim-devicons')
     call coc#config('explorer.icon.source', 'vim-devicons')
 endif
 " ----------------------------
@@ -134,7 +134,7 @@ nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 nnoremap <silent><leader>t :Vista finder coc<Cr>
 inoremap <silent><C-x><C-x> <C-r>=CocActionAsync('showSignatureHelp')<Cr>
 nnoremap <leader>w :CocFzfList symbols <C-r><C-w>
-xnoremap <leader>w :<C-u>CocFzfList symbols <C-r>=GetVisualSelection()<Cr>
+xnoremap <leader>w :<C-u>CocFzfList symbols <C-r>=utils#get_visual_selection()<Cr>
 " completion map
 function! s:has_backspace() abort
     let col = col('.') - 1

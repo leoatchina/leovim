@@ -161,8 +161,8 @@ if has('patch-8.0.1129') && !has('nvim')
         if FtBtIgnored() || &ft =~ 'fern'
             return
         else
-            let fname = Expand("%:t", 1)
-            let ename = Escape(fname)
+            let fname = utils#expand("%:t", 1)
+            let ename = utils#escape(fname)
             if a:open
                 if index(getcompletion('WinBar.', 'menu'), ename) < 0
                     execute "nnoremenu 1.00 WinBar." .  ename . ' :echo '. fname
@@ -181,6 +181,6 @@ if has('patch-8.0.1129') && !has('nvim')
         autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * OpenWinBar
         autocmd WinClosed,WinLeave,TabClosed,TabLeave,BufLeave * CloseWinBar
     augroup END
-elseif has('nvim') && InstalledCoc()
-    lua require('cfg/coc_symboline')
+elseif has('nvim') && utils#is_installed_coc()
+    lua utils#is_require('cfg/coc_symboline')
 endif

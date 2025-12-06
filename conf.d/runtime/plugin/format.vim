@@ -30,7 +30,7 @@ function! BuiltInFormat(visual)
     call cursor(line, col)
     call preview#cmdmsg("Using vim's builtin formatprg.", 1)
 endfunction
-if Planned('neoformat')
+if utils#is_planned('neoformat')
     " NOTE:  the two functions below is copied from neoformat.vim
     function! s:autoload_func_exists(func_name) abort
         try
@@ -85,7 +85,7 @@ endif
 " ----------------------------
 " table_mode
 " ----------------------------
-if Planned("vim-table-mode")
+if utils#is_planned("vim-table-mode")
     let g:table_mode_map_prefix      = '<M-t>'
     let g:table_mode_tableize_d_map  = '<M-T>'
     let g:table_mode_corner          = '|'
@@ -94,8 +94,8 @@ if Planned("vim-table-mode")
     nmap <M-t><M-t> <Plug>(table-mode-tableize)
     function! s:isAtStartOfLine(mapping)
         let text_before_cursor = getline('.')[0 : col('.')-1]
-        let mapping_pattern = '\V' . escape(a:mapping, '\')
-        let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+        let mapping_pattern = '\V' . utils#escape(a:mapping, '\')
+        let comment_pattern = '\V' . utils#escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
         return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
     endfunction
     inoreabbrev <expr> <bar><bar>

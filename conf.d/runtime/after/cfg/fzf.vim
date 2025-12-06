@@ -96,7 +96,7 @@ function FzfCallCommands(prompt, ...)
     endif
     let results = ["Ctrl-e To Edit"]
     for search in search_prefix
-        let commands = split(Execute("command " . search), '\n')[1:]
+        let commands = split(utils#execute("command " . search), '\n')[1:]
         for command in commands
             for sp in split(command, '\s\+')[:4]
                 if count(results, sp) > 0
@@ -130,7 +130,7 @@ function FzfCallCommands(prompt, ...)
     else
         let l:fzf_layout = {'down': '~30%'}
     endif
-    function! s:execute(item) abort
+    function! s:utils#execute(item) abort
         let key = a:item[0]
         let cmd = a:item[1]
         call histadd(':', cmd)

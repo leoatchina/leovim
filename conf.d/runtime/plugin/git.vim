@@ -2,7 +2,7 @@
 " git global set
 " ---------------------------------
 if executable('git') && get(g:, 'header_field_author', '') != '' && get(g:, 'header_field_author_email', '') != ''
-    command! GitSet execute(printf(
+    command! GitSet utils#execute(printf(
                 \ '!git config --global user.name "%s" && git config --global user.email "%s"',
                 \ g:header_field_author,
                 \ g:header_field_author_email))
@@ -39,7 +39,7 @@ function! LcdAndGitUpdate() abort
             else
                 let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
                 " TODO: change branch icon according to branch status, referring https://www.nerdfonts.com/cheat-sheet
-                let icon = ' ï„¦'
+                let icon = ' ï„?
                 let b:git_branch = icon . substitute(l:branch, '\n\+$', '', '')
                 if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
                     let b:git_root_dir = ''
@@ -77,13 +77,13 @@ function! RelativePath() abort
     if gitroot != '' && len(abspath) > len(gitroot)
         return abspath[len(gitroot)+1:]
     else
-        return Expand("%:t", 1)
+        return utils#expand("%:t", 1)
     endif
 endfunction
 "------------------------
 " fugitve and others
 "------------------------
-if Planned('vim-fugitive')
+if utils#is_planned('vim-fugitive')
     nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
@@ -102,7 +102,7 @@ if Planned('vim-fugitive')
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
     nnoremap <silent><M-g>[ :Gdiffsplit!<Cr>
     " GV
-    if Planned('GV.vim')
+    if utils#is_planned('GV.vim')
         nnoremap <silent><M-g>! :GV!<Cr>
         nnoremap <silent><M-g>v :GV<Cr>
         nnoremap <silent><M-g>? :GV?<Cr>
@@ -111,7 +111,7 @@ if Planned('vim-fugitive')
         au FileType GV nmap <buffer><nowait><M-q> q
         au FileType GV nmap <buffer><nowait>Q q
     endif
-    if Planned('vim-git-diffview')
+    if utils#is_planned('vim-git-diffview')
         let g:gdv_keymap = 'df'
     endif
     " buffer map, nnoremap
@@ -126,7 +126,7 @@ if Planned('vim-fugitive')
     au FileType fugitive nmap <buffer><nowait>, g?
     au FileType fugitive nmap <buffer><nowait>\ c?
 else
-    if Installed('asyncrun.vim') && g:has_terminal && UNIX()
+    if utils#is_installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
         nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 add -A<Cr>
         nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
         nnoremap <silent><M-g><Cr> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
@@ -151,7 +151,7 @@ if PlannedLeaderf()
     nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
 endif
 " inline blame
-if Installed('blamer.nvim')
+if utils#is_installed('blamer.nvim')
     let g:blamer_date_format = '%Y/%m/%d'
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '
@@ -172,7 +172,7 @@ nnoremap <silent><M-g>: :GCommands<Cr>
 " ---------------------------------
 " lazygit intergrated
 " ---------------------------------
-if Installed('vim-floaterm') && executable('lazygit')
+if utils#is_installed('vim-floaterm') && executable('lazygit')
     command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
     if has('nvim')
         nnoremap <silent><M-g><M-g> :GLazyGit<Cr>

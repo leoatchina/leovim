@@ -1,10 +1,10 @@
 local config
 local enabled_ft = {'lua', 'vim', 'python', 'r', 'c', 'cpp', 'rust', 'go', 'java', 'javascript', 'typescript'}
-if InstalledBlink() or InstalledCmp() then
+if is_installed_blink() or is_installed_cmp() then
   config = {
     provider = vim.g.ai_provider,
   }
-elseif InstalledLsp() then
+elseif is_installed_lsp() then
   config = {
     provider = vim.g.ai_provider,
     lsp = {
@@ -49,6 +49,6 @@ else
     },
   }
 end
-require('minuet').setup (
+is_require('minuet').setup (
   config
 )

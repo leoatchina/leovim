@@ -28,7 +28,7 @@ if g:has_terminal == 1
 elseif g:has_terminal == 2
     tnoremap <M-v> <C-_>""
 endif
-if PlannedFzf()
+if utils#is_planned_fzf()
     PlugOpt 'fzf-registers'
     nnoremap <silent><M-v> :FzfRegisterPaste<Cr>
     inoremap <silent><M-v> <C-o>:FzfRegisterPaste<Cr>
@@ -65,9 +65,9 @@ augroup END
 " -------------------------------
 " clipboard from remote to local
 " -------------------------------
-if exists("##TextYankPost") && UNIX()
+if exists("##TextYankPost") && utils#is_unix()
     function! s:raw_echo(str)
-        if filewritable('/dev/fd/2') && !HAS_GUI()
+        if filewritable('/dev/fd/2') && !utils#has_gui()
             call writefile([a:str], '/dev/fd/2', 'b')
         else
             call system("!echo " . shellescape(a:str))
@@ -76,14 +76,14 @@ if exists("##TextYankPost") && UNIX()
     endfunction
     function! s:copy() abort
         let c = join(v:event.regcontents,"\n")
-        if len(Trim(c)) == 0
+        if len(utils#trim(c)) == 0
             return
         endif
         let c64 = system("base64", c)
         if $TMUX == ''
-            let s = "\e]52;c;" . Trim(c64) . "\x07"
+            let s = "\e]52;c;" . utils#trim(c64) . "\x07"
         else
-            let s = "\ePtmux;\e\e]52;c;" . Trim(c64) . "\x07\e\\"
+            let s = "\ePtmux;\e\e]52;c;" . utils#trim(c64) . "\x07\e\\"
         endif
         call s:raw_echo(s)
     endfunction

@@ -1,4 +1,4 @@
-if Planned('vim-translator')
+if utils#is_planned('vim-translator')
     let g:translator_default_engines=['bing', 'haici']
     if g:has_popup_floating
         " show translate in popup or floating windows
@@ -9,11 +9,11 @@ if Planned('vim-translator')
         xmap <silent>q\ <Plug>TranslateV
     endif
 endif
-if Planned('dash.vim')
+if utils#is_planned('dash.vim')
     nmap q: :Dash<Space>
     nmap q? <Plug>DashGlobalSearch
     nmap q/ <Plug>DashSearch
-elseif Planned('zeavim.vim')
+elseif utils#is_planned('zeavim.vim')
     nmap q: :Zeavim<Space>
     nmap q? <Plug>ZVKeyDocset
     nmap q/ <Plug>Zeavim
@@ -25,9 +25,9 @@ function! s:k()
         if PlannedLeaderf()
             execute 'LeaderfHelpCword'
         else
-            execute 'h '.expand('<cword>')
+            execute 'h '.utils#expand('<cword>')
         endif
-    elseif InstalledCoc() && CocAction('hasProvider', 'hover')
+    elseif utils#is_installed_coc() && CocAction('hasProvider', 'hover')
         call CocActionAsync('doHover')
     else
         call feedkeys('K', 'n')

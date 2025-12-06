@@ -1,6 +1,6 @@
 setlocal commentstring=#\ %s
 au BufWritePre <buffer> :%retab
-if Installed('vim-quickui')
+if utils#is_installed('vim-quickui')
     au BufNew,BufEnter,BufNewFile,BufRead * nnoremap gx :call quickui#tools#python_help("")<Cr>
 endif
 inoremap <buffer>>> ->

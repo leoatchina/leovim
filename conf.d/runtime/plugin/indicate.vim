@@ -2,13 +2,13 @@
 " indentline
 " --------------------
 filetype plugin indent on
-if Installed('indent-blankline.nvim')
-    lua require("cfg/ibl")
-elseif Planned('indentline')
+if utils#is_installed('indent-blankline.nvim')
+    lua utils#is_require("cfg/ibl")
+elseif utils#is_planned('indentline')
     let g:vim_json_conceal = 0
     let g:indentLine_enabled = 0
     let g:markdown_syntax_conceal = 0
-    let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+    let g:indentLine_char_list = ['|', '¦', '�?, '�?]
     nnoremap <silent><leader>I :IndentLinesToggle<Cr>
 endif
 " --------------------
@@ -56,14 +56,14 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap <M-l> :WhichKey "\<M-l\>"<Cr>
     nnoremap <M-y> :WhichKey "\<M-y\>"<Cr>
     inoremap <M-y> <C-o>:WhichKey "\<M-y\>"<Cr>
-    if Installed("codecompanion.nvim") || Installed('yarepl.nvim')
+    if utils#is_installed("codecompanion.nvim") || utils#is_installed('yarepl.nvim')
         nnoremap <M-i> :WhichKey "\<M-i\>"<Cr>
     endif
-    if Planned("vim-table-mode")
+    if utils#is_planned("vim-table-mode")
         nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
         xnoremap <M-t> :WhichKeyVisual "\<M-t\>"<Cr>
     endif
-    if Installed('vim-floaterm')
+    if utils#is_installed('vim-floaterm')
         nnoremap <M-e> :WhichKey "\<M-e\>"<Cr>
         xnoremap <M-e> :WhichKeyVisual "\<M-e\>"<Cr>
     endif
@@ -71,7 +71,7 @@ if get(g:, 'leovim_whichkey', 1)
         nnoremap <M-d> :WhichKey "\<M-d\>"<Cr>
         nnoremap <M-m> :WhichKey "\<M-m\>"<Cr>
     endif
-    if Planned('vim-fugitive')
+    if utils#is_planned('vim-fugitive')
         au FileType fugitive nnoremap <buffer>g :WhichKey "g"<Cr>
         au FileType fugitive nnoremap <buffer>c :WhichKey "c"<Cr>
         au FileType fugitive nnoremap <buffer>d :WhichKey "d"<Cr>
@@ -84,7 +84,7 @@ endif
 function! s:getVimVersion()
     let l:result=[]
     if has('nvim')
-        if HAS_GUI()
+        if utils#has_gui()
             call add(l:result, 'gnvim-')
         else
             call add(l:result, 'nvim-')
@@ -92,7 +92,7 @@ function! s:getVimVersion()
         let v = api_info().version
         call add(l:result, printf('%d.%d.%d', v.major, v.minor, v.patch))
     else
-        if HAS_GUI()
+        if utils#has_gui()
             call add(l:result, 'gvim-')
         else
             call add(l:result, 'vim-')

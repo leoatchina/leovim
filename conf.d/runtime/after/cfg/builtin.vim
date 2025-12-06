@@ -37,7 +37,7 @@ def! g:AbbrevCompletor(findstart: number, base: string): any
 		endif
 		return col('.') - prefix->len() - 1
 	endif
-	var lines = execute('ia', 'silent!')
+	var lines = utils#execute('ia', 'silent!')
 	if lines =~? gettext('No abbreviation found')
 		return v:none  # Suppresses warning message
 	endif
