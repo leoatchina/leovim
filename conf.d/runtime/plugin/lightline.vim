@@ -136,7 +136,7 @@ function! Buffers()
     try
         let b:file_icon = buffers[1][0][:3]
     catch
-        let b:file_icon = 'î­?
+        let b:file_icon = 'î­°'
     endtry
     " reorder buffers
     if empty(buffers[2])

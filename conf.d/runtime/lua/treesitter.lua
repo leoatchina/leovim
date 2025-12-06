@@ -137,7 +137,6 @@ end
 -- treesitter-context
 -------------------------
 if is_installed("nvim-treesitter-context") then
-  -- �?Neovim �?Lua 配置文件中添加以下内�?
   vim.api.nvim_create_autocmd("FileType", {
     pattern = {"toml", "json", "yaml"},
     callback = function()
