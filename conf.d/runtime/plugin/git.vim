@@ -3,7 +3,7 @@
 " ---------------------------------
 if executable('git') && get(g:, 'header_field_author', '') != '' && get(g:, 'header_field_author_email', '') != ''
     command! GitSet utils#execute(printf(
-                \ '!git config --global user.name "%s" && git config --global user.email "%s"',
+                \ '!git config user.name "%s" && git config user.email "%s"',
                 \ g:header_field_author,
                 \ g:header_field_author_email))
     nnoremap <M-g>S :GitSet<Cr>

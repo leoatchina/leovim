@@ -130,7 +130,7 @@ function FzfCallCommands(prompt, ...)
     else
         let l:fzf_layout = {'down': '~30%'}
     endif
-    function! s:utils#execute(item) abort
+    function! s:fzf_execute(item) abort
         let key = a:item[0]
         let cmd = a:item[1]
         call histadd(':', cmd)
@@ -143,7 +143,7 @@ function FzfCallCommands(prompt, ...)
     endfunction
     call fzf#run(extend({
                 \ 'source': results,
-                \ 'sink*': function('s:execute'),
+                \ 'sink*': function('s:fzf_execute'),
                 \ 'options': printf('+m --ansi --header-lines=1 --expect=ctrl-e --tiebreak=index --prompt "%s> "', prompt)
                 \ }, l:fzf_layout), 0)
 endfunction

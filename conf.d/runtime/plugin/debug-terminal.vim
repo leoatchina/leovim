@@ -554,7 +554,7 @@ function! s:watch() range
                 call vimspector#AddWatch(l:selected_text)
             elseif pack#installed('nvim-dap')
                 let cmd = "lua require'dapui'.elements.watches.add(" .  l:selected_text . ")"
-                utils#execute(cmd)
+                execute(cmd)
             endif
         catch
             call preview#errmsg("Failed to add watch for reason: " . v:exception)

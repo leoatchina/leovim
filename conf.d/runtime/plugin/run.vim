@@ -152,7 +152,7 @@ function! s:asyncrun(...)
     if empty(run_cmd)
         if ft ==# 'vim'
             echo "source current vim file"
-            utils#execute("source %")
+            execute("source %")
         else
             call preview#errmsg('FileType ' . ft . ' could not be runned.')
         endif
@@ -201,7 +201,7 @@ if has('nvim') || v:version >= 801
         let task_name = a:task_name
         let pos = a:pos
         if s:task_check(task_name)
-            utils#execute('AsyncTask ' . task_name)
+            execute('AsyncTask ' . task_name)
         else
             if !has('nvim') && pos == 'floaterm_float' || pos == 'qf'
                 RunQfSilent
