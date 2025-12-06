@@ -72,7 +72,7 @@ function! s:grep(...)
             let g:grep_word = utils#escape(a:1)
             let g:grepall_last = g:grep_word
         endif
-        let cmd = printf('vimgrep /%s/j %s/**/* ', g:grep_word, GetRootDir())
+        let cmd = printf('vimgrep /%s/j %s/**/* ', g:grep_word, utils#get_root_dir())
     else
         return
     endif
@@ -125,13 +125,13 @@ if pack#planned_fzf()
                     \ fzf#vim#with_preview({'options': ' --nth 4.. --delimiter=":"'}),
                     \ <bang>0)
         command! -bang -nargs=* FzfRoot call fzf#vim#grep(
-                    \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>) . ' ' . GetRootDir(),
+                    \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>) . ' ' . utils#get_root_dir(),
                     \ fzf#vim#with_preview({'options': ' --nth 4.. --delimiter=":"'}),
                     \ <bang>0)
     endif
     if executable('git')
         command! -bang -nargs=* FzfGGrep call fzf#vim#grep(
-                    \ 'git grep -I -n --color=always ' . fzf#shellescape(<q-args>) . ' -- ' . GitRootDir(),
+                    \ 'git grep -I -n --color=always ' . fzf#shellescape(<q-args>) . ' -- ' . git#git_root_dir(),
                     \ fzf#vim#with_preview({'options': ' --nth 3..  --delimiter=":"'}),
                     \ <bang>0)
     endif
@@ -172,7 +172,7 @@ if pack#planned_fzf()
                 let g:fzf_searchall_last = search_str
             endif
         elseif a:000[-1] == 3
-            if GitRootDir() != ''
+            if git#root_dir() != ''
                 let fzf_cmd = 'FzfGGrep'
             endif
             if a:0 == 1
@@ -306,21 +306,21 @@ if pack#planned_leaderf()
         let g:search_tool = "leaderf-grep"
     endif
     nnoremap <nowait>\f/ :LeaderfSearchAll <C-r>=FileNameNoEXT()<Cr><Cr>
-    nnoremap <nowait>\f\ :LeaderfSearchAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f\ :LeaderfSearchAll <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
 elseif pack#planned_fzf()
     let g:search_tool = "fzf-grep"
     nnoremap <nowait>\f/ :FzfSearchAll <C-r>=FileNameNoEXT()<Cr><Cr>
-    nnoremap <nowait>\f\ :FzfSearchAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f\ :FzfSearchAll <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
 else
     let g:search_tool = "grep"
     nnoremap <nowait>\f/ :GrepAll <C-r>=FileNameNoEXT()<Cr><Cr>
-    nnoremap <nowait>\f\ :GrepAll <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
+    nnoremap <nowait>\f\ :GrepAll <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
 endif
 if pack#planned_fzf()
     nnoremap <nowait><leader>f/ :FzfSearch <C-r>=FileNameNoEXT()<Cr><Cr>
-    nnoremap <nowait><leader>f\ :FzfSearch <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><leader>f\ :FzfSearch <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
     nnoremap <nowait><Tab>f/ :FzfSearchGit <C-r>=FileNameNoEXT()<Cr><Cr>
-    nnoremap <nowait><Tab>f\ :FzfSearchGit <C-r>=split(AbsDir(), "/")[-1]<Cr><Cr>
+    nnoremap <nowait><Tab>f\ :FzfSearchGit <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
     nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
     xnoremap <nowait>\g y:<C-u>FzfGitFiles <C-r>=utils#get_visual_selection()<Cr>
 endif

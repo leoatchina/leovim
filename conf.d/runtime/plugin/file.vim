@@ -36,8 +36,8 @@ nnoremap <leader>fv :DiffVsp<Space>
 "------------------------
 " cd dir
 "------------------------
-command! CR execute('cd ' .  GetRootDir())
-command! CG execute('cd ' .  GitRootDir())
+command! CR execute('cd ' .  utils#get_root_dir())
+command! CG execute('cd ' .  git#git_root_dir()
 nnoremap cdr :CR<Cr>
 nnoremap cdg :CG<Cr>
 nnoremap cdl :lcd %:p:h<Cr>
@@ -45,21 +45,21 @@ nnoremap cdl :lcd %:p:h<Cr>
 " search files
 "------------------------
 if pack#pref_fzf()
-    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=GetRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 elseif pack#planned_leaderf()
-    nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=GetRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=utils#get_root_dir()<Cr><Cr>
 else
-    nnoremap <silent><nowait><C-p> :CtrlP <C-r>=GetRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
 endif
 if pack#pref_fzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>p  :FzfGitFiles<Cr>
 elseif pack#planned_leaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
-    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=git#git_root_dir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
-    nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=GitRootDir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=git#git_root_dir()<Cr><Cr>
 endif
 if pack#pref_fzf()
     nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
@@ -69,8 +69,8 @@ endif
 " open gitroot getroot
 " ---------------------------------
 nnoremap <leader><Cr> :e<Space>
-nnoremap <leader>P :tabe <C-r>=GitRootDir()<Cr>/
-nnoremap <leader>E :tabe <C-r>=GetRootDir()<Cr>/
+nnoremap <leader>P :tabe <C-r>=git#git_root_dir()<Cr>/
+nnoremap <leader>E :tabe <C-r>=utils#get_root_dir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
@@ -122,7 +122,7 @@ if utils#has_gui() || utils#is_windows()
             let g:browsefilter .= a:desc . " (" . a:wildcard . ")\t" . a:wildcard . "\n"
         endfunc
         function! s:use_system_browser()
-            let l:path = AbsDir()
+            let l:path = utils#abs_dir()
             if l:path == '' | let l:path = getcwd() | endif
             if exists('g:browsefilter') && exists('b:browsefilter')
                 if g:browsefilter != ''
@@ -163,7 +163,7 @@ function! s:open_or_create_file(file, ...) abort
             return 0
         endtry
     else
-        let dir = AbsDir()
+        let dir = utils#abs_dir()
         try
             if !isdirectory(dir)
                 call mkdir(dir, "p")
@@ -210,7 +210,7 @@ endif
 " create root file
 " ------------------
 function! s:open_or_create_rootfile(fl, ...) abort
-    let fl = GetRootDir() . '/' . a:fl
+    let fl = utils#get_root_dir() . '/' . a:fl
     if a:0
         call s:open_or_create_file(fl, a:000)
     else

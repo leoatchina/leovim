@@ -132,9 +132,9 @@ function! Buffers()
     let res[1] = [b:file_icon . RelativeDir()]
     return res
 endfunction
-let g:lightline['component_expand']['branch'] = 'GitBranch'
+let g:lightline['component_expand']['branch'] = 'git#git_branch'
 let g:lightline['component_expand']['buffers'] = 'Buffers'
-let g:lightline['component_expand']['relativepath'] = 'RelativePath'
+let g:lightline['component_expand']['relativepath'] = 'git#relative_path'
 " ------------------------
 " lightline component_type
 " ------------------------

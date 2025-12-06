@@ -15,27 +15,6 @@ augroup LcdAndGitUpdate
     au!
     autocmd BufWinEnter * call git#lcd_and_git_update()
 augroup END
-" ----------------------
-" relative dir && path
-" ----------------------
-function! RelativeDir() abort
-    let absdir = AbsDir()
-    let gitroot = GitRootDir()
-    if gitroot != '' && len(absdir) > len(gitroot)
-        return gitroot
-    else
-        return absdir
-    endif
-endfunction
-function! RelativePath() abort
-    let abspath = AbsPath()
-    let gitroot = GitRootDir()
-    if gitroot != '' && len(abspath) > len(gitroot)
-        return abspath[len(gitroot)+1:]
-    else
-        return utils#expand("%:t", 1)
-    endif
-endfunction
 "------------------------
 " fugitve and others
 "------------------------
