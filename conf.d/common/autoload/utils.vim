@@ -237,7 +237,7 @@ function! utils#set_alpha(alpha) abort
 endfunction
 
 " ----------------------------------------
-" Mode Function (from lightline.vim)
+" Mode Function
 " ----------------------------------------
 function! utils#mode() abort
     let l:modes_dict={
@@ -259,3 +259,33 @@ function! utils#mode() abort
     return m
 endfunction
 
+" ----------------------------------------
+" AutoClose
+" ----------------------------------------
+let s:autoclose_ft_buf = [
+            \ 'netrw', 'tagbar', 'vista', 'vista_kind',
+            \ 'qf', 'loclist', 'rg', 'outline',
+            \ 'leaderf', 'fzf', 'help', 'man', 'startify',
+            \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame', 'diff',
+            \ 'vimspector', 'vimspectorprompt',
+            \ 'terminal', 'floaterm', 'popup', 'undotree',
+            \ 'dropbar', 'dropbar_preview',
+            \ ]
+function! utils#autoclose(check_last_win) abort
+    let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
+    let bt = tolower(getbufvar(winbufnr(winnr()), '&bt'))
+    if a:check_last_win == 0
+        return ft == '' || index(s:autoclose_ft_buf, ft) >= 0 || index(s:autoclose_ft_buf, bt) >= 0
+    elseif winnr("$") <= 1 && a:check_last_win > 0
+        return index(s:autoclose_ft_buf, ft) >= 0 || index(s:autoclose_ft_buf, bt) >= 0
+    else
+        return 0
+    endif
+endfunction
+
+function! utils#ft_bt_ignored() abort
+    return utils#autoclose(0)
+endfunction
+function! utils#ft_bt_autoclose_lastwin() abort
+    return utils#autoclose(1)
+endfunction

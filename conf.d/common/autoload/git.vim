@@ -10,11 +10,11 @@ function! git#git_root_dir() abort
 endfunction
 
 function! git#lcd_and_git_update() abort
-    if FtBtIgnored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
+    if utils#ft_bt_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
         return
     endif
     try
-        let l:cur_dir = git#abs_dir()
+        let l:cur_dir = utils#abs_dir()
         if l:cur_dir != ''
             execute 'lcd ' . l:cur_dir
         endif
@@ -49,7 +49,7 @@ function! git#lcd_and_git_update() abort
 endfunction
 
 function! git#relative_dir() abort
-    let absdir = git#abs_dir()
+    let absdir = utils#abs_dir()
     let gitroot = git#git_root_dir()
     if gitroot != '' && len(absdir) > len(gitroot)
         return gitroot
@@ -59,11 +59,11 @@ function! git#relative_dir() abort
 endfunction
 
 function! git#relative_path() abort
-    let abspath = git#abs_path()
+    let abspath = utils#abs_path()
     let gitroot = git#git_root_dir()
     if gitroot != '' && len(abspath) > len(gitroot)
         return abspath[len(gitroot)+1:]
     else
-        return git#expand("%:t", 1)
+        return utils#expand("%:t", 1)
     endif
 endfunction
