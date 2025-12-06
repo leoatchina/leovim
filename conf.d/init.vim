@@ -35,10 +35,20 @@ if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
 " --------------------------
-" system functions
+" gui_running && OS
 " --------------------------
-" System detection functions moved to utils.vim
-" File path functions moved to utils.vim
+if exists('g:vscode') && !has('nvim-0.10')
+    echoe "vscode-neovim required nvim-0.10+!"
+    finish
+elseif utils#is_win()
+    if !has('nvim') && v:version < 900
+        echoe "In windows, please update to vim9.0+."
+        finish
+    elseif has('nvim') && !has('nvim')
+        echoe 'neovim 0.8 is at least required when uing leovim in windows.'
+        finish
+    endif
+endif
 " gui - GUI detection moved to utils.vim
 if has('gui_running')
     if get(g:, 'leovim_loaded', 0) == 0
@@ -54,10 +64,31 @@ if has('gui_running')
 elseif has('nvim') && exists('g:neovide')
     let g:neovide_cursor_animation_length = 0
 endif
+" ------------------------
+" mapleader
+" ------------------------
+let g:mapleader = ' '
+let g:maplocalleader = 'q'
+" ------------------------
+" set pack related variables
+" ------------------------
+let g:require_group = []
+let g:leovim_installed = {}
+" -----------------------------------
+" filetypes definition
+" -----------------------------------
+let g:c_filetypes = get(g:, 'c_filetypes', ["c", "cpp", "objc", "objcpp", "cuda"])
+let g:web_filetypes = get(g:, 'web_filetypes', ['php', 'html', 'css', 'scss', 'wxss', 'wxml', 'xml', 'toml', 'javascript', 'typescript', 'vue'])
+" -----------------------------------
+" pattern
+" -----------------------------------
+let g:todo_patterns = "(TODO|FIXME|WARN|ERROR|BUG)"
+let g:note_patterns = "(NOTE|XXX|HINT|ETC|HELPME|COMMENTED|NOTUSED|STEP|In\\[\\d\*\\])"
+let g:root_patterns = get(g:, 'root_patterns', [".git", ".svn", ".hg", ".root", ".vscode", ".vim", ".idea", ".ccls"])
+let g:root_files = get(g:, 'root_files', [".task", "tsconfig.js", "Cargo.toml", "go.mod"])
 " ----------------------------
 " enhance functions
 " ----------------------------
-" Trailing whitespace function moved to utils.vim
 nnoremap <silent>d<space> :call utils#trip_trailing_whitespace()<Cr>
 " enhance escape
 " Escape function moved to utils.vim
@@ -65,23 +96,6 @@ xnoremap / "yy/<C-r>=utils#escape(@y)<CR><Cr>
 xnoremap ? "yy?<C-r>=utils#escape(@y)<CR><Cr>
 xnoremap s "yy:%s/<C-r>=utils#escape(@y)<CR>/<C-r>=utils#escape(@y)<CR>/gc<Left><Left><Left>
 xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
-" GetVisualSelection only in one line
-" Visual selection function moved to utils.vim
-" --------------------------
-" gui_running && OS
-" --------------------------
-if exists('g:vscode') && !has('nvim-0.10')
-    echoe "vscode-neovim required nvim-0.10+!"
-    finish
-elseif utils#is_win()
-    if !has('nvim') && v:version < 900
-        echoe "In windows, please update to vim9.0+."
-        finish
-    elseif has('nvim') && !has('nvim')
-        echoe 'neovim 0.8 is at least required when uing leovim in windows.'
-        finish
-    endif
-endif
 " --------------------------
 " init directories
 " --------------------------
@@ -113,32 +127,10 @@ if has('nvim')
     set shadafile=$HOME/.vim/shada.main
     lua require('utils')
 endif
-" ------------------------
-" mapleader
-" ------------------------
 nnoremap q <Nop>
 nnoremap Q q
 xnoremap Q q
 onoremap Q q
-let g:mapleader = ' '
-let g:maplocalleader = 'q'
-" ------------------------
-" set pack related variables
-" ------------------------
-let g:require_group = []
-let g:leovim_installed = {}
-" -----------------------------------
-" filetypes definition
-" -----------------------------------
-let g:c_filetypes = get(g:, 'c_filetypes', ["c", "cpp", "objc", "objcpp", "cuda"])
-let g:web_filetypes = get(g:, 'web_filetypes', ['php', 'html', 'css', 'scss', 'wxss', 'wxml', 'xml', 'toml', 'javascript', 'typescript', 'vue'])
-" -----------------------------------
-" pattern
-" -----------------------------------
-let g:todo_patterns = "(TODO|FIXME|WARN|ERROR|BUG)"
-let g:note_patterns = "(NOTE|XXX|HINT|ETC|HELPME|COMMENTED|NOTUSED|STEP|In\\[\\d\*\\])"
-let g:root_patterns = get(g:, 'root_patterns', [".git", ".svn", ".hg", ".root", ".vscode", ".vim", ".idea", ".ccls"])
-let g:root_files = get(g:, 'root_files', [".task", "tsconfig.js", "Cargo.toml", "go.mod"])
 " -----------------------------------
 " map
 " -----------------------------------
