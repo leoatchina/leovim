@@ -212,6 +212,14 @@ function! utils#move_to_end_and_add_semicolon() abort
     endif
 endfunction
 
+function! utils#enhance_search() range
+    let l:saved_reg = @"
+    execute 'normal! vgvy'
+    let l:pattern = escape(@", "\\/.*'$^~[]")
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
 " ----------------------------------------
 " GUI Functions (from main.vim)
 " ----------------------------------------

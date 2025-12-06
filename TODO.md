@@ -116,7 +116,8 @@
     - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
 - [x] optimize nvim-0.11 builtin completion
 - [x] builtin的snippets问题
-- [ ] windows gvim add DETACH to  winbar 
+- [ ] utils.lua NO global functions
+- [ ] windows gvim add DETACH to winbar 
 - [ ] gtags without cscope
 - [ ] config formatter.nvim
 - [ ] Ai related 
@@ -125,7 +126,6 @@
     - [ ] minuet.ai
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
-- [ ] find conflicts using Git/Project/Current path.
 ## MyPlugins:
 - [x] fzf-registers
 - [ ] vim-funky

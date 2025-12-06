@@ -423,15 +423,7 @@ else
     nnoremap <silent><nowait>g# g#``
     nnoremap <silent><nowait><C-n> *``cgn
 endif
-function! EnhancedSearch() range
-    let l:saved_reg = @"
-    execute 'normal! vgvy'
-    let l:pattern = escape(@", "\\/.*'$^~[]")
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
-xnoremap <silent><C-n> :<C-u>call EnhancedSearch()<Cr>/<C-R>=@/<Cr><Cr>gvc
+xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------------------
 " clipboard
 " ------------------------------------
@@ -544,7 +536,7 @@ xnoremap zP "_c<ESC>P"
 " --------------------------------------------
 " yank command and position to editors
 " --------------------------------------------
-function s:yank_position_to_editor(editor)
+function! s:yank_position_to_editor(editor) abort
     if index(['code', 'cursor', 'windsurf', 'qoder', 'trae', 'positron', 'zed', 'vim'], a:editor) >= 0
         let editor = a:editor
         let register = (s:clipboard ==# 'unnamedplus') ? '+' : (s:clipboard ==# 'unnamed') ? '*' : ''

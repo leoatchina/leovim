@@ -52,11 +52,7 @@ nnoremap = :<C-r>=
 " ------------------------------
 " file functions
 " ------------------------------
-" GetRootDir moved to utils.vim
-function! GetRootDir(...)
-    return call('utils#get_root_dir', a:000)
-endfunction
-nnoremap <M-k>r :echo GetRootDir()<Cr>
+nnoremap <M-k>r :echo utils#get_root_dir()<Cr>
 " --------------------------
 " some support
 " --------------------------
@@ -209,16 +205,10 @@ if utils#is_win()
     " ToggleFullScreen and SetAlpha moved to utils.vim
     if has('libcall') && !has('nvim') && utils#has_gui()
         let g:gvimfullscreendll = $HOME ."\\. leovim.windows\\tools\\gvimfullscreen.dll"
-        function! ToggleFullScreen()
-            call utils#toggle_fullscreen()
-        endfunction
-        nnoremap <C-cr> <ESC>:call ToggleFullScreen()<Cr>
         let g:VimAlpha = 255
-        function! SetAlpha(alpha)
-            call utils#set_alpha(a:alpha)
-        endfunction
-        nnoremap <silent><M-\>  :call SetAlpha(5)<Cr>
-        nnoremap <silent><M-\|> :call SetAlpha(-5)<Cr>
+        nnoremap <silent><C-cr> <ESC>:call utils#toggle_fullscreen()<Cr>
+        nnoremap <silent><M-\>  :call utils#set_alpha(5)<Cr>
+        nnoremap <silent><M-\|> :call utils#set_alpha(-5)<Cr>
     endif
 else
     if get(g:, 'leovim_loaded', 0) == 0 && isdirectory($HOME . "/.leovim.unix")
