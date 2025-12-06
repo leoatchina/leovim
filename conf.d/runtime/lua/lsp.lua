@@ -22,10 +22,10 @@ local config = {
   severity_sort = true,
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = "�?,
-      [vim.diagnostic.severity.WARN] = "�?,
-      [vim.diagnostic.severity.HINT] = "�?,
-      [vim.diagnostic.severity.INFO] = "�?,
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN] = "",
+      [vim.diagnostic.severity.HINT] = "",
+      [vim.diagnostic.severity.INFO] = "",
     },
   },
   float = {
@@ -75,28 +75,28 @@ vim.lsp.config("*", {
 -- symbol icons
 -----------------------
 local icons = {
-  Class = "�?",
-  Color = "�?",
-  Constant = "�?",
-  Constructor = "�?",
-  Enum = "�?",
-  EnumMember = "�?",
-  Event = "�?",
-  Field = "�?",
-  File = "�?",
-  Folder = "�?",
+  Class = " ",
+  Color = " ",
+  Constant = " ",
+  Constructor = " ",
+  Enum = " ",
+  EnumMember = " ",
+  Event = " ",
+  Field = " ",
+  File = " ",
+  Folder = " ",
   Function = "󰊕 ",
-  Interface = "�?",
-  Keyword = "�?",
+  Interface = " ",
+  Keyword = " ",
   Method = "ƒ ",
   Module = "󰏗 ",
-  Property = "�?",
-  Snippet = "�?",
-  Struct = "�?",
-  Text = "�?",
-  Unit = "�?",
-  Value = "�?",
-  Variable = "�?",
+  Property = " ",
+  Snippet = " ",
+  Struct = " ",
+  Text = " ",
+  Unit = " ",
+  Value = " ",
+  Variable = " ",
 }
 local completion_kinds = vim.lsp.protocol.CompletionItemKind
 for i, kind in ipairs(completion_kinds) do
@@ -116,8 +116,8 @@ vim.api.nvim_set_hl(0, 'SymbolUsageImpl', { fg = hl('@keyword').fg, bg = hl('Cur
 local function text_format(symbol)
   local res = {}
   if symbol.references then
-    local round_start = { '�?, 'SymbolUsageRounding' }
-    local round_end = { '�?, 'SymbolUsageRounding' }
+    local round_start = { '', 'SymbolUsageRounding' }
+    local round_end = { '', 'SymbolUsageRounding' }
     local num = symbol.references == 0 and 'no' or symbol.references
     local usage = symbol.references <= 1 and 'usage' or 'usages'
     table.insert(res, round_start)
@@ -142,7 +142,7 @@ require('symbol-usage').setup({
 -------------------------
 require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed and vim.tbl_filter(function(server)
-    return server ~= "debugpy" -- 过滤�?debugpy，它�?DAP 而不�?LSP
+    return server ~= "debugpy"
   end, vim.g.ensure_installed) or {},
   automatic_enable = true
 })

@@ -175,7 +175,7 @@ endif
 " ------------------------------
 " lsp && linter tool install
 " ------------------------------
-if pack#planned('lsp')
+if pack#planned_lsp()
     let g:lint_tool = 'lsp'
     " lsp related
     PlugAdd 'mason-org/mason-lspconfig.nvim'
@@ -192,7 +192,7 @@ if pack#planned('lsp')
     if pack#require('neoconf')
         PlugAdd 'folke/neoconf.nvim'
     endif
-elseif pack#planned('coc')
+elseif pack#planned_coc()
     if g:python_version > 3.06 && pack#require('ale')
         let g:lint_tool = 'ale'
         PlugAdd 'dense-analysis/ale'
