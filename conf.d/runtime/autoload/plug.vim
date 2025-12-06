@@ -257,9 +257,6 @@ function! plug#begin(...)
 endfunction
 
 function! plug#define_commands()
-    if exists(':Plug') > 0
-        return
-    endif
     command! -nargs=+ -bar Plug call plug#(<args>)
     if !executable('git')
         return plug#err('`git` executable not found. Most commands will not be available. To suppress this message, prepend `silent!` to `call plug#begin(...)`.')
