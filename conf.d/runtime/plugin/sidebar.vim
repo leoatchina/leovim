@@ -97,7 +97,7 @@ endif
 " tree_browser
 " --------------------------
 if v:version >= 801 || has('nvim')
-    source $PRESET_DIR/fern.vim
+    source $CFG_DIR/fern.vim
     let g:tree_browser = 'fern'
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',

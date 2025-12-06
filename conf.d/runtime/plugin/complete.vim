@@ -51,7 +51,7 @@ if Installed('neoconf.nvim')
 endif
 if InstalledLsp()
     let g:vista_default_executive = 'nvim_lsp'
-    source $PRESET_DIR/lsp.vim
+    source $CFG_DIR/lsp.vim
 elseif InstalledCoc()
     let g:vista_default_executive = 'coc'
 elseif Planned('vista.vim')
@@ -67,21 +67,21 @@ if InstalledLsp()
         lua require("cfg/cmp")
     endif
 elseif InstalledCoc()
-    source $PRESET_DIR/coc.vim
+    source $CFG_DIR/coc.vim
 elseif g:complete_engine == 'mcm'
     PlugAddOpt 'vim-dict'
-    source $PRESET_DIR/mcm.vim
+    source $CFG_DIR/mcm.vim
 elseif g:complete_engine != ''
     if has('nvim-0.11')
         let g:complete_engine = 'builtin'
         lua require("cfg/builtin")
     elseif has('patch-9.1.1590')
         let g:complete_engine = 'builtin'
-        source $PRESET_DIR/builtin.vim
+        source $CFG_DIR/builtin.vim
     else
         let g:complete_engine = 'mcm'
         PlugAddOpt 'vim-dict'
-        source $PRESET_DIR/mcm.vim
+        source $CFG_DIR/mcm.vim
     endif
 endif
 " ------------------------------

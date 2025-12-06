@@ -15,8 +15,9 @@ let $LEOVIM_DIR = expand('~/.leovim')
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
 let $COMMON_DIR = expand($CONF_D_DIR . '/common')
 let $MODULE_DIR = expand($CONF_D_DIR . '/module')
-let $CONFIG_DIR = expand($CONF_D_DIR . '/config')
-let $PRESET_DIR = expand($CONFIG_DIR . '/preset')
+" cfg for special plugins
+let $RTP_DIR = expand($CONF_D_DIR . '/runtime')
+let $CFG_DIR = expand($RTP_DIR . '/after/cfg')
 " opt dirs
 let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
 let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
@@ -926,8 +927,8 @@ endif
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------
 if exists('g:vscode')
-    source $COMMON_DIR/vscode.vim
+    source $RTP_DIR/vscode.vim
 else
-    source $CONFIG_DIR/main.vim
+    source $RTP_DIR/main.vim
 endif
 let g:leovim_loaded = 1

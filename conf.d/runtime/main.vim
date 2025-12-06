@@ -21,7 +21,7 @@ endfor
 if !has('nvim-0.11')
     let &termencoding=&enc
 endif
-set rtp^=$CONFIG_DIR
+set rtp^=$RTP_DIR
 " ------------------------------------
 " map enhance
 " ------------------------------------
@@ -405,7 +405,7 @@ nnoremap <M-z> :set nowrap! nowrap?<Cr>
 " ------------------------------
 " easymotion
 " ------------------------------
-source $PRESET_DIR/easymotion.vim
+source $CFG_DIR/easymotion.vim
 " ------------------------------
 " set mason PATH
 " ------------------------------
