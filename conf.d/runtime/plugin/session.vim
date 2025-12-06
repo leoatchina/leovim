@@ -25,9 +25,9 @@ let g:startify_custom_header = [
 let g:startify_files_number = 10
 let g:startify_session_number = 10
 let g:startify_list_order = [
-            \ ['   最近项�?'],
+            \ ['   最近项目:'],
             \ 'sessions',
-            \ ['   最近文�?'],
+            \ ['   最近文件:'],
             \ 'files',
             \ ['   快捷命令:'],
             \ 'commands',
