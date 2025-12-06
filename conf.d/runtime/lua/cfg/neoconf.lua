@@ -1,4 +1,4 @@
-is_require("neoconf").setup({
+require("neoconf").setup({
   -- name of the local settings files
   local_settings = ".vim/neoconf.json",
   import = {

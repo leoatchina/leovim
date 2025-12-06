@@ -63,7 +63,7 @@ require('blink.cmp').setup({
     ['<M-.>'] = {
       function()
         if is_installed('minuet-ai.nvim') then
-          is_require('minuet').make_blink_map()
+          require('minuet').make_blink_map()
         end
       end
     }

@@ -5,14 +5,14 @@ vim.keymap.set("n", "<M-i><M-i>", [[<Cmd>CodeCompanionChat<Cr>]], opt)
 vim.keymap.set("x", "<M-I>", [[<Cmd>CodeCompanion<Cr>]], opt)
 vim.keymap.set("x", "<M-i><Cr>", [[<Cmd>CodeCompanionActions<Cr>]], opt)
 vim.keymap.set("x", "<M-i><M-i>", [[<Cmd>CodeCompanionChat Add<Cr>]], opt)
-is_require("codecompanion").setup({
+require("codecompanion").setup({
   opts = {
     log_level = "DEBUG",
     language = vim.g.codecompanion_language or 'Chinese'
   },
   adapters = {
     gemini = function()
-      return is_require("codecompanion.adapters").extend("gemini", {
+      return require("codecompanion.adapters").extend("gemini", {
         env = {
           api_key = vim.env.GEMINI_API_KEY
         },
@@ -24,7 +24,7 @@ is_require("codecompanion").setup({
       })
     end,
     deepseek = function()
-      return is_require("codecompanion.adapters").extend("deepseek", {
+      return require("codecompanion.adapters").extend("deepseek", {
         env = {
           api_key = vim.env.DEEPSEEK_API_KEY
         },
@@ -36,7 +36,7 @@ is_require("codecompanion").setup({
       })
     end,
     xai = function()
-      return is_require("codecompanion.adapters").extend("xai", {
+      return require("codecompanion.adapters").extend("xai", {
         env = {
           api_key = vim.env.XAI_API_KEY
         },
@@ -48,7 +48,7 @@ is_require("codecompanion").setup({
       })
     end,
     anthropic = function()
-      return is_require("codecompanion.adapters").extend("anthropic", {
+      return require("codecompanion.adapters").extend("anthropic", {
         env = {
           api_key = vim.env.ANTHROPIC_API_KEY
         },
@@ -60,7 +60,7 @@ is_require("codecompanion").setup({
       })
     end,
     openai = function()
-      return is_require("codecompanion.adapters").extend("openai", {
+      return require("codecompanion.adapters").extend("openai", {
         env = {
           api_key = vim.env.OPENAI_API_KEY
         },
@@ -72,7 +72,7 @@ is_require("codecompanion").setup({
       })
     end,
     openai_compatible = function()
-      return is_require("codecompanion.adapters").extend("openai_compatible", {
+      return require("codecompanion.adapters").extend("openai_compatible", {
         env = {
           api_key = vim.g.openai_compatible_api_key,
         },

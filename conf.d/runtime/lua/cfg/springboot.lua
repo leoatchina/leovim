@@ -4,7 +4,7 @@ if is_windows() then
 else
   ls_path = vim.fn['utils#expand']('~/.leovim.unix/jars')
 end
-is_require('spring_boot').setup({
+require('spring_boot').setup({
   ls_path = ls_path,
   jdtls_name = "jdtls",
   log_file = nil,

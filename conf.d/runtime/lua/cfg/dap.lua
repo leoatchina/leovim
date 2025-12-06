@@ -1,9 +1,9 @@
 ---------------------
 -- dap
 ---------------------
-local vscode = is_require("dap.ext.vscode")
-local dapui  = is_require("dapui")
-local dap    = is_require("dap")
+local vscode = require("dap.ext.vscode")
+local dapui  = require("dapui")
+local dap    = require("dap")
 local keymap = vim.keymap
 local api    = vim.api
 local fn     = vim.fn
@@ -13,11 +13,11 @@ fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl
 -------------------------------------
 -- mason
 -------------------------------------
-is_require("mason-nvim-dap").setup({
+require("mason-nvim-dap").setup({
   ensure_installed = { "bash" },
   handlers = {
     function(config)
-      is_require('mason-nvim-dap').default_setup(config)
+      require('mason-nvim-dap').default_setup(config)
     end
   }
 })
@@ -168,7 +168,7 @@ end
 ---------------------------------
 ---@param dir "next"|"prev"
 local function goto_breakpoint(dir)
-	local breakpoints = is_require("dap.breakpoints").get()
+	local breakpoints = require("dap.breakpoints").get()
 	if #breakpoints == 0 then
 		vim.notify("No breakpoints set", vim.log.levels.WARN)
 		return
@@ -242,7 +242,7 @@ local function dapui_toggle(open)
   else
     open = result
   end
-  local windows = is_require("dapui.windows")
+  local windows = require("dapui.windows")
   -- width > height
   if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
     if windows.layouts[1]:is_open() or open then
@@ -271,7 +271,7 @@ keymap.set({"n", "x"}, "<M-m><M-m>",
 )
 -- 打开 dapui
 function _G.DapUIOpen()
-  local windows = is_require("dapui.windows")
+  local windows = require("dapui.windows")
   -- 根据屏幕宽高比选择合适的布局
   if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
     dapui.open(2)

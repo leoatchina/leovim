@@ -49,6 +49,6 @@ else
     },
   }
 end
-is_require('minuet').setup (
+require('minuet').setup (
   config
 )

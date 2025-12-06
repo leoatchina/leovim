@@ -9,7 +9,7 @@ else
     "github:mason-org/mason-registry"
   }
 end
-is_require("mason").setup({
+require("mason").setup({
   registries = registries,
   install_root_dir = vim.fn.expand("~/.leovim.d/mason/" .. vim.g.complete_engine),
   ui = {

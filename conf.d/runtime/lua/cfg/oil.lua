@@ -51,16 +51,16 @@ require("oil").setup({
       callback = function()
         detail = not detail
         if detail then
-          is_require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
+          require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
         else
-          is_require("oil").set_columns({ "icon" })
+          require("oil").set_columns({ "icon" })
         end
       end,
     },
   },
   view_options = {
     is_hidden_file = function(name, bufnr)
-      local dir = is_require("oil").get_current_dir(bufnr)
+      local dir = require("oil").get_current_dir(bufnr)
       local is_dotfile = vim.startswith(name, ".") and name ~= ".."
       -- if no local directory (e.g. for ssh connections), just hide dotfiles
       if not dir then
