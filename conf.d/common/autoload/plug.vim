@@ -388,6 +388,9 @@ function! plug#end()
             if !empty(types)
                 augroup filetypedetect
                     call plug#source(plug#rtp(plug), 'ftdetect/**/*.vim', 'after/ftdetect/**/*.vim')
+                    if has('nvim-0.5.0')
+                        call plug#source(plug#rtp(plug), 'ftdetect/**/*.lua', 'after/ftdetect/**/*.lua')
+                    endif
                 augroup END
             endif
             for type in types
@@ -398,7 +401,9 @@ function! plug#end()
 
     for [cmd, names] in items(lod.cmd)
         execute printf(
-                    \ 'command! -nargs=* -range -bang -complete=file %s call plug#lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s)',
+                    \ has('patch-7.4.1898')
+                    \ ? 'command! -nargs=* -range -bang -complete=file %s call plug#lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, <q-mods>, %s)'
+                    \ : 'command! -nargs=* -range -bang -complete=file %s call plug#lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s)',
                     \ cmd, string(cmd), string(names))
     endfor
 
@@ -435,6 +440,9 @@ endfunction
 
 function! plug#load_plugin(spec)
     call plug#source(plug#rtp(a:spec), 'plugin/**/*.vim', 'after/plugin/**/*.vim')
+    if has('nvim-0.5.0')
+        call plug#source(plug#rtp(a:spec), 'plugin/**/*.lua', 'after/plugin/**/*.lua')
+    endif
 endfunction
 
 function! plug#reload_plugins()
@@ -652,6 +660,9 @@ function! plug#lod(names, types, ...)
         let rtp = plug#rtp(g:plugs[name])
         for dir in a:types
             call plug#source(rtp, dir.'/**/*.vim')
+            if has('nvim-0.5.0')  " see neovim#14686
+                call plug#source(rtp, dir.'/**/*.lua')
+            endif
         endfor
         if a:0
             if !plug#source(rtp, a:1) && !empty(plug#glob(rtp, a:2))
@@ -671,11 +682,19 @@ function! plug#lod_ft(pat, names)
     call plug#doautocmd('filetypeindent', 'FileType')
 endfunction
 
-function! plug#lod_cmd(cmd, bang, l1, l2, args, names)
-    call plug#lod(a:names, ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'])
-    call plug#dobufread(a:names)
-    execute printf('%s%s%s %s', (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
-endfunction
+if has('patch-7.4.1898')
+    function! plug#lod_cmd(cmd, bang, l1, l2, args, mods, names)
+        call plug#lod(a:names, ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'])
+        call plug#dobufread(a:names)
+        execute printf('%s %s%s%s %s', a:mods, (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
+    endfunction
+else
+    function! plug#lod_cmd(cmd, bang, l1, l2, args, names)
+        call plug#lod(a:names, ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'])
+        call plug#dobufread(a:names)
+        execute printf('%s%s%s %s', (a:l1 == a:l2 ? '' : (a:l1.','.a:l2)), a:cmd, a:bang, a:args)
+    endfunction
+endif
 
 function! plug#lod_map(map, names, with_prefix, prefix)
     call plug#lod(a:names, ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin'])
@@ -803,10 +822,11 @@ endfunction
 function! plug#syntax()
     syntax clear
     syntax region plug1 start=/\%1l/ end=/\%2l/ contains=plugNumber
-    syntax region plug2 start=/\%2l/ end=/\%3l/ contains=plugBracket,plugX
+    syntax region plug2 start=/\%2l/ end=/\%3l/ contains=plugBracket,plugX,plugAbort
     syn match plugNumber /[0-9]\+[0-9.]*/ contained
     syn match plugBracket /[[\]]/ contained
     syn match plugX /x/ contained
+    syn match plugAbort /\~/ contained
     syn match plugDash /^-\{1}\ /
     syn match plugPlus /^+/
     syn match plugStar /^*/
@@ -831,6 +851,7 @@ function! plug#syntax()
     hi def link plug2       Repeat
     hi def link plugH2      Type
     hi def link plugX       Exception
+    hi def link plugAbort   Ignore
     hi def link plugBracket Structure
     hi def link plugNumber  Number
 
@@ -866,7 +887,7 @@ function! plug#lastline(msg)
 endfunction
 
 function! plug#new_window()
-    execute get(g:, 'plug_window', 'vertical topleft new')
+    execute get(g:, 'plug_window', '-tabnew')
 endfunction
 
 function! plug#plug_window_exists()
@@ -928,7 +949,7 @@ function! plug#prepare(...)
         endif
     endfor
 
-    call plug#job_abort()
+    call plug#job_abort(0)
     if plug#switch_in()
         if b:plug_preview == 1
             pc
@@ -964,6 +985,8 @@ function! plug#close_pane()
     if b:plug_preview == 1
         pc
         let b:plug_preview = -1
+    elseif exists('s:jobs') && !empty(s:jobs)
+        call plug#job_abort(1)
     else
         bd
     endif
@@ -1028,6 +1051,11 @@ function! plug#is_updated(dir)
 endfunction
 
 function! plug#do(pull, force, todo)
+    if has('nvim')
+        " Reset &rtp to invalidate Neovim cache of loaded Lua modules
+        " See https://github.com/junegunn/vim-plug/pull/1157#issuecomment-1809226110
+        let &rtp = &rtp
+    endif
     for [name, spec] in items(a:todo)
         if !isdirectory(spec.dir)
             continue
@@ -1086,15 +1114,21 @@ function! plug#hash_match(a, b)
     return stridx(a:a, a:b) == 0 || stridx(a:b, a:a) == 0
 endfunction
 
+function! plug#disable_credential_helper()
+    return plug#git_version_requirement(2) && get(g:, 'plug_disable_credential_helper', 1)
+endfunction
+
 function! plug#checkout(spec)
     let sha = a:spec.commit
     let output = plug#git_revision(a:spec.dir)
+    let error = 0
     if !empty(output) && !plug#hash_match(sha, plug#lines(output)[0])
-        let credential_helper = plug#git_version_requirement(2) ? '-c credential.helper= ' : ''
+        let credential_helper = plug#disable_credential_helper() ? '-c credential.helper= ' : ''
         let output = plug#system(
                     \ 'git '.credential_helper.'fetch --depth 999999 && git checkout '.plug#shellescape(sha).' --', a:spec.dir)
+        let error = v:shell_error
     endif
-    return output
+    return [output, error]
 endfunction
 
 function! plug#finish(pull)
@@ -1155,7 +1189,7 @@ function! plug#update_impl(pull, force, args) abort
     let threads = (len(args) > 0 && args[-1] =~ '^[1-9][0-9]*$') ?
                 \ remove(args, -1) : get(g:, 'plug_threads', 16)
 
-    let managed = filter(copy(g:plugs), 'plug#is_managed(v:key)')
+    let managed = filter(deepcopy(g:plugs), 'plug#is_managed(v:key)')
     let todo = empty(args) ? filter(managed, '!v:val.frozen || !isdirectory(v:val.dir)') :
                 \ filter(managed, 'index(args, v:key) >= 0')
 
@@ -1245,9 +1279,11 @@ function! plug#update_finish()
             if !pos
                 continue
             endif
+            let out = ''
+            let error = 0
             if has_key(spec, 'commit')
                 call plug#log4(name, 'Checking out '.spec.commit)
-                let out = plug#checkout(spec)
+                let [out, error] = plug#checkout(spec)
             elseif has_key(spec, 'tag')
                 let tag = spec.tag
                 if tag =~ '\*'
@@ -1260,19 +1296,16 @@ function! plug#update_finish()
                 endif
                 call plug#log4(name, 'Checking out '.tag)
                 let out = plug#system('git checkout -q '.plug#shellescape(tag).' -- 2>&1', spec.dir)
-            else
-                let branch = plug#git_origin_branch(spec)
-                call plug#log4(name, 'Merging origin/'.plug#esc(branch))
-                let out = plug#system('git checkout -q '.plug#shellescape(branch).' -- 2>&1'
-                            \. (has_key(s:update.new, name) ? '' : ('&& git merge --ff-only '.plug#shellescape('origin/'.branch).' 2>&1')), spec.dir)
+                let error = v:shell_error
             endif
-            if !v:shell_error && filereadable(spec.dir.'/.gitmodules') &&
+            if !error && filereadable(spec.dir.'/.gitmodules') &&
                         \ (s:update.force || has_key(s:update.new, name) || plug#is_updated(spec.dir))
                 call plug#log4(name, 'Updating submodules. This may take a while.')
                 let out .= plug#bang('git submodule update --init --recursive'.s:submodule_opt.' 2>&1', spec.dir)
+                let error = v:shell_error
             endif
-            let msg = plug#format_message(v:shell_error ? 'x': '-', name, out)
-            if v:shell_error
+            let msg = plug#format_message(error ? 'x': '-', name, out)
+            if error
                 call add(s:update.errors, name)
                 call plug#regress_bar()
                 silent execute pos 'd _'
@@ -1296,7 +1329,12 @@ function! plug#update_finish()
     endif
 endfunction
 
-function! plug#job_abort()
+function! plug#mark_aborted(name, message)
+    let attrs = { 'running': 0, 'error': 1, 'abort': 1, 'lines': [a:message] }
+    let s:jobs[a:name] = extend(get(s:jobs, a:name, {}), attrs)
+endfunction
+
+function! plug#job_abort(cancel)
     if (!s:nvim && !s:vim8) || !exists('s:jobs')
         return
     endif
@@ -1310,8 +1348,18 @@ function! plug#job_abort()
         if j.new
             call plug#rm_rf(g:plugs[name].dir)
         endif
+        if a:cancel
+            call plug#mark_aborted(name, 'Aborted')
+        endif
     endfor
-    let s:jobs = {}
+
+    if a:cancel
+        for todo in values(s:update.todo)
+            let todo.abort = 1
+        endfor
+    else
+        let s:jobs = {}
+    endif
 endfunction
 
 function! plug#last_non_empty_line(lines)
@@ -1348,7 +1396,7 @@ endfunction
 
 function! plug#job_cb(fn, job, ch, data)
     if !plug#plug_window_exists() " plug window closed
-        return plug#job_abort()
+        return plug#job_abort(0)
     endif
     call call(a:fn, [a:job, a:data])
 endfunction
@@ -1607,7 +1655,10 @@ endfunction
 
 function! plug#with_cd(cmd, dir, ...)
     let script = a:0 > 0 ? a:1 : 1
-    return printf('cd%s %s && %s', s:is_win ? ' /d' : '', plug#shellescape(a:dir, {'script': script}), a:cmd)
+    let pwsh = plug#is_powershell(&shell)
+    let cd = s:is_win && !pwsh ? 'cd /d' : 'cd'
+    let sep = pwsh ? ';' : '&&'
+    return printf('%s %s %s %s', cd, plug#shellescape(a:dir, {'script': script, 'shell': &shell}), sep, a:cmd)
 endfunction
 
 function! plug#system(cmd, ...)
@@ -1659,7 +1710,9 @@ function! plug#git_validate(spec, check_branch)
             let err = join(['Invalid URI: '.remote,
                         \ 'Expected:    '.a:spec.uri,
                         \ 'PlugClean required.'], "\n")
-        elseif a:check_branch && has_key(a:spec, 'commit')
+        elseif !a:check_branch
+            return ['', 0]
+        elseif has_key(a:spec, 'commit')
             let sha = plug#git_revision(a:spec.dir)
             if empty(sha)
                 let err = join(add(result, 'PlugClean required.'), "\n")
@@ -1668,34 +1721,35 @@ function! plug#git_validate(spec, check_branch)
                             \ a:spec.commit[:6], sha[:6]),
                             \ 'PlugUpdate required.'], "\n")
             endif
+        elseif has_key(a:spec, 'tag')
+            let tag = plug#system_chomp('git describe --exact-match --tags HEAD 2>&1', a:spec.dir)
+            if a:spec.tag !=# tag && a:spec.tag !~ '\*'
+                let err = printf('Invalid tag: %s (expected: %s). Try PlugUpdate.',
+                            \ (empty(tag) ? 'N/A' : tag), a:spec.tag)
+            endif
         elseif a:check_branch
             let current_branch = result[0]
-            " Check tag
             let origin_branch = plug#git_origin_branch(a:spec)
-            if has_key(a:spec, 'tag')
-                let tag = plug#system_chomp('git describe --exact-match --tags HEAD 2>&1', a:spec.dir)
-                if a:spec.tag !=# tag && a:spec.tag !~ '\*'
-                    let err = printf('Invalid tag: %s (expected: %s). Try PlugUpdate.',
-                                \ (empty(tag) ? 'N/A' : tag), a:spec.tag)
-                endif
-                " Check branch
-            elseif origin_branch !=# current_branch
+            if origin_branch !=# current_branch
                 let err = printf('Invalid branch: %s (expected: %s). Try PlugUpdate.',
                             \ current_branch, origin_branch)
             endif
             if empty(err)
-                let [ahead, behind] = split(plug#lastline(plug#system([
+                let ahead_behind = split(plug#lastline(plug#system([
                             \ 'git', 'rev-list', '--count', '--left-right',
                             \ printf('HEAD...origin/%s', origin_branch)
                             \ ], a:spec.dir)), '\t')
-                if !v:shell_error && ahead
-                    if behind
+                if v:shell_error || len(ahead_behind) != 2
+                    let err = "Failed to compare with the origin. The default branch might have changed.\nPlugClean required."
+                else
+                    let [ahead, behind] = ahead_behind
+                    if ahead && behind
                         " Only mention PlugClean if diverged, otherwise it's likely to be
                         " pushable (and probably not that messed up).
                         let err = printf(
                                     \ "Diverged from origin/%s (%d commit(s) ahead and %d commit(s) behind!\n"
                                     \ .'Backup local changes and run PlugClean and PlugUpdate to reinstall it.', origin_branch, ahead, behind)
-                    else
+                    elseif ahead
                         let err = printf("Ahead of origin/%s by %d commit(s).\n"
                                     \ .'Cannot update until local changes are pushed.',
                                     \ origin_branch, ahead)
@@ -1727,7 +1781,7 @@ function! plug#clean(force)
     let errs = {}
     let [cnt, total] = [0, len(g:plugs)]
     for [name, spec] in items(g:plugs)
-        if !plug#is_managed(name)
+        if !plug#is_managed(name) || get(spec, 'frozen', 0)
             call add(dirs, spec.dir)
         else
             let [err, clean] = plug#git_validate(spec, 1)
