@@ -11,13 +11,6 @@ else
     nnoremap <nowait><M-l><M-l> :CtrlPLine<Cr>
 endif
 " ----------------------------
-" using rg
-" ----------------------------
-if executable('rg')
-    set grepprg=rg\ --line-number\ --no-heading\ --smart-case
-    set grepformat=%f:%l:%m,%f:%l,%f:%m,%f
-endif
-" ----------------------------
 " buffer search
 " ----------------------------
 function! s:search_cur(...)
@@ -52,19 +45,27 @@ nnoremap z\ :GrepBuf <C-r><C-w>
 xnoremap z\ :<C-u>GrepBuf <C-r>=utils#get_visual_selection(1)<Cr>
 nnoremap z? :GrepBuf <C-r>=@"<Cr><Cr>
 " ----------------------------
-" grep search
+" using rg to search
 " ----------------------------
+if executable('rg')
+    set grepprg=rg\ --line-number\ --no-heading\ --smart-case
+    set grepformat=%f:%l:%m,%f:%l,%f:%m,%f
+endif
 function! s:grep(...)
     if a:0 == 0
         return
     elseif a:000[-1] == 1
         if a:0 == 1
-            let g:grep_word = get(g:, 'grepdir_last', '')
+            let g:grep_word = get(g:, 'grep_last', '')
         else
             let g:grep_word = utils#escape(a:1)
-            let g:grepdir_last = g:grep_word
+            let g:grep_last = g:grep_word
         endif
-        let cmd = printf('vimgrep /%s/j **/* ', g:grep_word)
+        if executable('rg')
+            let cmd = printf('silent! grep %s', g:grep_word)
+        else
+            let cmd = printf('vimgrep /%s/j **/*', g:grep_word)
+        endif
     elseif a:000[-1] == 2
         if a:0 == 1
             let g:grep_word = get(g:, 'grepall_last', '')
@@ -72,18 +73,18 @@ function! s:grep(...)
             let g:grep_word = utils#escape(a:1)
             let g:grepall_last = g:grep_word
         endif
-        let cmd = printf('vimgrep /%s/j %s/**/* ', g:grep_word, utils#get_root_dir())
+        if executable('rg')
+            let cmd = printf('silent! grep %s %s', g:grep_word, utils#get_root_dir())
+        else
+            let cmd = printf('vimgrep /%s/j %s/**/*', g:grep_word, utils#get_root_dir())
+        endif
     else
         return
     endif
-    try
-        execute cmd
-        if len(getqflist())
-            copen
-        endif
-    catch
-        call preview#errmsg("vimgrep error")
-    endtry
+    execute cmd
+    if len(getqflist())
+        copen
+    endif
 endfunction
 command! GrepDirLast call s:grep(1)
 command! -nargs=1 GrepDir call s:grep(<q-args>, 1)

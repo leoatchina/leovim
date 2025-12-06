@@ -35,8 +35,8 @@ let g:coc_global_extensions = [
             \ 'coc-sh',
             \ 'coc-vimlsp',
             \ 'coc-basedpyright',
+            \ '@yaegassy/coc-ruff',
             \ ]
-" \ '@yaegassy/coc-ruff',
 if utils#is_unix()
     let g:coc_global_extensions += ['coc-lua']
 elseif utils#is_windows()
