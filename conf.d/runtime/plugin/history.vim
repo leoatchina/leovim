@@ -17,7 +17,7 @@ endtry
 " undo
 " --------------------------
 if pack#installed('nvim-fundo')
-    lua pack#require('fundo').setup()
+    lua require('fundo').setup()
 endif
 " undotree
 if pack#planned('undotree')

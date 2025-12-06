@@ -44,9 +44,9 @@ if pack#require('go') && g:gobin_exe != ''
     let g:ensure_installed += ['gopls']
 endif
 if pack#installed('spring-boot.nvim')
-    lua pack#require('cfg/springboot')
+    lua require('cfg/springboot')
 endif
 if pack#installed('nvim-java', 'nvim-java-core', 'nvim-java-test', 'nvim-java-refactor', 'nvim-java-dap', 'lua-async-await')
-    lua pack#require('java').setup()
+    lua require('java').setup()
 endif
-lua pack#require("lsp")
+lua require("lsp")
