@@ -69,7 +69,7 @@ if InstalledLsp()
 elseif InstalledCoc()
     source $CFG_DIR/coc.vim
 elseif g:complete_engine == 'mcm'
-    PlugAddOpt 'vim-dict'
+    PlugOpt 'vim-dict'
     source $CFG_DIR/mcm.vim
 elseif g:complete_engine != ''
     if has('nvim-0.11')
@@ -80,7 +80,7 @@ elseif g:complete_engine != ''
         source $CFG_DIR/builtin.vim
     else
         let g:complete_engine = 'mcm'
-        PlugAddOpt 'vim-dict'
+        PlugOpt 'vim-dict'
         source $CFG_DIR/mcm.vim
     endif
 endif

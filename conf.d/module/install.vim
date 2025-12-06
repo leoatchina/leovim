@@ -100,7 +100,7 @@ elseif g:complete_engine == 'coc'
     else
         PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
     endif
-    PlugAddOpt 'coc-fzf'
+    PlugOpt 'coc-fzf'
 endif
 " ------------------------------
 " snippets install

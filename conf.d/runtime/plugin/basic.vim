@@ -5,7 +5,7 @@ let g:preview#preview_position = "rightbottom"
 let g:preview#preview_size = get(g:, 'asyncrun_open', 8)
 let g:quickui_preview_h = 24
 nnoremap <silent><C-w><Space> <C-w>z:call preview#cmdmsg('close preview', 0)<Cr>
-PlugAddOpt 'vim-preview'
+PlugOpt 'vim-preview'
 " --------------------------
 " vim-quickui
 " --------------------------
@@ -24,7 +24,7 @@ if v:version >= 802 || has('nvim')
             let g:quickui_color_scheme = 'papercol light'
         endif
     endif
-    PlugAddOpt 'vim-quickui'
+    PlugOpt 'vim-quickui'
     nnoremap <silent><M-k>m :call quickui#tools#display_messages()<Cr>
     function! s:preview_popup_file(filename) abort
         let filename = a:filename
@@ -148,7 +148,7 @@ if PlannedLeaderf()
 endif
 if !PlannedLeaderf() && !PlannedFzf()
     source $CFG_DIR/ctrlp.vim
-    PlugAddOpt 'ctrlp.vim'
+    PlugOpt 'ctrlp.vim'
 endif
 " --------------------------------
 " common maps

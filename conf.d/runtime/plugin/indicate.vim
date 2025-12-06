@@ -22,7 +22,7 @@ set updatetime=200
 if get(g:, 'leovim_whichkey', 1)
     let g:which_key_group_dicts = ''
     let g:which_key_use_floating_win = g:has_popup_floating
-    PlugAddOpt 'vim-which-key'
+    PlugOpt 'vim-which-key'
     nnoremap [ :WhichKey '['<Cr>
     nnoremap ] :WhichKey ']'<Cr>
     " basic keys

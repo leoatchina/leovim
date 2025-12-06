@@ -204,7 +204,7 @@ if has('nvim') || has('patch-8.0.902')
     xmap am <plug>(signify-motion-outer-visual)
     nmap <leader>vm vim
     nmap <leader>vM vam
-    PlugAddOpt 'vim-signify'
+    PlugOpt 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
     nnoremap <silent>\: :SignifyCommands<Cr>

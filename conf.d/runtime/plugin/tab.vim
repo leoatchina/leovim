@@ -2,7 +2,7 @@
 " choose tab using fuzzy_findeer
 " ---------------------------------------
 if PlannedFzf()
-    PlugAddOpt 'fzf-tabs'
+    PlugOpt 'fzf-tabs'
     nnoremap <silent>gt :FzfTabs<Cr>
 endif
 " ------------------------

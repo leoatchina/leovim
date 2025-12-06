@@ -61,7 +61,7 @@ if s:planned_symbol('aerial')
     PlugAdd 'stevearc/aerial.nvim'
 endif
 if s:planned_symbol('vista')
-    PlugAddOpt 'vista.vim'
+    PlugOpt 'vista.vim'
 elseif s:planned_symbol('tagbar')
-    PlugAddOpt 'tagbar'
+    PlugOpt 'tagbar'
 endif

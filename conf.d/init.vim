@@ -421,16 +421,16 @@ function! s:plug_add_opt(pack)
     endif
     let g:leovim_installed[tolower(pack)] = 1
 endfunction
-command! -nargs=+ PlugAddOpt call <sid>plug_add_opt(<args>)
+command! -nargs=+ PlugOpt call <sid>plug_add_opt(<args>)
 " ------------------------------
 " intergrated packs
 " ------------------------------
-PlugAddOpt 'vim-eunuch'
+PlugOpt 'vim-eunuch'
 " ------------------------------
 " conflict marker
 " ------------------------------
 let g:conflict_marker_enable_mappings = 0
-PlugAddOpt 'conflict-marker.vim'
+PlugOpt 'conflict-marker.vim'
 nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
 nnoremap <leader>co :ConflictMarkerOurselves<Cr>
 nnoremap <leader>cx :ConflictMarkerNone<Cr>
@@ -456,7 +456,7 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
-PlugAddOpt 'nerdcommenter'
+PlugOpt 'nerdcommenter'
 " ------------------------
 " surround
 " ------------------------
@@ -477,11 +477,11 @@ if exists('*search') && exists('*getpos')
     " -------------------
     " textobj
     " -------------------
-    PlugAddOpt 'vim-textobj-user'
-    PlugAddOpt 'vim-textobj-uri'
-    PlugAddOpt 'vim-textobj-line'
-    PlugAddOpt 'vim-textobj-syntax'
-    PlugAddOpt 'vim-textobj-function'
+    PlugOpt 'vim-textobj-user'
+    PlugOpt 'vim-textobj-uri'
+    PlugOpt 'vim-textobj-line'
+    PlugOpt 'vim-textobj-syntax'
+    PlugOpt 'vim-textobj-function'
     nmap <leader>vf vafo
     nmap <leader>vF vifo
     nmap <leader>vc vaco
@@ -587,11 +587,11 @@ if exists('*search') && exists('*getpos')
     let g:vindent_object_XX_ai     = 'ai' " select current block + one extra line  at beginning.
     let g:vindent_object_XX_aI     = 'aI' " select current block + two extra lines at beginning and end.
     let g:vindent_jumps            = 1    " make vindent motion count as a |jump-motion| (works with |jumplist|).
-    PlugAddOpt 'vindent.vim'
+    PlugOpt 'vindent.vim'
     " -------------------
     " targets.vim
     " -------------------
-    PlugAddOpt 'targets.vim'
+    PlugOpt 'targets.vim'
     nmap <leader>vt vit
     nmap <leader>vT vat
     nmap <leader>va via
@@ -611,7 +611,7 @@ if exists('*search') && exists('*getpos')
     " -------------------
     " sandwich
     " -------------------
-    PlugAddOpt 'vim-sandwich'
+    PlugOpt 'vim-sandwich'
     xmap is <Plug>(textobj-sandwich-auto-i)
     xmap as <Plug>(textobj-sandwich-auto-a)
     omap is <Plug>(textobj-sandwich-auto-i)
@@ -629,7 +629,7 @@ endif
 " hl searchindex && multi replace
 " ----------------------------------
 if has('nvim')
-    PlugAddOpt 'nvim-hlslens'
+    PlugOpt 'nvim-hlslens'
     lua require('hlslens').setup()
     nnoremap <silent><nowait>n <Cmd>execute('normal! ' . v:count1 . 'n')<Cr><Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait>N <Cmd>execute('normal! ' . v:count1 . 'N')<Cr><Cmd>lua require('hlslens').start()<Cr>
@@ -639,7 +639,7 @@ if has('nvim')
     nnoremap <silent><nowait>g# g#``<Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait><C-n> *``<Cmd>lua require('hlslens').start()<Cr>cgn
 else
-    PlugAddOpt 'vim-searchindex'
+    PlugOpt 'vim-searchindex'
     nnoremap <silent><nowait>* *``
     nnoremap <silent><nowait># #``
     nnoremap <silent><nowait>g* g*``
@@ -890,14 +890,14 @@ nnoremap ; <Nop>
 nnoremap , <Nop>
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim')
-    PlugAddOpt 'flash.nvim'
+    PlugOpt 'flash.nvim'
     lua require("cfg/flash")
     nmap SJ vt<Space><Cr>S
     nmap SK vT<Space><Cr>S
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
-    PlugAddOpt 'clever-f.vim'
+    PlugOpt 'clever-f.vim'
     nmap ;s <Plug>(clever-f-repeat-forward)
     xmap ;s <Plug>(clever-f-repeat-forward)
     nmap ,s <Plug>(clever-f-repeat-back)
@@ -912,7 +912,7 @@ if exists('g:vscode')
     imap <C-x> <C-o>"*
     xmap <C-x> "*x
     nmap <C-x> "*x
-    PlugAddOpt 'hop.nvim'
+    PlugOpt 'hop.nvim'
     lua require("cfg/hop")
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"

@@ -61,7 +61,7 @@ endif
 if has('nvim') && UNIX()
     PlugAdd 'kevinhwang91/nvim-fundo'
 endif
-PlugAddOpt 'undotree'
+PlugOpt 'undotree'
 " ------------------------------
 " translate
 " ------------------------------

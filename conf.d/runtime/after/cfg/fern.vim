@@ -1,17 +1,17 @@
 let g:fern_disable_startup_warnings = 1
-PlugAddOpt 'vim-fern'
+PlugOpt 'vim-fern'
 " icons
 let g:fern#renderer = "nerdfont"
-PlugAddOpt 'vim-nerdfont'
-PlugAddOpt 'vim-glyph-palette'
-PlugAddOpt 'vim-fern-renderer-nerdfont'
+PlugOpt 'vim-nerdfont'
+PlugOpt 'vim-glyph-palette'
+PlugOpt 'vim-fern-renderer-nerdfont'
 augroup my-glyph-palette
     autocmd!
     autocmd FileType fern,startify call glyph_palette#apply()
 augroup END
 " enhance
-PlugAddOpt 'vim-fern-git-status'
-PlugAddOpt 'vim-fern-hijack'
+PlugOpt 'vim-fern-git-status'
+PlugOpt 'vim-fern-hijack'
 " fern_open
 function! FernOpen(type, ...) abort
     if a:type == 'lcd'
@@ -59,7 +59,7 @@ function! s:reveal(dict)
 endfunction
 let g:Fern_mapping_fzf_file_sink = function('s:reveal')
 let g:Fern_mapping_fzf_dir_sink = function('s:reveal')
-PlugAddOpt 'fern-mapping-fzf.vim'
+PlugOpt 'fern-mapping-fzf.vim'
 " ---------------
 " preview
 " ---------------
@@ -76,4 +76,4 @@ augroup fern-settings
     autocmd!
     autocmd FileType fern call s:fern_settings()
 augroup END
-PlugAddOpt 'fern-preview.vim'
+PlugOpt 'fern-preview.vim'

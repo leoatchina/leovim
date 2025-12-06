@@ -70,7 +70,7 @@ if WINDOWS()
 elseif executable('zsh') && has('nvim') && InstalledAdv()
     let g:floaterm_shell = 'zsh'
 endif
-PlugAddOpt 'vim-floaterm'
+PlugOpt 'vim-floaterm'
 " ---------------------------------------------------------
 " enhanced functions and commands
 " ---------------------------------------------------------
@@ -586,7 +586,7 @@ call s:bind_keymap('<M-}>', 'FloatermNext')
 " -----------------------------------------------------------------------------------------
 " using vim-floaterm-enhance to do repl/run/aider. NOTE: below bang[!] means cursor not move
 " -----------------------------------------------------------------------------------------
-PlugAddOpt 'vim-floaterm-enhance'
+PlugOpt 'vim-floaterm-enhance'
 " repl start
 nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
 nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>

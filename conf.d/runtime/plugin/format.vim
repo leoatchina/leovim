@@ -15,7 +15,7 @@ xmap g, ga*,
 xmap g= ga*=
 xmap g: ga*:
 xmap g<Space> ga*<Space>
-PlugAddOpt 'vim-easy-align'
+PlugOpt 'vim-easy-align'
 " ----------------------------
 " neoformat
 " ----------------------------

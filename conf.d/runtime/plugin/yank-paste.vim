@@ -29,7 +29,7 @@ elseif g:has_terminal == 2
     tnoremap <M-v> <C-_>""
 endif
 if PlannedFzf()
-    PlugAddOpt 'fzf-registers'
+    PlugOpt 'fzf-registers'
     nnoremap <silent><M-v> :FzfRegisterPaste<Cr>
     inoremap <silent><M-v> <C-o>:FzfRegisterPaste<Cr>
     xnoremap <silent><M-v> :<C-u>FzfRegisterPasteV<Cr>

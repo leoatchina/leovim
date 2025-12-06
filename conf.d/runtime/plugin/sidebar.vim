@@ -1,4 +1,4 @@
-PlugAddOpt 'vim-sidebar-manager'
+PlugOpt 'vim-sidebar-manager'
 let g:sidebars = {}
 function! s:check_buf_ft(name, nr) abort
     return getwinvar(a:nr, '&filetype') ==# a:name || bufname(winbufnr(a:nr)) ==# a:name
@@ -113,7 +113,7 @@ else
     let g:netrw_winsize = 16
     let g:netrw_liststyle = 3
     let g:netrw_browse_split = 4
-    PlugAddOpt 'vim-vinegar'
+    PlugOpt 'vim-vinegar'
     " functions
     function! NetrwClose()
         if exists('t:netrw_winnr')
