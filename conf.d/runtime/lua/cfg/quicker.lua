@@ -19,4 +19,4 @@ if is_unix() then
     }
   }
 end
-is_require("quicker").setup(config)
+require("quicker").setup(config)

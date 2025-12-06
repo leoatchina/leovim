@@ -182,5 +182,5 @@ if has('patch-8.0.1129') && !has('nvim')
         autocmd WinClosed,WinLeave,TabClosed,TabLeave,BufLeave * CloseWinBar
     augroup END
 elseif has('nvim') && utils#is_installed_coc()
-    lua utils#is_require('cfg/coc_symboline')
+    lua require('cfg/coc_symboline')
 endif

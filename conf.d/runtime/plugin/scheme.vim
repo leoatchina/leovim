@@ -60,5 +60,5 @@ endif
 " nvim-web-devicons
 " --------------------------
 if utils#is_installed('nvim-web-devicons')
-    lua utils#is_require('nvim-web-devicons').setup({})
+    lua require('nvim-web-devicons').setup({})
 endif

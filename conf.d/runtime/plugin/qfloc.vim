@@ -86,13 +86,13 @@ if utils#is_installed('nvim-bqf')
     hi link BqfPreviewRange Search
     hi default BqfSign ctermfg=14 guifg=Cyan
     hi BqfPreviewBorder guifg=#50a14f ctermfg=71
-    lua utils#is_require("cfg/bqf")
+    lua require("cfg/bqf")
 endif
 " ----------------------------
 " quickfix
 " ----------------------------
 if utils#is_installed('quicker.nvim')
-    lua utils#is_require("cfg/quicker")
+    lua require("cfg/quicker")
 elseif exists('&quickfixtextfunc')
     function! QuickFixFormat(info)
         let qflist = getqflist({'id' : a:info.id, 'items' : 1}).items

@@ -1,10 +1,10 @@
 local map = vim.keymap.set
-is_require("hlargs").setup({
+require("hlargs").setup({
   hl_priority = 1024 * 16
 })
 vim.opt.runtimepath:prepend(vim.fn.expand("~/.leovim.d/treesitter"))
-is_require("nvim-treesitter.install").prefer_git = true
-is_require("nvim-treesitter.configs").setup({
+require("nvim-treesitter.install").prefer_git = true
+require("nvim-treesitter.configs").setup({
   ensure_installed = {'python', 'vimdoc', 'markdown', 'markdown_inline', 'java', 'javadoc', 'r', 'c', 'cpp', 'rust', 'typescript', 'javascript'},
   sync_install = true,
   highlight = {
@@ -39,13 +39,13 @@ is_require("nvim-treesitter.configs").setup({
 })
 map("n", "<M-l>U", ":TSUpdate ", { noremap = true, silent = false })
 map("n", "<M-l>I", ":TSInstall ", { noremap = true, silent = false })
-map({ 'n', 'x', 'o' }, 'sv', function() is_require("flash").treesitter() end, { noremap = true, silent = true })
-map({ 'x', 'o' }, 'm', function() is_require("flash").treesitter_search() end, { noremap = true, silent = true })
+map({ 'n', 'x', 'o' }, 'sv', function() require("flash").treesitter() end, { noremap = true, silent = true })
+map({ 'x', 'o' }, 'm', function() require("flash").treesitter_search() end, { noremap = true, silent = true })
 -------------------------
 -- treesitter-textobj
 -------------------------
 if is_installed("nvim-treesitter-textobjects") then
-  is_require("nvim-treesitter.configs").setup({
+  require("nvim-treesitter.configs").setup({
     textobjects = {
       select = {
         enable = true,
