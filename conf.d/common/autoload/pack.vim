@@ -5,7 +5,7 @@ function! pack#require(pack) abort
     return count(g:require_group, a:pack) > 0
 endfunction
 
-function! pack#add_require(...) abort
+function! pack#add(...) abort
     if a:0 == 0
         return
     endif

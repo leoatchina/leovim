@@ -34,7 +34,7 @@ if exists('+pumwidth')
 endif
 " 如果补全功能不够完善，在Unix下使用mcm作为备选
 if !has('patch-7.4.775') && utils#is_unix()
-    call pack#add_require('mcm')
+    call pack#add('mcm')
 endif
 " ------------------------------
 " complete_engine select
@@ -68,7 +68,7 @@ else
 endif
 if get(s:, 'smart_engine_select', 0)
     if has('nvim-0.11')
-        call pack#add_require('builtin')
+        call pack#add('builtin')
         let g:complete_engine = 'builtin'
     else
         let g:complete_engine = 'mcm'
