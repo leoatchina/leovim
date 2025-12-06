@@ -127,13 +127,13 @@ if has('nvim')
     set shadafile=$HOME/.vim/shada.main
     lua require('utils')
 endif
+" -----------------------------------
+" map
+" -----------------------------------
 nnoremap q <Nop>
 nnoremap Q q
 xnoremap Q q
 onoremap Q q
-" -----------------------------------
-" map
-" -----------------------------------
 map ÏP <F1>
 map ÏQ <F2>
 map ÏR <F3>
