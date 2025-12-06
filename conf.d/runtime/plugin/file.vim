@@ -236,18 +236,21 @@ if get(g:, 'leovim_openmap', 1)
         exec "tabe " . f
     endfunction
     nnoremap <silent><M-h>i :call TabeOpen("$CONF_D_DIR/init.vim")<Cr>
-    nnoremap <silent><M-h>v :call TabeOpen("$CONF_D_DIR/vscode.vim")<Cr>
-    nnoremap <silent><M-h>k :call TabeOpen("$CONF_D_DIR/keybindings.json")<Cr>
+    nnoremap <silent><M-h>v :call TabeOpen("$COMMON_DIR/vscode.vim")<Cr>
+    nnoremap <silent><M-h>k :call TabeOpen("$COMMON_DIR/keybindings.json")<Cr>
+    nnoremap <silent><M-h>u :call TabeOpen("$COMMON_DIR/autoload/utils.vim")<Cr>
     nnoremap <silent><M-h>I :call TabeOpen("$MODULE_DIR/install.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$RTP_DIR/opt.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$RTP_DIR/main.vim")<Cr>
     if pack#planned_leaderf()
+        nnoremap <silent><M-h>p :Leaderf file --regex --no-sort ~/.leovim/conf.d/runtime/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --regex --no-sort ~/.leovim<Cr>
         if utils#is_unix()
             nnoremap <silent><M-h>L :Leaderf file --regex --no-sort ~/.local/bin<Cr>
         endif
     elseif pack#pref_fzf()
+        nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/runtime/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
         if utils#is_unix()
