@@ -345,7 +345,7 @@ if pack#planned('vimspector')
     nnoremap <silent>J :BalloonEval<Cr>
 elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
-    lua pack#require("cfg/dap")
+    lua require("cfg/dap")
     " load template
     if pack#planned_fzf()
         function! ReadDapTemplate(template_file) abort
@@ -402,17 +402,17 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
     nnoremap <silent><M-d>u <cmd>lua require"dap".up()<Cr>
     nnoremap <silent><M-d>d <cmd>lua require"dap".down()<Cr>
     " auto attach
-    au FileType dap-repl lua pack#require('dap.ext.autocompl').attach()
+    au FileType dap-repl lua require('dap.ext.autocompl').attach()
     " --------------------------------------
     " nvim-dap-ui
     " ---------------------------------------
-    nnoremap <M-m>l :lua pack#require("dapui").
+    nnoremap <M-m>l :lua require("dapui").
     " watch
-    nnoremap <silent><M-m>s <cmd>lua pack#require("dapui").float_element('scopes')<Cr>
-    nnoremap <silent><M-m>w <cmd>lua pack#require("dapui").float_element('watches')<Cr>
-    nnoremap <silent><M-m>t <cmd>lua pack#require("dapui").float_element('stacks')<Cr>
-    nnoremap <silent><M-m>c <cmd>lua pack#require("dapui").float_element('console')<Cr>
-    nnoremap <silent><M-m>r <cmd>lua pack#require("dapui").float_element('repl')<Cr>
+    nnoremap <silent><M-m>s <cmd>lua require("dapui").float_element('scopes')<Cr>
+    nnoremap <silent><M-m>w <cmd>lua require("dapui").float_element('watches')<Cr>
+    nnoremap <silent><M-m>t <cmd>lua require("dapui").float_element('stacks')<Cr>
+    nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
+    nnoremap <silent><M-m>r <cmd>lua require("dapui").float_element('repl')<Cr>
     function! GoToDAPWindows(name) abort
         try
             let windowNr = bufwinnr(a:name)
@@ -438,17 +438,17 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
     function! s:dap_or_floaterm(type)
         if a:type == "eval"
             if luaeval('require"dap".session() ~= nil')
-                lua pack#require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
+                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
             else
                 call s:diag_or_errmsg(1)
             endif
         elseif s:dapui_opened()
             if a:type == "console"
-                lua pack#require("dapui").float_element('console')
+                lua require("dapui").float_element('console')
             elseif a:type == "repl"
-                lua pack#require("dapui").float_element('repl')
+                lua require("dapui").float_element('repl')
             elseif a:type == "element"
-                lua pack#require("dapui").float_element()
+                lua require("dapui").float_element()
             else
                 call GoToDAPWindows("DAP Breakpoints")
                 wincmd k
@@ -624,7 +624,7 @@ if pack#installed('jupynium.nvim')
     let g:jupynium_protocal = get(g:, 'jupynium_protocal', 'http')
     let g:jupynium_url = get(g:, 'jupynium_url', printf("%s://%s:%d/nbclassic", g:jupynium_protocal, g:jupynium_ip, g:jupynium_port))
     " setup
-    lua pack#require("jupynium").setup({ default_notebook_URL = vim.g.jupynium_url, use_default_keybindings = false })
+    lua require("jupynium").setup({ default_notebook_URL = vim.g.jupynium_url, use_default_keybindings = false })
     " self defined function
     function! s:jupynium_run(...)
         let jupynium_urls = get(g:, 'jupynium_urls', [g:jupynium_url])

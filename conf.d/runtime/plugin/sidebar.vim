@@ -43,7 +43,7 @@ if pack#installed('aerial.nvim')
     let g:sidebars.aerial = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_aerial'),
-                \ 'open': 'lua pack#require("aerial").open({focus=false})',
+                \ 'open': 'lua require("aerial").open({focus=false})',
                 \ 'close': 'AerialClose'
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('aerial')<CR>

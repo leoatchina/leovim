@@ -317,7 +317,7 @@ function! s:lsp_tag_search(method, ...) abort
     " lsp
     " --------------------------
     elseif pack#installed_lsp() && lsp
-        let cmd = printf('lua pack#require("lsp").LspAction("%s", "%s")', method, open_action)
+        let cmd = printf('lua require("lsp").LspAction("%s", "%s")', method, open_action)
         call utils#execute(cmd)
         let symbol_found = get(g:, 'lsp_found', 0)
         if symbol_found
