@@ -36,7 +36,7 @@ if pack#installed('vista.vim')
     endif
 endif
 if pack#installed('aerial.nvim')
-    lua pack#require('cfg/aerial')
+    lua require('cfg/aerial')
     function! s:check_aerial(nr) abort
         return tolower(getwinvar(a:nr, '&filetype')) =~ 'aerial'
     endfunction

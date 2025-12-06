@@ -1,13 +1,13 @@
 if pack#installed('mason.nvim')
-    lua pack#require("cfg/mason")
+    lua require("cfg/mason")
 endif
 " ------------------------------
 " AI complete
 " ------------------------------
 let g:max_tokens = get(g:, 'max_tokens', 8192)
 if pack#installed('minuet-ai.nvim')
-    lua pack#require("cfg/api")
-    lua pack#require('cfg/minuet')
+    lua require("cfg/api")
+    lua require('cfg/minuet')
     let g:ai_complete_engine = 'minuet'
     let s:api_required = 1
 elseif pack#installed('windsurf.vim')
@@ -35,9 +35,9 @@ elseif pack#installed('copilot.vim')
 endif
 if pack#installed('codecompanion.nvim', 'codecompanion-history.nvim', 'mcphub.nvim')
     if !get(s:, 'api_required', 0)
-        lua pack#require("cfg/api")
+        lua require("cfg/api")
     endif
-    lua pack#require("cfg/codecompanion")
+    lua require("cfg/codecompanion")
 elseif !exists("g:ai_complete_engine")
     nnoremap <M-i> <Nop>
     xnoremap <M-i> <Nop>
@@ -47,7 +47,7 @@ endif
 " lsp && vista_default_executive
 " -----------------------------
 if pack#installed('neoconf.nvim')
-    lua pack#require('cfg/neoconf')
+    lua require('cfg/neoconf')
 endif
 if pack#installed_lsp()
     let g:vista_default_executive = 'nvim_lsp'
@@ -62,9 +62,9 @@ endif
 " ------------------------------
 if pack#installed_lsp()
     if pack#installed_blink()
-        lua pack#require("cfg/blink")
+        lua require("cfg/blink")
     else
-        lua pack#require("cfg/cmp")
+        lua require("cfg/cmp")
     endif
 elseif pack#installed_coc()
     source $CFG_DIR/coc.vim
@@ -74,7 +74,7 @@ elseif g:complete_engine == 'mcm'
 elseif g:complete_engine != ''
     if has('nvim-0.11')
         let g:complete_engine = 'builtin'
-        lua pack#require("cfg/builtin")
+        lua require("cfg/builtin")
     elseif has('patch-9.1.1590')
         let g:complete_engine = 'builtin'
         source $CFG_DIR/builtin.vim
