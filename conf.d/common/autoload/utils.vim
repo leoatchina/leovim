@@ -94,9 +94,29 @@ function! utils#get_root_dir(...) abort
     endwhile
 endfunction
 
+
 " ----------------------------------------
 " String Utility Functions
 " ----------------------------------------
+function! utils#mode()
+    let l:modes_dict={
+                \ "\<C-V>": 'V·Block',
+                \ 'Rv': 'V·Replace',
+                \ 'n':  'NORMAL',
+                \ 'v':  'VISUAL',
+                \ 'V':  'V·Line',
+                \ 'i':  'INSERT',
+                \ 'R':  'R',
+                \ 'c':  'Command',
+                \}
+    let m = mode()
+    if has_key(l:modes_dict, m)
+        let m = l:modes_dict[m]
+    else
+        let m = ""
+    endif
+    return m
+endfunction
 function! utils#trim(str) abort
     return substitute(a:str, "^\s\+\|\s\+$", "", "g")
 endfunction
@@ -390,5 +410,98 @@ function! utils#set_alpha(alpha) abort
         endif
         let g:gvimfullscreendll = $HOME ."\\.leovim.windows\\tools\\gvimfullscreen.dll"
         call libcall(g:gvimfullscreendll, 'SetAlpha', g:VimAlpha)
+    endif
+endfunction
+
+" ----------------------------------------
+" Mode Function (from lightline.vim)
+" ----------------------------------------
+function! utils#mode() abort
+    let l:modes_dict={
+                \ "\<C-V>": 'V·Block',
+                \ 'Rv': 'V·Replace',
+                \ 'n':  'NORMAL',
+                \ 'v':  'VISUAL',
+                \ 'V':  'V·Line',
+                \ 'i':  'INSERT',
+                \ 'R':  'R',
+                \ 'c':  'Command',
+                \}
+    let m = mode()
+    if has_key(l:modes_dict, m)
+        let m = l:modes_dict[m]
+    else
+        let m = ""
+    endif
+    return m
+endfunction
+
+" ----------------------------------------
+" Git Functions (from git.vim)
+" ----------------------------------------
+function! utils#git_branch() abort
+    return get(b:, 'git_branch', '')
+endfunction
+
+function! utils#git_root_dir() abort
+    return get(b:, 'git_root_dir', '')
+endfunction
+
+function! utils#lcd_and_git_update() abort
+    if FtBtIgnored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
+        return
+    endif
+    try
+        let l:cur_dir = utils#abs_dir()
+        if l:cur_dir != ''
+            execute 'lcd ' . l:cur_dir
+        endif
+    catch
+        return
+    endtry
+    if g:git_version > 1.8
+        try
+            let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
+            let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
+            if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
+                let b:git_root_dir = ''
+                let b:git_branch = ''
+            else
+                let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
+                " TODO: change branch icon according to branch status, referring https://www.nerdfonts.com/cheat-sheet
+                let icon = ' '
+                let b:git_branch = icon . substitute(l:branch, '\n\+$', '', '')
+                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
+                    let b:git_root_dir = ''
+                    let b:git_branch = ''
+                endif
+            endif
+        catch
+            let b:git_root_dir = ''
+            let b:git_branch = ''
+        endtry
+    else
+        let b:git_root_dir = ''
+        let b:git_branch = ''
+    endif
+endfunction
+
+function! utils#relative_dir() abort
+    let absdir = utils#abs_dir()
+    let gitroot = utils#git_root_dir()
+    if gitroot != '' && len(absdir) > len(gitroot)
+        return gitroot
+    else
+        return absdir
+    endif
+endfunction
+
+function! utils#relative_path() abort
+    let abspath = utils#abs_path()
+    let gitroot = utils#git_root_dir()
+    if gitroot != '' && len(abspath) > len(gitroot)
+        return abspath[len(gitroot)+1:]
+    else
+        return utils#expand("%:t", 1)
     endif
 endfunction

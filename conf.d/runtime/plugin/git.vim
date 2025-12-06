@@ -11,53 +11,9 @@ endif
 " ----------------------------------------------------------------------
 " git related functions
 " ----------------------------------------------------------------------
-function! GitBranch()
-    return get(b:, 'git_branch', '')
-endfunction
-function! GitRootDir()
-    return get(b:, 'git_root_dir', '')
-endfunction
-function! LcdAndGitUpdate() abort
-    if FtBtIgnored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
-        return
-    endif
-    try
-        let l:cur_dir = AbsDir()
-        if l:cur_dir != ''
-            execute 'lcd ' . l:cur_dir
-        endif
-    catch
-        return
-    endtry
-    if g:git_version > 1.8
-        try
-            let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
-            let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
-            if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
-                let b:git_root_dir = ''
-                let b:git_branch = ''
-            else
-                let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
-                " TODO: change branch icon according to branch status, referring https://www.nerdfonts.com/cheat-sheet
-                let icon = ' ï„?
-                let b:git_branch = icon . substitute(l:branch, '\n\+$', '', '')
-                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
-                    let b:git_root_dir = ''
-                    let b:git_branch = ''
-                endif
-            endif
-        catch
-            let b:git_root_dir = ''
-            let b:git_branch = ''
-        endtry
-    else
-        let b:git_root_dir = ''
-        let b:git_branch = ''
-    endif
-endfunction
 augroup LcdAndGitUpdate
     au!
-    autocmd BufWinEnter * call LcdAndGitUpdate()
+    autocmd BufWinEnter * call utils#lcd_and_git_update()
 augroup END
 " ----------------------
 " relative dir && path

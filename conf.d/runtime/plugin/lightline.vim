@@ -1,22 +1,3 @@
-function! Mode()
-    let l:modes_dict={
-                \ "\<C-V>": 'V·Block',
-                \ 'Rv': 'V·Replace',
-                \ 'n':  'NORMAL',
-                \ 'v':  'VISUAL',
-                \ 'V':  'V·Line',
-                \ 'i':  'INSERT',
-                \ 'R':  'R',
-                \ 'c':  'Command',
-                \}
-    let m = mode()
-    if has_key(l:modes_dict, m)
-        let m = l:modes_dict[m]
-    else
-        let m = ""
-    endif
-    return m
-endfunction
 " ---------------------------
 " lightline global settings
 " ---------------------------
@@ -27,7 +8,7 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! LightlineBufferlineMaxWidth() abort
-    let left = &columns - len(FileReadonly() . RelativeDir() . RelativePath() . GitBranch() . Mode())
+    let left = &columns - len(utils#is_file_readonly() . RelativeDir() . RelativePath() . GitBranch() . utils#mode())
     return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
@@ -53,9 +34,9 @@ let g:lightline = {
                     \ 'lineinfo': '%l/%L:%c'
                     \ },
                 \ 'component_function': {
-                    \ 'readonly': 'FileReadonly',
-                    \ 'mode': 'Mode',
-                    \ 'abspath': 'AbsPath',
+                    \ 'readonly': 'utils#is_file_readonly',
+                    \ 'mode': 'utils#mode',
+                    \ 'abspath': 'utils#abs_dir',
                     \ },
                 \ 'component_expand': {},
                 \ 'active': {},
