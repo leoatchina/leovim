@@ -247,7 +247,7 @@ if get(g:, 'leovim_openmap', 1)
         if utils#is_unix()
             nnoremap <silent><M-h>L :Leaderf file --regex --no-sort ~/.local/bin<Cr>
         endif
-    elseif PlannedFzf()
+    elseif pack#pref_fzf()
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
         if utils#is_unix()
