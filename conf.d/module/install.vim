@@ -206,10 +206,10 @@ endif
 " ------------------------------
 " debug tool install
 " ------------------------------
-if g:python_version >= 3.1 && pack#require('debug') && (has('patch-8.2.4797') || has('nvim') && !pack#planned('lsp'))
+if g:python_version >= 3.1 && pack#require('debug') && (has('patch-8.2.4797') || has('nvim') && !pack#planned_lsp())
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
-elseif has('nvim-0.9.5') && pack#require('debug') || pack#planned('lsp') && pack#require('java')
+elseif has('nvim-0.9.5') && pack#require('debug') || pack#planned_lsp() && pack#require('java')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'rcarriga/nvim-dap-ui'
@@ -262,16 +262,16 @@ if has('nvim')
     PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/oil.nvim'
     PlugAdd 'benomahony/oil-git.nvim'
-    if pack#planned('lsp') || has('nvim-0.10') && pack#planned('nvim-treesitter')
+    if pack#planned_lsp() || has('nvim-0.10') && pack#planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()
             PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
         endif
     endif
-    if pack#planned('lsp') || pack#planned('nvim-dap')
+    if pack#planned_lsp() || pack#planned('nvim-dap')
         PlugAdd 'mason-org/mason.nvim'
     endif
-    if pack#planned('lsp') || pack#planned('nvim-dap') || pack#planned('codecompanion.nvim') || pack#planned('minuet-ai.nvim')
+    if pack#planned_lsp() || pack#planned('nvim-dap') || pack#planned('codecompanion.nvim') || pack#planned('minuet-ai.nvim')
         PlugAdd 'MunifTanjim/nui.nvim'
         PlugAdd 'nvim-lua/plenary.nvim'
         PlugAdd 'stevearc/dressing.nvim'
