@@ -3,7 +3,7 @@ syntax enable
 filetype on
 filetype plugin on
 set background=dark
-function! s:tooglebg()
+function! s:toggle_bg()
     if &background == "dark"
         set background=light
     else
@@ -11,20 +11,16 @@ function! s:tooglebg()
     endif
     call preview#cmdmsg(&background, 1)
 endf
-command! ToggleBackgroud call s:tooglebg()
+command! ToggleBackgroud call s:toggle_bg()
 nnoremap <M-k>b :ToggleBackgroud<Cr>
 function! SetScheme(scheme, ...) abort
     let scheme = a:scheme
     let defaultscheme = get(a:, 1, 'slate')
-    try
-        if g:has_truecolor
-            utils#execute('colorscheme '. scheme)
-        else
-            utils#execute('colorscheme '. defaultscheme)
-        endif
-    catch
-        colorscheme slate
-    endtry
+    if g:has_truecolor
+        call utils#execute('colorscheme '. scheme)
+    else
+        call utils#execute('colorscheme '. defaultscheme)
+    endif
 endfunction
 " set scheme for different complete_engine
 let g:terminal_color_13 = ''
