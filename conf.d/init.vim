@@ -203,7 +203,6 @@ set rtp^=$COMMON_DIR
 if exists(':packadd')
     set packpath^=$LEOVIM_DIR
 endif
-call plug#define_commands()
 " --------------------------
 " init directories
 " --------------------------
