@@ -39,7 +39,7 @@ function! s:search_cur(...)
                 copen
             endif
         catch /.*/
-            call preview#errmsg("vimgrep error")
+            call preview#errmsg("vimgrep current buf error")
         endtry
     endif
 endfunction
