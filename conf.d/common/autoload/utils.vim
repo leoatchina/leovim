@@ -271,7 +271,7 @@ let s:autoclose_ft_buf = [
             \ 'terminal', 'floaterm', 'popup', 'undotree',
             \ 'dropbar', 'dropbar_preview',
             \ ]
-function! utils#autoclose(check_last_win) abort
+function! s:autoclose(check_last_win) abort
     let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
     let bt = tolower(getbufvar(winbufnr(winnr()), '&bt'))
     if a:check_last_win == 0
@@ -283,9 +283,9 @@ function! utils#autoclose(check_last_win) abort
     endif
 endfunction
 
-function! utils#ft_bt_ignored() abort
-    return utils#autoclose(0)
+function! utils#is_ftbt_ignored() abort
+    return s:autoclose(0)
 endfunction
-function! utils#ft_bt_autoclose_lastwin() abort
-    return utils#autoclose(1)
+function! utils#autoclose_lastwin() abort
+    return s:autoclose(1)
 endfunction

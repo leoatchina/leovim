@@ -111,29 +111,8 @@ endif
 " ---------------------------------------
 " show buffers and current file path
 " ---------------------------------------
-function! Buffers()
-    " origin buffers list
-    let buffers = copy(lightline#bufferline#buffers())
-    try
-        let b:file_icon = buffers[1][0][:3]
-    catch
-        let b:file_icon = ''
-    endtry
-    " reorder buffers
-    if empty(buffers[2])
-        let res = buffers
-    else
-        if empty(buffers[0])
-            let res = [buffers[2], buffers[1], []]
-        else
-            let res = [buffers[0] + buffers[2], buffers[1], []]
-        endif
-    endif
-    let res[1] = [b:file_icon . RelativeDir()]
-    return res
-endfunction
 let g:lightline['component_expand']['branch'] = 'git#git_branch'
-let g:lightline['component_expand']['buffers'] = 'Buffers'
+let g:lightline['component_expand']['buffers'] = 'git#lightline_buffers'
 let g:lightline['component_expand']['relativepath'] = 'git#relative_path'
 " ------------------------
 " lightline component_type

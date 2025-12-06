@@ -9,8 +9,30 @@ function! git#git_root_dir() abort
     return get(b:, 'git_root_dir', '')
 endfunction
 
+function! git#lightline_buffers()
+    " origin buffers list
+    let buffers = copy(lightline#bufferline#buffers())
+    try
+        let b:file_icon = buffers[1][0][:3]
+    catch
+        let b:file_icon = ''
+    endtry
+    " reorder buffers
+    if empty(buffers[2])
+        let res = buffers
+    else
+        if empty(buffers[0])
+            let res = [buffers[2], buffers[1], []]
+        else
+            let res = [buffers[0] + buffers[2], buffers[1], []]
+        endif
+    endif
+    let res[1] = [b:file_icon . git#relative_dir()]
+    return res
+endfunction
+
 function! git#lcd_and_git_update() abort
-    if utils#ft_bt_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
+    if utils#is_ftbt_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
         return
     endif
     try

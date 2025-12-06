@@ -1,6 +1,6 @@
 augroup AutoClose
     autocmd!
-    autocmd BufWinEnter * if utils#ft_bt_autoclose_lastwin() | q! | endif
+    autocmd BufWinEnter * if utils#autoclose_lastwin() | q! | endif
 augroup END
 " -------------------------
 " confirem quit
@@ -9,7 +9,7 @@ function! s:confirm_quit(type) abort
     let type = a:type
     if &ft == 'floaterm'
         FloatermKill
-    elseif (&ft == '' || utils#expand('%') == '' || utils#ft_bt_ignored()) && type == 0
+    elseif (&ft == '' || utils#expand('%') == '' || utils#is_ftbt_ignored()) && type == 0
         q!
     else
         if type == 'all'
