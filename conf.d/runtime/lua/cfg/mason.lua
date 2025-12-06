@@ -14,7 +14,9 @@ require("mason").setup({
   install_root_dir = vim.fn.expand("~/.leovim.d/mason/" .. vim.g.complete_engine),
   ui = {
     icons = {
-
+      package_installed = "✓",
+      package_pending = "➜",
+      package_uninstalled = "✗",
     },
   },
 })
