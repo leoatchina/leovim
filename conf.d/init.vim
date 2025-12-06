@@ -26,7 +26,7 @@ let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
 " set rtp && pack path
 " --------------------------
 set rtp^=$COMMON_DIR
-if utils#is_windows()
+if utils#is_win()
     set rtp^=$LEOVIM_DIR\pack
 else
     set rtp^=$LEOVIM_DIR/pack
@@ -73,7 +73,7 @@ xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
 if exists('g:vscode') && !has('nvim-0.10')
     echoe "vscode-neovim required nvim-0.10+!"
     finish
-elseif utils#is_windows()
+elseif utils#is_win()
     if !has('nvim') && v:version < 900
         echoe "In windows, please update to vim9.0+."
         finish

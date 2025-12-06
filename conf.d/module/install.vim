@@ -242,7 +242,7 @@ endif
 " ------------------------------
 if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
     PlugAdd 'junegunn/fzf.vim'
-    if utils#is_windows()
+    if utils#is_win()
         PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\AppData\\Local\\fzf')}
     else
         if pack#require('fzfbin')

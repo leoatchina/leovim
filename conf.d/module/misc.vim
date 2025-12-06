@@ -14,7 +14,7 @@ else
             UpdateRemotePlugins
         endfunction
         Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
-    elseif !has('nvim') && v:version >= 801 || has('nvim') && !utils#is_windows()
+    elseif !has('nvim') && v:version >= 801 || has('nvim') && !utils#is_win()
         PlugAdd 'gelguy/wilder.nvim'
     endif
     if v:version >= 800

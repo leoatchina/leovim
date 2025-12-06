@@ -1,7 +1,7 @@
 " --------------------------
 " R & python
 " --------------------------
-if utils#is_windows()
+if utils#is_win()
     let g:R_exe = utils#expand(exepath(get(g:, 'R_exe', 'R.exe')))
 else
     let g:R_exe = utils#expand(exepath(get(g:, 'R_exe', 'R')))
@@ -18,7 +18,7 @@ PlugAdd 'tweekmonster/helpful.vim', {'for': ['vim', 'lua', 'help']}
 " ------------------------------
 " ps1
 " ------------------------------
-if utils#is_windows()
+if utils#is_win()
     PlugAdd 'pprovost/vim-ps1', {'for': 'ps1'}
 endif
 " ------------------------------

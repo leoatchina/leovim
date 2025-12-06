@@ -48,7 +48,7 @@ end
 
 -- System detection functions (using utils#)
 function _G.is_windows()
-  return fn['utils#is_windows']() > 0
+  return fn['utils#is_win']() > 0
 end
 
 function _G.is_linux()

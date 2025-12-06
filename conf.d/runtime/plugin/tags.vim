@@ -22,7 +22,7 @@ PlugOpt 'vim-matchup'
 " --------------------------
 if get(g:, 'ctags_type', '') != ''
     let lst = g:root_patterns + ['lib', '.cache', 'package-lock.json']
-    if utils#is_windows()
+    if utils#is_win()
         let s:fzf_tags_command = utils#expand("~/.leovim.windows/tools/ctags.exe")
     else
         let s:fzf_tags_command = 'ctags'
@@ -96,7 +96,7 @@ if pack#planned('vim-gutentags')
             let line = line('.')
             for [key, path] in items(b:gutentags_files)
                 if filereadable(path)
-                    if utils#is_windows()
+                    if utils#is_win()
                         let cmd = printf('!del %s /a /q' % path)
                     else
                         let cmd = printf('!rm -f %s' % path)

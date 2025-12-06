@@ -16,7 +16,7 @@ endfunction
 if has('nvim') || has('timers') && has('channel') && has('job')
     let g:asyncrun_rootmarks = g:root_patterns
     let s:run_command = "AsyncRun"
-    if utils#is_windows()
+    if utils#is_win()
         let g:asyncrun_encs = get(g:, 'asyncrun_encs', 'gbk')
     else
         let g:asyncrun_encs = get(g:, 'asyncrun_encs', 'utf-8')
@@ -33,7 +33,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
         if executable('rustc')
             let g:asyncrun_rustc_cmd = 'rustc -o ~/.cache/build/$(VIM_FILENOEXT) $(VIM_FILEPATH) && echo && ~/.cache/build/$(VIM_FILENOEXT)'
         endif
-    elseif utils#is_windows()
+    elseif utils#is_win()
         if executable('gcc')
             let g:asyncrun_gcc_cmd = 'gcc $(VIM_FILEPATH) -o ..\target\test\$(VIM_FILENOEXT).exe & ..\target\test\$(VIM_FILENOEXT).exe'
         endif
@@ -45,7 +45,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
         endif
     endif
     nnoremap ! :AsyncRun<Space>
-    xnoremap ! :<C-u>AsyncRun <C-R>=utils#get_visual_selection()<Cr>
+    xnoremap ! :<C-u>AsyncRun <C-R>=utils#get_visual()<Cr>
     nnoremap <Tab>q :AsyncStop!<CR>
     nnoremap <Tab>Q :AsyncStop<CR>
     xnoremap <M-r> :AsyncRun -raw<Space>
@@ -53,7 +53,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
 else
     let s:run_command = "!"
     nnoremap ! :!
-    xnoremap ! :<C-u>!<C-R>=utils#get_visual_selection()<Cr>
+    xnoremap ! :<C-u>!<C-R>=utils#get_visual()<Cr>
 endif
 function! s:asyncrun(...)
     let ft = &ft
@@ -106,7 +106,7 @@ function! s:asyncrun(...)
         endif
     endif
     let ft = &ft
-    if ft ==# 'dosbatch' && utils#is_windows()
+    if ft ==# 'dosbatch' && utils#is_win()
         let run_cmd = s:run_command . params. ' %'
     elseif (ft ==# 'sh' || ft ==# 'bash') && executable('bash')
         let run_cmd = s:run_command . params . ' bash %'
@@ -132,17 +132,17 @@ function! s:asyncrun(...)
         let run_cmd = s:run_command . params . ' node %'
     " c && cpp
     elseif ft ==# 'c' && get(g:, 'asyncrun_gcc_cmd', '') != ''
-        if utils#is_windows()
+        if utils#is_win()
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:asyncrun_gcc_cmd
     elseif ft ==# 'cpp' && get(g:, 'asyncrun_gpp_cmd', '') != ''
-        if utils#is_windows()
+        if utils#is_win()
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:asyncrun_gpp_cmd
     elseif ft ==# 'rust' && get(g:, 'asyncrun_rustc_cmd', '') != ''
-        if utils#is_windows()
+        if utils#is_win()
             silent! call mkdir("../target/test", "p")
         endif
         let run_cmd = s:run_command . params . ' '. g:asyncrun_rustc_cmd
@@ -231,7 +231,7 @@ else
     nnoremap <silent><M-R> :RunQfRight<CR>
     nnoremap <silent><M-F> :RunQfSilent<CR>
 endif
-if utils#is_windows() || executable('gnome-terminal') && utils#has_gui()
+if utils#is_win() || executable('gnome-terminal') && utils#has_gui()
     command! RunExternal call s:asyncrun('external')
     nnoremap <silent><M-"> :RunExternal<CR>
 endif

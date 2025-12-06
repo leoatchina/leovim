@@ -1,5 +1,5 @@
 if pack#installed('nvim-treesitter', 'hlargs.nvim')
-    if utils#is_windows()
+    if utils#is_win()
         function! s:cleanup_ts() abort
             let dir = $HOME . '\.leovim.d\pack\add\opt\nvim-treesitter'
             exec printf('!del %s\parser\*.* %s\parser-info\*.* /a /f /q', dir, dir)

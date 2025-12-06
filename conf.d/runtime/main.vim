@@ -156,7 +156,7 @@ endif
 " ------------------------
 " has_truecolor
 " ------------------------
-if has('termguicolors') || utils#is_windows() || utils#has_gui()
+if has('termguicolors') || utils#is_win() || utils#has_gui()
     try
         set termguicolors
         hi LineNr ctermbg=NONE guibg=NONE
@@ -193,7 +193,7 @@ endif
 " --------------------------
 " set PATH && term
 " --------------------------
-if utils#is_windows()
+if utils#is_win()
     if get(g:,'leovim_loaded',0) == 0
         if isdirectory($HOME . "\\.leovim.windows")
             let $PATH = $HOME . "\\.leovim.windows\\cppcheck;" . $PATH
@@ -264,8 +264,8 @@ endif
 if pack#require('notags')
     let g:ctags_type = ''
     let g:gtags_version = 0
-elseif utils#is_windows() && pack#require('tags') || utils#is_unix()
-    if utils#is_windows() && filereadable(utils#expand("~/.leovim.windows/tools/ctags.exe"))
+elseif utils#is_win() && pack#require('tags') || utils#is_unix()
+    if utils#is_win() && filereadable(utils#expand("~/.leovim.windows/tools/ctags.exe"))
         let g:ctags_type = 'Universal-json'
     elseif executable('ctags')
         try
@@ -283,7 +283,7 @@ elseif utils#is_windows() && pack#require('tags') || utils#is_unix()
     else
         let g:ctags_type = ''
     endif
-    if utils#is_windows()
+    if utils#is_win()
         let $GTAGSCONF = utils#expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
     endif
     if executable('gtags') && get(g:, 'ctags_type', '') != '' && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
@@ -386,7 +386,7 @@ let mason_dirs  = [utils#expand('~/.leovim.d/mason/cmp/bin'), utils#expand('~/.l
 if !pack#planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
     for mason_dir in mason_dirs
         if isdirectory(mason_dir)
-            if utils#is_windows()
+            if utils#is_win()
                 let $PATH = mason_dir . ';' . $PATH
             else
                 let $PATH = mason_dir . ':' . $PATH

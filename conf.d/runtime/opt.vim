@@ -80,7 +80,7 @@ endif
 " endif
 
 
-if utils#is_windows()
+if utils#is_win()
     if has('nvim')
         " let g:python3_host_prog='C:\\Python37\\python.exe'
     else

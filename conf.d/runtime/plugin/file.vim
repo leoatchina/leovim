@@ -107,7 +107,7 @@ nnoremap <M-j>t <C-w>gf
 nnoremap <M-j>] <C-w>f<C-w>L
 nnoremap <M-j>[ <C-w>f
 " using system file explorer
-if utils#has_gui() || utils#is_windows()
+if utils#has_gui() || utils#is_win()
     imap <M-O> <C-o>O
     nmap <M-O> O
     imap <M-o> <C-o>o
@@ -116,7 +116,7 @@ if utils#has_gui() || utils#is_windows()
     nnoremap <silent><M-P> :tabm -1<Cr>
     nnoremap <M-]> :vsplit<Space>
     nnoremap <M-[> :split<Space>
-    if !has('nvim') && get(g:, 'use_system_browser', utils#is_windows())
+    if !has('nvim') && get(g:, 'use_system_browser', utils#is_win())
         let g:browsefilter = ''
         function! s:filter_push(desc, wildcard) abort
             let g:browsefilter .= a:desc . " (" . a:wildcard . ")\t" . a:wildcard . "\n"
@@ -264,7 +264,7 @@ endif
 " ------------------
 " delete tmp files
 " ------------------
-if utils#is_windows()
+if utils#is_win()
     nnoremap <leader>x :!powershell <C-r>=utils#expand("~/_leovim.clean.cmd")<Cr><Cr> \| e %<Cr><C-o>
 else
     nnoremap <leader>x :!bash <C-r>=utils#expand("~/.leovim.clean")<Cr><Cr> \| e %<Cr><C-o>

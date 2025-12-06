@@ -1,7 +1,7 @@
 " ----------------------------------------
 " System Detection Functions
 " ----------------------------------------
-function! utils#is_windows() abort
+function! utils#is_win() abort
     return has('win32') || has('win64')
 endfunction
 
@@ -77,7 +77,7 @@ function! utils#get_root_dir(...) abort
         let l:root = g:root_patterns + g:root_files
     endif
     while 1
-        if utils#is_windows() && curr_dir[-2:-1] == ':/' || utils#is_unix() && curr_dir ==# '/'
+        if utils#is_win() && curr_dir[-2:-1] == ':/' || utils#is_unix() && curr_dir ==# '/'
             return init_dir
         endif
         for each in l:root
@@ -179,7 +179,7 @@ function! utils#escape(param) abort
     return substitute(escape(a:param, '/\.*$^~[#'), '\n', '\\n', 'g')
 endfunction
 
-function! utils#get_visual_selection(...) abort
+function! utils#get_visual(...) abort
     " call with visualmode() as the argument
     let [line_start, column_start] = [line("'<"), charcol("'<")]
     let [line_end, column_end]     = [line("'>"), charcol("'>")]
@@ -216,14 +216,14 @@ endfunction
 " GUI Functions (from main.vim)
 " ----------------------------------------
 function! utils#toggle_fullscreen() abort
-    if has('libcall') && !has('nvim') && utils#has_gui() && utils#is_windows()
+    if has('libcall') && !has('nvim') && utils#has_gui() && utils#is_win()
         let g:gvimfullscreendll = $HOME ."\\.leovim.windows\\tools\\gvimfullscreen.dll"
         call libcallnr(g:gvimfullscreendll, "ToggleFullScreen", -1)
     endif
 endfunction
 
 function! utils#set_alpha(alpha) abort
-    if has('libcall') && !has('nvim') && utils#has_gui() && utils#is_windows()
+    if has('libcall') && !has('nvim') && utils#has_gui() && utils#is_win()
         let g:VimAlpha = get(g:, 'VimAlpha', 255) + a:alpha
         if g:VimAlpha < 95
             let g:VimAlpha = 95

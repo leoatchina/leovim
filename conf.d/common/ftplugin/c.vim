@@ -16,10 +16,10 @@ endif
 if pack#installed('vim-cppman')
     if pack#installed_adv()
         nnoremap <buffer>gx :Cppman <C-r>=utils#expand('<cword>')<Cr>
-        xnoremap <buffer>gx :<C-u>Cppman <C-r>=utils#get_visual_selection()<Cr>
+        xnoremap <buffer>gx :<C-u>Cppman <C-r>=utils#get_visual()<Cr>
     else
         nnoremap <buffer>K :Cppman <C-r>=utils#expand('<cword>')<Cr>
-        xnoremap <buffer>K :<C-u>Cppman <C-r>=utils#get_visual_selection()<Cr>
+        xnoremap <buffer>K :<C-u>Cppman <C-r>=utils#get_visual()<Cr>
     endif
 endif
 inoremap <buffer>!! !=

@@ -61,7 +61,7 @@ let g:floaterm_open_command = 'drop'
 let g:floaterm_wintype  = 'split'
 let g:floaterm_position = 'belowright'
 let g:floaterm_height = 0.3
-if utils#is_windows()
+if utils#is_win()
     if has('nvim')
         let g:floaterm_shell = 'pwsh.exe'
     else
@@ -211,7 +211,7 @@ if pack#planned('vimspector')
         function! s:load_vimspector()
             let options = ['--prompt', 'VimspectorTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('vimspector',{
-                        \ 'source': utils#is_windows() ? 'dir /B /S ' . $CONF_D_DIR . '\\vimspector\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/vimspector/*.json',
+                        \ 'source': utils#is_win() ? 'dir /B /S ' . $CONF_D_DIR . '\\vimspector\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/vimspector/*.json',
                         \ 'sink': function('ReadVimspectorTemplate'),
                         \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
                         \ })
@@ -354,7 +354,7 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
         function! s:load_dap() abort
             let options = ['--prompt', 'DapTemplate> ', '--delimiter', ':']
             let wrap = fzf#wrap('dap',{
-                        \ 'source': utils#is_windows() ? 'dir /B /S ' . $CONF_D_DIR . '\\dap\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/dap/*.json',
+                        \ 'source': utils#is_win() ? 'dir /B /S ' . $CONF_D_DIR . '\\dap\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/dap/*.json',
                         \ 'sink': function('ReadDapTemplate'),
                         \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
                         \ })

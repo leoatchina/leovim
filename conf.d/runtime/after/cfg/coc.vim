@@ -12,7 +12,7 @@ autocmd BufAdd * if getfsize(utils#expand('<afile>')) > 1024*1024 |
 " set coc data $PATH
 " ----------------------------
 let g:coc_config_home = utils#expand("$CFG_DIR")
-if utils#is_windows()
+if utils#is_win()
     let g:coc_data_home = $LEOVIMD_DIR . "\\coc"
 else
     let g:coc_data_home = $LEOVIMD_DIR . "/coc"
@@ -39,7 +39,7 @@ let g:coc_global_extensions = [
             \ ]
 if utils#is_unix()
     let g:coc_global_extensions += ['coc-lua']
-elseif utils#is_windows()
+elseif utils#is_win()
     let g:coc_global_extensions += ['coc-powershell']
 endif
 if has('nvim')
@@ -134,7 +134,7 @@ nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 nnoremap <silent><leader>t :Vista finder coc<Cr>
 inoremap <silent><C-x><C-x> <C-r>=CocActionAsync('showSignatureHelp')<Cr>
 nnoremap <leader>w :CocFzfList symbols <C-r><C-w>
-xnoremap <leader>w :<C-u>CocFzfList symbols <C-r>=utils#get_visual_selection()<Cr>
+xnoremap <leader>w :<C-u>CocFzfList symbols <C-r>=utils#get_visual()<Cr>
 " completion map
 function! s:has_backspace() abort
     let col = col('.') - 1

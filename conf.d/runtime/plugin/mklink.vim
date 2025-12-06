@@ -8,14 +8,14 @@ let s:editor_dirs = []
 let s:editor_names = ["code", "trae", "kiro", "qoder", "lingma", "cursor", "windsurf", "positron"]
 for editor in s:editor_names
     let dir = fnameescape(get(g:, editor . "_user_dir", ""))
-    if utils#is_windows()
+    if utils#is_win()
         let dir = substitute(dir, '/', '\', 'g')
     endif
     call add(s:editor_dirs, dir)
 endfor
 function! s:link() abort
     for dir in s:editor_dirs
-        if utils#is_windows() && isdirectory(dir)
+        if utils#is_win() && isdirectory(dir)
             let delete_cmd = printf('del /Q /S %s\keybindings.json', dir)
             call s:utils#execute(delete_cmd)
             let rmdir_cmd = printf('rmdir /Q /S %s\snippets', dir)
