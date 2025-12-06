@@ -83,7 +83,7 @@ if utils#is_planned('vim-gutentags')
     " modules
     if g:ctags_type != ''
         let g:gutentags_modules += ['ctags']
-        " 配置 ctags 的参�?
+        " 配置 ctags
         let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=q', '--c-kinds=+px', '--c++-kinds=+pxl']
         if g:ctags_type =~ "Universal"
             let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
@@ -152,7 +152,7 @@ if utils#is_planned('gutentags_plus')
     " kill
     nnoremap <silent><leader>gk :GscopeKill<Cr>
     " leaderfgtags
-    if PlannedLeaderf() && utils#is_unix()
+    if utils#is_planned_leaderf() && utils#is_unix()
         let g:Lf_Gtags = utils#expand(exepath('gtags'))
         let g:Lf_Gtagsconf = $GTAGSCONF
         let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')

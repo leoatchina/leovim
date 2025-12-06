@@ -8,7 +8,7 @@ elseif utils#is_planned('indentline')
     let g:vim_json_conceal = 0
     let g:indentLine_enabled = 0
     let g:markdown_syntax_conceal = 0
-    let g:indentLine_char_list = ['|', '¦', '�?, '�?]
+    let g:indentLine_char_list = ['|', '¦', '┆', '┊']
     nnoremap <silent><leader>I :IndentLinesToggle<Cr>
 endif
 " --------------------

@@ -80,7 +80,7 @@ function! Vim_NeatTabLine()
         let tabcur = tabpagenr()
         if nr == tabcur
             let s .= '%#TabLineSel#'
-            let s .= '%#TabNumSel# ' . nr . ' %#TabLineSel# ' .  get(b:, 'file_icon', 'î­?)
+            let s .= '%#TabNumSel# ' . nr . ' %#TabLineSel# ' .  get(b:, 'file_icon', 'î­°')
         else
             let s .= '%#TabLine# ' . nr . ' '
         endif

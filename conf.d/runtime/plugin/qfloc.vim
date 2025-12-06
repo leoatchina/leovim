@@ -60,7 +60,7 @@ if g:has_terminal
     tnoremap <silent><M-,> <C-\><C-n>:QuickfixToggle<Cr>
     tnoremap <silent><M-;> <C-\><C-n>:LoclistToggle<Cr>
 endif
-if PlannedLeaderf()
+if utils#is_planned_leaderf()
     function! s:leaderf_qf_loc()
         if s:loc_opened()
             lclose

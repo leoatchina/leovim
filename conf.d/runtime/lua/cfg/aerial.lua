@@ -1,4 +1,4 @@
-is_require("aerial").setup({
+require("aerial").setup({
   layout = {
     default_direction = "prefer_left",
   },

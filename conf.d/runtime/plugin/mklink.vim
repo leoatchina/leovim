@@ -1,4 +1,4 @@
-function! s:utils#execute(cmd, ...) abort
+function! s:execute(cmd, ...) abort
     if a:0 && a:1 > 0
         utils#execute("!echo " . a:cmd)
     endif

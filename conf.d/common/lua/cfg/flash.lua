@@ -8,7 +8,7 @@ local exclude = {
   end,
 }
 -- NOTE: treesitter related mved to lsp.lua
-is_require("flash").setup({
+require("flash").setup({
   labels = vim.g.EasyMotion_key,
   search = {
     exclude = exclude,
@@ -30,31 +30,31 @@ is_require("flash").setup({
 local map = vim.keymap.set
 -- jump forward
 map({ 'n', 'x'}, 'sj', function()
-  is_require("flash").jump({search = { forward = true,  wrap = false, multi_window = false }})
+  require("flash").jump({search = { forward = true,  wrap = false, multi_window = false }})
 end, { silent = true })
 map({ 'o' }, 'j', function()
-  is_require("flash").remote({search = { forward = true,  wrap = false, multi_window = false }})
+  require("flash").remote({search = { forward = true,  wrap = false, multi_window = false }})
 end, { silent = true })
 -- jump backward
 map({ 'n', 'x' }, 'sk', function()
-  is_require("flash").jump({search = { forward = false, wrap = false, multi_window = false }})
+  require("flash").jump({search = { forward = false, wrap = false, multi_window = false }})
 end, { silent = true })
 map({ 'o' }, 'k', function()
-  is_require("flash").remote({search = { forward = false, wrap = false, multi_window = false }})
+  require("flash").remote({search = { forward = false, wrap = false, multi_window = false }})
 end, { silent = true })
 -- remote
 map({ 'x', 'n' }, 'so', function()
-  is_require("flash").remote()
+  require("flash").remote()
 end,  { silent = true })
 map({ 'o' }, 'o', function()
-  is_require("flash").remote()
+  require("flash").remote()
 end,  { silent = true })
 -- treesitter_search
 if is_installed('nvim-treesitter') then
   map({ 'x', 'n' }, 'SO', function()
-    is_require("flash").treesitter_search()
+    require("flash").treesitter_search()
   end, { silent = true })
   map({ 'o' }, 'O', function()
-    is_require("flash").treesitter_search()
+    require("flash").treesitter_search()
   end, { silent = true })
 end

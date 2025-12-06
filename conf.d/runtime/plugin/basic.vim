@@ -12,13 +12,13 @@ PlugOpt 'vim-preview'
 if v:version >= 802 || has('nvim')
     let g:quickui_border_style = 2
     if has('nvim')
-        if utils#utils#has_gui()
+        if utils#has_gui()
             let g:quickui_color_scheme = 'gruvbox'
         else
             let g:quickui_color_scheme = 'papercol dark'
         endif
     else
-        if utils#utils#has_gui()
+        if utils#has_gui()
             let g:quickui_color_scheme = 'borland'
         else
             let g:quickui_color_scheme = 'papercol light'
@@ -138,7 +138,7 @@ if utils#is_planned_fzf()
     command! FzfRunCommands call FzfCallCommands('FzfRunCommands', 'Fzf', ['FzfAg', 'FzfRG'])
     nnoremap <silent><M-k><M-f> :FzfRunCommands<Cr>
 endif
-if PlannedLeaderf()
+if utils#is_planned_leaderf()
     nnoremap <leader>F :Leaderf
     nnoremap <silent><leader>L :Leaderf --recall<Cr>
     nnoremap <silent><leader>; :Leaderf --next<Cr>
@@ -146,18 +146,18 @@ if PlannedLeaderf()
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
     source $CFG_DIR/leaderf.vim
 endif
-if !PlannedLeaderf() && !utils#is_planned_fzf()
+if !utils#is_planned_leaderf() && !utils#is_planned_fzf()
     source $CFG_DIR/ctrlp.vim
     PlugOpt 'ctrlp.vim'
 endif
 " --------------------------------
 " common maps
 " --------------------------------
-if PrefFzf()
+if utils#pref_fzf()
     nnoremap <silent><M-k>t :FzfColors<Cr>
     nnoremap <silent><M-k>f :FzfFiletypes<Cr>
     nnoremap <silent><M-k><M-k> :FzfCommands<Cr>
-elseif PlannedLeaderf()
+elseif utils#is_planned_leaderf()
     nnoremap <silent><M-k>t :LeaderfColorscheme<Cr>
     nnoremap <silent><M-k>f :LeaderfFiletype<Cr>
     nnoremap <silent><M-k><M-k> :LeaderfCommand<Cr>
@@ -168,7 +168,7 @@ else
 endif
 if utils#is_planned_fzf() && executable('perl')
     nnoremap <silent><M-h><M-h> :FzfHelptags<Cr>
-elseif PlannedLeaderf()
+elseif utils#is_planned_leaderf()
     nnoremap <silent><M-h><M-h> :LeaderfHelp<Cr>
 else
     nnoremap <M-h><M-h> :h<Space>

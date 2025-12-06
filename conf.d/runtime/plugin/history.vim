@@ -1,4 +1,4 @@
-if PlannedLeaderf()
+if utils#is_planned_leaderf()
     nnoremap <silent><leader>m :LeaderfMru<Cr>
 elseif utils#is_planned_fzf()
     nnoremap <silent><leader>m :FzfHistory<Cr>
@@ -27,7 +27,7 @@ endif
 " ------------------------------
 " Fzf jumps
 " ------------------------------
-if PrefFzf()
+if utils#pref_fzf()
     function! s:jump_list_format(val) abort
         let l:file_name = bufname('%')
         let l:file_name = empty(l:file_name) ? 'Unknown file name' : l:file_name
@@ -35,8 +35,8 @@ if PrefFzf()
         let l:l = matchlist(a:val, '\(>\?\)\s*\(\d*\)\s*\(\d*\)\s*\(\d*\) \?\(.*\)')
         let [l:mark, l:jump, l:line, l:col, l:content] = l:l[1:5]
         if empty(utils#trim(l:mark)) | let l:mark = '-' | endif
-        if filereadable(utils#utils#expand(fnameescape(l:content)))
-            let l:file_name = utils#utils#expand(l:content)
+        if filereadable(utils#expand(fnameescape(l:content)))
+            let l:file_name = utils#expand(l:content)
             let l:bn = bufnr(l:file_name)
             if l:bn > -1 && buflisted(l:bn) > 0
                 let l:content = getbufline(l:bn, l:line)
@@ -60,7 +60,7 @@ if PrefFzf()
         let l:l = matchlist(a:jp, '\(.\)\s\(.*\):\(\d\+\):\(\d\+\)\(.*\)')
         let [l:file_name, l:line, l:col, l:content] = l:l[2:5]
         if empty(l:file_name) || empty(l:line) | return | endif
-        " 判断文件是否已经存在 buffer �?
+        " 判断文件是否已经存在 buffer
         let l:bn = bufnr(l:file_name)
         " 未打开
         if l:bn == -1
@@ -86,7 +86,7 @@ if PrefFzf()
     nnoremap <silent><M-j><M-j> :FzfJumps<cr>
     nnoremap <silent><M-k>/ :FzfHistory/<Cr>
     nnoremap <silent><M-k>: :FzfHistory:<Cr>
-elseif PlannedLeaderf()
+elseif utils#is_planned_leaderf()
     nnoremap <silent><M-j><M-j> :Leaderf jumps<cr>
     nnoremap <silent><M-k>/ :LeaderfHistorySearch<Cr>
     nnoremap <silent><M-k>: :LeaderfHistoryCmd<Cr>
@@ -110,7 +110,7 @@ function! s:recent_project_files()
         endif
     endfor
     let old_files = fzf#vim#_uniq(map(old_files, 'fnamemodify(v:val, ":~:.")'))
-    let options = ['--header-lines', !empty(utils#utils#expand('%')), '--ansi', '--prompt', 'ProjectMru> ']
+    let options = ['--header-lines', !empty(utils#expand('%')), '--ansi', '--prompt', 'ProjectMru> ']
     let options += ['--expect', join(keys(get(g:, 'fzf_action', ['ctrl-x', 'ctrl-v', 'ctrl-t'])), ',')]
     let options += ['--preview-window', get(get(g:, 'fzf_vim'), 'preview_window', ['right,45%'])[0] . ',+{2}-/2']
     let options = fzf#vim#with_preview({'options': options, 'placeholder': ' {1}'}).options

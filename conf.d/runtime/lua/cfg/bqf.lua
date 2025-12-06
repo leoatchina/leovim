@@ -1,4 +1,4 @@
-is_require('bqf').setup({
+require('bqf').setup({
   auto_enable = true,
   auto_resize_height = false,
   preview = {
@@ -7,7 +7,7 @@ is_require('bqf').setup({
     win_height = 12,
     win_vheight = 12,
     delay_syntax = 80,
-    border_chars = {'â”?, 'â”?, 'â”?, 'â”?, 'â”?, 'â”?, 'â”?, 'â”?, 'â–?},
+    border_chars = {'ï¿½?, 'ï¿½?, 'ï¿½?, 'ï¿½?, 'ï¿½?, 'ï¿½?, 'ï¿½?, 'ï¿½?, 'ï¿½?},
     should_preview_cb = function(bufnr)
       local bufname = vim.api.nvim_buf_get_name(bufnr)
       local fsize = vim.fn.getfsize(bufname)

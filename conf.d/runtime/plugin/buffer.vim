@@ -1,6 +1,6 @@
-if PrefFzf()
+if utils#pref_fzf()
     nnoremap <silent><leader>b :FzfBuffers<Cr>
-elseif PlannedLeaderf()
+elseif utils#is_planned_leaderf()
     nnoremap <silent><leader>b :LeaderfBuffer<Cr>
 elseif utils#is_planned('vim-quickui')
     nnoremap <silent><leader>b :call quickui#tools#list_buffer('e')<Cr>

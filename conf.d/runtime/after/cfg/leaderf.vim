@@ -18,7 +18,7 @@ if g:has_popup_floating
     let g:Lf_WindowPosition = 'popup'
     let g:Lf_PopupColorscheme = 'default'
     let g:Lf_PopupShowBorder = 1
-    let g:Lf_PopupBorders = ["â”€","â”?,"â”€","â”?,"â”?,"â”?,"â”?,"â”?]
+    let g:Lf_PopupBorders = ["â”€","â”‚","â”€","â”‚","â”Œ","â”","â”˜","â””"]
     let g:Lf_PopupHeight    = 0.7
     let g:Lf_PreviewInPopup = 1
     function s:Lf_Preview_Position()

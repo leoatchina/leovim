@@ -94,7 +94,7 @@ if utils#is_planned('vim-vsnip')
     endfunction
     let g:vsnip_snippet_dir = utils#expand("~/.leovim/conf.d/snippets")
     nnoremap <M-h>n :VsnipOpen<Cr>
-    if PlannedLeaderf()
+    if utils#is_planned_leaderf()
         nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
         nnoremap <silent><M-h>s :Leaderf file --no-sort ~/.leovim/conf.d/snippets<Cr>
     elseif utils#is_planned_fzf()

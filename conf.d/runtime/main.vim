@@ -156,7 +156,7 @@ endif
 " ------------------------
 " has_truecolor
 " ------------------------
-if has('termguicolors') || utils#is_windows() || utils#utils#has_gui()
+if has('termguicolors') || utils#is_windows() || utils#has_gui()
     try
         set termguicolors
         hi LineNr ctermbg=NONE guibg=NONE
@@ -202,12 +202,12 @@ if utils#is_windows()
         endif
     endif
     set winaltkeys=no
-    if utils#utils#has_gui()
+    if utils#has_gui()
         set lines=999
         set columns=999
     endif
     " ToggleFullScreen and SetAlpha moved to utils.vim
-    if has('libcall') && !has('nvim') && utils#utils#has_gui()
+    if has('libcall') && !has('nvim') && utils#has_gui()
         let g:gvimfullscreendll = $HOME ."\\. leovim.windows\\tools\\gvimfullscreen.dll"
         function! ToggleFullScreen()
             call utils#toggle_fullscreen()
@@ -246,7 +246,7 @@ else
     endif
     if has('nvim') && $TMUX != ''
         let $TERM = "xterm-256color"
-    elseif utils#utils#has_gui() == 0 && !has('nvim')
+    elseif utils#has_gui() == 0 && !has('nvim')
         if $TMUX != ''
             try
                 set term=xterm-256color
@@ -265,7 +265,7 @@ if utils#is_require('notags')
     let g:ctags_type = ''
     let g:gtags_version = 0
 elseif utils#is_windows() && utils#is_require('tags') || utils#is_unix()
-    if utils#is_windows() && filereadable(utils#utils#expand("~/.leovim.windows/tools/ctags.exe"))
+    if utils#is_windows() && filereadable(utils#expand("~/.leovim.windows/tools/ctags.exe"))
         let g:ctags_type = 'Universal-json'
     elseif executable('ctags')
         try
@@ -284,7 +284,7 @@ elseif utils#is_windows() && utils#is_require('tags') || utils#is_unix()
         let g:ctags_type = ''
     endif
     if utils#is_windows()
-        let $GTAGSCONF = utils#utils#expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
+        let $GTAGSCONF = utils#expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
     endif
     if executable('gtags') && get(g:, 'ctags_type', '') != '' && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
         let s:gtags_version = matchstr(system('gtags --version'), '\v\zs\d{1,2}.\d{1,2}.\d{1,2}\ze')
@@ -329,15 +329,15 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " ===============================================================================================================
 " install begin
 " ===============================================================================================================
-call plug#begin(utils#utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-if filereadable(utils#utils#expand("$LEOVIMD_DIR/pack.vim"))
+call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
+if filereadable(utils#expand("$LEOVIMD_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
 for vim in split(glob("$MODULE_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 function! s:plug_update() abort
-    let vimrc_opt = utils#utils#expand('~/.vimrc.opt')
+    let vimrc_opt = utils#expand('~/.vimrc.opt')
     if filereadable(vimrc_opt)
         execute "source " . vimrc_opt
     endif
@@ -368,7 +368,7 @@ for k in s:metacode_group
     exec "set " . mkey . "=\e" . k
     let modes = ['n', 'i', 'x', 'o']
     for mode in modes
-        " maparg 返回非空字符�?�?存在该模式下的映�?
+        " maparg 返回非空字符�?�?存在该模式下的映�?
         if empty(maparg(mkey, mode))
             exec(mode . "map " . mkey . " <Nop>")
         endif
@@ -382,7 +382,7 @@ source $CFG_DIR/easymotion.vim
 " ------------------------------
 " set mason PATH
 " ------------------------------
-let mason_dirs  = [utils#utils#expand('~/.leovim.d/mason/cmp/bin'), utils#utils#expand('~/.leovim.d/mason/blink/bin')]
+let mason_dirs  = [utils#expand('~/.leovim.d/mason/cmp/bin'), utils#expand('~/.leovim.d/mason/blink/bin')]
 if !utils#is_planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
     for mason_dir in mason_dirs
         if isdirectory(mason_dir)

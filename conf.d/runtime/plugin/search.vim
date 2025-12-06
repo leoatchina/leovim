@@ -1,9 +1,9 @@
 if utils#is_planned_fzf() && executable('rg')
     nnoremap <nowait><M-l><M-l> :FzfBLines<Cr>
-elseif PlannedLeaderf()
+elseif utils#is_planned_leaderf()
     nnoremap <nowait><M-l><M-l> :Leaderf line --fuzzy --no-sort<Cr>
 endif
-if PlannedLeaderf()
+if utils#is_planned_leaderf()
     nnoremap <nowait><M-l><M-a> :Leaderf line --fuzzy --all --no-sort<Cr>
 elseif utils#is_planned_fzf()
     nnoremap <nowait><M-l><M-a> :FzfLines<Cr>
@@ -211,7 +211,7 @@ endif
 " ----------------------------
 " leaderf search commands
 " ----------------------------
-if PlannedLeaderf() && executable('rg')
+if utils#is_planned_leaderf() && executable('rg')
     let g:Lf_DefaultExternalTool = "rg"
     " LeaderfLast
     nnoremap <nowait><C-f>. :Leaderf rg --recal<Cr>
@@ -299,7 +299,7 @@ endif
 " --------------------------------------
 " search path && dir, ans set search-tool
 " --------------------------------------
-if PlannedLeaderf()
+if utils#is_planned_leaderf()
     if utils#is_planned_fzf()
         let g:search_tool = "leaderf-fzf-grep"
     else

@@ -22,7 +22,7 @@ endif
 " map_K
 function! s:k()
     if index(['vim', 'help'], &ft) >= 0
-        if PlannedLeaderf()
+        if utils#is_planned_leaderf()
             execute 'LeaderfHelpCword'
         else
             execute 'h '.utils#expand('<cword>')

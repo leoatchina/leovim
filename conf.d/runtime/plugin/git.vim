@@ -141,7 +141,7 @@ else
     endif
 endif
 " blamer on left
-if PlannedLeaderf()
+if utils#is_planned_leaderf()
     nnoremap <silent><M-g>i :Leaderf git<Cr>
     nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
     nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
@@ -158,7 +158,7 @@ if utils#is_installed('blamer.nvim')
     let g:blamer_delay = 500
     nnoremap <silent><Tab><Cr> :BlamerToggle<Cr>
     command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
-elseif PlannedLeaderf()
+elseif utils#is_planned_leaderf()
     if has('patch-9.0.200') || has('nvim')
         nnoremap <silent><Tab><Cr> :LeaderfGitInlineBlameToggle<Cr>
         command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['Gutentag', 'Grep', 'Get'])

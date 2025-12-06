@@ -1,8 +1,8 @@
 local ls_path
 if is_windows() then
-  ls_path = vim.fn.Expand('~/.leovim.windows/jars')
+  ls_path = vim.fn['utils#expand']('~/.leovim.windows/jars')
 else
-  ls_path = vim.fn.Expand('~/.leovim.unix/jars')
+  ls_path = vim.fn['utils#expand']('~/.leovim.unix/jars')
 end
 is_require('spring_boot').setup({
   ls_path = ls_path,

@@ -36,7 +36,7 @@ local function new_git_status()
 end
 local git_status = new_git_status()
 -- Clear git status cache on refresh
-local refresh = is_require("oil.actions").refresh
+local refresh = require("oil.actions").refresh
 local orig_refresh = refresh.callback
 refresh.callback = function(...)
   git_status = new_git_status()
@@ -44,7 +44,7 @@ refresh.callback = function(...)
 end
 -- setup
 local detail = false
-is_require("oil").setup({
+require("oil").setup({
   keymaps = {
     ["gd"] = {
       desc = "Toggle file detail view",

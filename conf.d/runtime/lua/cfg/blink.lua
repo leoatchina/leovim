@@ -1,4 +1,4 @@
-is_require('blink.cmp').setup({
+require('blink.cmp').setup({
   appearance = {
     nerd_font_variant = 'mono'
   },
