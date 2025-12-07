@@ -18,7 +18,7 @@ autocmd BufReadPost * silent! normal g`"
 " number
 " --------------------------
 set number
-if !exists('g:vscode')
+if !utils#is_vscode()
     set relativenumber
     nnoremap <leader>n :set relativenumber! relativenumber? \| set number<Cr>
     nnoremap <leader>N :set norelativenumber \| set nonu! nonu?<Cr>

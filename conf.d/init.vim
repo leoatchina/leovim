@@ -37,7 +37,7 @@ endif
 " --------------------------
 " gui_running && OS
 " --------------------------
-if exists('g:vscode') && !has('nvim-0.10')
+if utils#is_vscode() && !has('nvim-0.10')
     echoe "vscode-neovim required nvim-0.10+!"
     finish
 elseif utils#is_win()
@@ -425,7 +425,7 @@ nnoremap <leader>YU _yg_:echo "-= Yanked line without leading whitespaces and li
 if has('clipboard')
     function! s:setup_clipboard(register, mode, label) abort
         let s:clipboard = a:mode
-        if exists('g:vscode')
+        if utils#is_vscode()
             execute 'set clipboard=' . a:mode
         else
             set clipboard=
@@ -437,7 +437,7 @@ if has('clipboard')
         execute 'nnoremap <leader>ym :let @' . a:register . '=utils#abs_path().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yu _"' . a:register . 'yg_:echo "-= Yanked line without leading whitespaces and line break to ' . a:label . ' clipboard=-"<Cr>'
     endfunction
-    if utils#is_linux() && (exists('g:vscode') || exists('$TMUX'))
+    if utils#is_linux() && (utils#is_vscode() || exists('$TMUX'))
         call s:setup_clipboard('+', 'unnamedplus', 'x11')
     else
         call s:setup_clipboard('*', 'unnamed', 'system')
@@ -503,7 +503,7 @@ command! YankWord call s:yank_border('word')
 nnoremap <silent>gY :YankWord<Cr>
 nnoremap <silent><leader>YY :YankFile<Cr>
 nnoremap <silent><leader>yy :YankLine<Cr>
-if exists('g:vscode')
+if utils#is_vscode()
     nnoremap <silent>Y :YankToLineEnd<Cr>
 else
     nnoremap Y y$:echo "Yank to line end to internal register."<Cr>
@@ -567,11 +567,11 @@ function! s:open_in_other()
     if !has('nvim')
         return
     endif
-    if exists('g:vscode') && executable(get(g:, 'open_neovim', ''))
+    if utils#is_vscode() && executable(get(g:, 'open_neovim', ''))
         call VSCodeNotify('copyFilePath')
         let p = fnameescape(@*)
         execute printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
-    elseif !exists('g:vscode') && executable(get(g:, 'open_editor', 'code'))
+    elseif !utils#is_vscode() && executable(get(g:, 'open_editor', 'code'))
         let editor = get(g:, 'open_editor', 'code')
         silent! exec printf("!%s --goto %s:%d:%d", editor, utils#abs_path(), line("."), col("."))
     else
@@ -659,7 +659,7 @@ else
     nmap SJ vt<Space>S
     nmap SK vT<Space>S
 endif
-if exists('g:vscode')
+if utils#is_vscode()
     imap <C-a> <ESC>ggVG
     xmap <C-a> <ESC>ggVG
     nmap <C-a> ggVG
@@ -680,7 +680,7 @@ endif
 " --------------------------------------------
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------
-if exists('g:vscode')
+if utils#is_vscode()
     source $COMMON_DIR/vscode.vim
 else
     source $RTP_DIR/main.vim

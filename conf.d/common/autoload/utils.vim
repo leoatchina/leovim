@@ -1,6 +1,10 @@
 " ----------------------------------------
 " System Detection Functions
 " ----------------------------------------
+function! utils#is_vscode() abort
+    return exists('g:vscode')
+endfunction
+
 function! utils#is_win() abort
     return has('win32') || has('win64')
 endfunction
@@ -29,7 +33,7 @@ function! utils#has_gui() abort
             return 1
         elseif exists('g:neovide')
             return 1
-        elseif exists('g:vscode')
+        elseif utils#is_vscode()
             return 0
         elseif exists('g:GuiLoaded') && g:GuiLoaded != 0
             return 1
@@ -45,6 +49,9 @@ function! utils#has_gui() abort
     endif
 endfunction
 
+function! utils#has_packadd() abort
+    return exists(':packadd') > 0
+endfunction
 " ----------------------------------------
 " File Path Functions
 " ----------------------------------------
