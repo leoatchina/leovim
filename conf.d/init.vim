@@ -86,16 +86,6 @@ let g:todo_patterns = "(TODO|FIXME|WARN|ERROR|BUG)"
 let g:note_patterns = "(NOTE|XXX|HINT|ETC|HELPME|COMMENTED|NOTUSED|STEP|In\\[\\d\*\\])"
 let g:root_patterns = get(g:, 'root_patterns', [".git", ".svn", ".hg", ".root", ".vscode", ".vim", ".idea", ".ccls"])
 let g:root_files = get(g:, 'root_files', [".task", "tsconfig.js", "Cargo.toml", "go.mod"])
-" ----------------------------
-" enhance functions
-" ----------------------------
-nnoremap <silent>d<space> :call utils#trip_trailing_whitespace()<Cr>
-" enhance escape
-" Escape function moved to utils.vim
-xnoremap / "yy/<C-r>=utils#escape(@y)<CR><Cr>
-xnoremap ? "yy?<C-r>=utils#escape(@y)<CR><Cr>
-xnoremap s "yy:%s/<C-r>=utils#escape(@y)<CR>/<C-r>=utils#escape(@y)<CR>/gc<Left><Left><Left>
-xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
 " --------------------------
 " init directories
 " --------------------------
@@ -207,11 +197,6 @@ xnoremap g_ $
 onoremap g_ $
 " MoveToEndAndAddSemicolon moved to utils.vim
 inoremap <silent><C-j> <C-\><C-n>:call utils#move_to_end_and_add_semicolon()<CR>
-" ------------------------
-" select and search
-" ------------------------
-" VIW moved to utils.vim
-nnoremap SS :call textobj#vim()<Cr>
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------
@@ -394,6 +379,10 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vq viq
     nmap <leader>vQ vaq
 endif
+" ------------------------
+" select and search
+" ------------------------
+nnoremap SS :call textobj#viw()<Cr>
 " ----------------------------------
 " hl searchindex && multi replace
 " ----------------------------------
@@ -419,6 +408,10 @@ xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------------------
 " clipboard
 " ------------------------------------
+xnoremap / "yy/<C-r>=utils#escape(@y)<CR><Cr>
+xnoremap ? "yy?<C-r>=utils#escape(@y)<CR><Cr>
+xnoremap s "yy:%s/<C-r>=utils#escape(@y)<CR>/<C-r>=utils#escape(@y)<CR>/gc<Left><Left><Left>
+xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
 " Copy file path
 nnoremap <leader>YA :let @"=utils#abs_path()<Cr>:echo "-= File path copied=-"<Cr>
 " Copy file dir
@@ -643,7 +636,7 @@ function! s:open_link_in_editor(text, col)
 endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
 nnoremap <silent>gx :OpenLink<cr>
-
+nnoremap <silent>d<space> :call utils#trip_trailing_whitespace()<Cr>
 " ------------------------
 " quick jump in buffer
 " ------------------------
@@ -688,7 +681,7 @@ endif
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------
 if exists('g:vscode')
-    source $RTP_DIR/vscode.vim
+    source $COMMON_DIR/vscode.vim
 else
     source $RTP_DIR/main.vim
 endif

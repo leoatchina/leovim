@@ -1,7 +1,4 @@
-" ----------------------------------------
-" Text Object Functions (from init.vim)
-" ----------------------------------------
-function! textobj#vim() abort
+function! textobj#viw() abort
     set iskeyword-=_ iskeyword-=#
     call timer_start(300, {-> execute("set iskeyword+=_  iskeyword+=#")})
     call feedkeys("viwo",'n')
