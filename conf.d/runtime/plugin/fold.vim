@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 set foldenable
 set foldlevel=99
 set foldlevelstart=99

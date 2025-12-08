@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 if pack#pref_fzf()
     nnoremap <silent><leader>b :FzfBuffers<Cr>
 elseif pack#planned_leaderf()

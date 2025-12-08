@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 if pack#installed('mason.nvim')
     lua require("cfg/mason")
 endif

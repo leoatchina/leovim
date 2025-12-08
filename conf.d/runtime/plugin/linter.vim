@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 let s:python_lint_ignore = "E101,E302,E251,E231,E226,E221,E127,E126,E123,E402,E501,W291,F405,F403"
 if pack#installed('coc.nvim')
     " highlight group

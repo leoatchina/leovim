@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 if pack#planned('vim-signature')
     let g:SignatureMap = {
                 \ 'Leader'           : "m",

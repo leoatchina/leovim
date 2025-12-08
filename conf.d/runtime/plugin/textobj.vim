@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 if pack#installed('nvim-treesitter', 'hlargs.nvim')
     if utils#is_win()
         function! s:cleanup_ts() abort

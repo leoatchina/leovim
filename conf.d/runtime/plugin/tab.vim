@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 " ---------------------------------------
 " choose tab using fuzzy_findeer
 " ---------------------------------------

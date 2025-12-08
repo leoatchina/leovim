@@ -1,8 +1,8 @@
-PlugOpt 'vim-sidebar-manager'
 let g:sidebars = {}
 function! s:check_buf_ft(name, nr) abort
     return getwinvar(a:nr, '&filetype') ==# a:name || bufname(winbufnr(a:nr)) ==# a:name
 endfunction
+PlugOpt 'vim-sidebar-manager'
 " --------------------------
 " symbol
 " --------------------------
@@ -13,7 +13,7 @@ if pack#installed('vista.vim')
     let g:vista_sidebar_width = 35
     let g:vista_echo_cursor   = 0
     let g:vista_stay_on_open  = 0
-    let g:vista_icon_indent   = ["╰─�?", "├─�?"]
+    let g:vista_icon_indent   = ["╰─�?", "├─�?"]
     let g:vista_executive_for = {
                 \ 'vimwiki': 'markdown',
                 \ 'pandoc': 'markdown',

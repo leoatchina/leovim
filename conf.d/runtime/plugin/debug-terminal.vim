@@ -1,6 +1,9 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 nnoremap <silent>- :call preview#errmsg("Please intalled debug plugins.")<Cr>
 nnoremap _ -
-inoremap !! !=
 " --------------------
 " J show diag
 " --------------------

@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 augroup AutoClose
     autocmd!
     autocmd BufWinEnter * if utils#autoclose_lastwin() | q! | endif

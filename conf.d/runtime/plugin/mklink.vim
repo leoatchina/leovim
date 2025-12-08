@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 function! s:mklink(cmd, ...) abort
     if a:0 && a:1 > 0
         execute("!echo " . a:cmd)

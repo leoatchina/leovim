@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 if pack#planned_leaderf()
     nnoremap <silent><leader>m :LeaderfMru<Cr>
 elseif pack#planned_fzf()

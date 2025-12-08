@@ -1,3 +1,7 @@
+" Skip in VSCode environment
+if utils#is_vscode()
+    finish
+endif
 if pack#planned('vim-translator')
     let g:translator_default_engines=['bing', 'haici']
     if g:has_popup_floating
