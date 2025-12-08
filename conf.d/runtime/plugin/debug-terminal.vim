@@ -156,8 +156,8 @@ if pack#planned_fzf()
             let template_file = ''
         endif
         if dap
-            let json_file = fnamemodify(GetRootDir() . '/.vim/dap.json', ':p')
-            let json_dir = fnamemodify(GetRootDir() . '/.vim', ':p')
+            let json_file = fnamemodify(utils#get_root_dir() . '/.vim/dap.json', ':p')
+            let json_dir = fnamemodify(utils#get_root_dir() . '/.vim', ':p')
             if !isdirectory(json_dir)
                 try
                     call mkdir(json_dir, 'p')
@@ -167,7 +167,7 @@ if pack#planned_fzf()
                 endtry
             endif
         else
-            let json_file = fnamemodify(GetRootDir() . '/.vimspector.json', ':p')
+            let json_file = fnamemodify(utils#get_root_dir() . '/.vimspector.json', ':p')
         endif
         if filereadable(json_file)
             execute "tabe " . json_file

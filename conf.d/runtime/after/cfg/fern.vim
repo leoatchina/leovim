@@ -17,9 +17,9 @@ function! FernOpen(type, ...) abort
     if a:type == 'lcd'
         let l:dir = '.'
     elseif a:type == 'gitroot'
-        let l:dir = GitRootDir()
+        let l:dir = git#git_root_dir()
     else
-        let l:dir = GetRootDir()
+        let l:dir = utils#get_root_dir()
     endif
     let l:cmd = 'Fern ' . l:dir
     if !get(a:, 1, 0)
