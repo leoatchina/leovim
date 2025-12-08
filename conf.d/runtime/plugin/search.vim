@@ -2,10 +2,10 @@
 if utils#is_vscode()
     finish
 endif
-if pack#planned_fzf() && executable('rg')
-    nnoremap <nowait><M-l><M-l> :FzfBLines<Cr>
-elseif pack#planned_leaderf()
+if pack#planned_leaderf()
     nnoremap <nowait><M-l><M-l> :Leaderf line --fuzzy --no-sort<Cr>
+elseif pack#planned_fzf() && executable('rg')
+    nnoremap <nowait><M-l><M-l> :FzfBLines<Cr>
 endif
 if pack#planned_leaderf()
     nnoremap <nowait><M-l><M-a> :Leaderf line --fuzzy --all --no-sort<Cr>

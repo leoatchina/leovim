@@ -48,19 +48,19 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-if pack#pref_fzf()
-    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
-elseif pack#planned_leaderf()
+if pack#planned_leaderf()
     nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=utils#get_root_dir()<Cr><Cr>
+elseif pack#planned_fzf()
+    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 else
     nnoremap <silent><nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
 endif
-if pack#pref_fzf()
-    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
-    nnoremap <silent><nowait><leader>p  :FzfGitFiles<Cr>
-elseif pack#planned_leaderf()
+if pack#planned_leaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
     nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=git#git_root_dir()<Cr><Cr>
+elseif pack#planned_fzf()
+    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
+    nnoremap <silent><nowait><leader>p  :FzfGitFiles<Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=git#git_root_dir()<Cr><Cr>
@@ -253,7 +253,7 @@ if get(g:, 'leovim_openmap', 1)
         if utils#is_unix()
             nnoremap <silent><M-h>L :Leaderf file --regex --no-sort ~/.local/bin<Cr>
         endif
-    elseif pack#pref_fzf()
+    elseif pack#planned_fzf()
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/runtime/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>

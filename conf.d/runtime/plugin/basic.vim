@@ -157,23 +157,23 @@ endif
 " --------------------------------
 " common maps
 " --------------------------------
-if pack#pref_fzf()
-    nnoremap <silent><M-k>t :FzfColors<Cr>
-    nnoremap <silent><M-k>f :FzfFiletypes<Cr>
-    nnoremap <silent><M-k><M-k> :FzfCommands<Cr>
-elseif pack#planned_leaderf()
+if pack#planned_leaderf()
     nnoremap <silent><M-k>t :LeaderfColorscheme<Cr>
     nnoremap <silent><M-k>f :LeaderfFiletype<Cr>
     nnoremap <silent><M-k><M-k> :LeaderfCommand<Cr>
+elseif pack#pref_fzf()
+    nnoremap <silent><M-k>t :FzfColors<Cr>
+    nnoremap <silent><M-k>f :FzfFiletypes<Cr>
+    nnoremap <silent><M-k><M-k> :FzfCommands<Cr>
 else
     nnoremap <M-k>t :colorscheme<Space>
     nnoremap <M-k>f :filetype<Space>
     nnoremap <M-k><M-k> :command<Space>
 endif
-if pack#planned_fzf() && executable('perl')
-    nnoremap <silent><M-h><M-h> :FzfHelptags<Cr>
-elseif pack#planned_leaderf()
+if pack#planned_leaderf()
     nnoremap <silent><M-h><M-h> :LeaderfHelp<Cr>
+elseif pack#planned_fzf() && executable('perl')
+    nnoremap <silent><M-h><M-h> :FzfHelptags<Cr>
 else
     nnoremap <M-h><M-h> :h<Space>
 endif
