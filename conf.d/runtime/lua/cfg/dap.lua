@@ -22,7 +22,7 @@ require("mason-nvim-dap").setup({
   }
 })
 ------------------------------------------------------------
--- 配置调试适配�?
+-- 配置调试适配
 ------------------------------------------------------------
 local mason_dir = fn.expand("~/.leovim.d/mason")
 -- sh
@@ -71,7 +71,7 @@ local function load_json(dap_json)
   local type_to_filetypes = vscode.type_to_filetypes
   local configurations = vscode.getconfigs(dap_json)
   assert(configurations, "launch.json must have a 'configurations' key")
-  -- 使用表来跟踪已初始化的文件类�?
+  -- 使用表来跟踪已初始化的文件类型
   local dap_config_inited = {}
   for _, config in ipairs(configurations) do
     assert(config.name, "Configuration in launch.json must have a 'name' key")
