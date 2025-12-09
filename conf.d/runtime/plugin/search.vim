@@ -65,7 +65,7 @@ function! s:grep(...)
             let g:grep_word = utils#escape(a:1)
             let g:grep_last = g:grep_word
         endif
-        if executable('rg')
+        if executable('rg') && utils#is_unix()
             let cmd = printf('silent! grep %s', g:grep_word)
         else
             let cmd = printf('vimgrep /%s/j **/*', g:grep_word)
@@ -77,7 +77,7 @@ function! s:grep(...)
             let g:grep_word = utils#escape(a:1)
             let g:grepall_last = g:grep_word
         endif
-        if executable('rg')
+        if executable('rg') && utils#is_unix()
             let cmd = printf('silent! grep %s %s', g:grep_word, utils#get_root_dir())
         else
             let cmd = printf('vimgrep /%s/j %s/**/*', g:grep_word, utils#get_root_dir())

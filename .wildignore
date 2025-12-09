@@ -1,5 +1,8 @@
-*.dll
 *.so
+*.dll
 *.pyd
 *.pyc
 *.exe
+*.jpg
+*.png
+*.bmp
