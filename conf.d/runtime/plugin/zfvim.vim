@@ -85,7 +85,7 @@ function! s:show_input()
     if empty(get(g:, 'ZFVimIM_symbolMap', {}))
         let punctuation = '[Eng] punctuation'
     else
-        let punctuation = '【中文】标�?
+        let punctuation = '【中文】标点'
     endif
     let msg = printf('%s with %s', ime_name, punctuation)
     call preview#cmdmsg(msg, 1)

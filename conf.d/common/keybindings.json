@@ -117,6 +117,10 @@
     "key": "ctrl+shift+oem_minus",
     "command": "gitlens.toggleMaximizedGraph"
   },
+  {
+    "key": "ctrl+shift+alt+oem_minus",
+    "command": "gitlens.views.commitDetails.focus"
+  },
   // ctrl o
   {
     "key": "ctrl+o",
