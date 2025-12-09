@@ -113,14 +113,14 @@ nnoremap <M-j>[ <C-w>f
 " using system file explorer
 if utils#has_gui() || utils#is_win()
     imap <M-O> <C-o>O
-    nmap <M-O> O
     imap <M-o> <C-o>o
-    nmap <M-o> o
     nnoremap <silent><M-N> :tabm +1<Cr>
     nnoremap <silent><M-P> :tabm -1<Cr>
     nnoremap <M-]> :vsplit<Space>
     nnoremap <M-[> :split<Space>
-    if !has('nvim') && get(g:, 'use_system_browser', utils#is_win())
+    if pack#installed('oil.nvim')
+        nnoremap <silent><nowait><M-o> <Cmd>Oil --float<Cr>
+    elseif !has('nvim') && get(g:, 'use_system_browser', utils#is_win())
         let g:browsefilter = ''
         function! s:filter_push(desc, wildcard) abort
             let g:browsefilter .= a:desc . " (" . a:wildcard . ")\t" . a:wildcard . "\n"
@@ -150,7 +150,7 @@ if utils#has_gui() || utils#is_win()
         call s:filter_push("Php", "*.php")
         call s:filter_push("Vim Script", "*.vim")
         command! UseSystemBrowser call s:use_system_browser()
-        nnoremap <silent><M-"> :UseSystemBrowser<Cr>
+        nnoremap <silent><M-o> :UseSystemBrowser<Cr>
     endif
 endif
 " --------------------------

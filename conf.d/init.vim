@@ -44,7 +44,7 @@ elseif utils#is_win()
     if !has('nvim') && v:version < 900
         echoe "In windows, please update to vim9.0+."
         finish
-    elseif !has('nvim-0.8')
+    elseif !has('nvim-0.8') && has('nvim')
         echoe 'neovim 0.8 is at least required when using leovim in windows.'
         finish
     endif
