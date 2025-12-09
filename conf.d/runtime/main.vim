@@ -358,7 +358,7 @@ for k in s:metacode_group
     exec "set " . mkey . "=\e" . k
     let modes = ['n', 'i', 'x', 'o']
     for mode in modes
-        " maparg 返回非空字符�?�?存在该模式下的映�?
+        " maparg 返回非空字符存在该模式下的映射
         if empty(maparg(mkey, mode))
             exec(mode . "map " . mkey . " <Nop>")
         endif

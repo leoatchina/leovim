@@ -44,8 +44,8 @@ elseif utils#is_win()
     if !has('nvim') && v:version < 900
         echoe "In windows, please update to vim9.0+."
         finish
-    elseif has('nvim') && !has('nvim')
-        echoe 'neovim 0.8 is at least required when uing leovim in windows.'
+    elseif !has('nvim-0.8')
+        echoe 'neovim 0.8 is at least required when using leovim in windows.'
         finish
     endif
 endif
@@ -607,8 +607,8 @@ function! s:open_link_in_editor(text, col)
         echom "No file under cursor"
         return
     endif
-    if executable(get(g:, 'open_edior', 'code'))
-        let editor = get(g:, 'open_edior', 'code') . ' --goto'
+    if executable(get(g:, 'open_editor', 'code'))
+        let editor = get(g:, 'open_editor', 'code') . ' --goto'
     else
         echom "Neither URL nor file found, and no editor executable"
         return
@@ -631,7 +631,7 @@ function! s:open_link_in_editor(text, col)
             exec "!" . editor . " " . fl
         endif
     else
-        echo "Neigher URL nor file path under cursor."
+        echo "Neither URL nor file path under cursor."
     endif
 endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))

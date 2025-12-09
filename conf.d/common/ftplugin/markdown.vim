@@ -51,8 +51,8 @@ function! s:get_current_numbers(level, numbers)
     return ''
 endfunction
 " FIXME: this function is not completed
-function! s:ToggleMarkdownNumbers(enable = 0) range
-    let l:numbers = [0, 0, 0, 0]  " 存储每级标题的当前序�?
+function! s:ToggleMarkdownNumbers(enable) range
+    let l:numbers = [0, 0, 0, 0]  " 存储每级标题的当前序�?
     let l:last_level = 0          " 记录上一个标题的级别
     " 首先收集所有行
     let l:lines = getline(a:firstline, a:lastline)
@@ -63,16 +63,16 @@ function! s:ToggleMarkdownNumbers(enable = 0) range
             call add(l:new_lines, l:line)
             continue
         endif
-        " 检查是否是标题�?
+        " 检查是否是标题
         if l:line =~# '^#\+\s'
             let l:level = s:get_header_level(l:line)
             if l:level > 4
                 call add(l:new_lines, l:line)
                 continue
             endif
-            " 如果要添加序�?
+            " 如果要添加序号
             if a:enable
-                " 移除已存在的序号（如果有�?
+                " 移除已存在的序号（如果有)
                 let l:clean_line = substitute(l:line, '^#\+\s\+\(\d\+\.\)*\d\+\s\+', '#\1 ', '')
                 let l:clean_line = substitute(l:clean_line, '^#\+\s\+[a-z])\s\+', '#\1 ', '')
                 " 更新序号
@@ -91,7 +91,7 @@ function! s:ToggleMarkdownNumbers(enable = 0) range
                         let l:numbers[l:i] = 0
                     endfor
                 endif
-                " 生成序号字符�?
+                " 生成序号字符
                 let l:number_str = s:get_current_numbers(l:level, l:numbers)
                 " 在标题文本前添加序号
                 let l:new_line = substitute(l:clean_line, '^#\+\s\+', '\0' . l:number_str . ' ', '')
@@ -108,7 +108,7 @@ function! s:ToggleMarkdownNumbers(enable = 0) range
             call add(l:new_lines, l:line)
         endif
     endfor
-    " 替换原文�?
+    " 替换原文
     execute a:firstline . ',' . a:lastline . 'delete'
     call append(a:firstline - 1, l:new_lines)
 endfunction

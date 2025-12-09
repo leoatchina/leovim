@@ -35,7 +35,7 @@ def! g:AbbrevCompletor(findstart: number, base: string): any
 		if prefix->empty()
 			return -2
 		endif
-		return col('.') - prefixsymotion-prefix)    ->len() - 1
+		return col('.') - prefix->len() - 1
 	endif
 	var lines = execute('ia', 'silent!')
 	if lines =~? gettext('No abbreviation found')
