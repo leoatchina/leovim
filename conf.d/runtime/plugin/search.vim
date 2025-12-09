@@ -100,6 +100,7 @@ xnoremap s<Cr> :<C-u>GrepDir <C-r>=utils#get_visual()<Cr><Cr>
 nnoremap s[ :GrepDirLast<Cr>
 nnoremap s] :GrepDir <C-r><C-w>
 xnoremap s] :<C-u>GrepDir <C-r>=utils#get_visual()<Cr>
+nnoremap s} :GrepDir <C-r>=@"<Cr><Cr>
 " searchall
 nnoremap s/ :GrepAll <C-r><C-w><Cr>
 xnoremap s/ :<C-u>GrepAll <C-r>=utils#get_visual()<Cr><Cr>

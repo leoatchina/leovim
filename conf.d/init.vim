@@ -500,7 +500,7 @@ command! YankToFileEnd call s:yank_border('to_file_end')
 command! YankFromLineBegin call s:yank_border('from_line_begin')
 command! YankToLineEnd call s:yank_border('to_line_end')
 command! YankWord call s:yank_border('word')
-nnoremap <silent>gY :YankWord<Cr>
+nnoremap <silent>yY :YankWord<Cr>
 nnoremap <silent><leader>YY :YankFile<Cr>
 nnoremap <silent><leader>yy :YankLine<Cr>
 if utils#is_vscode()
