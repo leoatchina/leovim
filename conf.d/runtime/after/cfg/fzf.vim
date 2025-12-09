@@ -40,7 +40,7 @@ else
     let g:vista_fzf_preview = g:fzf_vim.preview_window
     let g:fzf_vim.preview_window = ['right,45%', 'ctrl-l']
 endif
-" 使用 fzf 查看高亮配置
+" Use fzf to view highlight configuration
 function! s:get_highlight_list()
     redir => l:highlight_output
     silent highlight
@@ -148,3 +148,4 @@ function FzfCallCommands(prompt, ...)
                 \ }, l:fzf_layout), 0)
 endfunction
 autocmd! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+

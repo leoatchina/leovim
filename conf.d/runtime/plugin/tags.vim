@@ -78,16 +78,16 @@ let g:gutentags_modules = []
 if pack#planned('vim-gutentags')
     " exclude files
     let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", "node_modules", "*.vim/bundle/*", ".ccls_cache", "__pycache__"] + g:root_patterns
-    " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
+    " gutentags search project directory markers, stop recursion when encountering these files/directories
     let g:gutentags_project_root = g:root_patterns
     let g:gutentags_add_default_project_roots = 0
     let g:gutentags_define_advanced_commands = 1
-    " 所生成的数据文件的名称
+    " name of generated data files
     let g:gutentags_ctags_tagfile = '.tags'
     " modules
     if g:ctags_type != ''
         let g:gutentags_modules += ['ctags']
-        " 配置 ctags
+        " configure ctags
         let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=q', '--c-kinds=+px', '--c++-kinds=+pxl']
         if g:ctags_type =~ "Universal"
             let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
@@ -375,3 +375,4 @@ if pack#installed_adv()
     " typeDefinition
     nnoremap <silent><M-?> :call <SID>lsp_tag_search("type_definition", "list")<Cr>
 endif
+

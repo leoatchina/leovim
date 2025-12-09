@@ -100,7 +100,7 @@ endif
 if utils#is_win32unix()
     let g:python_version = 0
 else
-    " NOTE, 不能使用pyxeval/py3eval/pyeval, 否则neovim 没有pip安装相关包时，执行会出错.
+    " NOTE, cannot use pyxeval/py3eval/pyeval, otherwise neovim will error when pip packages are not installed.
     try
         let py_version = utils#execute('py3 print(sys.version)')
     catch
@@ -358,7 +358,7 @@ for k in s:metacode_group
     exec "set " . mkey . "=\e" . k
     let modes = ['n', 'i', 'x', 'o']
     for mode in modes
-        " maparg 返回非空字符存在该模式下的映射
+        " maparg returns non-empty characters if mapping exists in that mode
         if empty(maparg(mkey, mode))
             exec(mode . "map " . mkey . " <Nop>")
         endif

@@ -52,66 +52,67 @@ function! s:get_current_numbers(level, numbers)
 endfunction
 " FIXME: this function is not completed
 function! s:ToggleMarkdownNumbers(enable) range
-    let l:numbers = [0, 0, 0, 0]  " 存储每级标题的当前序�?
-    let l:last_level = 0          " 记录上一个标题的级别
-    " 首先收集所有行
+    let l:numbers = [0, 0, 0, 0]  " Store current sequence number for each header level
+    let l:last_level = 0          " Record previous header level
+    " First collect all lines
     let l:lines = getline(a:firstline, a:lastline)
     let l:new_lines = []
     for l:line in l:lines
-        " 跳过空行
+        " Skip empty lines
         if l:line =~# '^\s*$'
             call add(l:new_lines, l:line)
             continue
         endif
-        " 检查是否是标题
+        " Check if it's a header
         if l:line =~# '^#\+\s'
             let l:level = s:get_header_level(l:line)
             if l:level > 4
                 call add(l:new_lines, l:line)
                 continue
             endif
-            " 如果要添加序号
+            " If need to add sequence number
             if a:enable
-                " 移除已存在的序号（如果有)
+                " Remove existing sequence numbers (if any)
                 let l:clean_line = substitute(l:line, '^#\+\s\+\(\d\+\.\)*\d\+\s\+', '#\1 ', '')
                 let l:clean_line = substitute(l:clean_line, '^#\+\s\+[a-z])\s\+', '#\1 ', '')
-                " 更新序号
+                " Update sequence number
                 if l:level > l:last_level
-                    " 进入更深层级
+                    " Enter deeper level
                     for l:i in range(l:last_level, l:level-1)
                         let l:numbers[l:i] = 1
                     endfor
                 elseif l:level == l:last_level
-                    " 同级标题
+                    " Same level header
                     let l:numbers[l:level-1] += 1
                 else
-                    " 返回更浅层级
+                    " Return to shallower level
                     let l:numbers[l:level-1] += 1
                     for l:i in range(l:level, 3)
                         let l:numbers[l:i] = 0
                     endfor
                 endif
-                " 生成序号字符
+                " Generate sequence number string
                 let l:number_str = s:get_current_numbers(l:level, l:numbers)
-                " 在标题文本前添加序号
+                " Add sequence number before header text
                 let l:new_line = substitute(l:clean_line, '^#\+\s\+', '\0' . l:number_str . ' ', '')
                 call add(l:new_lines, l:new_line)
             else
-                " 移除序号
+                " Remove sequence number
                 let l:clean_line = substitute(l:line, '^#\+\s\+\(\d\+\.\)*\d\+\s\+', '#\1 ', '')
                 let l:clean_line = substitute(l:clean_line, '^#\+\s\+[a-z])\s\+', '#\1 ', '')
                 call add(l:new_lines, l:clean_line)
             endif
             let l:last_level = l:level
         else
-            " 非标题行直接添加
+            " Non-header lines added directly
             call add(l:new_lines, l:line)
         endif
     endfor
-    " 替换原文
+    " Replace original text
     execute a:firstline . ',' . a:lastline . 'delete'
     call append(a:firstline - 1, l:new_lines)
 endfunction
 " Add command for markdown number toggle
 au FileType markdown command! -range -nargs=? ToggleMarkdownNumbers <line1>,<line2>call s:ToggleMarkdownNumbers(<args>)
 nnoremap <silent><buffer><M-T> :ToggleMarkdownNumbers<Cr>
+

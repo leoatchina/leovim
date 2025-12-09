@@ -12,7 +12,7 @@ if has('patch-7.4.1829')
     set shortmess+=a
     set shortmess+=c
 endif
-" 补全选项设置 - 基于版本精确判断
+" completion options settings - based on precise version judgment
 if has('patch-7.4.775')
     set completeopt+=noselect
 endif
@@ -22,17 +22,17 @@ endif
 if has('nvim-0.11')
     set completeopt+=fuzzy
 endif
-" Vim 8.1.1880+ 的 popup 补全窗口（需要 textprop 支持，Neovim 使用浮动窗口）
+" Vim 8.1.1880+ popup completion window (requires textprop support, Neovim uses floating window)
 if !has('nvim') && has('patch-8.1.1880') && has('textprop') && exists('+completepopup')
     set completeopt+=popup
     set completepopup=align:menu,border:off,highlight:WildMenu
 endif
-" 补全菜单大小设置
+" completion menu size settings
 set pumheight=20
 if exists('+pumwidth')
     set pumwidth=50
 endif
-" 如果补全功能不够完善，在Unix下使用mcm作为备选
+" If completion function is not perfect enough, use mcm as alternative on Unix
 if !has('patch-7.4.775') && utils#is_unix()
     call pack#add('mcm')
 endif
@@ -279,3 +279,4 @@ if has('nvim')
 elseif v:version >= 800
     PlugAdd 'ryanoasis/vim-devicons'
 endif
+

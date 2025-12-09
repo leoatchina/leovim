@@ -64,9 +64,9 @@ if pack#pref_fzf()
         let l:l = matchlist(a:jp, '\(.\)\s\(.*\):\(\d\+\):\(\d\+\)\(.*\)')
         let [l:file_name, l:line, l:col, l:content] = l:l[2:5]
         if empty(l:file_name) || empty(l:line) | return | endif
-        " 判断文件是否已经存在 buffer
+        " Check if file already exists in buffer
         let l:bn = bufnr(l:file_name)
-        " 未打开
+        " Not opened
         if l:bn == -1
             if filereadable(l:file_name)
                 execute 'e ' . 'l:file_name'
@@ -126,3 +126,4 @@ function! s:recent_project_files()
 endfunction
 command! FzfProjectMru call s:recent_project_files()
 nnoremap <leader>u :FzfProjectMru<Cr>
+
