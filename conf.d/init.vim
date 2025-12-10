@@ -144,6 +144,8 @@ map <C-i> <Nop>
 map <C-z> <Nop>
 nnoremap s <Nop>
 nnoremap S <Nop>
+nnoremap ; <Nop>
+xnoremap ; <Nop>
 nnoremap , <Nop>
 xnoremap , <Nop>
 " enhanced remap
@@ -171,14 +173,10 @@ nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
 nnoremap <C-m> <C-i>
 nnoremap <Cr> <C-i>
 nnoremap gb 2g;I
-" ------------------------
 " case change
-" ------------------------
 nnoremap ZU m1gUiw`1
 nnoremap ZD m1guiw`1
-" ------------------------
 " home end
-" ------------------------
 cmap <C-a> <Home>
 cmap <C-e> <End>
 imap <expr><C-b> pumvisible()? "\<C-b>":"\<C-o>I"
@@ -195,8 +193,12 @@ onoremap $ g_
 nnoremap g_ $
 xnoremap g_ $
 onoremap g_ $
-" MoveToEndAndAddSemicolon moved to utils.vim
+" ------------------------
+" enhanced edit
+" ------------------------
 inoremap <silent><C-j> <C-\><C-n>:call utils#move_to_end_and_add_semicolon()<CR>
+nnoremap <silent>d<space> :call utils#trip_trailing_whitespace()<Cr>
+
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------
@@ -636,12 +638,9 @@ function! s:open_link_in_editor(text, col)
 endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
 nnoremap <silent>gx :OpenLink<cr>
-nnoremap <silent>d<space> :call utils#trip_trailing_whitespace()<Cr>
 " ------------------------
 " quick jump in buffer
 " ------------------------
-nnoremap ; <Nop>
-nnoremap , <Nop>
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim')
     PlugOpt 'flash.nvim'
