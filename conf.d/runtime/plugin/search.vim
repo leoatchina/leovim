@@ -52,43 +52,66 @@ nnoremap z? :GrepBuf <C-r>=@"<Cr><Cr>
 " using rg to search
 " ----------------------------
 if executable('rg')
-    set grepprg=rg\ --line-number\ --no-heading\ --smart-case
+    set grepprg=rg\ --vimgrep\ --line-number\ --no-heading\ --smart-case
     set grepformat=%f:%l:%m,%f:%l,%f:%m,%f
 endif
 function! s:grep(...)
     if a:0 == 0
         return
-    elseif a:000[-1] == 1
+    endif
+    let mode = a:000[-1]
+    if mode == 1
         if a:0 == 1
             let g:grep_word = get(g:, 'grep_last', '')
         else
             let g:grep_word = utils#escape(a:1)
             let g:grep_last = g:grep_word
         endif
-        if executable('rg') && utils#is_unix()
-            let cmd = printf('silent! grep %s', g:grep_word)
-        else
-            let cmd = printf('vimgrep /%s/j **/*', g:grep_word)
-        endif
-    elseif a:000[-1] == 2
+    elseif mode == 2
         if a:0 == 1
             let g:grep_word = get(g:, 'grepall_last', '')
         else
             let g:grep_word = utils#escape(a:1)
             let g:grepall_last = g:grep_word
         endif
-        if executable('rg') && utils#is_unix()
-            let cmd = printf('silent! grep %s %s', g:grep_word, utils#get_root_dir())
-        else
-            let cmd = printf('vimgrep /%s/j %s/**/*', g:grep_word, utils#get_root_dir())
-        endif
     else
         return
     endif
-    execute cmd
-    if len(getqflist())
-        copen
+
+    if executable('rg')
+        if mode == 1
+            let search_path = '.'
+        else
+            let search_path = utils#get_root_dir()
+        endif
+        let rg_cmd = &grepprg . ' ' . shellescape(g:grep_word) . ' ' . shellescape(search_path)
+        let lines = systemlist(rg_cmd)
+        let qfl = []
+        for l in lines
+            if empty(l)
+                continue
+            endif
+            let parts = split(l, ':', 4)
+            if len(parts) >= 4
+                call add(qfl, {'filename': parts[0], 'lnum': str2nr(parts[1]), 'col': str2nr(parts[2]), 'text': parts[3]})
+            endif
+        endfor
+        if !empty(qfl)
+            call setqflist(qfl, 'r')
+            copen
+        endif
+    else
+        if mode == 1
+            let cmd = printf('vimgrep /%s/j **/*', g:grep_word)
+        else
+            let cmd = printf('vimgrep /%s/j %s/**/*', g:grep_word, utils#get_root_dir())
+        endif
+        execute cmd
+        if len(getqflist())
+            copen
+        endif
     endif
+
 endfunction
 command! GrepDirLast call s:grep(1)
 command! -nargs=1 GrepDir call s:grep(<q-args>, 1)
