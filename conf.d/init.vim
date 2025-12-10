@@ -197,8 +197,7 @@ onoremap g_ $
 " enhanced edit
 " ------------------------
 inoremap <silent><C-j> <C-\><C-n>:call utils#move_to_end_and_add_semicolon()<CR>
-nnoremap <silent>d<space> :call utils#trip_trailing_whitespace()<Cr>
-
+nnoremap <silent>d<space> :call utils#trip_whitespace()<Cr>
 " ------------------------------
 " load pack in OPT_DIR
 " ------------------------------
@@ -244,8 +243,6 @@ nnoremap <leader>c, :ConflictMarkerPrevHunk<Cr>
 " ------------------------------
 " nerdcommenter
 " ------------------------------
-nnoremap <silent><leader>c] V}:call nerdcommenter#Comment('x', 'toggle')<CR>
-nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " Create default mappings
 let g:NERDCreateDefaultMappings = 1
 " Add space after comment delimiters by default
@@ -261,19 +258,19 @@ let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
 PlugOpt 'nerdcommenter'
-" ------------------------
+nnoremap <silent><leader>c] V}:call nerdcommenter#Comment('x', 'toggle')<CR>
+nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
+" --------------------------
+" textobj
+" --------------------------
 " surround
-" ------------------------
 nmap SW viw<Plug>VSurround
 nmap SL v$<Plug>VSurround
 nmap SH v^<Plug>VSurround
 nnoremap S) va)hol
 nnoremap S} va}hol
 nnoremap S] va]hol
-" --------------------------
-" textobj
-" --------------------------
-for s:v in ['', 'v', 'V', '<c-v>']
+for s:v in ['', 'v', 'V', '<C-V>']
     execute 'omap <expr>' s:v.'I%' "(v:count?'':'1').'".s:v."i%'"
     execute 'omap <expr>' s:v.'A%' "(v:count?'':'1').'".s:v."a%'"
 endfor
@@ -296,36 +293,6 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vB vaB
     nmap <leader>vn vin
     nmap <leader>vN vaN
-    " find line
-    " TextObj functions moved to utils.vim
-    call textobj#user#plugin('line', {
-                \   '-': {
-                \     'select-a-function': 'textobj#current_lina_a',
-                \     'select-a': 'ak',
-                \     'select-i-function': 'textobj#current_line_i',
-                \     'select-i': 'ik',
-                \   },
-                \ })
-    vnoremap ik ^o$h
-    onoremap ik :normal vik<Cr>
-    vnoremap ak ^o$
-    onoremap ak :normal vak<Cr>
-    nmap <leader>vk vik
-    nmap <leader>vK vak
-    " find block
-    let s:block_str = '^# In\[\d*\]\|^# %%\|^# STEP\d\+'
-    " Block TextObj functions moved to utils.vim
-    call textobj#user#plugin('block', {
-                \ 'block': {
-                \  'select-a-function': 'textobj#block_a',
-                \  'select-a': 'av',
-                \  'select-i-function': 'textobj#block_i',
-                \  'select-i': 'iv',
-                \  'region-type': 'V'
-                \ },
-                \ })
-    nmap <leader>vv viv
-    nmap <leader>vV vav
     " -------------------
     " indent textobj
     " -------------------
@@ -380,11 +347,39 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vS vas
     nmap <leader>vq viq
     nmap <leader>vQ vaq
+    " -------------------
+    " leo'defined textobj
+    " -------------------
+    nnoremap SS :call textobj#viw()<Cr>
+    call textobj#user#plugin('line', {
+                \   '-': {
+                \     'select-a-function': 'textobj#current_lina_a',
+                \     'select-a': 'ak',
+                \     'select-i-function': 'textobj#current_line_i',
+                \     'select-i': 'ik',
+                \   },
+                \ })
+    vnoremap ik ^o$h
+    onoremap ik :normal vik<Cr>
+    vnoremap ak ^o$
+    onoremap ak :normal vak<Cr>
+    nmap <leader>vk vik
+    nmap <leader>vK vak
+    " find block
+    let s:block_str = '^# In\[\d*\]\|^# %%\|^# STEP\d\+'
+    " Block TextObj functions moved to utils.vim
+    call textobj#user#plugin('block', {
+                \ 'block': {
+                \  'select-a-function': 'textobj#block_a',
+                \  'select-a': 'av',
+                \  'select-i-function': 'textobj#block_i',
+                \  'select-i': 'iv',
+                \  'region-type': 'V'
+                \ },
+                \ })
+    nmap <leader>vv viv
+    nmap <leader>vV vav
 endif
-" ------------------------
-" select and search
-" ------------------------
-nnoremap SS :call textobj#viw()<Cr>
 " ----------------------------------
 " hl searchindex && multi replace
 " ----------------------------------

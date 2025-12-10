@@ -42,12 +42,12 @@ function! s:search_cur(...)
 endfunction
 command! -nargs=? GrepBuf call s:search_cur(<f-args>)
 command! -nargs=0 GrepBufLast call s:search_cur(get(g:, 'grep_word', ''))
-nnoremap z/ :GrepBuf <C-r><C-w><Cr>
+nnoremap z/ :GrepBuf <C-r>=utils#escape(utils#get_cword())<Cr><Cr>
 xnoremap z/ :<C-u>GrepBuf <C-r>=utils#get_visual(1)<Cr><Cr>
 nnoremap z. :GrepBufLast<CR>
-nnoremap z\ :GrepBuf <C-r><C-w>
+nnoremap z\ :GrepBuf <C-r>=utils#escape(utils#get_cword())<Cr>
 xnoremap z\ :<C-u>GrepBuf <C-r>=utils#get_visual(1)<Cr>
-nnoremap z? :GrepBuf <C-r>=@"<Cr><Cr>
+nnoremap z? :GrepBuf <C-r>=utils#escape(@")<Cr><Cr>
 " ----------------------------
 " using rg to search
 " ----------------------------
@@ -77,7 +77,6 @@ function! s:grep(...)
     else
         return
     endif
-
     if executable('rg')
         if mode == 1
             let search_path = '.'

@@ -104,26 +104,6 @@ endfunction
 " ----------------------------------------
 " String Utility Functions
 " ----------------------------------------
-function! utils#mode()
-    let l:modes_dict={
-                \ "\<C-V>": 'V·Block',
-                \ 'Rv': 'V·Replace',
-                \ 'n':  'NORMAL',
-                \ 'v':  'VISUAL',
-                \ 'V':  'V·Line',
-                \ 'i':  'INSERT',
-                \ 'R':  'R',
-                \ 'c':  'Command',
-                \}
-    let m = mode()
-    if has_key(l:modes_dict, m)
-        let m = l:modes_dict[m]
-    else
-        let m = ""
-    endif
-    return m
-endfunction
-
 function! utils#trim(str) abort
     return substitute(a:str, "^\s\+\|\s\+$", "", "g")
 endfunction
@@ -171,7 +151,11 @@ function! utils#string_to_float(str, ...) abort
     endif
 endfunction
 
-function! utils#trip_trailing_whitespace() abort
+function! utils#escape(param) abort
+    return substitute(escape(a:param, '/\.*$^~[#'), '\n', '\\n', 'g')
+endfunction
+
+function! utils#trip_whitespace() abort
     let _s=@/
     let l = line(".")
     let c = col(".")
@@ -182,8 +166,8 @@ function! utils#trip_trailing_whitespace() abort
     call cursor(l, c)
 endfunction
 
-function! utils#escape(param) abort
-    return substitute(escape(a:param, '/\.*$^~[#'), '\n', '\\n', 'g')
+function! utils#get_cword() abort
+    return expand('<cword>')
 endfunction
 
 function! utils#get_visual(...) abort
@@ -250,7 +234,6 @@ function! utils#set_alpha(alpha) abort
         call libcall(g:gvimfullscreendll, 'SetAlpha', g:VimAlpha)
     endif
 endfunction
-
 " ----------------------------------------
 " Mode Function
 " ----------------------------------------
@@ -273,7 +256,6 @@ function! utils#mode() abort
     endif
     return m
 endfunction
-
 " ----------------------------------------
 " AutoClose
 " ----------------------------------------
@@ -297,8 +279,7 @@ function! s:autoclose(check_last_win) abort
         return 0
     endif
 endfunction
-
-function! utils#is_ftbt_ignored() abort
+function! utils#is_ignored() abort
     return s:autoclose(0)
 endfunction
 function! utils#autoclose_lastwin() abort
