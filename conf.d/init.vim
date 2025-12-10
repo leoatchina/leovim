@@ -242,8 +242,8 @@ nnoremap <leader>c, :ConflictMarkerPrevHunk<Cr>
 " ------------------------------
 " nerdcommenter
 " ------------------------------
-nnoremap <silent><leader>c} V}:call nerdcommenter#Comment('x', 'toggle')<CR>
-nnoremap <silent><leader>c{ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
+nnoremap <silent><leader>c] V}:call nerdcommenter#Comment('x', 'toggle')<CR>
+nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " Create default mappings
 let g:NERDCreateDefaultMappings = 1
 " Add space after comment delimiters by default
