@@ -18,7 +18,7 @@ else
 endif
 if g:node_version > 18
     if executable('unzip')
-        let g:ensure_installed += ['vimls', 'lua_ls', 'bashls']
+        let g:ensure_installed += ['vimls', 'emmylua_ls', 'bashls']
     else
         let g:ensure_installed += ['vimls']
     endif
