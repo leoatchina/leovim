@@ -90,8 +90,10 @@ function! s:grep(...)
             if empty(l)
                 continue
             endif
-            let parts = split(l, ':', 4)
-            if len(parts) >= 4
+            let parts = split(l, ':')
+            if l[1] ==# ':'
+                call add(qfl, {'filename': parts[0] . ':' . parts[1], 'lnum': str2nr(parts[2]), 'col': str2nr(parts[3]), 'text': parts[4]})
+            else
                 call add(qfl, {'filename': parts[0], 'lnum': str2nr(parts[1]), 'col': str2nr(parts[2]), 'text': parts[3]})
             endif
         endfor

@@ -13,7 +13,7 @@ function! s:confirm_quit(type) abort
     let type = a:type
     if &ft == 'floaterm'
         FloatermKill
-    elseif (&ft == '' || utils#expand('%') == '' || utils#is_ftbt_ignored()) && type == 0
+    elseif (&ft == '' || utils#expand('%') == '' || utils#is_ignored()) && type == 0
         q!
     else
         if type == 'all'
