@@ -20,24 +20,17 @@ endif
 function! s:search_cur(...)
     try
         if a:0 == 0
-            let g:grep_word = utils#expand('<cword>')
+            let g:grep_word = utils#get_cword()
         else
             let g:grep_word = a:1
         endif
     catch /.*/
-        let g:grep_word = ""
-    endtry
-    if empty(g:grep_word)
         call preview#errmsg("No search word offered")
-    else
-        try
-            execute 'vimgrep /' . utils#escape(g:grep_word) . "/j %"
-            if len(getqflist())
-                copen
-            endif
-        catch /.*/
-            call preview#errmsg("vimgrep current buf error")
-        endtry
+        return
+    endtry
+    execute 'vimgrep /' . utils#escape(g:grep_word) . "/j %"
+    if len(getqflist())
+        copen
     endif
 endfunction
 command! -nargs=? GrepBuf call s:search_cur(<f-args>)
@@ -64,14 +57,14 @@ function! s:grep(...)
         if a:0 == 1
             let g:grep_word = get(g:, 'grep_last', '')
         else
-            let g:grep_word = utils#escape(a:1)
+            let g:grep_word = a:1
             let g:grep_last = g:grep_word
         endif
     elseif mode == 2
         if a:0 == 1
             let g:grep_word = get(g:, 'grepall_last', '')
         else
-            let g:grep_word = utils#escape(a:1)
+            let g:grep_word = a:1
             let g:grepall_last = g:grep_word
         endif
     else
@@ -83,14 +76,14 @@ function! s:grep(...)
         else
             let search_path = utils#get_root_dir()
         endif
-        let rg_cmd = &grepprg . ' ' . shellescape(g:grep_word) . ' ' . shellescape(search_path)
+        let rg_cmd = &grepprg . ' ' . utils#escape(g:grep_word) . ' ' . shellescape(search_path)
         let lines = systemlist(rg_cmd)
         let qfl = []
         for l in lines
             if empty(l)
                 continue
             endif
-            let parts = split(l, ':')
+            let parts = split(l, '\:')
             if l[1] ==# ':'
                 call add(qfl, {'filename': parts[0] . ':' . parts[1], 'lnum': str2nr(parts[2]), 'text': parts[4]})
             else
@@ -103,16 +96,15 @@ function! s:grep(...)
         endif
     else
         if mode == 1
-            let cmd = printf('vimgrep /%s/j **/*', g:grep_word)
+            let cmd = printf('vimgrep /%s/j **/*', utils#escape(g:grep_word))
         else
-            let cmd = printf('vimgrep /%s/j %s/**/*', g:grep_word, utils#get_root_dir())
+            let cmd = printf('vimgrep /%s/j %s/**/*', utils#escape(g:grep_word), utils#get_root_dir())
         endif
         execute cmd
         if len(getqflist())
             copen
         endif
     endif
-
 endfunction
 command! GrepDirLast call s:grep(1)
 command! -nargs=1 GrepDir call s:grep(<q-args>, 1)

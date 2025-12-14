@@ -152,7 +152,8 @@ function! utils#string_to_float(str, ...) abort
 endfunction
 
 function! utils#escape(param) abort
-    return substitute(escape(a:param, '/\.*$^~[#'), '\n', '\\n', 'g')
+    " Escape search-special chars but allow literal '#'
+    return substitute(escape(a:param, '/\.*$^~['), '\n', '\\n', 'g')
 endfunction
 
 function! utils#trip_whitespace() abort
