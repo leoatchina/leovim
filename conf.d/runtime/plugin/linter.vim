@@ -93,7 +93,7 @@ if pack#planned('ale')
     let g:ale_use_neovim_diagnostics_api = 0
     let g:ale_warn_about_trailing_blank_lines = 0
     " show message type
-    let g:ale_virtualtext_prefix = ' �?type%�? '
+    let g:ale_virtualtext_prefix = '【%type%】:'
     let g:ale_hover_cursor = 0
     if g:has_popup_floating
         let g:ale_virtualtext_cursor = 1
