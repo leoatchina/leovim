@@ -129,11 +129,11 @@
     "when": "workbench.scm.active"
   },
   {
-    "key": "ctrl+shift+oem_minus",
+    "key": "ctrl+shift+-",
     "command": "gitlens.toggleMaximizedGraph"
   },
   {
-    "key": "ctrl+shift+alt+oem_minus",
+    "key": "shift+alt+-",
     "command": "gitlens.views.commitDetails.focus"
   },
   // ctrl o
@@ -241,7 +241,7 @@
   },
   // comment
   {
-    "key": "ctrl+shift+oem_2",
+    "key": "ctrl+shift+/",
     "command": "editor.action.blockComment",
     "when": "editorTextFocus && !editorReadonly"
   },
@@ -332,14 +332,14 @@
     "when": "terminalFocus"
   },
   {
+    "key": "alt+[",
+    "command": "workbench.action.terminal.kill",
+    "when": "terminalFocus"
+  },
+  {
     "key": "alt+shift+=",
     "command": "workbench.action.terminal.new",
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
-  },
-  {
-    "key": "shift+alt+-",
-    "command": "workbench.action.terminal.kill",
-    "when": "terminalHasBeenCreated || terminalIsOpen || terminalProcessSupported"
   },
   {
     "key": "shift+alt+[",
@@ -550,7 +550,8 @@
   },
   {
     "key": "alt+[",
-    "command": "workbench.action.splitEditorDown"
+    "command": "workbench.action.splitEditorDown",
+    "when": "editorTextFocus"
   },
   // multicommand
   {
@@ -622,19 +623,23 @@
     "command": "-kilo-code.toggleAutoApprove"
   },
   {
-    "key": "ctrl+shift+oem_5",
+    "key": "ctrl+shift+\\",
     "command": "kilo-code.focusChatInput"
   },
   {
-    "key": "ctrl+alt+oem_5",
+    "key": "alt+\\",
     "command": "kilo-code.ghost.generateSuggestions"
   },
   {
-    "key": "ctrl+shift+alt+oem_5",
+    "key": "shift+alt+\\",
     "command": "kilo-code.terminalAddToContext"
   },
   {
-    "key": "ctrl+oem_5",
+    "key": "ctrl+\\",
     "command": "kilo-code.addToContext"
+  },
+  {
+    "key": "ctrl+shift+alt+-",
+    "command": "workbench.action.terminal.killAll"
   }
 ]
