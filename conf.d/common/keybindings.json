@@ -309,12 +309,12 @@
     "when": "terminal.active"
   },
   {
-    "key": "ctrl+shift+alt+=",
+    "key": "ctrl+shift+`",
     "command": "-workbench.action.terminal.new",
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
   {
-    "key": "ctrl+shift+`",
+    "key": "ctrl+shift+alt+=",
     "command": "workbench.action.terminal.openNativeConsole"
   },
   {
