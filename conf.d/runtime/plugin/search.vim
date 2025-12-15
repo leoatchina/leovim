@@ -45,8 +45,8 @@ nnoremap z? :GrepBuf <C-r>=utils#escape(@")<Cr><Cr>
 " using rg to search
 " ----------------------------
 if executable('rg')
-    set grepprg=rg\ --vimgrep\ --line-number\ --no-heading\ --smart-case\ --color=never
-    set grepformat=%f:%l:%c:%m,%f:%l:%m,%f:%m,%f
+    set grepprg=rg\ --vimgrep\ --no-column\ --no-heading\ --smart-case\ --color=never
+    set grepformat=%f:%l:%m,%f:%m,%f
 endif
 function! s:grep(...)
     if a:0 == 0
@@ -76,7 +76,7 @@ function! s:grep(...)
         else
             let search_dir = utils#get_root_dir()
         endif
-        let rg_cmd = &grepprg . ' ' . shellescape(g:grep_word) . ' ' . search_dir
+        let rg_cmd = &grepprg . ' ' . shellescape(g:grep_word) . ' ' . shellescape(search_dir)
         let lines = systemlist(rg_cmd)
         let qfl = []
         for l in lines
@@ -84,26 +84,28 @@ function! s:grep(...)
                 continue
             endif
             let parts = split(l, ':')
-            if len(parts) < 4
-                continue
-            endif
-            " Check for Windows drive letter (e.g., C:)
-            if utils#is_win() && len(parts) >=5 && parts[0] =~# '[A-Za-z]'
+            " accept outputs with or without column numbers
+            if utils#is_win() && len(parts) >= 4 && parts[0] =~# '^[A-Za-z]$'
                 let fname = parts[1]
                 let lnum = str2nr(parts[2])
-                let col = str2nr(parts[3])
-                let text = join(parts[4:], ':')
-            else
+                let text = join(parts[3:], ':')
+            elseif len(parts) >= 3
                 let fname = parts[0]
                 let lnum = str2nr(parts[1])
-                let col = str2nr(parts[2])
-                let text = join(parts[3:], ':')
+                " if a column exists it lives at parts[2], otherwise it's text
+                if len(parts) >= 4
+                    let text = join(parts[3:], ':')
+                else
+                    let text = join(parts[2:], ':')
+                endif
+            else
+                continue
             endif
-            if col <= 0
-                let col = 1
+            if !has('nvim')
+                let g:text = text
+                let g:parts = parts
             endif
-            let data = {'filename': fname, 'lnum': lnum, 'col':col, 'text': text}
-            let g:test_data = data
+            let data = {'filename': fname, 'lnum': lnum, 'text': text}
             call add(qfl, data)
         endfor
         if !empty(qfl)
