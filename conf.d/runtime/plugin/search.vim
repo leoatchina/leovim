@@ -100,6 +100,9 @@ function! s:grep(...)
             else
                 continue
             endif
+            if utils#is_win()
+                let text = substitute(text, '\r', '', 'g')
+            endif
             let data = {'filename': fname, 'lnum': lnum, 'text': text}
             call add(qfl, data)
         endfor
