@@ -46,7 +46,6 @@ nnoremap z? :GrepBuf <C-r>=utils#escape(@")<Cr><Cr>
 " ----------------------------
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-column\ --no-heading\ --smart-case\ --color=never
-    set grepformat=%f:%l:%m,%f:%m,%f
 endif
 function! s:grep(...)
     if a:0 == 0
@@ -87,11 +86,11 @@ function! s:grep(...)
             " accept outputs with or without column numbers
             if utils#is_win() && len(parts) >= 4 && parts[0] =~# '^[A-Za-z]$'
                 let fname = parts[1]
-                let lnum = str2nr(parts[2])
+                let lnum = parts[2]
                 let text = join(parts[3:], ':')
             elseif len(parts) >= 3
                 let fname = parts[0]
-                let lnum = str2nr(parts[1])
+                let lnum = parts[1] . " col 1"
                 " if a column exists it lives at parts[2], otherwise it's text
                 if len(parts) >= 4
                     let text = join(parts[3:], ':')
@@ -100,10 +99,6 @@ function! s:grep(...)
                 endif
             else
                 continue
-            endif
-            if !has('nvim')
-                let g:text = text
-                let g:parts = parts
             endif
             let data = {'filename': fname, 'lnum': lnum, 'text': text}
             call add(qfl, data)
