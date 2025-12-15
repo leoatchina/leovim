@@ -114,7 +114,7 @@ else
         let fmt = '%-' . prefix_len . 's' . '%s'
         setlocal modifiable
         call setline('1', map(qflist,
-                    \ 'printf(fmt, v:val.filename . "|" . v:val.lnum, "|" . v:val.text)')
+                    \ 'printf(fmt, v:val.filename . "|" . v:val.lnum, "|" . v:val.text)'))
         setlocal nomodifiable nomodified
     endfunction
     augroup QuickFixFormat
