@@ -44,9 +44,9 @@ nnoremap z? :GrepBuf <C-r>=utils#escape(@")<Cr><Cr>
 " ----------------------------
 " using rg to search
 " ----------------------------
-set grepformat=%f:%l:%c:%m,%f:%l:%m,%f:$m,$f
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --line-number\ --no-heading\ --smart-case\ --color=never
+    set grepformat=%f:%l:%c:%m,%f:%l:%m,%f:%m,%f
 endif
 function! s:grep(...)
     if a:0 == 0
@@ -76,7 +76,7 @@ function! s:grep(...)
         else
             let search_dir = utils#get_root_dir()
         endif
-        let rg_cmd = &grepprg . ' ' . shellescape(g:grep_word) . ' ' . shellescape(search_dir)
+        let rg_cmd = &grepprg . ' ' . shellescape(g:grep_word) . ' ' . search_dir
         let lines = systemlist(rg_cmd)
         let qfl = []
         for l in lines
