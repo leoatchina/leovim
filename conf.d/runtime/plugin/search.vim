@@ -44,9 +44,9 @@ nnoremap z? :GrepBuf <C-r>=utils#escape(@")<Cr><Cr>
 " ----------------------------
 " using rg to search
 " ----------------------------
+set grepformat=%f:%l:%c:%m,%f:%l:%m,%f:$m,$f
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --line-number\ --no-heading\ --smart-case\ --color=never
-    set grepformat=%f:%l:%m
 endif
 function! s:grep(...)
     if a:0 == 0
@@ -88,7 +88,6 @@ function! s:grep(...)
                 continue
             endif
             " Check for Windows drive letter (e.g., C:)
-            let g:parts = parts
             if utils#is_win() && len(parts) >=5 && parts[0] =~# '[A-Za-z]'
                 let fname = parts[1]
                 let lnum = str2nr(parts[2])
@@ -103,7 +102,9 @@ function! s:grep(...)
             if col <= 0
                 let col = 1
             endif
-            call add(qfl, {'filename': fname, 'lnum': lnum, 'text': text})
+            let data = {'filename': fname, 'lnum': lnum, 'col':col, 'text': text}
+            let g:test_data = data
+            call add(qfl, data)
         endfor
         if !empty(qfl)
             call setqflist(qfl, 'r')
