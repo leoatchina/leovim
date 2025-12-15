@@ -90,7 +90,7 @@ function! s:grep(...)
                 let text = join(parts[3:], ':')
             elseif len(parts) >= 3
                 let fname = parts[0]
-                let lnum = parts[1] . " col 1"
+                let lnum = parts[1]
                 " if a column exists it lives at parts[2], otherwise it's text
                 if len(parts) >= 4
                     let text = join(parts[3:], ':')
