@@ -309,7 +309,7 @@
     "when": "terminal.active"
   },
   {
-    "key": "ctrl+shift+`",
+    "key": "ctrl+shift+alt+=",
     "command": "-workbench.action.terminal.new",
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
