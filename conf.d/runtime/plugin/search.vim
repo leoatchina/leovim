@@ -85,10 +85,17 @@ function! s:grep(...)
             endif
             let parts = split(l, '\:')
             if l[1] ==# ':'
-                call add(qfl, {'filename': parts[0] . ':' . parts[1], 'lnum': str2nr(parts[2]), 'text': parts[4]})
+                let fname = parts[0] . ':' . parts[1]
+                let lnum = str2nr(parts[2])
+                let text = utils#trim(join(parts[4:], ':'))
             else
-                call add(qfl, {'filename': parts[0], 'lnum': str2nr(parts[1]), 'text': parts[3]})
+                let fname = parts[0]
+                let lnum = str2nr(parts[1])
+                let text = utils#trim(join(parts[3:], ':'))
             endif
+            " strip ansi color codes to avoid garbled chars in Vim quickfix
+            let text = utils#trim(substitute(text, '\e\[[0-9;]*m', '', 'g'))
+            call add(qfl, {'filename': fname, 'lnum': lnum, 'text': text})
         endfor
         if !empty(qfl)
             call setqflist(qfl, 'r')
