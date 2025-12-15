@@ -45,7 +45,7 @@ nnoremap z? :GrepBuf <C-r>=utils#escape(@")<Cr><Cr>
 " using rg to search
 " ----------------------------
 if executable('rg')
-    set grepprg=rg\ --vimgrep\ --line-number\ --no-heading\ --smart-case
+    set grepprg=rg\ --vimgrep\ --line-number\ --no-heading\ --smart-case\ --color=never
     set grepformat=%f:%l:%m
 endif
 function! s:grep(...)
@@ -72,29 +72,37 @@ function! s:grep(...)
     endif
     if executable('rg')
         if mode == 1
-            let search_path = '.'
+            let search_dir = '.'
         else
-            let search_path = utils#get_root_dir()
+            let search_dir = utils#get_root_dir()
         endif
-        let rg_cmd = &grepprg . ' ' . utils#escape(g:grep_word) . ' ' . shellescape(search_path)
+        let rg_cmd = &grepprg . ' ' . shellescape(g:grep_word) . ' ' . shellescape(search_dir)
         let lines = systemlist(rg_cmd)
         let qfl = []
         for l in lines
             if empty(l)
                 continue
             endif
-            let parts = split(l, '\:')
-            if l[1] ==# ':'
-                let fname = parts[0] . ':' . parts[1]
+            let parts = split(l, ':')
+            if len(parts) < 4
+                continue
+            endif
+            " Check for Windows drive letter (e.g., C:)
+            let g:parts = parts
+            if utils#is_win() && len(parts) >=5 && parts[0] =~# '[A-Za-z]'
+                let fname = parts[1]
                 let lnum = str2nr(parts[2])
-                let text = utils#trim(join(parts[4:], ':'))
+                let col = str2nr(parts[3])
+                let text = join(parts[4:], ':')
             else
                 let fname = parts[0]
                 let lnum = str2nr(parts[1])
-                let text = utils#trim(join(parts[3:], ':'))
+                let col = str2nr(parts[2])
+                let text = join(parts[3:], ':')
             endif
-            " strip ansi color codes to avoid garbled chars in Vim quickfix
-            let text = utils#trim(substitute(text, '\e\[[0-9;]*m', '', 'g'))
+            if col <= 0
+                let col = 1
+            endif
             call add(qfl, {'filename': fname, 'lnum': lnum, 'text': text})
         endfor
         if !empty(qfl)
