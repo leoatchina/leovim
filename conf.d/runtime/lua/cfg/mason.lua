@@ -1,5 +1,7 @@
+local utils = require('utils')
+
 local registries
-if is_installed('nvim-java') then
+if utils.installed('nvim-java') then
   registries = {
     "github:nvim-java/mason-registry",
     "github:mason-org/mason-registry"

@@ -4,6 +4,7 @@
 local vscode = require("dap.ext.vscode")
 local dapui  = require("dapui")
 local dap    = require("dap")
+local utils  = require('utils')
 local keymap = vim.keymap
 local api    = vim.api
 local fn     = vim.fn
@@ -120,7 +121,7 @@ local function dap_load_run(json_file, run, run_to_cursor)
   return ok
 end
 local function get_json_file(json_file)
-  local json_file = json_file or get_root_dir() .. '/.vim/dap.json'
+  local json_file = json_file or utils.get_root_dir() .. '/.vim/dap.json'
   if fn.filereadable(json_file) then
     return json_file
   else

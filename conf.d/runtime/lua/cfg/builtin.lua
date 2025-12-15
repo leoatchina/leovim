@@ -5,6 +5,8 @@
 -- 全局变量和配置
 -- ============================================================================
 local map = vim.keymap.set
+local utils = require('utils')
+local is_win = utils.is_win
 
 -- 检查补全菜单是否可见
 local function pumvisible()
@@ -15,9 +17,6 @@ end
 local function mode()
   return vim.fn.mode()
 end
-
--- 使用全局 is_windows 函数（从 utils.lua）
-local is_windows = _G.is_windows
 
 -- 基础目录配置
 local dict_base_dir = vim.fn.expand('$HOME/.leovim/pack/clone/opt/vim-dict/dict') .. '/'
@@ -681,7 +680,7 @@ local function extract_path_prefix(line, col)
 
   -- Try to extract path from shell variable assignment (=path)
   local assignment_path
-  if is_windows() then
+  if is_win() then
     assignment_path = before_cursor:match('=([A-Za-z]:[/\\][^%s"\']*)$') or   -- =C:/path
                       before_cursor:match('=([/~][^%s"\']*)$') or             -- =/path or =~/path
                       before_cursor:match('=(%.%.[/\\][^%s"\']*)$') or        -- =../path
@@ -700,7 +699,7 @@ local function extract_path_prefix(line, col)
 
   -- Extract regular path patterns
   local path_patterns
-  if is_windows() then
+  if is_win() then
     path_patterns = {
       -- Windows patterns
       '([A-Za-z]:[/\\][^%s"\']*$)',        -- Windows absolute path (C:\ or C:/)
@@ -756,7 +755,7 @@ local function path_available()
   local before_cursor = line:sub(1, col)
 
   local path_patterns
-  if is_windows() then
+  if is_win() then
     path_patterns = {
       -- Windows patterns
       '[A-Za-z]:[/\\][^%s"\']*$',         -- Windows absolute path (C:\ or C:/)
@@ -824,13 +823,13 @@ local function get_path_completions(path_prefix)
 
   pcall(function()
     local dir_part, file_part
-    local path_sep = is_windows() and '[/\\]' or '/'
-    local preferred_sep = is_windows() and '\\' or '/'
+    local path_sep = is_win() and '[/\\]' or '/'
+    local preferred_sep = is_win() and '\\' or '/'
 
     -- Enhanced path parsing for better directory navigation
     local path_without_quotes = path_prefix:gsub('^[\'"]', ''):gsub('[\'"]$', '')
 
-    if is_windows() then
+    if is_win() then
       -- Windows path parsing - handle both / and \ separators
       dir_part = path_without_quotes:match('^(.*[/\\])')
       file_part = path_without_quotes:match('([^/\\]*)$')
@@ -876,7 +875,7 @@ local function get_path_completions(path_prefix)
         local full_path = path
 
         -- Convert path separators to match user's input style
-        if is_windows() then
+        if is_win() then
           if path_prefix:find('\\') then
             -- User prefers backslashes
             full_path = full_path:gsub('/', '\\')
@@ -888,16 +887,16 @@ local function get_path_completions(path_prefix)
 
         -- Add directory separator for directories
         if is_dir then
-          local sep = is_windows() and (path_prefix:find('\\') and '\\' or '/') or '/'
+          local sep = is_win() and (path_prefix:find('\\') and '\\' or '/') or '/'
           full_path = full_path .. sep
         end
 
         -- Handle relative path formatting
         local word = full_path
-        if dir_part == ('./' .. (is_windows() and '' or '')) or dir_part == ('.' .. preferred_sep) then
+        if dir_part == ('./' .. (is_win() and '' or '')) or dir_part == ('.' .. preferred_sep) then
           if not path_prefix:match('^%.') then
             -- Remove ./ or .\ prefix if user didn't type it
-            word = word:gsub('^%.' .. (is_windows() and '[/\\]' or '/'), '')
+            word = word:gsub('^%.' .. (is_win() and '[/\\]' or '/'), '')
           end
         end
 
@@ -1252,8 +1251,8 @@ local function handle_directory_navigation()
       -- 检查是否为已存在的目录，如果是则自动添加分隔符
       if vim.fn.isdirectory(path_without_quotes) == 1 then
         -- 确定路径分隔符类型
-        local sep = is_windows() and '\\' or '/'
-        if is_windows() and before_cursor:find('/') and not before_cursor:find('\\') then
+        local sep = is_win() and '\\' or '/'
+        if is_win() and before_cursor:find('/') and not before_cursor:find('\\') then
           sep = '/'
         end
 
@@ -1382,7 +1381,7 @@ vim.api.nvim_create_autocmd('FileType', {
     }
 
     -- Add Windows backslash triggers if on Windows
-    if is_windows() then
+    if is_win() then
       for ft, triggers in pairs(ft_triggers) do
         -- Add backslash to each filetype's triggers
         table.insert(triggers, '\\')

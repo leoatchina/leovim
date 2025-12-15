@@ -1,10 +1,12 @@
+local utils = require('utils')
+
 local config
 local enabled_ft = {'lua', 'vim', 'python', 'r', 'c', 'cpp', 'rust', 'go', 'java', 'javascript', 'typescript'}
-if is_installed_blink() or is_installed_cmp() then
+if utils.installed_blink() or utils.installed_cmp() then
   config = {
     provider = vim.g.ai_provider,
   }
-elseif is_installed_lsp() then
+elseif utils.installed_lsp() then
   config = {
     provider = vim.g.ai_provider,
     lsp = {

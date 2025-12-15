@@ -1,5 +1,7 @@
+local utils = require('utils')
+
 local ls_path
-if is_windows() then
+if utils.is_win() then
   ls_path = vim.fn['utils#expand']('~/.leovim.windows/jars')
 else
   ls_path = vim.fn['utils#expand']('~/.leovim.unix/jars')

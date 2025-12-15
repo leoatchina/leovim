@@ -13,6 +13,7 @@ end
 -----------------
 local unpack = table.unpack or unpack
 local fn = vim.fn
+local utils = require('utils')
 local cmp = require('cmp')
 local compare = cmp.config.compare
 local keymap = require('cmp.utils.keymap')
@@ -24,10 +25,10 @@ local sources = {
   { name = 'buffer', priority = 2 },
   { name = 'async_path', priority = 1 },
 }
-if is_installed('minuet-ai.nvim') then
+if utils.installed('minuet-ai.nvim') then
   table.insert(sources, 1, { name = 'minuet', priority = 6})
 end
-if is_installed('jupynium.nvim') then
+if utils.installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 7})
 end
 -----------------
@@ -67,7 +68,7 @@ cmp.setup({
   },
   mapping = {
     ["<M-.>"] = function()
-      if is_installed('minuet-ai.nvim') then
+      if utils.installed('minuet-ai.nvim') then
         require('minuet').make_cmp_map()
       end
     end,
@@ -211,7 +212,7 @@ cmp.setup({
         end
       end,
       s = function(fallback)
-        if is_installed('vim-vsnip') then
+        if utils.installed('vim-vsnip') then
           vim.fn['vsnip#expand']()
         elseif has_words_before() then
           cmp.complete()

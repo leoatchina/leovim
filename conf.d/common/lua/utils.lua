@@ -1,4 +1,6 @@
 local fn = vim.fn
+local utils = {}
+
 if fn.has("nvim-0.10") == 1 then
   vim.keymap.del({ "n" }, "gcc")
   vim.keymap.del({ "n", "x", "o" }, "gc")
@@ -16,83 +18,83 @@ function _G.inspect(item)
   vim.print(item)
 end
 
-function _G.executable(...)
+function utils.executable(...)
   return fn.executable(...) > 0
 end
 
 -- File path functions
-function _G.abs_path()
+function utils.abs_path()
   return fn['utils#abs_path']()
 end
 
-function _G.abs_dir()
+function utils.abs_dir()
   return fn['utils#abs_dir']()
 end
 
-function _G.file_name()
+function utils.file_name()
   return fn['utils#file_name']()
 end
 
-function _G.get_root_dir(...)
+function utils.get_root_dir(...)
   return fn['utils#get_root_dir'](...)
 end
 
 -- String utility functions
-function _G.trim(str)
+function utils.trim(str)
   return fn['utils#trim'](str)
 end
 
-function _G.expand_path(path, ...)
+function utils.expand_path(path, ...)
   return fn['utils#expand'](path, ...)
 end
 
 -- System detection functions (using utils#)
-function _G.is_windows()
+function utils.is_win()
   return fn['utils#is_win']() > 0
 end
 
-function _G.is_linux()
+function utils.is_linux()
   return fn['utils#is_linux']() > 0
 end
 
-function _G.is_unix()
+function utils.is_unix()
   return fn['utils#is_unix']() > 0
 end
 
-function _G.is_macos()
+function utils.is_macos()
   return fn['utils#is_macos']() > 0
 end
 
-function _G.has_gui()
+function utils.has_gui()
   return fn['utils#has_gui']() > 0
 end
 
 -- Package management functions (using utils#)
-function _G.is_require(...)
-  return fn['pack#require'](...) > 0
+function utils.require(name)
+  return fn['pack#require'](name) > 0
 end
 
-function _G.is_installed(...)
-  return fn['pack#installed'](...) > 0
+function utils.installed(name)
+  return fn['pack#installed'](name) > 0
 end
 
-function _G.is_planned(...)
-  return fn['pack#planned'](...) > 0
+function utils.planned(name)
+  return fn['pack#planned'](name) > 0
 end
 
-function _G.is_installed_lsp()
+function utils.installed_lsp()
   return fn['pack#installed_lsp']() > 0
 end
 
-function _G.is_installed_cmp()
+function utils.installed_cmp()
   return fn['pack#installed_cmp']() > 0
 end
 
-function _G.is_installed_blink()
+function utils.installed_blink()
   return fn['pack#installed_blink']() > 0
 end
 
-function _G.is_installed_coc()
+function utils.installed_coc()
   return fn['pack#installed_coc']() > 0
 end
 
@@ -119,3 +121,5 @@ vim.ui.select = function(items, opts, on_choice)
     vim.api.nvim_feedkeys("\n", "n", true)
   end
 end
+
+return utils

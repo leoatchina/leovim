@@ -1,3 +1,4 @@
+local utils = require('utils')
 local map = vim.keymap.set
 require("hlargs").setup({
   hl_priority = 1024 * 16
@@ -44,7 +45,7 @@ map({ 'x', 'o' }, 'm', function() require("flash").treesitter_search() end, { no
 -------------------------
 -- treesitter-textobj
 -------------------------
-if is_installed("nvim-treesitter-textobjects") then
+if utils.installed("nvim-treesitter-textobjects") then
   require("nvim-treesitter.configs").setup({
     textobjects = {
       select = {
@@ -111,7 +112,7 @@ end
 -------------------------
 -- treesitter-refactor
 -------------------------
-if is_installed("nvim-treesitter-refactor") then
+if utils.installed("nvim-treesitter-refactor") then
   require 'nvim-treesitter.configs'.setup {
     refactor = {
       highlight_definitions = {
@@ -136,7 +137,7 @@ end
 -------------------------
 -- treesitter-context
 -------------------------
-if is_installed("nvim-treesitter-context") then
+if utils.installed("nvim-treesitter-context") then
   vim.api.nvim_create_autocmd("FileType", {
     pattern = {"toml", "json", "yaml"},
     callback = function()

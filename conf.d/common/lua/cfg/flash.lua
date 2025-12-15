@@ -1,3 +1,5 @@
+local utils = require('utils')
+
 local exclude = {
   "notify",
   "cmp_menu",
@@ -50,7 +52,7 @@ map({ 'o' }, 'o', function()
   require("flash").remote()
 end,  { silent = true })
 -- treesitter_search
-if is_installed('nvim-treesitter') then
+if utils.installed('nvim-treesitter') then
   map({ 'x', 'n' }, 'SO', function()
     require("flash").treesitter_search()
   end, { silent = true })

@@ -1,8 +1,10 @@
+local utils = require('utils')
+
 require('blink.cmp').setup({
   appearance = {
     nerd_font_variant = 'mono'
   },
-  fuzzy = { implementation = executable("cargo") and not is_require('blink.lua') and "prefer_rust_with_warning" or 'lua'},
+  fuzzy = { implementation = utils.executable("cargo") and not utils.require('blink.lua') and "prefer_rust_with_warning" or 'lua'},
   signature = { enabled = true },
   completion = {
     ghost_text = {
@@ -27,7 +29,7 @@ require('blink.cmp').setup({
     jump = function(direction) vim.snippet.jump(direction) end,
   },
   sources = {
-    default = vim.list_extend(is_installed('minuet-ai.nvim') and { 'minuet' } or {}, { 'path', 'buffer', 'lsp', 'snippets' }),
+    default = vim.list_extend(utils.installed('minuet-ai.nvim') and { 'minuet' } or {}, { 'path', 'buffer', 'lsp', 'snippets' }),
     providers = {
       lsp = {
         name = 'LSP',
@@ -62,7 +64,7 @@ require('blink.cmp').setup({
     preset = 'super-tab',
     ['<M-.>'] = {
       function()
-        if is_installed('minuet-ai.nvim') then
+        if utils.installed('minuet-ai.nvim') then
           require('minuet').make_blink_map()
         end
       end

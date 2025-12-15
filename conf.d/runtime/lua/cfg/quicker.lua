@@ -1,5 +1,6 @@
+local utils = require('utils')
 local config = {}
-if is_unix() then
+if utils.is_unix() then
   config = {
     keys = {
       {
