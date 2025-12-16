@@ -99,7 +99,7 @@ let s:mac_gui = has('gui_macvim') && has('gui_running')
 let s:is_win = has('win32')
 let s:nvim = has('nvim-0.2') || (has('nvim') && exists('*jobwait') && !s:is_win)
 let s:vim8 = has('patch-8.0.0039') && exists('*job_start')
-let s:pash_packadd = exists(':packadd') > 0
+let s:packadd = exists(':packadd') > 0
 if s:is_win && &shellslash
     set noshellslash
     let s:me = resolve(expand('<sfile>:p'))
