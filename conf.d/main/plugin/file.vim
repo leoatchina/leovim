@@ -247,14 +247,14 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>O :call TabeOpen("$MAIN_DIR/opt.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$MAIN_DIR/main.vim")<Cr>
     if plug#planned_leaderf()
-        nnoremap <silent><M-h>p :Leaderf file --regex --no-sort ~/.leovim/conf.d/runtime/plugin<Cr>
+        nnoremap <silent><M-h>p :Leaderf file --regex --no-sort ~/.leovim/conf.d/main/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --regex --no-sort ~/.leovim<Cr>
         if utils#is_unix()
             nnoremap <silent><M-h>L :Leaderf file --regex --no-sort ~/.local/bin<Cr>
         endif
     elseif plug#planned_fzf()
-        nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/runtime/plugin<Cr>
+        nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/main/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
         if utils#is_unix()
@@ -266,7 +266,7 @@ if get(g:, 'leovim_openmap', 1)
         source ~/.leovim.d/after.vim
     endif
     nnoremap <silent><M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
-    nnoremap <silent><M-h>P :call <SID>open_or_create_file("~/.leovim.d/pack.vim")<Cr>
+    nnoremap <silent><M-h>P :call <SID>open_or_create_file("~/.leovim.d/plug.vim")<Cr>
 endif
 " ------------------
 " delete tmp files

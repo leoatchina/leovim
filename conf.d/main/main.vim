@@ -320,8 +320,8 @@ command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " install begin
 " ===============================================================================================================
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-if filereadable(utils#expand("$LEOVIMD_DIR/pack.vim"))
-    source ~/.leovim.d/pack.vim
+if filereadable(utils#expand("$LEOVIMD_DIR/plug.vim"))
+    source ~/.leovim.d/plug.vim
 endif
 for vim in split(glob("$PLUG_DIR/*.vim"), "\n")
     exec "source " . vim
