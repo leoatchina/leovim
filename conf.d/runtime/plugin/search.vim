@@ -45,7 +45,7 @@ nnoremap z? :GrepBuf <C-r>=utils#escape(@")<Cr><Cr>
 " using rg to search
 " ----------------------------
 if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-column\ --no-heading\ --smart-case\ --color=never
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --color=never
 endif
 function! s:grep(...)
     if a:0 == 0
@@ -84,18 +84,20 @@ function! s:grep(...)
             endif
             let parts = split(l, ':')
             " accept outputs with or without column numbers
-            if utils#is_win() && len(parts) >= 4 && parts[0] =~# '^[A-Za-z]$'
+            if utils#is_win() && len(parts) >= 5 && parts[0] =~# '^[A-Za-z]$'
                 let fname = parts[1]
                 let lnum = parts[2]
-                let text = join(parts[3:], ':')
-            elseif len(parts) >= 3
+                let col = parts[3]
+                let text = join(parts[4:], ':')
+            elseif len(parts) >= 4
                 let fname = parts[0]
                 let lnum = parts[1]
-                " if a column exists it lives at parts[2], otherwise it's text
-                if len(parts) >= 4
-                    let text = join(parts[3:], ':')
+                let col = parts[2]
+                " if a column exists it lives at parts[3], otherwise it's text
+                if len(parts) >= 5
+                    let text = join(parts[4:], ':')
                 else
-                    let text = join(parts[2:], ':')
+                    let text = join(parts[3:], ':')
                 endif
             else
                 continue
@@ -103,7 +105,7 @@ function! s:grep(...)
             if utils#is_win()
                 let text = substitute(text, '\r', '', 'g')
             endif
-            let data = {'filename': fname, 'lnum': lnum, 'text': text}
+            let data = {'filename': fname, 'lnum': lnum, 'col': col, 'text': text}
             call add(qfl, data)
         endfor
         if !empty(qfl)

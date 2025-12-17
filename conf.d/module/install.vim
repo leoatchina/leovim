@@ -259,7 +259,6 @@ if has('nvim')
     PlugAdd 'nvim-tree/nvim-web-devicons'
     PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'kevinhwang91/nvim-bqf'
-    PlugAdd 'stevearc/quicker.nvim'
     PlugAdd 'stevearc/oil.nvim'
     PlugAdd 'benomahony/oil-git.nvim'
     if pack#planned_lsp() || has('nvim-0.10') && pack#planned('nvim-treesitter')
@@ -279,4 +278,8 @@ if has('nvim')
 elseif v:version >= 800
     PlugAdd 'ryanoasis/vim-devicons'
 endif
-
+if has('nvim-0.10')
+    PlugAdd 'stevearc/quicker.nvim'
+else
+    PlugAdd 'romainl/vim-qf'
+endif

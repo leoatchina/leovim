@@ -1,6 +1,8 @@
 setlocal nowrap
 setlocal norelativenumber
 setlocal foldcolumn=0 colorcolumn= cursorline
+" 避免 quickfix 预览触发 E325 交互提示, Buffer-local: only affect this quickfix buffer
+autocmd SwapExists <buffer> let v:swapchoice = 'e'
 inoremap <silent><buffer><C-c> <ESC>
 nnoremap <silent><buffer>q :q!<Cr>
 nnoremap <silent><buffer>Q :q!<Cr>
@@ -27,12 +29,5 @@ if !pack#installed('nvim-bqf')
         nnoremap <silent><buffer>K :call quickui#tools#preview_quickfix()<Cr>
         nnoremap <silent><buffer>n j:call quickui#tools#preview_quickfix()<Cr>
         nnoremap <silent><buffer>p k:call quickui#tools#preview_quickfix()<Cr>
-        if exists('b:current_syntax')
-            finish
-        endif
-        syn match	qfFileName	"^[^│]*" contains=qfLineNr
-        syn match	qfSeparator	"│"
-        syn match	qfLineNr	":\\d*" contained
-        let b:current_syntax = 'qf'
     endif
 endif
