@@ -130,11 +130,21 @@
   },
   {
     "key": "ctrl+shift+-",
-    "command": "gitlens.toggleMaximizedGraph"
+    "command": "gitlens.views.graph.focus"
   },
   {
     "key": "shift+alt+-",
     "command": "gitlens.views.commitDetails.focus"
+  },
+  {
+    "key": "alt+c",
+    "command": "-gitlens.showQuickCommitFileDetails",
+    "when": "editorTextFocus && !gitlens:disabled && config.gitlens.keymap == 'alternate'"
+  },
+  {
+    "key": "ctrl+alt+-",
+    "command": "gitlens.showQuickCommitFileDetails",
+    "when": "!gitlens:disabled"
   },
   // ctrl o
   {
@@ -375,6 +385,10 @@
     "key": "ctrl+shift+alt+]",
     "command": "workbench.action.terminal.focusNextPane",
     "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+  },
+  {
+    "key": "ctrl+shift+alt+m",
+    "command": "workbench.action.toggleMaximizedPanel"
   },
   // copy
   {
