@@ -21,7 +21,7 @@ endfor
 if !has('nvim-0.11')
     let &termencoding=&enc
 endif
-set rtp^=$RTP_DIR
+set rtp^=$MAIN_DIR
 " ------------------------------------
 " map enhance
 " ------------------------------------

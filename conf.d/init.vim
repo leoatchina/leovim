@@ -13,11 +13,11 @@ endif
 let $LEOVIMD_DIR = expand("~/.leovim.d")
 let $LEOVIM_DIR = expand('~/.leovim')
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
-let $COMMON_DIR = expand($CONF_D_DIR . '/common')
+let $INIT_DIR = expand($CONF_D_DIR . '/init')
+let $MAIN_DIR = expand($CONF_D_DIR . '/main')
 let $MODULE_DIR = expand($CONF_D_DIR . '/module')
 " cfg for special plugins
-let $RTP_DIR = expand($CONF_D_DIR . '/runtime')
-let $CFG_DIR = expand($RTP_DIR . '/after/cfg')
+let $CFG_DIR = expand($MAIN_DIR . '/after/cfg')
 " opt dirs
 let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
 let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
@@ -25,7 +25,7 @@ let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
 " --------------------------
 " set rtp && pack path
 " --------------------------
-set rtp^=$COMMON_DIR
+set rtp^=$INIT_DIR
 if utils#is_win()
     set rtp^=$LEOVIM_DIR\pack
 else
@@ -675,8 +675,8 @@ endif
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------
 if utils#is_vscode()
-    source $COMMON_DIR/vscode.vim
+    source $INIT_DIR/vscode.vim
 else
-    source $RTP_DIR/main.vim
+    source $MAIN_DIR/main.vim
 endif
 let g:leovim_loaded = 1

@@ -28,7 +28,7 @@ function! s:link() abort
             let rmdir_cmd = printf('rmdir /Q /S %s\snippets', dir)
             call s:mklink(rmdir_cmd)
             " mklink
-            let mklink_cmd = printf('mklink %s %s', dir . '\keybindings.json', $COMMON_DIR . '\keybindings.json')
+            let mklink_cmd = printf('mklink %s %s', dir . '\keybindings.json', $INIT_DIR . '\keybindings.json')
             call s:mklink(mklink_cmd)
             let mklink_cmd = printf('mklink /d %s %s', dir . '\snippets', $CONF_D_DIR . '\snippets')
             call s:mklink(mklink_cmd)
@@ -38,7 +38,7 @@ function! s:link() abort
             let rm_cmd = printf('rm -rf %s',  dir . '/snippets')
             call s:mklink(rm_cmd)
             " ln -sf
-            let ln_cmd = printf('ln -sf %s %s', $COMMON_DIR . '/keybindings.json', dir . '/keybindings.json')
+            let ln_cmd = printf('ln -sf %s %s', $INIT_DIR . '/keybindings.json', dir . '/keybindings.json')
             call s:mklink(ln_cmd, 1)
             let ln_cmd = printf('ln -sf %s %s', $CONF_D_DIR . '/snippets', dir)
             call s:mklink(ln_cmd, 1)
