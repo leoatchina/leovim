@@ -56,7 +56,7 @@ let g:lightline = {
 let g:lightline.active.right = [['filetype', 'fileencoding', 'lineinfo']]
 let g:lightline.inactive.right = [['filetype', 'fileencoding', 'lineinfo']]
 let s:component_type = {}
-if pack#installed('lightline-ale')
+if plug#installed('lightline-ale')
     let g:lightline.component_expand =  {
                 \ 'linter_checking': 'lightline#ale#checking',
                 \ 'linter_errors': 'lightline#ale#errors',
@@ -69,7 +69,7 @@ if pack#installed('lightline-ale')
                 \ }
     let lint_info = ['linter_checking', 'linter_errors', 'linter_warnings']
     let g:lightline.active.right += [lint_info]
-elseif pack#installed('nvim-lightline-lsp')
+elseif plug#installed('nvim-lightline-lsp')
     let g:lightline.component_expand ={
                 \ 'lsp_warnings': 'lightline#lsp#warnings',
                 \ 'lsp_errors': 'lightline#lsp#errors',
@@ -87,7 +87,7 @@ elseif pack#installed('nvim-lightline-lsp')
                 \ }
     let lint_info = ['lsp_ok', 'lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings']
     let g:lightline.active.right += [lint_info]
-elseif pack#installed_coc()
+elseif plug#installed_coc()
     function! CocDiagnostic()
         let info = get(b:, 'coc_diagnostic_info', {})
         if empty(info) | return get(b:, 'coc_git_status', '')  | endif
@@ -164,7 +164,7 @@ augroup UpdateLightline
     autocmd!
     autocmd ColorScheme * call UpdateLightline()
     autocmd BufCreate,BufEnter,BufWinEnter,WinEnter,BufWritePost,InsertLeave,CmdlineLeave * call lightline#update()
-    if pack#installed_coc()
+    if plug#installed_coc()
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
 augroup END

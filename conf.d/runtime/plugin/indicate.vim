@@ -6,9 +6,9 @@ endif
 " indentline
 " --------------------
 filetype plugin indent on
-if pack#installed('indent-blankline.nvim')
+if plug#installed('indent-blankline.nvim')
     lua require("cfg/ibl")
-elseif pack#planned('indentline')
+elseif plug#planned('indentline')
     let g:vim_json_conceal = 0
     let g:indentLine_enabled = 0
     let g:markdown_syntax_conceal = 0
@@ -60,14 +60,14 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap <M-l> :WhichKey "\<M-l\>"<Cr>
     nnoremap <M-y> :WhichKey "\<M-y\>"<Cr>
     inoremap <M-y> <C-o>:WhichKey "\<M-y\>"<Cr>
-    if pack#installed("codecompanion.nvim") || pack#installed('yarepl.nvim')
+    if plug#installed("codecompanion.nvim") || plug#installed('yarepl.nvim')
         nnoremap <M-i> :WhichKey "\<M-i\>"<Cr>
     endif
-    if pack#planned("vim-table-mode")
+    if plug#planned("vim-table-mode")
         nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
         xnoremap <M-t> :WhichKeyVisual "\<M-t\>"<Cr>
     endif
-    if pack#installed('vim-floaterm')
+    if plug#installed('vim-floaterm')
         nnoremap <M-e> :WhichKey "\<M-e\>"<Cr>
         xnoremap <M-e> :WhichKeyVisual "\<M-e\>"<Cr>
     endif
@@ -75,7 +75,7 @@ if get(g:, 'leovim_whichkey', 1)
         nnoremap <M-d> :WhichKey "\<M-d\>"<Cr>
         nnoremap <M-m> :WhichKey "\<M-m\>"<Cr>
     endif
-    if pack#planned('vim-fugitive')
+    if plug#planned('vim-fugitive')
         au FileType fugitive nnoremap <buffer>g :WhichKey "g"<Cr>
         au FileType fugitive nnoremap <buffer>c :WhichKey "c"<Cr>
         au FileType fugitive nnoremap <buffer>d :WhichKey "d"<Cr>

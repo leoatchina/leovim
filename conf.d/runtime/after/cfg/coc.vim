@@ -45,7 +45,7 @@ endif
 if has('nvim')
     let g:coc_global_extensions += ['coc-symbol-line']
 endif
-if pack#require('web')
+if plug#require('web')
     let g:coc_global_extensions += [
                 \ 'coc-html',
                 \ 'coc-css',
@@ -56,13 +56,13 @@ if pack#require('web')
                 \ 'coc-vetur',
                 \ ]
 endif
-if pack#require('c')
+if plug#require('c')
     let g:coc_global_extensions += ['coc-cmake']
     if g:clangd_exe != ''
         let g:coc_global_extensions += ['coc-clangd']
     endif
 endif
-if pack#require('ccls') && g:ccls_exe != ''
+if plug#require('ccls') && g:ccls_exe != ''
     call coc#config('languageserver.ccls', {
                 \ "command": "ccls",
                 \ "filetypes": g:c_filetypes,
@@ -72,19 +72,19 @@ if pack#require('ccls') && g:ccls_exe != ''
                 \ "directory": $HOME . "/.leovim.d/ccls"
                 \ }}})
 endif
-if pack#require('R') && g:R_exe != ''
+if plug#require('R') && g:R_exe != ''
     let g:coc_global_extensions += ['coc-r-lsp']
 endif
-if pack#require('rust') && g:cargo_exe != ''
+if plug#require('rust') && g:cargo_exe != ''
     let g:coc_global_extensions += ['coc-rust-analyzer']
 endif
-if pack#require('java') && executable('java')
+if plug#require('java') && executable('java')
     let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
 endif
-if pack#require('go') && g:gobin_exe != ''
+if plug#require('go') && g:gobin_exe != ''
     let g:coc_global_extensions += ['coc-go']
 endif
-if pack#require('writing')
+if plug#require('writing')
     let g:coc_global_extensions += ['coc-vimtex']
 endif
 " ------------------------
@@ -111,9 +111,9 @@ augroup END
 " ------------------------
 " icons
 " ------------------------
-if pack#planned('nvim-web-devicons')
+if plug#planned('nvim-web-devicons')
     call coc#config('explorer.icon.source', 'nvim-web-devicons')
-elseif pack#planned('vim-devicons')
+elseif plug#planned('vim-devicons')
     call coc#config('explorer.icon.source', 'vim-devicons')
 endif
 " ----------------------------

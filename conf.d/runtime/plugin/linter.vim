@@ -3,7 +3,7 @@ if utils#is_vscode()
     finish
 endif
 let s:python_lint_ignore = "E101,E302,E251,E231,E226,E221,E127,E126,E123,E402,E501,W291,F405,F403"
-if pack#installed('coc.nvim')
+if plug#installed('coc.nvim')
     " highlight group
     let g:diagnostic_virtualtext_underline = v:false
     highlight def link CocErrorHighlight   NONE
@@ -84,7 +84,7 @@ if pack#installed('coc.nvim')
         nnoremap <silent><leader>o :CocDiagnosticToggleBuffer<Cr>
     endif
 endif
-if pack#planned('ale')
+if plug#planned('ale')
     " basic settings
     let g:ale_disable_lsp = 'auto'
     let g:ale_set_balloons = 0
@@ -135,7 +135,7 @@ if pack#planned('ale')
     " map
     command! ALECommands call FzfCallCommands('ALECommands', 'ALE')
     command! -bang -nargs=* ALEDiag call s:ale_diag()
-    if !pack#installed('coc.nvim')
+    if !plug#installed('coc.nvim')
         nnoremap <silent><leader>d :ALELint<Cr>
         nnoremap <silent><leader>o :ALEToggleBuffer<Cr>
         nnoremap <silent><leader>O :ALEToggle<Cr>

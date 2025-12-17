@@ -60,7 +60,7 @@ if g:has_terminal
     tnoremap <silent><M-,> <C-\><C-n>:QuickfixToggle<Cr>
     tnoremap <silent><M-;> <C-\><C-n>:LoclistToggle<Cr>
 endif
-if pack#planned_leaderf()
+if plug#planned_leaderf()
     function! s:leaderf_qf_loc()
         if s:loc_opened()
             lclose
@@ -78,7 +78,7 @@ endif
 " ----------------------------
 " bqf
 " ----------------------------
-if pack#installed('nvim-bqf')
+if plug#installed('nvim-bqf')
     hi default link BqfPreviewFloat Normal
     hi default link BqfPreviewBorder Normal
     hi default link BqfPreviewCursor Cursor
@@ -91,9 +91,9 @@ endif
 " ----------------------------
 " quickfix
 " ----------------------------
-if pack#installed('quicker.nvim')
+if plug#installed('quicker.nvim')
     lua require("cfg/quicker")
-elseif pack#installed('vim-qf')
+elseif plug#installed('vim-qf')
     let g:qf_statusline = {}
     let g:qf_statusline.before = '%<\ '
     let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \'

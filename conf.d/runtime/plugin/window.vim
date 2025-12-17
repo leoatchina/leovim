@@ -185,6 +185,6 @@ if has('patch-8.0.1129') && !has('nvim')
         autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * OpenWinBar
         autocmd WinClosed,WinLeave,TabClosed,TabLeave,BufLeave * CloseWinBar
     augroup END
-elseif has('nvim') && pack#installed_coc()
+elseif has('nvim') && plug#installed_coc()
     lua require('cfg/coc_symboline')
 endif

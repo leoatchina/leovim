@@ -2,11 +2,11 @@
 if utils#is_vscode()
     finish
 endif
-if pack#planned_leaderf()
+if plug#planned_leaderf()
     nnoremap <silent><leader>b :LeaderfBuffer<Cr>
-elseif pack#planned_fzf()
+elseif plug#planned_fzf()
     nnoremap <silent><leader>b :FzfBuffers<Cr>
-elseif pack#planned('vim-quickui')
+elseif plug#planned('vim-quickui')
     nnoremap <silent><leader>b :call quickui#tools#list_buffer('e')<Cr>
 else
     nnoremap <silent><leader>b :CtrlPBuffer<Cr>

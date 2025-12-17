@@ -2,9 +2,9 @@
 if utils#is_vscode()
     finish
 endif
-if pack#planned_leaderf()
+if plug#planned_leaderf()
     nnoremap <silent><leader>m :LeaderfMru<Cr>
-elseif pack#planned_fzf()
+elseif plug#planned_fzf()
     nnoremap <silent><leader>m :FzfHistory<Cr>
 else
     nnoremap <silent><leader>m :CtrlPMRU<Cr>
@@ -20,18 +20,18 @@ endtry
 " --------------------------
 " undo
 " --------------------------
-if pack#installed('nvim-fundo')
+if plug#installed('nvim-fundo')
     lua require('fundo').setup()
 endif
 " undotree
-if pack#planned('undotree')
+if plug#planned('undotree')
     let g:undotree_WindowLayout = 4
     nnoremap <silent><M-u> :UndotreeToggle<Cr>
 endif
 " ------------------------------
 " Fzf jumps
 " ------------------------------
-if pack#pref_fzf()
+if plug#pref_fzf()
     function! s:jump_list_format(val) abort
         let l:file_name = bufname('%')
         let l:file_name = empty(l:file_name) ? 'Unknown file name' : l:file_name
@@ -90,7 +90,7 @@ if pack#pref_fzf()
     nnoremap <silent><M-j><M-j> :FzfJumps<cr>
     nnoremap <silent><M-k>/ :FzfHistory/<Cr>
     nnoremap <silent><M-k>: :FzfHistory:<Cr>
-elseif pack#planned_leaderf()
+elseif plug#planned_leaderf()
     nnoremap <silent><M-j><M-j> :Leaderf jumps<cr>
     nnoremap <silent><M-k>/ :LeaderfHistorySearch<Cr>
     nnoremap <silent><M-k>: :LeaderfHistoryCmd<Cr>

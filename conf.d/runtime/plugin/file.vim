@@ -48,24 +48,24 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-if pack#planned_leaderf()
+if plug#planned_leaderf()
     nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=utils#get_root_dir()<Cr><Cr>
-elseif pack#planned_fzf()
+elseif plug#planned_fzf()
     nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 else
     nnoremap <silent><nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
 endif
-if pack#planned_leaderf()
+if plug#planned_leaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
     nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=git#git_root_dir()<Cr><Cr>
-elseif pack#planned_fzf()
+elseif plug#planned_fzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>p  :FzfGitFiles<Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=git#git_root_dir()<Cr><Cr>
 endif
-if pack#pref_fzf()
+if plug#pref_fzf()
     nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
     xnoremap <nowait>\g :<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
 endif
@@ -78,11 +78,11 @@ nnoremap <leader>E :tabe <C-r>=utils#get_root_dir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
-if pack#installed('oil.nvim')
+if plug#installed('oil.nvim')
     lua require('cfg/oil')
     nnoremap <silent><nowait><leader>fo <Cmd>Oil --float<Cr>
 endif
-if pack#installed('vim-floaterm')
+if plug#installed('vim-floaterm')
     function! s:floaterm_float(prg)
         let prg = a:prg
         if g:has_popup_floating
@@ -118,7 +118,7 @@ if utils#has_gui() || utils#is_win()
     nnoremap <silent><M-P> :tabm -1<Cr>
     nnoremap <M-]> :vsplit<Space>
     nnoremap <M-[> :split<Space>
-    if pack#installed('oil.nvim')
+    if plug#installed('oil.nvim')
         nnoremap <silent><nowait><M-o> <Cmd>Oil --float<Cr>
     elseif !has('nvim') && get(g:, 'use_system_browser', utils#is_win())
         let g:browsefilter = ''
@@ -246,14 +246,14 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>I :call TabeOpen("$MODULE_DIR/install.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$RTP_DIR/opt.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$RTP_DIR/main.vim")<Cr>
-    if pack#planned_leaderf()
+    if plug#planned_leaderf()
         nnoremap <silent><M-h>p :Leaderf file --regex --no-sort ~/.leovim/conf.d/runtime/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --regex --no-sort ~/.leovim<Cr>
         if utils#is_unix()
             nnoremap <silent><M-h>L :Leaderf file --regex --no-sort ~/.local/bin<Cr>
         endif
-    elseif pack#planned_fzf()
+    elseif plug#planned_fzf()
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/runtime/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>

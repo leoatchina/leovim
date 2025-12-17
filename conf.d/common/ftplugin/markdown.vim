@@ -4,12 +4,12 @@ inoremap <buffer><C-w>2 <Space><C-u>##<Space>
 inoremap <buffer><C-w>3 <Space><C-u>###<Space>
 inoremap <buffer><C-w>4 <Space><C-u>####<Space>
 inoremap <buffer><C-w>5 <Space><C-u>#####<Space>
-if pack#installed('md-img-paste.vim')
+if plug#installed('md-img-paste.vim')
     let g:mdip_imgdir = './'
     let g:mdip_imgname = 'attach'
     nnoremap <silent><buffer><leader>i :call mdip#MarkdownClipboardImage()<CR>
 endif
-if pack#installed('preview-markdown.vim')
+if plug#installed('preview-markdown.vim')
     function! s:smart_preview_markdown()
         if &columns > &lines * 3
             PreviewMarkdown right
@@ -20,7 +20,7 @@ if pack#installed('preview-markdown.vim')
     command! SmartPreviewMarkdown call s:smart_preview_markdown()
     nnoremap <silent><buffer><M-R> :SmartPreviewMarkdown<Cr>
 endif
-if pack#installed('render-markdown.nvim')
+if plug#installed('render-markdown.nvim')
     nnoremap <silent><buffer><M-B> :RenderMarkdown buf_toggle<Cr>
     augroup SetupRenderMarkdown
         autocmd!
@@ -28,7 +28,7 @@ if pack#installed('render-markdown.nvim')
         autocmd FileType markdown,vimwiki ++once lua utils#is_require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
     augroup END
 endif
-if pack#installed('markdown-preview.nvim') || pack#installed('markdown-preview.vim')
+if plug#installed('markdown-preview.nvim') || plug#installed('markdown-preview.vim')
     nnoremap <silent><buffer><M-F> :MarkdownPreview<Cr>
     nnoremap <silent><buffer><Tab>q :MarkdownPreviewStop<Cr>
 endif

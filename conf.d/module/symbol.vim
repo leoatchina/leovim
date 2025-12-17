@@ -13,7 +13,7 @@ endfunction
 " ------------------------------
 " lsp or vista or tagbar
 " ------------------------------
-if pack#planned_lsp()
+if plug#planned_lsp()
     call s:add_symbol('nvimlsp')
     call s:add_symbol('aerial')
     call s:add_symbol('vista')
@@ -29,9 +29,9 @@ endif
 " tags
 " ------------------------------
 if get(g:, 'ctags_type', '') != ''
-    if pack#planned('leaderf')
+    if plug#planned('leaderf')
         call s:add_symbol("leaderftags")
-    elseif pack#planned('fzf.vim')
+    elseif plug#planned('fzf.vim')
         call s:add_symbol("fzftags")
         if has('nvim') || v:version >= 802
             call s:add_symbol('quickui')

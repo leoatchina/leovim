@@ -7,7 +7,7 @@ let g:Lf_QuickSelect  = 0
 let g:Lf_PythonVersion = get(g:, 'Lf_PythonVersion', float2nr(g:python_version))
 let g:Lf_WorkingDirectoryMode = 'AF'
 " icons
-if pack#installed('nvim-web-devicons') || pack#installed('vim-devicons')
+if plug#installed('nvim-web-devicons') || plug#installed('vim-devicons')
     let g:Lf_ShowDevIcons = 1
 else
     let g:Lf_ShowDevIcons = 0

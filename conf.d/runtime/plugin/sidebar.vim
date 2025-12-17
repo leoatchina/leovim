@@ -6,7 +6,7 @@ PlugOpt 'vim-sidebar-manager'
 " --------------------------
 " symbol
 " --------------------------
-if pack#installed('vista.vim')
+if plug#installed('vista.vim')
     let g:vista#renderer#ctags = 'kind'
     let g:vista_update_on_text_changed = 1
     let g:vista_sidebar_position = 'vertical topleft'
@@ -35,7 +35,7 @@ if pack#installed('vista.vim')
         nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
     endif
 endif
-if pack#installed('aerial.nvim')
+if plug#installed('aerial.nvim')
     lua require('cfg/aerial')
     function! s:check_aerial(nr) abort
         return tolower(getwinvar(a:nr, '&filetype')) =~ 'aerial'
@@ -47,7 +47,7 @@ if pack#installed('aerial.nvim')
                 \ 'close': 'AerialClose'
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('aerial')<CR>
-elseif pack#installed('vista.vim')
+elseif plug#installed('vista.vim')
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort
             return tolower(getwinvar(a:nr, '&filetype')) =~ 'vista'
@@ -70,7 +70,7 @@ elseif pack#installed('vista.vim')
                     \ }
     endif
     nnoremap <silent><C-t> :call sidebar#toggle('vista')<CR>
-elseif pack#installed('tagbar')
+elseif plug#installed('tagbar')
     let g:tagbar_position = 'leftabove vertical'
     let g:tagbar_sort  = 0
     let g:tagbar_width = 35

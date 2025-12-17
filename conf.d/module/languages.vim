@@ -6,9 +6,9 @@ if utils#is_win()
 else
     let g:R_exe = utils#expand(exepath(get(g:, 'R_exe', 'R')))
 endif
-if has('nvim') && pack#require('jupynium') && g:python_version > 3.07
+if has('nvim') && plug#require('jupynium') && g:python_version > 3.07
     PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
-elseif pack#require('nvim-r') && (has('nvim') || v:version >= 802) && executable(g:R_exe)
+elseif plug#require('nvim-r') && (has('nvim') || v:version >= 802) && executable(g:R_exe)
     PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
 " ------------------------------
@@ -24,37 +24,37 @@ endif
 " ------------------------------
 " web
 " ------------------------------
-if pack#require('web')
+if plug#require('web')
     PlugAdd 'mattn/emmet-vim', {'for': g:web_filetypes}
     PlugAdd 'chemzqm/wxapp.vim', {'for': g:web_filetypes}
 endif
 " --------------------------
 " perl
 " --------------------------
-if pack#require('perl') || pack#require('bioinfo')
+if plug#require('perl') || plug#require('bioinfo')
     PlugAdd 'vim-perl/vim-perl', {'for': 'perl'}
 endif
 " --------------------------
 " bioinfo
 " --------------------------
-if pack#require('bioinfo')
+if plug#require('bioinfo')
     PlugAdd 'bioSyntax/bioSyntax-vim', {'for': ['fq', 'fa', 'fasta', 'fastq', 'gtf', 'gtt', 'sam', 'bam']}
 endif
 " --------------------------
 " C language
 " --------------------------
-if pack#require('c')
+if plug#require('c')
     PlugAdd 'leoatchina/a.vim', {'for': g:c_filetypes}
     if executable('cppman')
         PlugAdd 'skywind3000/vim-cppman', {'for': g:c_filetypes}
     endif
 endif
-if pack#require('clangd') && executable(utils#expand(get(g:, 'clangd_exe', 'clangd')))
+if plug#require('clangd') && executable(utils#expand(get(g:, 'clangd_exe', 'clangd')))
     let g:clangd_exe = utils#expand(exepath(get(g:, 'clangd_exe', 'clangd')))
 else
     let g:clangd_exe = ''
 endif
-if pack#require('ccls') && executable(utils#expand(get(g:, 'ccls_exe', 'ccls')))
+if plug#require('ccls') && executable(utils#expand(get(g:, 'ccls_exe', 'ccls')))
     let g:ccls_exe = utils#expand(exepath(get(g:, 'ccls_exe', 'ccls')))
     PlugAdd 'm-pilia/vim-ccls', {'for': g:c_filetypes}
 else
@@ -68,9 +68,9 @@ if executable(utils#expand(get(g:, 'cargo_exe', 'cargo')))
 else
     let g:cargo_exe = ''
 endif
-if get(g:, 'cargo_exe', '') != '' && pack#require('rust') && v:version >= 800
+if get(g:, 'cargo_exe', '') != '' && plug#require('rust') && v:version >= 800
     PlugAdd 'rust-lang/rust.vim', {'for': 'rust'}
-    if pack#planned_lsp()
+    if plug#planned_lsp()
         PlugAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
 endif
@@ -82,13 +82,13 @@ if executable(utils#expand(get(g:, 'gobin_exe', 'go')))
 else
     let g:gobin_exe = ''
 endif
-if get(g:, 'gobin_exe', '') != '' && pack#require('go') && (has('patch-8.1.2269') || has('nvim'))
+if get(g:, 'gobin_exe', '') != '' && plug#require('go') && (has('patch-8.1.2269') || has('nvim'))
     PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 endif
 " ------------------------------
 " nvim-java && neoconf
 " ------------------------------
-if pack#planned_lsp() && pack#require('java')
+if plug#planned_lsp() && plug#require('java')
     PlugAdd 'nvim-java/nvim-java'
     PlugAdd 'nvim-java/nvim-java-dap'
     PlugAdd 'nvim-java/nvim-java-core'
@@ -100,7 +100,7 @@ endif
 " ------------------------------
 " latex
 " ------------------------------
-if pack#require('latex') && executable(get(g:, "vimtex_view_method", ''))
+if plug#require('latex') && executable(get(g:, "vimtex_view_method", ''))
     PlugAdd 'lervag/vimtex', {'for': 'latex'}
 endif
 " ------------------------------
@@ -112,7 +112,7 @@ endif
 if executable(get(g:, 'preview_markdown_parser', 'mdr')) && (has('nvim') || has('patch-8.1.1401'))
     PlugOpt 'preview-markdown.vim'
 endif
-if pack#require('markdown')
+if plug#require('markdown')
     PlugAdd 'leoatchina/vim-table-mode'
     PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
     PlugAdd 'ferrine/md-img-paste.vim', {'for': 'markdown'}
