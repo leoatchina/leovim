@@ -327,6 +327,15 @@
     "command": "workbench.action.terminal.newWithProfile"
   },
   {
+    "key": "alt+shift+=",
+    "command": "workbench.action.terminal.new",
+    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+  },
+  {
+    "key": "ctrl+shift+alt+-",
+    "command": "workbench.action.terminal.killAll"
+  },
+  {
     "key": "alt+]",
     "command": "workbench.action.terminal.split",
     "when": "terminalFocus"
@@ -337,27 +346,12 @@
     "when": "terminalFocus"
   },
   {
-    "key": "alt+shift+=",
-    "command": "workbench.action.terminal.new",
-    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
-  },
-  {
     "key": "shift+alt+[",
       "command": "workbench.action.terminal.focusPrevious"
   },
   {
     "key": "shift+alt+]",
     "command": "workbench.action.terminal.focusNext"
-  },
-  {
-    "key": "ctrl+shift+alt+[",
-      "command": "workbench.action.terminal.focusPreviousPane",
-      "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
-  },
-  {
-    "key": "ctrl+shift+alt+]",
-    "command": "workbench.action.terminal.focusNextPane",
-    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
   },
   // panel
   {
@@ -371,6 +365,16 @@
   {
     "key": "alt+;",
     "command": "workbench.action.nextPanelView"
+  },
+  {
+    "key": "ctrl+shift+alt+[",
+      "command": "workbench.action.terminal.focusPreviousPane",
+      "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
+  },
+  {
+    "key": "ctrl+shift+alt+]",
+    "command": "workbench.action.terminal.focusNextPane",
+    "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
   },
   // copy
   {
@@ -637,9 +641,5 @@
   {
     "key": "ctrl+\\",
     "command": "kilo-code.addToContext"
-  },
-  {
-    "key": "ctrl+shift+alt+-",
-    "command": "workbench.action.terminal.killAll"
   }
 ]
