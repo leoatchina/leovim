@@ -323,7 +323,7 @@ call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
 if filereadable(utils#expand("$LEOVIMD_DIR/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
-for vim in split(glob("$MODULE_DIR/*.vim"), "\n")
+for vim in split(glob("$PLUG_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 function! s:plug_update() abort

@@ -10,12 +10,13 @@ endif
 " --------------------------
 " set dirs
 " --------------------------
-let $LEOVIMD_DIR = expand("~/.leovim.d")
 let $LEOVIM_DIR = expand('~/.leovim')
+let $LEOVIMD_DIR = expand("~/.leovim.d")
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
+" settings and plugins dirs
 let $INIT_DIR = expand($CONF_D_DIR . '/init')
 let $MAIN_DIR = expand($CONF_D_DIR . '/main')
-let $MODULE_DIR = expand($CONF_D_DIR . '/module')
+let $PLUG_DIR = expand($CONF_D_DIR . '/plug')
 " cfg for special plugins
 let $CFG_DIR = expand($MAIN_DIR . '/after/cfg')
 " opt dirs
