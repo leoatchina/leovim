@@ -1,4 +1,4 @@
-let g:require_group = copy(get(g:, 'preset_group', []))
+let g:requires = copy(get(g:, 'preset', []))
 
 let g:leovim_whichkey = 1
 let g:leovim_openmap = 1

@@ -14,4 +14,4 @@ else
   echo "nvim not executable"
   exit 1
 fi
-$NVIMCMD --cmd "let g:preset_group=['blink.lua']" "$@"
+$NVIMCMD --cmd "let g:preset=['blink.lua']" "$@"

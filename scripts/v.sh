@@ -12,4 +12,4 @@ else
     VIMCMD="vim"
   fi
 fi
-$VIMCMD -u ~/.leovim/conf.d/init.vim --cmd "let g:preset_group=['mcm']" "$@"
+$VIMCMD -u ~/.leovim/conf.d/init.vim --cmd "let g:preset=['mcm']" "$@"

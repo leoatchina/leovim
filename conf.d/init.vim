@@ -73,7 +73,7 @@ let g:maplocalleader = 'q'
 " ------------------------
 " set pack related variables
 " ------------------------
-let g:require_group = []
+let g:requires = []
 let g:leovim_installed = {}
 " -----------------------------------
 " filetypes definition

@@ -2,7 +2,7 @@
 " Package Management Functions
 " ----------------------------------------
 function! plug#require(pack) abort
-    return count(g:require_group, a:pack) > 0
+    return count(g:requires, a:pack) > 0
 endfunction
 
 function! plug#add(...) abort
@@ -11,7 +11,7 @@ function! plug#add(...) abort
     endif
     for require in a:000
         if !plug#require(require)
-            call add(g:require_group, require)
+            call add(g:requires, require)
         endif
     endfor
 endfunction
