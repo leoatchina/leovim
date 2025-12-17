@@ -299,21 +299,17 @@ function! s:plug_add(plugin, ...)
     " delete last / or \
     let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let pack = split(plugin, '\/')[1]
-    if has_key(g:leovim_installed, pack)
-        return
-    else
-        if a:0 == 0
-            call plug#(plugin)
-        else
-            call plug#(plugin, a:1)
-        endif
-        if a:0 >0 && has_key(a:1, 'as') && a:1['as'] != ''
-            let pack = tolower(a:1['as'])
-        else
-            let pack = tolower(pack)
-        endif
+    if a:0 > 0 && has_key(a:1, 'as') && a:1['as'] != ''
+        let pack = a:1['as']
     endif
-    let g:leovim_installed[pack] = 0
+    if exists('g:plugs') && type(g:plugs) == type({}) && has_key(g:plugs, pack)
+        return
+    endif
+    if a:0 == 0
+        call plug#(plugin)
+    else
+        call plug#(plugin, a:1)
+    endif
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
 " ===============================================================================================================
@@ -341,15 +337,6 @@ noremap <silent><Tab>S :PlugStatus<Cr>
 noremap <silent><Tab>O :PlugSnapshot<Cr>
 noremap <silent><Tab>P :Plug
 call plug#end()
-" ------------------------------
-" set installed
-" ------------------------------
-for [plug, value] in items(g:plugs)
-    let dir = value['dir']
-    if isdirectory(dir)
-        let g:leovim_installed[tolower(plug)] = 1
-    endif
-endfor
 " ------------------------------
 " <M-Key> map
 " ------------------------------

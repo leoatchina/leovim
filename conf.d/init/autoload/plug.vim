@@ -22,7 +22,17 @@ function! plug#planned(...) abort
     endif
     for pack in a:000
         let pack = tolower(pack)
-        if !has_key(g:leovim_installed, pack)
+        if !exists('g:plugs') || type(g:plugs) != type({})
+            return 0
+        endif
+        let found = 0
+        for name in keys(g:plugs)
+            if tolower(name) ==# pack
+                let found = 1
+                break
+            endif
+        endfor
+        if !found
             return 0
         endif
     endfor
@@ -35,7 +45,21 @@ function! plug#installed(...) abort
     endif
     for pack in a:000
         let pack = tolower(pack)
-        if !has_key(g:leovim_installed, pack) || get(g:leovim_installed, pack, 0) == 0
+        if !exists('g:plugs') || type(g:plugs) != type({})
+            return 0
+        endif
+        let key = ''
+        for name in keys(g:plugs)
+            if tolower(name) ==# pack
+                let key = name
+                break
+            endif
+        endfor
+        if empty(key)
+            return 0
+        endif
+        let spec = g:plugs[key]
+        if !isdirectory(get(spec, 'dir', ''))
             return 0
         endif
     endfor
