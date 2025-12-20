@@ -4,18 +4,10 @@
 if utils#is_vscode()
     finish
 endif
-" ------------------------------
-" vim-preview
-" ------------------------------
-let g:preview#preview_position = "rightbottom"
-let g:preview#preview_size = get(g:, 'asyncrun_open', 8)
-let g:quickui_preview_h = 24
-nnoremap <silent><C-w><Space> <C-w>z:call preview#cmdmsg('close preview', 0)<Cr>
-PlugAdd 'vim-preview'
 " --------------------------
 " vim-quickui
 " --------------------------
-if v:version >= 802 || has('nvim')
+if pack#planned('vim-quickui')
     let g:quickui_border_style = 2
     if has('nvim')
         if utils#has_gui()
@@ -150,10 +142,6 @@ if pack#planned_leaderf()
     nnoremap <silent><leader>, :Leaderf --previous<Cr>
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
     source $CFG_DIR/leaderf.vim
-endif
-if !pack#planned_leaderf() && !pack#planned_fzf()
-    source $CFG_DIR/ctrlp.vim
-    PlugAdd 'ctrlp.vim'
 endif
 " --------------------------------
 " common maps

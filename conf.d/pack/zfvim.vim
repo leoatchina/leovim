@@ -1,7 +1,3 @@
-" Skip in VSCode environment
-if utils#is_vscode()
-    finish
-endif
 " --------------------
 " ZFIgnore
 " --------------------
@@ -210,3 +206,7 @@ if has('terminal') || has('nvim')
     command! -nargs=* PassToTerm :call PassToTerm(<q-args>)
     tnoremap :: <c-\><c-n>q:a:PassToTerm<space>
 endif
+" ----------------------------
+" dirdiff
+" ----------------------------
+PlugAdd 'ZFVimDirDiff'

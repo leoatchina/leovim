@@ -2,7 +2,6 @@ let g:sidebars = {}
 function! s:check_buf_ft(name, nr) abort
     return getwinvar(a:nr, '&filetype') ==# a:name || bufname(winbufnr(a:nr)) ==# a:name
 endfunction
-PlugAdd 'vim-sidebar-manager'
 " --------------------------
 " symbol
 " --------------------------
@@ -96,7 +95,7 @@ endif
 " --------------------------
 " tree_browser
 " --------------------------
-if v:version >= 801 || has('nvim')
+if pack#planned('vim-fern')
     source $CFG_DIR/fern.vim
     let g:tree_browser = 'fern'
     let g:sidebars.tree_browser = {
@@ -113,7 +112,6 @@ else
     let g:netrw_winsize = 16
     let g:netrw_liststyle = 3
     let g:netrw_browse_split = 4
-    PlugAdd 'vim-vinegar'
     " functions
     function! NetrwClose()
         if exists('t:netrw_winnr')

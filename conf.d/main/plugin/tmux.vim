@@ -2,10 +2,8 @@
 if utils#is_vscode()
     finish
 endif
-if utils#is_unix() && utils#has_gui() == 0 && executable('tmux') && v:version >= 800
+if pack#planned('vim-tmux-navigator')
     let g:tmux_navigator_no_mappings = 1
-    PlugAdd 'vim-tmux-navigator'
-    PlugAdd 'vim-tmux-clipboard'
     nnoremap <silent><M-H> :TmuxNavigateLeft<cr>
     nnoremap <silent><M-L> :TmuxNavigateRight<cr>
     nnoremap <silent><M-J> :TmuxNavigateDown<cr>

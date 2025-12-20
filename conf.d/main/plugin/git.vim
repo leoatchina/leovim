@@ -122,7 +122,7 @@ endif
 " -----------------------------------------------------
 " vim-signify
 " -----------------------------------------------------
-if has('nvim') || has('patch-8.0.902')
+if pack#planned('vim-signify')
     let g:signify_disable_by_default = 0
     function! s:SignifyDiff()
         SignifyDiff
@@ -143,7 +143,6 @@ if has('nvim') || has('patch-8.0.902')
     xmap am <plug>(signify-motion-outer-visual)
     nmap <leader>vm vim
     nmap <leader>vM vam
-    PlugAdd 'vim-signify'
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
     nnoremap <silent>\: :SignifyCommands<Cr>

@@ -7,19 +7,6 @@ try
 catch /.*/
     " pass
 endtry
-" --------------------------
-" easyalign
-" --------------------------
-let g:easy_align_delimiters = {}
-let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
-let g:easy_align_delimiters['*'] = {'pattern': '*', 'ignore_groups': ['String']}
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-xmap g, ga*,
-xmap g= ga*=
-xmap g: ga*:
-xmap g<Space> ga*<Space>
-PlugAdd 'vim-easy-align'
 " ----------------------------
 " neoformat
 " ----------------------------

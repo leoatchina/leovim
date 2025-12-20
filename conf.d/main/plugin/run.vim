@@ -17,7 +17,7 @@ endfunction
 " --------------------------
 " asyncrun
 " --------------------------
-if has('nvim') || has('timers') && has('channel') && has('job')
+if pack#planned('asyncrun.vim')
     let g:asyncrun_rootmarks = g:root_patterns
     let s:run_command = "AsyncRun"
     if utils#is_win()
@@ -25,7 +25,6 @@ if has('nvim') || has('timers') && has('channel') && has('job')
     else
         let g:asyncrun_encs = get(g:, 'asyncrun_encs', 'utf-8')
     endif
-    PlugAdd 'asyncrun.vim'
     if utils#is_unix()
         silent! call mkdir(utils#expand("$HOME/.cache/build"), "p")
         if executable('gcc')
@@ -187,7 +186,7 @@ command! RunQfRight  call s:asyncrun('right',  'qf')
 " -------------------------
 " run in floaterm
 " -------------------------
-if has('nvim') || v:version >= 801
+if pack#planned('asynctasks.vim')
     " Task check firstly, if not, run in special position
     function s:task_check(task_name)
         let tasks = asynctasks#list('')
@@ -242,7 +241,7 @@ endif
 " ----------------
 " asynctasks
 " ----------------
-if has('nvim') || v:version >= 801
+if pack#planned('asyncrun.vim')
     let g:asyncrun_rootmarks     = g:root_patterns
     let g:asynctasks_config_name = [".vim/tasks.ini", ".git/tasks.ini", ".vscode/tasks.ini"]
     let g:asynctasks_rtp_config  = "tasks.ini"
@@ -256,8 +255,6 @@ if has('nvim') || v:version >= 801
                 \ '~/.leovim/conf.d/tasks/tasks_common.ini',
                 \ '~/.leovim.d/tasks/tasks.ini',
                 \ ]
-    " packadd
-    PlugAdd 'asynctasks.vim'
     " open template
     function! s:tasks_open(...)
         if a:0

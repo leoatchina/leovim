@@ -14,13 +14,7 @@ endif
 " --------------------------
 " matchup
 " --------------------------
-if g:has_popup_floating
-    let g:matchup_matchparen_offscreen = {'methed': 'popup'}
-else
-    let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
-endif
 nnoremap <silent>M :MatchupWhereAmI??<Cr>
-PlugAdd 'vim-matchup'
 " --------------------------
 " fuzzy_finder intergrated
 " --------------------------
@@ -45,13 +39,14 @@ elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
 " f<Cr> to useing native functions show
-PlugAdd 'vim-funky'
-command! QfFunky call funky#qf#show()
-if pack#installed('fzf', 'fzf.vim')
-    command! FzfFunky call funky#fzf#show()
-    nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
-else
-    nnoremap <silent>f<Cr> :w!<Cr>:QfFunky<Cr>
+if pack#planned('vim-funky')
+    command! QfFunky call funky#qf#show()
+    if pack#installed('fzf', 'fzf.vim')
+        command! FzfFunky call funky#fzf#show()
+        nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
+    else
+        nnoremap <silent>f<Cr> :w!<Cr>:QfFunky<Cr>
+    endif
 endif
 " t<Cr> for tags
 if g:complete_engine == 'coc' && utils#is_unix() && g:ctags_type != ''

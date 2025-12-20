@@ -2,13 +2,6 @@
 if utils#is_vscode()
     finish
 endif
-" ---------------------------------------
-" choose tab using fuzzy_findeer
-" ---------------------------------------
-if pack#planned_fzf()
-    PlugAdd 'fzf-tabs'
-    nnoremap <silent>gt :FzfTabs<Cr>
-endif
 " ------------------------
 " tab control
 " ------------------------
