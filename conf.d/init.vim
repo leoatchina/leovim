@@ -489,11 +489,18 @@ noremap <silent><Tab>C :PlugClean<Cr>
 noremap <silent><Tab>S :PlugStatus<Cr>
 noremap <silent><Tab>O :PlugSnapshot<Cr>
 noremap <silent><Tab>P :Plug
-" vscode or (neo)vim 's differnt config
+" addtional vim packs
+if filereadable(utils#expand("~/.leovim.d/pack.vim"))
+    source ~/.leovim.d/pack.vim
+endif
 if utils#is_vscode()
     source $INIT_DIR/vscode.vim
 else
     source $MAIN_DIR/main.vim
+endif
+" addtional vim config
+if filereadable(utils#expand("~/.leovim.d/after.vim"))
+    source ~/.leovim.d/after.vim
 endif
 call plug#end()
 " set loaded
