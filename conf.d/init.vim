@@ -434,6 +434,7 @@ endif
 " -------------------------------------------------------------
 " unified PlugAdd (local/remote) + PlugAdd shim
 " -------------------------------------------------------------
+let g:plugs = {}
 let g:plug_threads = get(g:, 'plug_threads', 8)
 set rtp^=$MAIN_DIR
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
@@ -458,10 +459,6 @@ function! s:plug_add(plugin, ...) abort
             endif
         endif
         call remove(opts, 'now')
-    endif
-
-    if !exists('g:plugs')
-        let g:plugs = {}
     endif
 
     " derive key name for duplicate check
@@ -497,8 +494,6 @@ function! s:plug_add(plugin, ...) abort
     if local_dir != ''
         let opts['dir'] = local_dir
         call plug#(local_dir, opts)
-    else
-        call plug#(plugin, opts)
     endif
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
