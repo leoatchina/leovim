@@ -21,9 +21,9 @@ let $PACK_DIR = expand($CONF_D_DIR . '/pack')
 " cfg for special plugins
 let $CFG_DIR = expand($MAIN_DIR . '/after/cfg')
 " opt dirs
-let $LEO_OPT_DIR = expand($PACK_DIR . '/leo/opt')
-let $FORK_OPT_DIR = expand($PACK_DIR . '/fork/opt')
-let $CLONE_OPT_DIR = expand($PACK_DIR . '/clone/opt')
+let $LEO_OPT_DIR = expand($RTP_DIR . '/leo/opt')
+let $FORK_OPT_DIR = expand($RTP_DIR . '/fork/opt')
+let $CLONE_OPT_DIR = expand($RTP_DIR . '/clone/opt')
 " --------------------------
 " set rtp && pack path
 " --------------------------
@@ -442,6 +442,25 @@ call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
 function! s:plug_add(plugin, ...) abort
     let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let opts = a:0 > 0 ? copy(a:1) : {}
+
+    " immediate load when now>0: skip vim-plug
+    if has_key(opts, 'now')
+        if get(opts, 'now', 0) && plugin !~ '/'
+            let local_dir = ''
+            for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
+                let try_dir = utils#expand(opt_dir . '/' . plugin)
+                if isdirectory(try_dir)
+                    let local_dir = try_dir
+                    break
+                endif
+            endfor
+            if local_dir != ''
+                execute 'set rtp^=' . fnameescape(local_dir)
+                return
+            endif
+        endif
+        call remove(opts, 'now')
+    endif
 
     if !exists('g:plugs')
         let g:plugs = {}

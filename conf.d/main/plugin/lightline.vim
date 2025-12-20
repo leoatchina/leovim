@@ -28,8 +28,6 @@ nmap ]b <Plug>lightline#bufferline#move_next()
 nmap [b <Plug>lightline#bufferline#move_previous()
 nmap [B <Plug>lightline#bufferline#move_first()
 nmap ]B <Plug>lightline#bufferline#move_last()
-PlugAdd 'lightline.vim'
-PlugAdd 'lightline-bufferline'
 " ------------------------
 " lightline init
 " ------------------------

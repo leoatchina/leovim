@@ -237,6 +237,8 @@ if g:has_truecolor
         PlugAdd 'bluz71/vim-nightfly-colors'
     endif
 endif
+PlugAdd 'lightline.vim'
+PlugAdd 'lightline-bufferline'
 " ------------------------------
 " backbone plugins.
 " ------------------------------
@@ -283,3 +285,4 @@ if has('nvim-0.10')
 else
     PlugAdd 'romainl/vim-qf'
 endif
+PlugAdd 'vim-startify'
