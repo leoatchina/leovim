@@ -30,7 +30,6 @@ if v:version >= 802 || has('nvim')
             let g:quickui_color_scheme = 'papercol light'
         endif
     endif
-    PlugAdd 'vim-quickui'
     nnoremap <silent><M-k>m :call quickui#tools#display_messages()<Cr>
     function! s:preview_popup_file(filename) abort
         let filename = a:filename

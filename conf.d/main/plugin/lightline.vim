@@ -1,5 +1,4 @@
-" Skip in VSCode environment
-if utils#is_vscode()
+if !pack#planned('lightline.vim')
     finish
 endif
 " ---------------------------
