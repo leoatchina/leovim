@@ -22,7 +22,7 @@ function! pack#planned(...) abort
     endif
     for pack in a:000
         let pack = tolower(pack)
-        if !has_key(g:leovim_installed, pack)
+        if !has_key(g:plugs, pack)
             return 0
         endif
     endfor
@@ -33,9 +33,15 @@ function! pack#installed(...) abort
     if empty(a:000)
         return 0
     endif
+    let loaded = exists('*plug#loaded_names') ? plug#loaded_names() : []
     for pack in a:000
         let pack = tolower(pack)
-        if !has_key(g:leovim_installed, pack) || get(g:leovim_installed, pack, 0) == 0
+        if !has_key(g:plugs, pack)
+            return 0
+        endif
+        let spec = g:plugs[pack]
+        let dir = get(spec, 'dir', '')
+        if index(loaded, pack) < 0 && !isdirectory(dir)
             return 0
         endif
     endfor

@@ -71,7 +71,6 @@ let g:maplocalleader = 'q'
 " set pack related variables
 " ------------------------
 let g:packs = []
-let g:leovim_installed = {}
 " -----------------------------------
 " filetypes definition
 " -----------------------------------
@@ -220,7 +219,6 @@ function! s:plug_add_opt(pack)
             endif
         endfor
     endif
-    let g:leovim_installed[tolower(pack)] = 1
 endfunction
 command! -nargs=+ PlugOpt call <sid>plug_add_opt(<args>)
 " ------------------------------------
