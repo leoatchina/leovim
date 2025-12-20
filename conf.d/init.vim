@@ -12,17 +12,18 @@ endif
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')
 let $LEOVIMD_DIR = expand("~/.leovim.d")
-let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
+let $RTP_DIR = expand($LEOVIM_DIR . '/rtp')
 " settings and plugins dirs
+let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
 let $INIT_DIR = expand($CONF_D_DIR . '/init')
 let $MAIN_DIR = expand($CONF_D_DIR . '/main')
-let $PLUG_DIR = expand($CONF_D_DIR . '/plug')
+let $PACK_DIR = expand($CONF_D_DIR . '/pack')
 " cfg for special plugins
 let $CFG_DIR = expand($MAIN_DIR . '/after/cfg')
 " opt dirs
-let $LEO_OPT_DIR = expand($LEOVIM_DIR . '/pack/leo/opt')
-let $FORK_OPT_DIR = expand($LEOVIM_DIR . '/pack/fork/opt')
-let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
+let $LEO_OPT_DIR = expand($PACK_DIR . '/leo/opt')
+let $FORK_OPT_DIR = expand($PACK_DIR . '/fork/opt')
+let $CLONE_OPT_DIR = expand($PACK_DIR . '/clone/opt')
 " --------------------------
 " set rtp && pack path
 " --------------------------
@@ -33,7 +34,7 @@ else
     set rtp^=$LEOVIM_DIR/pack
 endif
 if exists(':packadd')
-    set packpath^=$LEOVIM_DIR
+    set packpath^=$CONF_D_DIR
 endif
 " --------------------------
 " gui_running && OS
