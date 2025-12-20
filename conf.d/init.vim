@@ -468,7 +468,7 @@ function! s:plug_add(plugin, ...) abort
     elseif has_key(s:opt_plugs, plugin)
         let local_dir = s:opt_plugs[plugin]
         if get(opts, 'now', 0)
-            execute 'set rtp^=' . fnameescape(local_dir)
+            execute 'set rtp^=' . local_dir 
         else
             call plug#(local_dir, opts)
         endif
