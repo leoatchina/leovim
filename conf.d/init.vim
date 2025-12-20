@@ -15,22 +15,22 @@ endif
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')
 let $LEOVIMD_DIR = expand("~/.leovim.d")
-let $RTP_DIR = expand($LEOVIM_DIR . '/rtp')
+let $PACK_DIR = expand($LEOVIM_DIR . '/pack')
 " settings and plugins dirs
 let $CONF_D_DIR = expand($LEOVIM_DIR . '/conf.d')
 let $INIT_DIR = expand($CONF_D_DIR . '/init')
 let $MAIN_DIR = expand($CONF_D_DIR . '/main')
-let $PACK_DIR = expand($CONF_D_DIR . '/pack')
+let $PLUG_DIR = expand($CONF_D_DIR . '/plug')
 " cfg for special plugins
 let $CFG_DIR = expand($MAIN_DIR . '/after/cfg')
 " opt dirs
-let $LEO_OPT_DIR = expand($RTP_DIR . '/leo/opt')
-let $FORK_OPT_DIR = expand($RTP_DIR . '/fork/opt')
-let $CLONE_OPT_DIR = expand($RTP_DIR . '/clone/opt')
+let $LEO_OPT_DIR = expand($PACK_DIR . '/leo/opt')
+let $FORK_OPT_DIR = expand($PACK_DIR . '/fork/opt')
+let $CLONE_OPT_DIR = expand($PACK_DIR . '/clone/opt')
 " --------------------------
 " set rtp && pack path
 " --------------------------
-set rtp^=$RTP_DIR
+set rtp^=$PACK_DIR
 set rtp^=$INIT_DIR
 let s:opt_plugs = {}
 for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
@@ -43,6 +43,9 @@ for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
         let s:opt_plugs[plugin] = abs_dir
     endfor
 endfor
+if exists(':packadd')
+    set packpath^=$LEOVIM_DIR
+endif
 " --------------------------
 " gui_running && OS
 " --------------------------
@@ -468,7 +471,11 @@ function! s:plug_add(plugin, ...) abort
     elseif has_key(s:opt_plugs, plugin)
         let local_dir = s:opt_plugs[plugin]
         if get(opts, 'now', 0)
-            execute 'set rtp^=' . local_dir 
+            if exists(':packadd')
+                execute 'packadd ' . plugin
+            else
+                execute 'set rtp^=' . local_dir
+            endif
         else
             call plug#(local_dir, opts)
         endif

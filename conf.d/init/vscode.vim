@@ -1,4 +1,4 @@
-source $PACK_DIR/common.vim
+source $PLUG_DIR/common.vim
 " ------------------------
 " basic enhanced shortcut
 " ------------------------

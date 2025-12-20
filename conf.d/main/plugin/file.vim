@@ -233,7 +233,7 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>v :call TabeOpen("$INIT_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>k :call TabeOpen("$INIT_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>u :call TabeOpen("$INIT_DIR/autoload/utils.vim")<Cr>
-    nnoremap <silent><M-h>e :call TabeOpen("$PACK_DIR/essential.vim")<Cr>
+    nnoremap <silent><M-h>e :call TabeOpen("$PLUG_DIR/essential.vim")<Cr>
     nnoremap <silent><M-h>m :call TabeOpen("$MAIN_DIR/main.vim")<Cr>
     nnoremap <silent><M-h>O :call TabeOpen("$MAIN_DIR/opt.vim")<Cr>
     if pack#planned_leaderf()

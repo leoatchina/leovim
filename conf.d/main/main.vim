@@ -293,7 +293,7 @@ endif
 " ------------------------------
 " install packs
 " ------------------------------
-for vim in split(glob("$PACK_DIR/*.vim"), "\n")
+for vim in split(glob("$PLUG_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
 " ------------------------------
