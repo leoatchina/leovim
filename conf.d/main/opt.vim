@@ -5,32 +5,32 @@ let g:leovim_openmap = 1
 let g:nvim_treesitter_install = utils#is_unix()
 
 " if v:version < 800
-"     call plug#add('notags')
+"     call pack#add('notags')
 " else
-"     call plug#add('tags')
+"     call pack#add('tags')
 " endif
 
-" call plug#add('fzfbin')
+" call pack#add('fzfbin')
 
-" call plug#add('web')
-" call plug#add('wubi')
-" call plug#add('pinyin')
-" call plug#add('bioinfo')
-" call plug#add('translate')
+" call pack#add('web')
+" call pack#add('wubi')
+" call pack#add('pinyin')
+" call pack#add('bioinfo')
+" call pack#add('translate')
 
-" call plug#add('r')
-" call plug#add('c')
-" call plug#add('go')
-" call plug#add('rust')
-" call plug#add('java')
-" call plug#add('markdown')
+" call pack#add('r')
+" call pack#add('c')
+" call pack#add('go')
+" call pack#add('rust')
+" call pack#add('java')
+" call pack#add('markdown')
 
-" call plug#add('debug')
-" call plug#add('neoconf')
-" call plug#add('minuet-ai')
+" call pack#add('debug')
+" call pack#add('neoconf')
+" call pack#add('minuet-ai')
 
-" call plug#add('aider')
-" call plug#add('codecompanion')
+" call pack#add('aider')
+" call pack#add('codecompanion')
 
 " let g:open_editor="code.exe"
 " let g:open_neovim="nvim.exe"
@@ -56,18 +56,18 @@ let g:nvim_treesitter_install = utils#is_unix()
 if has('nvim')
     " if utils#has_gui()
         " if exists('g:neovide')
-        "     call plug#add('blink')
+        "     call pack#add('blink')
         " else
-        "     call plug#add('cmp')
+        "     call pack#add('cmp')
         " endif
     " else
-        " call plug#add('builtin')
+        " call pack#add('builtin')
     " endif
 else
     " if utils#has_gui()
-        " call plug#add('coc')
+        " call pack#add('coc')
     " else
-        " call plug#add('mcm')
+        " call pack#add('mcm')
     " endif
 endif
 

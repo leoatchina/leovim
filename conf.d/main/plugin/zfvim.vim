@@ -58,7 +58,7 @@ PlugOpt 'ZFVimBackup'
 " --------------------
 " ZFVimIM
 " --------------------
-if !plug#installed('ZFVimIM')
+if !pack#installed('ZFVimIM')
     finish
 endif
 let g:ZFVimIM_cachePath=$HOME.'/.vim/ZFVimIM'
@@ -91,7 +91,7 @@ function! s:show_input()
     call preview#cmdmsg(msg, 1)
 endfunction
 function! ZFVimIMELoop(...)
-    if plug#installed('ZFVimIM_wubi_base') && a:0 && a:1
+    if pack#installed('ZFVimIM_wubi_base') && a:0 && a:1
         if ZFVimIME_IMEName() == 'wubi'
             call ZFVimIME_keymap_next_n()
         elseif ZFVimIME_IMEName() == 'pinyin'
@@ -165,7 +165,7 @@ inoremap <silent>,; <C-o>:call ZFVimPunctuation()<Cr>
 " ----------------------------
 " dbinit
 " ----------------------------
-if plug#require('wubi')
+if pack#get('wubi')
     function! s:myLocalDb()
         let wubi = ZFVimIM_dbInit(
                     \ {

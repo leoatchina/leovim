@@ -11,7 +11,7 @@ else
 endif
 let g:mucomplete#chains = {}
 " vsnip
-if plug#installed('vim-vsnip', 'vim-vsnip-integ')
+if pack#installed('vim-vsnip', 'vim-vsnip-integ')
     let g:mucomplete#chains.default = ['path', 'omni', 'vsnip', 'keyn', 'dict']
     function! MapTabCr(tab) abort
         if pumvisible()

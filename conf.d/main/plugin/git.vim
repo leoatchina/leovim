@@ -22,7 +22,7 @@ augroup END
 "------------------------
 " fugitve and others
 "------------------------
-if plug#planned('vim-fugitive')
+if pack#planned('vim-fugitive')
     nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
@@ -41,7 +41,7 @@ if plug#planned('vim-fugitive')
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
     nnoremap <silent><M-g>[ :Gdiffsplit!<Cr>
     " GV
-    if plug#planned('GV.vim')
+    if pack#planned('GV.vim')
         nnoremap <silent><M-g>! :GV!<Cr>
         nnoremap <silent><M-g>v :GV<Cr>
         nnoremap <silent><M-g>? :GV?<Cr>
@@ -50,7 +50,7 @@ if plug#planned('vim-fugitive')
         au FileType GV nmap <buffer><nowait><M-q> q
         au FileType GV nmap <buffer><nowait>Q q
     endif
-    if plug#planned('vim-git-diffview')
+    if pack#planned('vim-git-diffview')
         let g:gdv_keymap = 'df'
     endif
     " buffer map, nnoremap
@@ -65,7 +65,7 @@ if plug#planned('vim-fugitive')
     au FileType fugitive nmap <buffer><nowait>, g?
     au FileType fugitive nmap <buffer><nowait>\ c?
 else
-    if plug#installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
+    if pack#installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
         nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 add -A<Cr>
         nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
         nnoremap <silent><M-g><Cr> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
@@ -80,7 +80,7 @@ else
     endif
 endif
 " blamer on left
-if plug#planned_leaderf()
+if pack#planned_leaderf()
     nnoremap <silent><M-g>i :Leaderf git<Cr>
     nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
     nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
@@ -90,14 +90,14 @@ if plug#planned_leaderf()
     nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
 endif
 " inline blame
-if plug#installed('blamer.nvim')
+if pack#installed('blamer.nvim')
     let g:blamer_date_format = '%Y/%m/%d'
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '
     let g:blamer_delay = 500
     nnoremap <silent><Tab><Cr> :BlamerToggle<Cr>
     command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
-elseif plug#planned_leaderf()
+elseif pack#planned_leaderf()
     if has('patch-9.0.200') || has('nvim')
         nnoremap <silent><Tab><Cr> :LeaderfGitInlineBlameToggle<Cr>
         command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['Gutentag', 'Grep', 'Get'])
@@ -111,7 +111,7 @@ nnoremap <silent><M-g>: :GCommands<Cr>
 " ---------------------------------
 " lazygit intergrated
 " ---------------------------------
-if plug#installed('vim-floaterm') && executable('lazygit')
+if pack#installed('vim-floaterm') && executable('lazygit')
     command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
     if has('nvim')
         nnoremap <silent><M-g><M-g> :GLazyGit<Cr>

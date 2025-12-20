@@ -2,7 +2,7 @@
 if utils#is_vscode()
     finish
 endif
-if plug#planned('vim-signature')
+if pack#planned('vim-signature')
     let g:SignatureMap = {
                 \ 'Leader'           : "m",
                 \ 'ToggleMarkAtLine' : "m.",
@@ -23,7 +23,7 @@ if plug#planned('vim-signature')
                 \ 'GotoPrevSpotByPos' : "[M",
                 \ }
 endif
-if plug#planned_fzf()
+if pack#planned_fzf()
     nnoremap <silent><leader>M :FzfMarks<CR>
 endif
 PlugOpt 'vim-bookmarks'

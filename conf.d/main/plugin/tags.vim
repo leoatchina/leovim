@@ -47,7 +47,7 @@ endif
 " f<Cr> to useing native functions show
 PlugOpt 'vim-funky'
 command! QfFunky call funky#qf#show()
-if plug#installed('fzf', 'fzf.vim')
+if pack#installed('fzf', 'fzf.vim')
     command! FzfFunky call funky#fzf#show()
     nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
 else
@@ -56,7 +56,7 @@ endif
 " t<Cr> for tags
 if g:complete_engine == 'coc' && utils#is_unix() && g:ctags_type != ''
     nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
-elseif plug#installed('vista.vim') && g:ctags_type =~ 'Universal'
+elseif pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
     nnoremap <silent>t<Cr> :Vista finder ctags<Cr>
 elseif g:symbol_tool =~ 'leaderftags'
     nnoremap <silent>t<Cr> :LeaderfBufTag<Cr>
@@ -75,7 +75,7 @@ if !isdirectory(g:gutentags_cache_dir)
     silent! call mkdir(g:gutentags_cache_dir, 'p')
 endif
 let g:gutentags_modules = []
-if plug#planned('vim-gutentags')
+if pack#planned('vim-gutentags')
     " exclude files
     let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", "node_modules", "*.vim/bundle/*", ".ccls_cache", "__pycache__"] + g:root_patterns
     " gutentags search project directory markers, stop recursion when encountering these files/directories
@@ -126,7 +126,7 @@ endif
 " --------------------------
 " gtags
 " --------------------------
-if plug#planned('gutentags_plus')
+if pack#planned('gutentags_plus')
     if has('+cscope') && executable('gtags-cscope')
         set cscopeprg=gtags-cscope
     elseif has('+cscope')
@@ -143,7 +143,7 @@ if plug#planned('gutentags_plus')
     nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><Cr>
     nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><Cr>
     nnoremap <silent><leader>gz :GscopeFind z <C-R><C-W><Cr>
-    if plug#installed_adv()
+    if pack#installed_adv()
         nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><Cr>
         nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><Cr>
     else
@@ -156,7 +156,7 @@ if plug#planned('gutentags_plus')
     " kill
     nnoremap <silent><leader>gk :GscopeKill<Cr>
     " leaderfgtags
-    if plug#planned_leaderf() && utils#is_unix()
+    if pack#planned_leaderf() && utils#is_unix()
         let g:Lf_Gtags = utils#expand(exepath('gtags'))
         let g:Lf_Gtagsconf = $GTAGSCONF
         let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
@@ -290,7 +290,7 @@ function! s:lsp_tag_search(method, ...) abort
     " --------------------------
     " coc
     " --------------------------
-    if plug#installed('coc.nvim') && lsp
+    if pack#installed('coc.nvim') && lsp
         let commands_dict = {
                     \ 'definition' : 'jumpDefinition',
                     \ 'declaration' : 'jumpDeclaration',
@@ -320,7 +320,7 @@ function! s:lsp_tag_search(method, ...) abort
     " --------------------------
     " lsp
     " --------------------------
-    elseif plug#installed_lsp() && lsp
+    elseif pack#installed_lsp() && lsp
         let cmd = printf('lua require("lsp").LspAction("%s", "%s")', method, open_action)
         call utils#execute(cmd)
         let symbol_found = get(g:, 'lsp_found', 0)
@@ -367,7 +367,7 @@ nnoremap <silent><C-w><C-g> :call <SID>lsp_tag_search("definition", "tabe")<Cr>
 nnoremap <silent><C-w><C-]> :call <SID>lsp_tag_search("definition", "split")<Cr>
 " references
 nnoremap <silent><M-/> :call <SID>lsp_tag_search("references", "list")<Cr>
-if plug#installed_adv()
+if pack#installed_adv()
     " declaration
     nnoremap <silent><M-C> :call <SID>lsp_tag_search("declaration", "list")<Cr>
     " implementation

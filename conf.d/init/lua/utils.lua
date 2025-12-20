@@ -71,31 +71,31 @@ end
 
 -- Package management functions (using utils#)
 function utils.require(name)
-  return fn['plug#require'](name) > 0
+  return fn['pack#get'](name) > 0
 end
 
 function utils.installed(name)
-  return fn['plug#installed'](name) > 0
+  return fn['pack#installed'](name) > 0
 end
 
 function utils.planned(name)
-  return fn['plug#planned'](name) > 0
+  return fn['pack#planned'](name) > 0
 end
 
 function utils.installed_lsp()
-  return fn['plug#installed_lsp']() > 0
+  return fn['pack#installed_lsp']() > 0
 end
 
 function utils.installed_cmp()
-  return fn['plug#installed_cmp']() > 0
+  return fn['pack#installed_cmp']() > 0
 end
 
 function utils.installed_blink()
-  return fn['plug#installed_blink']() > 0
+  return fn['pack#installed_blink']() > 0
 end
 
 function utils.installed_coc()
-  return fn['plug#installed_coc']() > 0
+  return fn['pack#installed_coc']() > 0
 end
 
 

@@ -251,10 +251,10 @@ endif
 " ------------------------------
 " tags conf
 " ------------------------------
-if plug#require('notags')
+if pack#get('notags')
     let g:ctags_type = ''
     let g:gtags_version = 0
-elseif utils#is_win() && plug#require('tags') || utils#is_unix()
+elseif utils#is_win() && pack#get('tags') || utils#is_unix()
     if utils#is_win() && filereadable(utils#expand("~/.leovim.windows/tools/ctags.exe"))
         let g:ctags_type = 'Universal-json'
     elseif executable('ctags')
@@ -373,7 +373,7 @@ source $CFG_DIR/easymotion.vim
 " set mason PATH
 " ------------------------------
 let mason_dirs  = [utils#expand('~/.leovim.d/mason/cmp/bin'), utils#expand('~/.leovim.d/mason/blink/bin')]
-if !plug#planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
+if !pack#planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
     for mason_dir in mason_dirs
         if isdirectory(mason_dir)
             if utils#is_win()

@@ -45,7 +45,7 @@ endif
 if has('nvim')
     let g:coc_global_extensions += ['coc-symbol-line']
 endif
-if plug#require('web')
+if pack#get('web')
     let g:coc_global_extensions += [
                 \ 'coc-html',
                 \ 'coc-css',
@@ -56,13 +56,13 @@ if plug#require('web')
                 \ 'coc-vetur',
                 \ ]
 endif
-if plug#require('c')
+if pack#get('c')
     let g:coc_global_extensions += ['coc-cmake']
     if g:clangd_exe != ''
         let g:coc_global_extensions += ['coc-clangd']
     endif
 endif
-if plug#require('ccls') && g:ccls_exe != ''
+if pack#get('ccls') && g:ccls_exe != ''
     call coc#config('languageserver.ccls', {
                 \ "command": "ccls",
                 \ "filetypes": g:c_filetypes,
@@ -72,19 +72,19 @@ if plug#require('ccls') && g:ccls_exe != ''
                 \ "directory": $HOME . "/.leovim.d/ccls"
                 \ }}})
 endif
-if plug#require('R') && g:R_exe != ''
+if pack#get('R') && g:R_exe != ''
     let g:coc_global_extensions += ['coc-r-lsp']
 endif
-if plug#require('rust') && g:cargo_exe != ''
+if pack#get('rust') && g:cargo_exe != ''
     let g:coc_global_extensions += ['coc-rust-analyzer']
 endif
-if plug#require('java') && executable('java')
+if pack#get('java') && executable('java')
     let g:coc_global_extensions += ['coc-java', 'coc-java-intellicode']
 endif
-if plug#require('go') && g:gobin_exe != ''
+if pack#get('go') && g:gobin_exe != ''
     let g:coc_global_extensions += ['coc-go']
 endif
-if plug#require('writing')
+if pack#get('writing')
     let g:coc_global_extensions += ['coc-vimtex']
 endif
 " ------------------------
@@ -111,9 +111,9 @@ augroup END
 " ------------------------
 " icons
 " ------------------------
-if plug#planned('nvim-web-devicons')
+if pack#planned('nvim-web-devicons')
     call coc#config('explorer.icon.source', 'nvim-web-devicons')
-elseif plug#planned('vim-devicons')
+elseif pack#planned('vim-devicons')
     call coc#config('explorer.icon.source', 'vim-devicons')
 endif
 " ----------------------------

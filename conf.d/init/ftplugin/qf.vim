@@ -18,14 +18,14 @@ nnoremap <silent><buffer><M-/> <Nop>
 nnoremap <silent><buffer><M-?> <Nop>
 nnoremap <silent><buffer><M-'> <Nop>
 nnoremap <silent><buffer><M-"> <Nop>
-if !plug#installed('nvim-bqf')
+if !pack#installed('nvim-bqf')
     nnoremap <silent><buffer>P :PreviewQuickfix<Cr>
     nnoremap <silent><buffer><C-m> :PreviewQuickfix e<Cr>
     nnoremap <silent><buffer><C-g> :PreviewQuickfix e<Cr>:QuickfixClose<Cr>
     nnoremap <silent><buffer><C-]> :PreviewQuickfix vsplit<Cr>
     nnoremap <silent><buffer><C-x> :PreviewQuickfix split<Cr>
     nnoremap <silent><buffer><C-t> :PreviewQuickfix tabe<Cr>
-    if plug#installed('vim-quickui')
+    if pack#installed('vim-quickui')
         nnoremap <silent><buffer>K :call quickui#tools#preview_quickfix()<Cr>
         nnoremap <silent><buffer>n j:call quickui#tools#preview_quickfix()<Cr>
         nnoremap <silent><buffer>p k:call quickui#tools#preview_quickfix()<Cr>

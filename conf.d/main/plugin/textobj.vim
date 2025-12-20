@@ -2,7 +2,7 @@
 if utils#is_vscode()
     finish
 endif
-if plug#installed('nvim-treesitter', 'hlargs.nvim')
+if pack#installed('nvim-treesitter', 'hlargs.nvim')
     if utils#is_win()
         function! s:cleanup_ts() abort
             let dir = $HOME . '\.leovim.d\pack\add\opt\nvim-treesitter'
@@ -24,11 +24,11 @@ else
     nmap <silent>{{ [m
     nmap <silent>}] ]M
     nmap <silent>{[ [M
-    if plug#installed_coc()
+    if pack#installed_coc()
         nmap <M-s> <Plug>(coc-range-select)
         xmap <M-s> <Plug>(coc-range-select)
         omap <M-s> <Plug>(coc-range-select)
-    elseif plug#installed('wildfire.vim')
+    elseif pack#installed('wildfire.vim')
         let g:wildfire_fuel_map = '<M-s>'
         let g:wildfire_water_map = '<M-S>'
         let g:wildfire_objects = get(g:, "wildfire_objects", split("iw i' i\" i] i) iL ii i}"))

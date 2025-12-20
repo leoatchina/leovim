@@ -5,7 +5,7 @@ PlugAdd 'kshenoy/vim-signature'
 " ----------------------------
 " pairs && wilder
 " ----------------------------
-if plug#planned_lsp()
+if pack#planned_lsp()
     PlugAdd 'windwp/nvim-autopairs'
 else
     if g:python_version > 3 && has('nvim') && utils#is_unix()
@@ -50,7 +50,7 @@ if executable('git') && v:version >= 800 && g:git_version >= 1.85
     " blamer.nvim installed when without virtual text or without leaderf
     if g:has_popup_floating
         PlugAdd 'skywind3000/vim-git-diffview'
-        if utils#is_unix() && (!plug#planned('leaderf') || plug#planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
+        if utils#is_unix() && (!pack#planned('leaderf') || pack#planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
             PlugAdd 'APZelos/blamer.nvim'
         endif
     endif
@@ -65,15 +65,15 @@ PlugOpt 'undotree'
 " ------------------------------
 " translate
 " ------------------------------
-if plug#require('translate') && v:version >= 800 && g:python_version >= 3.06
+if pack#get('translate') && v:version >= 800 && g:python_version >= 3.06
     PlugAdd 'voldikss/vim-translator'
 endif
 " ------------------------------
 " zfvim
 " ------------------------------
-if (plug#require('wubi') || plug#require('pinyin')) && g:has_terminal && utils#is_unix()
+if (pack#get('wubi') || pack#get('pinyin')) && g:has_terminal && utils#is_unix()
     PlugAdd 'ZSaberLv0/ZFVimIM'
-    if plug#require('wubi')
+    if pack#get('wubi')
         PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'
         let g:input_method = 'zfvim_wubi'
     else

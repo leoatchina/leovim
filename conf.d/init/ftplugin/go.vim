@@ -1,7 +1,7 @@
 setlocal commentstring=//\ %s
 command! GoCommands call FzfCallCommands('GoCommands', 'Go')
 nnoremap <buffer><silent><M-M> :GoCommands<Cr>
-if plug#installed('vim-go')
+if pack#installed('vim-go')
     nnoremap <buffer><silent>gl :GoDefPop<Cr>
     nnoremap <buffer><silent><leader>A :GoImports<Cr>
     if InstalledAdv()
@@ -14,7 +14,7 @@ if plug#installed('vim-go')
     endif
 endif
 " NOTE: below in order to be comparable with vscode-neovim
-if plug#installed('coc.nvim')
+if pack#installed('coc.nvim')
     nmap <buffer>qtj :CocCommand go.tags.add json<cr>
     nmap <buffer>qty :CocCommand go.tags.add yaml<cr>
     nmap <buffer>qtx :CocCommand go.tags.clear<cr>

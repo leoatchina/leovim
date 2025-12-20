@@ -1,6 +1,6 @@
 setlocal commentstring=//\ %s
 " for a.vim
-if plug#installed('a.vim')
+if pack#installed('a.vim')
     nnoremap <buffer>qa :A<Cr>
     nnoremap <buffer>qs :AS<Cr>
     nnoremap <buffer>qv :AV<Cr>
@@ -8,13 +8,13 @@ if plug#installed('a.vim')
     nnoremap <buffer>qn :AN<Cr>
 endif
 " ccls
-if plug#installed('vim-ccls')
+if pack#installed('vim-ccls')
     command! CclsCommands call FzfCallCommands('CclsCommands', 'Ccls')
     nnoremap <buffer><M-M> :CclsCommands<Cr>
 endif
 " cppman
-if plug#installed('vim-cppman')
-    if plug#installed_adv()
+if pack#installed('vim-cppman')
+    if pack#installed_adv()
         nnoremap <buffer>gx :Cppman <C-r>=utils#expand('<cword>')<Cr>
         xnoremap <buffer>gx :<C-u>Cppman <C-r>=utils#get_visual()<Cr>
     else
