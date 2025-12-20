@@ -70,7 +70,7 @@ function utils.has_gui()
 end
 
 -- Package management functions (using utils#)
-function utils.require(name)
+function utils.get(name)
   return fn['pack#get'](name) > 0
 end
 
