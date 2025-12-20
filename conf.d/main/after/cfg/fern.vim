@@ -1,17 +1,3 @@
-let g:fern_disable_startup_warnings = 1
-PlugAdd 'vim-fern'
-" icons
-let g:fern#renderer = "nerdfont"
-PlugAdd 'vim-nerdfont'
-PlugAdd 'vim-glyph-palette'
-PlugAdd 'vim-fern-renderer-nerdfont'
-augroup my-glyph-palette
-    autocmd!
-    autocmd FileType fern,startify call glyph_palette#apply()
-augroup END
-" enhance
-PlugAdd 'vim-fern-git-status'
-PlugAdd 'vim-fern-hijack'
 " fern_open
 function! FernOpen(type, ...) abort
     if a:type == 'lcd'

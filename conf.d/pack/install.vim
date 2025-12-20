@@ -292,3 +292,18 @@ if get(g:, 'leovim_whichkey', 1)
     let g:which_key_use_floating_win = g:has_popup_floating
     PlugAdd 'vim-which-key'
 endif
+if v:version >= 801 || has('nvim')
+    let g:fern_disable_startup_warnings = 1
+    PlugAdd 'vim-fern'
+    " icons
+    let g:fern#renderer = "nerdfont"
+    PlugAdd 'vim-nerdfont'
+    PlugAdd 'vim-glyph-palette'
+    PlugAdd 'vim-fern-git-status'
+    PlugAdd 'vim-fern-hijack'
+    PlugAdd 'vim-fern-renderer-nerdfont'
+    augroup my-glyph-palette
+        autocmd!
+        autocmd FileType fern,startify call glyph_palette#apply()
+    augroup END
+endif

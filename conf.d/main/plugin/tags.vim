@@ -244,7 +244,7 @@ function! s:lsp_tag_search(method, ...) abort
             call preview#errmsg("Preview need ctags.")
         else
             try
-                if &rtp =~ 'vim-quickui'
+                if utils#planned('vim-quickui')
                     let symbol_found = quickui#tools#preview_tag(tagname, v:false) == 0
                 else
                     let symbol_found = preview#preview_tag(tagname) == 0
