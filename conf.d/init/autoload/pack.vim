@@ -2,7 +2,7 @@
 " Package Management Functions
 " ----------------------------------------
 function! pack#get(pack) abort
-    return count(g:requires, a:pack) > 0
+    return count(g:packs, a:pack) > 0
 endfunction
 
 function! pack#add(...) abort
@@ -11,7 +11,7 @@ function! pack#add(...) abort
     endif
     for require in a:000
         if !pack#get(require)
-            call add(g:requires, require)
+            call add(g:packs, require)
         endif
     endfor
 endfunction

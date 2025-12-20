@@ -42,6 +42,8 @@ __pycache__/
 *.zip
 *.tar
 *.rar
+*.temp
+*.tmp
 .netrwhist
 core
 core.[0-9]*

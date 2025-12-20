@@ -1,4 +1,6 @@
-let g:requires = copy(get(g:, 'preset', []))
+if !exists('g:packs') || type(g:packs) != type([])
+    let g:packs = []
+endif
 
 let g:leovim_whichkey = 1
 let g:leovim_openmap = 1
