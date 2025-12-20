@@ -32,9 +32,17 @@ let $CLONE_OPT_DIR = expand($RTP_DIR . '/clone/opt')
 " --------------------------
 set rtp^=$RTP_DIR
 set rtp^=$INIT_DIR
-if exists(':packadd')
-    set packpath^=$CONF_D_DIR
-endif
+let s:opt_plugs = {}
+for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
+    for plug_dir in globpath(opt_dir, '*', 0, 1)
+        if !isdirectory(plug_dir)
+            continue
+        endif
+        let abs_dir = substitute(fnamemodify(plug_dir, ':p'), '[\\/]$', '', '')
+        let plugin = fnamemodify(abs_dir, ':t')
+        let s:opt_plugs[plugin] = abs_dir
+    endfor
+endfor
 " --------------------------
 " gui_running && OS
 " --------------------------
@@ -439,61 +447,31 @@ let g:plug_threads = get(g:, 'plug_threads', 8)
 set rtp^=$MAIN_DIR
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
 function! s:plug_add(plugin, ...) abort
-    let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
+    let plugin = tolower(substitute(a:plugin, '[\/]\+$', '', 'g'))
     let opts = a:0 > 0 ? copy(a:1) : {}
-
-    " immediate load when now>0: skip vim-plug
-    if has_key(opts, 'now')
-        if get(opts, 'now', 0) && plugin !~ '/'
-            let local_dir = ''
-            for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
-                let try_dir = utils#expand(opt_dir . '/' . plugin)
-                if isdirectory(try_dir)
-                    let local_dir = try_dir
-                    break
-                endif
-            endfor
-            if local_dir != ''
-                execute 'set rtp^=' . fnameescape(local_dir)
-                return
-            endif
-        endif
-        call remove(opts, 'now')
-    endif
-
     " derive key name for duplicate check
     if has_key(opts, 'as') && !empty(opts['as'])
         let key_name = tolower(opts['as'])
     elseif plugin =~ '/'
         let parts = split(plugin, '/')
-        let key_name = tolower(parts[len(parts)-1])
+        let key_name = parts[-1]
     else
-        let key_name = tolower(plugin)
+        let key_name = plugin
     endif
 
     if has_key(g:plugs, key_name)
         return
     endif
 
-    " remote repo path (owner/repo) passes through
     if plugin =~ '/'
         call plug#(plugin, opts)
-        return
-    endif
-
-    " local opt plugin lookup
-    let local_dir = ''
-    for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
-        let try_dir = utils#expand(opt_dir . '/' . plugin)
-        if isdirectory(try_dir)
-            let local_dir = try_dir
-            break
+    elseif has_key(s:opt_plugs, plugin)
+        let local_dir = s:opt_plugs[plugin]
+        if get(opts, 'now', 0)
+            execute 'set rtp^=' . fnameescape(local_dir)
+        else
+            call plug#(local_dir, opts)
         endif
-    endfor
-
-    if local_dir != ''
-        let opts['dir'] = local_dir
-        call plug#(local_dir, opts)
     endif
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)

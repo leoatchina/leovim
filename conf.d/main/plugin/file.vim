@@ -255,8 +255,7 @@ if get(g:, 'leovim_openmap', 1)
     if filereadable(utils#expand("~/.leovim.d/after.vim"))
         source ~/.leovim.d/after.vim
     endif
-    nnoremap <silent><M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
-    nnoremap <silent><M-h>P :call <SID>open_or_create_file("~/.leovim.d/plug.vim")<Cr>
+    nnoremap <silent><M-h>a :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>
 endif
 " -----------------------------
 " delete tmp files
