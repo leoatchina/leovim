@@ -17,6 +17,9 @@ nnoremap <C-w><C-r> <C-w>r
 nnoremap <C-w><Cr> <C-w>T
 " open window in tab
 nnoremap <leader><Tab> :tabe<Space>
+if pack#planned_fzf()
+    nnoremap <silent>gt :FzfTabs<Cr>
+endif
 " ------------------------------------
 " basic tab label function
 " ------------------------------------

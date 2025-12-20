@@ -219,6 +219,100 @@ endif
 " format install
 " -----------------------
 PlugAdd 'sbdchd/neoformat'
+" --------------------------------
+" run
+" --------------------------------
+if has('nvim') || has('timers') && has('channel') && has('job')
+    PlugAdd 'asyncrun.vim'
+    if !has("nvim")
+        let g:lightline#asyncrun#indicator_none = ''
+        PlugAdd 'lightline-asyncrun'
+    endif
+endif
+if has('nvim') || v:version >= 801
+    PlugAdd 'asynctasks.vim'
+endif
+" ------------------------------
+" Git
+" ------------------------------
+if executable('git') && v:version >= 800 && g:git_version >= 1.85
+    PlugAdd 'tpope/vim-fugitive'
+    PlugAdd 'junegunn/gv.vim'
+    " blamer.nvim installed when without virtual text or without leaderf
+    if g:has_popup_floating
+        PlugAdd 'skywind3000/vim-git-diffview'
+        if utils#is_unix() && (!pack#planned('leaderf') || pack#planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
+            PlugAdd 'APZelos/blamer.nvim'
+        endif
+    endif
+endif
+if has('nvim') || has('patch-8.0.902')
+    PlugAdd 'vim-signify'
+endif
+" ------------------------------
+" fuzzy finders
+" ------------------------------
+if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
+    PlugAdd 'junegunn/fzf.vim'
+    if utils#is_win()
+        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\AppData\\Local\\fzf')}
+    else
+        if pack#get('fzfbin')
+            PlugAdd 'junegunn/fzf', {'do': './install --bin', 'dir': utils#expand('~/.local/fzf')}
+        else
+            PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf')}
+        endif
+    endif
+    PlugAdd 'fzf-registers'
+    PlugAdd 'fzf-tabs'
+    if has('nvim')
+        PlugAdd 'stevearc/oil.nvim'
+        PlugAdd 'benomahony/oil-git.nvim'
+    endif
+endif
+if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !pack#get('noleaderf') && !pack#get('no-leaderf')
+    PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
+endif
+if !pack#planned_leaderf() && !pack#planned_fzf()
+    source $CFG_DIR/ctrlp.vim
+    PlugAdd 'ctrlp.vim'
+endif
+" --------------------------
+" terminal && tmux
+" --------------------------
+if g:has_terminal
+    PlugAdd 'vim-floaterm'
+    PlugAdd 'vim-floaterm-enhance'
+endif
+if utils#is_unix() && utils#has_gui() == 0 && executable('tmux') && v:version >= 800
+    PlugAdd 'vim-tmux-navigator'
+    PlugAdd 'vim-tmux-clipboard'
+endif
+" --------------------------
+" sidebar
+" --------------------------
+PlugAdd 'vim-sidebar-manager'
+if v:version >= 801 || has('nvim')
+    let g:fern_disable_startup_warnings = 1
+    let g:fern#renderer = "nerdfont"
+    PlugAdd 'vim-fern'
+    PlugAdd 'vim-nerdfont'
+    PlugAdd 'vim-glyph-palette'
+    PlugAdd 'vim-fern-git-status'
+    PlugAdd 'vim-fern-hijack'
+    PlugAdd 'vim-fern-renderer-nerdfont'
+    augroup my-glyph-palette
+        autocmd!
+        autocmd FileType fern,startify call glyph_palette#apply()
+    augroup END
+else
+    PlugAdd 'vim-vinegar'
+endif
+" --------------------------------
+" lightline
+" --------------------------------
+PlugAdd 'lightline.vim'
+PlugAdd 'lightline-bufferline'
 " ----------------------------
 " scheme
 " ----------------------------
@@ -239,30 +333,13 @@ if g:has_truecolor
 endif
 PlugAdd 'lightline.vim'
 PlugAdd 'lightline-bufferline'
-" ------------------------------
-" backbone plugins.
-" ------------------------------
-if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
-    PlugAdd 'junegunn/fzf.vim'
-    if utils#is_win()
-        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\AppData\\Local\\fzf')}
-    else
-        if pack#get('fzfbin')
-            PlugAdd 'junegunn/fzf', {'do': './install --bin', 'dir': utils#expand('~/.local/fzf')}
-        else
-            PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf')}
-        endif
-    endif
-endif
-if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !pack#get('noleaderf') && !pack#get('no-leaderf')
-    PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
-endif
+" --------------------------
+" ui && frame
+" --------------------------
 if has('nvim')
     PlugAdd 'nvim-tree/nvim-web-devicons'
     PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'kevinhwang91/nvim-bqf'
-    PlugAdd 'stevearc/oil.nvim'
-    PlugAdd 'benomahony/oil-git.nvim'
     if pack#planned_lsp() || has('nvim-0.10') && pack#planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()
@@ -284,4 +361,30 @@ if has('nvim-0.10')
     PlugAdd 'stevearc/quicker.nvim'
 else
     PlugAdd 'romainl/vim-qf'
+endif
+" -------------------
+" vim-preview
+" -------------------
+let g:preview#preview_position = "rightbottom"
+let g:preview#preview_size = get(g:, 'asyncrun_open', 8)
+nnoremap <silent><C-w><Space> <C-w>z:call preview#cmdmsg('close preview', 0)<Cr>
+PlugAdd 'vim-preview'
+" -------------------
+" vim-quickui
+" -------------------
+if v:version >= 802 || has('nvim')
+    let g:quickui_preview_h = 24
+    PlugAdd 'vim-quickui'
+endif
+" -------------------
+" startify
+" -------------------
+PlugAdd 'vim-startify'
+" -------------------
+" which-key
+" -------------------
+if get(g:, 'leovim_whichkey', 1)
+    let g:which_key_group_dicts = ''
+    let g:which_key_use_floating_win = g:has_popup_floating
+    PlugAdd 'vim-which-key'
 endif

@@ -210,3 +210,16 @@ endif
 " dirdiff
 " ----------------------------
 PlugAdd 'ZFVimDirDiff'
+" ------------------------------
+" zfvim
+" ------------------------------
+if (pack#get('wubi') || pack#get('pinyin')) && g:has_terminal && utils#is_unix()
+    PlugAdd 'ZSaberLv0/ZFVimIM'
+    if pack#get('wubi')
+        PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'
+        let g:input_method = 'zfvim_wubi'
+    else
+        let g:input_method = 'zfvim_pinyin'
+    endif
+    PlugAdd 'ZSaberLv0/ZFVimIM_pinyin'
+endif

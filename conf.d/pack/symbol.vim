@@ -48,6 +48,13 @@ if get(g:, 'ctags_type', '') != ''
         endif
     endif
 endif
+PlugAdd 'vim-funky'
+if g:has_popup_floating
+    let g:matchup_matchparen_offscreen = {'methed': 'popup'}
+else
+    let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
+endif
+PlugAdd 'vim-matchup'
 " ------------------------------
 " install
 " ------------------------------
