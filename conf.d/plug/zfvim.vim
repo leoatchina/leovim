@@ -211,7 +211,7 @@ endif
 " ----------------------------
 PlugAdd 'ZFVimDirDiff'
 " ------------------------------
-" zfvim
+" ZFVimIM
 " ------------------------------
 if (pack#get('wubi') || pack#get('pinyin')) && g:has_terminal && utils#is_unix()
     PlugAdd 'ZSaberLv0/ZFVimIM'
