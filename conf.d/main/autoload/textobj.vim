@@ -58,4 +58,3 @@ function! textobj#block_i() abort
     let tail_pos = getpos('.')
     return ['V', head_pos, tail_pos]
 endfunction
-

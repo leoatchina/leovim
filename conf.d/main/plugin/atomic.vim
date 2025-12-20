@@ -38,7 +38,7 @@ endif
 " -------------------
 " leo'defined textobj
 " -------------------
-if utils#installed("vim-textobj-user")
+if pack#installed("vim-textobj-user")
     nnoremap SS :call textobj#viw()<Cr>
     call textobj#user#plugin('line', {
                 \   '-': {
