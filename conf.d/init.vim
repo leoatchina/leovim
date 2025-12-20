@@ -27,12 +27,8 @@ let $CLONE_OPT_DIR = expand($PACK_DIR . '/clone/opt')
 " --------------------------
 " set rtp && pack path
 " --------------------------
+set rtp^=$RTP_DIR
 set rtp^=$INIT_DIR
-if utils#is_win()
-    set rtp^=$LEOVIM_DIR\pack
-else
-    set rtp^=$LEOVIM_DIR/pack
-endif
 if exists(':packadd')
     set packpath^=$CONF_D_DIR
 endif
