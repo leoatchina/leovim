@@ -195,32 +195,6 @@ onoremap g_ $
 " ------------------------
 inoremap <silent><C-j> <C-\><C-n>:call utils#move_to_end_and_add_semicolon()<CR>
 nnoremap <silent>d<space> :call utils#trip_whitespace()<Cr>
-" ------------------------------
-" load pack in OPT_DIR
-" ------------------------------
-function! s:plug_add_opt(pack)
-    let pack = a:pack
-    if exists(':packadd')
-        execute "packadd " . pack
-    else
-        for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
-            let added = 0
-            let dir = expand(opt_dir . "/" . pack)
-            let after = expand(opt_dir . "/" . pack . "/after")
-            if isdirectory(dir)
-                execute "set rtp^=" . dir
-                let added = 1
-            endif
-            if isdirectory(after)
-                execute "set rtp+=" . after
-            endif
-            if added
-                break
-            endif
-        endfor
-    endif
-endfunction
-command! -nargs=+ PlugOpt call <sid>plug_add_opt(<args>)
 " ------------------------------------
 " clipboard
 " ------------------------------------
@@ -452,19 +426,85 @@ function! s:open_link_in_editor(text, col)
 endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
 nnoremap <silent>gx :OpenLink<cr>
-" ------------------------
+" -----------------------------------------------------------
+" pack_tool
+" -----------------------------------------------------------
+let g:plug_threads = get(g:, 'plug_threads', 8)
+set rtp^=$MAIN_DIR
 " set optional
-" ------------------------
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
-" --------------------------------------------
+call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
+" -------------------------------------------------------------
+" unified PlugAdd (local/remote) + PlugAdd shim
+" -------------------------------------------------------------
+function! s:plug_add(plugin, ...) abort
+    let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
+    let opts = a:0 > 0 ? copy(a:1) : {}
+
+    if !exists('g:plugs')
+        let g:plugs = {}
+    endif
+
+    " derive key name for duplicate check
+    if has_key(opts, 'as') && !empty(opts['as'])
+        let key_name = tolower(opts['as'])
+    elseif plugin =~ '/'
+        let parts = split(plugin, '/')
+        let key_name = tolower(parts[len(parts)-1])
+    else
+        let key_name = tolower(plugin)
+    endif
+
+    if has_key(g:plugs, key_name)
+        return
+    endif
+
+    " remote repo path (owner/repo) passes through
+    if plugin =~ '/'
+        call plug#(plugin, opts)
+        return
+    endif
+
+    " local opt plugin lookup
+    let local_dir = ''
+    for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
+        let try_dir = utils#expand(opt_dir . '/' . plugin)
+        if isdirectory(try_dir)
+            let local_dir = try_dir
+            break
+        endif
+    endfor
+
+    if local_dir != ''
+        let opts['dir'] = local_dir
+        call plug#(local_dir, opts)
+    else
+        call plug#(plugin, opts)
+    endif
+endfunction
+command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
+function! s:plug_update() abort
+    let vimrc_opt = utils#expand('~/.vimrc.opt')
+    if filereadable(vimrc_opt)
+        execute "source " . vimrc_opt
+    endif
+    PlugUpdate
+endfunction
+command! PlugAddUpdate call s:plug_update()
+noremap <silent><Tab>u :PlugAddUpdate<Cr>
+noremap <silent><Tab>i :PlugInstall<Cr>
+noremap <silent><Tab>C :PlugClean<Cr>
+noremap <silent><Tab>S :PlugStatus<Cr>
+noremap <silent><Tab>O :PlugSnapshot<Cr>
+noremap <silent><Tab>P :Plug
 " vscode or (neo)vim 's differnt config
-" --------------------------------------------
 if utils#is_vscode()
-    source $PACK_DIR/common.vim
     source $INIT_DIR/vscode.vim
 else
     source $MAIN_DIR/main.vim
 endif
+call plug#end()
+" set loaded
 let g:leovim_loaded = 1

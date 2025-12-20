@@ -1,4 +1,6 @@
+" ------------------------------
 " Skip in VSCode environment
+" ------------------------------
 if utils#is_vscode()
     finish
 endif
@@ -9,7 +11,7 @@ let g:preview#preview_position = "rightbottom"
 let g:preview#preview_size = get(g:, 'asyncrun_open', 8)
 let g:quickui_preview_h = 24
 nnoremap <silent><C-w><Space> <C-w>z:call preview#cmdmsg('close preview', 0)<Cr>
-PlugOpt 'vim-preview'
+PlugAdd 'vim-preview'
 " --------------------------
 " vim-quickui
 " --------------------------
@@ -28,7 +30,7 @@ if v:version >= 802 || has('nvim')
             let g:quickui_color_scheme = 'papercol light'
         endif
     endif
-    PlugOpt 'vim-quickui'
+    PlugAdd 'vim-quickui'
     nnoremap <silent><M-k>m :call quickui#tools#display_messages()<Cr>
     function! s:preview_popup_file(filename) abort
         let filename = a:filename
@@ -152,7 +154,7 @@ if pack#planned_leaderf()
 endif
 if !pack#planned_leaderf() && !pack#planned_fzf()
     source $CFG_DIR/ctrlp.vim
-    PlugOpt 'ctrlp.vim'
+    PlugAdd 'ctrlp.vim'
 endif
 " --------------------------------
 " common maps

@@ -5,7 +5,7 @@ endif
 " --------------------
 " ZFIgnore
 " --------------------
-PlugOpt 'ZFVimJob'
+PlugAdd 'ZFVimJob'
 function! s:ZFIgnore_LeaderF()
     let ignore = ZFIgnoreGet()
     let g:Lf_WildIgnore = {'file' : ignore['file'], 'dir' : ignore['dir']}
@@ -24,7 +24,7 @@ let g:ZFIgnore_ignore_gitignore_detectOption = {
             \ 'parent' : 1,
             \ 'parentRecursive' : 0,
             \ }
-PlugOpt 'ZFVimIgnore'
+PlugAdd 'ZFVimIgnore'
 autocmd User ZFIgnoreOnToggle let &wildignore = join(ZFIgnoreToWildignore(ZFIgnoreGet()), ',')
 " --------------------
 " ZFVimBackup
@@ -54,7 +54,7 @@ function! s:zfbackup_savedir() abort
     endif
 endfunction
 nnoremap <silent><M-j><M-b> :call <SID>zfbackup_savedir()<Cr>
-PlugOpt 'ZFVimBackup'
+PlugAdd 'ZFVimBackup'
 " --------------------
 " ZFVimIM
 " --------------------

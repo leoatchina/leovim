@@ -1,9 +1,9 @@
-PlugOpt 'vim-eunuch'
+PlugAdd 'vim-eunuch'
 " ------------------------------
 " conflict marker
 " ------------------------------
 let g:conflict_marker_enable_mappings = 0
-PlugOpt 'conflict-marker.vim'
+PlugAdd 'conflict-marker.vim'
 nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
 nnoremap <leader>co :ConflictMarkerOurselves<Cr>
 nnoremap <leader>cx :ConflictMarkerNone<Cr>
@@ -27,9 +27,34 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
-PlugOpt 'nerdcommenter'
+PlugAdd 'nerdcommenter'
 nnoremap <silent><leader>c] V}:call nerdcommenter#Comment('x', 'toggle')<CR>
 nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
+" ----------------------------------
+" hl searchindex && multi replace
+" ----------------------------------
+if has('nvim')
+    PlugAdd 'nvim-hlslens'
+else
+    PlugAdd 'vim-searchindex'
+endif
+xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
+" ------------------------
+" quick jump in buffer
+" ------------------------
+let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
+if has('nvim')
+    PlugAdd 'flash.nvim'
+else
+    let g:clever_f_smart_case = 1
+    let g:clever_f_repeat_last_char_inputs = ['<Tab>']
+    PlugAdd 'clever-f.vim'
+endif
+if utils#is_vscode()
+    PlugAdd 'hop.nvim'
+else
+    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
+endif
 " --------------------------
 " textobj
 " --------------------------
@@ -45,14 +70,11 @@ for s:v in ['', 'v', 'V', '<C-V>']
     execute 'omap <expr>' s:v.'A%' "(v:count?'':'1').'".s:v."a%'"
 endfor
 if exists('*search') && exists('*getpos')
-    " -------------------
-    " textobj
-    " -------------------
-    PlugOpt 'vim-textobj-user'
-    PlugOpt 'vim-textobj-uri'
-    PlugOpt 'vim-textobj-line'
-    PlugOpt 'vim-textobj-syntax'
-    PlugOpt 'vim-textobj-function'
+    PlugAdd 'vim-textobj-user'
+    PlugAdd 'vim-textobj-uri'
+    PlugAdd 'vim-textobj-line'
+    PlugAdd 'vim-textobj-syntax'
+    PlugAdd 'vim-textobj-function'
     nmap <leader>vf vafo
     nmap <leader>vF vifo
     nmap <leader>vc vaco
@@ -80,11 +102,11 @@ if exists('*search') && exists('*getpos')
     let g:vindent_object_XX_ai     = 'ai' " select current block + one extra line  at beginning.
     let g:vindent_object_XX_aI     = 'aI' " select current block + two extra lines at beginning and end.
     let g:vindent_jumps            = 1    " make vindent motion count as a |jump-motion| (works with |jumplist|).
-    PlugOpt 'vindent.vim'
+    PlugAdd 'vindent.vim'
     " -------------------
     " targets.vim
     " -------------------
-    PlugOpt 'targets.vim'
+    PlugAdd 'targets.vim'
     nmap <leader>vt vit
     nmap <leader>vT vat
     nmap <leader>va via
@@ -104,7 +126,7 @@ if exists('*search') && exists('*getpos')
     " -------------------
     " sandwich
     " -------------------
-    PlugOpt 'vim-sandwich'
+    PlugAdd 'vim-sandwich'
     xmap is <Plug>(textobj-sandwich-auto-i)
     xmap as <Plug>(textobj-sandwich-auto-a)
     omap is <Plug>(textobj-sandwich-auto-i)
@@ -117,91 +139,4 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vS vas
     nmap <leader>vq viq
     nmap <leader>vQ vaq
-    " -------------------
-    " leo'defined textobj
-    " -------------------
-    nnoremap SS :call textobj#viw()<Cr>
-    call textobj#user#plugin('line', {
-                \   '-': {
-                \     'select-a-function': 'textobj#current_lina_a',
-                \     'select-a': 'ak',
-                \     'select-i-function': 'textobj#current_line_i',
-                \     'select-i': 'ik',
-                \   },
-                \ })
-    vnoremap ik ^o$h
-    onoremap ik :normal vik<Cr>
-    vnoremap ak ^o$
-    onoremap ak :normal vak<Cr>
-    nmap <leader>vk vik
-    nmap <leader>vK vak
-    " find block
-    let s:block_str = '^# In\[\d*\]\|^# %%\|^# STEP\d\+'
-    " Block TextObj functions moved to utils.vim
-    call textobj#user#plugin('block', {
-                \ 'block': {
-                \  'select-a-function': 'textobj#block_a',
-                \  'select-a': 'av',
-                \  'select-i-function': 'textobj#block_i',
-                \  'select-i': 'iv',
-                \  'region-type': 'V'
-                \ },
-                \ })
-    nmap <leader>vv viv
-    nmap <leader>vV vav
 endif
-" ----------------------------------
-" hl searchindex && multi replace
-" ----------------------------------
-if has('nvim')
-    PlugOpt 'nvim-hlslens'
-    lua require('hlslens').setup()
-    nnoremap <silent><nowait>n <Cmd>execute('normal! ' . v:count1 . 'n')<Cr><Cmd>lua require('hlslens').start()<Cr>
-    nnoremap <silent><nowait>N <Cmd>execute('normal! ' . v:count1 . 'N')<Cr><Cmd>lua require('hlslens').start()<Cr>
-    nnoremap <silent><nowait>* *``<Cmd>lua require('hlslens').start()<Cr>
-    nnoremap <silent><nowait># #``<Cmd>lua require('hlslens').start()<Cr>
-    nnoremap <silent><nowait>g* g*``<Cmd>lua require('hlslens').start()<Cr>
-    nnoremap <silent><nowait>g# g#``<Cmd>lua require('hlslens').start()<Cr>
-    nnoremap <silent><nowait><C-n> *``<Cmd>lua require('hlslens').start()<Cr>cgn
-else
-    PlugOpt 'vim-searchindex'
-    nnoremap <silent><nowait>* *``
-    nnoremap <silent><nowait># #``
-    nnoremap <silent><nowait>g* g*``
-    nnoremap <silent><nowait>g# g#``
-    nnoremap <silent><nowait><C-n> *``cgn
-endif
-xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
-" ------------------------
-" quick jump in buffer
-" ------------------------
-let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
-if has('nvim')
-    PlugOpt 'flash.nvim'
-    lua require("cfg/flash")
-    nmap SJ vt<Space><Cr>S
-    nmap SK vT<Space><Cr>S
-else
-    let g:clever_f_smart_case = 1
-    let g:clever_f_repeat_last_char_inputs = ['<Tab>']
-    PlugOpt 'clever-f.vim'
-    nmap ;s <Plug>(clever-f-repeat-forward)
-    xmap ;s <Plug>(clever-f-repeat-forward)
-    nmap ,s <Plug>(clever-f-repeat-back)
-    xmap ,s <Plug>(clever-f-repeat-back)
-    nmap SJ vt<Space>S
-    nmap SK vT<Space>S
-endif
-if utils#is_vscode()
-    imap <C-a> <ESC>ggVG
-    xmap <C-a> <ESC>ggVG
-    nmap <C-a> ggVG
-    imap <C-x> <C-o>"*
-    xmap <C-x> "*x
-    nmap <C-x> "*x
-    PlugOpt 'hop.nvim'
-    lua require("cfg/hop")
-else
-    imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
-endif
-

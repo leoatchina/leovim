@@ -25,7 +25,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
     else
         let g:asyncrun_encs = get(g:, 'asyncrun_encs', 'utf-8')
     endif
-    PlugOpt 'asyncrun.vim'
+    PlugAdd 'asyncrun.vim'
     if utils#is_unix()
         silent! call mkdir(utils#expand("$HOME/.cache/build"), "p")
         if executable('gcc')
@@ -257,7 +257,7 @@ if has('nvim') || v:version >= 801
                 \ '~/.leovim.d/tasks/tasks.ini',
                 \ ]
     " packadd
-    PlugOpt 'asynctasks.vim'
+    PlugAdd 'asynctasks.vim'
     " open template
     function! s:tasks_open(...)
         if a:0

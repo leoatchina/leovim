@@ -10,7 +10,7 @@ if get(g:, 'header_field_author', '') != ''
     let g:header_auto_add_header = 0
     let g:header_auto_update_header = 0
     let g:header_field_timestamp_format = '%Y.%m.%d'
-    PlugOpt 'vim-header'
+    PlugAdd 'vim-header'
 endif
 "----------------------------------------------------------------------
 " Sudo

@@ -1,5 +1,5 @@
-PlugOpt 'vim-easymotion'
-PlugOpt 'vim-easymotion-chs'
+PlugAdd 'vim-easymotion'
+PlugAdd 'vim-easymotion-chs'
 nmap <M-f> <Plug>(easymotion-w)
 xmap <M-f> <Plug>(easymotion-w)
 omap <M-f> <Plug>(easymotion-w)

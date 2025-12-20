@@ -20,7 +20,7 @@ else
     let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
 endif
 nnoremap <silent>M :MatchupWhereAmI??<Cr>
-PlugOpt 'vim-matchup'
+PlugAdd 'vim-matchup'
 " --------------------------
 " fuzzy_finder intergrated
 " --------------------------
@@ -45,7 +45,7 @@ elseif g:symbol_tool =~ 'ctrlptags'
     nnoremap <silent><leader>T :CtrlPTags<Cr>
 endif
 " f<Cr> to useing native functions show
-PlugOpt 'vim-funky'
+PlugAdd 'vim-funky'
 command! QfFunky call funky#qf#show()
 if pack#installed('fzf', 'fzf.vim')
     command! FzfFunky call funky#fzf#show()

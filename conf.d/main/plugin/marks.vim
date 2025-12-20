@@ -26,6 +26,6 @@ endif
 if pack#planned_fzf()
     nnoremap <silent><leader>M :FzfMarks<CR>
 endif
-PlugOpt 'vim-bookmarks'
+PlugAdd 'vim-bookmarks'
 nnoremap ms :BookmarkSave<Space>
 nnoremap ml :BookmarkLoad<Space>

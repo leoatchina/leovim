@@ -1,3 +1,4 @@
+
 " Skip in VSCode environment
 if utils#is_vscode()
     finish

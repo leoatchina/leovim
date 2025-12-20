@@ -5,7 +5,7 @@ endif
 " --------------------------
 " startify
 " --------------------------
-PlugOpt 'vim-startify'
+PlugAdd 'vim-startify'
 autocmd User Startified setlocal buflisted
 let g:startify_session_before_save = ['call sidebar#close_all()']
 let g:startify_custom_header = [

@@ -46,4 +46,4 @@ else
 endif
 let g:mucomplete#chains.markdown = ['path', 'cmd', 'keyn']
 " installed this complete
-PlugOpt 'vim-mucomplete'
+PlugAdd 'vim-mucomplete'

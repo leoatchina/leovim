@@ -21,7 +21,6 @@ endfor
 if !has('nvim-0.11')
     let &termencoding=&enc
 endif
-set rtp^=$MAIN_DIR
 " ------------------------------------
 " map enhance
 " ------------------------------------
@@ -291,54 +290,16 @@ else
     let g:ctags_type = ''
     let g:gtags_version = 0
 endif
-" -----------------------------------------------------------
-" pack_tool
-" -----------------------------------------------------------
-let g:plug_threads = get(g:, 'plug_threads', 8)
-function! s:plug_add(plugin, ...)
-    " delete last / or \
-    let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
-    let pack = split(plugin, '\/')[1]
-    if has_key(g:plugs, tolower(pack))
-        return
-    endif
-    if a:0 == 0
-        call plug#(plugin)
-    else
-        call plug#(plugin, a:1)
-    endif
-    if a:0 > 0 && has_key(a:1, 'as') && a:1['as'] != ''
-        let pack = tolower(a:1['as'])
-    else
-        let pack = tolower(pack)
-    endif
-endfunction
-command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
-" ===============================================================================================================
-" install begin
-" ===============================================================================================================
-call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-if filereadable(utils#expand("$LEOVIMD_DIR/plug.vim"))
-    source ~/.leovim.d/plug.vim
-endif
+" ------------------------------
+" easymotion
+" ------------------------------
+source $CFG_DIR/easymotion.vim
+" ------------------------------
+" install packs
+" ------------------------------
 for vim in split(glob("$PACK_DIR/*.vim"), "\n")
     exec "source " . vim
 endfor
-function! s:plug_update() abort
-    let vimrc_opt = utils#expand('~/.vimrc.opt')
-    if filereadable(vimrc_opt)
-        execute "source " . vimrc_opt
-    endif
-    PlugUpdate
-endfunction
-command! PlugOptUpdate call s:plug_update()
-noremap <silent><Tab>u :PlugOptUpdate<Cr>
-noremap <silent><Tab>i :PlugInstall<Cr>
-noremap <silent><Tab>C :PlugClean<Cr>
-noremap <silent><Tab>S :PlugStatus<Cr>
-noremap <silent><Tab>O :PlugSnapshot<Cr>
-noremap <silent><Tab>P :Plug
-call plug#end()
 " ------------------------------
 " <M-Key> map
 " ------------------------------
@@ -354,10 +315,6 @@ for k in s:metacode_group
     endfor
 endfor
 nnoremap <M-z> :set nowrap! nowrap?<Cr>
-" ------------------------------
-" easymotion
-" ------------------------------
-source $CFG_DIR/easymotion.vim
 " ------------------------------
 " set mason PATH
 " ------------------------------

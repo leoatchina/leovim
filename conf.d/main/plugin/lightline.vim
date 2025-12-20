@@ -28,8 +28,8 @@ nmap ]b <Plug>lightline#bufferline#move_next()
 nmap [b <Plug>lightline#bufferline#move_previous()
 nmap [B <Plug>lightline#bufferline#move_first()
 nmap ]B <Plug>lightline#bufferline#move_last()
-PlugOpt 'lightline.vim'
-PlugOpt 'lightline-bufferline'
+PlugAdd 'lightline.vim'
+PlugAdd 'lightline-bufferline'
 " ------------------------
 " lightline init
 " ------------------------
@@ -107,7 +107,7 @@ elseif pack#installed_coc()
     let g:lightline.active.right += [['coc_diag']]
 endif
 if !has("nvim")
-    PlugOpt 'lightline-asyncrun'
+    PlugAdd 'lightline-asyncrun'
     let g:lightline#asyncrun#indicator_none = ''
     let g:lightline.component_expand.asyncrun_status = 'lightline#asyncrun#status'
     let g:lightline.active.right += [['asyncrun_status']]
