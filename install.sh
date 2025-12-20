@@ -81,7 +81,7 @@ create_symlinks() {
 
 setup_plug() {
     info "Starting update/install plugins for $1"
-    "$1" +PlugOptUpdate +qall
+    "$1" +PlugAddUpdate +qall
     success "Successfully updated/installed plugins for $1"
 }
 
