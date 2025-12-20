@@ -362,6 +362,10 @@ if has('nvim-0.10')
 else
     PlugAdd 'romainl/vim-qf'
 endif
+" ------------------------------
+" easymotion
+" ------------------------------
+source $CFG_DIR/easymotion.vim
 " -------------------
 " vim-preview
 " -------------------

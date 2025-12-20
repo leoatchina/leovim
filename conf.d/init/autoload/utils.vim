@@ -286,3 +286,17 @@ endfunction
 function! utils#autoclose_lastwin() abort
     return s:autoclose(1)
 endfunction
+" ----------------------------------------
+" format
+" ----------------------------------------
+function! utils#format(visual)
+    let col = col('.')
+    let line = line('.')
+    if a:visual
+        silent! normal gv=
+    else
+        silent! normal ggVG=
+    endif
+    call cursor(line, col)
+    echo "Using vim's builtin formatprg."
+endfunction

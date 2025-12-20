@@ -291,10 +291,6 @@ else
     let g:gtags_version = 0
 endif
 " ------------------------------
-" easymotion
-" ------------------------------
-source $CFG_DIR/easymotion.vim
-" ------------------------------
 " install packs
 " ------------------------------
 for vim in split(glob("$PACK_DIR/*.vim"), "\n")

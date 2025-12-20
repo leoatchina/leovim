@@ -67,10 +67,6 @@ endif
 " ------------------------
 let g:mapleader = ' '
 let g:maplocalleader = 'q'
-" ------------------------
-" set pack related variables
-" ------------------------
-let g:packs = []
 " -----------------------------------
 " filetypes definition
 " -----------------------------------
@@ -427,18 +423,20 @@ endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
 nnoremap <silent>gx :OpenLink<cr>
 " -----------------------------------------------------------
-" pack_tool
+" g:packs
 " -----------------------------------------------------------
-let g:plug_threads = get(g:, 'plug_threads', 8)
-set rtp^=$MAIN_DIR
-" set optional
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
-call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
+if !exists('g:packs') || type(g:packs) != type([])
+    let g:packs = []
+endif
 " -------------------------------------------------------------
 " unified PlugAdd (local/remote) + PlugAdd shim
 " -------------------------------------------------------------
+let g:plug_threads = get(g:, 'plug_threads', 8)
+set rtp^=$MAIN_DIR
+call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
 function! s:plug_add(plugin, ...) abort
     let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let opts = a:0 > 0 ? copy(a:1) : {}
@@ -504,14 +502,14 @@ function! s:plug_add(plugin, ...) abort
     endif
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
-function! s:plug_update() abort
+function! s:plug_add_update() abort
     let vimrc_opt = utils#expand('~/.vimrc.opt')
     if filereadable(vimrc_opt)
         execute "source " . vimrc_opt
     endif
     PlugUpdate
 endfunction
-command! PlugAddUpdate call s:plug_update()
+command! PlugAddUpdate call s:plug_add_update()
 noremap <silent><Tab>u :PlugAddUpdate<Cr>
 noremap <silent><Tab>i :PlugInstall<Cr>
 noremap <silent><Tab>C :PlugClean<Cr>

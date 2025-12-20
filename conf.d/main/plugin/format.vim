@@ -10,17 +10,6 @@ endtry
 " ----------------------------
 " neoformat
 " ----------------------------
-function! BuiltInFormat(visual)
-    let col = col('.')
-    let line = line('.')
-    if a:visual
-        silent! normal gv=
-    else
-        silent! normal ggVG=
-    endif
-    call cursor(line, col)
-    call preview#cmdmsg("Using vim's builtin formatprg.", 1)
-endfunction
 if pack#planned('neoformat')
     " NOTE:  the two functions below is copied from neoformat.vim
     function! s:autoload_func_exists(func_name) abort
@@ -48,14 +37,14 @@ if pack#planned('neoformat')
             let formatprgs = formatprgs + neoformat#formatters#{filetype}#enabled()
         endif
         if empty(formatprgs)
-            call BuiltInFormat(visual)
+            call utils#format(visual)
         else
             if !visual
                 let formatprgs = ['builtin'] + formatprgs
             endif
             let formatprg = ChooseOne(formatprgs, "Choose a formatprg")
             if formatprg == 'builtin'
-                call BuiltInFormat(visual)
+                call utils#format(visual)
             else
                 if visual
                     let start = line("'<")
