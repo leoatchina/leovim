@@ -1,5 +1,5 @@
 #!/bin/bash
-cmd="$HOME/.leovim.unix/linux/tokei ./ conf.d/pack/leo -e conf.d/main/autoload/plug.vim conf.d/pack rtp fonts script assets .gits *.md *.sh *.cmd LICENSE tokei"
+cmd="$HOME/.leovim.unix/linux/tokei ./ conf.d/pack/leo -e conf.d/main/autoload/plug.vim conf.d/pack rtp fonts scripts assets .gits *.md *.sh *.cmd LICENSE tokei"
 cd ~/.leovim
 if [ $# == 1 ] && [ $1 == 'all' ]; then
     $cmd --files 
