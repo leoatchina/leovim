@@ -291,52 +291,23 @@ else
     let g:ctags_type = ''
     let g:gtags_version = 0
 endif
-" -----------------------------------------------------------
-" pack_tool
-" -----------------------------------------------------------
-let g:plug_threads = get(g:, 'plug_threads', 8)
-function! s:plug_add(plugin, ...)
-    " delete last / or \
-    let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
-    let pack = split(plugin, '\/')[1]
-    if a:0 > 0 && has_key(a:1, 'as') && a:1['as'] != ''
-        let pack = a:1['as']
-    endif
-    if exists('g:plugs') && type(g:plugs) == type({}) && has_key(g:plugs, pack)
-        return
-    endif
-    if a:0 == 0
-        call plug#(plugin)
-    else
-        call plug#(plugin, a:1)
-    endif
-endfunction
-command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
-" ===============================================================================================================
-" install begin
-" ===============================================================================================================
-call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-if filereadable(utils#expand("$LEOVIMD_DIR/plug.vim"))
-    source ~/.leovim.d/plug.vim
-endif
-for vim in split(glob("$PLUG_DIR/*.vim"), "\n")
-    exec "source " . vim
-endfor
-function! s:plug_update() abort
+" ------------------------------
+" plug commands shortcut
+" ------------------------------
+function! s:plug_add_update() abort
     let vimrc_opt = utils#expand('~/.vimrc.opt')
     if filereadable(vimrc_opt)
-        execute "source " . vimrc_opt
+        execute 'source ' . vimrc_opt
     endif
     PlugUpdate
 endfunction
-command! PlugOptUpdate call s:plug_update()
-noremap <silent><Tab>u :PlugOptUpdate<Cr>
+command! PlugAddUpdate call s:plug_add_update()
+noremap <silent><Tab>u :PlugAddUpdate<Cr>
 noremap <silent><Tab>i :PlugInstall<Cr>
 noremap <silent><Tab>C :PlugClean<Cr>
 noremap <silent><Tab>S :PlugStatus<Cr>
 noremap <silent><Tab>O :PlugSnapshot<Cr>
 noremap <silent><Tab>P :Plug
-call plug#end()
 " ------------------------------
 " <M-Key> map
 " ------------------------------

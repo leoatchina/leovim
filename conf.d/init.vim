@@ -27,6 +27,7 @@ let $CLONE_OPT_DIR = expand($LEOVIM_DIR . '/pack/clone/opt')
 " set rtp && pack path
 " --------------------------
 set rtp^=$INIT_DIR
+set rtp^=$MAIN_DIR
 if utils#is_win()
     set rtp^=$LEOVIM_DIR\pack
 else
@@ -199,40 +200,52 @@ onoremap g_ $
 inoremap <silent><C-j> <C-\><C-n>:call utils#move_to_end_and_add_semicolon()<CR>
 nnoremap <silent>d<space> :call utils#trip_whitespace()<Cr>
 " ------------------------------
-" load pack in OPT_DIR
+" plugin manager
 " ------------------------------
-function! s:plug_add_opt(pack)
-    let pack = a:pack
-    if exists(':packadd')
-        execute "packadd " . pack
-    else
-        for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
-            let added = 0
-            let dir = expand(opt_dir . "/" . pack)
-            let after = expand(opt_dir . "/" . pack . "/after")
+call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
+if filereadable(utils#expand("$LEOVIMD_DIR/plug.vim"))
+    source ~/.leovim.d/plug.vim
+endif
+function! s:plug_add(...) abort
+    if a:0 == 0
+        return
+    endif
+    let repo = a:1
+    let opts = (a:0 > 1 && type(a:2) == type({})) ? copy(a:2) : {}
+    if repo !~# '/' && empty(get(opts, 'dir', ''))
+        for root in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
+            let dir = expand(root . '/' . repo)
             if isdirectory(dir)
-                execute "set rtp^=" . dir
-                let added = 1
-            endif
-            if isdirectory(after)
-                execute "set rtp+=" . after
-            endif
-            if added
+                let opts['dir'] = dir
                 break
             endif
         endfor
     endif
+    if empty(opts)
+        execute 'Plug ' . string(repo)
+    else
+        execute 'Plug ' . string(repo) . ', ' . string(opts)
+    endif
 endfunction
-command! -nargs=+ PlugOpt call <sid>plug_add_opt(<args>)
+command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
+if filereadable(utils#expand('$LEOVIMD_DIR/plug.vim'))
+    execute 'source ' . utils#expand('$LEOVIMD_DIR/plug.vim')
+endif
+for vim in split(glob($PLUG_DIR . '/*.vim'), "\n")
+    execute 'source ' . vim
+endfor
+if filereadable(expand($PLUG_DIR . '/common.vim'))
+    execute 'source ' . expand($PLUG_DIR . '/common.vim')
+endif
 " ------------------------------
 " intergrated packs
 " ------------------------------
-PlugOpt 'vim-eunuch'
+PlugAdd 'vim-eunuch'
 " ------------------------------
 " conflict marker
 " ------------------------------
 let g:conflict_marker_enable_mappings = 0
-PlugOpt 'conflict-marker.vim'
+PlugAdd 'conflict-marker.vim'
 nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
 nnoremap <leader>co :ConflictMarkerOurselves<Cr>
 nnoremap <leader>cx :ConflictMarkerNone<Cr>
@@ -256,7 +269,7 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
-PlugOpt 'nerdcommenter'
+PlugAdd 'nerdcommenter'
 nnoremap <silent><leader>c] V}:call nerdcommenter#Comment('x', 'toggle')<CR>
 nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " --------------------------
@@ -277,11 +290,11 @@ if exists('*search') && exists('*getpos')
     " -------------------
     " textobj
     " -------------------
-    PlugOpt 'vim-textobj-user'
-    PlugOpt 'vim-textobj-uri'
-    PlugOpt 'vim-textobj-line'
-    PlugOpt 'vim-textobj-syntax'
-    PlugOpt 'vim-textobj-function'
+    PlugAdd 'vim-textobj-user'
+    PlugAdd 'vim-textobj-uri'
+    PlugAdd 'vim-textobj-line'
+    PlugAdd 'vim-textobj-syntax'
+    PlugAdd 'vim-textobj-function'
     nmap <leader>vf vafo
     nmap <leader>vF vifo
     nmap <leader>vc vaco
@@ -309,11 +322,11 @@ if exists('*search') && exists('*getpos')
     let g:vindent_object_XX_ai     = 'ai' " select current block + one extra line  at beginning.
     let g:vindent_object_XX_aI     = 'aI' " select current block + two extra lines at beginning and end.
     let g:vindent_jumps            = 1    " make vindent motion count as a |jump-motion| (works with |jumplist|).
-    PlugOpt 'vindent.vim'
+    PlugAdd 'vindent.vim'
     " -------------------
     " targets.vim
     " -------------------
-    PlugOpt 'targets.vim'
+    PlugAdd 'targets.vim'
     nmap <leader>vt vit
     nmap <leader>vT vat
     nmap <leader>va via
@@ -333,7 +346,7 @@ if exists('*search') && exists('*getpos')
     " -------------------
     " sandwich
     " -------------------
-    PlugOpt 'vim-sandwich'
+    PlugAdd 'vim-sandwich'
     xmap is <Plug>(textobj-sandwich-auto-i)
     xmap as <Plug>(textobj-sandwich-auto-a)
     omap is <Plug>(textobj-sandwich-auto-i)
@@ -383,7 +396,7 @@ endif
 " hl searchindex && multi replace
 " ----------------------------------
 if has('nvim')
-    PlugOpt 'nvim-hlslens'
+    PlugAdd 'nvim-hlslens'
     lua require('hlslens').setup()
     nnoremap <silent><nowait>n <Cmd>execute('normal! ' . v:count1 . 'n')<Cr><Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait>N <Cmd>execute('normal! ' . v:count1 . 'N')<Cr><Cmd>lua require('hlslens').start()<Cr>
@@ -393,7 +406,7 @@ if has('nvim')
     nnoremap <silent><nowait>g# g#``<Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait><C-n> *``<Cmd>lua require('hlslens').start()<Cr>cgn
 else
-    PlugOpt 'vim-searchindex'
+    PlugAdd 'vim-searchindex'
     nnoremap <silent><nowait>* *``
     nnoremap <silent><nowait># #``
     nnoremap <silent><nowait>g* g*``
@@ -637,14 +650,14 @@ nnoremap <silent>gx :OpenLink<cr>
 " ------------------------
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 if has('nvim')
-    PlugOpt 'flash.nvim'
+    PlugAdd 'flash.nvim'
     lua require("cfg/flash")
     nmap SJ vt<Space><Cr>S
     nmap SK vT<Space><Cr>S
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
-    PlugOpt 'clever-f.vim'
+    PlugAdd 'clever-f.vim'
     nmap ;s <Plug>(clever-f-repeat-forward)
     xmap ;s <Plug>(clever-f-repeat-forward)
     nmap ,s <Plug>(clever-f-repeat-back)
@@ -659,17 +672,12 @@ if utils#is_vscode()
     imap <C-x> <C-o>"*
     xmap <C-x> "*x
     nmap <C-x> "*x
-    PlugOpt 'hop.nvim'
+    PlugAdd 'hop.nvim'
     lua require("cfg/hop")
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
 endif
-" ------------------------
-" set optional
-" ------------------------
-if filereadable(expand("~/.vimrc.opt"))
-    source $HOME/.vimrc.opt
-endif
+call plug#end()
 " --------------------------------------------
 " vscode or (neo)vim 's differnt config
 " --------------------------------------------
