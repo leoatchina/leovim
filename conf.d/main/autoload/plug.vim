@@ -1570,6 +1570,10 @@ function! plug#tick()
             if !empty(prog)
                 call add(cmd, prog)
             endif
+            let branch = plug#git_origin_branch(spec)
+            if !empty(branch)
+                call extend(cmd, ['-b', branch])
+            endif
             call plug#spawn(name, extend(cmd, [spec.uri, plug#trim(spec.dir)]), { 'new': 1 })
         endif
 
