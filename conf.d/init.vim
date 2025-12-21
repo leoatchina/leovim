@@ -446,9 +446,7 @@ let g:plugs = {}
 let g:plug_threads = get(g:, 'plug_threads', 8)
 set rtp^=$MAIN_DIR
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-" -------------------------------------------------------------
 " unified PlugAdd (local/remote) + PlugAdd shim
-" -------------------------------------------------------------
 function! s:plug_add(plugin, ...) abort
     let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let opts = a:0 > 0 ? copy(a:1) : {}
@@ -460,11 +458,9 @@ function! s:plug_add(plugin, ...) abort
     else
         let key_name = plugin
     endif
-
     if has_key(g:plugs, key_name)
         return
     endif
-
     if plugin =~ '/'
         call plug#(plugin, opts)
     elseif has_key(s:opt_plugs, plugin)
@@ -483,6 +479,7 @@ function! s:plug_add(plugin, ...) abort
     endif
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
+" map
 function! s:plug_add_update() abort
     let vimrc_opt = utils#expand('~/.vimrc.opt')
     if filereadable(vimrc_opt)
@@ -491,12 +488,12 @@ function! s:plug_add_update() abort
     PlugUpdate
 endfunction
 command! PlugAddUpdate call s:plug_add_update()
-noremap <silent><Tab>u :PlugAddUpdate<Cr>
-noremap <silent><Tab>i :PlugInstall<Cr>
-noremap <silent><Tab>C :PlugClean<Cr>
-noremap <silent><Tab>S :PlugStatus<Cr>
-noremap <silent><Tab>O :PlugSnapshot<Cr>
-noremap <silent><Tab>P :Plug
+nnoremap <silent><Tab>u :PlugAddUpdate<Cr>
+nnoremap <silent><Tab>i :PlugInstall<Cr>
+nnoremap <silent><Tab>C :PlugClean<Cr>
+nnoremap <silent><Tab>S :PlugStatus<Cr>
+nnoremap <silent><Tab>O :PlugSnapshot<Cr>
+nnoremap <silent><Tab>P :Plug
 " addtional vim packs
 if filereadable(utils#expand("~/.leovim.d/pack.vim"))
     source ~/.leovim.d/pack.vim
