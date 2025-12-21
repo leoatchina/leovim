@@ -116,7 +116,7 @@ endif
 " textobj install
 " ------------------------------
 if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', utils#is_unix())
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
+    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
     PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects'
     PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
     PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
