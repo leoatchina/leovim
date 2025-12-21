@@ -37,7 +37,7 @@ function! s:confirm_quit(type) abort
             endif
         endif
         if &modified && type == 'check'
-            let choice = ChooseOne(choices, title, 0, 'Cancel')
+            let choice = utils#choose_one(choices, title, 0, 'Cancel')
             if choice =~# '^Save'
                 UndotreeHide
                 wq!
@@ -46,7 +46,7 @@ function! s:confirm_quit(type) abort
                 q!
             endif
         else
-            let choice = ChooseOne(choices, title, 0, 'Cancel')
+            let choice = utils#choose_one(choices, title, 0, 'Cancel')
             if choice =~# '^Quit'
                 if type == 'all'
                     UndotreeHide

@@ -76,7 +76,7 @@ if pack#planned_fzf()
         if len(a:lines) == 0
             return
         endif
-        let confirm = ChooseOne(['yes', 'no'], "Delete selected session(s)?")
+        let confirm = utils#choose_one(['yes', 'no'], "Delete selected session(s)?")
         if confirm == 'yes'
             for session in a:lines
                 call startify#session_delete(1, fnamemodify(session, ':t'))

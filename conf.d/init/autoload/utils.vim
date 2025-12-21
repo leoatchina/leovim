@@ -304,3 +304,118 @@ function! utils#format(visual)
     call cursor(line, col)
     echo "Using vim's builtin formatprg."
 endfunction
+function! utils#choose_formatpr(visual) abort
+    let filetype = &ft
+    let visual = a:visual
+    if &formatprg != '' && neoformat#utils#var('neoformat_try_formatprg')
+        call neoformat#utils#log('adding formatprg to enabled formatters')
+        let formatprgs = [split(&formatprg)[0]]
+    else
+        let formatprgs = []
+    endif
+    if exists('b:neoformat_enabled_' . filetype)
+        let formatprgs = formatprgs + b:neoformat_enabled_{filetype}
+    elseif exists('g:neoformat_enabled_' . filetype)
+        let formatprgs = formatprgs + g:neoformat_enabled_{filetype}
+    elseif s:autoload_func_exists('neoformat#formatters#' . filetype . '#enabled')
+        let formatprgs = formatprgs + neoformat#formatters#{filetype}#enabled()
+    endif
+    if empty(formatprgs)
+        call utils#format(visual)
+    else
+        if !visual
+            let formatprgs = ['builtin'] + formatprgs
+        endif
+        let formatprg = utils#choose_one(formatprgs, "Choose a formatprg")
+        if formatprg == 'builtin'
+            call utils#format(visual)
+        else
+            if visual
+                let start = line("'<")
+                let end = line("'>")
+                exec start . "," . end . 'Neoformat ' . formatprg
+            else
+                exec "Neoformat " . formatprg
+            endif
+        endif
+    endif
+endfunction
+" ----------------------------------------
+" choose one
+" ----------------------------------------
+function! utils#get_char_form_lst(lst, cmd) abort
+    let lst = a:lst
+    let cmd = a:cmd
+    for i in range(len(cmd))
+        if index(lst, cmd[i]) < 0
+            call add(lst, cmd[i])
+            if i == 0
+                return [lst, '&' . cmd]
+            else
+                return [lst,  cmd[:i-1] . '&' . cmd[i:]]
+            endif
+        endif
+    endfor
+    " if failed to find
+    let ext = '123456789!@#$%^*-=_+'
+    let l_e = len(ext)
+    for i in range(l_e)
+        if index(lst, ext[i]) < 0
+            call add(lst, ext[i])
+            return [lst, '&' . ext[i] . cmd]
+        endif
+    endfor
+    return [lst, cmd]
+endfunction
+function! utils#choose_one(lst, ...) abort
+    let cmds = a:lst
+    if len(cmds) == 0
+        return ""
+    elseif len(cmds) > 9
+        let cmds=cmds[:8]
+    endif
+    if a:0 && a:1 != ''
+        let title = a:1
+    else
+        let title = "Please choose one."
+    endif
+    if a:0 >= 2 && a:2 >= 1
+        let add_num = 1
+    else
+        let add_num = 0
+    endif
+    let cnt = 0
+    let lines = []
+    for cmd in cmds
+        let cnt += 1
+        if add_num
+            call add(lines, '&' . cnt . ' '. cmd)
+        else
+            if !exists('char_lst')
+                let char_lst = []
+            endif
+            let [char_lst, cmd] = utils#get_char_form_lst(char_lst, cmd)
+            call add(lines, cmd)
+        endif
+    endfor
+    if pack#planned('vim-quickui')
+        let opts = {'title': title, 'index':g:quickui#listbox#cursor, 'w': 64}
+        let idx = quickui#listbox#inputlist(lines, opts)
+        if idx >= 0
+            return cmds[idx]
+        endif
+    else
+        let cnt += 1
+        if a:0 >= 3 && a:3 != ''
+            call add(lines, '&' . a:3)
+        else
+            call add(lines, '&0None')
+        endif
+        let content = join(lines, "\n")
+        let idx = confirm(title, content, cnt)
+        if idx > 0 && idx < cnt
+            return cmds[idx-1]
+        endif
+    endif
+    return ""
+endfunction

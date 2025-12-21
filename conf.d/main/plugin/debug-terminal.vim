@@ -92,7 +92,7 @@ function! s:floaterm_select_pos()
         let positions = positions[:1]
     endif
     let title = 'Choose a Floaterm Position'
-    let pos = tolower(ChooseOne(positions, title, 0))
+    let pos = tolower(utils#choose_one(positions, title, 0))
     if empty(pos)
         return
     endif
@@ -632,7 +632,7 @@ if pack#installed('jupynium.nvim')
         if len(jupynium_urls) == 1
             let tLjupynium_url = jupynium_urls[0]
         else
-            let t:jupynium_url = ChooseOne(jupynium_urls, 'Choose a jupynium url', 1)
+            let t:jupynium_url = utils#choose_one(jupynium_urls, 'Choose a jupynium url', 1)
         endif
         if empty(t:jupynium_url)
             return

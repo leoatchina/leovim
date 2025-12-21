@@ -32,7 +32,7 @@ nnoremap <M-j><M-d> :ZFBackupListDir<Cr>
 nnoremap <M-j><M-m> :ZFBackupRemove<Cr>
 nnoremap <M-j><M-r> :ZFBackupRemoveDir<Cr>
 function! s:zfbackup_cleanup() abort
-    let confirm = ChooseOne(['yes', 'no'], "Cleanup all ZFBackup files?")
+    let confirm = utils#choose_one(['yes', 'no'], "Cleanup all ZFBackup files?")
     if confirm == 'yes'
         if utils#is_win()
             exec printf('!del %s\*.* /a /f /q', ZFBackup_backupDir())
@@ -43,7 +43,7 @@ function! s:zfbackup_cleanup() abort
 endfunction
 nnoremap <silent><M-j><M-c> :call <SID>zfbackup_cleanup()<Cr>
 function! s:zfbackup_savedir() abort
-    let confirm = ChooseOne(['yes', 'no'], "Save current dir using ZFBackup?")
+    let confirm = utils#choose_one(['yes', 'no'], "Save current dir using ZFBackup?")
     if confirm == 'yes'
         call preview#cmdmsg("Start to save files under current dir", 1)
         ZFBackupSaveDir
