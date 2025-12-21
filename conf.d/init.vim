@@ -506,10 +506,10 @@ if utils#is_vscode()
 else
     source $MAIN_DIR/main.vim
 endif
+call plug#end()
 " addtional vim config
 if filereadable(utils#expand("~/.leovim.d/after.vim"))
     source ~/.leovim.d/after.vim
 endif
-call plug#end()
 " set loaded
 let g:leovim_loaded = 1
