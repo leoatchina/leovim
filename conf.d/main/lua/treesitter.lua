@@ -125,10 +125,10 @@ if utils.installed("nvim-treesitter-refactor") then
         enable = true,
         keymaps = {
           goto_definition = "sh",
-          list_definitions = false,
-          list_definitions_toc = false,
           goto_next_usage = "sn",
           goto_previous_usage = "sp",
+          list_definitions = "gD",
+          list_definitions_toc = "gO",
         },
       },
     },
