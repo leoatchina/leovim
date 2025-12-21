@@ -32,7 +32,7 @@ function! git#lightline_buffers()
 endfunction
 
 function! git#lcd_and_git_update() abort
-    if utils#is_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || tolower(getbufvar(winbufnr(winnr()), '&bt')) == 'nofile'
+    if utils#is_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern'
         return
     endif
     try

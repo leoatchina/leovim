@@ -191,7 +191,7 @@ function! s:settagstack(winnr, tagname, pos)
 endfunction
 function! s:find_with_ctags(...)
     if a:0 == 0
-        let tagname = utils#expand('<cword>')
+        let tagname = expand('<cword>')
         let action_pos = 'list'
     else
         let tagname = a:1
