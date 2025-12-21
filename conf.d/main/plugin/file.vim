@@ -11,7 +11,6 @@ nnoremap <leader>sw :SudoWrite<Space>
 "----------------------------------------------------------------------
 " usage: DiffVsp <left_file> <right_file>
 "----------------------------------------------------------------------
-command! -nargs=+ -complete=file DiffVsp call s:DiffVsp(<f-args>)
 function! s:DiffVsp(...) abort
     if a:0 != 2
         echohl ErrorMsg
@@ -26,6 +25,7 @@ function! s:DiffVsp(...) abort
         exec 'normal! gg]c'
     endif
 endfunc
+command! -nargs=+ -complete=file DiffVsp call s:DiffVsp(<f-args>)
 nnoremap <leader>fv :DiffVsp<Space>
 "------------------------
 " cd dir

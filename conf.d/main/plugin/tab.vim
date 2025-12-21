@@ -23,7 +23,7 @@ endif
 " ------------------------------------
 " basic tab label function
 " ------------------------------------
-function! Vim_NeatBuffer(bufnr, fullname)
+function! tab#neat_buffer(bufnr, fullname)
     let l:name = bufname(a:bufnr)
     if getbufvar(a:bufnr, '&modifiable')
         if l:name == ''
@@ -50,7 +50,7 @@ function! Vim_NeatBuffer(bufnr, fullname)
         endif
     endif
 endfunc
-function! Vim_NeatTabLabel(n, ...)
+function! tab#neat_tablabel(n, ...)
     if a:0 && a:1
         let active = 1
     else
@@ -59,7 +59,7 @@ function! Vim_NeatTabLabel(n, ...)
     let l:buflist = tabpagebuflist(a:n)
     let l:winnr = tabpagewinnr(a:n)
     let l:bufnr = l:buflist[l:winnr - 1]
-    let l:label = Vim_NeatBuffer(l:bufnr, active)
+    let l:label = tab#neat_buffer(l:bufnr, active)
     if getbufvar(l:bufnr, '&modified')
         let l:label .= ' +'
     endif
@@ -69,7 +69,7 @@ endfun
 " make tabline in terminal mode
 " ---------------------------------
 hi link TabNumSel Type
-function! Vim_NeatTabLine()
+function! tab#neat_tabline()
     let s = ''
     let taball = tabpagenr('$')
     for i in range(taball)
@@ -85,9 +85,9 @@ function! Vim_NeatTabLine()
             let s .= '%#TabLine# ' . nr . ' '
         endif
         if nr == tabcur -1 || nr == tabcur || nr == taball
-            let s .= '%{Vim_NeatTabLabel(' . nr . ')} '
+            let s .= '%{tab#neat_tablabel(' . nr . ')} '
         else
-            let s .= '%{Vim_NeatTabLabel(' . nr . ')} |'
+            let s .= '%{tab#neat_tablabel(' . nr . ')} |'
         endif
     endfor
     " after the last tab fill with TabLineFill and reset tab page nr
@@ -98,30 +98,30 @@ function! Vim_NeatTabLine()
     endif
     return s
 endfunction
-set tabline=%!Vim_NeatTabLine()
+set tabline=%!tab#neat_tabline()
 " Re-apply the tabline after a colorscheme change
 augroup TablineColorschemeFix
     autocmd!
-    autocmd ColorScheme * set tabline=%!Vim_NeatTabLine()
+    autocmd ColorScheme * set tabline=%!tab#neat_tabline()
 augroup END
 " ---------------------------------
 " make tabline in GuiMode
 " ---------------------------------
  if !has('nvim-0.11')
-    function! Vim_NeatGuiTabLabel()
+    function! tab#neat_gui_tablabel()
         let l:num = v:lnum
         let l:buflist = tabpagebuflist(l:num)
         let l:winnr = tabpagewinnr(l:num)
         let l:bufnr = l:buflist[l:winnr - 1]
-        return Vim_NeatBuffer(l:bufnr, 0)
+        return tab#neat_buffer(l:bufnr, 0)
     endfunc
-    set guitablabel=%{Vim_NeatGuiTabLabel()}
+    set guitablabel=%{tab#neat_gui_tablabel()}
 endif
 " ---------------------------------
 " make tabline in tabpanel
 " ---------------------------------
 if exists('&showtabpanel')
-    function! Vim_GetMaxTabNameLength()
+    function! tab#get_max_tabnamelen()
         let l:max_length = 0
         let l:taball = tabpagenr('$')
         for i in range(l:taball)
@@ -129,7 +129,7 @@ if exists('&showtabpanel')
             let l:buflist = tabpagebuflist(l:tabnr)
             let l:winnr = tabpagewinnr(l:tabnr)
             let l:bufnr = l:buflist[l:winnr - 1]
-            let l:caption = Vim_NeatBuffer(l:bufnr, 0)
+            let l:caption = tab#neat_buffer(l:bufnr, 0)
             let l:name_length = strwidth(l:caption)
             if l:name_length > l:max_length
                 let l:max_length = l:name_length
@@ -137,16 +137,16 @@ if exists('&showtabpanel')
         endfor
         return l:max_length + 5
     endfunction
-    function! Vim_UpdateTabPanelWidth()
-        let l:width = Vim_GetMaxTabNameLength()
+    function! tab#update_tabpanel_width()
+        let l:width = tab#get_max_tabnamelen()
         execute 'set tabpanelopt=columns:' . l:width
     endfunction
-    function! Vim_NeatTabPanelText()
+    function! tab#neat_tabpanel_text()
         let l:tabnr = g:actual_curtabpage
         let l:buflist = tabpagebuflist(l:tabnr)
         let l:winnr = tabpagewinnr(l:tabnr)
         let l:bufnr = l:buflist[l:winnr - 1]
-        let l:caption = Vim_NeatBuffer(l:bufnr, 0)
+        let l:caption = tab#neat_buffer(l:bufnr, 0)
         " Check if this is the current active tab
         let l:curtabnr = tabpagenr()
         if l:tabnr == l:curtabnr
@@ -155,11 +155,11 @@ if exists('&showtabpanel')
             return "%#TabLine#[".l:tabnr."]%#TabLine# ".l:caption." %#TabLine#"
         endif
     endfunc
-    set tabpanel=%!Vim_NeatTabPanelText()
+    set tabpanel=%!tab#neat_tabpanel_text()
     " Update tabpanel width when tabs change
     augroup TabPanelWidthUpdate
         autocmd!
-        autocmd TabNew,TabEnter,TabLeave * if tabpagenr('$') > 9 && &columns > &lines * 3 | set showtabpanel=1 showtabline=0 | call Vim_UpdateTabPanelWidth() | else | set showtabpanel=0 showtabline=1 | endif
+        autocmd TabNew,TabEnter,TabLeave * if tabpagenr('$') > 9 && &columns > &lines * 3 | set showtabpanel=1 showtabline=0 | call tab#update_tabpanel_width() | else | set showtabpanel=0 showtabline=1 | endif
     augroup END
 endif
 " --------------------------

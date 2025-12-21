@@ -341,21 +341,21 @@ if pack#planned_leaderf()
     else
         let g:search_tool = "leaderf-grep"
     endif
-    nnoremap <nowait>\f/ :LeaderfSearchAll <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait>\f/ :LeaderfSearchAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
     nnoremap <nowait>\f\ :LeaderfSearchAll <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
 elseif pack#planned_fzf()
     let g:search_tool = "fzf-grep"
-    nnoremap <nowait>\f/ :FzfSearchAll <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait>\f/ :FzfSearchAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
     nnoremap <nowait>\f\ :FzfSearchAll <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
 else
     let g:search_tool = "grep"
-    nnoremap <nowait>\f/ :GrepAll <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait>\f/ :GrepAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
     nnoremap <nowait>\f\ :GrepAll <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
 endif
 if pack#planned_fzf()
-    nnoremap <nowait><leader>f/ :FzfSearch <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait><leader>f/ :FzfSearch <C-r>=utils#file_name_no_ext()<Cr><Cr>
     nnoremap <nowait><leader>f\ :FzfSearch <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
-    nnoremap <nowait><Tab>f/ :FzfSearchGit <C-r>=FileNameNoEXT()<Cr><Cr>
+    nnoremap <nowait><Tab>f/ :FzfSearchGit <C-r>=utils#file_name_no_ext()<Cr><Cr>
     nnoremap <nowait><Tab>f\ :FzfSearchGit <C-r>=split(utils#abs_dir(), "/")[-1]<Cr><Cr>
     nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
     xnoremap <nowait>\g y:<C-u>FzfGitFiles <C-r>=utils#get_visual()<Cr>

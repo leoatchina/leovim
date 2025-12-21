@@ -291,16 +291,81 @@ function! utils#autoclose_lastwin() abort
     return s:autoclose(1)
 endfunction
 " ----------------------------------------
-" format
+" choose one
 " ----------------------------------------
-function! utils#format(visual)
-    let col = col('.')
-    let line = line('.')
-    if a:visual
-        silent! normal gv=
-    else
-        silent! normal ggVG=
+function! utils#get_char_form_lst(lst, cmd) abort
+    let lst = a:lst
+    let cmd = a:cmd
+    for i in range(len(cmd))
+        if index(lst, cmd[i]) < 0
+            call add(lst, cmd[i])
+            if i == 0
+                return [lst, '&' . cmd]
+            else
+                return [lst,  cmd[:i-1] . '&' . cmd[i:]]
+            endif
+        endif
+    endfor
+    " if failed to find
+    let ext = '123456789!@#$%^*-=_+'
+    let l_e = len(ext)
+    for i in range(l_e)
+        if index(lst, ext[i]) < 0
+            call add(lst, ext[i])
+            return [lst, '&' . ext[i] . cmd]
+        endif
+    endfor
+    return [lst, cmd]
+endfunction
+function! utils#choose_one(lst, ...) abort
+    let cmds = a:lst
+    if len(cmds) == 0
+        return ""
+    elseif len(cmds) > 9
+        let cmds=cmds[:8]
     endif
-    call cursor(line, col)
-    echo "Using vim's builtin formatprg."
+    if a:0 && a:1 != ''
+        let title = a:1
+    else
+        let title = "Please choose one."
+    endif
+    if a:0 >= 2 && a:2 >= 1
+        let add_num = 1
+    else
+        let add_num = 0
+    endif
+    let cnt = 0
+    let lines = []
+    for cmd in cmds
+        let cnt += 1
+        if add_num
+            call add(lines, '&' . cnt . ' '. cmd)
+        else
+            if !exists('char_lst')
+                let char_lst = []
+            endif
+            let [char_lst, cmd] = utils#get_char_form_lst(char_lst, cmd)
+            call add(lines, cmd)
+        endif
+    endfor
+    if pack#planned('vim-quickui')
+        let opts = {'title': title, 'index':g:quickui#listbox#cursor, 'w': 64}
+        let idx = quickui#listbox#inputlist(lines, opts)
+        if idx >= 0
+            return cmds[idx]
+        endif
+    else
+        let cnt += 1
+        if a:0 >= 3 && a:3 != ''
+            call add(lines, '&' . a:3)
+        else
+            call add(lines, '&0None')
+        endif
+        let content = join(lines, "\n")
+        let idx = confirm(title, content, cnt)
+        if idx > 0 && idx < cnt
+            return cmds[idx-1]
+        endif
+    endif
+    return ""
 endfunction

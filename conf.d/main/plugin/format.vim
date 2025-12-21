@@ -7,20 +7,22 @@ try
 catch /.*/
     " pass
 endtry
+function! format#builtin_fmt(visual)
+    let col = col('.')
+    let line = line('.')
+    if a:visual
+        silent! normal gv=
+    else
+        silent! normal ggVG=
+    endif
+    call cursor(line, col)
+    echo "Using vim's builtin formatprg."
+endfunction
 " ----------------------------
 " neoformat
 " ----------------------------
 if pack#planned('neoformat')
-    " NOTE:  the two functions below is copied from neoformat.vim
-    function! s:autoload_func_exists(func_name) abort
-        try
-            call eval(a:func_name . '()')
-        catch /^Vim\%((\a\+)\)\=:E/
-            return 0
-        endtry
-        return 1
-    endfunction
-    function! ChooseFormatPrg(visual) abort
+    function! format#choose_fmtprg(visual) abort
         let filetype = &ft
         let visual = a:visual
         if &formatprg != '' && neoformat#utils#var('neoformat_try_formatprg')
@@ -37,14 +39,14 @@ if pack#planned('neoformat')
             let formatprgs = formatprgs + neoformat#formatters#{filetype}#enabled()
         endif
         if empty(formatprgs)
-            call utils#format(visual)
+            call format#builtin_fmt(visual)
         else
             if !visual
                 let formatprgs = ['builtin'] + formatprgs
             endif
-            let formatprg = ChooseOne(formatprgs, "Choose a formatprg")
+            let formatprg = utils#choose_one(formatprgs, "Choose a formatprg")
             if formatprg == 'builtin'
-                call utils#format(visual)
+                call format#builtin_fmt(visual)
             else
                 if visual
                     let start = line("'<")
@@ -56,11 +58,20 @@ if pack#planned('neoformat')
             endif
         endif
     endfunction
-    command! -bang -range ChooseFormatPrg call ChooseFormatPrg(<bang>0)
-    nnoremap + :ChooseFormatPrg<Cr>
-    xnoremap + :ChooseFormatPrg!<Cr>
+    " NOTE:  the two functions below is copied from neoformat.vim
+    function! s:autoload_func_exists(func_name) abort
+        try
+            call eval(a:func_name . '()')
+        catch /^Vim\%((\a\+)\)\=:E/
+            return 0
+        endtry
+        return 1
+    endfunction
+    command! -bang -range ChooseFormatPrg call format#choose_fmtprgg(<bang>0)
+    nnoremap <silent>+ :ChooseFormatPrg<Cr>
+    xnoremap <silent>+ :ChooseFormatPrg!<Cr>
 else
-    nnoremap <silent>= :call BuiltInFormat()<Cr>
+    nnoremap <silent>+ :call format#builtin_fmt()<Cr>
 endif
 " ----------------------------
 " table_mode

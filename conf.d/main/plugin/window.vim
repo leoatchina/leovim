@@ -8,7 +8,7 @@ nnoremap <Tab>[ :split<Space>
 " ------------------------
 " Previous Window Control
 " ------------------------
-function! PreviousCursor(mode)
+function! window#pre_cursor_pos(mode)
     if winnr('$') <= 1
         return
     endif
@@ -42,15 +42,15 @@ function! PreviousCursor(mode)
     endif
     noautocmd silent! wincmd p
 endfunction
-nnoremap <silent><M-Q> :call PreviousCursor('quit')<Cr>
-nnoremap <silent><M-U> :call PreviousCursor('ctrlu')<Cr>
-nnoremap <silent><M-D> :call PreviousCursor('ctrld')<Cr>
-nnoremap <silent><M-E> :call PreviousCursor('ctrle')<Cr>
-nnoremap <silent><M-Y> :call PreviousCursor('ctrly')<Cr>
-inoremap <silent><M-U> <C-o>:call PreviousCursor('ctrlu')<Cr>
-inoremap <silent><M-D> <C-o>:call PreviousCursor('ctrld')<Cr>
-inoremap <silent><M-E> <C-o>:call PreviousCursor('ctrle')<Cr>
-inoremap <silent><M-Y> <C-o>:call PreviousCursor('ctrly')<Cr>
+nnoremap <silent><M-Q> :call window#pre_cursor_pos('quit')<Cr>
+nnoremap <silent><M-U> :call window#pre_cursor_pos('ctrlu')<Cr>
+nnoremap <silent><M-D> :call window#pre_cursor_pos('ctrld')<Cr>
+nnoremap <silent><M-E> :call window#pre_cursor_pos('ctrle')<Cr>
+nnoremap <silent><M-Y> :call window#pre_cursor_pos('ctrly')<Cr>
+inoremap <silent><M-U> <C-o>:call window#pre_cursor_pos('ctrlu')<Cr>
+inoremap <silent><M-D> <C-o>:call window#pre_cursor_pos('ctrld')<Cr>
+inoremap <silent><M-E> <C-o>:call window#pre_cursor_pos('ctrle')<Cr>
+inoremap <silent><M-Y> <C-o>:call window#pre_cursor_pos('ctrly')<Cr>
 " -----------------------------------
 " Adjust window panel smartly
 " -----------------------------------
@@ -74,7 +74,7 @@ function! s:winnr(direction)
         return d_winnr
     endif
 endfunction
-function! SmartResize(line, move) abort
+function! window#smart_resize(line, move) abort
     let line = a:line
     let move = a:move
     let h_winnr = s:winnr('h')
@@ -149,14 +149,14 @@ function! SmartResize(line, move) abort
         noautocmd silent! execute cmd
     endif
 endfunction
-nnoremap <silent><Tab>h :call SmartResize('h', 'h')<Cr>
-nnoremap <silent><Tab>l :call SmartResize('h', 'l')<Cr>
-nnoremap <silent>\a     :call SmartResize('l', 'h')<Cr>
-nnoremap <silent>\d     :call SmartResize('l', 'l')<Cr>
-nnoremap <silent><Tab>k :call SmartResize('k', 'k')<Cr>
-nnoremap <silent><Tab>j :call SmartResize('k', 'j')<Cr>
-nnoremap <silent>\w     :call SmartResize('j', 'k')<Cr>
-nnoremap <silent>\s     :call SmartResize('j', 'j')<Cr>
+nnoremap <silent><Tab>h :call window#smart_resize('h', 'h')<Cr>
+nnoremap <silent><Tab>l :call window#smart_resize('h', 'l')<Cr>
+nnoremap <silent>\a     :call window#smart_resize('l', 'h')<Cr>
+nnoremap <silent>\d     :call window#smart_resize('l', 'l')<Cr>
+nnoremap <silent><Tab>k :call window#smart_resize('k', 'k')<Cr>
+nnoremap <silent><Tab>j :call window#smart_resize('k', 'j')<Cr>
+nnoremap <silent>\w     :call window#smart_resize('j', 'k')<Cr>
+nnoremap <silent>\s     :call window#smart_resize('j', 'j')<Cr>
 " ------------------------
 " winbar
 " ------------------------

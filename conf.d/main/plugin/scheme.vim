@@ -17,7 +17,7 @@ function! s:toggle_bg()
 endf
 command! ToggleBackgroud call s:toggle_bg()
 nnoremap <M-k>b :ToggleBackgroud<Cr>
-function! SetScheme(scheme, ...) abort
+function! scheme#set(scheme, ...) abort
     let scheme = a:scheme
     let defaultscheme = get(a:, 1, 'slate')
     if g:has_truecolor
@@ -32,29 +32,29 @@ let g:edge_better_performance = 1
 let g:gruvbox_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call SetScheme('gruvbox-material', 'gruvbox')
+    call scheme#set('gruvbox-material', 'gruvbox')
 elseif g:complete_engine == 'builtin'
     if has('nvim')
-        call SetScheme('terafox', 'wombat')
+        call scheme#set('terafox', 'wombat')
     else
-        call SetScheme('sonokai', 'sublime')
+        call scheme#set('sonokai', 'sublime')
     endif
 elseif g:complete_engine == 'cmp'
-    call SetScheme('tokyonight', 'space-vim-dark')
+    call scheme#set('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
     if pack#get('blink.lua') || pack#get('blink') && !executable('cargo')
-        call SetScheme('nightfox', 'hybrid')
+        call scheme#set('nightfox', 'hybrid')
     else
-        call SetScheme('duskfox', 'hybrid')
+        call scheme#set('duskfox', 'hybrid')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call SetScheme('catppuccin', 'codedark')
+        call scheme#set('catppuccin', 'codedark')
     else
-        call SetScheme('nightfly', 'codedark')
+        call scheme#set('nightfly', 'codedark')
     endif
 else
-    call SetScheme('edge', 'one')
+    call scheme#set('edge', 'one')
 endif
 " --------------------------
 " nvim-web-devicons
