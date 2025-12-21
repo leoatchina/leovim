@@ -73,7 +73,7 @@ if has('gui_running')
         set guioptions-=m
         set guioptions-=
     endif
-elseif has('nvim') && exists('g:neovide')
+elseif utils#is_vscode()
     let g:neovide_cursor_animation_length = 0
 endif
 " ------------------------

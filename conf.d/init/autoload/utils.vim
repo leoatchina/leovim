@@ -1,8 +1,12 @@
 " ----------------------------------------
 " System Detection Functions
 " ----------------------------------------
+function! utils#is_neovide() abort
+    return exists('g:neovide') && has('nvim')
+endfunction
+
 function! utils#is_vscode() abort
-    return exists('g:vscode')
+    return exists('g:vscode') && has('nvim')
 endfunction
 
 function! utils#is_win() abort
@@ -31,16 +35,16 @@ function! utils#has_gui() abort
     elseif has('nvim')
         if has('gui_vimr')
             return 1
-        elseif exists('g:neovide')
-            return 1
-        elseif utils#is_vscode()
-            return 0
         elseif exists('g:GuiLoaded') && g:GuiLoaded != 0
             return 1
         elseif exists('*nvim_list_uis') && len(nvim_list_uis()) > 0
             return get(nvim_list_uis()[0], 'ext_termcolors', 0) ? 0 : 1
         elseif exists("+termguicolors") && (&termguicolors) != 0
             return 1
+        elseif utils#is_neovide()
+            return 1
+        elseif utils#is_vscode()
+            return 0
         else
             return 0
         endif
