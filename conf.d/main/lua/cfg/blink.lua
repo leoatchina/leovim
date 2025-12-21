@@ -4,7 +4,7 @@ require('blink.cmp').setup({
   appearance = {
     nerd_font_variant = 'mono'
   },
-  fuzzy = { implementation = utils.executable("cargo") and not utils.get('blink.lua') and "prefer_rust_with_warning" or 'lua'},
+  fuzzy = { implementation = executable("cargo") and not utils.get('blink.lua') and "prefer_rust_with_warning" or 'lua'},
   signature = { enabled = true },
   completion = {
     ghost_text = {

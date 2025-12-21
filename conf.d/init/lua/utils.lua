@@ -18,7 +18,7 @@ function _G.inspect(item)
   vim.print(item)
 end
 
-function utils.executable(...)
+function _G.executable(...)
   return fn.executable(...) > 0
 end
 

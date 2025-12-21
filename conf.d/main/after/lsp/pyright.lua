@@ -1,9 +1,7 @@
-local utils = require('utils')
-
 return {
   name = 'pyright',
   filetypes = { "python" },
-  cmd = utils.executable("delance-langserver") and {"delance-langserver", "--stdio"} or {"pyright-langserver", "--stdio"},
+  cmd = executable("delance-langserver") and {"delance-langserver", "--stdio"} or {"pyright-langserver", "--stdio"},
   settings = {
     pyright = {
       disableOrganizeImports = false,
