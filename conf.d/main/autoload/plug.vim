@@ -1296,6 +1296,14 @@ function! plug#update_finish()
                 call plug#log4(name, 'Checking out '.tag)
                 let out = plug#system('git checkout -q '.plug#shellescape(tag).' -- 2>&1', spec.dir)
                 let error = v:shell_error
+            elseif !empty(plug#git_origin_branch(spec))
+                let branch = plug#git_origin_branch(spec)
+                let current = plug#git_local_branch(spec.dir)
+                if branch !=# current
+                    call plug#log4(name, 'Switching to '.branch)
+                    let out = plug#system('git checkout -q '.plug#shellescape(branch).' -- 2>&1', spec.dir)
+                    let error = v:shell_error
+                endif
             endif
             if !error && filereadable(spec.dir.'/.gitmodules') &&
                         \ (s:update.force || has_key(s:update.new, name) || plug#is_updated(spec.dir))
