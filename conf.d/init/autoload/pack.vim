@@ -21,7 +21,6 @@ function! pack#planned(...) abort
         return 0
     endif
     for pack in a:000
-        let pack = tolower(pack)
         if !has_key(g:plugs, pack)
             return 0
         endif
@@ -35,7 +34,6 @@ function! pack#installed(...) abort
     endif
     let loaded = exists('*plug#loaded_names') ? plug#loaded_names() : []
     for pack in a:000
-        let pack = tolower(pack)
         if !has_key(g:plugs, pack)
             return 0
         endif

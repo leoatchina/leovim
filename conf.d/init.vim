@@ -24,7 +24,7 @@ let $PLUG_DIR = expand($CONF_D_DIR . '/plug')
 " cfg for special plugins
 let $CFG_DIR = expand($MAIN_DIR . '/after/cfg')
 " opt dirs
-let $LEO_OPT_DIR = expand($PACK_DIR . '/leo/opt')
+let $LEO_OPT_DIR = expand($CONF_D_DIR . '/pack/leo/opt')
 let $FORK_OPT_DIR = expand($PACK_DIR . '/fork/opt')
 let $CLONE_OPT_DIR = expand($PACK_DIR . '/clone/opt')
 " --------------------------
@@ -33,7 +33,7 @@ let $CLONE_OPT_DIR = expand($PACK_DIR . '/clone/opt')
 set rtp^=$PACK_DIR
 set rtp^=$INIT_DIR
 let s:opt_plugs = {}
-for opt_dir in [$CLONE_OPT_DIR, $FORK_OPT_DIR, $LEO_OPT_DIR]
+for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
     for plug_dir in globpath(opt_dir, '*', 0, 1)
         if !isdirectory(plug_dir)
             continue
@@ -312,12 +312,6 @@ else
     nnoremap <silent><Tab>Y :YankToFileEnd<Cr>
     nnoremap <silent><Tab>y :YankFromFileBegin<Cr>
 endif
-" ------------------------
-" special paste
-" ------------------------
-nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
-xnoremap zp "_c<ESC>p"
-xnoremap zP "_c<ESC>P"
 " --------------------------------------------
 " yank command and position to editors
 " --------------------------------------------
@@ -361,7 +355,13 @@ nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
 nnoremap <silent><leader>ye :YankPositionToVim<Cr>
 nnoremap <silent><leader>yz :YankPositionToZed<Cr>
 " ------------------------
-" open_in_other
+" special paste
+" ------------------------
+nnoremap <expr>gp '`[' . strpart(getregtype(), 0, 1) . '`]'
+xnoremap zp "_c<ESC>p"
+xnoremap zP "_c<ESC>P"
+" ------------------------
+" open_in_other_editor
 " ------------------------
 function! s:open_in_other()
     if !has('nvim')
@@ -437,27 +437,26 @@ endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
 nnoremap <silent>gx :OpenLink<cr>
 " -----------------------------------------------------------
-" g:packs
+" start pack install
 " -----------------------------------------------------------
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
-" -------------------------------------------------------------
-" unified PlugAdd (local/remote) + PlugAdd shim
-" -------------------------------------------------------------
 let g:plugs = {}
 let g:plug_threads = get(g:, 'plug_threads', 8)
 set rtp^=$MAIN_DIR
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
+" -------------------------------------------------------------
+" unified PlugAdd (local/remote) + PlugAdd shim
+" -------------------------------------------------------------
 function! s:plug_add(plugin, ...) abort
-    let plugin = tolower(substitute(a:plugin, '[\/]\+$', '', 'g'))
+    let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let opts = a:0 > 0 ? copy(a:1) : {}
     " derive key name for duplicate check
     if has_key(opts, 'as') && !empty(opts['as'])
-        let key_name = tolower(opts['as'])
+        let key_name = opts['as']
     elseif plugin =~ '/'
-        let parts = split(plugin, '/')
-        let key_name = parts[-1]
+        let key_name = split(plugin, '/')[-1]
     else
         let key_name = plugin
     endif
@@ -479,6 +478,8 @@ function! s:plug_add(plugin, ...) abort
         else
             call plug#(local_dir, opts)
         endif
+    else
+        echoe plugin . " not exists"
     endif
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
