@@ -105,7 +105,7 @@ function! s:getVimVersion()
     endif
     return join(l:result, "")
 endfunction
-function! Version()
+function! s:version()
     let params_dict = {
                 \ 'version':         s:getVimVersion(),
                 \ 'python_version':  g:python_version,
@@ -144,6 +144,6 @@ function! Version()
     endif
     echom string(params_dict)
 endfunction
-command! Version call Version()
+command! Version call s:version()
 nnoremap <M-k>v :Version<Cr>
 nnoremap <M-k>V :version<Cr>

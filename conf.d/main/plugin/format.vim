@@ -7,10 +7,57 @@ try
 catch /.*/
     " pass
 endtry
+function! format#builtin_fmt(visual)
+    let col = col('.')
+    let line = line('.')
+    if a:visual
+        silent! normal gv=
+    else
+        silent! normal ggVG=
+    endif
+    call cursor(line, col)
+    echo "Using vim's builtin formatprg."
+endfunction
 " ----------------------------
 " neoformat
 " ----------------------------
 if pack#planned('neoformat')
+    function! format#choose_fmtprg(visual) abort
+        let filetype = &ft
+        let visual = a:visual
+        if &formatprg != '' && neoformat#utils#var('neoformat_try_formatprg')
+            call neoformat#utils#log('adding formatprg to enabled formatters')
+            let formatprgs = [split(&formatprg)[0]]
+        else
+            let formatprgs = []
+        endif
+        if exists('b:neoformat_enabled_' . filetype)
+            let formatprgs = formatprgs + b:neoformat_enabled_{filetype}
+        elseif exists('g:neoformat_enabled_' . filetype)
+            let formatprgs = formatprgs + g:neoformat_enabled_{filetype}
+        elseif s:autoload_func_exists('neoformat#formatters#' . filetype . '#enabled')
+            let formatprgs = formatprgs + neoformat#formatters#{filetype}#enabled()
+        endif
+        if empty(formatprgs)
+            call format#builtin_fmt(visual)
+        else
+            if !visual
+                let formatprgs = ['builtin'] + formatprgs
+            endif
+            let formatprg = utils#choose_one(formatprgs, "Choose a formatprg")
+            if formatprg == 'builtin'
+                call format#builtin_fmt(visual)
+            else
+                if visual
+                    let start = line("'<")
+                    let end = line("'>")
+                    exec start . "," . end . 'Neoformat ' . formatprg
+                else
+                    exec "Neoformat " . formatprg
+                endif
+            endif
+        endif
+    endfunction
     " NOTE:  the two functions below is copied from neoformat.vim
     function! s:autoload_func_exists(func_name) abort
         try
@@ -20,11 +67,11 @@ if pack#planned('neoformat')
         endtry
         return 1
     endfunction
-    command! -bang -range ChooseFormatPrg call utils#choose_formatprg(<bang>0)
+    command! -bang -range ChooseFormatPrg call format#choose_fmtprgg(<bang>0)
     nnoremap <silent>+ :ChooseFormatPrg<Cr>
     xnoremap <silent>+ :ChooseFormatPrg!<Cr>
 else
-    nnoremap <silent>+ :call utils#format()<Cr>
+    nnoremap <silent>+ :call format#builtin_fmt()<Cr>
 endif
 " ----------------------------
 " table_mode
