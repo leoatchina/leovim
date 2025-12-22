@@ -6,6 +6,9 @@ elseif !has('nvim-0.8') && has('nvim')
     finish
 else
     set nocompatible
+    if !exists('g:packs') || type(g:packs) != type([])
+        let g:packs = []
+    endif
 endif
 " --------------------------
 " set dirs
@@ -438,9 +441,6 @@ nnoremap <silent>gx :OpenLink<cr>
 " -----------------------------------------------------------
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
-endif
-if !exists('g:packs') || type(g:packs) != type([])
-    let g:packs = []
 endif
 let g:plugs = {}
 let g:plug_threads = get(g:, 'plug_threads', 8)
