@@ -1,8 +1,5 @@
-" -------------------
-" leo'defined textobj
-" -------------------
+nnoremap SS :call textobj#viw()<Cr>
 if pack#installed("vim-textobj-user")
-    nnoremap SS :call textobj#viw()<Cr>
     call textobj#user#plugin('line', {
                 \   '-': {
                 \     'select-a-function': 'textobj#current_lina_a',
