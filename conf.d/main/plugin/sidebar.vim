@@ -113,7 +113,7 @@ else
     let g:netrw_liststyle = 3
     let g:netrw_browse_split = 4
     " functions
-    function! NetrwClose()
+    function! s:netrw_close()
         if exists('t:netrw_winnr')
             let netrw_bufnr = bufwinnr(t:netrw_winnr)
             if netrw_bufnr != -1
@@ -123,13 +123,13 @@ else
             unlet t:netrw_winnr
         endif
     endfunction
-    command! NetrwClose call NetrwClose()
-    function! NetrwOpen()
+    command! NetrwClose call s:netrw_close()
+    function! s:netrw_open()
         Vexplore
         let t:netrw_winnr = bufnr("%")
         wincmd p
     endfunction
-    command! NetrwOpen call NetrwOpen()
+    command! NetrwOpen call s:netrw_open()
     function! s:check_netrw(nr) abort
         return s:check_buf_ft('netrw', a:nr)
     endfunction

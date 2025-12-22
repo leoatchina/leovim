@@ -98,7 +98,7 @@ elseif pack#installed('vim-qf')
     let g:qf_statusline.before = '%<\ '
     let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \'
 elseif exists('&quickfixtextfunc')
-    function! QuickFixFormat(info)
+    function! quickfix#format(info)
         let qflist = getqflist({'id' : a:info.id, 'items' : 1}).items
         let qflist = map(qflist,
                     \ 'extend(v:val, {"filename" : bufname(v:val.bufnr)})')
@@ -108,9 +108,9 @@ elseif exists('&quickfixtextfunc')
         return map(qflist,
                     \ 'printf(fmt, v:val.filename . "|" . v:val.lnum, "|" . v:val.text)')
     endfunction
-    set quickfixtextfunc=QuickFixFormat
+    set quickfixtextfunc=quickfix#format
 else
-    function! QuickFixFormat()
+    function! quickfix#format()
         let qflist = map(getqflist(),
                     \ 'extend(v:val, {"filename" : bufname(v:val.bufnr)})')
         let prefix_len = 2 + max(map(copy(qflist),
@@ -121,8 +121,5 @@ else
                     \ 'printf(fmt, v:val.filename . "|" . v:val.lnum, "|" . v:val.text)'))
         setlocal nomodifiable nomodified
     endfunction
-    augroup QuickFixFormat
-        autocmd!
-        autocmd BufReadPost quickfix call QuickFixFormat()
-    augroup END
+    autocmd BufReadPost quickfix call QuickFixFormat()
 endif

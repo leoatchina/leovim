@@ -10,15 +10,15 @@ let g:lightline#bufferline#show_number = 0
 let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
-function! LightlineBufferlineMaxWidth() abort
+function! lightline#bufferline_maxwidht() abort
     let left = &columns - len(utils#file_readonly() . git#relative_dir() . git#relative_path() . git#git_branch() . utils#mode())
     return left > 60 ? left - 60 : 0
 endfunction
-let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
-function! LightlineBufferlineFilter(buffer) abort
+let g:lightline#bufferline#max_width = "lightline#bufferline_maxwidht"
+function! lightline#bufferline_filter(buffer) abort
     return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# '' && getbufvar(a:buffer, '&filetype') !=# 'startify'
 endfunction
-let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
+let g:lightline#bufferline#buffer_filter = "lightline#bufferline_filter"
 nmap ;b <Plug>lightline#bufferline#go_next()
 nmap ,b <Plug>lightline#bufferline#go_previous()
 nmap ;B <Plug>lightline#bufferline#go_next_category()
@@ -85,7 +85,7 @@ elseif pack#installed('nvim-lightline-lsp')
     let lint_info = ['lsp_ok', 'lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings']
     let g:lightline.active.right += [lint_info]
 elseif pack#installed_coc()
-    function! CocDiagnostic()
+    function! lightline#coc_diag()
         let info = get(b:, 'coc_diagnostic_info', {})
         if empty(info) | return get(b:, 'coc_git_status', '')  | endif
         let msgs = []
@@ -100,7 +100,7 @@ elseif pack#installed_coc()
         endif
         return get(b:, 'coc_git_status', '') . ' ' . join(msgs, ' ')
     endfunction
-    let g:lightline.component_function.coc_diag = 'CocDiagnostic'
+    let g:lightline.component_function.coc_diag = 'lightline#coc_diag'
     let g:lightline.active.right += [['coc_diag']]
 endif
 if pack#planned('lightline-asyncrun')
@@ -127,9 +127,9 @@ let g:lightline.component_type = extend(s:component_type, {
 let g:lightline.active.left = [['mode', 'paste'], ['buffers', 'relativepath', 'modified', 'branch']]
 let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ---------------------
-" UpdateLightline
+" lightline#upgrade
 " ---------------------
-function! UpdateLightline() abort
+function! lightline#upgrade() abort
     let colors_name = get(g:, 'colors_name', '')
     if index(['sonokai', 'edge', 'codedark', 'one', 'wombat'], colors_name) >= 0
         let g:lightline.colorscheme = g:colors_name
@@ -155,12 +155,12 @@ function! UpdateLightline() abort
     call lightline#init()
     call lightline#colorscheme()
 endfunction
-augroup UpdateLightline
+augroup LightlineUpgrade
     autocmd!
-    autocmd ColorScheme * call UpdateLightline()
+    autocmd ColorScheme * call lightline#upgrade()
     autocmd BufCreate,BufEnter,BufWinEnter,WinEnter,BufWritePost,InsertLeave,CmdlineLeave * call lightline#update()
     if pack#installed_coc()
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
 augroup END
-nnoremap <silent><C-l> :redraw \| call lightline#update()<Cr>
+nnoremap <C-l> :redraw \| call lightline#update()<Cr>

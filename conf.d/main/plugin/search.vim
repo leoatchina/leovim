@@ -146,6 +146,7 @@ nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
 " replace in filetype qf
 " --------------------------
 au Filetype qf nnoremap <buffer>r :cdo! s/<C-r>=get(g:, 'grep_word', '')<Cr>//ge<Left><Left><Left>
+au Filetype qf nnoremap <buffer>R :cdo! s/<C-r>=get(g:, 'grep_word', '')<Cr>//gc<Left><Left><Left>
 au Filetype qf nnoremap <buffer>W :cfdo! up
 " --------------------------
 " FzfSearch
