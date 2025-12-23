@@ -150,14 +150,17 @@
   - [x] README
   - [x] deploy to github
 - [x] name vim-floaterm-repl to vim-floaterm-enhance
-    - [ ] fork vim-floaterm
     - [x] intergrated with asyncrun.vim
-    - [ ] Run is current tab related only, could not be used in other tabs, 
-    - [ ] using different idx for aider, repl
+    - [x] fork vim-floaterm
+    - [x] Run is current tab related only, could not be used in other tabs, 
+- [ ] add ai intergration in vim-floaterm-enhance
+    - [ ] using different idx for ai, repl
+    - [ ] https://github.com/kitallen23/conduit.nvim
+    - [ ] https://staging.d5data.tech/dlp/upload
+    - [ ] https://github.com/aweis89/ai-terminals.nvim
 - [ ] vim-plug update 
-  - [ ] reorganized to using vim-plug's lazy load
+  - [x] reorganize leovim's structure to use vim-plug's lazy load
   - [ ] floating or popup window.
-  - [ ] use `:packadd` to load plugins
   - [ ] mix `vim-plug` and `vim-jetpack` together
 ## Plenty of works
 - [x] ReWrite readme
