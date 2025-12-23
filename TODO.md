@@ -150,20 +150,21 @@
   - [x] README
   - [x] deploy to github
 - [x] name vim-floaterm-repl to vim-floaterm-enhance
+    - [ ] fork vim-floaterm
     - [x] intergrated with asyncrun.vim
     - [ ] Run is current tab related only, could not be used in other tabs, 
     - [ ] using different idx for aider, repl
-    - [ ] fork vim-floaterm
+- [ ] vim-plug update 
+  - [ ] reorganized to using vim-plug's lazy load
+  - [ ] floating or popup window.
+  - [ ] use `:packadd` to load plugins
+  - [ ] mix `vim-plug` and `vim-jetpack` together
 ## Plenty of works
 - [x] ReWrite readme
 - [ ] vista
   - [ ] icons bug in windows-terminal
   - [ ] open shortcuts
   - [ ] ctags enhanced, according to zhihu user `成隽`
-- [ ] vim-packadd
-  - [ ] floating or popup window.
-  - [ ] use `:packadd` to load plugins
-  - [ ] mix `vim-plug` and `vim-jetpack` together
 - [ ] vim-zeal
   - [ ] view document in (neo)vim
 - [ ] Introduce video
