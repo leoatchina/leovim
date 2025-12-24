@@ -465,7 +465,7 @@ ln_code() {
 
 # Function to link the latest cursor-server cursor to ~/.local/bin
 ln_cursor() {
-    local cursor_base="$HOME/.cursor-server/cli/servers"
+    local cursor_base="$HOME/.cursor-server/bin"
     local target_dir="$HOME/.local/bin"
 
     if [ ! -d "$cursor_base" ]; then
@@ -480,7 +480,7 @@ ln_cursor() {
         return 1
     fi
 
-    local cursor_path="${latest_dir}server/bin/remote-cli/cursor"
+    local cursor_path="${latest_dir}/bin/remote-cli/cursor"
 
     if [ ! -f "$cursor_path" ]; then
         echo "Error: cursor not found at $cursor_path"
