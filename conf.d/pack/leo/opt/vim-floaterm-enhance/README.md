@@ -6,6 +6,151 @@ This is a Vim plugin based on [vim-floaterm](https://github.com/voldikss/vim-flo
 1. **REPL Integration**: Send code from your editor to a REPL in a floating terminal
 2. **AsyncRun Integration**: Run programs in floating terminals through asyncrun.vim
 
+## Architecture Overview
+
+### 1. REPL Startup Flow
+
+```mermaid
+graph TB
+    Start[FloatermReplStart] --> Check{Programs Configured?}
+    Check -->|No| Error[Show Error Message]
+    Check -->|Yes| SelectMode{Auto or Interactive?}
+    SelectMode -->|Auto| GetFirst[Get First Program]
+    SelectMode -->|Interactive| ShowMenu[Show Selection Menu]
+    GetFirst --> CheckRunning{Already Running?}
+    ShowMenu --> UserSelect[User Selects Program]
+    UserSelect --> CheckRunning
+    CheckRunning -->|Yes| OpenExist[Open Existing Terminal]
+    CheckRunning -->|No| CreateNew[Create New Terminal]
+    CreateNew --> SetName[Set Terminal Name]
+    SetName --> StoreMap[Store in t:floaterm_repl_terms]
+    OpenExist --> Return[Return to Editor]
+    StoreMap --> Return
+```
+
+**Key Variables:**
+- `g:floaterm_repl_programs`: Global dictionary mapping filetypes to REPL programs
+  ```vim
+  " Example: {'python': ['ipython', 'python3'], 'r': ['radian']}
+  ```
+- `t:floaterm_repl_terms`: Tab-level dictionary storing terminal mappings
+  - **Key**: `"{filetype}{bufnr}"` (e.g., `"python12"`)
+  - **Value**: Terminal name (e.g., `"#12|python!IPYTHON"`)
+- `b:floaterm_repl_curr_bufnr`: Buffer-level variable storing current buffer number
+- Terminal name format: `"#{bufnr}|{filetype}!{PROGRAM}"`
+  - Example: `"#12|python!IPYTHON"` for buffer 12, Python filetype, using IPython
+
+### 2. Code Sending Flow
+
+```mermaid
+graph TB
+    Send[FloatermReplSend Commands] --> GetRange[Get Code Range]
+    GetRange --> GetFT[Get Filetype & Buffer]
+    GetFT --> FindTerm{Find REPL Terminal}
+    FindTerm -->|Not Found| Prompt[Show Prompt]
+    FindTerm -->|Found| GetLines[Get Code Lines]
+    GetLines --> Filter[Filter Comments/Empty Lines]
+    Filter --> SendData[Send via floaterm#terminal#send]
+    SendData --> KeepCheck{keep Parameter?}
+    KeepCheck -->|keep=0| MoveNext[Move to Next Line]
+    KeepCheck -->|keep=1| Stay[Stay at Position]
+```
+
+**Key Variables:**
+- `&filetype`: Current buffer's filetype (e.g., `"python"`, `"javascript"`)
+- `a:keep`: Boolean parameter controlling cursor movement
+  - `0`: Move cursor to next non-empty/non-comment line after sending
+  - `1`: Keep cursor at current position
+- `g:floaterm_repl_block_mark`: Dictionary defining code block markers
+  ```vim
+  " Example: {'python': '# %%', 'javascript': '%%'}
+  ```
+- `a:line_begin`, `a:line_end`: Range of lines to send
+- `a:vmode`: Visual mode flag (1 if called from visual selection)
+
+### 3. Code Block Detection
+
+```mermaid
+graph TB
+    GetBlock[get_block Function] --> GetMarker[Get Block Marker]
+    GetMarker --> SearchBack[Search Backward]
+    GetMarker --> SearchFwd[Search Forward]
+    SearchBack --> StartLine{Found Previous?}
+    SearchFwd --> EndLine{Found Next?}
+    StartLine -->|Yes| StartFound[Start = Marker + 1]
+    StartLine -->|No| StartDefault[Start = 1]
+    EndLine -->|Yes| EndFound[End = Marker - 1]
+    EndLine -->|No| EndDefault[End = Line $]
+    StartFound --> Return[Return Range]
+    StartDefault --> Return
+    EndFound --> Return
+    EndDefault --> Return
+```
+
+**Key Variables:**
+- `g:floaterm_repl_block_mark`: Dictionary or list defining block markers
+  ```vim
+  " Single marker: {'python': '# %%'}
+  " Multiple markers: {'python': ['# %%', '## Cell', '# ---']}
+  ```
+- `search_str`: Pattern string constructed from markers
+  - Single: `"^# %%"`
+  - Multiple: `"^# %%\|^## Cell\|^# ---"` (joined with `\|`)
+- `line("$")`: Total number of lines in current buffer
+- `getline(start, end)`: Get lines from range [start, end]
+
+### 4. AsyncRun Integration
+
+```mermaid
+graph TB
+    AsyncRun[AsyncRun Command] --> SelectType{Select Position}
+    SelectType -->|floaterm_right| Right[vsplt + right]
+    SelectType -->|floaterm_float| Float[float + bottomright]
+    SelectType -->|floaterm_bottom| Bottom[split + botright]
+    Right --> FindExist{Existing Terminal?}
+    Float --> FindExist
+    Bottom --> FindExist
+    FindExist -->|Yes| OpenExist[Open Existing]
+    FindExist -->|No| CreateNew[Create New]
+    OpenExist --> SendCmd[Send cd + Command]
+    CreateNew --> SendCmd
+    SendCmd --> FocusCheck{focus Parameter?}
+    FocusCheck -->|focus=0| BackEditor[Return to Editor]
+    FocusCheck -->|focus=1| InTerm[Stay in Terminal]
+```
+
+**Key Variables:**
+- `a:opts`: Dictionary containing asyncrun options
+  - `cmd`: Command to execute
+  - `width`: Terminal width (optional)
+  - `height`: Terminal height (optional)
+  - `silent`: Hide terminal after creation (1) or keep visible (0)
+  - `focus`: Return to editor (0) or stay in terminal (1)
+- `floaterm_wintype`: Window type - `'float'`, `'vsplit'`, or `'split'`
+- `position`: Window position - `'right'`, `'bottomright'`, `'botright'`, etc.
+- `floaterm_bufnr`: Buffer number of the floaterm terminal
+- `g:has_popup_floating`: Global flag checking Vim/Neovim version for floating window support
+
+### Key Components Summary
+
+| Component | Variable/Function | Type | Description |
+|-----------|-------------------|------|-------------|
+| **Terminal Management** | `t:floaterm_repl_terms` | Tab-level dict | Maps `{filetype}{bufnr}` → terminal name |
+| **Terminal Name** | Terminal name format | String | `#{bufnr}\|{filetype}!{PROGRAM}` |
+| **Buffer Tracking** | `b:floaterm_repl_curr_bufnr` | Buffer-level | Current buffer number for REPL |
+| **REPL Programs** | `g:floaterm_repl_programs` | Global dict | Filetype → list of REPL commands |
+| **Block Markers** | `g:floaterm_repl_block_mark` | Global dict/list | Filetype → marker pattern(s) |
+| **Clear Commands** | `g:floaterm_repl_clear` | Global dict | Filetype → clear command |
+| **Exit Commands** | `g:floaterm_repl_exit` | Global dict | Filetype → exit command |
+| **Position** | `g:floaterm_repl_open_position` | Global string | `'auto'`, `'right'`, or `'bottom'` |
+| **Ratio** | `g:floaterm_repl_ratio` | Global float | Terminal size ratio (default: 0.38) |
+
+**Code Locations:**
+- REPL startup: `autoload/floaterm/repl.vim:99-158`
+- Code sending: `autoload/floaterm/repl.vim:353-394`
+- Block detection: `autoload/floaterm/enhance.vim:35-63`
+- AsyncRun integration: `autoload/floaterm/asyncrun.vim:2-57`
+
 
 # Requirements
 - Vim or Neovim with the `:terminal` command. The specific version requirement is higher than [vim-floaterm](https://github.com/voldikss/vim-floaterm).

@@ -7,6 +7,151 @@
 1. **REPL集成**: 将编辑器中的代码发送到浮动终端中的REPL进行执行
 2. **AsyncRun集成**: 通过asyncrun.vim在浮动终端中运行程序
 
+## 架构概览
+
+### 1. REPL 启动流程
+
+```mermaid
+graph TB
+    Start[FloatermReplStart] --> Check{是否配置程序?}
+    Check -->|否| Error[显示错误信息]
+    Check -->|是| SelectMode{自动或交互选择?}
+    SelectMode -->|自动| GetFirst[获取第一个程序]
+    SelectMode -->|交互| ShowMenu[显示选择菜单]
+    GetFirst --> CheckRunning{是否已运行?}
+    ShowMenu --> UserSelect[用户选择程序]
+    UserSelect --> CheckRunning
+    CheckRunning -->|是| OpenExist[打开现有终端]
+    CheckRunning -->|否| CreateNew[创建新终端]
+    CreateNew --> SetName[设置终端名称]
+    SetName --> StoreMap[存储到 t:floaterm_repl_terms]
+    OpenExist --> Return[返回编辑器]
+    StoreMap --> Return
+```
+
+**关键变量说明:**
+- `g:floaterm_repl_programs`: 全局字典，映射文件类型到 REPL 程序列表
+  ```vim
+  " 示例: {'python': ['ipython', 'python3'], 'r': ['radian']}
+  ```
+- `t:floaterm_repl_terms`: Tab 级字典，存储终端映射关系
+  - **键**: `"{filetype}{bufnr}"` (例如: `"python12"`)
+  - **值**: 终端名称 (例如: `"#12|python!IPYTHON"`)
+- `b:floaterm_repl_curr_bufnr`: Buffer 级变量，存储当前缓冲区号
+- 终端名称格式: `"#{bufnr}|{filetype}!{PROGRAM}"`
+  - 示例: `"#12|python!IPYTHON"` 表示缓冲区 12、Python 文件类型、使用 IPython
+
+### 2. 代码发送流程
+
+```mermaid
+graph TB
+    Send[FloatermReplSend 命令] --> GetRange[获取代码范围]
+    GetRange --> GetFT[获取文件类型和缓冲区]
+    GetFT --> FindTerm{查找 REPL 终端}
+    FindTerm -->|未找到| Prompt[显示提示]
+    FindTerm -->|找到| GetLines[获取代码行]
+    GetLines --> Filter[过滤注释和空行]
+    Filter --> SendData[通过 floaterm#terminal#send 发送]
+    SendData --> KeepCheck{keep 参数?}
+    KeepCheck -->|keep=0| MoveNext[移动到下一行]
+    KeepCheck -->|keep=1| Stay[保持当前位置]
+```
+
+**关键变量说明:**
+- `&filetype`: 当前缓冲区的文件类型 (例如: `"python"`, `"javascript"`)
+- `a:keep`: 布尔参数，控制光标移动行为
+  - `0`: 发送后移动光标到下一个非空/非注释行
+  - `1`: 保持光标在当前位置
+- `g:floaterm_repl_block_mark`: 定义代码块标记的字典
+  ```vim
+  " 示例: {'python': '# %%', 'javascript': '%%'}
+  ```
+- `a:line_begin`, `a:line_end`: 要发送的行范围
+- `a:vmode`: 可视模式标志 (如果从可视选择调用则为 1)
+
+### 3. 代码块识别
+
+```mermaid
+graph TB
+    GetBlock[get_block 函数] --> GetMarker[获取块标记]
+    GetMarker --> SearchBack[向前搜索]
+    GetMarker --> SearchFwd[向后搜索]
+    SearchBack --> StartLine{找到上一个?}
+    SearchFwd --> EndLine{找到下一个?}
+    StartLine -->|是| StartFound[起始 = 标记 + 1]
+    StartLine -->|否| StartDefault[起始 = 1]
+    EndLine -->|是| EndFound[结束 = 标记 - 1]
+    EndLine -->|否| EndDefault[结束 = 最后一行]
+    StartFound --> Return[返回范围]
+    StartDefault --> Return
+    EndFound --> Return
+    EndDefault --> Return
+```
+
+**关键变量说明:**
+- `g:floaterm_repl_block_mark`: 字典或列表，定义块标记
+  ```vim
+  " 单个标记: {'python': '# %%'}
+  " 多个标记: {'python': ['# %%', '## Cell', '# ---']}
+  ```
+- `search_str`: 从标记构造的搜索模式字符串
+  - 单个: `"^# %%"`
+  - 多个: `"^# %%\|^## Cell\|^# ---"` (用 `\|` 连接)
+- `line("$")`: 当前缓冲区的总行数
+- `getline(start, end)`: 获取范围 [start, end] 内的行
+
+### 4. AsyncRun 集成
+
+```mermaid
+graph TB
+    AsyncRun[AsyncRun 命令] --> SelectType{选择位置}
+    SelectType -->|floaterm_right| Right[垂直分割 + 右侧]
+    SelectType -->|floaterm_float| Float[浮动 + 右下角]
+    SelectType -->|floaterm_bottom| Bottom[水平分割 + 底部]
+    Right --> FindExist{存在终端?}
+    Float --> FindExist
+    Bottom --> FindExist
+    FindExist -->|是| OpenExist[打开现有终端]
+    FindExist -->|否| CreateNew[创建新终端]
+    OpenExist --> SendCmd[发送 cd + 命令]
+    CreateNew --> SendCmd
+    SendCmd --> FocusCheck{focus 参数?}
+    FocusCheck -->|focus=0| BackEditor[返回编辑器]
+    FocusCheck -->|focus=1| InTerm[留在终端]
+```
+
+**关键变量说明:**
+- `a:opts`: 包含 asyncrun 选项的字典
+  - `cmd`: 要执行的命令
+  - `width`: 终端宽度 (可选)
+  - `height`: 终端高度 (可选)
+  - `silent`: 创建后隐藏终端 (1) 或保持可见 (0)
+  - `focus`: 返回编辑器 (0) 或留在终端 (1)
+- `floaterm_wintype`: 窗口类型 - `'float'`, `'vsplit'`, 或 `'split'`
+- `position`: 窗口位置 - `'right'`, `'bottomright'`, `'botright'` 等
+- `floaterm_bufnr`: floaterm 终端的缓冲区号
+- `g:has_popup_floating`: 全局标志，检查 Vim/Neovim 版本是否支持浮动窗口
+
+### 核心组件汇总
+
+| 组件 | 变量/函数 | 类型 | 说明 |
+|------|----------|------|------|
+| **终端管理** | `t:floaterm_repl_terms` | Tab 级字典 | 映射 `{filetype}{bufnr}` → 终端名称 |
+| **终端名称** | 终端名称格式 | 字符串 | `#{bufnr}\|{filetype}!{PROGRAM}` |
+| **缓冲区跟踪** | `b:floaterm_repl_curr_bufnr` | Buffer 级 | REPL 的当前缓冲区号 |
+| **REPL 程序** | `g:floaterm_repl_programs` | 全局字典 | 文件类型 → REPL 命令列表 |
+| **块标记** | `g:floaterm_repl_block_mark` | 全局字典/列表 | 文件类型 → 标记模式 |
+| **清屏命令** | `g:floaterm_repl_clear` | 全局字典 | 文件类型 → 清屏命令 |
+| **退出命令** | `g:floaterm_repl_exit` | 全局字典 | 文件类型 → 退出命令 |
+| **位置** | `g:floaterm_repl_open_position` | 全局字符串 | `'auto'`, `'right'`, 或 `'bottom'` |
+| **比例** | `g:floaterm_repl_ratio` | 全局浮点数 | 终端大小比例 (默认: 0.38) |
+
+**代码位置:**
+- REPL 启动: `autoload/floaterm/repl.vim:99-158`
+- 代码发送: `autoload/floaterm/repl.vim:353-394`
+- 块检测: `autoload/floaterm/enhance.vim:35-63`
+- AsyncRun 集成: `autoload/floaterm/asyncrun.vim:2-57`
+
 # 需求
 - 有`:terminal` 命令的 vim或 neovim , 具体版本需求要比[vim-floaterm](https://github.com/voldikss/vim-floaterm)  要高一些
 - 安装相应的`repl` 程序，比如`ipython`, `radian`
