@@ -473,14 +473,14 @@ ln_cursor() {
         return 1
     fi
 
-    local latest_dir=$(ls -td "$cursor_base"/*/ 2>/dev/null | head -n 1)
+    local latest_dir=$(ls -td "$cursor_base"/*/ 2>/dev/null | grep -v multi | head -n 1)
 
     if [ -z "$latest_dir" ]; then
         echo "Error: No directories found in $cursor_base"
         return 1
     fi
 
-    local cursor_path="${latest_dir}/bin/remote-cli/cursor"
+    local cursor_path="${latest_dir}bin/remote-cli/cursor"
 
     if [ ! -f "$cursor_path" ]; then
         echo "Error: cursor not found at $cursor_path"
