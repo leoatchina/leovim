@@ -54,6 +54,8 @@ if utils#is_vscode()
     PlugAdd 'hop.nvim'
 else
     imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
+    PlugAdd 'vim-easymotion'
+    PlugAdd 'vim-easymotion-chs'
 endif
 " --------------------------
 " textobj

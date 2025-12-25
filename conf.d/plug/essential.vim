@@ -362,17 +362,13 @@ if has('nvim-0.10')
 else
     PlugAdd 'romainl/vim-qf'
 endif
-" ------------------------------
-" easymotion
-" ------------------------------
-source $CFG_DIR/easymotion.vim
 " -------------------
 " vim-preview
 " -------------------
 let g:preview#preview_position = "rightbottom"
 let g:preview#preview_size = get(g:, 'asyncrun_open', 8)
-nnoremap <silent><C-w><Space> <C-w>z:call preview#cmdmsg('close preview', 0)<Cr>
 PlugAdd 'vim-preview'
+nnoremap <silent><C-w><Space> <C-w>z:call preview#cmdmsg('close preview', 0)<Cr>
 " -------------------
 " vim-quickui
 " -------------------
