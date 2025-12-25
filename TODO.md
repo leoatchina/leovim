@@ -155,12 +155,13 @@
     - [x] Run is current tab related only, could not be used in other tabs, 
 - [ ] add ai intergration in vim-floaterm-enhance
     - [ ] using different idx for ai, repl
-    - [ ] https://github.com/folke/sidekick.nvim 
-    - [ ] https://github.com/kitallen23/conduit.nvim
-    - [ ] https://github.com/aweis89/ai-terminals.nvim
-    - [ ] https://github.com/azorng/goose.nvim
-    - [ ] https://github.com/coder/claudecode.nvim
-    - [ ] https://github.com/marcinjahn/gemini-cli.nvim
+    - [ ] refs
+        - https://github.com/folke/sidekick.nvim 
+        - https://github.com/kitallen23/conduit.nvim
+        - https://github.com/aweis89/ai-terminals.nvim
+        - https://github.com/azorng/goose.nvim
+        - https://github.com/coder/claudecode.nvim
+        - https://github.com/marcinjahn/gemini-cli.nvim
 - [ ] vim-plug update 
   - [x] reorganize leovim's structure to use vim-plug's lazy load
   - [ ] floating or popup window.
