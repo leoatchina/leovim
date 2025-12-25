@@ -571,42 +571,6 @@ ln_windsurf() {
     fi
 }
 
-# Function to link the latest windsurf-server surf to ~/.local/bin
-ln_surf() {
-    local windsurf_base="$HOME/.windsurf-server/bin"
-    local target_dir="$HOME/.local/bin"
-
-    if [ ! -d "$windsurf_base" ]; then
-        echo "Error: $windsurf_base directory not found"
-        return 1
-    fi
-
-    local latest_dir=$(ls -td "$windsurf_base"/*/ 2>/dev/null | head -n 1)
-
-    if [ -z "$latest_dir" ]; then
-        echo "Error: No directories found in $windsurf_base"
-        return 1
-    fi
-
-    local surf_path="${latest_dir}bin/remote-cli/surf"
-
-    if [ ! -f "$surf_path" ]; then
-        echo "Error: surf not found at $surf_path"
-        return 1
-    fi
-
-    mkdir -p "$target_dir"
-    ln -sf "$surf_path" "$target_dir/surf"
-
-    if [ $? -eq 0 ]; then
-        echo "Successfully linked: $surf_path -> $target_dir/surf"
-        echo "Latest surf directory: $(basename "$latest_dir")"
-    else
-        echo "Error: Failed to create symbolic link"
-        return 1
-    fi
-}
-
 # Function to link the latest trae-server trae to ~/.local/bin
 ln_trae() {
     local trae_base="$HOME/.trae-server/bin"
@@ -689,7 +653,6 @@ ln_all_clis() {
     [ -d "$HOME/.cursor-server" ] && { echo "[ cursor ]"; ln_cursor; echo ""; }
     [ -d "$HOME/.positron-server" ] && { echo "[ positron ]"; ln_positron; echo ""; }
     [ -d "$HOME/.windsurf-server" ] && { echo "[ windsurf ]"; ln_windsurf; echo ""; }
-    [ -d "$HOME/.windsurf-server" ] && { echo "[ surf ]"; ln_surf; echo ""; }
     [ -d "$HOME/.trae-server" ] && { echo "[ trae ]"; ln_trae; echo ""; }
     [ -d "$HOME/.trae-cn-server" ] && { echo "[ trae-cn ]"; ln_trae_cn; echo ""; }
 
