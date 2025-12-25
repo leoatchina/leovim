@@ -2,150 +2,11 @@
 if utils#is_vscode()
     finish
 endif
-nnoremap <silent>- :call preview#errmsg("Please intalled debug plugins.")<Cr>
+nnoremap - :call preview#errmsg("Please intalled debug plugins.")<Cr>
 nnoremap _ -
-" --------------------
-" J show diag
-" --------------------
-function! s:diag_or_errmsg(diagnostic)
-    if a:diagnostic
-        if pack#planned('ale')
-            ALEDetail
-        elseif pack#installed_coc()
-            call CocActionAsync('diagnosticInfo')
-        elseif pack#installed_lsp()
-            lua vim.diagnostic.open_float()
-        else
-            call preview#errmsg('Please select lines to merge!') | sleep 2
-        endif
-    else
-        call preview#errmsg('Please select lines to merge!') | sleep 2
-    endif
-endfunction
-function! s:j(line1, line2, diagnostic) range abort
-    let pos = getpos('.')
-    if a:line1 != a:line2
-        execute a:line1 . "," . a:line2 . "join"
-    else
-        call s:diag_or_errmsg(a:diagnostic)
-        call setpos('.', pos)
-    endif
-endfunction
-command! -range J call s:j(<line1>, <line2>, 0)
-command! -range JDiag call s:j(<line1>, <line2>, 1)
-xnoremap <silent>J :J<Cr>
-nnoremap <silent>J :JDiag<Cr>
 if g:has_terminal == 0
     finish
 endif
-" --------------------------
-" basic terminal map
-" --------------------------
-tmap <expr><C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
-" --------------------------
-" open terminal
-" --------------------------
-if has('nvim')
-    command! TermPackD tabe | call termopen([&shell], {'cwd': utils#expand('~/.leovim.d')})
-    nnoremap <silent><M-h>D :TermPackD<Cr>i
-    nnoremap <silent>_ :tabnew<Cr>:terminal<Cr>i
-else
-    nnoremap <silent><M-h>D :tab terminal<CR>cd ~/.leovim.d<tab><CR>
-    nnoremap <silent>_ :tab terminal<Cr>
-endif
-tnoremap <silent><C-v> <C-\><C-n>
-tnoremap <silent><M-q> <C-\><C-n>:ConfirmQuit<Cr>
-tnoremap <silent><M-w> <C-\><C-n>:tabclose<Cr>
-tnoremap <silent><M-W> <C-\><C-n>:tabonly<Cr>i
-" ---------------------------------------------------------
-" floaterm
-" ---------------------------------------------------------
-let g:floaterm_open_command = 'drop'
-let g:floaterm_wintype  = 'split'
-let g:floaterm_position = 'belowright'
-let g:floaterm_height = 0.3
-if utils#is_win()
-    if has('nvim')
-        let g:floaterm_shell = 'pwsh.exe'
-    else
-        let g:floaterm_shell = 'cmd.exe'
-    endif
-elseif executable('zsh') && has('nvim') && pack#installed_adv()
-    let g:floaterm_shell = 'zsh'
-endif
-" ---------------------------------------------------------
-" enhanced functions and commands
-" ---------------------------------------------------------
-command! FloatermCommands call FzfCallCommands('FloatermCommands', 'Floaterm')
-nnoremap <silent><Tab>: :FloatermCommands<Cr>
-let s:floaterm_parameters = {}
-let s:floaterm_parameters.right = " --wintype=vsplit --width=0.382"
-let s:floaterm_parameters.belowright = " --wintype=split --height=0.3"
-if g:has_popup_floating
-    let s:floaterm_parameters.center = " --wintype=float --width=0.618 --height=0.618"
-    let s:floaterm_parameters.topright = " --wintype=float --width=0.45 --height=0.618"
-    let s:floaterm_parameters.bottomright = " --wintype=float --width=0.45 --height=0.3"
-endif
-function! s:floaterm_select_pos()
-    let positions = ['Right', 'Belowright', 'Center', 'Topright', 'BottomRight']
-    if g:has_popup_floating == 0
-        let positions = positions[:1]
-    endif
-    let title = 'Choose a Floaterm Position'
-    let pos = tolower(utils#choose_one(positions, title, 0))
-    if empty(pos)
-        return
-    endif
-    let position = " --position=" . pos
-    let cmd = "FloatermNew" . s:floaterm_parameters[pos] . position
-    execute cmd
-endfunction
-command! FloatermSpecial call s:floaterm_select_pos()
-function! s:floaterm_list() abort
-    let bufs = floaterm#buflist#gather()
-    let cnt = len(bufs)
-    if cnt == 0
-        let no_msg = "No floaterm windows"
-        if pack#installed('vim-quickui')
-            call quickui#textbox#open([no_msg], {})
-        else
-            call preview#errmsg(no_msg)
-        endif
-        return
-    endif
-    let content = []
-    for bufnr in bufs
-        let title = getbufvar(bufnr, 'floaterm_title')
-        if title ==# "floaterm($1/$2)"
-            let cur = index(bufs, bufnr) + 1
-            let title = substitute(title, '$1', cur, 'gm')
-            let title = substitute(title, '$2', cnt, 'gm')
-        endif
-        let postion = getbufvar(bufnr, 'floaterm_position')
-        let wintype = getbufvar(bufnr, 'floaterm_wintype')
-        let cmd     = getbufvar(bufnr, 'floaterm_cmd')
-        let open_cmd = printf('call floaterm#terminal#open_existing(%s)', bufnr)
-        if pack#installed('vim-quickui')
-            let title = title . "@" . wintype . '/' .  postion . ' ' .  cmd
-            let line = [title, open_cmd]
-        else
-            let title = title . "@" . wintype . '/' .  postion
-            let line = {}
-            let line.bufnr = bufnr
-            let line.text = title
-            let line.pattern = open_cmd
-        endif
-        call add(content, line)
-    endfor
-    if pack#installed('vim-quickui')
-        let opts = {'title': 'All floaterm buffers', 'w': 64}
-        call quickui#listbox#open(content, opts)
-    else
-        call setqflist(content)
-        execute "belowright copen" . g:asyncrun_open
-    endif
-endfunc
-command! FloatermList call s:floaterm_list()
 " ---------------------------------
 " debug: load_json
 " ---------------------------------
@@ -588,33 +449,35 @@ call s:bind_keymap('<M-}>', 'FloatermNext')
 " -----------------------------------------------------------------------------------------
 " using vim-floaterm-enhance to do repl/run/aider. NOTE: below bang[!] means cursor not move
 " -----------------------------------------------------------------------------------------
-" repl start
-nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
-nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
-" repl line send
-nnoremap <silent><M-e>n :FloatermReplSend<Cr>
-nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
-xnoremap <silent><M-e>n :FloatermReplSendVisual<Cr>
-xnoremap <silent><M-e>l :FloatermReplSendVisual!<Cr>
-nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
-nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
-" repl block send
-xnoremap <silent><M-e><M-e>   :FloatermReplSendVisual<Cr>
-xnoremap <silent><M-e><Space> :FloatermReplSendVisual!<Cr>
-nnoremap <silent><M-e><M-e>   :FloatermReplSendBlock<Cr>
-nnoremap <silent><M-e><Space> :FloatermReplSendBlock!<Cr>
-" repl send above/below/all lines
-nnoremap <silent><M-e>b :FloatermReplSendFromBegin!<Cr>
-nnoremap <silent><M-e>e :FloatermReplSendToEnd!<Cr>
-nnoremap <silent><M-e>a :FloatermReplSendAll!<Cr>
-" repl send word
-nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
-xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
-" repl mark print send
-nnoremap <silent><M-e>m :FloatermReplMark<Cr>
-xnoremap <silent><M-e>m :FloatermReplMark!<Cr>
-nnoremap <silent><M-e>s :FloatermReplSendMark<Cr>
-nnoremap <silent><M-e>S :FloatermReplQuickuiMark<Cr>
+if pack#installed('vim-floaterm-enhance')
+    " repl start
+    nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
+    nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
+    " repl line send
+    nnoremap <silent><M-e>n :FloatermReplSend<Cr>
+    nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
+    xnoremap <silent><M-e>n :FloatermReplSendVisual<Cr>
+    xnoremap <silent><M-e>l :FloatermReplSendVisual!<Cr>
+    nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
+    nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
+    " repl block send
+    xnoremap <silent><M-e><M-e>   :FloatermReplSendVisual<Cr>
+    xnoremap <silent><M-e><Space> :FloatermReplSendVisual!<Cr>
+    nnoremap <silent><M-e><M-e>   :FloatermReplSendBlock<Cr>
+    nnoremap <silent><M-e><Space> :FloatermReplSendBlock!<Cr>
+    " repl send above/below/all lines
+    nnoremap <silent><M-e>b :FloatermReplSendFromBegin!<Cr>
+    nnoremap <silent><M-e>e :FloatermReplSendToEnd!<Cr>
+    nnoremap <silent><M-e>a :FloatermReplSendAll!<Cr>
+    " repl send word
+    nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
+    xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
+    " repl mark print send
+    nnoremap <silent><M-e>m :FloatermReplMark<Cr>
+    xnoremap <silent><M-e>m :FloatermReplMark!<Cr>
+    nnoremap <silent><M-e>s :FloatermReplSendMark<Cr>
+    nnoremap <silent><M-e>S :FloatermReplQuickuiMark<Cr>
+endif
 " ---------------------------------------
 " jupynvim
 " ---------------------------------------
