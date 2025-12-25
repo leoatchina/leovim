@@ -191,7 +191,7 @@ if pack#planned('vimspector')
         elseif a:type ==# 'terminal'
             FloatermList
         elseif a:type ==# 'eval'
-            call s:diag_or_errmsg(1)
+            call linter#diag(1)
         endif
     endfunction
     command! BalloonEval call s:vimspector_or_floaterm('eval')
@@ -206,6 +206,8 @@ if pack#planned('vimspector')
     nmap <silent><F1> <Plug>VimspectorDisassemble
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
+    " deletewatch
+    au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteWatch()<Cr>
 elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
     let g:debug_tool = 'nvim-dap'
     lua require("cfg/dap")
@@ -303,7 +305,7 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
             if luaeval('require"dap".session() ~= nil')
                 lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
             else
-                call s:diag_or_errmsg(1)
+                call linter#diag(1)
             endif
         elseif s:dapui_opened()
             if a:type == "console"
@@ -429,7 +431,6 @@ endfunction
 command! -range WatchCword call s:watch()
 xnoremap - :WatchCword<CR>
 nnoremap - :WatchCword<CR>
-au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteWatch()<Cr>
 " -----------------------------------------------------------------------------------------
 " using vim-floaterm-enhance to do repl/run/ai. NOTE: below bang[!] means cursor not move
 " -----------------------------------------------------------------------------------------
