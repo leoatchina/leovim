@@ -5,7 +5,7 @@ endif
 " --------------------
 " J show diag
 " --------------------
-function! linter#diag(diagnostic)
+function! diagnostic#show(diagnostic)
     if a:diagnostic
         if pack#planned('ale')
             ALEDetail
@@ -25,7 +25,7 @@ function! s:j(line1, line2, diagnostic) range abort
     if a:line1 != a:line2
         execute a:line1 . "," . a:line2 . "join"
     else
-        call linter#diag(a:diagnostic)
+        call diagnostic#show(a:diagnostic)
         call setpos('.', pos)
     endif
 endfunction

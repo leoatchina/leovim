@@ -56,8 +56,8 @@ else
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=git#git_root_dir()<Cr><Cr>
 endif
 if pack#pref_fzf()
-    nnoremap <nowait>\g :FzfGitFiles <C-r>=@"<Cr>
-    xnoremap <nowait>\g :<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait>\F :FzfGitFiles <C-r>=@"<Cr>
+    xnoremap <nowait>\F :<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
 endif
 " ---------------------------------
 " open gitroot getroot

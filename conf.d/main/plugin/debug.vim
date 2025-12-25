@@ -191,7 +191,7 @@ if pack#planned('vimspector')
         elseif a:type ==# 'terminal'
             FloatermList
         elseif a:type ==# 'eval'
-            call linter#diag(1)
+            call diagnostic#show(1)
         endif
     endfunction
     command! BalloonEval call s:vimspector_or_floaterm('eval')
@@ -305,7 +305,7 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
             if luaeval('require"dap".session() ~= nil')
                 lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
             else
-                call linter#diag(1)
+                call diagnostic#show(1)
             endif
         elseif s:dapui_opened()
             if a:type == "console"
