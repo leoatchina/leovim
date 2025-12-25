@@ -56,6 +56,20 @@ endfunction
 function! utils#has_packadd() abort
     return exists(':packadd') > 0
 endfunction
+
+function! utils#has_map(key, mode) abort
+    try
+        let mp = maparg(a:key, a:mode)
+        if empty(mp) || mp =~# 'Nop'
+            return 0
+        else
+            return 1
+        endif
+    catch /.*/
+        return 0
+
+    endtry
+endfunction
 " ----------------------------------------
 " File Path Functions
 " ----------------------------------------

@@ -32,7 +32,7 @@ endfunction
 command! -range MergeLines call s:j(<line1>, <line2>, 0)
 command! -range DiagShow call s:j(<line1>, <line2>, 1)
 xnoremap <silent>J :MergeLines<Cr>
-if empty(maparg('J', 'n'))
+if !utils#has_map('J', 'n')
     nnoremap <silent>J :DiagShow<Cr>
 endif
 " --------------------

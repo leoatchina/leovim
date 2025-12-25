@@ -436,8 +436,7 @@ nnoremap - :WatchCword<CR>
 " -----------------------------------------------------------------------------------------
 if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
     function! s:bind_keymap(mapvar, command) abort
-        let mp = maparg(a:mapvar, 'n')
-        if empty(mp) || mp =~# 'Nop'
+        if !utils#has_map(a:mapvar, 'n')
             execute printf('nnoremap <silent>%s :%s<CR>', a:mapvar, a:command)
         endif
         execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
