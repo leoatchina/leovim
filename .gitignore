@@ -1,7 +1,8 @@
 plan.md
 update.md
 upgrade.md
-*/pack/compare
+analysis.md
+*/pack/*/*/compare
 .aider*
 .plan/
 .update/
