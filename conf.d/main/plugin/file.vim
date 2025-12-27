@@ -293,7 +293,7 @@ function! s:mklink(cmd, ...) abort
     execute("!" . a:cmd)
 endfunction
 let s:editor_dirs = []
-let s:editor_names = ["code", "trae", "kiro", "qoder", "lingma", "cursor", "windsurf", "positron"]
+let s:editor_names = ["code", "trae", "kiro", "qoder", "cursor", "windsurf", "positron", "antigravity"]
 for editor in s:editor_names
     let dir = fnameescape(get(g:, editor . "_user_dir", ""))
     if utils#is_win()
