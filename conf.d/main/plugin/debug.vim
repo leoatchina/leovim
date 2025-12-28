@@ -435,18 +435,6 @@ nnoremap - :WatchCword<CR>
 " using vim-floaterm-enhance to do repl/run/ai. NOTE: below bang[!] means cursor not move
 " -----------------------------------------------------------------------------------------
 if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
-    function! s:bind_keymap(mapvar, command) abort
-        if !utils#has_map(a:mapvar, 'n')
-            execute printf('nnoremap <silent>%s :%s<CR>', a:mapvar, a:command)
-        endif
-        execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
-    endfunction
-    call s:bind_keymap('<M-->', 'FloatermToggle')
-    call s:bind_keymap('<M-+>', 'FloatermOpenPos')
-    call s:bind_keymap('<M-=>', 'FloatermFzfList')
-    call s:bind_keymap('<M-_>', 'FloatermKill')
-    call s:bind_keymap('<M-{>', 'FloatermPrev')
-    call s:bind_keymap('<M-}>', 'FloatermNext')
     " repl start
     nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
     nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
