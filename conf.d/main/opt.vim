@@ -93,10 +93,10 @@ if utils#is_win()
     " let g:kiro_user_dir = 'C:\Users\Admin\AppData\Roaming\Kiro\User'
     " let g:trae_user_dir = 'C:\Users\Admin\AppData\Roaming\Trae\User'
     " let g:qoder_user_dir = 'C:\Users\Admin\AppData\Roaming\Qoder\User'
-    " let g:lingma_user_dir = 'C:\Users\Admin\AppData\Roaming\Lingma\User'
     " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
     " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
     " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
+    " let g:antigravity_user_dir = 'C:\Users\Admin\AppData\Roaming\Antigravity\User'
 elseif utils#is_unix()
     if has('nvim')
         " let g:python3_host_prog=exepath('python3')
@@ -109,10 +109,10 @@ elseif utils#is_unix()
     " let g:kiro_user_dir = utils#expand("$HOME/.config/Kiro/User")
     " let g:trae_user_dir = utils#expand("$HOME/.config/Trae/User")
     " let g:qoder_user_dir = utils#expand("$HOME/.config/Qoder/User")
-    " let g:lingma_user_dir = utils#expand("$HOME/.config/Lingma/User")
     " let g:cursor_user_dir = utils#expand("$HOME/.config/Cursor/User")
     " let g:windsurf_user_dir = utils#expand("$HOME/.config/Windsurf/User")
     " let g:positron_user_dir = utils#expand("$HOME/.config/Positron/User")
+    " let g:antigravity_user_dir = utils#expand("$HOME/.config/Antigravity/User")
 endif
 
 " NOTE: visit https://ftp.gnu.org/pub/gnu/global/
