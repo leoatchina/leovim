@@ -94,7 +94,7 @@ function! s:grep(...)
                 let lnum = parts[1]
                 let col = parts[2]
                 " if a column exists it lives at parts[3], otherwise it's text
-                if len(parts) >= 5
+                if len(parts) >= 5 && !has('nvim')
                     let text = join(parts[4:], ':')
                 else
                     let text = join(parts[3:], ':')
