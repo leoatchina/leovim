@@ -189,7 +189,7 @@ if pack#planned('vimspector')
         elseif a:type ==# 'Console'
             FloatermToggle
         elseif a:type ==# 'terminal'
-            FloatermList
+            FloatermFzfList
         elseif a:type ==# 'eval'
             call diagnostic#show(1)
         endif
@@ -197,11 +197,11 @@ if pack#planned('vimspector')
     command! BalloonEval call s:vimspector_or_floaterm('eval')
     command! FocusCode call s:vimspector_or_floaterm("code")
     command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
-    command! TerminalOrFloatermList call s:vimspector_or_floaterm('terminal')
+    command! TerminalOrFloatermFzfList call s:vimspector_or_floaterm('terminal')
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :TerminalOrFloatermList<Cr>
+    nnoremap <silent><M-=> :TerminalOrFloatermFzfList<Cr>
     " VimspectorDisassemble
     nmap <silent><F1> <Plug>VimspectorDisassemble
     " view variables
@@ -321,7 +321,7 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
         elseif a:type == "repl"
             FloatermToggle
         elseif a:type == "element"
-            FloatermList
+            FloatermFzfList
         else
             call preview#errmsg('Please start dap session.') | sleep 2
         endif
@@ -329,11 +329,11 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
     command! DapUIEval call s:dap_or_floaterm("eval")
     command! FocusCode call s:dap_or_floaterm("focus")
     command! ReplOrFloatermToggle call s:dap_or_floaterm("repl")
-    command! FloatElementOrFloatermList call s:dap_or_floaterm("element")
+    command! FloatElementOrFloatermFzfList call s:dap_or_floaterm("element")
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ReplOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :FloatElementOrFloatermList<Cr>
+    nnoremap <silent><M-=> :FloatElementOrFloatermFzfList<Cr>
     " view variables
     nnoremap <silent>J :DapUIEval<Cr>
 elseif v:version >= 801 && !has('nvim') && pack#get('termdebug')
@@ -442,8 +442,8 @@ if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
         execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
     endfunction
     call s:bind_keymap('<M-->', 'FloatermToggle')
-    call s:bind_keymap('<M-+>', 'FloatermSpecial')
-    call s:bind_keymap('<M-=>', 'FloatermList')
+    call s:bind_keymap('<M-+>', 'FloatermOpenPos')
+    call s:bind_keymap('<M-=>', 'FloatermFzfList')
     call s:bind_keymap('<M-_>', 'FloatermKill')
     call s:bind_keymap('<M-{>', 'FloatermPrev')
     call s:bind_keymap('<M-}>', 'FloatermNext')

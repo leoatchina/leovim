@@ -1,4 +1,3 @@
-" cSpell:ignore asyncrun floaterm wintype buflist bufnr vsplit botright topleft
 function! floaterm#asyncrun#run(opts, floaterm_wintype, position)
     let opts = copy(a:opts)
     let floaterm_wintype = copy(a:floaterm_wintype)

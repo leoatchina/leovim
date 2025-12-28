@@ -1,3 +1,4 @@
+command! FloatermFzfList call floaterm#enhance#fzf_list()
 let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
 " registry runners
 let g:asyncrun_runner.floaterm_right  = function('floaterm#asyncrun#right')

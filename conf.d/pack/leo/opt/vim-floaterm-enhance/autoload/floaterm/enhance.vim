@@ -112,3 +112,51 @@ function! floaterm#enhance#showmsg(content, ...) abort
         set showmode
     endif
 endfunc
+
+" --------------------------------------------------------------
+" floaterm fzf list
+" --------------------------------------------------------------
+function! floaterm#enhance#fzf_sink(line) abort
+    let bufnr = str2nr(matchstr(a:line, '^\d\+'))
+    if bufnr <= 0
+        call floaterm#enhance#showmsg('Invalid floaterm selection', 1)
+        return
+    endif
+    call floaterm#terminal#open_existing(bufnr)
+endfunction
+
+function! floaterm#enhance#fzf_list() abort
+    if !exists('*fzf#run')
+        call floaterm#enhance#showmsg('fzf.vim is required for FloatermFzfList', 1)
+        return
+    endif
+    let bufs = floaterm#buflist#gather()
+    if empty(bufs)
+        call floaterm#enhance#showmsg('No floaterm windows', 1)
+        return
+    endif
+    let cnt = len(bufs)
+    let source = []
+    for bufnr in bufs
+        let title = getbufvar(bufnr, 'floaterm_title')
+        if title ==# 'floaterm($1/$2)'
+            let cur = index(bufs, bufnr) + 1
+            let title = substitute(title, '$1', cur, 'gm')
+            let title = substitute(title, '$2', cnt, 'gm')
+        endif
+        if empty(title)
+            let title = printf('floaterm(%d/%d)', index(bufs, bufnr) + 1, cnt)
+        endif
+        let position = getbufvar(bufnr, 'floaterm_position')
+        let wintype = getbufvar(bufnr, 'floaterm_wintype')
+        let cmd = getbufvar(bufnr, 'floaterm_cmd')
+        let display = printf('%4d %s@%s/%s!%s', bufnr, title, wintype, position, cmd)
+        call add(source, display)
+    endfor
+    let spec = {
+                \ 'source': source,
+                \ 'sink': function('floaterm#enhance#fzf_sink'),
+                \ 'options': ['--prompt', 'floaterm> ', '--layout=reverse-list'],
+                \ }
+    call fzf#run(fzf#wrap('FloatermFzfList', spec, 0))
+endfunction
