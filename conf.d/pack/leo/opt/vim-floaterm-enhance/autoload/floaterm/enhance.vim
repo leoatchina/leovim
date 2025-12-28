@@ -18,7 +18,6 @@ endfunction
 " Get range from begin line to current
 function! floaterm#enhance#get_begin() abort
     let curr_line = line('.')
-    let start = 1
     return [1, curr_line == 1 ? 1 : curr_line - 1]
 endfunction
 " Get range from current line to end
@@ -35,7 +34,7 @@ endfunction
 function! floaterm#enhance#get_block() abort
     let ft = &ft
     let comment = floaterm#enhance#get_comment(ft)
-    if type(g:floaterm_repl_block_mark[ft]) == v:t_list
+    if type(g:floaterm_repl_block_mark[ft]) == type([])
         let lst = []
         for each in g:floaterm_repl_block_mark[ft]
             call add(lst, '^' . each)
