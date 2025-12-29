@@ -124,3 +124,9 @@ if pack#get('markdown')
         PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
     endif
 endif
+" ------------------------------
+" translate
+" ------------------------------
+if pack#get('translate') && v:version >= 800 && g:python_version >= 3.06
+    PlugAdd 'voldikss/vim-translator'
+endif
