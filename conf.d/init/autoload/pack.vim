@@ -81,7 +81,6 @@ function! pack#installed_lsp() abort
                 \ 'symbol-usage.nvim',
                 \ 'nvim-lsp-selection-range',
                 \ 'formatter.nvim',
-                \ 'dropbar.nvim',
                 \ 'aerial.nvim',
                 \ )
 endfunction

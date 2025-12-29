@@ -37,13 +37,13 @@ let g:coc_global_extensions = [
             \ 'coc-basedpyright',
             \ '@yaegassy/coc-ruff',
             \ ]
+if has('nvim') && !pack#planned('nvim-treesitter')
+    let g:coc_global_extensions += ['coc-symbol-line']
+endif
 if utils#is_unix()
     let g:coc_global_extensions += ['coc-lua']
 elseif utils#is_win()
     let g:coc_global_extensions += ['coc-powershell']
-endif
-if has('nvim')
-    let g:coc_global_extensions += ['coc-symbol-line']
 endif
 if pack#get('web')
     let g:coc_global_extensions += [
