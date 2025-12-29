@@ -52,16 +52,10 @@ endif
 if utils#is_vscode() && !has('nvim-0.10')
     echoe "vscode-neovim required nvim-0.10+!"
     finish
-elseif utils#is_win()
-    if !has('nvim') && v:version < 900
-        echoe "In windows, please update to vim9.0+."
-        finish
-    elseif !has('nvim-0.8') && has('nvim')
-        echoe 'neovim 0.8 is at least required when using leovim in windows.'
-        finish
-    endif
+elseif utils#is_win() && !has('nvim') && v:version < 900
+    echoe "In windows, please update to vim9.0+."
+    finish
 endif
-" gui - GUI detection moved to utils.vim
 if has('gui_running')
     if get(g:, 'leovim_loaded', 0) == 0
         set guioptions-=e
