@@ -43,9 +43,10 @@ for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
         let s:opt_plugs[plugin] = abs_dir
     endfor
 endfor
-if exists(':packadd')
-    set packpath^=$LEOVIM_DIR
-endif
+" if exists(':packadd')
+"     set packpath^=$LEOVIM_DIR
+"     set packpath^=$CONF_D_DIR
+" endif
 " --------------------------
 " gui_running && OS
 " --------------------------
@@ -440,7 +441,9 @@ let g:plugs = {}
 let g:plug_threads = get(g:, 'plug_threads', 8)
 set rtp^=$MAIN_DIR
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
+" -----------------------------------------------------------
 " unified PlugAdd (local/remote) + PlugAdd shim
+" -----------------------------------------------------------
 function! s:plug_add(plugin, ...) abort
     let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let opts = a:0 > 0 ? copy(a:1) : {}
