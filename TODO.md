@@ -51,27 +51,26 @@
 - [x] lsp-lens.nvim or symbol-usage.nvim for cmp/nvim-lsp codeaction.
 - [x] symbol-tags-search lsp check update.
 - [x] leaderf TODO/NOTE bug
-- [x] Neoformat, config like REPLFloaterm. using Q
-  - [x] nnoremap
-  - [x] xnoremap
+- [x] Neoformat, config like REPLFloaterm.
+    - [x] nnoremap
+    - [x] xnoremap
 - [x] registers enhanced, using <M-y> to copy to alphatical registers
 - [x] leaderf git
 - [x] update vim-which-key
 - [x] wilder.nvim or change wildmode settings -> longest,full
 - [x] nvim-dap conifg,
-  - [x] plan to load vscode config [https://github.com/mfussenegger/nvim-dap/blob/master/doc/dap.txt#L372]
-  - [x] daptab
-  - [x] <F3> to reset dap and close daptab.
-  - [x] <F5> load dap.json
-  - [x] <F6> pause and mv to daptab
-  - [x] <F7/F8> mv between breakpoints.
-  - [x] optimize open json config.
+    - [x] plan to load vscode config [https://github.com/mfussenegger/nvim-dap/blob/master/doc/dap.txt#L372]
+    - [x] daptab
+    - [x] <F3> to reset dap and close daptab.
+    - [x] <F5> load dap.json
+    - [x] <F6> pause and mv to daptab
+    - [x] <F7/F8> mv between breakpoints.
+    - [x] optimize open json config.
 - [x] ai editor cursor config
 - [x] jupynium.nvim.
-  - [x] local
-  - [x] remote url
+    - [x] local
+    - [x] remote url
 - [x] Add ctrl-e to edit command in FzfCallCommands
-- [x] neoconf
 - [x] imap <C-f> enhanced
 - [x] vimspector preview template in WINDOWS()
 - [x] leaderf gtags bug
@@ -116,62 +115,63 @@
     - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
 - [x] optimize nvim-0.11 builtin completion
 - [x] builtin的snippets问题
-- [ ] utils.lua NO global functions
-- [ ] windows gvim add DETACH to winbar 
+- [x] utils.lua NO global functions
+- [ ] neoconf -> codesettings.nvim
+    - [ ] https://github.com/mrjones2014/codesettings.nvim
+- [ ] windows gvim add DETACH to winbar
 - [ ] gtags without cscope
 - [ ] config formatter.nvim
-- [ ] Ai related 
+- [ ] Ai related
     - [x] ~~yarepl.nvim + aider~~
-    - [ ] copilot plus 
+    - [ ] copilot plus
     - [ ] minuet.ai
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
 ## MyPlugins:
 - [x] fzf-registers
 - [ ] vim-funky
-  - [x] open bug
-  - [x] preview funky
-  - [x] multi buffers
-  - [x] jump to another window bug
-  - [x] ~~FunkyAll not show buffer modified bug~~, actually should do w! before funky functions
-  - [x] ~~ctrlp intergrated~~, using funky#qf#show() instead
-  - [ ] README
-  - [ ] deploy to github
+    - [x] open bug
+    - [x] preview funky
+    - [x] multi buffers
+    - [x] jump to another window bug
+    - [x] ~~FunkyAll not show buffer modified bug~~, actually should do w! before funky functions
+    - [x] ~~ctrlp intergrated~~, using funky#qf#show() instead
+    - [ ] README
+    - [ ] deploy to github
 - [x] vim-floaterm-repl updates.
-  - [x] use <M-e> as prefix key
-  - [x] update repl_floaterm block send command. Updated with Find_Side
-  - [x] send block, but keep cusor position, NOTE:fixed by Find_Side function
-  - [x] g:repl_floaterm_block_mark find without textobj.
-  - [x] if REPL started, send enter in repl terminal. If not start REPL.
-  - [x] g:repl_floaterm_clear for each ft
-  - [x] g:repl_floaterm_quit for each ft
-  - [x] send current word to terminal.
-  - [x] mark content, and resend/show marked content if `quickui` installed
-  - [x] README
-  - [x] deploy to github
-- [x] name vim-floaterm-repl to vim-floaterm-enhance
-    - [x] intergrated with asyncrun.vim
-    - [x] fork vim-floaterm
-    - [x] Run is current tab related only, could not be used in other tabs, 
-- [ ] add ai intergration in vim-floaterm-enhance
-    - [ ] using different idx for ai, repl
-    - [ ] refs
-        - https://github.com/folke/sidekick.nvim 
-        - https://github.com/kitallen23/conduit.nvim
-        - https://github.com/aweis89/ai-terminals.nvim
-        - https://github.com/azorng/goose.nvim
-        - https://github.com/coder/claudecode.nvim
-        - https://github.com/marcinjahn/gemini-cli.nvim
-- [ ] vim-plug update 
-  - [x] reorganize leovim's structure to use vim-plug's lazy load
-  - [ ] floating or popup window.
-  - [ ] mix `vim-plug` and `vim-jetpack` together
+    - [x] use <M-e> as prefix key
+    - [x] update repl_floaterm block send command. Updated with Find_Side
+    - [x] send block, but keep cusor position, NOTE:fixed by Find_Side function
+    - [x] g:repl_floaterm_block_mark find without textobj.
+    - [x] if REPL started, send enter in repl terminal. If not start REPL.
+    - [x] g:repl_floaterm_clear for each ft
+    - [x] g:repl_floaterm_quit for each ft
+    - [x] send current word to terminal.
+    - [x] mark content, and resend/show marked content if `quickui` installed
+    - [x] README
+    - [x] deploy to github
+    - [x] name vim-floaterm-repl to vim-floaterm-enhance
+        - [x] intergrated with asyncrun.vim
+        - [x] fork vim-floaterm
+        - [x] Run is current tab related only, could not be used in other tabs,
+    - [ ] add ai intergration in vim-floaterm-enhance
+        - [ ] using different idx for ai, repl
+        - refs
+            - https://github.com/folke/sidekick.nvim
+            - https://github.com/aweis89/ai-terminals.nvim
+            - https://github.com/coder/claudecode.nvim
+            - https://github.com/azorng/goose.nvim
+            - https://github.com/marcinjahn/gemini-cli.nvim
+- [ ] vim-plug update
+    - [x] reorganize leovim's structure to use vim-plug's lazy load
+    - [ ] floating or popup window.
+    - [ ] mix `vim-plug` and `vim-jetpack` together
 ## Plenty of works
 - [x] ReWrite readme
 - [ ] vista
-  - [ ] icons bug in windows-terminal
-  - [ ] open shortcuts
-  - [ ] ctags enhanced, according to zhihu user `成隽`
+    - [ ] icons bug in windows-terminal
+    - [ ] open shortcuts
+    - [ ] ctags enhanced, according to zhihu user `成隽`
 - [ ] vim-zeal
-  - [ ] view document in (neo)vim
+    - [ ] view document in (neo)vim
 - [ ] Introduce video
