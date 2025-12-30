@@ -340,7 +340,7 @@ if has('nvim')
     PlugAdd 'nvim-tree/nvim-web-devicons'
     PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'kevinhwang91/nvim-bqf'
-    if pack#planned_lsp() || has('nvim-0.10') && pack#planned('nvim-treesitter')
+    if pack#planned_lsp() || has('nvim-0.11') && pack#planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()
             PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
@@ -451,3 +451,4 @@ endif
 " marks
 " ------------------------------
 PlugAdd 'kshenoy/vim-signature'
+PlugAdd 'vim-bookmarks'

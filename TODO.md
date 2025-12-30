@@ -111,11 +111,11 @@
 - [x] nvim-lsp
     - [x] require nvim-0.11
     - [x] nvim-java
-    - [x] create .vim folder for neoconf
     - [x] ~~blink sources: https://cmp.saghen.dev/configuration/sources.html#community-sources~~
 - [x] optimize nvim-0.11 builtin completion
 - [x] builtin的snippets问题
 - [x] utils.lua NO global functions
+- [ ] replace neoconf
 - [ ] neoconf -> codesettings.nvim
     - [ ] https://github.com/mrjones2014/codesettings.nvim
 - [ ] windows gvim add DETACH to winbar
