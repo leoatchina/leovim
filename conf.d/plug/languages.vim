@@ -86,7 +86,7 @@ if get(g:, 'gobin_exe', '') != '' && pack#get('go') && (has('patch-8.1.2269') ||
     PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 endif
 " ------------------------------
-" nvim-java && neoconf
+" nvim-java
 " ------------------------------
 if pack#planned_lsp() && pack#get('java')
     PlugAdd 'nvim-java/nvim-java'
