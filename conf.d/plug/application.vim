@@ -188,10 +188,8 @@ if pack#planned_lsp()
     PlugAdd 'josa42/nvim-lightline-lsp'
     " lspimport is only for pyright
     PlugAdd 'leoatchina/nvim-lspimport'
-    " neoconf
-    if pack#get('neoconf')
-        PlugAdd 'folke/neoconf.nvim'
-    endif
+    " codesettings
+    PlugAdd 'mrjones2014/codesettings.nvim'
 elseif pack#planned_coc()
     if g:python_version > 3.06 && pack#get('ale')
         let g:lint_tool = 'ale'

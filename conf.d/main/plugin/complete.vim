@@ -50,8 +50,8 @@ endif
 " -----------------------------
 " lsp && vista_default_executive
 " -----------------------------
-if pack#installed('neoconf.nvim')
-    lua require('cfg/neoconf')
+if pack#installed('codesettings.nvim')
+    lua require('cfg/codesettings')
 endif
 if pack#installed_lsp()
     let g:vista_default_executive = 'nvim_lsp'
