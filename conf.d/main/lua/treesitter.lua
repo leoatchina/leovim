@@ -127,7 +127,7 @@ if utils.installed("nvim-treesitter-refactor") then
           goto_definition = "sh",
           goto_next_usage = "sn",
           goto_previous_usage = "sp",
-          list_definitions = "gD",
+          list_definitions = "gr",
           list_definitions_toc = "gO",
         },
       },

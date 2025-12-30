@@ -32,6 +32,10 @@ let $CLONE_OPT_DIR = expand($PACK_DIR . '/clone/opt')
 " --------------------------
 set rtp^=$PACK_DIR
 set rtp^=$INIT_DIR
+" if exists(':packadd')
+"     set packpath^=$LEOVIM_DIR
+"     set packpath^=$CONF_D_DIR
+" endif
 let s:opt_plugs = {}
 for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
     for plug_dir in globpath(opt_dir, '*', 0, 1)
@@ -43,10 +47,6 @@ for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
         let s:opt_plugs[plugin] = abs_dir
     endfor
 endfor
-" if exists(':packadd')
-"     set packpath^=$LEOVIM_DIR
-"     set packpath^=$CONF_D_DIR
-" endif
 " --------------------------
 " gui_running && OS
 " --------------------------
