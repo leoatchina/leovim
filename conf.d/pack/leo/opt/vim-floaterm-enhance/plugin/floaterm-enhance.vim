@@ -1,3 +1,7 @@
+if exists('g:floaterm_repl_enhance')
+    finish
+endif
+let g:floaterm_repl_enhance = 1
 command! FloatermFzfList call floaterm#enhance#fzf_list()
 let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
 " registry runners

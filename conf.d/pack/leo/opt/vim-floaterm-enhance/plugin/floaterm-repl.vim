@@ -1,3 +1,7 @@
+if exists('g:floaterm_repl_loaded')
+    finish
+endif
+let g:floaterm_repl_loaded = 1
 let g:floaterm_repl_programs = get(g:, 'floaterm_repl_programs', {})
 " repl add_program
 call floaterm#repl#add_program('python', 'ipython --no-autoindent', 'python3', 'python', 'ptipython', 'ptpython')
