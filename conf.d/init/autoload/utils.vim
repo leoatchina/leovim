@@ -73,6 +73,19 @@ endfunction
 " ----------------------------------------
 " File Path Functions
 " ----------------------------------------
+function! utils#get_dir(path) abort
+    if isdirectory(a:path)
+      let dir = fnamemodify(a:path, ':p')
+    elseif filereadable(a:path)
+      let dir = fnamemodify(a:path, ':p:h')
+    else
+      let dir = fnamemodify(getcwd(), ':p')
+    endif
+    let dir = fnamemodify(dir, ':~')
+    let dir = escape(dir, ' %#|"')
+    return dir
+endfunction
+
 function! utils#abs_dir() abort
     return substitute(utils#expand('%:p:h', 1), '^vscode-remote://[^/]\+/%2B[^/]\+', '', '')
 endfunction

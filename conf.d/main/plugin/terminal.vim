@@ -24,6 +24,9 @@ tnoremap <silent><M-W> <C-\><C-n>:tabonly<Cr>i
 " ---------------------------------------------------------
 " floaterm
 " ---------------------------------------------------------
+if !pack#installed('vim-floaterm')
+    finish
+endif
 let g:floaterm_open_command = 'drop'
 let g:floaterm_wintype  = 'split'
 let g:floaterm_position = 'belowright'
@@ -73,9 +76,17 @@ function! s:bind_keymap(mapvar, command) abort
     execute printf('inoremap <silent>%s <C-o>:%s<CR>', a:mapvar, a:command)
     execute printf('tnoremap <silent>%s <C-\><C-n>:%s<CR>', a:mapvar, a:command)
 endfunction
+function! s:floaterm_new_list()
+    if floaterm#buflist#curr() <= 0
+        execute('FloatermNew --cwd=<C-R>=utils#get_dir(expand("%"))<CR>')
+    else
+        FloatermFzfList
+    endif
+endfunction
+command! FloatermNewOrList call s:floaterm_new_list()
 call s:bind_keymap('<M-->', 'FloatermToggle')
 call s:bind_keymap('<M-_>', 'FloatermKill')
 call s:bind_keymap('<M-{>', 'FloatermPrev')
 call s:bind_keymap('<M-}>', 'FloatermNext')
 call s:bind_keymap('<M-+>', 'FloatermOpenPos')
-call s:bind_keymap('<M-=>', 'FloatermFzfList')
+call s:bind_keymap('<M-=>', 'FloatermNewOrList')
