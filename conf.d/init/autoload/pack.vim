@@ -42,7 +42,7 @@ function! pack#installed(...) abort
         endif
         let spec = g:plugs[pack]
         let dir = get(spec, 'dir', '')
-        if  index(loaded, pack) < 0 || !isdirectory(dir)
+        if index(loaded, pack) < 0 || !isdirectory(dir)
             return 0
         endif
     endfor
