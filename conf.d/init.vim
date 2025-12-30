@@ -241,7 +241,7 @@ if has('clipboard')
     " yank command and position to editors
     " --------------------------------------------
     function! s:yank_position_to_editor(editor) abort
-        if index(['code', 'cursor', 'windsurf', 'qoder', 'trae', 'positron', 'zed', 'vim'], a:editor) >= 0
+        if index(['code', 'cursor', 'windsurf', 'antigravity', 'qoder', 'trae', 'positron', 'zed', 'vim'], a:editor) >= 0
             let editor = a:editor
             let register = (s:clipboard ==# 'unnamedplus') ? '+' : (s:clipboard ==# 'unnamed') ? '*' : ''
         else
@@ -263,17 +263,19 @@ if has('clipboard')
         endif
         echo '=== Yank current position to ' . editor . ' ==='
     endfunction
-    command! YankPositionToVscode   call s:yank_position_to_editor('code')
-    command! YankPositionToCursr    call s:yank_position_to_editor('cursor')
-    command! YankPositionToWindsurf call s:yank_position_to_editor('windsurf')
-    command! YankPositionToQoder    call s:yank_position_to_editor('qoder')
-    command! YankPositionToTrae     call s:yank_position_to_editor('trae')
-    command! YankPositionToPositron call s:yank_position_to_editor('positron')
-    command! YankPositionToVim      call s:yank_position_to_editor('vim')
-    command! YankPositionToZed      call s:yank_position_to_editor('zed')
+    command! YankPositionToVscode      call s:yank_position_to_editor('code')
+    command! YankPositionToCursr       call s:yank_position_to_editor('cursor')
+    command! YankPositionToWindsurf    call s:yank_position_to_editor('windsurf')
+    command! YankPositionToAntigravity call s:yank_position_to_editor('antigravity')
+    command! YankPositionToQoder       call s:yank_position_to_editor('qoder')
+    command! YankPositionToTrae        call s:yank_position_to_editor('trae')
+    command! YankPositionToPositron    call s:yank_position_to_editor('positron')
+    command! YankPositionToVim         call s:yank_position_to_editor('vim')
+    command! YankPositionToZed         call s:yank_position_to_editor('zed')
     nnoremap <silent><leader>yv :YankPositionToVscode<Cr>
     nnoremap <silent><leader>yc :YankPositionToCursr<Cr>
     nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
+    nnoremap <silent><leader>ya :YankPositionToAntigravity<Cr>
     nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
     nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
     nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
