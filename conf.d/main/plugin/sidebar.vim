@@ -11,34 +11,17 @@ endfunction
 " --------------------------
 " symbol
 " --------------------------
-if pack#installed('vista.vim')
-    let g:vista#renderer#ctags = 'kind'
-    let g:vista_update_on_text_changed = 1
-    let g:vista_sidebar_position = 'vertical topleft'
-    let g:vista_sidebar_width = 35
-    let g:vista_echo_cursor   = 0
-    let g:vista_stay_on_open  = 0
-    let g:vista_icon_indent   =  ["╰─▸ ", "├─▸ "]
-    let g:vista_executive_for = {
-                \ 'vimwiki': 'markdown',
-                \ 'pandoc': 'markdown',
-                \ 'markdown': 'toc',
+if pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
+    function! s:check_vista_kind(nr) abort
+        return s:check_buf_ft('vista_kind', a:nr)
+    endfunction
+    let g:sidebars.vista_ctags = {
+                \ 'position': 'left',
+                \ 'check_win': function('s:check_vista_kind'),
+                \ 'open': 'Vista ctags',
+                \ 'close': 'Vista!!'
                 \ }
-    if g:ctags_type != ''
-        let g:vista_executive_for.go = 'ctags'
-    endif
-    if get(g:, 'ctags_type', '') =~ 'Universal'
-        function! s:check_vista_kind(nr) abort
-            return s:check_buf_ft('vista_kind', a:nr)
-        endfunction
-        let g:sidebars.vista_ctags = {
-                    \ 'position': 'left',
-                    \ 'check_win': function('s:check_vista_kind'),
-                    \ 'open': 'Vista ctags',
-                    \ 'close': 'Vista!!'
-                    \ }
-        nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
-    endif
+    nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
 endif
 if pack#installed('aerial.nvim')
     lua require('cfg/aerial')
