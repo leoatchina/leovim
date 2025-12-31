@@ -90,27 +90,21 @@ local function load_json(dap_json)
   end
 
   -- 使用表来跟踪已初始化的文件类型
-  local dap_config_inited = {}
-  local cur_filetype_has_config = false
+  local dap_configed = {}
 
   for _, config in ipairs(configurations) do
     if not config.name or not config.type then
-      vim.notify("Invalid configuration in dap.json", vim.log.levels.WARN)
       goto continue
     end
 
     local filetypes = type_to_filetypes[config.type] or { cur_filetype, }
     for _, filetype in pairs(filetypes) do
-      if filetype == cur_filetype then
-        cur_filetype_has_config = true
-      end
-
-      if not dap_config_inited[filetype] then
+      if not dap_configed[filetype] then
         -- do not use default config
         dap.configurations[filetype] = {}
-        dap_config_inited[filetype] = true
+        dap_configed[filetype] = true
       end
-      -- remove old value
+      -- remove old value, 只用新的配置
       for i, dap_config in pairs(dap.configurations[filetype] ) do
         if dap_config.name == config.name then
           table.remove(dap.configurations[filetype] , i)
@@ -120,11 +114,9 @@ local function load_json(dap_json)
     end
     ::continue::
   end
-
   -- 如果 JSON 中没有当前文件类型的配置，恢复默认配置
-  if not cur_filetype_has_config and default_config then
+  if not dap.configurations[cur_filetype] and default_config then
     dap.configurations[cur_filetype] = default_config
-    vim.notify("No config for " .. cur_filetype .. " in dap.json, using default", vim.log.levels.INFO)
   end
 end
 local function dap_load_run(json_file, run, run_to_cursor)
