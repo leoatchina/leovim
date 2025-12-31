@@ -26,7 +26,14 @@ require("mason-nvim-dap").setup({
 -- 配置调试适配
 ------------------------------------------------------------
 local mason_dir = fn.expand("~/.leovim.d/mason")
--- sh
+local cmp_dir = mason_dir .. "/cmp"
+local blink_dir = mason_dir .. "/blink"
+if fn.isdirectory(cmp_dir) == 1 then
+  mason_dir = cmp_dir
+elseif fn.isdirectory(blink_dir) == 1 then
+  mason_dir = blink_dir
+end
+-- bash
 local bash_debug_adapter = mason_dir .. "/bin/bash-debug-adapter"
 local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
 dap.adapters.bashdb = {
@@ -70,15 +77,34 @@ vim.g.dap_adapters = dap.adapters
 local function load_json(dap_json)
   local cur_filetype = vim.bo.filetype
   local type_to_filetypes = vscode.type_to_filetypes
-  local configurations = vscode.getconfigs(dap_json)
-  assert(configurations, "launch.json must have a 'configurations' key")
+
+  -- 保存当前文件类型的默认配置
+  local default_config = dap.configurations[cur_filetype]
+
+  -- 尝试读取 JSON 配置
+  local ok, configurations = pcall(vscode.getconfigs, dap_json)
+  if not ok or not configurations then
+    -- 读取失败或没有配置，使用默认配置
+    vim.notify("Failed to load dap.json, using default config", vim.log.levels.WARN)
+    return
+  end
+
   -- 使用表来跟踪已初始化的文件类型
   local dap_config_inited = {}
+  local cur_filetype_has_config = false
+
   for _, config in ipairs(configurations) do
-    assert(config.name, "Configuration in launch.json must have a 'name' key")
-    assert(config.type, "Configuration in launch.json must have a 'type' key")
+    if not config.name or not config.type then
+      vim.notify("Invalid configuration in dap.json", vim.log.levels.WARN)
+      goto continue
+    end
+
     local filetypes = type_to_filetypes[config.type] or { cur_filetype, }
     for _, filetype in pairs(filetypes) do
+      if filetype == cur_filetype then
+        cur_filetype_has_config = true
+      end
+
       if not dap_config_inited[filetype] then
         -- do not use default config
         dap.configurations[filetype] = {}
@@ -92,6 +118,13 @@ local function load_json(dap_json)
       end
       table.insert(dap.configurations[filetype], config)
     end
+    ::continue::
+  end
+
+  -- 如果 JSON 中没有当前文件类型的配置，恢复默认配置
+  if not cur_filetype_has_config and default_config then
+    dap.configurations[cur_filetype] = default_config
+    vim.notify("No config for " .. cur_filetype .. " in dap.json, using default", vim.log.levels.INFO)
   end
 end
 local function dap_load_run(json_file, run, run_to_cursor)
@@ -314,10 +347,10 @@ dapui.setup({
     },
   },
 })
---------------------------------------
+---------------------------------------------------------------------------------------------
 -- daptab, auto open/close/load dapui in tab
--- https://github.com/przepompownia/nvim-dap-tab/blob/master/lua/dap-tab/init.lua
---------------------------------------
+-- XXX: https://github.com/przepompownia/nvim-dap-tab/blob/master/lua/dap-tab/init.lua
+---------------------------------------------------------------------------------------------
 local debugWinId = nil
 local function daptab_exists()
   if nil ~= debugWinId and api.nvim_win_is_valid(debugWinId) then

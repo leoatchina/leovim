@@ -363,7 +363,6 @@ elseif v:version >= 801 && !has('nvim') && pack#get('termdebug')
     nnoremap <F12> :Finish<Cr>
     " debug
     nnoremap J :Evaluate <C-r><C-w><Cr>
-    nnoremap - :Evaluate<Space>
     " other
     nnoremap <M-m>d :Termdebug<Space>
     nnoremap <M-m>c :TermdebugCommand<Space>
