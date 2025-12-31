@@ -1,3 +1,9 @@
+" ------------------------------
+" Skip in VSCode environment
+" ------------------------------
+if utils#is_vscode()
+    finish
+endif
 let g:sidebars = {}
 function! s:check_buf_ft(name, nr) abort
     return getwinvar(a:nr, '&filetype') ==# a:name || bufname(winbufnr(a:nr)) ==# a:name
