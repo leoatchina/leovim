@@ -53,46 +53,9 @@ nnoremap = :<C-r>=
 " ------------------------------
 nnoremap <M-k>r :echo utils#get_root_dir()<Cr>
 " --------------------------
-" some support
-" --------------------------
-let g:loaded_perl_provider = 0
-" --------------------------
 " python_support
 " --------------------------
-function! s:python_prog()
-    let l:venv_path = ''
-    let l:root_dir = utils#get_root_dir('.venv', '.env', 'venv', 'env')
-    let l:venv_names = ['.venv', '.env', 'venv', 'env']
-    for l:venv_name in l:venv_names
-        let l:possible_venv = l:root_dir . '/' . l:venv_name
-        if isdirectory(l:possible_venv)
-            let l:venv_path = l:possible_venv
-            break
-        endif
-    endfor
-    " set python_prog path if venv_path
-    if !empty(l:venv_path)
-        if has('win32') || has('win64')
-            let l:python_prog = l:venv_path . '/Scripts/python.exe'
-            let $PATH = l:venv_path . "\bin;". $PATH
-        else
-            let l:python_prog = l:venv_path . '/bin/python'
-            let $PATH = l:venv_path . "/bin:". $PATH
-        endif
-    endif
-    if filereadable(get(l:, "python_prog", ""))
-        let g:ale_python_pylint_executable = l:python_prog
-        let g:ale_python_flake8_executable = l:python_prog
-        return l:python_prog
-    elseif executable('python3')
-        return exepath('python3')
-    elseif executable('python')
-        return exepath('python')
-    else
-        return ""
-    endif
-endfunction
-let g:python_prog = get(g:, 'python_prog', s:python_prog())
+let g:python_prog = get(g:, 'python_prog', utils#get_python_prog())
 if has('nvim')
     let g:python3_host_prog = get(g:, 'python3_host_prog', g:python_prog)
 endif
