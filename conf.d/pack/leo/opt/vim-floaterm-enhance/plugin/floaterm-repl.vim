@@ -12,7 +12,7 @@ call floaterm#repl#add_program('ps1', 'powershell -noexit -executionpolicy bypas
 call floaterm#repl#add_program('perl', 'perlconsole', 'reply', 're.pl')
 call floaterm#repl#add_program('lua', 'lua')
 call floaterm#repl#add_program('vim', 'vim -e')
-call floaterm#repl#add_program('rudy', 'irb')
+call floaterm#repl#add_program('ruby', 'irb')
 call floaterm#repl#add_program('julia', 'julia')
 call floaterm#repl#add_program('javascript', 'node')
 " block mark

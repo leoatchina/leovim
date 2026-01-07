@@ -57,20 +57,23 @@ endfunction
 function! floaterm#asyncrun#right(opts)
     call floaterm#asyncrun#run(a:opts, 'vsplit', 'right')
 endfunction
+function! floaterm#asyncrun#left(opts)
+    call floaterm#asyncrun#run(a:opts, 'vsplit', 'left')
+endfunction
+function! floaterm#asyncrun#float(opts)
+    call floaterm#asyncrun#run(a:opts, 'float', 'center')
+endfunction
 function! floaterm#asyncrun#float_bottom(opts)
     call floaterm#asyncrun#run(a:opts, 'float', 'bottomright')
 endfunction
 function! floaterm#asyncrun#bottom(opts)
     call floaterm#asyncrun#run(a:opts, 'split', 'botright')
 endfunction
-function! floaterm#asyncrun#topleft(opts)
-    call floaterm#asyncrun#run(a:opts, 'vsplit', 'topleft')
-endfunction
 function! floaterm#asyncrun#top(opts)
     call floaterm#asyncrun#run(a:opts, 'split', 'top')
 endfunction
 function! floaterm#asyncrun#topleft(opts)
-    call floaterm#asyncrun#run(a:opts, 'float', 'topleft')
+    call floaterm#asyncrun#run(a:opts, 'vsplit', 'topleft')
 endfunction
 function! floaterm#asyncrun#center(opts)
     call floaterm#asyncrun#run(a:opts, 'float', 'center')
