@@ -133,10 +133,6 @@
     "command": "gitlens.views.graph.focus"
   },
   {
-    "key": "shift+alt+-",
-    "command": "gitlens.views.commitDetails.focus"
-  },
-  {
     "key": "alt+c",
     "command": "-gitlens.showQuickCommitFileDetails",
     "when": "editorTextFocus && !gitlens:disabled && config.gitlens.keymap == 'alternate'"
@@ -367,6 +363,10 @@
   {
     "key": "alt+-",
     "command": "workbench.action.togglePanel"
+  },
+  {
+    "key": "shift+alt+-",
+    "command": "workbench.action.closePanel"
   },
   {
     "key": "alt+,",
