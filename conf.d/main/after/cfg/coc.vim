@@ -205,15 +205,6 @@ nmap <silent><leader>ar <Plug>(coc-codeaction-refactor)
 nmap <silent><leader>as <Plug>(coc-codeaction-source)
 nmap <silent><leader>ac <Plug>(coc-codeaction-cursor)
 " ------------------------
-" coc git
-" ------------------------
-omap ig <Plug>(coc-git-chunk-inner)
-xmap ig <Plug>(coc-git-chunk-inner)
-omap ag <Plug>(coc-git-chunk-outer)
-xmap ag <Plug>(coc-git-chunk-outer)
-nmap <leader>vg vig
-nmap <leader>vG vag
-" ------------------------
 " textobject using coc lsp
 " ------------------------
 xmap if <Plug>(coc-funcobj-i)

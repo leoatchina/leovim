@@ -135,14 +135,14 @@ if pack#planned('vim-signify')
     nnoremap \<Tab> :SignifyToggle<Cr>
     nnoremap \<Space> :SignifyHunkDiff<Cr>
     nnoremap \<BackSpace> :SignifyHunkUndo<Cr>
-    nmap ;h <plug>(signify-next-hunk)
-    nmap ,h <plug>(signify-prev-hunk)
-    omap im <plug>(signify-motion-inner-pending)
-    xmap im <plug>(signify-motion-inner-visual)
-    omap am <plug>(signify-motion-outer-pending)
-    xmap am <plug>(signify-motion-outer-visual)
-    nmap <leader>vm vim
-    nmap <leader>vM vam
+    nmap ;g <plug>(signify-next-hunk)
+    nmap ,g <plug>(signify-prev-hunk)
+    omap ig <plug>(signify-motion-inner-pending)
+    xmap ig <plug>(signify-motion-inner-visual)
+    omap ag <plug>(signify-motion-outer-pending)
+    xmap ag <plug>(signify-motion-outer-visual)
+    nmap <leader>vg vig
+    nmap <leader>vG vag
     " commands
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
     nnoremap <silent>\: :SignifyCommands<Cr>
