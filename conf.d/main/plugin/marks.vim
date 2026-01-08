@@ -8,10 +8,10 @@ endif
 if pack#installed('vim-signature')
     let g:SignatureMap = {
                 \ 'Leader'           : "m",
-                \ 'ToggleMarkAtLine' : "m.",
-                \ 'PlaceNextMark'    : "m<Cr>",
-                \ 'PurgeMarksAtLine' : "m,",
-                \ 'PurgeMarks'       : "m;",
+                \ 'PlaceNextMark'    : "m;",
+                \ 'ToggleMarkAtLine' : "m<Cr>",
+                \ 'PurgeMarksAtLine' : "m.",
+                \ 'PurgeMarks'       : "m,",
                 \ 'PurgeMarkers'     : "m<Bs>",
                 \ 'DeleteMark'       : "dm",
                 \ 'ListBufferMarks'   : "m/",

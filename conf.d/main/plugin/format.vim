@@ -68,10 +68,10 @@ if pack#planned('neoformat')
         return 1
     endfunction
     command! -bang -range ChooseFormatPrg call format#choose_fmtprgg(<bang>0)
-    nnoremap <silent>+ :ChooseFormatPrg<Cr>
-    xnoremap <silent>+ :ChooseFormatPrg!<Cr>
+    nnoremap <silent>Q :ChooseFormatPrg<Cr>
+    xnoremap <silent>Q :ChooseFormatPrg!<Cr>
 else
-    nnoremap <silent>+ :call format#builtin_fmt()<Cr>
+    nnoremap <silent>Q :call format#builtin_fmt()<Cr>
 endif
 " ----------------------------
 " table_mode

@@ -31,7 +31,7 @@ endif
 " --------------------------
 " matchup
 " --------------------------
-nnoremap <silent>M :MatchupWhereAmI??<Cr>
+nnoremap <silent>sm :MatchupWhereAmI??<Cr>
 " --------------------------
 " fuzzy_finder intergrated
 " --------------------------

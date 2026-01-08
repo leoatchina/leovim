@@ -123,9 +123,9 @@ endif
 " map
 " -----------------------------------
 nnoremap q <Nop>
-nnoremap Q q
-xnoremap Q q
-onoremap Q q
+nnoremap M q
+xnoremap M q
+onoremap M q
 map ÏP <F1>
 map ÏQ <F2>
 map ÏR <F3>
