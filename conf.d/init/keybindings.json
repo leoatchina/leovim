@@ -12,6 +12,11 @@
   },
   {
     "key": "ctrl+l",
+    "command": "-vscode-neovim.send",
+    "when": "editorTextFocus && neovim.ctrlKeysInsert.l && neovim.init && neovim.mode == 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+  },
+  {
+    "key": "ctrl+l",
     "command": "-vscode-neovim.send-cmdline",
     "when": "neovim.init && neovim.mode == 'cmdline'"
   },
@@ -19,6 +24,11 @@
     "key": "ctrl+l",
     "command": "-expandLineSelection",
     "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "-notebook.centerActiveCell",
+    "when": "notebookEditorFocused"
   },
   {
     "key": "ctrl+alt+e",
@@ -609,11 +619,6 @@
     "when": "editorHasSelection && editorTextFocus"
   },
   {
-    "key": "ctrl+i",
-    "command": "-kilo-code.addToContextAndFocus",
-    "when": "editorTextFocus && kilocode.ghost.enableQuickInlineTaskKeybinding && !github.copilot.completions.enabled"
-  },
-  {
     "key": "ctrl+shift+a",
     "command": "-kilo-code.focusChatInput"
   },
@@ -626,11 +631,6 @@
     "key": "ctrl+l",
     "command": "-kilo-code.ghost.showIncompatibilityExtensionPopup",
     "when": "editorTextFocus && github.copilot.completions.enabled && kilocode.ghost.enableSmartInlineTaskKeybinding && !editorTabMovesFocus && !inSnippetMode"
-  },
-  {
-    "key": "ctrl+i",
-    "command": "-kilo-code.ghost.showIncompatibilityExtensionPopup",
-    "when": "editorTextFocus && github.copilot.completions.enabled && kilocode.ghost.enableQuickInlineTaskKeybinding"
   },
   {
     "key": "ctrl+shift+g",
@@ -655,5 +655,16 @@
   {
     "key": "ctrl+\\",
     "command": "kilo-code.addToContext"
+  },
+  // ----------------- copilot ----------------
+  {
+    "key": "ctrl+l",
+    "command": "github.copilot.chat.attachSelection",
+    "when": "editorTextFocus && github.copilot-chat.activated"
+  },
+  {
+    "key": "ctrl+alt+l",
+    "command": "github.copilot.chat.attachFile",
+    "when": "editorTextFocus && github.copilot-chat.activated"
   }
 ]
