@@ -241,7 +241,7 @@ if has('clipboard')
     " yank command and position to editors
     " --------------------------------------------
     function! s:yank_position_to_editor(editor) abort
-        if index(['code', 'cursor', 'windsurf', 'antigravity', 'qoder', 'trae', 'positron', 'zed', 'vim'], a:editor) >= 0
+        if index(['code', 'cursor', 'windsurf', 'antigravity', 'qoder', 'trae', 'positron', 'zed', 'edit'], a:editor) >= 0
             let editor = a:editor
             let register = (s:clipboard ==# 'unnamedplus') ? '+' : (s:clipboard ==# 'unnamed') ? '*' : ''
         else
@@ -249,7 +249,7 @@ if has('clipboard')
         endif
         if editor == 'zed'
             let cmd = printf('zed %s:%d:%d', utils#abs_path(), line("."), col("."))
-        elseif editor == 'vim'
+        elseif editor == 'edit'
             let cmd = printf(' %s | call cursor(%d, %d)', utils#abs_path(), line("."), col("."))
         else
             let cmd = printf('%s --goto %s:%d:%d', editor, utils#abs_path(), line("."), col("."))
@@ -270,8 +270,8 @@ if has('clipboard')
     command! YankPositionToQoder       call s:yank_position_to_editor('qoder')
     command! YankPositionToTrae        call s:yank_position_to_editor('trae')
     command! YankPositionToPositron    call s:yank_position_to_editor('positron')
-    command! YankPositionToVim         call s:yank_position_to_editor('vim')
     command! YankPositionToZed         call s:yank_position_to_editor('zed')
+    command! YankPositionToEdit        call s:yank_position_to_editor('edit')
     nnoremap <silent><leader>yv :YankPositionToVscode<Cr>
     nnoremap <silent><leader>yc :YankPositionToCursr<Cr>
     nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
@@ -279,8 +279,26 @@ if has('clipboard')
     nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
     nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
     nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
-    nnoremap <silent><leader>ye :YankPositionToVim<Cr>
     nnoremap <silent><leader>yz :YankPositionToZed<Cr>
+    nnoremap <silent><leader>ye :YankPositionToEdit<Cr>
+    function! s:yank_line_ref(start, end) range abort
+        let l:ref = utils#abs_path() . '#L' . a:start
+        if a:start != a:end
+            let l:ref .= '-L' . a:end
+        endif
+        let l:register = (s:clipboard ==# 'unnamedplus') ? '+' : (s:clipboard ==# 'unnamed') ? '*' : ''
+        if l:register == '+'
+            let @+ = l:ref
+        elseif l:register == '*'
+            let @* = l:ref
+        else
+            let @" = l:ref
+        endif
+        echo '=== Yank line reference === '
+    endfunction
+    command! -range YankLineRef call s:yank_line_ref(<line1>, <line2>)
+    nnoremap <silent><leader>yl :YankLineRef<Cr>
+    xnoremap <silent><leader>yl :YankLineRef<Cr>
 else
     let s:clipboard = ""
     set clipboard=
