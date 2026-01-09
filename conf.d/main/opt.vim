@@ -48,9 +48,10 @@ let g:nvim_treesitter_install = utils#is_unix()
 " let g:gemini_model = 'gemini-2.5-flash'
 " let g:deepseek_model = 'deepseek-chat'
 
+
 " let g:openai_compatible_api_key = ''
-" let g:openai_compatible_url = ''
 " let g:openai_compatible_model = ''
+" let g:openai_compatible_url = ''
 
 if has('nvim')
     " if utils#has_gui()
