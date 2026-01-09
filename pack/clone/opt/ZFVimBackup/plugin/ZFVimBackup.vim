@@ -252,6 +252,10 @@ if get(g:, 'ZFBackup_autoEnable', 1)
     call ZFBackup_enable()
 endif
 
+function! ZFBackup_state()
+    return get(s:, 'state', {})
+endfunction
+
 function! s:ZFBackup_autoClean_sortFunc(backupInfo1, backupInfo2)
     if a:backupInfo1['time'] == a:backupInfo2['time']
         return 0
@@ -342,6 +346,10 @@ function! s:stateSave()
         return
     endif
     let s:stateChanged = 0
+
+    " load again, to prevent multiple vim instance data race
+    call s:stateLoad()
+
     let stateExists = {}
     for backupFile in s:getAllBackupFilePath()
         let backupInfo = s:backupInfoDecode(backupFile)
@@ -368,7 +376,9 @@ function! s:stateLoad()
     if !filereadable(ZFBackup_stateFilePath())
         return
     endif
-    let s:state = {}
+    if !exists('s:state')
+        let s:state = {}
+    endif
     for line in readfile(ZFBackup_stateFilePath())
         let split = split(line, '\~')
         if len(split) != 2
@@ -503,8 +513,8 @@ function! s:backupSave(filePath, option)
                 if i != 0
                     silent! call delete(backupDir . '/' . backupInfoListOld[i]['backupFile'])
                     call Fn_backupFunc(absPath, backupDir . '/' . backupInfoNew['backupFile'])
-                    call s:stateSet(backupInfoNew['pathMD5'], name, fnamemodify(absPath, ':h'))
                 endif
+                call s:stateSet(backupInfoNew['pathMD5'], name, fnamemodify(absPath, ':h'))
                 return
             endif
         endfor
