@@ -1,7 +1,8 @@
+PlugAdd 'ZFVimJob'
+PlugAdd 'ZFVimDirDiff'
 " --------------------
 " ZFIgnore
 " --------------------
-PlugAdd 'ZFVimJob'
 function! s:ZFIgnore_LeaderF()
     let ignore = ZFIgnoreGet()
     let g:Lf_WildIgnore = {'file' : ignore['file'], 'dir' : ignore['dir']}
@@ -20,8 +21,8 @@ let g:ZFIgnore_ignore_gitignore_detectOption = {
             \ 'parent' : 1,
             \ 'parentRecursive' : 0,
             \ }
-PlugAdd 'ZFVimIgnore'
 autocmd User ZFIgnoreOnToggle let &wildignore = join(ZFIgnoreToWildignore(ZFIgnoreGet()), ',')
+PlugAdd 'ZFVimIgnore'
 " --------------------
 " ZFVimBackup
 " --------------------
@@ -31,7 +32,7 @@ nnoremap <M-j><M-l> :ZFBackupList<Cr>
 nnoremap <M-j><M-d> :ZFBackupListDir<Cr>
 nnoremap <M-j><M-m> :ZFBackupRemove<Cr>
 nnoremap <M-j><M-r> :ZFBackupRemoveDir<Cr>
-function! s:zfbackup_cleanup() abort
+function! zfvim#zfbackup_cleanup() abort
     let confirm = utils#choose_one(['yes', 'no'], "Cleanup all ZFBackup files?")
     if confirm == 'yes'
         if utils#is_win()
@@ -41,20 +42,29 @@ function! s:zfbackup_cleanup() abort
         endif
     endif
 endfunction
-nnoremap <silent><M-j><M-c> :call <SID>zfbackup_cleanup()<Cr>
-function! s:zfbackup_savedir() abort
+nnoremap <silent><M-j><M-c> :call zfvim#zfbackup_cleanup()<Cr>
+function! zfvim#zfbackup_savedir() abort
     let confirm = utils#choose_one(['yes', 'no'], "Save current dir using ZFBackup?")
     if confirm == 'yes'
         call preview#cmdmsg("Start to save files under current dir", 1)
         ZFBackupSaveDir
     endif
 endfunction
-nnoremap <silent><M-j><M-b> :call <SID>zfbackup_savedir()<Cr>
+nnoremap <silent><M-j><M-b> :call zfvim#zfbackup_savedir()<Cr>
 PlugAdd 'ZFVimBackup'
-" --------------------
+" ------------------------------
 " ZFVimIM
-" --------------------
-if !pack#installed('ZFVimIM')
+" ------------------------------
+if (pack#get('wubi') || pack#get('pinyin')) && g:has_terminal && utils#is_unix()
+    PlugAdd 'ZSaberLv0/ZFVimIM'
+    if pack#get('wubi')
+        PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'
+        let g:input_method = 'zfvim_wubi'
+    else
+        let g:input_method = 'zfvim_pinyin'
+    endif
+    PlugAdd 'ZSaberLv0/ZFVimIM_pinyin'
+else
     finish
 endif
 let g:ZFVimIM_cachePath=$HOME.'/.vim/ZFVimIM'
@@ -165,16 +175,14 @@ if pack#get('wubi')
     function! s:myLocalDb()
         let wubi = ZFVimIM_dbInit(
                     \ {
-                        \ 'name':'wubi',
-                        \ 'priority':1
-                        \ }
-                        \ )
+                    \ 'name':'wubi',
+                    \ 'priority':1
+                    \ })
         let pinyin = ZFVimIM_dbInit(
                     \ {
-                        \ 'name':'pinyin',
-                        \ 'priority':2
-                        \ }
-                        \ )
+                    \ 'name':'pinyin',
+                    \ 'priority':2
+                    \ })
     endfunction
     autocmd User ZFVimIM_event_OnDbInit call s:myLocalDb()
 endif
@@ -205,21 +213,4 @@ if has('terminal') || has('nvim')
     endfunction
     command! -nargs=* PassToTerm :call PassToTerm(<q-args>)
     tnoremap :: <c-\><c-n>q:a:PassToTerm<space>
-endif
-" ----------------------------
-" dirdiff
-" ----------------------------
-PlugAdd 'ZFVimDirDiff'
-" ------------------------------
-" ZFVimIM
-" ------------------------------
-if (pack#get('wubi') || pack#get('pinyin')) && g:has_terminal && utils#is_unix()
-    PlugAdd 'ZSaberLv0/ZFVimIM'
-    if pack#get('wubi')
-        PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'
-        let g:input_method = 'zfvim_wubi'
-    else
-        let g:input_method = 'zfvim_pinyin'
-    endif
-    PlugAdd 'ZSaberLv0/ZFVimIM_pinyin'
 endif
