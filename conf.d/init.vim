@@ -282,7 +282,7 @@ if has('clipboard')
     nnoremap <silent><leader>yz :YankPositionToZed<Cr>
     nnoremap <silent><leader>ye :YankPositionToEdit<Cr>
     function! s:yank_line_ref(start, end) range abort
-        let l:ref = utils#abs_path() . '#L' . a:start
+        let l:ref = '@' . utils#abs_path() . '#L' . a:start
         if a:start != a:end
             let l:ref .= '-L' . a:end
         endif
