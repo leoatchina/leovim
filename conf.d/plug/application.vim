@@ -113,51 +113,21 @@ if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 " ------------------------------
-" textobj install
-" ------------------------------
-if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', utils#is_unix())
-    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master'}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
-    PlugAdd 'm-demare/hlargs.nvim'
-elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
-    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
-    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
-    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
-    PlugAdd 'gcmt/wildfire.vim'
-endif
-" ------------------------------
-" AI engine install
-" ------------------------------
-if pack#get('copilot_plus') ||
-    \  exists('$GEMINI_API_KEY') ||
-    \  exists('$XAI_API_KEY') ||
-    \  exists('$DEEPSEEK_API_KEY') ||
-    \  exists('$MISTRAL_API_KEY') ||
-    \  exists('$HUGGINGFACE_API_KEY') ||
-    \  exists('$OPENAI_API_KEY') ||
-    \  exists('$ANTHROPIC_API_KEY')
-    let g:ai_api_key = 2
-elseif get(g:, 'openai_compatible_api_key', '') != '' &&
-    \  get(g:, 'openai_compatible_model', '') != '' &&
-    \  get(g:, 'openai_compatible_url', '') != ''
-    let g:ai_api_key = 1
-else
-    let g:ai_api_key = 0
-endif
 " AI complete
+" ------------------------------
 if has('nvim-0.10') && pack#get('minuet-ai') && (
     \  exists('$GEMINI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
     \  exists('$OPENAI_API_KEY') ||
     \  exists('$CODESTRAL_API_KEY') ||
     \  exists('$ANTHROPIC_API_KEY') ||
-    \  g:ai_api_key == 1
+    \  get(g:, 'openai_compatible_api_key', '') != '' &&
+    \  get(g:, 'openai_compatible_model', '') != '' &&
+    \  get(g:, 'openai_compatible_url', '') != ''
     \  )
     PlugAdd 'milanglacier/minuet-ai.nvim'
 elseif has('patch-9.0.0185') || has('nvim')
-    if pack#get('codeium')
+    if pack#get('windsurf')
         PlugAdd 'Exafunction/windsurf.vim'
     elseif pack#get('copilot') && !pack#get('copilot_plus') && g:node_version > 18
         PlugAdd 'github/copilot.vim'
@@ -203,6 +173,21 @@ elseif has('nvim-0.9.5') && pack#get('debug') || pack#planned_lsp() && pack#get(
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+endif
+" ------------------------------
+" textobj install
+" ------------------------------
+if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', utils#is_unix())
+    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master'}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
+    PlugAdd 'm-demare/hlargs.nvim'
+elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
+    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
+    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
+    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+    PlugAdd 'gcmt/wildfire.vim'
 endif
 " -----------------------
 " format install

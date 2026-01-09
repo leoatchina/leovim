@@ -8,12 +8,9 @@ endif
 " ------------------------------
 " AI complete
 " ------------------------------
-let g:max_tokens = get(g:, 'max_tokens', 8192)
 if pack#installed('minuet-ai.nvim')
-    lua require("cfg/api")
     lua require('cfg/minuet')
     let g:ai_complete_engine = 'minuet'
-    let s:api_required = 1
 elseif pack#installed('windsurf.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
