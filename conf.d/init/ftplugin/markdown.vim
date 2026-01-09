@@ -24,7 +24,6 @@ if pack#installed('render-markdown.nvim')
     nnoremap <silent><buffer><M-B> :RenderMarkdown buf_toggle<Cr>
     augroup SetupRenderMarkdown
         autocmd!
-        autocmd User codecompanion.nvim,mini.pick ++once lua utils#is_require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
         autocmd FileType markdown,vimwiki ++once lua utils#is_require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
     augroup END
 endif

@@ -37,16 +37,6 @@ elseif pack#installed('copilot.vim')
     imap <silent><nowait><M-:> <Plug>(copilot-accept-line)
     let g:ai_complete_engine = 'copliot'
 endif
-if pack#installed('codecompanion.nvim', 'codecompanion-history.nvim', 'mcphub.nvim')
-    if !get(s:, 'api_required', 0)
-        lua require("cfg/api")
-    endif
-    lua require("cfg/codecompanion")
-elseif !exists("g:ai_complete_engine")
-    nnoremap <M-i> <Nop>
-    xnoremap <M-i> <Nop>
-    inoremap <M-i> <Nop>
-endif
 " -----------------------------
 " lsp && vista_default_executive
 " -----------------------------

@@ -146,15 +146,6 @@ elseif get(g:, 'openai_compatible_api_key', '') != '' &&
 else
     let g:ai_api_key = 0
 endif
-if g:ai_api_key > 0 && pack#planned('nvim-treesitter') && executable('curl') && pack#planned_lsp() && pack#get('codecompanion')
-    PlugAdd 'olimorris/codecompanion.nvim'
-    PlugAdd 'ravitemer/codecompanion-history.nvim'
-    PlugAdd 'franco-ruggeri/codecompanion-spinner.nvim'
-    PlugAdd 'ravitemer/mcphub.nvim'
-    if executable('vectorcode')
-        PlugAdd 'Davidyz/VectorCode'
-    endif
-endif
 " AI complete
 if has('nvim-0.10') && pack#get('minuet-ai') && (
     \  exists('$GEMINI_API_KEY') ||
@@ -347,7 +338,7 @@ if has('nvim')
     if pack#planned_lsp() || pack#planned('nvim-dap')
         PlugAdd 'mason-org/mason.nvim'
     endif
-    if pack#planned_lsp() || pack#planned('nvim-dap') || pack#planned('codecompanion.nvim') || pack#planned('minuet-ai.nvim')
+    if pack#planned_lsp() || pack#planned('nvim-dap') || pack#planned('minuet-ai.nvim')
         PlugAdd 'MunifTanjim/nui.nvim'
         PlugAdd 'nvim-lua/plenary.nvim'
         PlugAdd 'stevearc/dressing.nvim'

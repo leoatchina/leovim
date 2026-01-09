@@ -30,8 +30,6 @@ let g:nvim_treesitter_install = utils#is_unix()
 " call pack#add('debug')
 " call pack#add('minuet-ai')
 
-" call pack#add('aider')
-" call pack#add('codecompanion')
 
 " let g:open_editor="code.exe"
 " let g:open_neovim="nvim.exe"
