@@ -109,10 +109,6 @@ git clone --depth 1 https://github.com/lambdalisue/vim-glyph-palette
 git clone --depth 1 https://github.com/LumaKernel/fern-mapping-fzf.vim
 git clone --depth 1 https://github.com/yuki-yano/fern-preview.vim
 
-# quickui
-rm -rf vim-quickui
-git clone --depth 1 https://github.com/leoatchina/vim-quickui
-
 # zfvim
 rm -rf ZFVim*
 git clone --depth 1 https://github.com/ZSaberLv0/ZFVimJob.git
