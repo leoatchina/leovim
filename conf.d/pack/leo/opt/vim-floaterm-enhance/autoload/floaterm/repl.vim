@@ -5,7 +5,12 @@ function! floaterm#repl#get_repl_bufnr(idx) abort
     if exists('t:floaterm_repl_terms') && has_key(t:floaterm_repl_terms, a:idx)
         let termname = t:floaterm_repl_terms[a:idx]
         let bufnr = floaterm#terminal#get_bufnr(termname)
-        return [bufnr, termname]
+        if bufnr <= 0
+            call remove(t:floaterm_repl_terms, idx)
+            return [-1, '']
+        else
+            return [bufnr, termname]
+        endif
     else
         return [-1, '']
     endif
