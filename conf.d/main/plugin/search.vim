@@ -195,7 +195,7 @@ if pack#planned_fzf()
             if a:0 == 1
                 let search_str = get(g:, 'fzf_search_last', '')
             else
-                let search_str = utils#escape(a:1)
+                let search_str = a:1
                 let g:fzf_search_last = search_str
             endif
         elseif a:000[-1] == 2
@@ -205,7 +205,7 @@ if pack#planned_fzf()
             if a:0 == 1
                 let search_str = get(g:, 'fzf_searchall_last', '')
             else
-                let search_str = utils#escape(a:1)
+                let search_str = a:1
                 let g:fzf_searchall_last = search_str
             endif
         elseif a:000[-1] == 3
@@ -215,8 +215,8 @@ if pack#planned_fzf()
             if a:0 == 1
                 let search_str = get(g:, 'fzf_searchgit_last', '')
             else
-                let search_str = utils#escape(a:1)
-                let g:fzf_searchgit_last = search_str
+                let search_str = a:1
+                let g:fzf_searchall_last = search_str
             endif
         else
             return
