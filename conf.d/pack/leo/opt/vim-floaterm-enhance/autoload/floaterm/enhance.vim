@@ -110,12 +110,12 @@ function! floaterm#enhance#showmsg(content, ...) abort
     if saveshow != 0
         set showmode
     endif
-endfunc
+endfunction
 
 " --------------------------------------------------------------
 " floaterm fzf list
 " --------------------------------------------------------------
-function! floaterm#enhance#fzf_sink(line) abort
+function! floaterm#enhance#term_open(line) abort
     let bufnr = str2nr(matchstr(a:line, '^\d\+'))
     if bufnr <= 0
         call floaterm#enhance#showmsg('Invalid floaterm selection', 1)
@@ -124,9 +124,9 @@ function! floaterm#enhance#fzf_sink(line) abort
     call floaterm#terminal#open_existing(bufnr)
 endfunction
 
-function! floaterm#enhance#fzf_list() abort
+function! floaterm#enhance#term_list() abort
     if !exists('*fzf#run')
-        call floaterm#enhance#showmsg('fzf.vim is required for FloatermFzfList', 1)
+        call floaterm#enhance#showmsg('fzf.vim is required for FloatermList', 1)
         return
     endif
     let bufs = floaterm#buflist#gather()
@@ -154,8 +154,30 @@ function! floaterm#enhance#fzf_list() abort
     endfor
     let spec = {
                 \ 'source': source,
-                \ 'sink': function('floaterm#enhance#fzf_sink'),
+                \ 'sink': function('floaterm#enhance#term_open'),
                 \ 'options': ['--prompt', 'floaterm> ', '--layout=reverse-list'],
                 \ }
-    call fzf#run(fzf#wrap('FloatermFzfList', spec, 0))
+    call fzf#run(fzf#wrap('FloatermList', spec, 0))
+endfunction
+
+" --------------------------------------------------------------
+" get file absolute path
+" --------------------------------------------------------------
+function! floaterm#enhance#get_file_abspath() abort
+    return '@' . fnamemodify(expand('%'), ':p')
+endfunction
+
+function! floaterm#enhance#get_file_absdir() abort
+    return '@' . fnamemodify(expand('%'), ':p:h')
+endfunction
+
+" --------------------------------------------------------------
+" get current line and selected lines in format @file#L1-L10
+" --------------------------------------------------------------
+function! floaterm#enhance#get_file_line_range(start, end) range abort
+    let range = '@' . floaterm#enhance#get_file_abspath() . '#L' . a:start
+    if a:start != a:end
+        let range .= '-L' . a:end
+    endif
+    return range
 endfunction

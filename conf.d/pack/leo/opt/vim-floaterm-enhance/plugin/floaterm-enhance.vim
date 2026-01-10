@@ -1,10 +1,10 @@
-if exists('g:floaterm_repl_enhance')
+if exists('g:floaterm_enhance_loaded')
     finish
 endif
-let g:floaterm_repl_enhance = 1
-command! FloatermFzfList call floaterm#enhance#fzf_list()
-let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
+let g:floaterm_enhance_loaded = 1
+command! FloatermList call floaterm#enhance#term_list()
 " registry runners
+let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
 let g:asyncrun_runner.floaterm_right  = function('floaterm#asyncrun#right')
 let g:asyncrun_runner.floaterm_float  = function('floaterm#asyncrun#float')
 let g:asyncrun_runner.floaterm_bottom = function('floaterm#asyncrun#bottom')

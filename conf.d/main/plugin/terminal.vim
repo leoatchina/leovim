@@ -80,7 +80,7 @@ function! s:floaterm_new_list()
     if floaterm#buflist#curr() <= 0
         execute('FloatermNew --cwd=<C-R>=utils#get_dir(expand("%"))<CR>')
     else
-        FloatermFzfList
+        FloatermList
     endif
 endfunction
 command! FloatermNewOrList call s:floaterm_new_list()
