@@ -159,13 +159,13 @@ function! floaterm#terminal#send(bufnr, cmds, ...) abort
     " default send cr
     if !a:0
         let send_cr = 1
-    elseif a:0 && a:1 > 0 
+    elseif a:0 && a:1 > 0
         let send_cr = 1
     else
         let send_cr = 0
     endif
     if has('nvim')
-        if send_cr 
+        if send_cr
             call add(a:cmds, '')
         endif
         call chansend(ch, a:cmds)

@@ -40,7 +40,7 @@ function! floaterm#repl#choose_program(lst) abort
         let cnt += 1
         call add(contents, '&' . cnt . ' '. cmd)
     endfor
-    if &rtp=~#'vim-quickui'
+    if exists('*QuickThemeChange') 
         let opts = {'title': title, 'index': g:quickui#listbox#cursor, 'w': 64}
         let idx = quickui#listbox#inputlist(contents, opts)
         if idx >= 0
@@ -48,11 +48,7 @@ function! floaterm#repl#choose_program(lst) abort
         endif
     else
         let cnt += 1
-        if a:0 >= 3 && a:3 != ''
-            call add(contents, '&' . a:3)
-        else
-            call add(contents, '&0None')
-        endif
+        call add(contents, '&0 Cancel')
         let content = join(contents, "\n")
         let idx = confirm(title, content, cnt)
         if idx > 0 && idx < cnt
@@ -101,7 +97,7 @@ endfunction
 " -------------------------------------
 " start repl (internal function)
 " -------------------------------------
-function! floaterm#repl#start(ft, choose_prg) abort
+function! floaterm#repl#ft_start(ft, choose_prg) abort
     if !has_key(g:floaterm_repl_programs, a:ft) || len(get(g:floaterm_repl_programs, a:ft, [])) == 0
         call floaterm#enhance#showmsg(printf("REPL program for %s not set or installed, please install and add it g:floaterm_repl_programs.", a:ft), 1)
         return v:false
@@ -165,13 +161,13 @@ endfunction
 " start repl (auto select program)
 " -------------------------------------
 function! floaterm#repl#start() abort
-    return floaterm#repl#start(&filetype, v:false)
+    return floaterm#repl#ft_start(&filetype, v:false)
 endfunction
 " -------------------------------------
 " start repl (choose program interactively)
 " -------------------------------------
 function! floaterm#repl#choose() abort
-    return floaterm#repl#start(&filetype, v:true)
+    return floaterm#repl#ft_start(&filetype, v:true)
 endfunction
 " -------------------------------------
 " set repl program for each filetype
