@@ -1,0 +1,15 @@
+{
+  "configurations": {
+    "cpp:attach": {
+      "adapter": "vscode-cpptools",
+      "configuration": {
+        "name": "cpp",
+        "type": "cppdbg",
+        "request": "attach",
+        "stopOnEntry": false,
+        "program": "${fileDirname}/${fileBasenameNoExtension}",
+        "MIMode": "gdb"
+      }
+    }
+  }
+}
