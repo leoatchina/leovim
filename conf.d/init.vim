@@ -68,7 +68,7 @@ if has('gui_running')
         set guioptions-=m
         set guioptions-=
     endif
-elseif utils#is_vscode()
+elseif utils#is_neovide()
     let g:neovide_cursor_animation_length = 0
 endif
 " ------------------------
@@ -122,10 +122,10 @@ endif
 " -----------------------------------
 " map
 " -----------------------------------
-nnoremap q <Nop>
-nnoremap M q
-xnoremap M q
-onoremap M q
+nmap q <Nop>
+nmap M q
+xmap M q
+omap M q
 map ÏP <F1>
 map ÏQ <F2>
 map ÏR <F3>
@@ -153,10 +153,10 @@ xnoremap , <Nop>
 " enhanced remap
 xmap >> >gv
 xmap << <gv
-nnoremap <silent> gj j
-nnoremap <silent> gk k
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
+nmap <silent> gj j
+nmap <silent> gk k
+nmap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
+nmap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 " z remap
 nnoremap zs <Nop>
 nnoremap zS <Nop>
@@ -181,6 +181,7 @@ nnoremap ZD m1guiw`1
 " home end
 cmap <C-a> <Home>
 cmap <C-e> <End>
+imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
 imap <expr><C-b> pumvisible()? "\<C-b>":"\<C-o>I"
 imap <expr><C-f> pumvisible()? "\<C-f>":"\<C-o>A"
 nnoremap H ^
@@ -283,12 +284,13 @@ if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
 let g:plugs = {}
-let g:plug_threads = get(g:, 'plug_threads', 8)
+let g:plug_threads = get(g:, 'plug_threads', 16)
 set rtp^=$MAIN_DIR
+" -----------------------------------------------------------
+" NOTE: plugs begin
+" -----------------------------------------------------------
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-" -----------------------------------------------------------
 " unified PlugAdd (local/remote) + PlugAdd shim
-" -----------------------------------------------------------
 function! s:plug_add(plugin, ...) abort
     let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let opts = a:0 > 0 ? copy(a:1) : {}
@@ -321,7 +323,6 @@ function! s:plug_add(plugin, ...) abort
     endif
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
-" map
 function! s:plug_add_update() abort
     let vimrc_opt = utils#expand('~/.vimrc.opt')
     if filereadable(vimrc_opt)
@@ -345,6 +346,9 @@ if utils#is_vscode()
 else
     source $MAIN_DIR/main.vim
 endif
+" -----------------------------------------------------------
+" NOTE: plugs end
+" -----------------------------------------------------------
 call plug#end()
 " addtional vim config
 if filereadable(utils#expand("~/.leovim.d/after.vim"))

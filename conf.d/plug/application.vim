@@ -167,7 +167,7 @@ endif
 " ------------------------------
 if g:python_version >= 3.1 && pack#get('debug') && (has('patch-8.2.4797') || has('nvim') && !pack#planned_lsp())
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', {'do': g:python_prog . vimspector_install}
+    PlugAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install }
 elseif has('nvim-0.9.5') && pack#get('debug') || pack#planned_lsp() && pack#get('java')
     PlugAdd 'mfussenegger/nvim-dap'
     PlugAdd 'nvim-neotest/nvim-nio'
