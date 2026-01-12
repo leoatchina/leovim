@@ -68,7 +68,7 @@ if has('gui_running')
         set guioptions-=m
         set guioptions-=
     endif
-elseif utils#is_vscode()
+elseif utils#is_neovide()
     let g:neovide_cursor_animation_length = 0
 endif
 " ------------------------
@@ -122,10 +122,10 @@ endif
 " -----------------------------------
 " map
 " -----------------------------------
-nnoremap q <Nop>
-nnoremap M q
-xnoremap M q
-onoremap M q
+nmap q <Nop>
+nmap M q
+xmap M q
+omap M q
 map ÏP <F1>
 map ÏQ <F2>
 map ÏR <F3>
