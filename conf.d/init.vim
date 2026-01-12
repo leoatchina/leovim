@@ -153,10 +153,10 @@ xnoremap , <Nop>
 " enhanced remap
 xmap >> >gv
 xmap << <gv
-nnoremap <silent> gj j
-nnoremap <silent> gk k
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
+nmap <silent> gj j
+nmap <silent> gk k
+nmap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
+nmap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 " z remap
 nnoremap zs <Nop>
 nnoremap zS <Nop>
@@ -181,6 +181,7 @@ nnoremap ZD m1guiw`1
 " home end
 cmap <C-a> <Home>
 cmap <C-e> <End>
+imap <expr><C-a> pumvisible()? "\<C-a>":"\<C-o>0"
 imap <expr><C-b> pumvisible()? "\<C-b>":"\<C-o>I"
 imap <expr><C-f> pumvisible()? "\<C-f>":"\<C-o>A"
 nnoremap H ^
