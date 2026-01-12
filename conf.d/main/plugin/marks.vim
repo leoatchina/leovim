@@ -27,6 +27,8 @@ if pack#installed('vim-signature')
                 \ }
 endif
 if pack#installed('vim-bookmarks')
-    nnoremap ms :BookmarkSave<Space>
-    nnoremap ml :BookmarkLoad<Space>
+    nmap mj <Plug>BookmarkNext
+    nmap mk <Plug>BookmarkPrev
+    nmap ms :BookmarkSave<Space>
+    nmap ml :BookmarkLoad<Space>
 endif
