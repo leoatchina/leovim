@@ -85,7 +85,7 @@ function! s:floaterm_new_list()
 endfunction
 command! FloatermNewOrList call s:floaterm_new_list()
 call s:bind_keymap('<M-->', 'FloatermToggle')
-call s:bind_keymap('<M-_>', 'FloatermKill')
+call s:bind_keymap('<M-_>', 'FloatermHide')
 call s:bind_keymap('<M-{>', 'FloatermPrev')
 call s:bind_keymap('<M-}>', 'FloatermNext')
 call s:bind_keymap('<M-+>', 'FloatermOpenPos')
