@@ -284,12 +284,13 @@ if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
 let g:plugs = {}
-let g:plug_threads = get(g:, 'plug_threads', 8)
+let g:plug_threads = get(g:, 'plug_threads', 16)
 set rtp^=$MAIN_DIR
+" -----------------------------------------------------------
+" NOTE: plugs begin
+" -----------------------------------------------------------
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-" -----------------------------------------------------------
 " unified PlugAdd (local/remote) + PlugAdd shim
-" -----------------------------------------------------------
 function! s:plug_add(plugin, ...) abort
     let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let opts = a:0 > 0 ? copy(a:1) : {}
@@ -322,7 +323,6 @@ function! s:plug_add(plugin, ...) abort
     endif
 endfunction
 command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
-" map
 function! s:plug_add_update() abort
     let vimrc_opt = utils#expand('~/.vimrc.opt')
     if filereadable(vimrc_opt)
@@ -346,6 +346,9 @@ if utils#is_vscode()
 else
     source $MAIN_DIR/main.vim
 endif
+" -----------------------------------------------------------
+" NOTE: plugs end
+" -----------------------------------------------------------
 call plug#end()
 " addtional vim config
 if filereadable(utils#expand("~/.leovim.d/after.vim"))
