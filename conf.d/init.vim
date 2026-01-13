@@ -153,10 +153,10 @@ xnoremap , <Nop>
 " enhanced remap
 xmap >> >gv
 xmap << <gv
-nmap <silent> gj j
-nmap <silent> gk k
-nmap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
-nmap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
+nnoremap <silent> gj j
+nnoremap <silent> gk k
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 " z remap
 nnoremap zs <Nop>
 nnoremap zS <Nop>
