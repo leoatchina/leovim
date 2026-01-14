@@ -181,3 +181,87 @@ function! floaterm#enhance#get_file_line_range(start, end) range abort
     endif
     return range
 endfunction
+
+" --------------------------------------------------------------
+" fzf select and run programs
+" --------------------------------------------------------------
+function! floaterm#enhance#select_program(programs, prompt, ...) abort
+    if !exists('*fzf#run')
+        call floaterm#enhance#showmsg('fzf.vim is required for FloatermProgram', 1)
+        return
+    endif
+    if empty(a:programs)
+        call floaterm#enhance#showmsg('No programs provided', 1)
+        return
+    endif
+    let prompt = a:prompt
+    let l:wincmdp = a:0 > 1 && type(a:2) == type(v:true) ? a:2 : v:true
+    let l:source = []
+    let l:done = v:false
+    let l:selected = v:null
+    let l:program_map = {}
+    for item in a:programs
+        if type(item) != type([]) || len(item) < 2
+            continue
+        endif
+        let cmd = item[0]
+        let opts = item[1]
+        if len(item) >= 3
+            let type = item[2]
+        else
+            let type = 'PROG'
+        endif
+        let display = printf('%s|%s %s', cmd, type, opts)
+        let l:program_map[display] = [cmd, type, opts]
+        call add(l:source, display)
+    endfor
+    if empty(l:source)
+        call floaterm#enhance#showmsg('No valid programs available', 1)
+        return
+    endif
+
+    function! s:_floaterm_program_finish() abort closure
+        if !l:done
+            return
+        endif
+        if !empty(l:selected) && has_key(l:program_map, l:selected)
+            let [cmd, type , opts] = l:program_map[l:selected]
+            let command = printf('FloatermNew %s %s', opts, cmd)
+            try
+                call execute(command)
+                let t:floaterm_program_bufnr = floaterm#buflist#curr()
+                call floaterm#config#set(t:floaterm_program_bufnr, 'program', type)
+                if l:wincmdp
+                    wincmd p
+                endif
+            catch /.*/
+                call floaterm#enhance#showmsg('Failed to run program: ' . cmd, 1)
+            endtry
+        else
+            let t:floaterm_program_bufnr = v:null
+        endif
+    endfunction
+
+    function! s:_floaterm_program_sink(selection) abort closure
+        let l:done = v:true
+        if empty(a:selection) || !has_key(l:program_map, a:selection)
+            let l:selected = v:null
+        else
+            let l:selected = a:selection
+        endif
+        call timer_start(0, {-> s:_floaterm_program_finish()})
+        return
+    endfunction
+    function! s:_floaterm_program_exit(code) abort closure
+        let l:done = v:true
+        let l:selected = v:null
+        call timer_start(0, {-> s:_floaterm_program_finish()})
+    endfunction
+    let l:spec = {
+                \ 'source': l:source,
+                \ 'sink': function('s:_floaterm_program_sink'),
+                \ 'exit': function('s:_floaterm_program_exit'),
+                \ 'options': ['--prompt', prompt . '> ', '--layout=reverse-list'],
+                \ }
+    call fzf#run(fzf#wrap('FloatermProgram', l:spec, 0))
+endfunction
