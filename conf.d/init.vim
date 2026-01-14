@@ -153,10 +153,10 @@ xnoremap , <Nop>
 " enhanced remap
 xmap >> >gv
 xmap << <gv
-nmap <silent> gj j
-nmap <silent> gk k
-nmap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
-nmap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
+nnoremap <silent> gj j
+nnoremap <silent> gk k
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 " z remap
 nnoremap zs <Nop>
 nnoremap zS <Nop>
@@ -286,9 +286,6 @@ endif
 let g:plugs = {}
 let g:plug_threads = get(g:, 'plug_threads', 16)
 set rtp^=$MAIN_DIR
-" -----------------------------------------------------------
-" NOTE: plugs begin
-" -----------------------------------------------------------
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
 " unified PlugAdd (local/remote) + PlugAdd shim
 function! s:plug_add(plugin, ...) abort
@@ -341,18 +338,18 @@ nnoremap <silent><Tab>P :Plug
 if filereadable(utils#expand("~/.leovim.d/pack.vim"))
     source ~/.leovim.d/pack.vim
 endif
+" different for vscode and main config
 if utils#is_vscode()
     source $INIT_DIR/vscode.vim
 else
     source $MAIN_DIR/main.vim
 endif
-" -----------------------------------------------------------
-" NOTE: plugs end
-" -----------------------------------------------------------
-call plug#end()
 " addtional vim config
 if filereadable(utils#expand("~/.leovim.d/after.vim"))
     source ~/.leovim.d/after.vim
 endif
-" set loaded
+" -----------------------------------------------------------
+" NOTE: plug install and config end
+" -----------------------------------------------------------
+call plug#end()
 let g:leovim_loaded = 1

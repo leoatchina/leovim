@@ -60,15 +60,12 @@ lnif() {
 ############################ SETUP FUNCTIONS
 create_vimrc(){
     local vimrc="$1"
-    [[ -f "$vimrc" || -L "$vimrc" ]] && rm -f $vimrc
-    cat << EOF > $vimrc
-if filereadable(expand("~/.vimrc.local"))
-    source ~/.vimrc.local
-else
-    source ~/.leovim/conf.d/init.vim
-endif
-EOF
-    success "Setted up $vimrc"
+    if [ ! -f "$vimrc" ] && [ ! -L "$vimrc" ]; then
+        cp "$APP_PATH/scripts/vimrc" "$vimrc"
+        success "Setted up $vimrc"
+    else
+        info "$vimrc already exists, skipping"
+    fi
 }
 
 create_symlinks() {
