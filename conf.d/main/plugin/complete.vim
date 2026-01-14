@@ -54,7 +54,7 @@ endif
 if pack#installed_lsp()
     if pack#installed_blink()
         lua require("cfg/blink")
-    else
+    elseif pack#installed_cmp()
         lua require("cfg/cmp")
     endif
 elseif pack#installed_coc()

@@ -174,10 +174,10 @@ alias disks="df -lh | head -1; df -lh | sort | grep -vE '^/srv' |  grep -E '/hom
 
 alias v='bash ~/.local/bin/v.sh'
 alias n='bash ~/.local/bin/n.sh'
-alias vi='bash ~/.local/bin/vi.sh'
-alias nv='bash ~/.local/bin/nv.sh'
 alias ni='bash ~/.local/bin/ni.sh'
+alias nv='bash ~/.local/bin/nv.sh'
 alias nn='bash ~/.local/bin/nn.sh'
+# alias vi='bash ~/.local/bin/vi.sh'
 
 # Z jumps command
 if command_exists "lua" && [ -f ~/z.lua/z.lua ]; then

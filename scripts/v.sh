@@ -13,3 +13,4 @@ else
   fi
 fi
 $VIMCMD -u ~/.leovim/conf.d/init.vim --cmd "let g:packs=['mcm']" "$@"
+# $VIMCMD -u ~/.leovim/conf.d/init.vim --cmd "let g:packs=['builtin']" "$@"
