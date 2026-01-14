@@ -17,6 +17,13 @@
   {
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
+      "ctrl-l": "agent::AddSelectionToThread",
+      "ctrl-L": "agent::ToggleFocus"
+    }
+  },
+  {
+    "context": "vim_mode == normal || vim_mode == visual",
+    "bindings": {
       "M": "vim::MiddleOfLine",
       "L": "vim::EndOfLineDownward",
       "H": "vim::StartOfLineDownward"
