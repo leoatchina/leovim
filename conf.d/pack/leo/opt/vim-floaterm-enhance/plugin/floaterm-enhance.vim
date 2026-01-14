@@ -2,7 +2,8 @@ if exists('g:floaterm_enhance_loaded')
     finish
 endif
 let g:floaterm_enhance_loaded = 1
-command! FloatermList call floaterm#enhance#term_list()
+let g:floaterm_prog_postion = get(g:, 'floaterm_prog_postion', 'auto')
+let g:floaterm_prog_col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 3)
 " registry runners
 let g:asyncrun_runner = get(g:, 'asyncrun_runner', {})
 let g:asyncrun_runner.floaterm_right  = function('floaterm#asyncrun#right')
@@ -12,3 +13,5 @@ let g:asyncrun_runner.floaterm_left   = function('floaterm#asyncrun#left')
 let g:asyncrun_runner.floaterm_top    = function('floaterm#asyncrun#top')
 let g:asyncrun_runner.floaterm_topleft= function('floaterm#asyncrun#topleft')
 let g:asyncrun_runner.floaterm_center = function('floaterm#asyncrun#center')
+" list term
+command! FloatermList call floaterm#enhance#term_list()

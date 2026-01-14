@@ -40,7 +40,7 @@ function! floaterm#repl#choose_program(lst) abort
         let cnt += 1
         call add(contents, '&' . cnt . ' '. cmd)
     endfor
-    if exists('*QuickThemeChange') 
+    if exists('*QuickThemeChange')
         let opts = {'title': title, 'index': g:quickui#listbox#cursor, 'w': 64}
         let idx = quickui#listbox#inputlist(contents, opts)
         if idx >= 0
@@ -172,7 +172,7 @@ endfunction
 " -------------------------------------
 " set repl program for each filetype
 " -------------------------------------
-function! floaterm#repl#add_program(ft, ...) abort
+function! floaterm#repl#update_program(ft, ...) abort
     let ft = a:ft
     for cmd in a:000
         let cmd = trim(cmd)
