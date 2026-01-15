@@ -271,6 +271,7 @@ endfunction
 function! floaterm#enhance#parse_opt(...) abort
     let col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 3)
     let prog_ratio = get(g:, 'floaterm_prog_ratio', 0.38)
+    let float_ratio = get(g:, 'floaterm_prog_float_ratio', 0.45)
     " postions
     let basic_postions = ['auto', 'center', 'right', 'bottom', 'left', 'top', 'leftabove', 'aboveleft', 'rightbelow', 'belowright', 'botright']
     let float_postions = ['topleft', 'topright', 'bottomleft', 'bottomright', 'cusor']
@@ -282,33 +283,33 @@ function! floaterm#enhance#parse_opt(...) abort
     else
         let wintypes = ['split', 'vsplit']
     endif
-    let  = ''
+    let wintype_opt = ''
     let title_opt = ''
     function! _parse(optstr, parse) abort
         let optstr = a:optstr
         let parse = a:parse
-        if type(optstr) != type('') || type(parse) != type('') || index(['wintype', 'postion', 'title'], parse) < 0
+        if type(optstr) != type('') || type(parse) != type('') || index(['wintype', 'position', 'title'], parse) < 0
             return ''
         endif
         let key = '--' . parse
-        let pat = '\v' . escape(key, '\') . '(=|\s+)\zs\S+'
+        let pat = key . '\%([[:space:]]\|=\)\zs\S\+'
         return matchstr(optstr, pat)
     endfunction
 
     if a:0 && type(a:1) == type('')
-        let pos = _parse(optstr, 'position')
+        let pos = _parse(a:1, 'position')
         if !empty(pos)
-            if index(basic_postions, pos) && !has('nvim')
+            if index(basic_postions, pos) >= 0 && !has('nvim')
                 let open_position = pos
-            elseif index(all_postions, pos)
+            elseif index(all_postions, pos) >= 0
                 let open_position = pos
             endif
         endif
-        let wintype = _parse(optstr, 'wintype')
+        let wintype = _parse(a:1, 'wintype')
         if !empty(wintype) && index(wintypes, wintype) >= 0
             let wintype_opt = '--wintype=' . wintype
         endif
-        let title = _parse(optstr, 'title')
+        let title = _parse(a:1, 'title')
         if !empty(title)
             let title_opt = '--title=' . title
         endif
@@ -333,8 +334,11 @@ function! floaterm#enhance#parse_opt(...) abort
         let wintype_opt = '--wintype=split'
         return printf(' --position=bottom --height=%s %s %s', prog_ratio, wintype_opt, title_opt)
     elseif wintype_opt == '--wintype=float'
-        return printf(' --position=%s --wintype=float --width=0.45 --height=0.45 %s', open_positon, title_opt)
+        if open_position == 'auto'
+            let open_position = 'topright'
+        endif
+        return printf(' --position=%s --wintype=float --width=%s --height=%s %s', open_position, float_ratio, float_ratio, title_opt)
     else
-        return printf(' --position=%s %s %s', open_positon, wintyep_opt, title_opt)
+        return printf(' --position=%s %s %s', open_position, wintype_opt, title_opt)
     endif
 endfunction
