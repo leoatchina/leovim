@@ -2,19 +2,19 @@ if exists('g:floaterm_repl_loaded')
     finish
 endif
 let g:floaterm_repl_loaded = 1
-let g:floaterm_repl_programs = get(g:, 'floaterm_repl_programs', {})
+let g:floaterm_ft_repl_programs = get(g:, 'floaterm_ft_repl_programs', {})
 " repl add_program
-call floaterm#repl#update_program('python', 'ipython --no-autoindent', 'python3', 'python', 'ptipython', 'ptpython')
-call floaterm#repl#update_program('r', 'radian', 'R')
-call floaterm#repl#update_program('sh', 'bash', 'zsh', 'fish')
-call floaterm#repl#update_program('lua', 'lua')
-call floaterm#repl#update_program('vim', 'vim -e')
-call floaterm#repl#update_program('php', 'psysh', 'php -a')
-call floaterm#repl#update_program('ps1', 'powershell -noexit -executionpolicy bypass')
-call floaterm#repl#update_program('perl', 'perlconsole', 'reply', 're.pl')
-call floaterm#repl#update_program('ruby', 'irb')
-call floaterm#repl#update_program('julia', 'julia')
-call floaterm#repl#update_program('javascript', 'node')
+call floaterm#repl#update_program('python', ['ipython --no-autoindent', 'python3', 'python', 'ptipython', 'ptpython'])
+call floaterm#repl#update_program('r', ['radian', 'R'])
+call floaterm#repl#update_program('sh', ['bash', 'zsh', 'fish'])
+call floaterm#repl#update_program('lua', ['lua'])
+call floaterm#repl#update_program('vim', ['vim -e'])
+call floaterm#repl#update_program('php', ['psysh', 'php -a'])
+call floaterm#repl#update_program('ps1', ['powershell -noexit -executionpolicy bypass'])
+call floaterm#repl#update_program('perl', ['perlconsole', 'reply', 're.pl'])
+call floaterm#repl#update_program('ruby', ['irb'])
+call floaterm#repl#update_program('julia', ['julia'])
+call floaterm#repl#update_program('javascript', ['node'])
 " block mark
 let g:floaterm_repl_block_mark = get(g:, 'floaterm_repl_block_mark', {})
 let g:floaterm_repl_block_mark.default = '# %%'

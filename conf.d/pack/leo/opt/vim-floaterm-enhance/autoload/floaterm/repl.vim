@@ -98,8 +98,8 @@ endfunction
 " start repl (internal function)
 " -------------------------------------
 function! floaterm#repl#ft_start(ft, choose_prg) abort
-    if !has_key(g:floaterm_repl_programs, a:ft) || len(get(g:floaterm_repl_programs, a:ft, [])) == 0
-        call floaterm#enhance#showmsg(printf("REPL program for %s not set or installed, please install and add it g:floaterm_repl_programs.", a:ft), 1)
+    if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, a:ft) || empty(g:floaterm_repl_programs[a:ft])
+        call floaterm#enhance#showmsg(printf("REPL program for %s not set or installed, please install and add it via floaterm#repl#update_program().", a:ft), 1)
         return v:false
     endif
     let b:floaterm_repl_curr_bufnr = winbufnr(winnr())
@@ -111,10 +111,13 @@ function! floaterm#repl#ft_start(ft, choose_prg) abort
     endif
     try
         let program = ""
+        let opt_parsed = ''
+        let prog_entries = get(g:floaterm_repl_programs, a:ft, [])
+        let prog_cmds = map(copy(prog_entries), 'v:val[0]')
         if a:choose_prg
             " User wants to choose program interactively
             try
-                let program = floaterm#repl#choose_program(g:floaterm_repl_programs[a:ft])
+                let program = floaterm#repl#choose_program(prog_cmds)
             catch /.*/
                 call floaterm#enhance#showmsg("Error occurred when choosing REPL program", 1)
                 return v:false
@@ -127,7 +130,7 @@ function! floaterm#repl#ft_start(ft, choose_prg) abort
         else
             " Automatically select the first available program
             try
-                let program = get(g:floaterm_repl_programs[a:ft], 0, "")
+                let program = get(prog_cmds, 0, "")
                 if empty(program)
                     call floaterm#enhance#showmsg("No REPL program available for " . a:ft, 1)
                     return v:false
@@ -137,6 +140,12 @@ function! floaterm#repl#ft_start(ft, choose_prg) abort
                 return v:false
             endtry
         endif
+        for entry in prog_entries
+            if entry[0] ==# program
+                let opt_parsed = entry[1]
+                break
+            endif
+        endfor
     catch /.*/
         call floaterm#enhance#showmsg("Error occurred when choosing REPL program", 1)
         return v:false
@@ -144,7 +153,7 @@ function! floaterm#repl#ft_start(ft, choose_prg) abort
     if empty(termname) || repl_bufnr <= 0
         let termname = printf('#%s|%s!%S', b:floaterm_repl_curr_bufnr, a:ft, toupper(split(program, " ")[0]))
         call floaterm#repl#set_repl_term(a:ft, b:floaterm_repl_curr_bufnr, termname)
-        let floatermnew_cmd = printf('%s --name=%s --title=%s %s', g:floaterm_repl_new_cmd, termname, termname, program)
+        let floatermnew_cmd = printf('%s%s --name=%s --title=%s %s', g:floaterm_repl_new_cmd, opt_parsed, termname, termname, program)
         execute floatermnew_cmd
     else
         call floaterm#terminal#open_existing(repl_bufnr)
@@ -172,23 +181,48 @@ endfunction
 " -------------------------------------
 " set repl program for each filetype
 " -------------------------------------
-function! floaterm#repl#update_program(ft, ...) abort
+function! floaterm#repl#update_program(ft, programs, ...) abort
     let ft = a:ft
-    for cmd in a:000
-        let cmd = trim(cmd)
-        let lst = split(cmd, ' ')
-        if executable(lst[0])
-            if !has_key(g:floaterm_repl_programs, ft)
-                let g:floaterm_repl_programs[ft] = []
-            endif
-            if len(lst) > 1
-                let cmd = join(lst, ' ')
-            endif
-        else
+    if !exists('g:floaterm_repl_programs')
+        let g:floaterm_repl_programs = {}
+    endif
+    let optstr = a:0 ? a:1 : ''
+    let opt_parsed = floaterm#enhance#parse_opt(optstr)
+    if type(a:programs) == type('')
+        let programs = [a:programs]
+    elseif type(a:programs) == type([])
+        let programs = a:programs
+    else
+        return
+    endif
+    if !has_key(g:floaterm_repl_programs, ft)
+        let g:floaterm_repl_programs[ft] = []
+    endif
+    for cmd in programs
+        if type(cmd) != type('')
             continue
         endif
-        if count(g:floaterm_repl_programs[ft], cmd) == 0
-            call add(g:floaterm_repl_programs[ft], cmd)
+        let cmd = trim(cmd)
+        if empty(cmd)
+            continue
+        endif
+        let lst = split(cmd, ' ')
+        if !executable(lst[0])
+            continue
+        endif
+        let entry = [cmd, opt_parsed, 'REPL']
+        let replaced = v:false
+        let i = 0
+        while i < len(g:floaterm_repl_programs[ft])
+            if g:floaterm_repl_programs[ft][i][0] ==# cmd
+                let g:floaterm_repl_programs[ft][i] = entry
+                let replaced = v:true
+                break
+            endif
+            let i += 1
+        endwhile
+        if !replaced
+            call add(g:floaterm_repl_programs[ft], entry)
         endif
     endfor
 endfunction
