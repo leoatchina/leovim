@@ -186,7 +186,7 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
     if !exists('g:floaterm_repl_programs')
         let g:floaterm_repl_programs = {}
     endif
-    let optstr = a:0 ? a:1 : ''
+    let optstr = a:0 && type(a:1) == type('')? a:1 : ''
     let opt_parsed = floaterm#enhance#parse_opt(optstr)
     if type(a:programs) == type('')
         let programs = [a:programs]
@@ -225,27 +225,6 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
             call add(g:floaterm_repl_programs[ft], entry)
         endif
     endfor
-endfunction
-" ---------------------------------------------
-" update repl position, must do check at first
-" ---------------------------------------------
-function! floaterm#repl#update_position() abort
-    let open_position = get(g:, 'floaterm_repl_open_position', 'auto')
-    if open_position == 'auto'
-        if &columns > &lines * 3
-            let open_position = 'right'
-        else
-            let open_position = 'bottom'
-        endif
-    elseif index(['right', 'bottom'], open_position) < 0
-        let open_position = "right"
-    endif
-    if open_position == 'right'
-        let g:floaterm_repl_new_cmd = "FloatermNew --wintype=vsplit --position=right --width="
-    else
-        let g:floaterm_repl_new_cmd = "FloatermNew --wintype=split --position=bottom --height="
-    endif
-    let g:floaterm_repl_new_cmd = g:floaterm_repl_new_cmd . string(get(g:, 'floaterm_repl_ratio', 0.38))
 endfunction
 " -------------------------------------
 " mark
