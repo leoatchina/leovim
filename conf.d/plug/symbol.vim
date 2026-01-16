@@ -29,9 +29,9 @@ endif
 " tags
 " ------------------------------
 if get(g:, 'ctags_type', '') != ''
-    if pack#planned('leaderf')
+    if pack#planned_leaderf()
         call s:add_symbol("leaderftags")
-    elseif pack#planned('fzf.vim')
+    elseif pack#planned_fzf()
         call s:add_symbol("fzftags")
         if has('nvim') || v:version >= 802
             call s:add_symbol('quickui')
