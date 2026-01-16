@@ -241,7 +241,7 @@ augroup YankToPRegister
         \ | call setreg('p', getreg('"'), getregtype('"'))
         \ | endif
 augroup END
-xnoremap \pp "pp
+xnoremap <M-V> "pp
 " ------------------------
 " y register for replace
 " ------------------------
