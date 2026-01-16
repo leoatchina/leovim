@@ -56,6 +56,10 @@ function! pack#planned_fzf() abort
     return pack#planned('fzf', 'fzf.vim')
 endfunction
 
+function! pack#planned_leaderf() abort
+    return pack#planned('LeaderF')
+endfunction
+
 function! pack#planned_coc() abort
     return pack#get('coc') && g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438'))
 endfunction
@@ -66,10 +70,6 @@ endfunction
 
 function! pack#planned_adv_comp_eng() abort
     return pack#planned_coc() || pack#planned_lsp()
-endfunction
-
-function! pack#planned_leaderf() abort
-    return pack#planned('leaderf')
 endfunction
 
 function! pack#pref_fzf() abort
