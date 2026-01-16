@@ -115,17 +115,13 @@ function! utils#get_root_dir(...) abort
         let l:root = g:root_patterns + g:root_files
     endif
     while 1
-        if utils#is_win() && curr_dir[-2:-1] == ':/' || utils#is_unix() && curr_dir ==# '/'
+        if utils#is_win() && curr_dir[1] == ':' || utils#is_unix() && curr_dir ==# '/'
             return init_dir
         endif
         for each in l:root
             let chk_path = curr_dir . '/' . each
             if isdirectory(chk_path) || filereadable(chk_path)
-                if a:0 && a:1 > 0
-                    return substitute(curr_dir, '/', '\', 'g')
-                else
-                    return curr_dir
-                endif
+                return substitute(curr_dir, '\', '/', 'g')
             endif
         endfor
         let curr_dir = fnamemodify(curr_dir, ":h")
