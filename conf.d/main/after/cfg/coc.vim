@@ -131,7 +131,6 @@ nnoremap <silent><M-l>, :CocPrev<Cr>
 nnoremap <silent><M-l><M-c> :CocFzfList<Cr>
 nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 " symbol
-nnoremap <silent><leader>t :Vista finder coc<Cr>
 inoremap <silent><C-x><C-x> <C-r>=CocActionAsync('showSignatureHelp')<Cr>
 nnoremap <leader>w :CocFzfList symbols <C-r><C-w>
 xnoremap <leader>w :<C-u>CocFzfList symbols <C-r>=utils#get_visual()<Cr>
