@@ -91,10 +91,6 @@ xnoremap <silent><leader>yl :YankLineRef<Cr>
 " ------------------------------------
 " clipboard
 " ------------------------------------
-xnoremap / "yy/<C-r>=utils#escape(@y)<CR><Cr>
-xnoremap ? "yy?<C-r>=utils#escape(@y)<CR><Cr>
-xnoremap s "yy:%s/<C-r>=utils#escape(@y)<CR>/<C-r>=utils#escape(@y)<CR>/gc<Left><Left><Left>
-xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
 " Copy file path
 nnoremap <leader>YA :let @"=utils#abs_path()<Cr>:echo "-= File path copied=-"<Cr>
 " Copy file dir
@@ -228,12 +224,31 @@ endif
 " paste
 " ------------------------
 nnoremap \pw viwp
+nnoremap \p` viw"0p
+xnoremap \p` "0p
 for i in range(4)
     execute printf('nnoremap \p%s viw"%sp', i , i)
     execute printf('xnoremap \p%s "%sp', i , i)
 endfor
-nnoremap \p` viw"0p
-xnoremap \p` "0p
+" ------------------------
+" yank to p regsiter
+" ------------------------
+augroup YankToPRegister
+  autocmd!
+  autocmd TextYankPost *
+        \ if get(v:event, 'operator', '') ==# 'y'
+        \ && get(v:event, 'regname', '') ==# ''
+        \ | call setreg('p', getreg('"'), getregtype('"'))
+        \ | endif
+augroup END
+xnoremap \pp "pp
+" ------------------------
+" y register for replace
+" ------------------------
+xnoremap / "yy/<C-r>=utils#escape(@y)<CR><Cr>
+xnoremap ? "yy?<C-r>=utils#escape(@y)<CR><Cr>
+xnoremap s "yy:%s/<C-r>=utils#escape(@y)<CR>/<C-r>=utils#escape(@y)<CR>/gc<Left><Left><Left>
+xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
 " ------------------------
 " pastemode toggle
 " ------------------------
