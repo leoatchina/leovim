@@ -16,4 +16,4 @@ let g:asyncrun_runner.floaterm_top    = function('floaterm#asyncrun#top')
 let g:asyncrun_runner.floaterm_topleft= function('floaterm#asyncrun#topleft')
 let g:asyncrun_runner.floaterm_center = function('floaterm#asyncrun#center')
 " list term
-command! FloatermList call floaterm#enhance#term_list()
+command! FloatermFzfList call floaterm#enhance#term_fzflist()

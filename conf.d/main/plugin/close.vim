@@ -4,7 +4,7 @@ if utils#is_vscode()
 endif
 augroup AutoClose
     autocmd!
-    autocmd BufWinEnter * if utils#autoclose_lastwin() | q! | endif
+    autocmd BufWinEnter,BufEnter * if utils#autoclose_lastwin() | q! | endif
 augroup END
 " -------------------------
 " confirem quit

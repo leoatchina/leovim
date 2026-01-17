@@ -189,7 +189,7 @@ if pack#planned('vimspector')
         elseif a:type ==# 'Console'
             FloatermToggle
         elseif a:type ==# 'terminal'
-            FloatermNewOrList
+            FloatermNewOrFzfList
         elseif a:type ==# 'eval'
             call diagnostic#show(1)
         endif
@@ -197,11 +197,11 @@ if pack#planned('vimspector')
     command! BalloonEval call s:vimspector_or_floaterm('eval')
     command! FocusCode call s:vimspector_or_floaterm("code")
     command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
-    command! TerminalOrFloatermNewOrList call s:vimspector_or_floaterm('terminal')
+    command! TerminalOrFloatermNewOrFzfList call s:vimspector_or_floaterm('terminal')
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :TerminalOrFloatermNewOrList<Cr>
+    nnoremap <silent><M-=> :TerminalOrFloatermNewOrFzfList<Cr>
     " VimspectorDisassemble
     nmap <silent><F1> <Plug>VimspectorDisassemble
     " view variables
@@ -321,7 +321,7 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
         elseif a:type == "repl"
             FloatermToggle
         elseif a:type == "element"
-            FloatermNewOrList
+            FloatermNewOrFzfList
         else
             call preview#errmsg('Please start dap session.') | sleep 2
         endif
@@ -329,11 +329,11 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
     command! DapUIEval call s:dap_or_floaterm("eval")
     command! FocusCode call s:dap_or_floaterm("focus")
     command! ReplOrFloatermToggle call s:dap_or_floaterm("repl")
-    command! FloatElementOrFloatermNewOrList call s:dap_or_floaterm("element")
+    command! FloatElementOrFloatermNewOrFzfList call s:dap_or_floaterm("element")
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ReplOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :FloatElementOrFloatermNewOrList<Cr>
+    nnoremap <silent><M-=> :FloatElementOrFloatermNewOrFzfList<Cr>
     " view variables
     nnoremap <silent>J :DapUIEval<Cr>
 elseif v:version >= 801 && !has('nvim') && pack#get('termdebug')

@@ -80,13 +80,13 @@ function! s:floaterm_new_list()
     if floaterm#buflist#curr() <= 0
         execute('FloatermNew --cwd=<C-R>=utils#get_dir(expand("%"))<CR>')
     else
-        FloatermList
+        FloatermFzfList
     endif
 endfunction
-command! FloatermNewOrList call s:floaterm_new_list()
+command! FloatermNewOrFzfList call s:floaterm_new_list()
 call s:bind_keymap('<M-->', 'FloatermToggle')
 call s:bind_keymap('<M-_>', 'FloatermHide')
 call s:bind_keymap('<M-{>', 'FloatermPrev')
 call s:bind_keymap('<M-}>', 'FloatermNext')
 call s:bind_keymap('<M-+>', 'FloatermOpenPos')
-call s:bind_keymap('<M-=>', 'FloatermNewOrList')
+call s:bind_keymap('<M-=>', 'FloatermNewOrFzfList')

@@ -124,9 +124,9 @@ function! floaterm#enhance#term_open(line) abort
     call floaterm#terminal#open_existing(bufnr)
 endfunction
 
-function! floaterm#enhance#term_list() abort
+function! floaterm#enhance#term_fzflist() abort
     if !exists('*fzf#run')
-        call floaterm#enhance#showmsg('fzf.vim is required for FloatermList', 1)
+        call floaterm#enhance#showmsg('fzf.vim is required for FloatermFzfList', 1)
         return
     endif
     let bufs = floaterm#buflist#gather()
@@ -137,7 +137,7 @@ function! floaterm#enhance#term_list() abort
     let cnt = len(bufs)
     let source = []
     for bufnr in bufs
-        let title = getbufvar(bufnr, 'floaterm_title')
+        let title = floaterm#config#get(bufnr, 'title')
         if title ==# 'floaterm($1/$2)'
             let cur = index(bufs, bufnr) + 1
             let title = substitute(title, '$1', cur, 'gm')
@@ -146,10 +146,11 @@ function! floaterm#enhance#term_list() abort
         if empty(title)
             let title = printf('floaterm(%d/%d)', index(bufs, bufnr) + 1, cnt)
         endif
-        let position = getbufvar(bufnr, 'floaterm_position')
-        let wintype = getbufvar(bufnr, 'floaterm_wintype')
-        let cmd = getbufvar(bufnr, 'floaterm_cmd')
-        let display = printf('%4d %s@%s/%s!%s', bufnr, title, wintype, position, cmd)
+        let position = floaterm#config#get(bufnr, 'position')
+        let wintype = floaterm#config#get(bufnr, 'wintype')
+        let cmd = trim(floaterm#config#get(bufnr, 'cmd'))
+        let program = floaterm#config#get(bufnr, 'program', 'PROG')
+        let display = printf("%s#%d\t%s!%s@%s/%s", program, bufnr, title, cmd, wintype, position)
         call add(source, display)
     endfor
     let spec = {
@@ -157,7 +158,7 @@ function! floaterm#enhance#term_list() abort
                 \ 'sink': function('floaterm#enhance#term_open'),
                 \ 'options': ['--prompt', 'floaterm> ', '--layout=reverse-list'],
                 \ }
-    call fzf#run(fzf#wrap('FloatermList', spec, 0))
+    call fzf#run(fzf#wrap('FloatermFzfList', spec, 0))
 endfunction
 
 " --------------------------------------------------------------
