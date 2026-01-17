@@ -49,43 +49,6 @@ function! floaterm#repl#get_ft_programs(ft) abort
     endfor
     return l:result
 endfunction
-" -------------------------------------------
-" core function send_contents. contents is
-" the codes/scripts want to send
-" -------------------------------------------
-function! floaterm#repl#send_contents(contents, ft, repl_bufnr, keep, jump_line, vmode) abort
-    let comment = floaterm#enhance#get_comment(a:ft)
-    let contents = []
-    for line in a:contents
-        if line =~# "^\s*" . comment || line =~# "^\s*$"
-            continue
-        endif
-        call add(contents, line)
-    endfor
-    if len(contents) > 0
-        if len(contents) > 1 && contents[-1] =~# '^\s\+' && a:ft ==# 'python'
-            call add(contents, "")
-        endif
-        call floaterm#terminal#send(a:repl_bufnr, contents)
-    endif
-    if a:keep == 0
-        execute "normal! " . a:jump_line . 'G'
-        normal! j
-        let t_col = line("$")
-        let c_col = line('.')
-        let line = getline('.')
-        while (line =~# "^\s*" . comment || line =~# "^\s*$") && c_col < t_col
-            normal! j
-            let c_col = line('.')
-            let line = getline('.')
-        endwhile
-    elseif a:keep && a:vmode
-        execute "normal! " . a:jump_line . 'G'
-    endif
-    if !has('nvim')
-        redraw
-    endif
-endfunction
 " -------------------------------------
 " start repl (internal function)
 " -------------------------------------
@@ -302,6 +265,43 @@ function! floaterm#repl#send_exit() abort
         endif
     else
         call floaterm#enhance#showmsg("Start REPL first to send exit signal.")
+    endif
+endfunction
+" -------------------------------------------
+" core function send_contents. contents is
+" the codes/scripts want to send
+" -------------------------------------------
+function! floaterm#repl#send_contents(contents, ft, repl_bufnr, keep, jump_line, vmode) abort
+    let comment = floaterm#enhance#get_comment(a:ft)
+    let contents = []
+    for line in a:contents
+        if line =~# "^\s*" . comment || line =~# "^\s*$"
+            continue
+        endif
+        call add(contents, line)
+    endfor
+    if len(contents) > 0
+        if len(contents) > 1 && contents[-1] =~# '^\s\+' && a:ft ==# 'python'
+            call add(contents, "")
+        endif
+        call floaterm#terminal#send(a:repl_bufnr, contents)
+    endif
+    if a:keep == 0
+        execute "normal! " . a:jump_line . 'G'
+        normal! j
+        let t_col = line("$")
+        let c_col = line('.')
+        let line = getline('.')
+        while (line =~# "^\s*" . comment || line =~# "^\s*$") && c_col < t_col
+            normal! j
+            let c_col = line('.')
+            let line = getline('.')
+        endwhile
+    elseif a:keep && a:vmode
+        execute "normal! " . a:jump_line . 'G'
+    endif
+    if !has('nvim')
+        redraw
     endif
 endfunction
 " -------------------------------------------
