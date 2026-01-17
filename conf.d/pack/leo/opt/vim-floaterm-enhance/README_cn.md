@@ -188,7 +188,7 @@ graph TB
 * **`FloatermReplSendFromBegin`**: 从文件开头发送到当前行（或上一行代码块标记）。
 * **`FloatermReplSendToEnd`**: 从当前行发送到文件末尾。
 * **`FloatermReplSendAll`**: 发送整个文件内容到 REPL。
-* **`FloatermReplSendNewlineOrStart`**:
+* **`FloatermReplSendCrOrStart`**:
     * 如果 REPL 未启动，则启动 REPL。
     * 如果 REPL 已启动，则发送一个换行符到 REPL。
 * **`FloatermReplSendClear`**: 发送清屏命令到 REPL，清除 REPL 终端的显示。
@@ -213,7 +213,7 @@ graph TB
 ```
 " start
 nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
-nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
+nnoremap <silent><M-e><Cr> :FloatermReplSendCrOrStart<Cr>
 " basic send
 nnoremap <silent><M-e>n :FloatermReplSend<Cr>
 nnoremap <silent><M-e>l :FloatermReplSend!<Cr>

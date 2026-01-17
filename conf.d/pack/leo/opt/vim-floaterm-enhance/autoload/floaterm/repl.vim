@@ -78,7 +78,7 @@ endfunction
 " -------------------------------------
 " start repl (internal function)
 " -------------------------------------
-function! floaterm#repl#start(now) abort
+function! floaterm#repl#fzf_run(now) abort
     let ft = &ft
     if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, ft) || empty(g:floaterm_repl_programs[ft])
         call floaterm#enhance#showmsg(printf("REPL program for %s not set or installed, please install and add it via floaterm#repl#update_program().", a:ft), 1)
@@ -100,7 +100,7 @@ function! floaterm#repl#start(now) abort
             call floaterm#enhance#run_cmd(cmd, opts, type)
             call floaterm#repl#set_repl_bufnr()
         else
-            call floaterm#enhance#select_program(programs, 'FloatermREPL')
+            call floaterm#enhance#fzf_run(programs, 'FloatermREPL')
             call timer_start(0, {-> floaterm#repl#set_repl_bufnr()})
         endif
     endif
@@ -109,13 +109,13 @@ endfunction
 " start repl (auto select program)
 " -------------------------------------
 function! floaterm#repl#start_now() abort
-    call floaterm#repl#start(v:true)
+    call floaterm#repl#fzf_run(v:true)
 endfunction
 " -------------------------------------
 " start repl (choose program interactively)
 " -------------------------------------
 function! floaterm#repl#start_choose() abort
-    call floaterm#repl#start(v:false)
+    call floaterm#repl#fzf_run(v:false)
 endfunction
 " -------------------------------------
 " set repl program for each filetype
@@ -246,7 +246,7 @@ endfunction
 " ------------------------------------------------------
 " Send a newline to REPL or start REPL if not running
 " ------------------------------------------------------
-function! floaterm#repl#send_newline() abort
+function! floaterm#repl#send_cr_or_start() abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         call floaterm#terminal#send(repl_bufnr, [""])

@@ -208,7 +208,7 @@ function! floaterm#enhance#run_cmd(cmd, opts, type, ...) abort
     endtry
 endfunction
 
-function! floaterm#enhance#select_program(programs, prompt, ...) abort
+function! floaterm#enhance#fzf_run(programs, prompt, ...) abort
     if !exists('*fzf#run')
         call floaterm#enhance#showmsg('fzf.vim is required for FloatermProgram', 1)
         return

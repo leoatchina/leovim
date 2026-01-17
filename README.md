@@ -545,7 +545,7 @@ let g:maplocalleader = 'q'
   * `FloatermReplSendFromBegin`：将从文件开头到当前行的代码发送到 REPL。
   * `FloatermReplSendToEnd`：将从当前行到文件末尾的代码发送到 REPL。
   * `FloatermReplSendAll`：将整个文件内容发送到 REPL。
-  * `FloatermReplSendNewlineOrStart`：向 REPL 发送换行符，或者如果 REPL 尚未运行则启动它。
+  * `FloatermReplSendCrOrStart`：向 REPL 发送换行符，或者如果 REPL 尚未运行则启动它。
   * `FloatermReplSendClear`：向 REPL 发送清除命令。
   * `FloatermReplSendExit`：向 REPL 发送退出命令。
   * `FloatermReplSendWord`：将光标下的单词发送到 REPL。

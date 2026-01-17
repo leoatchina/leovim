@@ -187,7 +187,7 @@ The following are the main commands and functions provided by the `vim-floaterm-
 * **`FloatermReplSendFromBegin`**: Send from the beginning of the file to the current line (or the previous code block marker).
 * **`FloatermReplSendToEnd`**: Send from the current line to the end of the file.
 * **`FloatermReplSendAll`**: Send the entire file content to the REPL.
-* **`FloatermReplSendNewlineOrStart`**:
+* **`FloatermReplSendCrOrStart`**:
     * If the REPL is not started, start the REPL.
     * If the REPL is started, send a newline character to the REPL.
 * **`FloatermReplSendClear`**: Send the clear screen command to the REPL to clear the display of the REPL terminal.
@@ -213,7 +213,7 @@ You can customize the behavior of the plugin by configuring Vim global variables
 ```
 " start
 nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
-nnoremap <silent><M-e><Cr> :FloatermReplSendNewlineOrStart<Cr>
+nnoremap <silent><M-e><Cr> :FloatermReplSendCrOrStart<Cr>
 " basic send
 nnoremap <silent><M-e>n :FloatermReplSend<Cr>
 nnoremap <silent><M-e>l :FloatermReplSend!<Cr>

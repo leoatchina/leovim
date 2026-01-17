@@ -44,7 +44,7 @@ command! -bang FloatermReplSendFromBegin call floaterm#repl#send_border("begin",
 command! -bang FloatermReplSendToEnd call floaterm#repl#send_border("end", <bang>0)
 command! -bang FloatermReplSendAll call floaterm#repl#send_border("all", <bang>0)
 " Commands for newline/clear/exit using dedicated functions
-command! FloatermReplSendNewlineOrStart call floaterm#repl#send_newline()
+command! FloatermReplSendCrOrStart call floaterm#repl#send_cr_or_start()
 command! FloatermReplSendClear call floaterm#repl#send_clear()
 command! FloatermReplSendExit call floaterm#repl#send_exit()
 command! -bang -range FloatermReplSendWord call floaterm#repl#send_word(<bang>0)
