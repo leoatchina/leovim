@@ -11,7 +11,6 @@ if has('clipboard')
         execute 'nnoremap <leader>ya :let @' . a:register . '=utils#abs_path()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yd :let @' . a:register . '=utils#abs_dir()<Cr>:echo "-= File dir copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yf :let @' . a:register . '=utils#file_name()<Cr>:echo "-= File name copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>ym :let @' . a:register . '=utils#abs_path().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yu _"' . a:register . 'yg_:echo "-= Yanked line without leading whitespaces and line break to ' . a:label . ' clipboard=-"<Cr>'
     endfunction
     if utils#is_linux() && (utils#is_vscode() || exists('$TMUX'))
@@ -62,7 +61,7 @@ command! YankPositionToEdit        call s:yank_position_to_editor('edit')
 nnoremap <silent><leader>yv :YankPositionToVscode<Cr>
 nnoremap <silent><leader>yc :YankPositionToCursr<Cr>
 nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
-nnoremap <silent><leader>ya :YankPositionToAntigravity<Cr>
+nnoremap <silent><leader>yA :YankPositionToAntigravity<Cr>
 nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
 nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
 nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
@@ -97,8 +96,6 @@ nnoremap <leader>YA :let @"=utils#abs_path()<Cr>:echo "-= File path copied=-"<Cr
 nnoremap <leader>YD :let @"=utils#abs_dir()<Cr>:echo "-= File dir copied=-"<Cr>
 " Copy file name
 nnoremap <leader>YF :let @"=utils#file_name()<Cr>:echo "-= File name copied=-"<Cr>
-" Copy bookmark position reference
-nnoremap <leader>YM :let @"=utils#abs_path().":".line(".").":".col(".")<Cr>:echo "-= Current position reference copied=-"<Cr>
 " Yank a line without leading whitespaces and line break
 nnoremap <leader>YU _yg_:echo "-= Yanked line without leading whitespaces and line break=-"<Cr>
 " ------------------------
