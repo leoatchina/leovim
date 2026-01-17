@@ -186,14 +186,13 @@ endfunction
 " fzf select and run programs
 " --------------------------------------------------------------
 function! floaterm#enhance#run_cmd(cmd, opts, type, ...) abort
-    let t:floaterm_program_bufnr = 0
     if a:0 && type(a:1) == type(v:true)
         let wincmdp = a:1
     else
         let wincmdp = v:true
     endif
-    let command = printf('FloatermNew %s %s', a:opts, a:cmd)
     try
+        let command = printf('FloatermNew %s %s', a:opts, a:cmd)
         call execute(command)
         let t:floaterm_program_bufnr = floaterm#buflist#curr()
         call floaterm#config#set(t:floaterm_program_bufnr, 'program', a:type)
@@ -205,6 +204,7 @@ function! floaterm#enhance#run_cmd(cmd, opts, type, ...) abort
         endif
     catch /.*/
         call floaterm#enhance#showmsg('Failed to run program: ' . cmd, 1)
+        let t:floaterm_program_bufnr = 0
     endtry
 endfunction
 
