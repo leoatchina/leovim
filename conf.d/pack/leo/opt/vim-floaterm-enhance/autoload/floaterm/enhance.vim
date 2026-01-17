@@ -181,11 +181,11 @@ function! floaterm#enhance#get_file_line_range(start, end) range abort
     endif
     return range
 endfunction
-
 " --------------------------------------------------------------
 " fzf select and run programs
 " --------------------------------------------------------------
 function! floaterm#enhance#run_cmd(cmd, opts, type, ...) abort
+    let t:floaterm_program_bufnr = 0
     if a:0 && type(a:1) == type(v:true)
         let wincmdp = a:1
     else
@@ -241,7 +241,6 @@ function! floaterm#enhance#select_program(programs, prompt, ...) abort
         call floaterm#enhance#showmsg('No valid programs available', 1)
         return
     endif
-
     function! s:_floaterm_program_finish() abort closure
         if !l:done
             return
@@ -251,7 +250,6 @@ function! floaterm#enhance#select_program(programs, prompt, ...) abort
         elseif !has_key(l:program_map, l:selected)
             return
         else
-            let t:floaterm_program_bufnr = v:null
             let [cmd, opts, type] = l:program_map[l:selected]
             call floaterm#enhance#run_cmd(cmd, opts, type, l:wincmdp)
         endif

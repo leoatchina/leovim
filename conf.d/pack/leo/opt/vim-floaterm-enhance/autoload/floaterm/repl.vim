@@ -1,103 +1,121 @@
 " -------------------------------------
-" get repl buf nr
+" XXX: idx/get/set
 " -------------------------------------
 function! floaterm#repl#create_idx(...) abort
-    if a:0 && type(a:1) == type(0) && a:1
-        let bufnr = a:1
+    if a:0 && type(a:1) == type('') && a:1
+        let ft = a:1
+    else
+        let ft = &ft
+    endif
+    if a:0 > 1 && type(a:2) == type(0) && a:2
+        let bufnr = a:2
     else
         let bufnr = winbufnr(winnr())
     endif
-    return &ft . '-' . bufnr
+    return ft . '-' . bufnr
 endfunction
-function! floaterm#repl#get_repl_bufnr(idx) abort
-    if exists('t:floaterm_repl_terms') && has_key(t:floaterm_repl_terms, a:idx)
-        let termname = t:floaterm_repl_terms[a:idx]
-        let bufnr = floaterm#terminal#get_bufnr(termname)
-        if bufnr
-            return [bufnr, termname]
-        else
-            call remove(t:floaterm_repl_terms, a:idx)
-            return [0, '']
-        endif
+function! floaterm#repl#get_repl_bufnr(...) abort
+    if !exists('t:floaterm_repl_dict')
+        return 0
+    endif
+    if a:0 && type(a:1) == type('') && a:1
+        let idx = a:1
     else
-        return [0, '']
+        let idx = floaterm#repl#create_idx()
+    endif
+    if !has_key(t:floaterm_repl_dict, idx)
+        return 0
+    endif
+    let bufnr = t:floaterm_repl_dict[idx]
+    if index(floaterm#buflist#gather(), bufnr) < 0
+        call remove(t:floaterm_repl_dict, idx)
+        return 0
+    else
+        return bufnr
     endif
 endfunction
-" -------------------------------------
-" set repl terminal name
-" -------------------------------------
-function! floaterm#repl#set_termname(ft, bufnr, termname) abort
-    if !exists('t:floaterm_repl_terms')
-        let t:floaterm_repl_terms = {}
+function! floaterm#repl#set_repl_bufnr(...) abort
+    if !exists('t:floaterm_repl_dict')
+        let t:floaterm_repl_dict = {}
     endif
-    let idx = floaterm#repl#create_idx(a:bufnr)
-    let t:floaterm_repl_terms[idx] = a:termname
+    if a:0 && type(a:1) == type('')
+        let idx = a:1
+    else
+        let idx = floaterm#repl#create_idx()
+    endif
+    if a:0 > 1 && type(a:2) == type(0)
+        let prog_bufnr = a:2
+    elseif exists('t:floaterm_program_bufnr')
+        let prog_bufnr = t:floaterm_program_bufnr
+    else
+        let prog_bufnr = 0
+    endif
+    if prog_bufnr
+        let t:floaterm_repl_dict[idx] = prog_bufnr
+    endif
 endfunction
 " -------------------------------------
 " get repl programs for filetype
 " -------------------------------------
-function! floaterm#repl#get_ft_programs(ft) abort
-    let l:entries = get(g:floaterm_repl_programs, a:ft, [])
-    let l:result = []
-    for entry in l:entries
+function! floaterm#repl#get_ft_programs(...) abort
+    if a:0 && type(a:1) == type('')
+        let ft = a:1
+    else
+        let ft = &ft
+    endif
+    let entries = get(g:floaterm_repl_programs, ft, [])
+    let result = []
+    for entry in entries
         if type(entry) != type([]) || len(entry) < 2
             continue
         endif
         let cmd = entry[0]
-        let optstr = floaterm#enhance#parse_opt(entry[1])
-        call add(l:result, [cmd, optstr, 'REPL'])
+        let opts = floaterm#enhance#parse_opt(entry[1])
+        call add(result, [cmd, opts, 'REPL'])
     endfor
-    return l:result
+    return result
 endfunction
 " -------------------------------------
 " start repl (internal function)
 " -------------------------------------
-function! floaterm#repl#_start(ft, start_now) abort
-    if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, a:ft) || empty(g:floaterm_repl_programs[a:ft])
+function! floaterm#repl#start(now) abort
+    let ft = &ft
+    if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, ft) || empty(g:floaterm_repl_programs[ft])
         call floaterm#enhance#showmsg(printf("REPL program for %s not set or installed, please install and add it via floaterm#repl#update_program().", a:ft), 1)
         return
     endif
-    let win_bufnr = winbufnr(winnr())
-    let idx = floaterm#repl#create_idx(win_bufnr)
-    let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         call floaterm#enhance#showmsg(printf("REPL for %s already started", win_bufnr))
-        return
-    endif
-    try
-        if empty(termname) || !repl_bufnr
-            let programs = floaterm#repl#get_ft_programs(a:ft)
-            if empty(programs)
-                call floaterm#enhance#showmsg("No REPL program available for " . a:ft, 1)
-                return
-            endif
-            if a:start_now
-                let [cmd, opts, type] = programs[0]
-                call floaterm#enhance#run_cmd(cmd, opts, type)
-            else
-                call floaterm#enhance#select_program(programs, 'FloatermREPL')
-            endif
-        else
-            call floaterm#terminal#open_existing(repl_bufnr)
-            " let termname = printf('#%s|%s!%S', win_bufnr, a:ft, toupper(split(programs[0][0], " ")[0]))
-            " call floaterm#repl#set_termname(a:ft, win_bufnr, termname)
+    else
+        let programs = floaterm#repl#get_ft_programs()
+        if empty(programs)
+            call floaterm#enhance#showmsg("No REPL program available for " . ft, 1)
+            return
         endif
-    catch /.*/
-        call floaterm#enhance#showmsg("Error occurred when choosing REPL program", 1)
-        return
-    endtry
+        " -1 代表没有run cmd 过， 0 代表run cmd 但没有成功， > 0 值 代表floaterm_bufnr
+        let t:floaterm_program_bufnr = -1
+        if a:now
+            let [cmd, opts, type] = programs[0]
+            call floaterm#enhance#run_cmd(cmd, opts, type)
+            call floaterm#repl#set_repl_bufnr()
+        else
+            call floaterm#enhance#select_program(programs, 'FloatermREPL')
+            call timer_start(0, {-> floaterm#repl#set_repl_bufnr()})
+        endif
+    endif
 endfunction
 " -------------------------------------
 " start repl (auto select program)
 " -------------------------------------
 function! floaterm#repl#start_now() abort
-    call floaterm#repl#_start(&filetype, v:true)
+    call floaterm#repl#start(v:true)
 endfunction
 " -------------------------------------
 " start repl (choose program interactively)
 " -------------------------------------
 function! floaterm#repl#start_choose() abort
-    call floaterm#repl#_start(&filetype, v:false)
+    call floaterm#repl#start(v:false)
 endfunction
 " -------------------------------------
 " set repl program for each filetype
@@ -107,7 +125,7 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
     if !exists('g:floaterm_repl_programs')
         let g:floaterm_repl_programs = {}
     endif
-    let optstr = a:0 && type(a:1) == type('') ? a:1 : ''
+    let opts = a:0 && type(a:1) == type('') ? a:1 : ''
     if type(a:programs) == type('')
         let programs = [a:programs]
     elseif type(a:programs) == type([])
@@ -130,7 +148,7 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
         if !executable(lst[0])
             continue
         endif
-        let entry = [cmd, optstr, 'REPL']
+        let entry = [cmd, opts, 'REPL']
         let replaced = v:false
         let i = 0
         while i < len(g:floaterm_repl_programs[ft])
@@ -201,10 +219,9 @@ function! floaterm#repl#send_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echom "t:floaterm_repl_marked_lines is empty"
     else
-        let idx = floaterm#repl#create_idx()
-        let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
-        if repl_bufnr > 0
-            call floaterm#repl#send_contents(t:floaterm_repl_marked_lines, ft, repl_bufnr, 1, line('.') , 0)
+        let repl_bufnr = floaterm#repl#get_repl_bufnr()
+        if repl_bufnr
+            call floaterm#repl#send_contents(t:floaterm_repl_marked_lines, &ft, repl_bufnr, 1, line('.') , 0)
         endif
     endif
 endfunction
@@ -221,8 +238,7 @@ function! floaterm#repl#send_word(visual) abort
         call floaterm#enhance#showmsg('cword is empty', 1)
         return
     endif
-    let idx = floaterm#repl#create_idx()
-    let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr > 0
         call floaterm#terminal#send(repl_bufnr, [word])
     endif
@@ -231,8 +247,7 @@ endfunction
 " Send a newline to REPL or start REPL if not running
 " ------------------------------------------------------
 function! floaterm#repl#send_newline() abort
-    let idx = floaterm#repl#create_idx()
-    let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         call floaterm#terminal#send(repl_bufnr, [""])
     else
@@ -243,11 +258,10 @@ endfunction
 " Send clear command to REPL
 " ------------------------------------------------------
 function! floaterm#repl#send_clear() abort
-    let idx = floaterm#repl#create_idx()
-    let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr > 0
-        if has_key(g:floaterm_repl_clear, ft) && g:floaterm_repl_clear[ft] != ''
-            call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_clear[ft]])
+        if has_key(g:floaterm_repl_clear, &ft) && g:floaterm_repl_clear[&ft] != ''
+            call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_clear[&ft]])
         endif
     else
         call floaterm#enhance#showmsg("Start REPL first to send clear signal.")
@@ -257,11 +271,10 @@ endfunction
 " Send exit command to REPL
 " ------------------------------------------------------
 function! floaterm#repl#send_exit() abort
-    let idx = floaterm#repl#create_idx()
-    let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr > 0
-        if has_key(g:floaterm_repl_exit, ft) && g:floaterm_repl_exit[ft] != ''
-            call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_exit[ft]])
+        if has_key(g:floaterm_repl_exit, &ft) && g:floaterm_repl_exit[&ft] != ''
+            call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_exit[&ft]])
         endif
     else
         call floaterm#enhance#showmsg("Start REPL first to send exit signal.")
@@ -318,9 +331,8 @@ function! floaterm#repl#send(line_begin, line_end, keep, ...) range abort
         return
     endif
     " Normal case - send code contents
-    let idx = floaterm#repl#create_idx()
-    let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
-    if repl_bufnr < 0
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
+    if repl_bufnr == 0
         call floaterm#enhance#showmsg("Do REPLFloatermStart at first.")
         return
     endif
