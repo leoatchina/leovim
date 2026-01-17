@@ -1,61 +1,53 @@
 " -------------------------------------
 " get repl buf nr
 " -------------------------------------
+function! floaterm#repl#create_idx(...) abort
+    if a:0 && type(a:1) == type(0) && a:1
+        let bufnr = a:1
+    else
+        let bufnr = winbufnr(winnr())
+    endif
+    return &ft . '-' . bufnr
+endfunction
 function! floaterm#repl#get_repl_bufnr(idx) abort
     if exists('t:floaterm_repl_terms') && has_key(t:floaterm_repl_terms, a:idx)
         let termname = t:floaterm_repl_terms[a:idx]
         let bufnr = floaterm#terminal#get_bufnr(termname)
-        if bufnr <= 0
-            call remove(t:floaterm_repl_terms, idx)
-            return [-1, '']
-        else
+        if bufnr
             return [bufnr, termname]
+        else
+            call remove(t:floaterm_repl_terms, a:idx)
+            return [0, '']
         endif
     else
-        return [-1, '']
+        return [0, '']
     endif
 endfunction
 " -------------------------------------
 " set repl terminal name
 " -------------------------------------
-function! floaterm#repl#set_repl_term(ft, bufnr, termname) abort
+function! floaterm#repl#set_termname(ft, bufnr, termname) abort
     if !exists('t:floaterm_repl_terms')
         let t:floaterm_repl_terms = {}
     endif
-    let idx = a:ft . a:bufnr
+    let idx = floaterm#repl#create_idx(a:bufnr)
     let t:floaterm_repl_terms[idx] = a:termname
 endfunction
 " -------------------------------------
-" choose a program to run repl
+" get repl programs for filetype
 " -------------------------------------
-function! floaterm#repl#choose_program(lst) abort
-    let cmds = a:lst
-    if len(cmds) == 0
-        return ""
-    endif
-    let cnt = 0
-    let contents = []
-    let title = "Which REPL program"
-    for cmd in cmds
-        let cnt += 1
-        call add(contents, '&' . cnt . ' '. cmd)
+function! floaterm#repl#get_ft_programs(ft) abort
+    let l:entries = get(g:floaterm_repl_programs, a:ft, [])
+    let l:result = []
+    for entry in l:entries
+        if type(entry) != type([]) || len(entry) < 2
+            continue
+        endif
+        let cmd = entry[0]
+        let optstr = floaterm#enhance#parse_opt(entry[1])
+        call add(l:result, [cmd, optstr, 'REPL'])
     endfor
-    if exists('*QuickThemeChange')
-        let opts = {'title': title, 'index': g:quickui#listbox#cursor, 'w': 64}
-        let idx = quickui#listbox#inputlist(contents, opts)
-        if idx >= 0
-            return cmds[idx]
-        endif
-    else
-        let cnt += 1
-        call add(contents, '&0 Cancel')
-        let content = join(contents, "\n")
-        let idx = confirm(title, content, cnt)
-        if idx > 0 && idx < cnt
-            return cmds[idx-1]
-        endif
-    endif
-    return ""
+    return l:result
 endfunction
 " -------------------------------------------
 " core function send_contents. contents is
@@ -97,86 +89,52 @@ endfunction
 " -------------------------------------
 " start repl (internal function)
 " -------------------------------------
-function! floaterm#repl#ft_start(ft, choose_prg) abort
+function! floaterm#repl#_start(ft, start_now) abort
     if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, a:ft) || empty(g:floaterm_repl_programs[a:ft])
         call floaterm#enhance#showmsg(printf("REPL program for %s not set or installed, please install and add it via floaterm#repl#update_program().", a:ft), 1)
-        return v:false
+        return
     endif
-    let b:floaterm_repl_curr_bufnr = winbufnr(winnr())
-    let idx = a:ft . b:floaterm_repl_curr_bufnr
+    let win_bufnr = winbufnr(winnr())
+    let idx = floaterm#repl#create_idx(win_bufnr)
     let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
-    if repl_bufnr > 0
-        call floaterm#enhance#showmsg(printf("REPL for %s already started", b:floaterm_repl_curr_bufnr))
-        return v:false
+    if repl_bufnr
+        call floaterm#enhance#showmsg(printf("REPL for %s already started", win_bufnr))
+        return
     endif
     try
-        let program = ""
-        let opt_parsed = ''
-        let prog_entries = get(g:floaterm_repl_programs, a:ft, [])
-        let prog_cmds = map(copy(prog_entries), 'v:val[0]')
-        if a:choose_prg
-            " User wants to choose program interactively
-            try
-                let program = floaterm#repl#choose_program(prog_cmds)
-            catch /.*/
-                call floaterm#enhance#showmsg("Error occurred when choosing REPL program", 1)
-                return v:false
-            endtry
-            " Check if user cancelled program selection
-            if empty(program)
-                call floaterm#enhance#showmsg("REPL program selection cancelled", 1)
-                return v:false
+        if empty(termname) || !repl_bufnr
+            let programs = floaterm#repl#get_ft_programs(a:ft)
+            if empty(programs)
+                call floaterm#enhance#showmsg("No REPL program available for " . a:ft, 1)
+                return
+            endif
+            if a:start_now
+                let [cmd, opts, type] = programs[0]
+                call floaterm#enhance#run_cmd(cmd, opts, type)
+            else
+                call floaterm#enhance#select_program(programs, 'FloatermREPL')
             endif
         else
-            " Automatically select the first available program
-            try
-                let program = get(prog_cmds, 0, "")
-                if empty(program)
-                    call floaterm#enhance#showmsg("No REPL program available for " . a:ft, 1)
-                    return v:false
-                endif
-            catch /.*/
-                call floaterm#enhance#showmsg("Error selecting REPL program", 1)
-                return v:false
-            endtry
+            call floaterm#terminal#open_existing(repl_bufnr)
+            " let termname = printf('#%s|%s!%S', win_bufnr, a:ft, toupper(split(programs[0][0], " ")[0]))
+            " call floaterm#repl#set_termname(a:ft, win_bufnr, termname)
         endif
-        for entry in prog_entries
-            if entry[0] ==# program
-                let opt_parsed = entry[1]
-                break
-            endif
-        endfor
     catch /.*/
         call floaterm#enhance#showmsg("Error occurred when choosing REPL program", 1)
-        return v:false
+        return
     endtry
-    if empty(termname) || repl_bufnr <= 0
-        let termname = printf('#%s|%s!%S', b:floaterm_repl_curr_bufnr, a:ft, toupper(split(program, " ")[0]))
-        call floaterm#repl#set_repl_term(a:ft, b:floaterm_repl_curr_bufnr, termname)
-        let floatermnew_cmd = printf('%s%s --name=%s --title=%s %s', g:floaterm_repl_new_cmd, opt_parsed, termname, termname, program)
-        execute floatermnew_cmd
-    else
-        call floaterm#terminal#open_existing(repl_bufnr)
-    endif
-    if winnr() > 0
-        wincmd p
-        if has('nvim')
-            stopinsert
-        endif
-    endif
-    return v:true
 endfunction
 " -------------------------------------
 " start repl (auto select program)
 " -------------------------------------
-function! floaterm#repl#start() abort
-    return floaterm#repl#ft_start(&filetype, v:false)
+function! floaterm#repl#start_now() abort
+    call floaterm#repl#_start(&filetype, v:true)
 endfunction
 " -------------------------------------
 " start repl (choose program interactively)
 " -------------------------------------
-function! floaterm#repl#choose() abort
-    return floaterm#repl#ft_start(&filetype, v:true)
+function! floaterm#repl#start_choose() abort
+    call floaterm#repl#_start(&filetype, v:false)
 endfunction
 " -------------------------------------
 " set repl program for each filetype
@@ -186,8 +144,7 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
     if !exists('g:floaterm_repl_programs')
         let g:floaterm_repl_programs = {}
     endif
-    let optstr = a:0 && type(a:1) == type('')? a:1 : ''
-    let opt_parsed = floaterm#enhance#parse_opt(optstr)
+    let optstr = a:0 && type(a:1) == type('') ? a:1 : ''
     if type(a:programs) == type('')
         let programs = [a:programs]
     elseif type(a:programs) == type([])
@@ -210,7 +167,7 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
         if !executable(lst[0])
             continue
         endif
-        let entry = [cmd, opt_parsed, 'REPL']
+        let entry = [cmd, optstr, 'REPL']
         let replaced = v:false
         let i = 0
         while i < len(g:floaterm_repl_programs[ft])
@@ -281,9 +238,7 @@ function! floaterm#repl#send_mark()
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echom "t:floaterm_repl_marked_lines is empty"
     else
-        let ft = &filetype
-        let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
-        let idx = ft . curr_bufnr
+        let idx = floaterm#repl#create_idx()
         let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
         if repl_bufnr > 0
             call floaterm#repl#send_contents(t:floaterm_repl_marked_lines, ft, repl_bufnr, 1, line('.') , 0)
@@ -303,9 +258,7 @@ function! floaterm#repl#send_word(visual) abort
         call floaterm#enhance#showmsg('cword is empty', 1)
         return
     endif
-    let ft = &filetype
-    let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
-    let idx = ft . curr_bufnr
+    let idx = floaterm#repl#create_idx()
     let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
     if repl_bufnr > 0
         call floaterm#terminal#send(repl_bufnr, [word])
@@ -315,27 +268,19 @@ endfunction
 " Send a newline to REPL or start REPL if not running
 " ------------------------------------------------------
 function! floaterm#repl#send_newline() abort
-    let ft = &filetype
-    let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
-    let idx = ft . curr_bufnr
+    let idx = floaterm#repl#create_idx()
     let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
-    if repl_bufnr > 0
+    if repl_bufnr
         call floaterm#terminal#send(repl_bufnr, [""])
     else
-        if floaterm#repl#start()
-            call floaterm#enhance#showmsg("Starting REPL for " . ft)
-        else
-            call floaterm#enhance#showmsg("Start repl failed.", 1)
-        endif
+        call floaterm#repl#start_now()
     endif
 endfunction
 " ------------------------------------------------------
 " Send clear command to REPL
 " ------------------------------------------------------
 function! floaterm#repl#send_clear() abort
-    let ft = &filetype
-    let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
-    let idx = ft . curr_bufnr
+    let idx = floaterm#repl#create_idx()
     let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
     if repl_bufnr > 0
         if has_key(g:floaterm_repl_clear, ft) && g:floaterm_repl_clear[ft] != ''
@@ -349,9 +294,7 @@ endfunction
 " Send exit command to REPL
 " ------------------------------------------------------
 function! floaterm#repl#send_exit() abort
-    let ft = &filetype
-    let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
-    let idx = ft . curr_bufnr
+    let idx = floaterm#repl#create_idx()
     let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
     if repl_bufnr > 0
         if has_key(g:floaterm_repl_exit, ft) && g:floaterm_repl_exit[ft] != ''
@@ -375,9 +318,7 @@ function! floaterm#repl#send(line_begin, line_end, keep, ...) range abort
         return
     endif
     " Normal case - send code contents
-    let ft = &filetype
-    let curr_bufnr = get(b:, 'floaterm_repl_curr_bufnr', winbufnr(winnr()))
-    let idx = ft . curr_bufnr
+    let idx = floaterm#repl#create_idx()
     let [repl_bufnr, termname] = floaterm#repl#get_repl_bufnr(idx)
     if repl_bufnr < 0
         call floaterm#enhance#showmsg("Do REPLFloatermStart at first.")
@@ -404,7 +345,7 @@ function! floaterm#repl#send(line_begin, line_end, keep, ...) range abort
     elseif get(g:, 'floaterm_repl_showsend', 0)
         call floaterm#enhance#showmsg(printf("%s,%s %slines", line_begin, line_end, len(contents)))
     endif
-    call floaterm#repl#send_contents(contents, ft, repl_bufnr, a:keep, line_end, vmode)
+    call floaterm#repl#send_contents(contents, &ft, repl_bufnr, a:keep, line_end, vmode)
 endfunction
 " ------------------------------------------------------
 " Send border

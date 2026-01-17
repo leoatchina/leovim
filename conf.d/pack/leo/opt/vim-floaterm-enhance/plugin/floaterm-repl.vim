@@ -33,15 +33,10 @@ let g:floaterm_repl_exit.python = 'exit'
 let g:floaterm_repl_exit.vim = 'vis'
 let g:floaterm_repl_exit.r = 'quit'
 " ----------------------------------
-" update open postion
-" ----------------------------------
-call floaterm#repl#update_position()
-au VimResized * call floaterm#repl#update_position()
-" ----------------------------------
 " commands. NOTE <bang>0 means move forword
 " ----------------------------------
-command! -bang FloatermReplStart call floaterm#repl#start()
-command! -bang FloatermReplChoose call floaterm#repl#choose()
+command! -bang FloatermReplStart call floaterm#repl#start_now()
+command! -bang FloatermReplChoose call floaterm#repl#start_choose()
 command! -bang -range FloatermReplSend call floaterm#repl#send(<line1>, <line2>, <bang>0)
 command! -bang -range FloatermReplSendVisual call floaterm#repl#send(<line1>, <line2>, <bang>0, 1)
 command! -bang FloatermReplSendBlock call floaterm#repl#send_border("block", <bang>0)

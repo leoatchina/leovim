@@ -185,6 +185,28 @@ endfunction
 " --------------------------------------------------------------
 " fzf select and run programs
 " --------------------------------------------------------------
+function! floaterm#enhance#run_cmd(cmd, opts, type, ...) abort
+    if a:0 && type(a:1) == type(v:true)
+        let wincmdp = a:1
+    else
+        let wincmdp = v:true
+    endif
+    let command = printf('FloatermNew %s %s', a:opts, a:cmd)
+    try
+        call execute(command)
+        let t:floaterm_program_bufnr = floaterm#buflist#curr()
+        call floaterm#config#set(t:floaterm_program_bufnr, 'program', a:type)
+        if wincmdp
+            wincmd p
+            if has('nvim')
+                stopinsert
+            endif
+        endif
+    catch /.*/
+        call floaterm#enhance#showmsg('Failed to run program: ' . cmd, 1)
+    endtry
+endfunction
+
 function! floaterm#enhance#select_program(programs, prompt, ...) abort
     if !exists('*fzf#run')
         call floaterm#enhance#showmsg('fzf.vim is required for FloatermProgram', 1)
@@ -195,7 +217,7 @@ function! floaterm#enhance#select_program(programs, prompt, ...) abort
         return
     endif
     let prompt = a:prompt
-    let l:wincmdp = a:0 > 1 && type(a:2) == type(v:true) ? a:2 : v:true
+    let l:wincmdp = a:0 && type(a:1) == type(v:true) ? a:1 : v:true
     let l:source = []
     let l:done = v:false
     let l:selected = v:null
@@ -211,8 +233,8 @@ function! floaterm#enhance#select_program(programs, prompt, ...) abort
         else
             let type = 'PROG'
         endif
-        let display = printf('%s|%s %s', cmd, type, opts)
-        let l:program_map[display] = [cmd, type, opts]
+        let display = printf('%s|%s %s', type, cmd, opts)
+        let l:program_map[display] = [cmd, opts, type]
         call add(l:source, display)
     endfor
     if empty(l:source)
@@ -224,21 +246,14 @@ function! floaterm#enhance#select_program(programs, prompt, ...) abort
         if !l:done
             return
         endif
-        if !empty(l:selected) && has_key(l:program_map, l:selected)
-            let [cmd, type , opts] = l:program_map[l:selected]
-            let command = printf('FloatermNew %s %s', opts, cmd)
-            try
-                call execute(command)
-                let t:floaterm_program_bufnr = floaterm#buflist#curr()
-                call floaterm#config#set(t:floaterm_program_bufnr, 'program', type)
-                if l:wincmdp
-                    wincmd p
-                endif
-            catch /.*/
-                call floaterm#enhance#showmsg('Failed to run program: ' . cmd, 1)
-            endtry
+        if empty(l:selected)
+            return
+        elseif !has_key(l:program_map, l:selected)
+            return
         else
             let t:floaterm_program_bufnr = v:null
+            let [cmd, opts, type] = l:program_map[l:selected]
+            call floaterm#enhance#run_cmd(cmd, opts, type, l:wincmdp)
         endif
     endfunction
 
