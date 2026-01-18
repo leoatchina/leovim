@@ -77,19 +77,82 @@ endfunction
 " --------------------------------------------------------------
 " send file path with line range to latest AI terminal
 " --------------------------------------------------------------
-function! floaterm#ai#send_line_range(bang) range abort
+function! floaterm#ai#_send(type, keep_in_ai, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if !ai_bufnr
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
         return
     endif
-    let range_str = floaterm#ai#at(floaterm#enhance#get_file_line_range(a:firstline, a:lastline))
-    if empty(range_str)
+    if a:type == 'range'
+        if a:0
+            if a:0 == 1 && a:1
+                let content = floaterm#ai#at(floaterm#enhance#get_file_line_range(a:1, a:1))
+            elseif a:1 && a:2 && a:1 <= a:2
+                let content = floaterm#ai#at(floaterm#enhance#get_file_line_range(a:1, a:2))
+            else
+                let content = floaterm#ai#at(floaterm#enhance#get_file_abspath())
+            endif
+        else
+            let content = floaterm#ai#at(floaterm#enhance#get_file_abspath())
+        endif
+    elseif a:type == 'file'
+        let content = floaterm#ai#at(floaterm#enhance#get_file_abspath())
+    elseif a:type == 'dir'
+        let content = floaterm#ai#at(floaterm#enhance#get_file_absdir())
+    else
         return
     endif
-    if a:bang
-        call floaterm#terminal#send(ai_bufnr, [range_str], 0)
-    else
-        call floaterm#terminal#send(ai_bufnr, [range_str], 1)
+    if empty(content)
+        return
     endif
+    if a:keep_in_ai
+        call floaterm#terminal#send(ai_bufnr, [content], 0)
+    else
+        call floaterm#terminal#send(ai_bufnr, [content], 1)
+    endif
+endfunction
+" send range
+function! floaterm#ai#send_line_range(keep_in_ai) range abort
+    call floaterm#ai#_send('range', a:keep_in_ai, a:firstline, a:lastline)
+endfunction
+" send file
+function! floaterm#ai#send_file(keep_in_ai) abort
+    call floaterm#ai#_send('file', a:keep_in_ai)
+endfunction
+" send dir
+function! floaterm#ai#send_dir(keep_in_ai) abort
+    call floaterm#ai#_send('dir', a:keep_in_ai)
+endfunction
+" --------------------------------------------------------------
+" fzf file picker with root dir files -> send paths to latest AI terminal
+" --------------------------------------------------------------
+function! floaterm#ai#fzf_file_sink(lines) abort
+    if empty(a:lines)
+        call floaterm#enhance#showmsg('No file selected', 1)
+        return
+    endif
+    let curr_bufnr = floaterm#buflist#curr()
+    if curr_bufnr
+        call floaterm#enhance#showmsg('No floaterm window found', 1)
+        return
+    endif
+    let msg = ''
+    for file_path in a:lines
+        let msg .= ' @' . file_path
+    endfor
+    call floaterm#terminal#send(curr_bufnr, [msg], 0)
+endfunction
+
+function! floaterm#ai#fzf_file_list() abort
+    if !exists('*fzf#run')
+        call floaterm#enhance#showmsg('fzf.vim is required for file picker', 1)
+        return
+    endif
+    let ai_bufnr = floaterm#ai#
+    let root_dir = floaterm#path#get_root()
+    let relative_dir = substitute(floaterm#enhance#get_file_absdir(), '^' . root_dir . '/', '', '')
+    call fzf#vim#files(root_dir, fzf#vim#with_preview({
+                \ 'sink*': function('floaterm#ai#fzf_file_sink'),
+                \ 'options': ['--multi', '--prompt', 'FloatermFzfFile> ', '--query', relative_dir]
+                \ }), 0)
 endfunction
