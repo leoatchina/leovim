@@ -1,3 +1,14 @@
+" Copy file path
+nnoremap <leader>YF :let @"=utils#abs_path()<Cr>:echo "-= File path copied=-"<Cr>
+" Copy file dir
+nnoremap <leader>YD :let @"=utils#abs_dir()<Cr>:echo "-= File dir copied=-"<Cr>
+" Copy file name
+nnoremap <leader>YB :let @"=utils#file_name()<Cr>:echo "-= File name copied=-"<Cr>
+" Yank a line without leading whitespaces and line break
+nnoremap <leader>YU _yg_:echo "-= Yanked line without leading whitespaces and line break=-"<Cr>
+" ------------------------------------
+" clipboard
+" ------------------------------------
 if has('clipboard')
     function! s:setup_clipboard(register, mode, label) abort
         let s:register = a:register
@@ -8,9 +19,9 @@ if has('clipboard')
             set clipboard=
         endif
         execute 'xnoremap Y "' . a:register . 'y:echo "Yank selection to ' . a:label . ' clipboard."<Cr>'
-        execute 'nnoremap <leader>ya :let @' . a:register . '=utils#abs_path()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>yf :let @' . a:register . '=utils#abs_path()<Cr>:echo "-= File path copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yd :let @' . a:register . '=utils#abs_dir()<Cr>:echo "-= File dir copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>yf :let @' . a:register . '=utils#file_name()<Cr>:echo "-= File name copied to ' . a:label . ' clipboard=-"<Cr>'
+        execute 'nnoremap <leader>yb :let @' . a:register . '=utils#file_name()<Cr>:echo "-= File name copied to ' . a:label . ' clipboard=-"<Cr>'
         execute 'nnoremap <leader>yu _"' . a:register . 'yg_:echo "-= Yanked line without leading whitespaces and line break to ' . a:label . ' clipboard=-"<Cr>'
     endfunction
     if utils#is_linux() && (utils#is_vscode() || exists('$TMUX'))
@@ -28,7 +39,7 @@ endif
 " yank command and position to editors
 " --------------------------------------------
 function! s:yank_position_to_editor(editor) abort
-    if index(['code', 'cursor', 'windsurf', 'antigravity', 'qoder', 'trae', 'positron', 'zed', 'edit'], a:editor) >= 0
+    if index(['code', 'cursor', 'windsurf', 'antigravity', 'qoder', 'trae', 'positron', 'antigravity', 'zed', 'edit'], a:editor) >= 0
         let editor = a:editor
     else
         return
@@ -61,7 +72,7 @@ command! YankPositionToEdit        call s:yank_position_to_editor('edit')
 nnoremap <silent><leader>yv :YankPositionToVscode<Cr>
 nnoremap <silent><leader>yc :YankPositionToCursr<Cr>
 nnoremap <silent><leader>yw :YankPositionToWindsurf<Cr>
-nnoremap <silent><leader>yA :YankPositionToAntigravity<Cr>
+nnoremap <silent><leader>ya :YankPositionToAntigravity<Cr>
 nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
 nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
 nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
@@ -87,17 +98,6 @@ endfunction
 command! -range YankLineRef call s:yank_line_ref(<line1>, <line2>)
 nnoremap <silent><leader>yl :YankLineRef<Cr>
 xnoremap <silent><leader>yl :YankLineRef<Cr>
-" ------------------------------------
-" clipboard
-" ------------------------------------
-" Copy file path
-nnoremap <leader>YA :let @"=utils#abs_path()<Cr>:echo "-= File path copied=-"<Cr>
-" Copy file dir
-nnoremap <leader>YD :let @"=utils#abs_dir()<Cr>:echo "-= File dir copied=-"<Cr>
-" Copy file name
-nnoremap <leader>YF :let @"=utils#file_name()<Cr>:echo "-= File name copied=-"<Cr>
-" Yank a line without leading whitespaces and line break
-nnoremap <leader>YU _yg_:echo "-= Yanked line without leading whitespaces and line break=-"<Cr>
 " ------------------------
 " special yank
 " ------------------------
