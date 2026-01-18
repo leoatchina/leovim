@@ -49,6 +49,6 @@ command! FloatermReplSendExit call floaterm#repl#send_exit()
 " work
 command! FloatermReplSendWord call floaterm#repl#send_word()
 " mark
-command! FloatermReplMark call floaterm#repl#mark()
+command! -range FloatermReplMark call floaterm#repl#mark()
 command! FloatermReplSendMark call floaterm#repl#send_mark()
 command! FloatermReplShowMark call floaterm#repl#show_mark()
