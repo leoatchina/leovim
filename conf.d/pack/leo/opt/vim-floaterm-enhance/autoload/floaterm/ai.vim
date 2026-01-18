@@ -77,16 +77,17 @@ endfunction
 " --------------------------------------------------------------
 " send file path with line range to latest AI terminal
 " --------------------------------------------------------------
-function! floaterm#ai#send_line_range(...) abort
+function! floaterm#ai#send_line_range(bang) range abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if !ai_bufnr
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
         return
-    let range_str = floaterm#ai#at(floaterm#enhance#get_file_line_range())
+    endif
+    let range_str = floaterm#ai#at(floaterm#enhance#get_file_line_range(a:firstline, a:lastline))
     if empty(range_str)
         return
     endif
-    if a:0 && a:1
+    if a:bang
         call floaterm#terminal#send(ai_bufnr, [range_str], 0)
     else
         call floaterm#terminal#send(ai_bufnr, [range_str], 1)
