@@ -43,17 +43,26 @@ if get(g:, 'ctags_type', '') != ''
         let s:fzf_tags_command = 'ctags'
     endif
     let g:fzf_tags_command = s:fzf_tags_command . ' -R --exclude=' . join(lst, " --exclude=")
-endif
-" F/T<Cr>
-if g:symbol_tool =~ 'leaderftags'
-    let g:Lf_Ctags = g:fzf_tags_command
-    nnoremap <silent><leader>T :LeaderfTag<Cr>
-    nnoremap <silent>T<Cr> :LeaderfBufTagAll<Cr>
-    nnoremap <silent>F<Cr> :LeaderfFunctionAll<Cr>
-elseif g:symbol_tool =~ 'fzftags' && executable('perl')
-    nnoremap <silent><leader>T :FzfTags<Cr>
-elseif g:symbol_tool =~ 'ctrlptags'
-    nnoremap <silent><leader>T :CtrlPTags<Cr>
+    if g:symbol_tool =~ 'leaderftags'
+        let g:Lf_Ctags = g:fzf_tags_command
+        nnoremap <silent><leader>T :LeaderfTag<Cr>
+        nnoremap <silent>T<Cr> :LeaderfBufTagAll<Cr>
+    elseif g:symbol_tool =~ 'fzftags' && executable('perl')
+        nnoremap <silent><leader>T :FzfTags<Cr>
+    elseif g:symbol_tool =~ 'ctrlptags'
+        nnoremap <silent><leader>T :CtrlPTags<Cr>
+    endif
+    if g:complete_engine == 'coc' && utils#is_unix() && g:ctags_type != ''
+        nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
+    elseif pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
+        nnoremap <silent>t<Cr> :Vista finder ctags<Cr>
+    elseif g:symbol_tool =~ 'leaderftags'
+        nnoremap <silent>t<Cr> :LeaderfBufTag<Cr>
+    elseif g:symbol_tool =~ 'fzftags'
+        nnoremap <silent>t<Cr> :FzfBTags<Cr>
+    elseif g:symbol_tool =~ 'ctrlptags'
+        nnoremap <silent>t<Cr> :CtrlPBufTag<Cr>
+    endif
 endif
 " f<Cr> to useing native functions show
 if pack#planned('vim-funky')
@@ -65,17 +74,11 @@ if pack#planned('vim-funky')
         nnoremap <silent>f<Cr> :w!<Cr>:QfFunky<Cr>
     endif
 endif
-" t<Cr> for tags
-if g:complete_engine == 'coc' && utils#is_unix() && g:ctags_type != ''
-    nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
-elseif pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
-    nnoremap <silent>t<Cr> :Vista finder ctags<Cr>
-elseif g:symbol_tool =~ 'leaderftags'
-    nnoremap <silent>t<Cr> :LeaderfBufTag<Cr>
-elseif g:symbol_tool =~ 'fzftags'
-    nnoremap <silent>t<Cr> :FzfBTags<Cr>
-elseif g:symbol_tool =~ 'ctrlptags'
-    nnoremap <silent>t<Cr> :CtrlPBufTag<Cr>
+" lsp tag show
+if pack#installed_coc()
+    nnoremap <silent><leader>t :Vista finder coc<Cr>
+elseif pack#installed_lsp()
+    nnoremap <silent><leader>t :Vista finder nvim_lsp<Cr>
 endif
 " -------------------------------
 " vim-gutentags

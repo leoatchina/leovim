@@ -207,23 +207,6 @@ if has('nvim') || v:version >= 801
     PlugAdd 'asynctasks.vim'
 endif
 " ------------------------------
-" Git
-" ------------------------------
-if executable('git') && v:version >= 800 && g:git_version >= 1.85
-    PlugAdd 'tpope/vim-fugitive'
-    PlugAdd 'junegunn/gv.vim'
-    " blamer.nvim installed when without virtual text or without leaderf
-    if g:has_popup_floating
-        PlugAdd 'skywind3000/vim-git-diffview'
-        if utils#is_unix() && (!pack#planned('leaderf') || pack#planned('leaderf') && !has('nvim') && !has('patch-9.0.200'))
-            PlugAdd 'APZelos/blamer.nvim'
-        endif
-    endif
-endif
-if has('nvim') || has('patch-8.0.902')
-    PlugAdd 'vim-signify'
-endif
-" ------------------------------
 " fuzzy finders
 " ------------------------------
 if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
@@ -244,12 +227,29 @@ if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
         PlugAdd 'benomahony/oil-git.nvim'
     endif
 endif
-if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 2 && !pack#get('noleaderf') && !pack#get('no-leaderf')
+if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 3 && !pack#get('noleaderf') && !pack#get('no-leaderf')
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
 if !pack#planned_leaderf() && !pack#planned_fzf()
     source $CFG_DIR/ctrlp.vim
     PlugAdd 'ctrlp.vim'
+endif
+" ------------------------------
+" Git
+" ------------------------------
+if executable('git') && v:version >= 800 && g:git_version >= 1.85
+    PlugAdd 'tpope/vim-fugitive'
+    PlugAdd 'junegunn/gv.vim'
+    " blamer.nvim installed when without virtual text or without leaderf
+    if g:has_popup_floating
+        PlugAdd 'skywind3000/vim-git-diffview'
+        if utils#is_unix() && (!pack#planned_leaderf() || pack#planned_leaderf() && !has('nvim') && !has('patch-9.0.200'))
+            PlugAdd 'APZelos/blamer.nvim'
+        endif
+    endif
+endif
+if has('nvim') || has('patch-8.0.902')
+    PlugAdd 'vim-signify'
 endif
 " --------------------------
 " terminal && tmux
