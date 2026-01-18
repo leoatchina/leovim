@@ -306,14 +306,18 @@ endfunction
 " -------------------------------------------
 " sent current line or selected contents to repl
 " -------------------------------------------
-function! floaterm#repl#send(line_begin, line_end, keep, ...) range abort
-    if a:0 && a:1 > 0
+function! floaterm#repl#send(keep) range abort
+    " Auto detect visual mode
+    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
         let vmode = 1
+        let [firstline] = getpos("'<")[1:1]
+        let [lastline] = getpos("'>")[1:1]
     else
         let vmode = 0
+        let firstline = a:firstline
+        let lastline = a:lastline
     endif
-    " Send newline - both line_begin and line_end are 0
-    if a:line_begin == 0 || a:line_end == 0
+    if firstline == 0 || lastline == 0 || firstline > lastline
         return
     endif
     " Normal case - send code contents
@@ -322,47 +326,39 @@ function! floaterm#repl#send(line_begin, line_end, keep, ...) range abort
         call floaterm#enhance#showmsg("Do REPLFloatermStart at first.")
         return
     endif
-    let line_begin = a:line_begin
-    let line_end = a:line_end
-    if vmode
-        let [line_begin] = getpos("'<")[1:1]
-        let [line_end] = getpos("'>")[1:1]
-    endif
-    if line_begin == 0 || line_end == 0 || line_begin > line_end
-        return
-    endif
     " NOTE: if visual selected, line('.') == 1, otherwise row where cursor located
-    if line_begin == line_end
-        let contents = [getline(line_begin)]
+    if firstline == lastline
+        let contents = [getline(firstline)]
     else
-        let contents = getline(line_begin, line_end)
+        let contents = getline(firstline, lastline)
     endif
     if empty(contents)
         call floaterm#enhance#showmsg('No contents selected.')
         return
     elseif get(g:, 'floaterm_repl_showsend', 0)
-        call floaterm#enhance#showmsg(printf("%s,%s %slines", line_begin, line_end, len(contents)))
+        call floaterm#enhance#showmsg(printf("%s,%s %slines", firstline, lastline, len(contents)))
     endif
-    call floaterm#repl#send_contents(contents, &ft, repl_bufnr, a:keep, line_end, vmode)
-----------------------------------------------
+    call floaterm#repl#send_contents(contents, &ft, repl_bufnr, a:keep, lastline, vmode)
+endfunction
+" ----------------------------------------------
 " Send border
 " ------------------------------------------------------
 function! floaterm#repl#send_border(border, keep) abort
-    let keep = a:keep
     if index(['begin', 'end', 'all', 'block'], a:border) >= 0
         let border = a:border
     else
         let border = 'block'
     endif
     if border == 'all'
-        let [line_begin, line_end] = floaterm#enhance#get_all()
-    elseif border == 'line_begin'
-        let [line_begin, line_end] = floaterm#enhance#get_begin()
+        let [firstline, lastline] = floaterm#enhance#get_all()
+    elseif border == 'begin'
+        let [firstline, lastline] = floaterm#enhance#get_begin()
     elseif border == 'end'
-        let [line_begin, line_end] = floaterm#enhance#get_end()
-    " block
+        let [firstline, lastline] = floaterm#enhance#get_end()
+    elseif border == 'block'
+        let [firstline, lastline] = floaterm#enhance#get_block()
     else
-        let [line_begin, line_end] = floaterm#enhance#get_block()
+        return
     endif
-    call floaterm#repl#send(line_begin, line_end, keep)
+    execute firstline . ',' . lastline . 'call floaterm#repl#send(' . a:keep . ')'
 endfunction

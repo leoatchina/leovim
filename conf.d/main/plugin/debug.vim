@@ -440,8 +440,8 @@ if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
     " repl line send
     nnoremap <silent><M-e>n :FloatermReplSend<Cr>
     nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
-    xnoremap <silent><M-e>n :FloatermReplSendVisual<Cr>
-    xnoremap <silent><M-e>l :FloatermReplSendVisual!<Cr>
+    xnoremap <silent><M-e>n :FloatermReplSend<Cr>
+    xnoremap <silent><M-e>l :FloatermReplSend!<Cr>
     nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
     nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
     " repl block send

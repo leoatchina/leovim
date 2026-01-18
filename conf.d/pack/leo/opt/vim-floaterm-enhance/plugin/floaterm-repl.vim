@@ -37,8 +37,7 @@ let g:floaterm_repl_exit.r = 'quit'
 " ----------------------------------
 command! -bang FloatermReplStart call floaterm#repl#start_now()
 command! -bang FloatermReplChoose call floaterm#repl#start_choose()
-command! -bang -range FloatermReplSend call floaterm#repl#send(<line1>, <line2>, <bang>0)
-command! -bang -range FloatermReplSendVisual call floaterm#repl#send(<line1>, <line2>, <bang>0, 1)
+command! -bang -range FloatermReplSend <line1>,<line2>call floaterm#repl#send(<bang>0)
 command! -bang FloatermReplSendBlock call floaterm#repl#send_border("block", <bang>0)
 command! -bang FloatermReplSendFromBegin call floaterm#repl#send_border("begin", <bang>0)
 command! -bang FloatermReplSendToEnd call floaterm#repl#send_border("end", <bang>0)
