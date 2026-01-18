@@ -263,7 +263,11 @@ function! floaterm#enhance#parse_programs(programs, type) abort
     endif
     let result = []
     for entry in a:programs
-        if type(entry) != type([]) || len(entry) < 2
+        if type(entry) == type('')
+            let entry = [entry, '']
+        elseif type(entry) == type([]) && len(entry) >= 2
+            let entry = entry[0:1]
+        else
             continue
         endif
         let cmd = entry[0]

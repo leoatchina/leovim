@@ -57,7 +57,7 @@ endfunction
 " -------------------------------------
 " get repl programs for filetype
 " -------------------------------------
-function! floaterm#repl#get_ft_parse_programs(...) abort
+function! floaterm#repl#get_ft_parsed_programs(...) abort
     if a:0 && type(a:1) == type('')
         let ft = trim(a:1)
     else
@@ -78,7 +78,7 @@ function! floaterm#repl#_active_or_run(now) abort
     if repl_bufnr
         call floaterm#enhance#showmsg(printf("REPL for %s already started", winbufnr(winnr())))
     else
-        let programs = floaterm#repl#get_ft_parse_programs(ft)
+        let programs = floaterm#repl#get_ft_parsed_programs(ft)
         if empty(programs)
             call floaterm#enhance#showmsg("No REPL program available for " . ft, 1)
             return
