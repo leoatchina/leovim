@@ -53,16 +53,42 @@ function! floaterm#ai#_active_or_run(now) abort
         endif
     endif
 endfunction
-
+" --------------------------------------------------------------
+" fromat string/list to @
+" --------------------------------------------------------------
+function! floaterm#ai#at(...) abort
+    if !a:0
+        return ''
+    endif
+    let result = []
+    for each in a:000
+        if type(each) == type('')
+            call add(result, each)
+        elseif type(each) == type([])
+            call extend(result, each)
+        endif
+    endfor
+    if empty(result)
+        return ""
+    else
+        return '@' . join(result, ' @') . ' '
+    endif
+endfunction
 " --------------------------------------------------------------
 " send file path with line range to latest AI terminal
 " --------------------------------------------------------------
-function! floaterm#ai#send_file_line_range() abort
-    let curr_bufnr = floaterm#ai#get_ai_bufnr()
-    if !curr_bufnr
+function! floaterm#ai#send_line_range(...) abort
+    let ai_bufnr = floaterm#ai#get_ai_bufnr()
+    if !ai_bufnr
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
         return
+    let range_str = floaterm#ai#at(floaterm#enhance#get_file_line_range())
+    if empty(range_str)
+        return
     endif
-    let range_str = '@'.floaterm#enhance#get_file_line_range() . ' '
-    call floaterm#terminal#send(curr_bufnr, [range_str], 0)
+    if a:0 && a:1
+        call floaterm#terminal#send(ai_bufnr, [range_str], 0)
+    else
+        call floaterm#terminal#send(ai_bufnr, [range_str], 1)
+    endif
 endfunction

@@ -15,3 +15,4 @@ augroup UpdateAiBufnr
     autocmd!
     autocmd User FloatermOpen call s:update_ai_bufnr()
 augroup END
+command! -bang -range FloatermAiSendLineRange call floaterm#ai#send_line_range(bang<0>)

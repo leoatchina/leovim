@@ -47,8 +47,9 @@ command! -bang FloatermReplSendAll call floaterm#repl#send_border("all", <bang>0
 command! FloatermReplSendCrOrStart call floaterm#repl#send_cr_or_start()
 command! FloatermReplSendClear call floaterm#repl#send_clear()
 command! FloatermReplSendExit call floaterm#repl#send_exit()
-command! -bang -range FloatermReplSendWord call floaterm#repl#send_word(<bang>0)
+" work
+command! FloatermReplSendWord call floaterm#repl#send_word()
 " mark
-command! -bang -range FloatermReplMark call floaterm#repl#mark(<bang>0)
+command! FloatermReplMark call floaterm#repl#mark()
 command! FloatermReplSendMark call floaterm#repl#send_mark()
 command! FloatermReplShowMark call floaterm#repl#show_mark()

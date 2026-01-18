@@ -7,7 +7,7 @@ function! floaterm#repl#create_idx(...) abort
     else
         let ft = &ft
     endif
-    if a:0 > 1 && type(a:2) == type(0) && a:2
+    if a:0 && type(a:2) == type(0) && a:2
         let bufnr = a:2
     else
         let bufnr = winbufnr(winnr())
@@ -157,13 +157,13 @@ endfunction
 " -------------------------------------
 " mark
 " -------------------------------------
-function! floaterm#repl#mark(visual) range abort
+function! floaterm#repl#mark() range abort
     try
-        if a:visual
+        if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
             let t:floaterm_repl_marked_lines = getline("'<", "'>")
             echom "Visual selection marked."
         else
-            let [start, end] = s:get_block()
+            let [start, end] = floaterm#enhance#get_block()
             let t:floaterm_repl_marked_lines = getline(start, end)
             echom "Block code marked."
         endif
@@ -171,11 +171,9 @@ function! floaterm#repl#mark(visual) range abort
         echom "Error mark."
     endtry
 endfunction
-" -------------------------------------
 " Using quickfix to show marked contents
-" -------------------------------------
-function! floaterm#repl#show_mark()
-    if get(t:, 'floaterm_repl_marked_lines', []) == []
+function! floaterm#repl#show_mark() abort
+    if empty(get(t:, 'floaterm_repl_marked_lines', []))
         echo "t:floaterm_repl_marked_lines is None"
         return
     endif
@@ -202,10 +200,8 @@ function! floaterm#repl#show_mark()
     " Set title for quickfix window
     let w:quickfix_title = 'REPL Marked contents'
 endfunction
-" -------------------------------------
 " sent marked contents
-" -------------------------------------
-function! floaterm#repl#send_mark()
+function! floaterm#repl#send_mark() abort
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echom "t:floaterm_repl_marked_lines is empty"
     else
@@ -218,8 +214,8 @@ endfunction
 " -------------------------------------
 " send only one word
 " -------------------------------------
-function! floaterm#repl#send_word(visual) abort
-    if a:visual
+function! floaterm#repl#send_word() range abort
+    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
         let word = trim(floaterm#enhance#get_visual_select())
     else
         let word = expand('<cword>')
@@ -229,7 +225,7 @@ function! floaterm#repl#send_word(visual) abort
         return
     endif
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
-    if repl_bufnr > 0
+    if repl_bufnr
         call floaterm#terminal#send(repl_bufnr, [word])
     endif
 endfunction
@@ -249,7 +245,7 @@ endfunction
 " ------------------------------------------------------
 function! floaterm#repl#send_clear() abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
-    if repl_bufnr > 0
+    if repl_bufnr
         if has_key(g:floaterm_repl_clear, &ft) && g:floaterm_repl_clear[&ft] != ''
             call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_clear[&ft]])
         endif
@@ -348,8 +344,7 @@ function! floaterm#repl#send(line_begin, line_end, keep, ...) range abort
         call floaterm#enhance#showmsg(printf("%s,%s %slines", line_begin, line_end, len(contents)))
     endif
     call floaterm#repl#send_contents(contents, &ft, repl_bufnr, a:keep, line_end, vmode)
-endfunction
-" ------------------------------------------------------
+----------------------------------------------
 " Send border
 " ------------------------------------------------------
 function! floaterm#repl#send_border(border, keep) abort
