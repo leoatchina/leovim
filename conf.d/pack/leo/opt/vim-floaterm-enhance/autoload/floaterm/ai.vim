@@ -34,7 +34,7 @@ endfunction
 function! floaterm#ai#_active_or_run(now) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if ai_bufnr
-        call floaterm#enhance#showmsg(printf("REPL for %s already started", winbufnr(winnr())))
+        call floaterm#enhance#showmsg(printf("AI for %s already started", ai_bufnr))
     else
         let programs = floaterm#ai#get_parsed_programs()
         if empty(programs)
@@ -49,12 +49,12 @@ function! floaterm#ai#_active_or_run(now) abort
             call floaterm#ai#update_ai_bufnr(t:floaterm_program_bufnr)
         else
             call floaterm#enhance#fzf_run(programs, 'FloatermAI')
-            call timer_start(0, {-> floaterm#repl#update_ai_bufnr(t:floaterm_program_bufnr)})
+            call timer_start(0, {-> floaterm#ai#update_ai_bufnr(t:floaterm_program_bufnr)})
         endif
     endif
 endfunction
 " --------------------------------------------------------------
-" fromat string/list to @
+" format string/list with '@' string 
 " --------------------------------------------------------------
 function! floaterm#ai#at(...) abort
     if !a:0
@@ -126,33 +126,24 @@ endfunction
 " --------------------------------------------------------------
 " fzf file picker with root dir files -> send paths to latest AI terminal
 " --------------------------------------------------------------
-function! floaterm#ai#fzf_file_sink(lines) abort
+function! floaterm#ai#fzf_file_sink(ai_bufnr, keep_in_ai, lines) abort
     if empty(a:lines)
         call floaterm#enhance#showmsg('No file selected', 1)
         return
     endif
-    let curr_bufnr = floaterm#buflist#curr()
-    if curr_bufnr
-        call floaterm#enhance#showmsg('No floaterm window found', 1)
-        return
-    endif
-    let msg = ''
-    for file_path in a:lines
-        let msg .= ' @' . file_path
-    endfor
-    call floaterm#terminal#send(curr_bufnr, [msg], 0)
+    call floaterm#terminal#send(a:ai_bufnr, [floaterm#ai#at(a:lines)], a:keep_in_ai ? 0 : 1)
 endfunction
 
-function! floaterm#ai#fzf_file_list() abort
-    if !exists('*fzf#run')
-        call floaterm#enhance#showmsg('fzf.vim is required for file picker', 1)
+function! floaterm#ai#fzf_file_list(keep_in_ai) abort
+    let ai_bufnr = floaterm#ai#get_ai_bufnr()
+    if !ai_bufnr
+        call floaterm#enhance#showmsg('No AI floaterm window found', 1)
         return
     endif
-    let ai_bufnr = floaterm#ai#
     let root_dir = floaterm#path#get_root()
     let relative_dir = substitute(floaterm#enhance#get_file_absdir(), '^' . root_dir . '/', '', '')
     call fzf#vim#files(root_dir, fzf#vim#with_preview({
-                \ 'sink*': function('floaterm#ai#fzf_file_sink'),
+                \ 'sink*': function('floaterm#ai#fzf_file_sink', [ai_bufnr, a:keep_in_ai]),
                 \ 'options': ['--multi', '--prompt', 'FloatermFzfFile> ', '--query', relative_dir]
                 \ }), 0)
 endfunction
