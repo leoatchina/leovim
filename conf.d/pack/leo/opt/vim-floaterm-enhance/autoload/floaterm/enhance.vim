@@ -162,30 +162,120 @@ function! floaterm#enhance#term_fzflist() abort
 endfunction
 
 " --------------------------------------------------------------
-" get file absolute path
+" get file path/dir/line range
 " --------------------------------------------------------------
 function! floaterm#enhance#get_file_abspath() abort
-    return '@' . fnamemodify(expand('%'), ':p')
+    return fnamemodify(expand('%'), ':p')
 endfunction
 
 function! floaterm#enhance#get_file_absdir() abort
-    return '@' . fnamemodify(expand('%'), ':p:h')
+    return fnamemodify(expand('%'), ':p:h')
 endfunction
 
-" --------------------------------------------------------------
-" get current line and selected lines in format @file#L1-L10
-" --------------------------------------------------------------
 function! floaterm#enhance#get_file_line_range(start, end) range abort
-    let range = '@' . floaterm#enhance#get_file_abspath() . '#L' . a:start
+    let range = floaterm#enhance#get_file_abspath() . '#L' . a:start
     if a:start != a:end
         let range .= '-L' . a:end
     endif
     return range
 endfunction
+" -------------------------------------
+" parse floaterm options
+" -------------------------------------
+function! floaterm#enhance#parse_opt(...) abort
+    let col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 3)
+    let prog_ratio = get(g:, 'floaterm_prog_ratio', 0.38)
+    let float_ratio = get(g:, 'floaterm_prog_float_ratio', 0.45)
+    " postions
+    let basic_postions = ['auto', 'center', 'right', 'bottom', 'left', 'top', 'leftabove', 'aboveleft', 'rightbelow', 'belowright', 'botright']
+    let float_postions = ['topleft', 'topright', 'bottomleft', 'bottomright', 'cusor']
+    let all_postions = basic_postions + float_postions
+    let open_position = get(g:, 'floaterm_prog_open_postion', 'auto')
+    " wintypes
+    if has('nvim')
+        let wintypes = ['split', 'vsplit', 'float']
+    else
+        let wintypes = ['split', 'vsplit']
+    endif
+    let wintype_opt = ''
+    let title_opt = ''
+    function! _parse(optstr, parse) abort
+        let optstr = a:optstr
+        let parse = a:parse
+        if type(optstr) != type('') || type(parse) != type('') || index(['wintype', 'position', 'title'], parse) < 0
+            return ''
+        endif
+        let key = '--' . parse
+        let pat = key . '\%([[:space:]]\|=\)\zs\S\+'
+        return matchstr(optstr, pat)
+    endfunction
+
+    if a:0 && type(a:1) == type('')
+        let pos = _parse(a:1, 'position')
+        if !empty(pos)
+            if index(basic_postions, pos) >= 0 && !has('nvim')
+                let open_position = pos
+            elseif index(all_postions, pos) >= 0
+                let open_position = pos
+            endif
+        endif
+        let wintype = _parse(a:1, 'wintype')
+        if !empty(wintype) && index(wintypes, wintype) >= 0
+            let wintype_opt = '--wintype=' . wintype
+        endif
+        let title = _parse(a:1, 'title')
+        if !empty(title)
+            let title_opt = '--title=' . title
+        endif
+    endif
+    if open_position ==# 'auto'
+        if col_row_ratio > 0
+            if &columns > &lines * col_row_ratio
+                let open_position = 'right'
+            else
+                let open_position = 'bottom'
+            endif
+        else
+            let open_position = 'right'
+        endif
+    endif
+    " todo, adjust this part
+    if open_position ==# 'right' && empty(wintype_opt)
+        let wintype_opt = '--wintype=vsplit'
+        return printf(' --position=right --width=%s %s %s', prog_ratio, wintype_opt, title_opt)
+    elseif open_position ==# 'bottom' && empty(wintype_opt)
+        let wintype_opt = '--wintype=split'
+        return printf(' --position=bottom --height=%s %s %s', prog_ratio, wintype_opt, title_opt)
+    elseif wintype_opt == '--wintype=float'
+        if open_position == 'auto'
+            let open_position = 'topright'
+        endif
+        return printf(' --position=%s --wintype=float --width=%s --height=%s %s', open_position, float_ratio, float_ratio, title_opt)
+    else
+        return printf(' --position=%s %s %s', open_position, wintype_opt, title_opt)
+    endif
+endfunction
+" parse programs
+function! floaterm#enhance#parse_programs(programs, type) abort
+    if empty(a:programs)
+        call floaterm#enhance#showmsg(printf('No %s programs configured', a:type), 1)
+        return []
+    endif
+    let result = []
+    for entry in a:programs
+        if type(entry) != type([]) || len(entry) < 2
+            continue
+        endif
+        let cmd = entry[0]
+        let opts = floaterm#enhance#parse_opt(entry[1])
+        call add(result, [cmd, opts, a:type])
+    endfor
+    return result
+endfunction
 " --------------------------------------------------------------
 " fzf select and run programs
 " --------------------------------------------------------------
-function! floaterm#enhance#run_cmd(cmd, opts, type, ...) abort
+function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
     if a:0 && type(a:1) == type(v:true)
         let wincmdp = a:1
     else
@@ -252,7 +342,7 @@ function! floaterm#enhance#fzf_run(programs, prompt, ...) abort
             return
         else
             let [cmd, opts, type] = l:program_map[l:selected]
-            call floaterm#enhance#run_cmd(cmd, opts, type, l:wincmdp)
+            call floaterm#enhance#cmd_run(cmd, opts, type, l:wincmdp)
         endif
     endfunction
 
@@ -278,81 +368,4 @@ function! floaterm#enhance#fzf_run(programs, prompt, ...) abort
                 \ 'options': ['--prompt', prompt . '> ', '--layout=reverse-list'],
                 \ }
     call fzf#run(fzf#wrap('FloatermProgram', l:spec, 0))
-endfunction
-" -------------------------------------
-" parse floaterm options
-" -------------------------------------
-function! floaterm#enhance#parse_opt(...) abort
-    let col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 3)
-    let prog_ratio = get(g:, 'floaterm_prog_ratio', 0.38)
-    let float_ratio = get(g:, 'floaterm_prog_float_ratio', 0.45)
-    " postions
-    let basic_postions = ['auto', 'center', 'right', 'bottom', 'left', 'top', 'leftabove', 'aboveleft', 'rightbelow', 'belowright', 'botright']
-    let float_postions = ['topleft', 'topright', 'bottomleft', 'bottomright', 'cusor']
-    let all_postions = basic_postions + float_postions
-    let open_position = get(g:, 'floaterm_prog_open_postion', 'auto')
-    " wintypes
-    if has('nvim')
-        let wintypes = ['split', 'vsplit', 'float']
-    else
-        let wintypes = ['split', 'vsplit']
-    endif
-    let wintype_opt = ''
-    let title_opt = ''
-    function! _parse(optstr, parse) abort
-        let optstr = a:optstr
-        let parse = a:parse
-        if type(optstr) != type('') || type(parse) != type('') || index(['wintype', 'position', 'title'], parse) < 0
-            return ''
-        endif
-        let key = '--' . parse
-        let pat = key . '\%([[:space:]]\|=\)\zs\S\+'
-        return matchstr(optstr, pat)
-    endfunction
-
-    if a:0 && type(a:1) == type('')
-        let pos = _parse(a:1, 'position')
-        if !empty(pos)
-            if index(basic_postions, pos) >= 0 && !has('nvim')
-                let open_position = pos
-            elseif index(all_postions, pos) >= 0
-                let open_position = pos
-            endif
-        endif
-        let wintype = _parse(a:1, 'wintype')
-        if !empty(wintype) && index(wintypes, wintype) >= 0
-            let wintype_opt = '--wintype=' . wintype
-        endif
-        let title = _parse(a:1, 'title')
-        if !empty(title)
-            let title_opt = '--title=' . title
-        endif
-    endif
-
-    if open_position ==# 'auto'
-        if col_row_ratio > 0
-            if &columns > &lines * col_row_ratio
-                let open_position = 'right'
-            else
-                let open_position = 'bottom'
-            endif
-        else
-            let open_position = 'right'
-        endif
-    endif
-    " todo, adjust this part
-    if open_position ==# 'right' && empty(wintype_opt)
-        let wintype_opt = '--wintype=vsplit'
-        return printf(' --position=right --width=%s %s %s', prog_ratio, wintype_opt, title_opt)
-    elseif open_position ==# 'bottom' && empty(wintype_opt)
-        let wintype_opt = '--wintype=split'
-        return printf(' --position=bottom --height=%s %s %s', prog_ratio, wintype_opt, title_opt)
-    elseif wintype_opt == '--wintype=float'
-        if open_position == 'auto'
-            let open_position = 'topright'
-        endif
-        return printf(' --position=%s --wintype=float --width=%s --height=%s %s', open_position, float_ratio, float_ratio, title_opt)
-    else
-        return printf(' --position=%s %s %s', open_position, wintype_opt, title_opt)
-    endif
 endfunction
