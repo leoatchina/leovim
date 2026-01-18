@@ -57,47 +57,37 @@ endfunction
 " -------------------------------------
 " get repl programs for filetype
 " -------------------------------------
-function! floaterm#repl#get_ft_programs(...) abort
+function! floaterm#repl#get_ft_parse_programs(...) abort
     if a:0 && type(a:1) == type('')
-        let ft = a:1
+        let ft = trim(a:1)
     else
         let ft = &ft
     endif
-    let entries = get(g:floaterm_repl_programs, ft, [])
-    let result = []
-    for entry in entries
-        if type(entry) != type([]) || len(entry) < 2
-            continue
-        endif
-        let cmd = entry[0]
-        let opts = floaterm#enhance#parse_opt(entry[1])
-        call add(result, [cmd, opts, 'REPL'])
-    endfor
-    return result
+    if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, ft)
+        return []
+    else
+        return floaterm#enhance#parse_programs(get(g:floaterm_repl_programs, ft, []), 'REPL')
+    endif
 endfunction
 " -------------------------------------
 " start repl (internal function)
 " -------------------------------------
-function! floaterm#repl#fzf_run(now) abort
+function! floaterm#repl#_active_or_run(now) abort
     let ft = &ft
-    if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, ft) || empty(g:floaterm_repl_programs[ft])
-        call floaterm#enhance#showmsg(printf("REPL program for %s not set or installed, please install and add it via floaterm#repl#update_program().", a:ft), 1)
-        return
-    endif
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
-        call floaterm#enhance#showmsg(printf("REPL for %s already started", win_bufnr))
+        call floaterm#enhance#showmsg(printf("REPL for %s already started", winbufnr(winnr())))
     else
-        let programs = floaterm#repl#get_ft_programs()
+        let programs = floaterm#repl#get_ft_parse_programs(ft)
         if empty(programs)
             call floaterm#enhance#showmsg("No REPL program available for " . ft, 1)
             return
         endif
-        " -1 代表没有run cmd 过， 0 代表run cmd 但没有成功， > 0 值 代表floaterm_bufnr
+        " XXX: -1:没有run 过， 0 :run cmd but fail,  > 0 -> floaterm_bufnr
         let t:floaterm_program_bufnr = -1
         if a:now
             let [cmd, opts, type] = programs[0]
-            call floaterm#enhance#run_cmd(cmd, opts, type)
+            call floaterm#enhance#cmd_run(cmd, opts, type)
             call floaterm#repl#set_repl_bufnr()
         else
             call floaterm#enhance#fzf_run(programs, 'FloatermREPL')
@@ -109,13 +99,13 @@ endfunction
 " start repl (auto select program)
 " -------------------------------------
 function! floaterm#repl#start_now() abort
-    call floaterm#repl#fzf_run(v:true)
+    call floaterm#repl#_active_or_run(v:true)
 endfunction
 " -------------------------------------
 " start repl (choose program interactively)
 " -------------------------------------
 function! floaterm#repl#start_choose() abort
-    call floaterm#repl#fzf_run(v:false)
+    call floaterm#repl#_active_or_run(v:false)
 endfunction
 " -------------------------------------
 " set repl program for each filetype
