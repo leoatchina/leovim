@@ -4,11 +4,10 @@
 set autoread
 autocmd BufRead acwrite set ma
 if has('nvim')
-    autocmd FocusGained,TermLeave * if mode() ==# 'n' && &bt !=# 'terminal' | silent! ! | endif
+    autocmd FocusGained,TermLeave,TermClose * if mode() ==# 'n' && &bt !=# 'terminal' | silent! ! | endif
 elseif !utils#has_gui()
-    autocmd FocusGained * if mode() ==# 'n' && &bt !=# 'terminal' | silent! ! | endif
+    autocmd FocusGained * silent! !
 endif
-
 " -----------------------------------
 " swap exists ignore
 " -----------------------------------
