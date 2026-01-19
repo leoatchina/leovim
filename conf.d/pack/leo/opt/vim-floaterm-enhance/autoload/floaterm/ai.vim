@@ -1,3 +1,6 @@
+" --------------------------------------------------------------
+" AI buf control
+" --------------------------------------------------------------
 function! floaterm#ai#get_ai_bufnr(...) abort
     let t:floaterm_ai_bufnrs = get(t:, 'floaterm_ai_bufnrs', [])
     let all_bufnrs = floaterm#buflist#gather()
@@ -15,7 +18,6 @@ function! floaterm#ai#get_ai_bufnr(...) abort
     endif
     return t:floaterm_ai_bufnrs[0]
 endfunction
-
 function! floaterm#ai#update_ai_bufnr(bufnr)
     " 把 bufnr 放到  floaterm_ai_bufnr的第一个
     let t:floaterm_ai_bufnrs = get(t:, 'floaterm_ai_bufnrs', [])
@@ -23,15 +25,16 @@ function! floaterm#ai#update_ai_bufnr(bufnr)
     call filter(t:floaterm_ai_bufnrs, {_, v -> v != a:bufnr && index(all_bufnrs, v) > 0})
     call insert(t:floaterm_ai_bufnrs, a:bufnr, 0)
 endfunction
-
 " --------------------------------------------------------------
-" AI helpers for vim-floaterm-enhance
+" get programs
 " --------------------------------------------------------------
 function! floaterm#ai#get_parsed_programs() abort
     return floaterm#enhance#parse_programs(get(g:, 'floaterm_ai_programs', []), 'AI')
 endfunction
-
-function! floaterm#ai#_active_or_run(now) abort
+" --------------------------------------------------------------
+" AI helpers for vim-floaterm-enhance
+" --------------------------------------------------------------
+function! floaterm#ai#start(now) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if ai_bufnr
         call floaterm#enhance#showmsg(printf("AI for %s already started", ai_bufnr))
@@ -51,6 +54,17 @@ function! floaterm#ai#_active_or_run(now) abort
             call floaterm#enhance#fzf_run(programs, 'FloatermAI')
             call timer_start(0, {-> floaterm#ai#update_ai_bufnr(t:floaterm_program_bufnr)})
         endif
+    endif
+endfunction
+" ------------------------------------------------------
+" Send a newline to AI or start AI if not running
+" ------------------------------------------------------
+function! floaterm#ai#send_cr_or_start(start, stay_curr, ...) abort
+    let ai_bufnr = floaterm#ai#get_ai_bufnr()
+    if ai_bufnr
+        call floaterm#terminal#send(ai_bufnr, [""], a:stay_curr)
+    elseif a:start
+        call floaterm#ai#start(a:0 && a:1 ? 1:0)
     endif
 endfunction
 " --------------------------------------------------------------

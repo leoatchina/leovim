@@ -53,6 +53,11 @@ let g:nvim_treesitter_install = utils#is_unix()
 " let g:openai_compatible_model = ''
 " let g:openai_compatible_url = ''
 
+" let g:floaterm_ai_programs = [
+"     \ "claude",
+"     \ ["claude", "--wintype=float --position=topright"]
+"   \ ]
+
 if has('nvim')
     " if utils#has_gui()
         " if exists('g:neovide')

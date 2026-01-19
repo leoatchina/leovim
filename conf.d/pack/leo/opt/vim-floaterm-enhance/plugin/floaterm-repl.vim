@@ -38,6 +38,7 @@ let g:floaterm_repl_exit.r = 'quit'
 command! -bang FloatermReplStart call floaterm#repl#start(<bang>0)
 command! -bang FloatermReplSendCr call floaterm#repl#send_cr_or_start(0, <bang>0)
 command! -bang FloatermReplSendCrOrStart call floaterm#repl#send_cr_or_start(1, <bang>0)
+command! -bang FloatermReplSendCrOrStartNow call floaterm#repl#send_cr_or_start(1, <bang>0, 1)
 command! -bang FloatermReplSendBlock call floaterm#repl#send_border("block", <bang>0)
 command! -bang FloatermReplSendFromBegin call floaterm#repl#send_border("begin", <bang>0)
 command! -bang FloatermReplSendToEnd call floaterm#repl#send_border("end", <bang>0)

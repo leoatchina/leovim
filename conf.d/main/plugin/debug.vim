@@ -436,7 +436,7 @@ nnoremap - :WatchCword<CR>
 if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
     " NOTE: ! means keep in current line
     nnoremap <silent><M-e>r :FloatermReplStart<Cr>
-    nnoremap <silent><M-e><Cr> :FloatermReplSendCrOrStart!<Cr>
+    nnoremap <silent><M-e><Cr> :FloatermReplSendCrOrStartNow!<Cr>
     " repl line send
     nnoremap <silent><M-e>n :FloatermReplSend<Cr>
     nnoremap <silent><M-e>l :FloatermReplSend!<Cr>

@@ -15,7 +15,10 @@ augroup UpdateAiBufnr
     autocmd!
     autocmd User FloatermOpen call s:update_ai_bufnr()
 augroup END
-command! -bang -range FloatermAiSendLineRange <line1>,<line2>call floaterm#ai#send_line_range(<bang>0)
+command! -bang FloatermAiStart call floaterm#ai#start(<bang>0)
+command! -bang FloatermAiSendCr call floaterm#ai#send_cr_or_start(0, <bang>0)
+command! -bang FloatermAiSendCrOrStart call floaterm#ai#send_cr_or_start(1, <bang>0)
 command! -bang FloatermAiSendFile call floaterm#ai#send_file(<bang>0)
 command! -bang FloatermAiSendDir call floaterm#ai#send_dir(<bang>0)
 command! -bang FloatermAiFzfFiles call floaterm#ai#fzf_file(<bang>0)
+command! -bang -range FloatermAiSendLineRange <line1>,<line2>call floaterm#ai#send_line_range(<bang>0)

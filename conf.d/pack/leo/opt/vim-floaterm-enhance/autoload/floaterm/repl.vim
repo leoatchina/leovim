@@ -144,12 +144,12 @@ endfunction
 " ------------------------------------------------------
 " Send a newline to REPL or start REPL if not running
 " ------------------------------------------------------
-function! floaterm#repl#send_cr_or_start(start, now) abort
+function! floaterm#repl#send_cr_or_start(start, stay_curr, ...) abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
-        call floaterm#terminal#send(repl_bufnr, [""])
+        call floaterm#terminal#send(repl_bufnr, [""], a:stay_curr)
     elseif a:start
-        call floaterm#repl#start(a:now)
+        call floaterm#repl#start(a:0 && a:1 ? 1:0)
     endif
 endfunction
 " -------------------------------------

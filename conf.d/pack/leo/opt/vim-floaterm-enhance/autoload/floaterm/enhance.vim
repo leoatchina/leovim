@@ -182,6 +182,16 @@ endfunction
 " -------------------------------------
 " parse floaterm options
 " -------------------------------------
+function! floaterm#enhance#get_opt_param(optstr, check) abort
+    let optstr = a:optstr
+    let check = a:check
+    if type(optstr) != type('') || type(check) != type('') || index(['wintype', 'position', 'title'], check) < 0
+        return ''
+    endif
+    let key = '--' . check
+    let pat = key . '\%([[:space:]]\|=\)\zs\S\+'
+    return matchstr(optstr, pat)
+endfunction
 function! floaterm#enhance#parse_opt(...) abort
     let col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 3)
     let prog_ratio = get(g:, 'floaterm_prog_ratio', 0.38)
@@ -199,33 +209,30 @@ function! floaterm#enhance#parse_opt(...) abort
     endif
     let wintype_opt = ''
     let title_opt = ''
-    function! _parse(optstr, parse) abort
-        let optstr = a:optstr
-        let parse = a:parse
-        if type(optstr) != type('') || type(parse) != type('') || index(['wintype', 'position', 'title'], parse) < 0
-            return ''
-        endif
-        let key = '--' . parse
-        let pat = key . '\%([[:space:]]\|=\)\zs\S\+'
-        return matchstr(optstr, pat)
-    endfunction
-
-    if a:0 && type(a:1) == type('')
-        let pos = _parse(a:1, 'position')
-        if !empty(pos)
-            if index(basic_postions, pos) >= 0 && !has('nvim')
-                let open_position = pos
-            elseif index(all_postions, pos) >= 0
-                let open_position = pos
-            endif
-        endif
-        let wintype = _parse(a:1, 'wintype')
-        if !empty(wintype) && index(wintypes, wintype) >= 0
-            let wintype_opt = '--wintype=' . wintype
-        endif
-        let title = _parse(a:1, 'title')
+    if a:0 && type(a:1) == type('') && len(trim(a:1))
+        let optstr = trim(a:1)
+        " title
+        let title = floaterm#enhance#get_opt_param(optstr, 'title')
         if !empty(title)
             let title_opt = '--title=' . title
+        endif
+        " wintype
+        let wintype = floaterm#enhance#get_opt_param(optstr, 'wintype')
+        if !empty(wintype) && index(wintypes, wintype) >= 0
+            let wintype_opt = '--wintype=' . wintype
+        else
+            let wintype_opt = ''
+        endif
+        " NOTE: open_position
+        let pos = floaterm#enhance#get_opt_param(optstr, 'position')
+        if !empty(pos)
+            if has('nvim') && index(all_postions, pos) >= 0
+                let open_position = pos
+            elseif index(basic_postions, pos) >= 0
+                let open_position = pos
+            else
+                let open_position = 'auto'
+            endif
         endif
     endif
     if open_position ==# 'auto'
@@ -262,6 +269,7 @@ function! floaterm#enhance#parse_programs(programs, type) abort
         return []
     endif
     let result = []
+    let check_lst = []
     for entry in a:programs
         if type(entry) == type('')
             let entry = [entry, '']
@@ -271,8 +279,14 @@ function! floaterm#enhance#parse_programs(programs, type) abort
             continue
         endif
         let cmd = entry[0]
-        let opts = floaterm#enhance#parse_opt(entry[1])
-        call add(result, [cmd, opts, a:type])
+        if executable(split(cmd, " ")[0])
+            let opts = floaterm#enhance#parse_opt(entry[1])
+            let check = cmd . '-' . opts . '-' . a:type
+            if index(check_lst, check) < 0
+                call add(check_lst, check)
+                call add(result, [cmd, opts, a:type])
+            endif
+        endif
     endfor
     return result
 endfunction

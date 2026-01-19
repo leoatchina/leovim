@@ -230,12 +230,12 @@ if get(g:, 'leovim_openmap', 1)
         exec "tabe " . f
     endfunction
     nnoremap <silent><M-h>i :call file#open_in_tab("$CONF_D_DIR/init.vim")<Cr>
+    nnoremap <silent><M-h>O :call file#open_in_tab("$INIT_DIR/opt.vim")<Cr>
     nnoremap <silent><M-h>v :call file#open_in_tab("$INIT_DIR/vscode.vim")<Cr>
     nnoremap <silent><M-h>k :call file#open_in_tab("$INIT_DIR/keybindings.json")<Cr>
     nnoremap <silent><M-h>u :call file#open_in_tab("$INIT_DIR/autoload/utils.vim")<Cr>
     nnoremap <silent><M-h>a :call file#open_in_tab("$PLUG_DIR/application.vim")<Cr>
     nnoremap <silent><M-h>m :call file#open_in_tab("$MAIN_DIR/main.vim")<Cr>
-    nnoremap <silent><M-h>O :call file#open_in_tab("$MAIN_DIR/opt.vim")<Cr>
     if pack#planned_leaderf()
         nnoremap <silent><M-h>p :Leaderf file --regex --no-sort ~/.leovim/conf.d/main/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
