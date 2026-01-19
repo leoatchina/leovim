@@ -206,8 +206,6 @@ nnoremap <silent>d<space> :call utils#trip_whitespace()<Cr>
 " ------------------------
 if has('nvim')
     function! s:open_in_other()
-            return
-        endif
         if utils#is_vscode() && executable(get(g:, 'open_neovim', ''))
             call VSCodeNotify('copyFilePath')
             let p = fnameescape(@*)
