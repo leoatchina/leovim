@@ -1,5 +1,5 @@
 " -------------------------------------
-" XXX: idx/get/set
+" NOTE: idx/get/set
 " -------------------------------------
 function! floaterm#repl#create_idx(...) abort
     if a:0 && type(a:1) == type('') && a:1
@@ -55,59 +55,6 @@ function! floaterm#repl#set_repl_bufnr(...) abort
     endif
 endfunction
 " -------------------------------------
-" get repl programs for filetype
-" -------------------------------------
-function! floaterm#repl#get_ft_parsed_programs(...) abort
-    if a:0 && type(a:1) == type('')
-        let ft = trim(a:1)
-    else
-        let ft = &ft
-    endif
-    if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, ft)
-        return []
-    else
-        return floaterm#enhance#parse_programs(get(g:floaterm_repl_programs, ft, []), 'REPL')
-    endif
-endfunction
-" -------------------------------------
-" start repl (internal function)
-" -------------------------------------
-function! floaterm#repl#_active_or_run(now) abort
-    let ft = &ft
-    let repl_bufnr = floaterm#repl#get_repl_bufnr()
-    if repl_bufnr
-        call floaterm#enhance#showmsg(printf("REPL for %s already started", winbufnr(winnr())))
-    else
-        let programs = floaterm#repl#get_ft_parsed_programs(ft)
-        if empty(programs)
-            call floaterm#enhance#showmsg("No REPL program available for " . ft, 1)
-            return
-        endif
-        " XXX: -1:没有run 过， 0 :run cmd but fail,  > 0 -> floaterm_bufnr
-        let t:floaterm_program_bufnr = -1
-        if a:now
-            let [cmd, opts, type] = programs[0]
-            call floaterm#enhance#cmd_run(cmd, opts, type)
-            call floaterm#repl#set_repl_bufnr()
-        else
-            call floaterm#enhance#fzf_run(programs, 'FloatermREPL')
-            call timer_start(0, {-> floaterm#repl#set_repl_bufnr()})
-        endif
-    endif
-endfunction
-" -------------------------------------
-" start repl (auto select program)
-" -------------------------------------
-function! floaterm#repl#start_now() abort
-    call floaterm#repl#_active_or_run(v:true)
-endfunction
-" -------------------------------------
-" start repl (choose program interactively)
-" -------------------------------------
-function! floaterm#repl#start_choose() abort
-    call floaterm#repl#_active_or_run(v:false)
-endfunction
-" -------------------------------------
 " set repl program for each filetype
 " -------------------------------------
 function! floaterm#repl#update_program(ft, programs, ...) abort
@@ -153,6 +100,57 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
             call add(g:floaterm_repl_programs[ft], entry)
         endif
     endfor
+endfunction
+" -------------------------------------
+" get repl programs for filetype
+" -------------------------------------
+function! floaterm#repl#get_ft_parsed_programs(...) abort
+    if a:0 && type(a:1) == type('')
+        let ft = trim(a:1)
+    else
+        let ft = &ft
+    endif
+    if !exists('g:floaterm_repl_programs') || !has_key(g:floaterm_repl_programs, ft)
+        return []
+    else
+        return floaterm#enhance#parse_programs(get(g:floaterm_repl_programs, ft, []), 'REPL')
+    endif
+endfunction
+" -------------------------------------
+" start repl (internal function)
+" -------------------------------------
+function! floaterm#repl#start(now) abort
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
+    if repl_bufnr
+        call floaterm#enhance#showmsg(printf("REPL for %s already started", winbufnr(winnr())))
+    else
+        let programs = floaterm#repl#get_ft_parsed_programs(&ft)
+        if empty(programs)
+            call floaterm#enhance#showmsg("No REPL program available for " . &ft, 1)
+            return
+        endif
+        " XXX: -1:没有run 过， 0 :run cmd but fail,  > 0 -> floaterm_bufnr
+        let t:floaterm_program_bufnr = -1
+        if a:now
+            let [cmd, opts, type] = programs[0]
+            call floaterm#enhance#cmd_run(cmd, opts, type)
+            call floaterm#repl#set_repl_bufnr()
+        else
+            call floaterm#enhance#fzf_run(programs, 'FloatermREPL')
+            call timer_start(0, {-> floaterm#repl#set_repl_bufnr()})
+        endif
+    endif
+endfunction
+" ------------------------------------------------------
+" Send a newline to REPL or start REPL if not running
+" ------------------------------------------------------
+function! floaterm#repl#send_cr_or_start(start, now) abort
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
+    if repl_bufnr
+        call floaterm#terminal#send(repl_bufnr, [""])
+    elseif a:start
+        call floaterm#repl#start(a:now)
+    endif
 endfunction
 " -------------------------------------
 " mark
@@ -227,17 +225,6 @@ function! floaterm#repl#send_word() range abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         call floaterm#terminal#send(repl_bufnr, [word])
-    endif
-endfunction
-" ------------------------------------------------------
-" Send a newline to REPL or start REPL if not running
-" ------------------------------------------------------
-function! floaterm#repl#send_cr_or_start() abort
-    let repl_bufnr = floaterm#repl#get_repl_bufnr()
-    if repl_bufnr
-        call floaterm#terminal#send(repl_bufnr, [""])
-    else
-        call floaterm#repl#start_now()
     endif
 endfunction
 " ------------------------------------------------------
@@ -337,14 +324,13 @@ function! floaterm#repl#send(keep_curr) range abort
         return
     endif
     " Auto detect visual mode
+    let firstline = a:firstline
     if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
         let vmode = 1
-        let [firstline] = getpos("'<")[1:1]
-        let [lastline] = getpos("'>")[1:1]
+        let lastline = a:lastline
     else
         let vmode = 0
-        let firstline = a:firstline
-        let lastline = a:lastline
+        let lastline = firstline
     endif
     if firstline == 0 || lastline == 0 || firstline > lastline
         return

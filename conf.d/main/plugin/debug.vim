@@ -434,9 +434,9 @@ nnoremap - :WatchCword<CR>
 " using vim-floaterm-enhance to do repl/run/ai. NOTE: below bang[!] means cursor not move
 " -----------------------------------------------------------------------------------------
 if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
-    " repl start
-    nnoremap <silent><M-e>r :FloatermReplStart!<Cr>
-    nnoremap <silent><M-e><Cr> :FloatermReplSendCrOrStart<Cr>
+    " NOTE: ! means keep in current line
+    nnoremap <silent><M-e>r :FloatermReplStart<Cr>
+    nnoremap <silent><M-e><Cr> :FloatermReplSendCrOrStart!<Cr>
     " repl line send
     nnoremap <silent><M-e>n :FloatermReplSend<Cr>
     nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
@@ -445,8 +445,8 @@ if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
     nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
     nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
     " repl block send
-    xnoremap <silent><M-e><M-e>   :FloatermReplSendVisual<Cr>
-    xnoremap <silent><M-e><Space> :FloatermReplSendVisual!<Cr>
+    xnoremap <silent><M-e><M-e>   :FloatermReplSend<Cr>
+    xnoremap <silent><M-e><Space> :FloatermReplSend!<Cr>
     nnoremap <silent><M-e><M-e>   :FloatermReplSendBlock<Cr>
     nnoremap <silent><M-e><Space> :FloatermReplSendBlock!<Cr>
     " repl send above/below/all lines
@@ -455,12 +455,12 @@ if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
     nnoremap <silent><M-e>a :FloatermReplSendAll!<Cr>
     " repl send word
     nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
-    xnoremap <silent><M-e>k :FloatermReplSendWord!<Cr>
+    xnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
     " repl mark print send
     nnoremap <silent><M-e>m :FloatermReplMark<Cr>
-    xnoremap <silent><M-e>m :FloatermReplMark!<Cr>
+    xnoremap <silent><M-e>m :FloatermReplMark<Cr>
     nnoremap <silent><M-e>s :FloatermReplSendMark<Cr>
-    nnoremap <silent><M-e>S :FloatermReplQuickuiMark<Cr>
+    nnoremap <silent><M-e>S :FloatermReplShowMark<Cr>
 endif
 " ---------------------------------------
 " jupynvim
