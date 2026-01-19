@@ -77,7 +77,7 @@ endfunction
 " --------------------------------------------------------------
 " send file path with line range to latest AI terminal
 " --------------------------------------------------------------
-function! floaterm#ai#_send(type, stay_ai, ...) abort
+function! floaterm#ai#_send(type, keep_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if !ai_bufnr
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
@@ -105,45 +105,52 @@ function! floaterm#ai#_send(type, stay_ai, ...) abort
     if empty(content)
         return
     endif
-    if a:stay_ai
-        call floaterm#terminal#send(ai_bufnr, [content], 0)
-    else
-        call floaterm#terminal#send(ai_bufnr, [content], 1)
+    call floaterm#terminal#send(ai_bufnr, [content], 0)
+    if a:keep_curr
+        wincmd p
+        if has('nvim')
+            stopinsert
+        endif
     endif
 endfunction
 " send range
-function! floaterm#ai#send_line_range(stay_ai) range abort
-    call floaterm#ai#_send('range', a:stay_ai, a:firstline, a:lastline)
+function! floaterm#ai#send_line_range(keep_curr) range abort
+    call floaterm#ai#_send('range', a:keep_curr, a:firstline, a:lastline)
 endfunction
 " send file
-function! floaterm#ai#send_file(stay_ai) abort
-    call floaterm#ai#_send('file', a:stay_ai)
+function! floaterm#ai#send_file(keep_curr) abort
+    call floaterm#ai#_send('file', a:keep_curr)
 endfunction
 " send dir
-function! floaterm#ai#send_dir(stay_ai) abort
-    call floaterm#ai#_send('dir', a:stay_ai)
+function! floaterm#ai#send_dir(keep_curr) abort
+    call floaterm#ai#_send('dir', a:keep_curr)
 endfunction
 " --------------------------------------------------------------
 " fzf file picker with root dir files -> send paths to latest AI terminal
 " --------------------------------------------------------------
-function! floaterm#ai#fzf_file_sink(ai_bufnr, stay_ai, lines) abort
+function! floaterm#ai#fzf_file_sink(ai_bufnr, keep_curr, lines) abort
     if empty(a:lines)
         call floaterm#enhance#showmsg('No file selected', 1)
-        return
+    else
+        call floaterm#terminal#send(a:ai_bufnr, [floaterm#ai#at(a:lines)], 0)
+        if a:keep_curr
+            wincmd p
+            if has('nvim')
+                stopinsert
+            endif
+        endif
     endif
-    call floaterm#terminal#send(a:ai_bufnr, [floaterm#ai#at(a:lines)], a:stay_ai ? 0 : 1)
 endfunction
-
-function! floaterm#ai#fzf_file_list(stay_ai) abort
+function! floaterm#ai#fzf_file(keep_curr) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
-    if !ai_bufnr
+    if ai_bufnr
+        let root_dir = floaterm#path#get_root()
+        let relative_dir = substitute(floaterm#enhance#get_file_absdir(), '^' . root_dir . '/', '', '')
+        call fzf#vim#files(root_dir, fzf#vim#with_preview({
+                    \ 'sink*': function('floaterm#ai#fzf_file_sink', [ai_bufnr, a:keep_curr]),
+                    \ 'options': ['--multi', '--prompt', 'FloatermFzfFile> ', '--query', relative_dir]
+                    \ }), 0)
+    else
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
-        return
     endif
-    let root_dir = floaterm#path#get_root()
-    let relative_dir = substitute(floaterm#enhance#get_file_absdir(), '^' . root_dir . '/', '', '')
-    call fzf#vim#files(root_dir, fzf#vim#with_preview({
-                \ 'sink*': function('floaterm#ai#fzf_file_sink', [ai_bufnr, a:stay_ai]),
-                \ 'options': ['--multi', '--prompt', 'FloatermFzfFile> ', '--query', relative_dir]
-                \ }), 0)
 endfunction

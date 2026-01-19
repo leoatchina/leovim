@@ -16,3 +16,6 @@ augroup UpdateAiBufnr
     autocmd User FloatermOpen call s:update_ai_bufnr()
 augroup END
 command! -bang -range FloatermAiSendLineRange <line1>,<line2>call floaterm#ai#send_line_range(<bang>0)
+command! -bang FloatermAiSendFile call floaterm#ai#send_file(<bang>0)
+command! -bang FloatermAiSendDir call floaterm#ai#send_dir(<bang>0)
+command! -bang FloatermAiFzfFiles call floaterm#ai#fzf_file(<bang>0)

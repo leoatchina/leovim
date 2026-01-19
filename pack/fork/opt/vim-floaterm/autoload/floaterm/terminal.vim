@@ -159,7 +159,7 @@ function! floaterm#terminal#send(bufnr, cmds, ...) abort
     " default send cr
     if !a:0
         let send_cr = 1
-    elseif a:0 && a:1 > 0
+    elseif a:0 && a:1
         let send_cr = 1
     else
         let send_cr = 0

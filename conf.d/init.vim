@@ -204,23 +204,24 @@ nnoremap <silent>d<space> :call utils#trip_whitespace()<Cr>
 " ------------------------
 " open_in_other_editor
 " ------------------------
-function! s:open_in_other()
-    if !has('nvim')
-        return
-    endif
-    if utils#is_vscode() && executable(get(g:, 'open_neovim', ''))
-        call VSCodeNotify('copyFilePath')
-        let p = fnameescape(@*)
-        execute printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
-    elseif !utils#is_vscode() && executable(get(g:, 'open_editor', 'code'))
-        let editor = get(g:, 'open_editor', 'code')
-        silent! exec printf("!%s --goto %s:%d:%d", editor, utils#abs_path(), line("."), col("."))
-    else
-        echom "Cannot open current file in other editor."
-    endif
-endfunction
-command! OpenInOther call s:open_in_other()
-nnoremap <silent><nowait>g<tab> :OpenInOther<Cr>
+if has('nvim')
+    function! s:open_in_other()
+            return
+        endif
+        if utils#is_vscode() && executable(get(g:, 'open_neovim', ''))
+            call VSCodeNotify('copyFilePath')
+            let p = fnameescape(@*)
+            silent! exec printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
+        elseif !utils#is_vscode() && executable(get(g:, 'open_editor', 'code'))
+            let editor = get(g:, 'open_editor', 'code')
+            silent! exec printf("!%s --goto %s:%d:%d", editor, utils#abs_path(), line("."), col("."))
+        else
+            echom "Cannot open current file in other editor."
+        endif
+    endfunction
+    command! OpenInOther call s:open_in_other()
+    nnoremap <silent><nowait>g<tab> :OpenInOther<Cr>
+endif
 " ------------------------
 " open url/file under cursor
 " ------------------------

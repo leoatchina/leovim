@@ -530,26 +530,83 @@ let g:maplocalleader = 'q'
 
 ![](assets/image-2.png)
 
+#### 6.6.7.1. 功能原理
+
+该插件允许用户将编辑器中的代码片段发送到浮动终端中的 REPL 进行执行，其核心原理包括：
+
+* **感叹号(!)的意义**: 当一个命令后面有一个感叹号时，意义是发送代码后，光标将保持在当前位置。
 * **REPL 程序定义：** 该插件为各种语言（Python、R、Shell、PHP、PowerShell、Perl、Lua、Vim、Ruby、Julia、JavaScript）定义了常用 REPL 程序的列表。它使用
   `floaterm#repl#add_repl_program` 函数将文件类型与其对应的 REPL 命令关联起来。这使得插件能够根据当前文件的类型自动启动正确的 REPL 环境。
 * **块标记：** 该插件支持使用特殊的注释标记（例如，Python 的 `# %%`）标记代码块。这允许用户轻松地将特定的代码块发送到 REPL。`g:floaterm_repl_block_mark`
   变量存储了不同文件类型的这些标记。
 * **清除和退出命令：** 该插件定义了用于清除 REPL 屏幕和退出不同语言的 REPL 环境的命令。这些命令存储在 `g:floaterm_repl_clear` 和 `g:floaterm_repl_exit`
   变量中。
-* **终端管理：** 该插件使用 `vim-floaterm` 来管理 REPL 终端。它使用 `t:floaterm_repl_termnames` 跟踪与每个文件类型和缓冲区关联的终端名称。
-* **发送代码：** 该插件提供了各种将代码发送到 REPL 的命令：
-  * `FloatermReplStart`：启动当前文件类型的 REPL。
-  * `FloatermReplSend`：将当前行或选定的行发送到 REPL。
-  * `FloatermReplSendVisual`：将视觉上选定的行发送到 REPL。
-  * `FloatermReplSendBlock`：将当前代码块发送到 REPL。
-  * `FloatermReplSendFromBegin`：将从文件开头到当前行的代码发送到 REPL。
-  * `FloatermReplSendToEnd`：将从当前行到文件末尾的代码发送到 REPL。
-  * `FloatermReplSendAll`：将整个文件内容发送到 REPL。
-  * `FloatermReplSendCrOrStart`：向 REPL 发送换行符，或者如果 REPL 尚未运行则启动它。
-  * `FloatermReplSendClear`：向 REPL 发送清除命令。
-  * `FloatermReplSendExit`：向 REPL 发送退出命令。
-  * `FloatermReplSendWord`：将光标下的单词发送到 REPL。
-* **标记和发送标记的代码：** 该插件允许用户标记代码块（通过视觉方式或块标记），然后使用 `FloatermReplMark` 和 `FloatermReplSendMark` 将标记的代码发送到 REPL。
+* **终端管理：** 该插件使用 `vim-floaterm` 来管理 REPL 终端。它使用 `t:floaterm_repl_terms` 存储文件类型和 buffer number 组合的索引与浮动终端名称的映射关系。
+* **代码发送流程：** 当用户执行发送代码的命令时，插件会获取选定的代码范围（当前行、选定行、代码块等），然后将其发送到与当前文件类型关联的 REPL 进程。
+* **floaterm 位置动态调整：** 会根据屏幕列/行比调整 floaterm window 的位置在右还是下面。
+
+#### 6.6.7.2. 主要命令
+
+该插件提供了各种将代码发送到 REPL 的命令：
+
+| 命令 | 功能说明 |
+|------|----------|
+| `FloatermReplStart [!]` | 启动当前文件类型的 REPL。如果配置了多个可执行的 REPL 程序，会弹出列表供用户选择 |
+| `FloatermReplSend [range] [!]` | 将指定范围的代码发送到 REPL。未指定范围则发送当前行 |
+| `FloatermReplSendVisual [!]` | 将可视模式下选中的代码发送到 REPL |
+| `FloatermReplSendBlock [!]` | 发送当前代码块到 REPL（由 `# %%` 等标记分隔） |
+| `FloatermReplSendFromBegin [!]` | 从文件开头发送到当前行（或上一行代码块标记） |
+| `FloatermReplSendToEnd [!]` | 从当前行发送到文件末尾 |
+| `FloatermReplSendAll [!]` | 发送整个文件内容到 REPL |
+| `FloatermReplSendCrOrStart` | 如果 REPL 未启动则启动，已启动则发送换行符 |
+| `FloatermReplSendClear` | 发送清屏命令到 REPL，清除终端显示 |
+| `FloatermReplSendExit` | 发送退出命令到 REPL，关闭 REPL 进程 |
+| `FloatermReplSendWord [!]` | 发送光标下的单词到 REPL |
+| `FloatermReplMark [range] [!]` | Visual 标记一个代码块或可视选择，方便后续发送 |
+| `FloatermReplSendMark` | 发送之前使用 `FloatermReplMark` 命令标记的代码 |
+| `FloatermReplQuickuiMark` | 快速查看标记的代码（依赖 `vim-quickui` 插件） |
+
+#### 6.6.7.3. 典型按键映射
+
+以下按键映射使用 `<M-e>` 作为前导键：
+
+**启动 REPL**
+- `<M-e>r` - 启动 REPL（保持光标位置）
+- `<M-e><Cr>` - 发送换行符或启动 REPL
+
+**基本发送**
+- `<M-e>n` - 发送当前行（移动光标到下一行）
+- `<M-e>l` - 发送当前行（保持光标位置）
+- `<M-e>q` - 退出 REPL
+
+**代码块发送**
+- `<M-e><M-e>` - 发送当前代码块
+- `<M-e><Space>` - 发送当前代码块（保持光标位置）
+
+**范围发送**
+- `<M-e>b` - 从文件开头发送到当前行
+- `<M-e>e` - 从当前行发送到文件末尾
+- `<M-e>a` - 发送整个文件
+
+**单词发送**
+- `<M-e>k` - 发送光标下的单词
+
+**标记相关**
+- `<M-e><M-m>` - 标记代码块
+- `<M-e><M-l>` - 发送标记的代码
+- `<M-e><M-r>` - 快速查看标记的代码
+- `<M-e><M-c>` - 清屏
+
+#### 6.6.7.4. 配置变量
+
+可以通过配置 Vim 全局变量来自定义插件的行为：
+
+* **`g:floaterm_repl_programs`**: 字典，配置不同文件类型关联的 REPL 启动命令
+* **`g:floaterm_repl_block_mark`**: 字典，配置不同文件类型的代码块标记
+* **`g:floaterm_repl_clear`**: 字典，配置不同文件类型的 REPL 清屏命令
+* **`g:floaterm_repl_exit`**: 字典，配置不同文件类型的 REPL 退出命令
+* **`g:floaterm_repl_open_position`**: 字符串，配置终端打开位置 (`'auto'`, `'right'`, `'bottom'`)
+* **`g:floaterm_repl_ratio`**: 浮点数，配置终端大小比例（默认: 0.38）
 
 ## 6.7. 代码补全
 
