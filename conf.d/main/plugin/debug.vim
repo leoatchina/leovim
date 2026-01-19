@@ -434,10 +434,9 @@ nnoremap - :WatchCword<CR>
 " using vim-floaterm-enhance to do repl/run/ai. NOTE: below bang[!] means cursor not move
 " -----------------------------------------------------------------------------------------
 if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
-    " repl start
+    " NOTE: ! means keep in current line
     nnoremap <silent><M-e>r :FloatermReplStart<Cr>
     nnoremap <silent><M-e><Cr> :FloatermReplSendCrOrStart!<Cr>
-    " NOTE: ! means keep in current line
     " repl line send
     nnoremap <silent><M-e>n :FloatermReplSend<Cr>
     nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
