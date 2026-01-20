@@ -54,24 +54,19 @@ endfunction
 " AI helpers for vim-floaterm-enhance
 " --------------------------------------------------------------
 function! floaterm#ai#start(now) abort
-    let ai_bufnr = floaterm#ai#get_ai_bufnr()
-    if ai_bufnr
-        call floaterm#enhance#showmsg(printf("AI for %s already started", ai_bufnr))
+    let programs = floaterm#ai#get_parsed_programs()
+    if empty(programs)
+        call floaterm#enhance#showmsg("No AI programs available ", 1)
+        return
+    endif
+    " XXX: -1:没有run 过， 0 :run cmd but fail,  > 0 -> floaterm_bufnr
+    let t:floaterm_program_bufnr = -1
+    if a:now
+        let [cmd, opts, type] = programs[0]
+        call floaterm#enhance#cmd_run(cmd, opts, type)
+        call floaterm#ai#set_ai_bufnr()
     else
-        let programs = floaterm#ai#get_parsed_programs()
-        if empty(programs)
-            call floaterm#enhance#showmsg("No AI programs available ", 1)
-            return
-        endif
-        " XXX: -1:没有run 过， 0 :run cmd but fail,  > 0 -> floaterm_bufnr
-        let t:floaterm_program_bufnr = -1
-        if a:now
-            let [cmd, opts, type] = programs[0]
-            call floaterm#enhance#cmd_run(cmd, opts, type)
-            call floaterm#ai#set_ai_bufnr()
-        else
-            call floaterm#enhance#fzf_run(programs, 'FloatermAI', function('floaterm#ai#set_ai_bufnr'))
-        endif
+        call floaterm#enhance#fzf_run(programs, 'FloatermAI', function('floaterm#ai#set_ai_bufnr'))
     endif
 endfunction
 " ------------------------------------------------------

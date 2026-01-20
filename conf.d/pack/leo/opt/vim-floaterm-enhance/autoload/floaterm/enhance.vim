@@ -185,7 +185,7 @@ endfunction
 function! floaterm#enhance#get_opt_param(optstr, check) abort
     let optstr = a:optstr
     let check = a:check
-    if type(optstr) != type('') || type(check) != type('') || index(['wintype', 'position', 'title'], check) < 0
+    if type(optstr) != type('') || type(check) != type('') || index(['wintype', 'position', 'title', 'width', 'height'], check) < 0
         return ''
     endif
     let key = '--' . check
@@ -262,7 +262,7 @@ function! floaterm#enhance#parse_opt(...) abort
         let width_opt = "--width=" . prog_ratio
     elseif open_position == 'bottom' && empty(height_opt)
         let height_opt = "--height=" . prog_ratio
-    elseif open_position == 'float'
+    else
         if empty(wintype_opt)
             let width_opt = "--width=" . float_ratio
         endif
@@ -319,14 +319,11 @@ endfunction
 " fzf select and run programs
 " --------------------------------------------------------------
 function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
-    if a:0 && type(a:1) == type(v:true)
-        let wincmdp = a:1
-    else
-        let wincmdp = v:true
-    endif
+    let wincmdp = a:0 && type(a:1) == type(0) ? a:1 : 1
     try
         let command = printf('FloatermNew %s %s', a:opts, a:cmd)
         call execute(command)
+        sleep 100m
         let t:floaterm_program_bufnr = floaterm#buflist#curr()
         call floaterm#config#set(t:floaterm_program_bufnr, 'program', a:type)
         if wincmdp
@@ -351,7 +348,7 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
         return
     endif
     let prompt = a:prompt
-    let l:wincmdp = a:0 && type(a:1) == type(v:true) ? a:1 : v:true
+    let l:wincmdp = a:0 && type(a:1) == type(0) ? a:1 : 1
     let l:source = []
     let l:done = v:false
     let l:selected = v:null
@@ -375,13 +372,11 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
         call floaterm#enhance#showmsg('No valid programs available', 1)
         return
     endif
+    " finish and call
     function! s:_floaterm_program_finish() abort closure
         if !l:done
             return
-        endif
-        if empty(l:selected)
-            return
-        elseif !has_key(l:program_map, l:selected)
+        elseif empty(l:selected)
             return
         else
             let [cmd, opts, type] = l:program_map[l:selected]
@@ -389,7 +384,7 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
             call call(a:callback, [t:floaterm_program_bufnr])
         endif
     endfunction
-
+    " sink to select
     function! s:_floaterm_program_sink(selection) abort closure
         let l:done = v:true
         if empty(a:selection) || !has_key(l:program_map, a:selection)
@@ -398,13 +393,14 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
             let l:selected = a:selection
         endif
         call timer_start(0, {-> s:_floaterm_program_finish()})
-        return
     endfunction
+    " exit
     function! s:_floaterm_program_exit(code) abort closure
         let l:done = v:true
         let l:selected = v:null
         call timer_start(0, {-> s:_floaterm_program_finish()})
     endfunction
+    " fzf run spect
     let l:spec = {
                 \ 'source': l:source,
                 \ 'sink': function('s:_floaterm_program_sink'),
