@@ -117,14 +117,8 @@ function! floaterm#ai#_send(type, stary_curr, ...) abort
         return
     endif
     if a:type == 'range'
-        if a:0
-            if a:0 == 1 && a:1
-                let content = floaterm#ai#at(floaterm#enhance#get_file_line_range(a:1, a:1))
-            elseif a:1 && a:2 && a:1 <= a:2
-                let content = floaterm#ai#at(floaterm#enhance#get_file_line_range(a:1, a:2))
-            else
-                let content = floaterm#ai#at(floaterm#enhance#get_file_abspath())
-            endif
+        if a:0 == 2 && a:1 && a:2 && a:1 <= a:2
+            let content = floaterm#ai#at(floaterm#enhance#get_file_line_range(a:1, a:2))
         else
             let content = floaterm#ai#at(floaterm#enhance#get_file_abspath())
         endif
@@ -148,7 +142,13 @@ function! floaterm#ai#_send(type, stary_curr, ...) abort
 endfunction
 " send range
 function! floaterm#ai#send_line_range(stay_curr) range abort
-    call floaterm#ai#_send('range', a:stay_curr, a:firstline, a:lastline)
+    let firstline = a:firstline
+    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
+        let lastline = a:lastline
+    else
+        let lastline = firstline
+    endif
+    call floaterm#ai#_send('range', a:stay_curr, firstline, lastline)
 endfunction
 " send file
 function! floaterm#ai#send_file(stay_curr) abort

@@ -172,7 +172,7 @@ function! floaterm#enhance#get_file_absdir() abort
     return fnamemodify(expand('%'), ':p:h')
 endfunction
 
-function! floaterm#enhance#get_file_line_range(start, end) range abort
+function! floaterm#enhance#get_file_line_range(start, end) abort
     let range = floaterm#enhance#get_file_abspath() . '#L' . a:start
     if a:start != a:end
         let range .= '-L' . a:end

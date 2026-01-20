@@ -161,18 +161,14 @@ endfunction
 " mark
 " -------------------------------------
 function! floaterm#repl#mark() range abort
-    try
-        if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
-            let t:floaterm_repl_marked_lines = getline(a:firstline, a:lastline)
-            echom "Visual selection marked."
-        else
-            let [start, end] = floaterm#enhance#get_block()
-            let t:floaterm_repl_marked_lines = getline(start, end)
-            echom "Block code marked."
-        endif
-    catch /.*/
-        echom "Error mark lines."
-    endtry
+    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
+        let t:floaterm_repl_marked_lines = getline(a:firstline, a:lastline)
+        echom "Visual selection marked."
+    else
+        let [start, end] = floaterm#enhance#get_block()
+        let t:floaterm_repl_marked_lines = getline(start, end)
+        echom "Block code marked."
+    endif
 endfunction
 " Using quickfix to show marked contents
 function! floaterm#repl#show_mark() abort
