@@ -271,10 +271,10 @@ function! floaterm#enhance#parse_opt(...) abort
         endif
     endif
     " set up w-h-opt
-    let w_h_opt = printf("%s %s", width_opt, height_opt)
+    let w_h_opt = printf('%s %s', width_opt, height_opt)
     if open_position ==# 'right' && empty(wintype_opt)
         let wintype_opt = '--wintype=vsplit'
-        return printf(' --position=right %s %s %s', wintype_opt, w_h_opt title_opt)
+        return printf(' --position=right %s %s %s', wintype_opt, w_h_opt, title_opt)
     elseif open_position ==# 'bottom' && empty(wintype_opt)
         let wintype_opt = '--wintype=split'
         return printf(' --position=bottom %s %s %s', wintype_opt, w_h_opt, title_opt)
