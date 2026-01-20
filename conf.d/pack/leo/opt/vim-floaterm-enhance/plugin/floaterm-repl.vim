@@ -33,7 +33,7 @@ let g:floaterm_repl_exit.python = 'exit'
 let g:floaterm_repl_exit.vim = 'vis'
 let g:floaterm_repl_exit.r = 'quit'
 " ------------------------------------------------------------
-" Start. NOTE ! = <bang>0  means `no choose` == start_now
+" Start. NOTE ! means startnow
 " ------------------------------------------------------------
 command! -bang FloatermReplStart call floaterm#repl#start(<bang>0)
 " ------------------------------------------------------------

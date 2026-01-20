@@ -15,9 +15,19 @@ augroup UpdateAiBufnr
     autocmd!
     autocmd User FloatermOpen call s:update_ai_bufnr()
 augroup END
+" ------------------------------------------------------------
+" Start. NOTE ! = <bang>0  means `no choose` == start_now
+" ------------------------------------------------------------
 command! -bang FloatermAiStart call floaterm#ai#start(<bang>0)
+" ------------------------------------------------------------
+" SendCrOrStart. NOTE ! = <bang>0 means stay in floaterm
+" ------------------------------------------------------------
 command! -bang FloatermAiSendCr call floaterm#ai#send_cr_or_start(0, <bang>0)
 command! -bang FloatermAiSendCrOrStart call floaterm#ai#send_cr_or_start(1, <bang>0)
+command! -bang FloatermAiSendCrOrStartNow call floaterm#ai#send_cr_or_start(1, <bang>0, 1)
+" -------------------------------------------------------------------------------
+" commands. NOTE <bang>0 means ! in Send commands means stay in floaterm
+" -------------------------------------------------------------------------------
 command! -bang FloatermAiSendFile call floaterm#ai#send_file(<bang>0)
 command! -bang FloatermAiSendDir call floaterm#ai#send_dir(<bang>0)
 command! -bang FloatermAiFzfFiles call floaterm#ai#fzf_file(<bang>0)
