@@ -86,12 +86,12 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
             continue
         endif
         let entry = [cmd, opts, 'REPL']
-        let replaced = v:false
+        let replaced = 0
         let i = 0
         while i < len(g:floaterm_repl_programs[ft])
             if g:floaterm_repl_programs[ft][i][0] ==# cmd
                 let g:floaterm_repl_programs[ft][i] = entry
-                let replaced = v:true
+                let replaced = 1
                 break
             endif
             let i += 1

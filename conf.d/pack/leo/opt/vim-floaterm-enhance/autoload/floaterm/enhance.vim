@@ -354,16 +354,12 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
     let l:selected = v:null
     let l:program_map = {}
     for item in a:programs
-        if type(item) != type([]) || len(item) < 2
+        if type(item) != type([]) || len(item) < 3
             continue
         endif
         let cmd = item[0]
         let opts = item[1]
-        if len(item) >= 3
-            let type = item[2]
-        else
-            let type = 'PROG'
-        endif
+        let type = item[2]
         let display = printf('%s|%s %s', type, cmd, opts)
         let l:program_map[display] = [cmd, opts, type]
         call add(l:source, display)
@@ -372,11 +368,23 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
         call floaterm#enhance#showmsg('No valid programs available', 1)
         return
     endif
+    " sink to select
+    function! s:floaterm_program_sink(selection) abort closure
+        if empty(a:selection) || !has_key(l:program_map, a:selection)
+            let l:selected = v:null
+        else
+            let l:selected = a:selection
+        endif
+        call s:floaterm_program_finish()
+    endfunction
+    " exit
+    function! s:floaterm_program_exit(code) abort closure
+        let l:selected = v:null
+        call s:floaterm_program_finish()
+    endfunction
     " finish and call
-    function! s:_floaterm_program_finish() abort closure
-        if !l:done
-            return
-        elseif empty(l:selected)
+    function! s:floaterm_program_finish() abort closure
+        if empty(l:selected)
             return
         else
             let [cmd, opts, type] = l:program_map[l:selected]
@@ -384,27 +392,11 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
             call call(a:callback, [t:floaterm_program_bufnr])
         endif
     endfunction
-    " sink to select
-    function! s:_floaterm_program_sink(selection) abort closure
-        let l:done = v:true
-        if empty(a:selection) || !has_key(l:program_map, a:selection)
-            let l:selected = v:null
-        else
-            let l:selected = a:selection
-        endif
-        call timer_start(0, {-> s:_floaterm_program_finish()})
-    endfunction
-    " exit
-    function! s:_floaterm_program_exit(code) abort closure
-        let l:done = v:true
-        let l:selected = v:null
-        call timer_start(0, {-> s:_floaterm_program_finish()})
-    endfunction
     " fzf run spect
     let l:spec = {
                 \ 'source': l:source,
-                \ 'sink': function('s:_floaterm_program_sink'),
-                \ 'exit': function('s:_floaterm_program_exit'),
+                \ 'sink': function('s:floaterm_program_sink'),
+                \ 'exit': function('s:floaterm_program_exit'),
                 \ 'options': ['--prompt', prompt . '> ', '--layout=reverse-list'],
                 \ }
     call fzf#run(fzf#wrap('FloatermProgram', l:spec, 0))

@@ -6,13 +6,13 @@ function! floaterm#asyncrun#run(opts, floaterm_wintype, position)
         call preview#errmsg("Please update to vim8.1+/nvim0.6+ to run script in floating or popup window.")
         return
     endif
-    let found_floaterm = v:false
+    let found_floaterm = 0
     let buflist = floaterm#buflist#gather()
     if len(buflist) > 0
         for floaterm_bufnr in buflist
             " NOTE: found floaterm of same floaterm wintype and position
             if floaterm#config#get(floaterm_bufnr, 'wintype') == floaterm_wintype && floaterm#config#get(floaterm_bufnr, 'position') == position
-                let found_floaterm = v:true
+                let found_floaterm = 1
                 break
             endif
         endfor

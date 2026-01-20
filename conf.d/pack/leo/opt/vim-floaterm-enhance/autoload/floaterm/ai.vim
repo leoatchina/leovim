@@ -35,7 +35,7 @@ function! floaterm#ai#set_ai_bufnr(...) abort
         return
     endif
     call filter(t:floaterm_ai_lst, {_, v -> v != bufnr && index(all_bufnrs, v) >= 0})
-    call floaterm#config#set(bufnr, 'program', 'AI')
+    " call floaterm#config#set(bufnr, 'program', 'AI')
     call insert(t:floaterm_ai_lst, bufnr, 0)
 endfunction
 function! floaterm#ai#async_set_ai_bufnr(...) abort
