@@ -38,6 +38,12 @@ function! floaterm#ai#set_ai_bufnr(...) abort
     call floaterm#config#set(bufnr, 'program', 'AI')
     call insert(t:floaterm_ai_lst, bufnr, 0)
 endfunction
+function! floaterm#ai#async_set_ai_bufnr(...) abort
+    while exists('t:floaterm_program_bufnr') && t:floaterm_program_bufnr < 0
+        sleep 50m
+    endwhile
+    call floaterm#ai#set_ai_bufnr()
+endfunction
 " --------------------------------------------------------------
 " get programs
 " --------------------------------------------------------------
@@ -62,10 +68,9 @@ function! floaterm#ai#start(now) abort
         if a:now
             let [cmd, opts, type] = programs[0]
             call floaterm#enhance#cmd_run(cmd, opts, type)
-            call floaterm#ai#set_ai_bufnr(t:floaterm_program_bufnr)
+            call floaterm#ai#set_ai_bufnr()
         else
             call floaterm#enhance#fzf_run(programs, 'FloatermAI')
-            call timer_start(0, {-> floaterm#ai#set_ai_bufnr(t:floaterm_program_bufnr)})
         endif
     endif
 endfunction

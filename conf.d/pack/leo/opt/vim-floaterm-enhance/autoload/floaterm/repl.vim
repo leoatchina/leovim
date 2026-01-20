@@ -137,7 +137,6 @@ function! floaterm#repl#start(now) abort
             call floaterm#repl#set_repl_bufnr()
         else
             call floaterm#enhance#fzf_run(programs, 'FloatermREPL')
-            call timer_start(0, {-> floaterm#repl#set_repl_bufnr()})
         endif
     endif
 endfunction
