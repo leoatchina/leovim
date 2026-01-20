@@ -36,6 +36,11 @@ let g:nvim_treesitter_install = utils#is_unix()
 
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
 
+" let g:floaterm_ai_programs = [
+"     \ "claude",
+"     \ ["opencode", "--wintype=float --position=topright"]
+"   \ ]
+
 " let $XAI_API_KEY=''
 " let $GEMINI_API_KEY=''
 " let $OPENAI_API_KEY=''
@@ -53,10 +58,6 @@ let g:nvim_treesitter_install = utils#is_unix()
 " let g:openai_compatible_model = ''
 " let g:openai_compatible_url = ''
 
-" let g:floaterm_ai_programs = [
-"     \ "claude",
-"     \ ["claude", "--wintype=float --position=topright"]
-"   \ ]
 
 if has('nvim')
     " if utils#has_gui()

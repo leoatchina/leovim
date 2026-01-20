@@ -207,10 +207,22 @@ function! floaterm#enhance#parse_opt(...) abort
     else
         let wintypes = ['split', 'vsplit']
     endif
-    let wintype_opt = ''
+    let width_opt = ''
+    let height_opt = ''
     let title_opt = ''
+    let wintype_opt = ''
     if a:0 && type(a:1) == type('') && len(trim(a:1))
         let optstr = trim(a:1)
+        " width
+        let width = floaterm#enhance#get_opt_param(optstr, 'width')
+        if !empty(width)
+            let width_opt = '--width=' . width
+        endif
+        " height
+        let height = floaterm#enhance#get_opt_param(optstr, 'height')
+        if !empty(height)
+            let width_opt = '--height=' . height
+        endif
         " title
         let title = floaterm#enhance#get_opt_param(optstr, 'title')
         if !empty(title)
@@ -246,20 +258,33 @@ function! floaterm#enhance#parse_opt(...) abort
             let open_position = 'right'
         endif
     endif
-    " todo, adjust this part
+    if open_position == 'right' && empty(width_opt)
+        let width_opt = "--width=" . prog_ratio
+    elseif open_position == 'bottom' && empty(height_opt)
+        let height_opt = "--height=" . prog_ratio
+    elseif open_position == 'float'
+        if empty(wintype_opt)
+            let width_opt = "--width=" . float_ratio
+        endif
+        if empty(height_opt)
+            let height_opt = "--height=" . float_ratio
+        endif
+    endif
+    " set up w-h-opt
+    let w_h_opt = printf("%s %s", width_opt, height_opt)
     if open_position ==# 'right' && empty(wintype_opt)
         let wintype_opt = '--wintype=vsplit'
-        return printf(' --position=right --width=%s %s %s', prog_ratio, wintype_opt, title_opt)
+        return printf(' --position=right %s %s %s', wintype_opt, w_h_opt title_opt)
     elseif open_position ==# 'bottom' && empty(wintype_opt)
         let wintype_opt = '--wintype=split'
-        return printf(' --position=bottom --height=%s %s %s', prog_ratio, wintype_opt, title_opt)
+        return printf(' --position=bottom %s %s %s', wintype_opt, w_h_opt, title_opt)
     elseif wintype_opt == '--wintype=float'
         if open_position == 'auto'
             let open_position = 'topright'
         endif
-        return printf(' --position=%s --wintype=float --width=%s --height=%s %s', open_position, float_ratio, float_ratio, title_opt)
+        return printf(' --position=%s --wintype=float %s %s', open_position, w_h_opt, title_opt)
     else
-        return printf(' --position=%s %s %s', open_position, wintype_opt, title_opt)
+        return printf(' --position=%s %s %s %s', open_position, wintype_opt, w_h_opt, title_opt)
     endif
 endfunction
 " parse programs
