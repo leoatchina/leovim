@@ -58,12 +58,14 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap <M-y> :WhichKey "\<M-y\>"<Cr>
     inoremap <M-y> <C-o>:WhichKey "\<M-y\>"<Cr>
     if pack#planned("vim-table-mode")
-        nnoremap <M-t> :WhichKey "\<M-t\>"<Cr>
+        nnoremap <M-t> :WhichKey       "\<M-t\>"<Cr>
         xnoremap <M-t> :WhichKeyVisual "\<M-t\>"<Cr>
     endif
-    if pack#installed('vim-floaterm')
-        nnoremap <M-e> :WhichKey "\<M-e\>"<Cr>
+    if pack#installed('vim-floaterm-enhance')
+        nnoremap <M-e> :WhichKey       "\<M-e\>"<Cr>
         xnoremap <M-e> :WhichKeyVisual "\<M-e\>"<Cr>
+        nnoremap <M-i> :WhichKey       "\<M-i\>"<Cr>
+        xnoremap <M-i> :WhichKeyVisual "\<M-i\>"<Cr>
     endif
     if get(g:, 'debug_tool', '') != ''
         nnoremap <M-d> :WhichKey "\<M-d\>"<Cr>

@@ -72,18 +72,18 @@ endfunction
 " ------------------------------------------------------
 " Send a newline to AI or start AI if not running
 " ------------------------------------------------------
-function! floaterm#ai#send_cr_or_start(start, stay_curr, ...) abort
+function! floaterm#ai#send_cr(stay_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if ai_bufnr
-        call floaterm#terminal#send(ai_bufnr, ["\r"], 0)
-    elseif a:start
-        call floaterm#ai#start(a:0 && a:1 ? 1:0)
-    endif
-    if a:stay_curr
-        wincmd p
-        if has('nvim')
-            stopinsert
+        call floaterm#terminal#send(ai_bufnr, ["\r"])
+        if a:stay_curr
+            wincmd p
+            if has('nvim')
+                stopinsert
+            endif
         endif
+    else
+        call floaterm#enhance#showmsg('No AI floaterm window found', 1)
     endif
 endfunction
 " --------------------------------------------------------------
