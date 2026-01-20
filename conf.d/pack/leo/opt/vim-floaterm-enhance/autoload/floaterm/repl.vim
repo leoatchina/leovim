@@ -146,9 +146,15 @@ endfunction
 function! floaterm#repl#send_cr_or_start(start, stay_curr, ...) abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
-        call floaterm#terminal#send(repl_bufnr, [""], a:stay_curr)
+        call floaterm#terminal#send(repl_bufnr, [""])
     elseif a:start
         call floaterm#repl#start(a:0 && a:1 ? 1:0)
+    endif
+    if a:stay_curr
+        wincmd p
+        if has('nvim')
+            stopinsert
+        endif
     endif
 endfunction
 " -------------------------------------
@@ -256,7 +262,7 @@ endfunction
 " core function send_contents. contents is
 " the codes/scripts want to send
 " -------------------------------------------
-function! floaterm#repl#send_contents(contents, ft, repl_bufnr, keep_curr, jump_line, vmode) abort
+function! floaterm#repl#send_contents(contents, ft, repl_bufnr, stay_curr, jump_line, vmode) abort
     let comment = floaterm#enhance#get_comment(a:ft)
     let contents = []
     for line in a:contents
@@ -271,7 +277,7 @@ function! floaterm#repl#send_contents(contents, ft, repl_bufnr, keep_curr, jump_
         endif
         call floaterm#terminal#send(a:repl_bufnr, contents)
     endif
-    if a:keep_curr == 0
+    if a:stay_curr == 0
         execute "normal! " . a:jump_line . 'G'
         normal! j
         let t_col = line("$")
@@ -282,7 +288,7 @@ function! floaterm#repl#send_contents(contents, ft, repl_bufnr, keep_curr, jump_
             let c_col = line('.')
             let line = getline('.')
         endwhile
-    elseif a:keep_curr && a:vmode
+    elseif a:stay_curr && a:vmode
         execute "normal! " . a:jump_line . 'G'
     endif
     if !has('nvim')
@@ -292,7 +298,7 @@ endfunction
 " -------------------------------------------
 " sent current line or selected contents to repl
 " -------------------------------------------
-function! floaterm#repl#_send_range(first, last, repl_bufnr, keep_curr, ...) abort
+function! floaterm#repl#_send_range(first, last, repl_bufnr, stay_curr, ...) abort
     let firstline = a:first
     let lastline = a:last
     if firstline == lastline
@@ -311,11 +317,11 @@ function! floaterm#repl#_send_range(first, last, repl_bufnr, keep_curr, ...) abo
     elseif get(g:, 'floaterm_repl_showsend', 0)
         call floaterm#enhance#showmsg(printf("Sent L%s-L%s all %s lines", firstline, lastline, len(contents)))
     endif
-    " XXX: lastline is the jump_line when keep_curr == 0
-    call floaterm#repl#send_contents(contents, &ft, a:repl_bufnr, a:keep_curr, lastline, vmode)
+    " XXX: lastline is the jump_line when stay_curr == 0
+    call floaterm#repl#send_contents(contents, &ft, a:repl_bufnr, a:stay_curr, lastline, vmode)
 endfunction
 " core function
-function! floaterm#repl#send(keep_curr) range abort
+function! floaterm#repl#send(stay_curr) range abort
     " Normal case - send code contents
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr == 0
@@ -334,12 +340,12 @@ function! floaterm#repl#send(keep_curr) range abort
     if firstline == 0 || lastline == 0 || firstline > lastline
         return
     endif
-    call floaterm#repl#_send_range(firstline, lastline, repl_bufnr, a:keep_curr, vmode)
+    call floaterm#repl#_send_range(firstline, lastline, repl_bufnr, a:stay_curr, vmode)
 endfunction
 " ----------------------------------------------
 " Send border
 " ------------------------------------------------------
-function! floaterm#repl#send_border(border, keep_curr) abort
+function! floaterm#repl#send_border(border, stay_curr) abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr == 0
         call floaterm#enhance#showmsg("Do REPLFloatermStart at first.")
@@ -361,5 +367,5 @@ function! floaterm#repl#send_border(border, keep_curr) abort
     else
         return
     endif
-    call floaterm#repl#_send_range(firstline, lastline, repl_bufnr, a:keep_curr)
+    call floaterm#repl#_send_range(firstline, lastline, repl_bufnr, a:stay_curr)
 endfunction

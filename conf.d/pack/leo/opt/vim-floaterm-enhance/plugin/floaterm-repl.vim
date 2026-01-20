@@ -32,23 +32,29 @@ let g:floaterm_repl_exit.javascript = '.exit'
 let g:floaterm_repl_exit.python = 'exit'
 let g:floaterm_repl_exit.vim = 'vis'
 let g:floaterm_repl_exit.r = 'quit'
-" ----------------------------------
-" commands. NOTE <bang>0 means move forword
-" ----------------------------------
+" ------------------------------------------------------------
+" Start. NOTE ! = <bang>0  means `no choose` == start_now
+" ------------------------------------------------------------
 command! -bang FloatermReplStart call floaterm#repl#start(<bang>0)
+" ------------------------------------------------------------
+" SendCrOrStart. NOTE ! = <bang>0 means stay in floaterm
+" ------------------------------------------------------------
 command! -bang FloatermReplSendCr call floaterm#repl#send_cr_or_start(0, <bang>0)
 command! -bang FloatermReplSendCrOrStart call floaterm#repl#send_cr_or_start(1, <bang>0)
 command! -bang FloatermReplSendCrOrStartNow call floaterm#repl#send_cr_or_start(1, <bang>0, 1)
+" -------------------------------------------------------------------------------
+" commands. NOTE <bang>0 means ! in Send commands means stay in curr line
+" -------------------------------------------------------------------------------
 command! -bang FloatermReplSendBlock call floaterm#repl#send_border("block", <bang>0)
 command! -bang FloatermReplSendFromBegin call floaterm#repl#send_border("begin", <bang>0)
 command! -bang FloatermReplSendToEnd call floaterm#repl#send_border("end", <bang>0)
 command! -bang FloatermReplSendAll call floaterm#repl#send_border("all", <bang>0)
 command! -bang -range FloatermReplSend <line1>,<line2>call floaterm#repl#send(<bang>0)
+" word
+command! -range FloatermReplSendWord call floaterm#repl#send_word()
 " Commands for newline/clear/exit using dedicated functions
 command! FloatermReplSendClear call floaterm#repl#send_clear()
 command! FloatermReplSendExit call floaterm#repl#send_exit()
-" word
-command! -range FloatermReplSendWord call floaterm#repl#send_word()
 " mark
 command! -range FloatermReplMark <line1>,<line2>call floaterm#repl#mark()
 command! FloatermReplSendMark call floaterm#repl#send_mark()
