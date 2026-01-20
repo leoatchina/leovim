@@ -8,7 +8,7 @@ command! FloatermAiStart call floaterm#ai#start()
 function! s:update_ai_bufnr() abort
     let bufnr = floaterm#buflist#curr()
     if bufnr && floaterm#config#get(bufnr, 'program', 'PROG') == 'AI'
-        call floaterm#ai#update_ai_bufnr(bufnr)
+        call floaterm#ai#set_ai_bufnr(bufnr)
     endif
 endfunction
 augroup UpdateAiBufnr
