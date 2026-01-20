@@ -1,32 +1,42 @@
 " --------------------------------------------------------------
 " AI buf control
 " --------------------------------------------------------------
-function! floaterm#ai#get_ai_bufnr() abort
-    let t:floaterm_ai_bufnrs = get(t:, 'floaterm_ai_bufnrs', [])
+function! floaterm#ai#get_ai_bufnr(...) abort
+    let t:floaterm_ai_lst = get(t:, 'floaterm_ai_lst', [])
     let all_bufnrs = floaterm#buflist#gather()
-    if empty(all_bufnrs) || empty(t:floaterm_ai_bufnrs)
-        let t:floaterm_ai_bufnrs = []
+    if empty(all_bufnrs) || empty(t:floaterm_ai_lst)
+        let t:floaterm_ai_lst = []
         return 0
     endif
     let ai_bufnr = (a:0 && a:1) ? a:1 : 0
     if ai_bufnr
-        call floaterm#ai#update_ai_bufnr(bufnr)
+        call floaterm#ai#set_ai_bufnr(ai_bufnr)
     else
-        call filter(t:floaterm_ai_bufnrs, {_, v -> index(all_bufnrs, v) >= 0})
+        call filter(t:floaterm_ai_lst, {_, v -> index(all_bufnrs, v) >= 0})
     endif
-    if empty(t:floaterm_ai_bufnrs)
+    if empty(t:floaterm_ai_lst)
         return 0
     else
-        return t:floaterm_ai_bufnrs[0]
+        return t:floaterm_ai_lst[0]
     endif
 endfunction
-function! floaterm#ai#update_ai_bufnr(bufnr)
+function! floaterm#ai#set_ai_bufnr(...) abort
     " 把 bufnr 放到  floaterm_ai_bufnr的第一个
-    let t:floaterm_ai_bufnrs = get(t:, 'floaterm_ai_bufnrs', [])
+    let t:floaterm_ai_lst = get(t:, 'floaterm_ai_lst', [])
     let all_bufnrs = floaterm#buflist#gather()
-    call filter(t:floaterm_ai_bufnrs, {_, v -> v != a:bufnr && index(all_bufnrs, v) >= 0})
-    call floaterm#config#set(a:bufnr, 'program', 'AI')
-    call insert(t:floaterm_ai_bufnrs, a:bufnr, 0)
+    if a:0 && type(a:1) == type(0)
+        let bufnr = a:1
+    elseif exists('t:floaterm_program_bufnr')
+        let bufnr = t:floaterm_program_bufnr
+    else
+        let bufnr = 0
+    endif
+    if bufnr <= 0
+        return
+    endif
+    call filter(t:floaterm_ai_lst, {_, v -> v != bufnr && index(all_bufnrs, v) >= 0})
+    call floaterm#config#set(bufnr, 'program', 'AI')
+    call insert(t:floaterm_ai_lst, bufnr, 0)
 endfunction
 " --------------------------------------------------------------
 " get programs
@@ -52,10 +62,10 @@ function! floaterm#ai#start(now) abort
         if a:now
             let [cmd, opts, type] = programs[0]
             call floaterm#enhance#cmd_run(cmd, opts, type)
-            call floaterm#ai#update_ai_bufnr(t:floaterm_program_bufnr)
+            call floaterm#ai#set_ai_bufnr(t:floaterm_program_bufnr)
         else
             call floaterm#enhance#fzf_run(programs, 'FloatermAI')
-            call timer_start(0, {-> floaterm#ai#update_ai_bufnr(t:floaterm_program_bufnr)})
+            call timer_start(0, {-> floaterm#ai#set_ai_bufnr(t:floaterm_program_bufnr)})
         endif
     endif
 endfunction
