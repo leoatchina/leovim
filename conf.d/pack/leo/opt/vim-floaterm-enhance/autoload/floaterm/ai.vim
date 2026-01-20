@@ -80,7 +80,7 @@ endfunction
 function! floaterm#ai#send_cr_or_start(start, stay_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if ai_bufnr
-        call floaterm#terminal#send(ai_bufnr, [""], a:stay_curr)
+        call floaterm#terminal#send(ai_bufnr, ["\n"], a:stay_curr)
     elseif a:start
         call floaterm#ai#start(a:0 && a:1 ? 1:0)
     endif

@@ -38,7 +38,7 @@ let g:nvim_treesitter_install = utils#is_unix()
 
 " let g:floaterm_ai_programs = [
 "     \ "claude",
-"     \ ["opencode", "--wintype=float --position=topright"]
+"     \ ["opencode", "--wintype=float --position=topright --width=0.45 --height=0.8"]
 "   \ ]
 
 " let $XAI_API_KEY=''
