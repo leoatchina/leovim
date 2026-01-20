@@ -316,7 +316,7 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
     endtry
 endfunction
 
-function! floaterm#enhance#fzf_run(programs, prompt, ...) abort
+function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
     if !exists('*fzf#run')
         call floaterm#enhance#showmsg('fzf.vim is required for FloatermProgram', 1)
         return
@@ -361,6 +361,7 @@ function! floaterm#enhance#fzf_run(programs, prompt, ...) abort
         else
             let [cmd, opts, type] = l:program_map[l:selected]
             call floaterm#enhance#cmd_run(cmd, opts, type, l:wincmdp)
+            call call(a:callback, [t:floaterm_program_bufnr])
         endif
     endfunction
 

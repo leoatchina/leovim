@@ -136,7 +136,7 @@ function! floaterm#repl#start(now) abort
             call floaterm#enhance#cmd_run(cmd, opts, type)
             call floaterm#repl#set_repl_bufnr()
         else
-            call floaterm#enhance#fzf_run(programs, 'FloatermREPL')
+            call floaterm#enhance#fzf_run(programs, 'FloatermREPL', function('floaterm#repl#set_repl_bufnr'))
         endif
     endif
 endfunction

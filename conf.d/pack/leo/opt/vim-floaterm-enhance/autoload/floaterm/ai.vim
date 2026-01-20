@@ -70,7 +70,7 @@ function! floaterm#ai#start(now) abort
             call floaterm#enhance#cmd_run(cmd, opts, type)
             call floaterm#ai#set_ai_bufnr()
         else
-            call floaterm#enhance#fzf_run(programs, 'FloatermAI')
+            call floaterm#enhance#fzf_run(programs, 'FloatermAI', function('floaterm#ai#set_ai_bufnr'))
         endif
     endif
 endfunction
