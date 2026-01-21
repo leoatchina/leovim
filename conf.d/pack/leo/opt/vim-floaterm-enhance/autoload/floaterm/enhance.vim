@@ -281,20 +281,16 @@ function! floaterm#enhance#parse_opt(...) abort
     endif
     let misc_opt = printf('%s %s %s', width_opt, height_opt, autoclose_opt)
     " return result: NOTE, wintype must be the first one
-    if wintype_opt == '--wintype=float'
-        if open_position == 'auto'
+    if wintype_opt ==# '--wintype=float'
+        if open_position ==# 'auto'
             let open_position = 'topright'
         endif
-        let result = wintype_opt . printf(' --position=%s %s %s', open_position, title_opt, misc_opt)
     elseif open_position ==# 'right' && empty(wintype_opt)
         let wintype_opt = '--wintype=vsplit'
-        let result = wintype_opt . printf(' --position=right %s %s', title_opt, misc_opt)
     elseif open_position ==# 'bottom' && empty(wintype_opt)
         let wintype_opt = '--wintype=split'
-        let result = wintype_opt . printf(' --position=bottom %s %s', title_opt, misc_opt)
-    else
-        let result = wintype_opt . printf(' --position=%s %s %s', open_position, title_opt, misc_opt)
     endif
+    let result = wintype_opt . printf(' --position=%s %s %s', open_position, title_opt, misc_opt)
     let result = substitute(result, '\s\+', ' ', 'g')
     return result
 endfunction
