@@ -49,13 +49,13 @@ command! -bang FloatermReplSendBlock call floaterm#repl#send_border("block", <ba
 command! -bang FloatermReplSendFromBegin call floaterm#repl#send_border("begin", <bang>0)
 command! -bang FloatermReplSendToEnd call floaterm#repl#send_border("end", <bang>0)
 command! -bang FloatermReplSendAll call floaterm#repl#send_border("all", <bang>0)
-command! -bang -range FloatermReplSend <line1>,<line2>call floaterm#repl#send(<bang>0)
+command! -bang -range FloatermReplSend call floaterm#repl#send(<bang>0, <line1>, <line2>)
 " word
-command! -range FloatermReplSendWord call floaterm#repl#send_word()
+command! -range FloatermReplSendWord call floaterm#repl#send_word(<line1>, <line2>)
+" mark
+command! -range FloatermReplMark call floaterm#repl#mark(<line1>, <line2>)
+command! FloatermReplSendMark call floaterm#repl#send_mark()
+command! FloatermReplShowMark call floaterm#repl#show_mark()
 " Commands for newline/clear/exit using dedicated functions
 command! FloatermReplSendClear call floaterm#repl#send_clear()
 command! FloatermReplSendExit call floaterm#repl#send_exit()
-" mark
-command! -range FloatermReplMark <line1>,<line2>call floaterm#repl#mark()
-command! FloatermReplSendMark call floaterm#repl#send_mark()
-command! FloatermReplShowMark call floaterm#repl#show_mark()

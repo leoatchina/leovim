@@ -160,9 +160,14 @@ endfunction
 " -------------------------------------
 " mark
 " -------------------------------------
-function! floaterm#repl#mark() range abort
-    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
-        let t:floaterm_repl_marked_lines = getline(a:firstline, a:lastline)
+function! floaterm#repl#mark(...) abort
+    if a:0 >= 2
+        let firstline = a:1
+        let lastline = a:2
+        let t:floaterm_repl_marked_lines = getline(firstline, lastline)
+        echom "Range marked."
+    elseif mode() =~# '^[vV]' || mode() ==# "\<C-v>"
+        let t:floaterm_repl_marked_lines = getline(line("'<"), line("'>"))
         echom "Visual selection marked."
     else
         let [start, end] = floaterm#enhance#get_block()
@@ -213,8 +218,11 @@ endfunction
 " -------------------------------------
 " send only one word
 " -------------------------------------
-function! floaterm#repl#send_word() range abort
-    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
+function! floaterm#repl#send_word(...) abort
+    if a:0 >= 2
+        let lines = getline(a:1, a:2)
+        let word = trim(join(lines, ' '))
+    elseif mode() =~# '^[vV]' || mode() ==# "\<C-v>"
         let word = trim(floaterm#enhance#get_visual_select())
     else
         let word = expand('<cword>')
@@ -314,24 +322,34 @@ function! floaterm#repl#_send_range(first, last, repl_bufnr, stay_curr, ...) abo
         call floaterm#enhance#showmsg(printf("Sent L%s-L%s all %s lines", firstline, lastline, len(contents)))
     endif
     " XXX: lastline is the jump_line when stay_curr == 0
-    call floaterm#repl#send_contents(contents, &ft, a:repl_bufnr, a:stay_curr, lastline, vmode)
+l floaterm#repl#send_contents(contents, &ft, a:repl_bufnr, a:stay_curr, lastline, vmode)
 endfunction
 " core function
-function! floaterm#repl#send(stay_curr) range abort
+function! floaterm#repl#send(stay_curr, ...) abort
     " Normal case - send code contents
+    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
+        let vmode = 1
+    else
+        let vmode = 0
+    endif
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr == 0
         call floaterm#enhance#showmsg("Do REPLFloatermStart at first.")
         return
     endif
-    " Auto detect visual mode
-    let firstline = a:firstline
-    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
-        let vmode = 1
-        let lastline = a:lastline
+    " Check if line range is provided as arguments
+    if a:0 >= 2
+        let firstline = a:1
+        let lastline = a:2
     else
-        let vmode = 0
-        let lastline = firstline
+        " Auto detect visual mode
+        let firstline = line('.')
+        if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
+            let lastline = line("'>")
+            let firstline = line("'<")
+        else
+            let lastline = firstline
+        endif
     endif
     if firstline == 0 || lastline == 0 || firstline > lastline
         return

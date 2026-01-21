@@ -141,11 +141,12 @@ function! floaterm#ai#_send(type, stary_curr, ...) abort
     endif
 endfunction
 " send range
-function! floaterm#ai#send_line_range(stay_curr) range abort
-    let firstline = a:firstline
-    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
-        let lastline = a:lastline
+function! floaterm#ai#send_line_range(stay_curr, ...) abort
+    if a:0 >= 2
+        let firstline = a:1
+        let lastline = a:2
     else
+        let firstline = line('.')
         let lastline = firstline
     endif
     call floaterm#ai#_send('range', a:stay_curr, firstline, lastline)
