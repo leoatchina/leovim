@@ -322,7 +322,7 @@ function! floaterm#repl#_send_range(first, last, repl_bufnr, stay_curr, ...) abo
         call floaterm#enhance#showmsg(printf("Sent L%s-L%s all %s lines", firstline, lastline, len(contents)))
     endif
     " XXX: lastline is the jump_line when stay_curr == 0
-l floaterm#repl#send_contents(contents, &ft, a:repl_bufnr, a:stay_curr, lastline, vmode)
+    call floaterm#repl#send_contents(contents, &ft, a:repl_bufnr, a:stay_curr, lastline, vmode)
 endfunction
 " core function
 function! floaterm#repl#send(stay_curr, ...) abort
