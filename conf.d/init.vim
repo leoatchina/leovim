@@ -86,7 +86,7 @@ let g:web_filetypes = get(g:, 'web_filetypes', ['php', 'html', 'css', 'scss', 'w
 " -----------------------------------
 let g:todo_patterns = "(TODO|FIXME|WARN|ERROR|BUG)"
 let g:note_patterns = "(NOTE|XXX|HINT|ETC|HELPME|COMMENTED|NOTUSED|STEP|In\\[\\d\*\\])"
-let g:root_patterns = get(g:, 'root_patterns', [".git", ".svn", ".hg", ".root", ".vscode", ".vim", ".idea", ".ccls"])
+let g:root_patterns = get(g:, 'root_patterns', [".git", ".svn", ".hg", ".root", ".vim"])
 let g:root_files = get(g:, 'root_files', [".task", "tsconfig.js", "Cargo.toml", "go.mod"])
 " --------------------------
 " init directories

@@ -205,12 +205,18 @@ function! floaterm#enhance#parse_opt(...) abort
     else
         let wintypes = ['split', 'vsplit']
     endif
+    let autoclose_opt = ''
     let width_opt = ''
     let height_opt = ''
     let title_opt = ''
     let wintype_opt = ''
     if a:0 && type(a:1) == type('') && len(trim(a:1))
         let optstr = trim(a:1)
+        " autoclose
+        let autoclose = floaterm#enhance#get_opt_param(optstr, 'autoclose')
+        if !empty(autoclose)
+            let autoclose_opt = '--autoclose=' . autoclose
+        endif
         " width
         let width = floaterm#enhance#get_opt_param(optstr, 'width')
         if !empty(width)
@@ -245,6 +251,7 @@ function! floaterm#enhance#parse_opt(...) abort
             endif
         endif
     endif
+    " setup width_height_opt
     if open_position ==# 'auto'
         if col_row_ratio > 0
             if &columns > &lines * col_row_ratio
@@ -257,33 +264,39 @@ function! floaterm#enhance#parse_opt(...) abort
         endif
     endif
     if open_position == 'right' && empty(width_opt)
-        let width_opt = "--width=" . prog_ratio
+        let width_opt = '--width=' . prog_ratio
     elseif open_position == 'bottom' && empty(height_opt)
-        let height_opt = "--height=" . prog_ratio
+        let height_opt = '--height=' . prog_ratio
     else
-        if empty(wintype_opt)
-            let width_opt = "--width=" . float_ratio
+        if empty(width_opt)
+            let width_opt = '--width=' . float_ratio
         endif
         if empty(height_opt)
-            let height_opt = "--height=" . float_ratio
+            let height_opt = '--height=' . float_ratio
         endif
     endif
-    " set up w-h-opt
-    let w_h_opt = printf('%s %s', width_opt, height_opt)
-    if open_position ==# 'right' && empty(wintype_opt)
-        let wintype_opt = '--wintype=vsplit'
-        return printf(' --position=right %s %s %s', wintype_opt, w_h_opt, title_opt)
-    elseif open_position ==# 'bottom' && empty(wintype_opt)
-        let wintype_opt = '--wintype=split'
-        return printf(' --position=bottom %s %s %s', wintype_opt, w_h_opt, title_opt)
-    elseif wintype_opt == '--wintype=float'
+    " setup autoclose_opt and misc_opt
+    if (has('win32') || has('win64')) && empty(autoclose_opt)
+        let autoclose_opt = '--autoclose=0'
+    endif
+    let misc_opt = printf('%s %s %s', width_opt, height_opt, autoclose_opt)
+    " return result: NOTE, wintype must be the first one
+    if wintype_opt == '--wintype=float'
         if open_position == 'auto'
             let open_position = 'topright'
         endif
-        return printf(' --position=%s --wintype=float %s %s', open_position, w_h_opt, title_opt)
+        let result = wintype_opt . printf(' --position=%s %s %s', open_position, title_opt, misc_opt)
+    elseif open_position ==# 'right' && empty(wintype_opt)
+        let wintype_opt = '--wintype=vsplit'
+        let result = wintype_opt . printf(' --position=right %s %s', title_opt, misc_opt)
+    elseif open_position ==# 'bottom' && empty(wintype_opt)
+        let wintype_opt = '--wintype=split'
+        let result = wintype_opt . printf(' --position=bottom %s %s', title_opt, misc_opt)
     else
-        return printf(' --position=%s %s %s %s', open_position, wintype_opt, w_h_opt, title_opt)
+        let result = wintype_opt . printf(' --position=%s %s %s', open_position, title_opt, misc_opt)
     endif
+    let result = substitute(result, '\s\+', ' ', 'g')
+    return result
 endfunction
 " parse programs
 function! floaterm#enhance#parse_programs(programs, type) abort
