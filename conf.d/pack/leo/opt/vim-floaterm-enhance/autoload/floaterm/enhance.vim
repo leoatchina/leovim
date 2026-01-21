@@ -214,7 +214,9 @@ function! floaterm#enhance#parse_opt(...) abort
         let optstr = trim(a:1)
         " autoclose
         let autoclose = floaterm#enhance#get_opt_param(optstr, 'autoclose')
-        if !empty(autoclose)
+        if empty(autoclose)
+            let autoclose_opt = '--autoclose=0'
+        else
             let autoclose_opt = '--autoclose=' . autoclose
         endif
         " width
@@ -275,10 +277,7 @@ function! floaterm#enhance#parse_opt(...) abort
             let height_opt = '--height=' . float_ratio
         endif
     endif
-    " setup autoclose_opt and misc_opt
-    if (has('win32') || has('win64')) && empty(autoclose_opt)
-        let autoclose_opt = '--autoclose=0'
-    endif
+    " setup misc_opt
     let misc_opt = printf('%s %s %s', width_opt, height_opt, autoclose_opt)
     " return result: NOTE, wintype must be the first one
     if wintype_opt ==# '--wintype=float'
