@@ -164,14 +164,12 @@ endfunction
 " --------------------------------------------------------------
 " get file path/dir/line range
 " --------------------------------------------------------------
-function! floaterm#enhance#get_file_abspath() abort
-    return fnamemodify(expand('%'), ':p')
-endfunction
-
 function! floaterm#enhance#get_file_absdir() abort
-    return fnamemodify(expand('%'), ':p:h')
+    return substitute(expand('%:p:h', 1), '\', '/', 'g')
 endfunction
-
+function! floaterm#enhance#get_file_abspath() abort
+    return substitute(expand('%:p', 1), '\', '/', 'g')
+endfunction
 function! floaterm#enhance#get_file_line_range(start, end) abort
     let range = floaterm#enhance#get_file_abspath() . '#L' . a:start
     if a:start != a:end

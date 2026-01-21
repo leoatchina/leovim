@@ -38,9 +38,7 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-if pack#planned_leaderf()
-    nnoremap <silent><nowait><C-p> :LeaderfFile <C-r>=utils#get_root_dir()<Cr><Cr>
-elseif pack#planned_fzf()
+if pack#planned_fzf()
     nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 else
     nnoremap <silent><nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
