@@ -219,7 +219,7 @@ function! floaterm#enhance#parse_opt(...) abort
         " height
         let height = floaterm#enhance#get_opt_param(optstr, 'height')
         if !empty(height)
-            let width_opt = '--height=' . height
+            let height_opt = '--height=' . height
         endif
         " title
         let title = floaterm#enhance#get_opt_param(optstr, 'title')
