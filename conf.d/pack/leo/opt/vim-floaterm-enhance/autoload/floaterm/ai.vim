@@ -67,7 +67,7 @@ function! floaterm#ai#send_cr(stay_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if ai_bufnr
         call floaterm#terminal#open_existing(ai_bufnr)
-        call floaterm#terminal#send(ai_bufnr, ["\r"])
+        call floaterm#terminal#send(ai_bufnr, ["\r"], 0)
         if a:stay_curr
             wincmd p
             if has('nvim')
@@ -102,7 +102,7 @@ endfunction
 " --------------------------------------------------------------
 " send file path with line range to latest AI terminal
 " --------------------------------------------------------------
-function! floaterm#ai#_send(type, stary_curr, ...) abort
+function! floaterm#ai#send_to_ai(type, stary_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if !ai_bufnr
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
@@ -125,7 +125,7 @@ function! floaterm#ai#_send(type, stary_curr, ...) abort
         return
     endif
     call floaterm#terminal#open_existing(ai_bufnr)
-    call floaterm#terminal#send(ai_bufnr, [content])
+    call floaterm#terminal#send(ai_bufnr, [content], 0)
     if a:stary_curr
         wincmd p
         if has('nvim')
@@ -142,15 +142,15 @@ function! floaterm#ai#send_line_range(stay_curr, ...) abort
         let firstline = line('.')
         let lastline = firstline
     endif
-    call floaterm#ai#_send('range', a:stay_curr, firstline, lastline)
+    call floaterm#ai#send_to_ai('range', a:stay_curr, firstline, lastline)
 endfunction
 " send file
 function! floaterm#ai#send_file(stay_curr) abort
-    call floaterm#ai#_send('file', a:stay_curr)
+    call floaterm#ai#send_to_ai('file', a:stay_curr)
 endfunction
 " send dir
 function! floaterm#ai#send_dir(stay_curr) abort
-    call floaterm#ai#_send('dir', a:stay_curr)
+    call floaterm#ai#send_to_ai('dir', a:stay_curr)
 endfunction
 " --------------------------------------------------------------
 " fzf file picker with root dir files -> send paths to latest AI terminal
@@ -161,7 +161,7 @@ function! floaterm#ai#fzf_file_sink(ai_bufnr, stay_curr, lines) abort
         call floaterm#enhance#showmsg('No file selected', 1)
     else
         call floaterm#terminal#open_existing(ai_bufnr)
-        call floaterm#terminal#send(ai_bufnr, [floaterm#ai#at(a:lines)])
+        call floaterm#terminal#send(ai_bufnr, [floaterm#ai#at(a:lines)], 0)
         if a:stay_curr
             wincmd p
             if has('nvim')
