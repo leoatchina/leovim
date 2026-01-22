@@ -41,7 +41,7 @@ elseif executable('zsh') && has('nvim') && pack#installed_adv()
     let g:floaterm_shell = 'zsh'
 endif
 command! FloatermCommands call FzfCallCommands('FloatermCommands', 'Floaterm')
-nnoremap <silent><Tab>: :FloatermCommands<Cr>
+nnoremap <silent><leader>: :FloatermCommands<Cr>
 " ---------------------------------------------------------
 " enhanced functions and commands
 " ---------------------------------------------------------

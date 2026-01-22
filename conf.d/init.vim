@@ -207,12 +207,9 @@ nnoremap <silent>d<space> :call utils#trip_whitespace()<Cr>
 if has('nvim')
     function! s:open_in_other()
         if utils#is_vscode() && executable(get(g:, 'open_neovim', ''))
-            call VSCodeNotify('copyFilePath')
-            let p = fnameescape(@*)
-            silent! exec printf('!%s +%d "%s"', g:open_neovim, line('.'), p)
+            silent! exec printf('!%s +%d "%s"', g:open_neovim, line('.'), utils#abs_path())
         elseif !utils#is_vscode() && executable(get(g:, 'open_editor', 'code'))
-            let editor = get(g:, 'open_editor', 'code')
-            silent! exec printf("!%s --goto %s:%d:%d", editor, utils#abs_path(), line("."), col("."))
+            silent! exec printf("!%s --goto %s:%d:%d", g:open_editor, utils#abs_path(), line("."), col("."))
         else
             echom "Cannot open current file in other editor."
         endif

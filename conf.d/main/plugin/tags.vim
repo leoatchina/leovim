@@ -133,7 +133,6 @@ if pack#planned('vim-gutentags')
     command! -bar GutentagsDelTags call s:delete_tags()
     command! GutentagsDelTagsAndUpdate GutentagsDelTags | GutentagsUpdate
     nnoremap <leader>g<Cr> :GutentagsUpdate<Cr>
-    nnoremap <leader>g<Tab> :GutentagsDelTags<Cr>
     nnoremap <leader>g<Space> :GutentagsDelTagsAndUpdate<Cr>
     command! GutentagsCommands call FzfCallCommands('GutentagsCommands', 'Gutentags')
     nnoremap <leader>g: :GutentagsCommands<Cr>

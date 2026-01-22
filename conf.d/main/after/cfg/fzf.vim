@@ -1,9 +1,10 @@
 let $FZF_DEFAULT_OPTS='--layout=reverse --inline-info --bind ctrl-b:preview-up,ctrl-f:preview-down,ctrl-a:select-all'
 let g:fzf_vim = {}
-au FileType fzf tnoremap <buffer> <C-j> <Down>
-au FileType fzf tnoremap <buffer> <C-k> <Up>
-au FileType fzf tnoremap <buffer> <C-n> <Nop>
-au FileType fzf tnoremap <buffer> <C-p> <Nop>
+au! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+au! FileType fzf tnoremap <buffer><C-j> <Down>
+au! FileType fzf tnoremap <buffer><C-k> <Up>
+au! FileType fzf tnoremap <buffer><C-n> <Nop>
+au! FileType fzf tnoremap <buffer><C-p> <Nop>
 " preview position
 let g:fzf_vim.command_prefix = 'Fzf'
 " [Buffers] Jump to the existing window if possible
@@ -147,5 +148,3 @@ function FzfCallCommands(prompt, ...)
                 \ 'options': printf('+m --ansi --header-lines=1 --expect=ctrl-e --tiebreak=index --prompt "%s> "', prompt)
                 \ }, l:fzf_layout), 0)
 endfunction
-autocmd! FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-
