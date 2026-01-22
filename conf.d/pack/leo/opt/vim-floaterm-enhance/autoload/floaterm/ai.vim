@@ -63,10 +63,10 @@ function! floaterm#ai#start(now) abort
     let t:floaterm_program_bufnr = -1
     if a:now
         let [cmd, opts, type] = programs[0]
-        call floaterm#enhance#cmd_run(cmd, opts, type)
+        call floaterm#enhance#cmd_run(cmd, opts, type, 0)
         call floaterm#ai#set_ai_bufnr()
     else
-        call floaterm#enhance#fzf_run(programs, 'FloatermAI', function('floaterm#ai#set_ai_bufnr'))
+        call floaterm#enhance#fzf_run(programs, 'FloatermAI', function('floaterm#ai#set_ai_bufnr'), 0)
     endif
 endfunction
 " ------------------------------------------------------
