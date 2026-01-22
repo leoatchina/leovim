@@ -41,7 +41,7 @@ function! floaterm#asyncrun#run(opts, floaterm_wintype, position)
         FloatermHide!
     endif
     let cd = 'cd ' . shellescape(getcwd())
-    call floaterm#window#open(floaterm_bufnr)
+    call floaterm#terminal#open_existing(floaterm_bufnr)
     call floaterm#terminal#send(floaterm_bufnr, [cd])
     call floaterm#terminal#send(floaterm_bufnr, [a:opts.cmd])
     let ft = &filetype

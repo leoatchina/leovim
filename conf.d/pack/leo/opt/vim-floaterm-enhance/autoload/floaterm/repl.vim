@@ -146,7 +146,7 @@ endfunction
 function! floaterm#repl#send_cr_or_start(start, stay_curr, ...) abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
-        call floaterm#window#open(repl_bufnr)
+        call floaterm#terminal#open_existing(repl_bufnr)
         call floaterm#terminal#send(repl_bufnr, [""])
     elseif a:start
         call floaterm#repl#start(a:0 && a:1 ? 1:0)
@@ -234,7 +234,7 @@ function! floaterm#repl#send_word(...) abort
     endif
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
-        call floaterm#window#open(repl_bufnr)
+        call floaterm#terminal#open_existing(repl_bufnr)
         call floaterm#terminal#send(repl_bufnr, [word])
     endif
 endfunction
@@ -245,7 +245,7 @@ function! floaterm#repl#send_clear() abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         if has_key(g:floaterm_repl_clear, &ft) && g:floaterm_repl_clear[&ft] != ''
-            call floaterm#window#open(repl_bufnr)
+            call floaterm#terminal#open_existing(repl_bufnr)
             call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_clear[&ft]])
         endif
     else
@@ -259,7 +259,7 @@ function! floaterm#repl#send_exit() abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr > 0
         if has_key(g:floaterm_repl_exit, &ft) && g:floaterm_repl_exit[&ft] != ''
-            call floaterm#window#open(repl_bufnr)
+            call floaterm#terminal#open_existing(repl_bufnr)
             call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_exit[&ft]])
         endif
     else
@@ -283,7 +283,7 @@ function! floaterm#repl#send_contents(contents, ft, repl_bufnr, stay_curr, jump_
         if len(contents) > 1 && contents[-1] =~# '^\s\+' && a:ft ==# 'python'
             call add(contents, "")
         endif
-        call floaterm#window#open(a:repl_bufnr)
+        call floaterm#terminal#open_existing(a:repl_bufnr)
         call floaterm#terminal#send(a:repl_bufnr, contents)
     endif
     if a:stay_curr == 0
