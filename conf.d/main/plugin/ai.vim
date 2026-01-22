@@ -2,9 +2,9 @@ if utils#is_vscode()
     finish
 endif
 if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') && !empty(g:floaterm_ai_programs) && type(g:floaterm_ai_programs) == type([])
-    nnoremap <silent><M-i>r    :FloatermAiStart!<Cr>
-    nnoremap <silent><M-i>R    :FloatermAiStart<Cr>
-    nnoremap <silent><M-i><Cr> :FloatermAiSendCr<Cr>
+    nnoremap <silent><M-i>r     :FloatermAiStart!<Cr>
+    nnoremap <silent><M-i><Tab> :FloatermAiStart<Cr>
+    nnoremap <silent><M-i><Cr>  :FloatermAiSendCr<Cr>
     " send
     nnoremap <silent><M-I>      :FloatermAiFzfFiles!<Cr>
     nnoremap <silent><M-i><M-i> :FloatermAiFzfFiles<Cr>
