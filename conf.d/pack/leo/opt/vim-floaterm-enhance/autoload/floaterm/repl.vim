@@ -45,8 +45,8 @@ function! floaterm#repl#set_repl_bufnr(...) abort
     endif
     if a:0 > 1 && type(a:2) == type(0)
         let prog_bufnr = a:2
-    elseif exists('t:floaterm_program_bufnr')
-        let prog_bufnr = t:floaterm_program_bufnr
+    elseif exists('t:floaterm_enhance_bufnur')
+        let prog_bufnr = t:floaterm_enhance_bufnur
     else
         let prog_bufnr = 0
     endif
@@ -129,11 +129,9 @@ function! floaterm#repl#start(now) abort
             call floaterm#enhance#showmsg("No REPL program available for " . &ft, 1)
             return
         endif
-        " XXX: -1:没有run 过， 0 :run cmd but fail,  > 0 -> floaterm_bufnr
-        let t:floaterm_program_bufnr = -1
         if a:now
             let [cmd, opts, type] = programs[0]
-            call floaterm#enhance#cmd_run(cmd, opts, type)
+            call floaterm#enhance#cmd_run(cmd, opts, type, function('floaterm#repl#set_repl_bufnr'))
             call floaterm#repl#set_repl_bufnr()
         else
             call floaterm#enhance#fzf_run(programs, 'FloatermREPL', function('floaterm#repl#set_repl_bufnr'))

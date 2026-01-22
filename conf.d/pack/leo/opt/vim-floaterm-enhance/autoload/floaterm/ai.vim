@@ -26,8 +26,8 @@ function! floaterm#ai#set_ai_bufnr(...) abort
     let all_bufnrs = floaterm#buflist#gather()
     if a:0 && type(a:1) == type(0)
         let bufnr = a:1
-    elseif exists('t:floaterm_program_bufnr')
-        let bufnr = t:floaterm_program_bufnr
+    elseif exists('t:floaterm_enhance_bufnur')
+        let bufnr = t:floaterm_enhance_bufnur
     else
         let bufnr = 0
     endif
@@ -37,12 +37,6 @@ function! floaterm#ai#set_ai_bufnr(...) abort
     call filter(t:floaterm_ai_lst, {_, v -> v != bufnr && index(all_bufnrs, v) >= 0})
     " call floaterm#config#set(bufnr, 'program', 'AI')
     call insert(t:floaterm_ai_lst, bufnr, 0)
-endfunction
-function! floaterm#ai#async_set_ai_bufnr(...) abort
-    while exists('t:floaterm_program_bufnr') && t:floaterm_program_bufnr < 0
-        sleep 50m
-    endwhile
-    call floaterm#ai#set_ai_bufnr()
 endfunction
 " --------------------------------------------------------------
 " get programs
@@ -59,12 +53,9 @@ function! floaterm#ai#start(now) abort
         call floaterm#enhance#showmsg("No AI programs available ", 1)
         return
     endif
-    " XXX: -1:没有run 过， 0 :run cmd but fail,  > 0 -> floaterm_bufnr
-    let t:floaterm_program_bufnr = -1
     if a:now
         let [cmd, opts, type] = programs[0]
-        call floaterm#enhance#cmd_run(cmd, opts, type, 0)
-        call floaterm#ai#set_ai_bufnr()
+        call floaterm#enhance#cmd_run(cmd, opts, type, function('floaterm#ai#set_ai_bufnr'), 0)
     else
         call floaterm#enhance#fzf_run(programs, 'FloatermAI', function('floaterm#ai#set_ai_bufnr'), 0)
     endif

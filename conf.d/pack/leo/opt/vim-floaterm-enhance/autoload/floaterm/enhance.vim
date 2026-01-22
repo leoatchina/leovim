@@ -324,24 +324,38 @@ endfunction
 " --------------------------------------------------------------
 " fzf select and run programs
 " --------------------------------------------------------------
-function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
+function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
     let wincmdp = a:0 && type(a:1) == type(0) ? a:1 : 1
-    try
-        let command = printf('FloatermNew %s %s', a:opts, a:cmd)
-        call execute(command)
-        sleep 100m
-        let t:floaterm_program_bufnr = floaterm#buflist#curr()
-        call floaterm#config#set(t:floaterm_program_bufnr, 'program', a:type)
-        if wincmdp
-            wincmd p
-            if has('nvim')
-                stopinsert
-            endif
+    let cmd = a:cmd
+    let opts = a:opts
+    let type = a:type
+    let wintype = floaterm#enhance#get_opt_param(opts, 'wintype')
+    let position = floaterm#enhance#get_opt_param(opts, 'position')
+    " check all bufs to find if the floaterm has been opened
+    let t:floaterm_enhance_bufnr = 0
+    let check_string = printf("%s-%s-%s", cmd, wintype, position)
+    for bufnr in floaterm#buflist#gather()
+        let cmd = floaterm#config#get(bufnr, 'cmd', '')
+        let wintype = floaterm#config#get(bufnr, 'wintype', '')
+        let position = floaterm#config#get(bufnr, 'position', '')
+        if check_string ==# printf("%s-%s-%s", cmd, wintype, position)
+            let t:floaterm_enhance_bufnr = bufnr
+            call call(a:callback, [t:floaterm_enhance_bufnr])
+            return
         endif
-    catch /.*/
-        call floaterm#enhance#showmsg('Failed to run program: ' . cmd, 1)
-        let t:floaterm_program_bufnr = 0
-    endtry
+    endfor
+    " if not found, open nen
+    call execute(printf('FloatermNew %s %s', opts, cmd))
+    sleep 100m
+    let t:floaterm_enhance_bufnr = floaterm#buflist#curr()
+    call floaterm#config#set(t:floaterm_enhance_bufnr, 'program', a:type)
+    call call(a:callback, [t:floaterm_enhance_bufnr])
+    if wincmdp
+        wincmd p
+        if has('nvim')
+            stopinsert
+        endif
+    endif
 endfunction
 
 function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
@@ -394,8 +408,7 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
             return
         else
             let [cmd, opts, type] = l:program_map[l:selected]
-            call floaterm#enhance#cmd_run(cmd, opts, type, l:wincmdp)
-            call call(a:callback, [t:floaterm_program_bufnr])
+            call floaterm#enhance#cmd_run(cmd, opts, type, a:callback, l:wincmdp)
         endif
     endfunction
     " fzf run spect
