@@ -75,6 +75,7 @@ endfunction
 function! floaterm#ai#send_cr(stay_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if ai_bufnr
+        call floaterm#window#open(ai_bufnr)
         call floaterm#terminal#send(ai_bufnr, ["\r"])
         if a:stay_curr
             wincmd p
@@ -132,6 +133,7 @@ function! floaterm#ai#_send(type, stary_curr, ...) abort
     if empty(content)
         return
     endif
+    call floaterm#window#open(ai_bufnr)
     call floaterm#terminal#send(ai_bufnr, [content])
     if a:stary_curr
         wincmd p
@@ -163,10 +165,12 @@ endfunction
 " fzf file picker with root dir files -> send paths to latest AI terminal
 " --------------------------------------------------------------
 function! floaterm#ai#fzf_file_sink(ai_bufnr, stay_curr, lines) abort
+    let ai_bufnr = a:ai_bufnr
     if empty(a:lines)
         call floaterm#enhance#showmsg('No file selected', 1)
     else
-        call floaterm#terminal#send(a:ai_bufnr, [floaterm#ai#at(a:lines)])
+        call floaterm#window#open(ai_bufnr)
+        call floaterm#terminal#send(ai_bufnr, [floaterm#ai#at(a:lines)])
         if a:stay_curr
             wincmd p
             if has('nvim')
