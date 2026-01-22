@@ -17,7 +17,9 @@ function! floaterm#ai#get_ai_bufnr(...) abort
     if empty(t:floaterm_ai_lst)
         return 0
     else
-        return t:floaterm_ai_lst[0]
+        let ai_bufnr = t:floaterm_ai_lst[0]
+        call floaterm#terminal#open_existing(ai_bufnr)
+        return ai_bufnr
     endif
 endfunction
 function! floaterm#ai#set_ai_bufnr(...) abort
@@ -75,7 +77,6 @@ endfunction
 function! floaterm#ai#send_cr(stay_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if ai_bufnr
-        call floaterm#terminal#open_existing(ai_bufnr)
         call floaterm#terminal#send(ai_bufnr, ["\r"])
         if a:stay_curr
             wincmd p
@@ -133,7 +134,6 @@ function! floaterm#ai#_send(type, stary_curr, ...) abort
     if empty(content)
         return
     endif
-    call floaterm#terminal#open_existing(ai_bufnr)
     call floaterm#terminal#send(ai_bufnr, [content])
     if a:stary_curr
         wincmd p
@@ -169,7 +169,6 @@ function! floaterm#ai#fzf_file_sink(ai_bufnr, stay_curr, lines) abort
     if empty(a:lines)
         call floaterm#enhance#showmsg('No file selected', 1)
     else
-        call floaterm#terminal#open_existing(ai_bufnr)
         call floaterm#terminal#send(ai_bufnr, [floaterm#ai#at(a:lines)])
         if a:stay_curr
             wincmd p
