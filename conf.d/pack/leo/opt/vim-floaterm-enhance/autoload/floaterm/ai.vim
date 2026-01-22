@@ -132,7 +132,7 @@ function! floaterm#ai#_send(type, stary_curr, ...) abort
     if empty(content)
         return
     endif
-    call floaterm#terminal#send(ai_bufnr, [content], 0)
+    call floaterm#terminal#send(ai_bufnr, [content])
     if a:stary_curr
         wincmd p
         if has('nvim')
@@ -166,7 +166,7 @@ function! floaterm#ai#fzf_file_sink(ai_bufnr, stay_curr, lines) abort
     if empty(a:lines)
         call floaterm#enhance#showmsg('No file selected', 1)
     else
-        call floaterm#terminal#send(a:ai_bufnr, [floaterm#ai#at(a:lines)], 0)
+        call floaterm#terminal#send(a:ai_bufnr, [floaterm#ai#at(a:lines)])
         if a:stay_curr
             wincmd p
             if has('nvim')
