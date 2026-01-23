@@ -18,7 +18,6 @@ function! floaterm#ai#get_ai_bufnr(...) abort
         return 0
     else
         let ai_bufnr = t:floaterm_ai_lst[0]
-        call floaterm#terminal#open_existing(ai_bufnr)
         return ai_bufnr
     endif
 endfunction
