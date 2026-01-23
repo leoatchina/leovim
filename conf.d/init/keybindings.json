@@ -611,7 +611,6 @@
     "key": "ctrl+`",
     "command": "workbench.view.extension.Lingma"
   },
-  // ----------------- cline ----------------
   // ----------------- kilocode ----------------
   {
     "key": "ctrl+y",
@@ -666,5 +665,46 @@
     "key": "ctrl+alt+l",
     "command": "github.copilot.chat.attachFile",
     "when": "editorTextFocus && github.copilot-chat.activated"
+  },
+  // ----------------- claude ----------------
+  {
+    "key": "ctrl+'",
+    "command": "claude-vscode.blur",
+    "when": "!config.claudeCode.useTerminal && !editorTextFocus"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.blur",
+    "when": "!config.claudeCode.useTerminal && !editorTextFocus"
+  },
+  {
+    "key": "ctrl+'",
+    "command": "claude-vscode.focus",
+    "when": "editorTextFocus && !config.claudeCode.useTerminal"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.focus",
+    "when": "editorTextFocus && !config.claudeCode.useTerminal"
+  },
+  {
+    "key": "ctrl+shift+'",
+    "command": "claude-vscode.editor.open",
+    "when": "!config.claudeCode.useTerminal"
+  },
+  {
+    "key": "ctrl+shift+escape",
+    "command": "-claude-vscode.editor.open",
+    "when": "!config.claudeCode.useTerminal"
+  },
+  {
+    "key": "ctrl+'",
+    "command": "claude-vscode.terminal.open.keyboard",
+    "when": "config.claudeCode.useTerminal"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.terminal.open.keyboard",
+    "when": "config.claudeCode.useTerminal"
   }
 ]
