@@ -191,8 +191,8 @@ function! floaterm#enhance#get_opt_param(optstr, check) abort
     return matchstr(optstr, pat)
 endfunction
 function! floaterm#enhance#parse_opt(...) abort
-    let col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 3)
-    let prog_ratio = get(g:, 'floaterm_prog_ratio', 0.38)
+    let col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 2.5)
+    let split_ration = get(g:, 'floaterm_prog_split_ratio', 0.38)
     let float_ratio = get(g:, 'floaterm_prog_float_ratio', 0.45)
     " postions
     let basic_postions = ['auto', 'center', 'right', 'bottom', 'left', 'top', 'leftabove', 'aboveleft', 'rightbelow', 'belowright', 'botright']
@@ -266,9 +266,9 @@ function! floaterm#enhance#parse_opt(...) abort
         endif
     endif
     if open_position == 'right' && empty(width_opt)
-        let width_opt = '--width=' . prog_ratio
+        let width_opt = '--width=' . split_ration
     elseif open_position == 'bottom' && empty(height_opt)
-        let height_opt = '--height=' . prog_ratio
+        let height_opt = '--height=' . split_ration
     else
         if empty(width_opt)
             let width_opt = '--width=' . float_ratio

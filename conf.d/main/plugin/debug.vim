@@ -435,32 +435,32 @@ nnoremap - :WatchCword<CR>
 " -----------------------------------------------------------------------------------------
 if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
     " NOTE: ! means keep in current line
-    nnoremap <silent><M-e>r :FloatermReplStart<Cr>
-    nnoremap <silent><M-e><Cr> :FloatermReplSendCrOrStartNow<Cr>
+    nnoremap <silent><M-i>r :FloatermReplStart<Cr>
+    nnoremap <silent><M-i><Cr> :FloatermReplSendCrOrStartNow<Cr>
     " repl line send
-    nnoremap <silent><M-e>n :FloatermReplSend<Cr>
-    nnoremap <silent><M-e>l :FloatermReplSend!<Cr>
-    xnoremap <silent><M-e>n :FloatermReplSend<Cr>
-    xnoremap <silent><M-e>l :FloatermReplSend!<Cr>
-    nnoremap <silent><M-e>q :FloatermReplSendExit<Cr>
-    nnoremap <silent><M-e>L :FloatermReplSendClear<Cr>
+    nnoremap <silent><M-i>n :FloatermReplSend<Cr>
+    nnoremap <silent><M-i>l :FloatermReplSend!<Cr>
+    xnoremap <silent><M-i>n :FloatermReplSend<Cr>
+    xnoremap <silent><M-i>l :FloatermReplSend!<Cr>
+    nnoremap <silent><M-i>q :FloatermReplSendExit<Cr>
+    nnoremap <silent><M-i>L :FloatermReplSendClear<Cr>
     " repl block send
-    xnoremap <silent><M-e><M-e>   :FloatermReplSend<Cr>
-    xnoremap <silent><M-e><Space> :FloatermReplSend!<Cr>
-    nnoremap <silent><M-e><M-e>   :FloatermReplSendBlock<Cr>
-    nnoremap <silent><M-e><Space> :FloatermReplSendBlock!<Cr>
+    xnoremap <silent><M-i><M-i>   :FloatermReplSend<Cr>
+    xnoremap <silent><M-i><Space> :FloatermReplSend!<Cr>
+    nnoremap <silent><M-i><M-i>   :FloatermReplSendBlock<Cr>
+    nnoremap <silent><M-i><Space> :FloatermReplSendBlock!<Cr>
     " repl send above/below/all lines
-    nnoremap <silent><M-e>b :FloatermReplSendFromBegin!<Cr>
-    nnoremap <silent><M-e>e :FloatermReplSendToEnd!<Cr>
-    nnoremap <silent><M-e>a :FloatermReplSendAll!<Cr>
+    nnoremap <silent><M-i>b :FloatermReplSendFromBegin!<Cr>
+    nnoremap <silent><M-i>e :FloatermReplSendToEnd!<Cr>
+    nnoremap <silent><M-i>a :FloatermReplSendAll!<Cr>
     " repl send word
-    nnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
-    xnoremap <silent><M-e>k :FloatermReplSendWord<Cr>
+    nnoremap <silent><M-i>k :FloatermReplSendWord<Cr>
+    xnoremap <silent><M-i>k :FloatermReplSendWord<Cr>
     " repl mark print send
-    nnoremap <silent><M-e>m :FloatermReplMark<Cr>
-    xnoremap <silent><M-e>m :FloatermReplMark<Cr>
-    nnoremap <silent><M-e>s :FloatermReplSendMark<Cr>
-    nnoremap <silent><M-e>S :FloatermReplShowMark<Cr>
+    nnoremap <silent><M-i>m :FloatermReplMark<Cr>
+    xnoremap <silent><M-i>m :FloatermReplMark<Cr>
+    nnoremap <silent><M-i>s :FloatermReplSendMark<Cr>
+    nnoremap <silent><M-i>S :FloatermReplShowMark<Cr>
 endif
 " ---------------------------------------
 " jupynvim
