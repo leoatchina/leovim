@@ -433,9 +433,14 @@ nnoremap - :WatchCword<CR>
 " -----------------------------------------------------------------------------------------
 " using vim-floaterm-enhance to do repl/run/ai. NOTE: below bang[!] means cursor not move
 " -----------------------------------------------------------------------------------------
+nnoremap <M-i><M-i> <C-w><C-w>
+inoremap <M-i><M-i> <ESC><C-w><C-w>
+xnoremap <M-i><M-i> <ESC><C-w><C-w>
 if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
+    tnoremap <M-i><M-i> <C-\><C-n><C-w><C-w>
     " NOTE: ! means keep in current line
-    nnoremap <silent><M-i>r :FloatermReplStart<Cr>
+    nnoremap <silent><M-i>r :FloatermReplStart!<Cr>
+    nnoremap <silent><M-i>; :FloatermReplStart<Cr>
     nnoremap <silent><M-i><Cr> :FloatermReplSendCrOrStartNow<Cr>
     " repl line send
     nnoremap <silent><M-i>n :FloatermReplSend<Cr>
@@ -445,10 +450,10 @@ if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
     nnoremap <silent><M-i>q :FloatermReplSendExit<Cr>
     nnoremap <silent><M-i>L :FloatermReplSendClear<Cr>
     " repl block send
-    xnoremap <silent><M-i><M-i>   :FloatermReplSend<Cr>
-    xnoremap <silent><M-i><Space> :FloatermReplSend!<Cr>
-    nnoremap <silent><M-i><M-i>   :FloatermReplSendBlock<Cr>
-    nnoremap <silent><M-i><Space> :FloatermReplSendBlock!<Cr>
+    xnoremap <silent><M-i><Space> :FloatermReplSend<Cr>
+    xnoremap <silent><M-i><Tab>   :FloatermReplSend!<Cr>
+    nnoremap <silent><M-i><Space> :FloatermReplSendBlock<Cr>
+    nnoremap <silent><M-i><Tab>   :FloatermReplSendBlock!<Cr>
     " repl send above/below/all lines
     nnoremap <silent><M-i>b :FloatermReplSendFromBegin!<Cr>
     nnoremap <silent><M-i>e :FloatermReplSendToEnd!<Cr>
