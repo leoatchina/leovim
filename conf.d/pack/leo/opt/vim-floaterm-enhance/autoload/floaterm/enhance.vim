@@ -334,10 +334,10 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
     " check all bufs to find if the floaterm has been opened
     let check_string = printf("%s-%s-%s", cmd, wintype, position)
     for bufnr in floaterm#buflist#gather()
-        let cmd = floaterm#config#get(bufnr, 'cmd', '')
-        let wintype = floaterm#config#get(bufnr, 'wintype', '')
-        let position = floaterm#config#get(bufnr, 'position', '')
-        if check_string ==# printf("%s-%s-%s", cmd, wintype, position)
+        let buf_cmd = floaterm#config#get(bufnr, 'cmd', '')
+        let buf_wintype = floaterm#config#get(bufnr, 'wintype', '')
+        let buf_position = floaterm#config#get(bufnr, 'position', '')
+        if check_string ==# printf("%s-%s-%s", buf_cmd, buf_wintype, buf_position)
             call call(a:callback, [bufnr])
             return
         endif
