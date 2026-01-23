@@ -116,8 +116,8 @@ endif
 " AI complete
 " ------------------------------
 if has('nvim-0.10') && pack#get('minuet-ai') && (
-    \  exists('$GEMINI_API_KEY') ||
     \  exists('$DEEPSEEK_API_KEY') ||
+    \  exists('$GEMINI_API_KEY') ||
     \  exists('$OPENAI_API_KEY') ||
     \  exists('$CODESTRAL_API_KEY') ||
     \  exists('$ANTHROPIC_API_KEY') ||
@@ -128,9 +128,17 @@ if has('nvim-0.10') && pack#get('minuet-ai') && (
     PlugAdd 'milanglacier/minuet-ai.nvim'
 elseif has('patch-9.0.0185') || has('nvim')
     if pack#get('windsurf')
-        PlugAdd 'Exafunction/windsurf.vim'
-    elseif pack#get('copilot') && !pack#get('copilot_plus') && g:node_version > 18
-        PlugAdd 'github/copilot.vim'
+        if has('nvim')
+            PlugAdd 'Exafunction/windsurf.lua'
+        else
+            PlugAdd 'Exafunction/windsurf.vim'
+        endif
+    elseif pack#get('copilot') && g:node_version > 18
+        if has('nvim')
+            PlugAdd 'zbirenbaum/copilot.lua'
+        else
+            PlugAdd 'github/copilot.vim'
+        endif
     endif
 endif
 " ------------------------------
