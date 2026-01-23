@@ -43,6 +43,7 @@ xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " quick jump in buffer
 " ------------------------
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
+let g:EasyMotion_leader_key = 's'
 if has('nvim')
     PlugAdd 'flash.nvim'
 else
