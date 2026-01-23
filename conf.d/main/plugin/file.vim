@@ -227,6 +227,7 @@ if get(g:, 'leovim_openmap', 1)
         let f = utils#expand(a:f)
         exec "tabe " . f
     endfunction
+    nnoremap <silent><M-h>S :so  ~/.vimrc.opt<Cr>
     nnoremap <silent><M-h>i :call file#open_in_tab("$CONF_D_DIR/init.vim")<Cr>
     nnoremap <silent><M-h>O :call file#open_in_tab("$INIT_DIR/opt.vim")<Cr>
     nnoremap <silent><M-h>v :call file#open_in_tab("$INIT_DIR/vscode.vim")<Cr>
