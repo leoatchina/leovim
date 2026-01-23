@@ -205,20 +205,12 @@ function! floaterm#enhance#parse_opt(...) abort
     else
         let wintypes = ['split', 'vsplit']
     endif
-    let autoclose_opt = ''
     let width_opt = ''
     let height_opt = ''
     let title_opt = ''
     let wintype_opt = ''
     if a:0 && type(a:1) == type('') && len(trim(a:1))
         let optstr = trim(a:1)
-        " autoclose
-        let autoclose = floaterm#enhance#get_opt_param(optstr, 'autoclose')
-        if empty(autoclose)
-            let autoclose_opt = '--autoclose=0'
-        else
-            let autoclose_opt = '--autoclose=' . autoclose
-        endif
         " width
         let width = floaterm#enhance#get_opt_param(optstr, 'width')
         if !empty(width)
@@ -278,7 +270,7 @@ function! floaterm#enhance#parse_opt(...) abort
         endif
     endif
     " setup misc_opt
-    let misc_opt = printf('%s %s %s', width_opt, height_opt, autoclose_opt)
+    let misc_opt = printf('%s %s', width_opt, height_opt)
     " return result: NOTE, wintype must be the first one
     if wintype_opt ==# '--wintype=float'
         if open_position ==# 'auto'
@@ -331,7 +323,7 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
     let type = a:type
     let wintype = floaterm#enhance#get_opt_param(opts, 'wintype')
     let position = floaterm#enhance#get_opt_param(opts, 'position')
-    " check all bufs to find if the floaterm has been opened
+    " check all bufs to find if the the same command has been opened
     let check_string = printf("%s-%s-%s", cmd, wintype, position)
     for bufnr in floaterm#buflist#gather()
         let buf_cmd = floaterm#config#get(bufnr, 'cmd', '')
@@ -342,9 +334,8 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
             return
         endif
     endfor
-    " if not found, open nen
+    " Using FloatermNeow to open new prog floaterm terminal
     call execute(printf('FloatermNew %s %s', opts, cmd))
-    sleep 50m
     let bufnr = floaterm#buflist#curr()
     call floaterm#config#set(bufnr, 'program', a:type)
     call call(a:callback, [bufnr])
