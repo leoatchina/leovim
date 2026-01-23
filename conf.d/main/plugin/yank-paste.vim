@@ -249,10 +249,10 @@ xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
 " ------------------------
 " pastemode toggle
 " ------------------------
-inoremap <C-x><C-i> <C-\><C-o>:set paste<Cr>
-onoremap <C-w><C-i> :set paste<CR>
-nnoremap <C-w><C-i> :set paste<Cr>
-xnoremap <C-w><C-i> :set paste<Cr>
+inoremap <M-I> <C-\><C-o>:set paste<Cr>
+onoremap <M-I> :set paste<CR>
+nnoremap <M-I> :set paste<Cr>
+xnoremap <M-I> :set paste<Cr>
 augroup AutoPasteMode
     autocmd!
     autocmd InsertLeave,CmdlineLeave * set nopaste
