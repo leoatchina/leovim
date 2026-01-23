@@ -109,14 +109,11 @@ endif
 if has('nvim-0.10.3')
     PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
 endif
-if executable(get(g:, 'preview_markdown_parser', 'mdr')) && (has('nvim') || has('patch-8.1.1401'))
-    PlugAdd 'preview-markdown.vim'
-endif
 if pack#get('markdown')
     PlugAdd 'leoatchina/vim-table-mode'
     PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
     PlugAdd 'ferrine/md-img-paste.vim', {'for': 'markdown'}
-    if get(g:, 'node_version', 0) > 12 && (has('nvim') || v:version >= 801)
+    if g:node_version > 12 && (has('nvim') || v:version >= 801)
         PlugAdd 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
         PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
     elseif g:python_version > 0
