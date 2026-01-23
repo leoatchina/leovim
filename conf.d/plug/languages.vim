@@ -112,7 +112,7 @@ endif
 if pack#get('markdown')
     PlugAdd 'leoatchina/vim-table-mode'
     PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
-    PlugAdd 'ferrine/md-img-paste.vim', {'for': 'markdown'}
+    PlugAdd 'ferrine/md-img-paste.vim', {'for': ['markdown', 'vim-plug', 'txt', 'latex']}
     if g:node_version > 12 && (has('nvim') || v:version >= 801)
         PlugAdd 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
         PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
