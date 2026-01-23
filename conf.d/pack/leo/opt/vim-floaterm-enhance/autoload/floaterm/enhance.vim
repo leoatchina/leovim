@@ -332,24 +332,22 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
     let wintype = floaterm#enhance#get_opt_param(opts, 'wintype')
     let position = floaterm#enhance#get_opt_param(opts, 'position')
     " check all bufs to find if the floaterm has been opened
-    let t:floaterm_enhance_bufnr = 0
     let check_string = printf("%s-%s-%s", cmd, wintype, position)
     for bufnr in floaterm#buflist#gather()
         let cmd = floaterm#config#get(bufnr, 'cmd', '')
         let wintype = floaterm#config#get(bufnr, 'wintype', '')
         let position = floaterm#config#get(bufnr, 'position', '')
         if check_string ==# printf("%s-%s-%s", cmd, wintype, position)
-            let t:floaterm_enhance_bufnr = bufnr
-            call call(a:callback, [t:floaterm_enhance_bufnr])
+            call call(a:callback, [bufnr])
             return
         endif
     endfor
     " if not found, open nen
     call execute(printf('FloatermNew %s %s', opts, cmd))
-    sleep 100m
-    let t:floaterm_enhance_bufnr = floaterm#buflist#curr()
-    call floaterm#config#set(t:floaterm_enhance_bufnr, 'program', a:type)
-    call call(a:callback, [t:floaterm_enhance_bufnr])
+    sleep 50m
+    let bufnr = floaterm#buflist#curr()
+    call floaterm#config#set(bufnr, 'program', a:type)
+    call call(a:callback, [bufnr])
     if wincmdp
         wincmd p
         if has('nvim')

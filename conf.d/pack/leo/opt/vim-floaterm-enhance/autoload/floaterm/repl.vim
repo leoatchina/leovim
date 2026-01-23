@@ -46,8 +46,6 @@ function! floaterm#repl#set_repl_bufnr(...) abort
     endif
     if a:0 > 1 && type(a:2) == type(0)
         let prog_bufnr = a:2
-    elseif exists('t:floaterm_enhance_bufnur')
-        let prog_bufnr = t:floaterm_enhance_bufnur
     else
         let prog_bufnr = 0
     endif

@@ -28,8 +28,6 @@ function! floaterm#ai#set_ai_bufnr(...) abort
     let all_bufnrs = floaterm#buflist#gather()
     if a:0 && type(a:1) == type(0)
         let bufnr = a:1
-    elseif exists('t:floaterm_enhance_bufnur')
-        let bufnr = t:floaterm_enhance_bufnur
     else
         let bufnr = 0
     endif
