@@ -11,14 +11,14 @@ if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') &&
     nnoremap <silent><M-e>; :FloatermAiStart<Cr>
     nnoremap <silent><M-e><Cr> :FloatermAiSendCr<Cr>
     " send, NOTE ! means start in curr editing buffer
-    nnoremap <silent><M-e><M-l> :FloatermAiSendLineRange!<Cr>
-    nnoremap <silent><M-e>l     :FloatermAiSendLineRange<Cr>
-    xnoremap <silent><M-e><M-l> :FloatermAiSendLineRange!<Cr>
-    xnoremap <silent><M-e>l     :FloatermAiSendLineRange<Cr>
-    nnoremap <silent><M-e><M-f> :FloatermAiSendFile!<Cr>
-    nnoremap <silent><M-e>f     :FloatermAiSendFile<Cr>
-    nnoremap <silent><M-e><M-d> :FloatermAiSendDir!<Cr>
-    nnoremap <silent><M-e>d     :FloatermAiSendDir<Cr>
-    nnoremap <silent><M-e><M-i> :FloatermAiFzfFiles!<Cr>
-    nnoremap <silent><M-e>i     :FloatermAiFzfFiles<Cr>
+    nnoremap <silent><M-e><BS> :FloatermAiSendLineRange!<Cr>
+    nnoremap <silent><M-e>l    :FloatermAiSendLineRange<Cr>
+    xnoremap <silent><M-e><BS> :FloatermAiSendLineRange!<Cr>
+    xnoremap <silent><M-e>l    :FloatermAiSendLineRange<Cr>
+    nnoremap <silent><M-e>=    :FloatermAiSendFile!<Cr>
+    nnoremap <silent><M-e>f    :FloatermAiSendFile<Cr>
+    nnoremap <silent><M-e>-    :FloatermAiSendDir!<Cr>
+    nnoremap <silent><M-e>d    :FloatermAiSendDir<Cr>
+    nnoremap <silent><M-e>0    :FloatermAiFzfFiles!<Cr>
+    nnoremap <silent><M-e>i    :FloatermAiFzfFiles<Cr>
 endif

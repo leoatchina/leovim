@@ -48,7 +48,7 @@ function! floaterm#asyncrun#run(opts, floaterm_wintype, position)
         if has('nvim')
             stopinsert | noa wincmd p
         elseif floaterm_wintype != 'float'
-            call feedkeys("\<C-_>w", "n")
+            call feedkeys("\<C-\>\<C-n>:wincmd p\<C-m>", "n")
         endif
     elseif ft == 'floaterm'
         call floaterm#util#startinsert()

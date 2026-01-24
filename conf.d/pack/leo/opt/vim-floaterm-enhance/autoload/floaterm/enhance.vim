@@ -318,11 +318,9 @@ endfunction
 " --------------------------------------------------------------
 function! floaterm#enhance#wincmdp() abort
     if has('nvim')
-        wincmd p
-        stopinsert
+        stopinsert | noa wincmd p
     else
-        call feedkeys('<C-\><C-n>')
-        wincmd p
+        call feedkeys("\<C-\>\<C-n>:wincmd p\<C-m>", "n")
     endif
 endfunction
 function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
@@ -349,10 +347,7 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
     call floaterm#config#set(bufnr, 'program', a:type)
     call call(a:callback, [bufnr])
     if wincmdp
-        wincmd p
-        if has('nvim')
-            stopinsert
-        endif
+        call floaterm#enhance#wincmdp()
     endif
 endfunction
 
