@@ -323,11 +323,28 @@ function! floaterm#enhance#wincmdp() abort
         call feedkeys("\<C-\>\<C-n>:wincmd p\<C-m>", "n")
     endif
 endfunction
-function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
-    let wincmdp = a:0 && type(a:1) == type(0) ? a:1 : 1
+function! floaterm#enhance#create_idx(...) abort
+    if a:0 && type(a:1) == type('') && a:1
+        let ft = a:1
+    else
+        let ft = &ft
+    endif
+    if a:0 && type(a:2) == type(0) && a:2
+        let bufnr = a:2
+    else
+        let bufnr = winbufnr(winnr())
+    endif
+    return ft . '-' . bufnr
+endfunction
+function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
+    let type = tolower(a:type)
+    if index(['ai', 'repl'], type) < 0
+        return
+    endif
+    let idx = floaterm#enhance#create_idx()
+    let wincmdp = a:0 && type(a:1) == type(0) && a:1 ? 1 : 0
     let cmd = a:cmd
     let opts = a:opts
-    let type = a:type
     let wintype = floaterm#enhance#get_opt_param(opts, 'wintype')
     let position = floaterm#enhance#get_opt_param(opts, 'position')
     " check all bufs to find if the the same command has been opened
@@ -345,23 +362,23 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
     call execute(printf('FloatermNew %s %s', opts, cmd))
     let bufnr = floaterm#buflist#curr()
     call floaterm#config#set(bufnr, 'program', a:type)
-    call call(a:callback, [bufnr])
+    if type ==# 'ai'
+        call floaterm#ai#set_ai_bufnr(bufnr)
+    elseif type ==# 'repl'
+        call floaterm#repl#set_repl_bufnr(bufnr, idx)
+    endif
     if wincmdp
         call floaterm#enhance#wincmdp()
     endif
 endfunction
 
-function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
-    if !exists('*fzf#run')
-        call floaterm#enhance#showmsg('fzf.vim is required for FloatermProgram', 1)
-        return
-    endif
+function! floaterm#enhance#fzf_run(programs, prompt, ...) abort
     if empty(a:programs)
         call floaterm#enhance#showmsg('No programs provided', 1)
         return
     endif
     let prompt = a:prompt
-    let l:wincmdp = a:0 && type(a:1) == type(0) ? a:1 : 1
+    let l:wincmdp = a:0 && type(a:1) == type(0) && a:1 ? 1 : 0
     let l:source = []
     let l:done = v:false
     let l:selected = v:null
@@ -401,7 +418,7 @@ function! floaterm#enhance#fzf_run(programs, prompt, callback, ...) abort
             return
         else
             let [cmd, opts, type] = l:program_map[l:selected]
-            call floaterm#enhance#cmd_run(cmd, opts, type, a:callback, l:wincmdp)
+            call floaterm#enhance#cmd_run(cmd, opts, type, l:wincmdp)
         endif
     endfunction
     " fzf run spect

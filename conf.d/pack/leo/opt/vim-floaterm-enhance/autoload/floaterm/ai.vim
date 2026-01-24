@@ -54,9 +54,9 @@ function! floaterm#ai#start(now) abort
     endif
     if a:now
         let [cmd, opts, type] = programs[0]
-        call floaterm#enhance#cmd_run(cmd, opts, type, function('floaterm#ai#set_ai_bufnr'), 0)
+        call floaterm#enhance#cmd_run(cmd, opts, type, 0)
     else
-        call floaterm#enhance#fzf_run(programs, 'FloatermAI', function('floaterm#ai#set_ai_bufnr'), 0)
+        call floaterm#enhance#fzf_run(programs, 'FloatermAI', 0)
     endif
 endfunction
 " ------------------------------------------------------

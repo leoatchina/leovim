@@ -1,19 +1,6 @@
 " -------------------------------------
 " NOTE: idx/get/set
 " -------------------------------------
-function! floaterm#repl#create_idx(...) abort
-    if a:0 && type(a:1) == type('') && a:1
-        let ft = a:1
-    else
-        let ft = &ft
-    endif
-    if a:0 && type(a:2) == type(0) && a:2
-        let bufnr = a:2
-    else
-        let bufnr = winbufnr(winnr())
-    endif
-    return ft . '-' . bufnr
-endfunction
 function! floaterm#repl#get_repl_bufnr(...) abort
     if !exists('t:floaterm_repl_dict')
         return 0
@@ -21,7 +8,7 @@ function! floaterm#repl#get_repl_bufnr(...) abort
     if a:0 && type(a:1) == type('') && a:1
         let idx = a:1
     else
-        let idx = floaterm#repl#create_idx()
+        let idx = floaterm#enhance#create_idx()
     endif
     if !has_key(t:floaterm_repl_dict, idx)
         return 0
@@ -30,28 +17,19 @@ function! floaterm#repl#get_repl_bufnr(...) abort
     if index(floaterm#buflist#gather(), bufnr) < 0
         call remove(t:floaterm_repl_dict, idx)
         return 0
-    else
-        call floaterm#terminal#open_existing(bufnr)
-        return bufnr
     endif
+    return bufnr
 endfunction
-function! floaterm#repl#set_repl_bufnr(...) abort
+function! floaterm#repl#set_repl_bufnr(bufnr, ...) abort
     if !exists('t:floaterm_repl_dict')
         let t:floaterm_repl_dict = {}
     endif
     if a:0 && type(a:1) == type('')
         let idx = a:1
     else
-        let idx = floaterm#repl#create_idx()
+        let idx = floaterm#enhance#create_idx()
     endif
-    if a:0 > 1 && type(a:2) == type(0)
-        let prog_bufnr = a:2
-    else
-        let prog_bufnr = 0
-    endif
-    if prog_bufnr
-        let t:floaterm_repl_dict[idx] = prog_bufnr
-    endif
+    let t:floaterm_repl_dict[idx] = a:bufnr
 endfunction
 " -------------------------------------
 " set repl program for each filetype
@@ -122,6 +100,7 @@ function! floaterm#repl#start(now) abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         call floaterm#enhance#showmsg(printf("REPL for %s already started", winbufnr(winnr())))
+        call floaterm#terminal#open_existing(repl_bufnr)
     else
         let programs = floaterm#repl#get_ft_parsed_programs(&ft)
         if empty(programs)
@@ -130,25 +109,23 @@ function! floaterm#repl#start(now) abort
         endif
         if a:now
             let [cmd, opts, type] = programs[0]
-            call floaterm#enhance#cmd_run(cmd, opts, type, function('floaterm#repl#set_repl_bufnr'))
-            call floaterm#repl#set_repl_bufnr()
+            call floaterm#enhance#cmd_run(cmd, opts, type)
         else
-            call floaterm#enhance#fzf_run(programs, 'FloatermREPL', function('floaterm#repl#set_repl_bufnr'))
+            call floaterm#enhance#fzf_run(programs, 'FloatermREPL')
         endif
     endif
+    call floaterm#enhance#wincmdp()
 endfunction
 " ------------------------------------------------------
 " Send a newline to REPL or start REPL if not running
 " ------------------------------------------------------
-function! floaterm#repl#send_cr_or_start(start, stay_curr, ...) abort
+function! floaterm#repl#send_cr_or_start(start, ...) abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         call floaterm#terminal#send(repl_bufnr, [""])
-    elseif a:start
-        call floaterm#repl#start(a:0 && a:1 ? 1:0)
-    endif
-    if a:stay_curr
         call floaterm#enhance#wincmdp()
+    elseif a:start
+        call floaterm#repl#start(a:0 && a:1 ? 1 : 0)
     endif
 endfunction
 " -------------------------------------
@@ -248,7 +225,7 @@ endfunction
 " ------------------------------------------------------
 function! floaterm#repl#send_exit() abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
-    if repl_bufnr > 0
+    if repl_bufnr
         if has_key(g:floaterm_repl_exit, &ft) && g:floaterm_repl_exit[&ft] != ''
             call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_exit[&ft]])
         endif
@@ -294,6 +271,7 @@ function! floaterm#repl#send_contents(contents, ft, repl_bufnr, stay_curr, jump_
     if !has('nvim')
         redraw
     endif
+    call floaterm#enhance#wincmdp()
 endfunction
 " -------------------------------------------
 " sent current line or selected contents to repl
