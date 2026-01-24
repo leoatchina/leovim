@@ -68,9 +68,12 @@ function! floaterm#ai#send_cr(stay_curr, ...) abort
         call floaterm#terminal#open_existing(ai_bufnr)
         call floaterm#terminal#send(ai_bufnr, ["\r"], 0)
         if a:stay_curr
-            wincmd p
             if has('nvim')
+                wincmd p
                 stopinsert
+            else
+                call feedkeys('<C-\><C-n>')
+                wincmd p
             endif
         endif
     else
@@ -126,9 +129,12 @@ function! floaterm#ai#send_to_ai(type, stary_curr, ...) abort
     call floaterm#terminal#open_existing(ai_bufnr)
     call floaterm#terminal#send(ai_bufnr, [content], 0)
     if a:stary_curr
-        wincmd p
         if has('nvim')
+            wincmd p
             stopinsert
+        else
+            call feedkeys('<C-\><C-n>')
+            wincmd p
         endif
     endif
 endfunction
@@ -162,9 +168,12 @@ function! floaterm#ai#fzf_file_sink(ai_bufnr, stay_curr, lines) abort
         call floaterm#terminal#open_existing(ai_bufnr)
         call floaterm#terminal#send(ai_bufnr, [floaterm#ai#at(a:lines)], 0)
         if a:stay_curr
-            wincmd p
             if has('nvim')
+                wincmd p
                 stopinsert
+            else
+                call feedkeys('<C-\><C-n>')
+                wincmd p
             endif
         endif
     endif
