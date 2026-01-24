@@ -148,10 +148,7 @@ function! floaterm#repl#send_cr_or_start(start, stay_curr, ...) abort
         call floaterm#repl#start(a:0 && a:1 ? 1:0)
     endif
     if a:stay_curr
-        wincmd p
-        if has('nvim')
-            stopinsert
-        endif
+        call floaterm#enhance#wincmdp()
     endif
 endfunction
 " -------------------------------------

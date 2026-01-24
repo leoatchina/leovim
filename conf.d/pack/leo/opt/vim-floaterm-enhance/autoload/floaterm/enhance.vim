@@ -316,6 +316,15 @@ endfunction
 " --------------------------------------------------------------
 " fzf select and run programs
 " --------------------------------------------------------------
+function! floaterm#enhance#wincmdp() abort
+    if has('nvim')
+        wincmd p
+        stopinsert
+    else
+        call feedkeys('<C-\><C-n>')
+        wincmd p
+    endif
+endfunction
 function! floaterm#enhance#cmd_run(cmd, opts, type, callback, ...) abort
     let wincmdp = a:0 && type(a:1) == type(0) ? a:1 : 1
     let cmd = a:cmd

@@ -68,13 +68,7 @@ function! floaterm#ai#send_cr(stay_curr, ...) abort
         call floaterm#terminal#open_existing(ai_bufnr)
         call floaterm#terminal#send(ai_bufnr, ["\r"], 0)
         if a:stay_curr
-            if has('nvim')
-                wincmd p
-                stopinsert
-            else
-                call feedkeys('<C-\><C-n>')
-                wincmd p
-            endif
+            call floaterm#enhance#wincmdp()
         endif
     else
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
@@ -129,13 +123,7 @@ function! floaterm#ai#send_to_ai(type, stary_curr, ...) abort
     call floaterm#terminal#open_existing(ai_bufnr)
     call floaterm#terminal#send(ai_bufnr, [content], 0)
     if a:stary_curr
-        if has('nvim')
-            wincmd p
-            stopinsert
-        else
-            call feedkeys('<C-\><C-n>')
-            wincmd p
-        endif
+        call floaterm#enhance#wincmdp()
     endif
 endfunction
 " send range
@@ -168,13 +156,7 @@ function! floaterm#ai#fzf_file_sink(ai_bufnr, stay_curr, lines) abort
         call floaterm#terminal#open_existing(ai_bufnr)
         call floaterm#terminal#send(ai_bufnr, [floaterm#ai#at(a:lines)], 0)
         if a:stay_curr
-            if has('nvim')
-                wincmd p
-                stopinsert
-            else
-                call feedkeys('<C-\><C-n>')
-                wincmd p
-            endif
+            call floaterm#enhance#wincmdp()
         endif
     endif
 endfunction
