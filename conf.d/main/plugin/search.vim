@@ -14,6 +14,12 @@ elseif pack#planned_fzf()
 else
     nnoremap <nowait><M-l><M-l> :CtrlPLine<Cr>
 endif
+" ------------------------
+" y register for replace
+" ------------------------
+xnoremap / "yy/<C-r>=utils#escape(@y)<CR><Cr>
+xnoremap ? "yy?<C-r>=utils#escape(@y)<CR><Cr>
+xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>/<C-r>=utils#escape(@y)<CR>/gc<Left><Left><Left>
 " ----------------------------
 " buffer search
 " ----------------------------

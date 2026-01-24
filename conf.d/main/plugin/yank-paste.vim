@@ -240,13 +240,6 @@ augroup YankToPRegister
 augroup END
 xnoremap <M-V> "pp
 " ------------------------
-" y register for replace
-" ------------------------
-xnoremap / "yy/<C-r>=utils#escape(@y)<CR><Cr>
-xnoremap ? "yy?<C-r>=utils#escape(@y)<CR><Cr>
-xnoremap s "yy:%s/<C-r>=utils#escape(@y)<CR>/<C-r>=utils#escape(@y)<CR>/gc<Left><Left><Left>
-xnoremap <Cr> "yy:%s/<C-r>=utils#escape(@y)<CR>//gc<Left><Left><Left>
-" ------------------------
 " pastemode toggle
 " ------------------------
 inoremap <M-I> <C-\><C-o>:set paste<Cr>

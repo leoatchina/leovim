@@ -14,18 +14,8 @@ else
     nnoremap <silent><nowait>g# g#``
     nnoremap <silent><nowait><C-n> *``cgn
 endif
-if pack#installed('flash.nvim')
-    lua require("cfg/flash")
-    nmap SJ vt<Space><Cr>S
-    nmap SK vT<Space><Cr>S
-else
-    nmap ;s <Plug>(clever-f-repeat-forward)
-    xmap ;s <Plug>(clever-f-repeat-forward)
-    nmap ,s <Plug>(clever-f-repeat-back)
-    xmap ,s <Plug>(clever-f-repeat-back)
-    nmap SJ vt<Space>S
-    nmap SK vT<Space>S
-endif
+let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
+let g:EasyMotion_leader_key = 's'
 if pack#installed('hop.nvim')
     imap <C-a> <ESC>ggVG
     xmap <C-a> <ESC>ggVG
@@ -67,4 +57,16 @@ else
         xmap so <Plug>(easymotion-sn)
         omap so <Plug>(easymotion-sn)
     endif
+endif
+if pack#installed('flash.nvim')
+    lua require("cfg/flash")
+    nmap SJ vt<Space><Cr>S
+    nmap SK vT<Space><Cr>S
+else
+    nmap ;s <Plug>(clever-f-repeat-forward)
+    xmap ;s <Plug>(clever-f-repeat-forward)
+    nmap ,s <Plug>(clever-f-repeat-back)
+    xmap ,s <Plug>(clever-f-repeat-back)
+    nmap SJ vt<Space>S
+    nmap SK vT<Space>S
 endif

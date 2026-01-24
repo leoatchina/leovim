@@ -298,7 +298,7 @@ endfunction
 " -------------------------------------------
 " sent current line or selected contents to repl
 " -------------------------------------------
-function! floaterm#repl#_send_range(first, last, repl_bufnr, stay_curr, ...) abort
+function! floaterm#repl#send_range(first, last, repl_bufnr, stay_curr, ...) abort
     let firstline = a:first
     let lastline = a:last
     if firstline == lastline
@@ -350,7 +350,7 @@ function! floaterm#repl#send(stay_curr, ...) abort
     if firstline == 0 || lastline == 0 || firstline > lastline
         return
     endif
-    call floaterm#repl#_send_range(firstline, lastline, repl_bufnr, a:stay_curr, vmode)
+    call floaterm#repl#send_range(firstline, lastline, repl_bufnr, a:stay_curr, vmode)
 endfunction
 " ----------------------------------------------
 " Send border
@@ -377,5 +377,5 @@ function! floaterm#repl#send_border(border, stay_curr) abort
     else
         return
     endif
-    call floaterm#repl#_send_range(firstline, lastline, repl_bufnr, a:stay_curr)
+    call floaterm#repl#send_range(firstline, lastline, repl_bufnr, a:stay_curr)
 endfunction
