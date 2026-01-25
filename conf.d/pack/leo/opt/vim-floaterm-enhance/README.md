@@ -197,6 +197,10 @@ The following are the main commands and functions provided by the `vim-floaterm-
 * **`FloatermReplSendMark`**: Send the code marked previously using the `FloatermReplMark` command.
 * **`FloatermReplQuickuiMark`**: (May depend on the `vim-quickui` plugin) Quickly view the marked code.
 
+Internal function note:
+
+* **`floaterm#repl#send(border, stay_curr, [line1], [line2])`**: Unified send entry; `border` supports `block`, `begin`, `end`, `all`, and `line` (current line/visual range).
+
 ## Configuration
 
 You can customize the behavior of the plugin by configuring Vim global variables:

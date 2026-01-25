@@ -128,63 +128,124 @@ function! floaterm#repl#send_cr_or_start(start, ...) abort
         call floaterm#repl#start(a:0 && a:1 ? 1 : 0)
     endif
 endfunction
-" -------------------------------------
-" mark
-" -------------------------------------
-function! floaterm#repl#mark(...) abort
+" ----------------------------------------------------------------------------
+" core function send_contents. contents is the codes/scripts want to send
+" ----------------------------------------------------------------------------
+function! s:send_contents(first, last, ft, repl_bufnr, stay_curr, vmode, ...) abort
+    let repl_bufnr = a:repl_bufnr
+    let firstline = a:first
+    let lastline = a:last
+    if a:0 && type(a:1) == type([])
+        let raw_contents = a:1
+        let has_range = 0
+    else
+        let has_range = 1
+        if firstline == lastline
+            let raw_contents = [getline(firstline)]
+        else
+            let raw_contents = getline(firstline, lastline)
+        endif
+    endif
+    if empty(raw_contents)
+        call floaterm#enhance#showmsg('No contents selected.')
+        return
+    elseif has_range && get(g:, 'floaterm_repl_showsend', 0)
+        call floaterm#enhance#showmsg(printf("Sent L%s-L%s all %s lines", firstline, lastline, len(raw_contents)))
+    endif
+    let comment = floaterm#enhance#get_comment(a:ft)
+    let contents = []
+    for line in raw_contents
+        if line =~# "^\s*" . comment || line =~# "^\s*$"
+            continue
+        endif
+        call add(contents, line)
+    endfor
+    if !len(contents)
+        return
+    endif
+    if len(contents) > 1 && contents[-1] =~# '^\s\+' && a:ft ==# 'python'
+        call add(contents, "")
+    endif
+    call floaterm#terminal#open_existing(repl_bufnr)
+    call floaterm#terminal#send(repl_bufnr, contents)
+    call floaterm#enhance#wincmdp()
+    if a:stay_curr == 0
+        execute "normal! " . lastline . 'G'
+        normal! j
+        let t_col = line("$")
+        let c_col = line('.')
+        let line = getline('.')
+        while (line =~# "^\s*" . comment || line =~# "^\s*$") && c_col < t_col
+            normal! j
+            let c_col = line('.')
+            let line = getline('.')
+        endwhile
+    elseif a:stay_curr && a:vmode
+        execute "normal! " . lastline . 'G'
+    endif
+    if !has('nvim')
+        redraw
+    endif
+endfunction
+" -------------------------------------------
+" sent current line or selected contents to repl
+" -------------------------------------------
+function! floaterm#repl#send_range(first, last, repl_bufnr, stay_curr, ...) abort
+    if a:0 && a:1
+        let vmode = 1
+    else
+        let vmode = 0
+    endif
+    call s:send_contents(a:first, a:last, &ft, a:repl_bufnr, a:stay_curr, vmode)
+endfunction
+" ------------------------------------------------------
+" send line/border
+" ------------------------------------------------------
+function! floaterm#repl#send(border, stay_curr, ...) abort
+    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
+        let vmode = 1
+    else
+        let vmode = 0
+    endif
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
+    if repl_bufnr == 0
+        call floaterm#enhance#showmsg("Do REPLFloatermStart at first.")
+        return
+    endif
+    " Check if line range is provided as arguments
     if a:0 >= 2
         let firstline = a:1
         let lastline = a:2
-        let t:floaterm_repl_marked_lines = getline(firstline, lastline)
-        echom "Range marked."
-    elseif mode() =~# '^[vV]' || mode() ==# "\<C-v>"
-        let t:floaterm_repl_marked_lines = getline(line("'<"), line("'>"))
-        echom "Visual selection marked."
     else
-        let [start, end] = floaterm#enhance#get_block()
-        let t:floaterm_repl_marked_lines = getline(start, end)
-        echom "Block code marked."
-    endif
-endfunction
-" Using quickfix to show marked contents
-function! floaterm#repl#show_mark() abort
-    if empty(get(t:, 'floaterm_repl_marked_lines', []))
-        echo "t:floaterm_repl_marked_lines is None"
-        return
-    endif
-    " Clear quickfix list
-    call setqflist([])
-    " Get current buffer number for location reference
-    let bufnr = bufnr('%')
-    " Prepare quickfix entries
-    let qf_entries = []
-    let line_nr = 1
-    for line in t:floaterm_repl_marked_lines
-        call add(qf_entries, {
-            \ 'bufnr': bufnr,
-            \ 'lnum': line_nr,
-            \ 'text': line,
-            \ 'type': 'I'
-            \ })
-        let line_nr += 1
-    endfor
-    " Set quickfix list with entries
-    call setqflist(qf_entries)
-    " Open quickfix window
-    copen
-    " Set title for quickfix window
-    let w:quickfix_title = 'REPL Marked contents'
-endfunction
-" sent marked contents
-function! floaterm#repl#send_mark() abort
-    if get(t:, 'floaterm_repl_marked_lines', []) == []
-        echom "t:floaterm_repl_marked_lines is empty"
-    else
-        let repl_bufnr = floaterm#repl#get_repl_bufnr()
-        if repl_bufnr
-            call floaterm#repl#send_contents(t:floaterm_repl_marked_lines, &ft, repl_bufnr, 1, line('.') , 0)
+        if index(['begin', 'end', 'all', 'block', 'line'], a:border) >= 0
+            let border = a:border
+        else
+            let border = 'block'
+        endif
+        if border == 'all'
+            let [firstline, lastline] = floaterm#enhance#get_all()
+        elseif border == 'begin'
+            let [firstline, lastline] = floaterm#enhance#get_begin()
+        elseif border == 'end'
+            let [firstline, lastline] = floaterm#enhance#get_end()
+        elseif border == 'block'
+            let [firstline, lastline] = floaterm#enhance#get_block()
+        elseif border == 'line'
+            let firstline = line('.')
+            if vmode
+                let lastline = line("'>")
+                let firstline = line("'<")
+            else
+                let lastline = firstline
+            endif
+        else
+            return
         endif
     endif
+    if firstline == 0 || lastline == 0 || firstline > lastline
+        return
+    endif
+    call s:send_contents(firstline, lastline, &ft, repl_bufnr, a:stay_curr, vmode)
 endfunction
 " -------------------------------------
 " send only one word
@@ -233,127 +294,61 @@ function! floaterm#repl#send_exit() abort
         call floaterm#enhance#showmsg("Start REPL first to send exit signal.")
     endif
 endfunction
-" -------------------------------------------
-" core function send_contents. contents is
-" the codes/scripts want to send
-" -------------------------------------------
-function! floaterm#repl#send_contents(contents, ft, repl_bufnr, stay_curr, jump_line, vmode) abort
-    let repl_bufnr = a:repl_bufnr
-    let comment = floaterm#enhance#get_comment(a:ft)
-    let contents = []
-    for line in a:contents
-        if line =~# "^\s*" . comment || line =~# "^\s*$"
-            continue
+" -------------------------------------
+" mark
+" -------------------------------------
+" sent marked contents
+function! floaterm#repl#send_mark() abort
+    if get(t:, 'floaterm_repl_marked_lines', []) == []
+        echom "t:floaterm_repl_marked_lines is empty"
+    else
+        let repl_bufnr = floaterm#repl#get_repl_bufnr()
+        if repl_bufnr
+            call s:send_contents(line('.'), line('.'), &ft, repl_bufnr, 1, 0, t:floaterm_repl_marked_lines)
         endif
-        call add(contents, line)
-    endfor
-    if len(contents) > 0
-        if len(contents) > 1 && contents[-1] =~# '^\s\+' && a:ft ==# 'python'
-            call add(contents, "")
-        endif
-        call floaterm#terminal#open_existing(repl_bufnr)
-        call floaterm#terminal#send(repl_bufnr, contents)
     endif
-    if a:stay_curr == 0
-        execute "normal! " . a:jump_line . 'G'
-        normal! j
-        let t_col = line("$")
-        let c_col = line('.')
-        let line = getline('.')
-        while (line =~# "^\s*" . comment || line =~# "^\s*$") && c_col < t_col
-            normal! j
-            let c_col = line('.')
-            let line = getline('.')
-        endwhile
-    elseif a:stay_curr && a:vmode
-        execute "normal! " . a:jump_line . 'G'
-    endif
-    if !has('nvim')
-        redraw
-    endif
-    call floaterm#enhance#wincmdp()
 endfunction
-" -------------------------------------------
-" sent current line or selected contents to repl
-" -------------------------------------------
-function! floaterm#repl#send_range(first, last, repl_bufnr, stay_curr, ...) abort
-    let firstline = a:first
-    let lastline = a:last
-    if firstline == lastline
-        let contents = [getline(firstline)]
-    else
-        let contents = getline(firstline, lastline)
-    endif
-    if a:0 && a:1
-        let vmode = 1
-    else
-        let vmode = 0
-    endif
-    if empty(contents)
-        call floaterm#enhance#showmsg('No contents selected.')
-        return
-    elseif get(g:, 'floaterm_repl_showsend', 0)
-        call floaterm#enhance#showmsg(printf("Sent L%s-L%s all %s lines", firstline, lastline, len(contents)))
-    endif
-    " XXX: lastline is the jump_line when stay_curr == 0
-    call floaterm#repl#send_contents(contents, &ft, a:repl_bufnr, a:stay_curr, lastline, vmode)
-endfunction
-" core function
-function! floaterm#repl#send(stay_curr, ...) abort
-    " Normal case - send code contents
-    if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
-        let vmode = 1
-    else
-        let vmode = 0
-    endif
-    let repl_bufnr = floaterm#repl#get_repl_bufnr()
-    if repl_bufnr == 0
-        call floaterm#enhance#showmsg("Do REPLFloatermStart at first.")
-        return
-    endif
-    " Check if line range is provided as arguments
+function! floaterm#repl#mark(...) abort
     if a:0 >= 2
         let firstline = a:1
         let lastline = a:2
+        let t:floaterm_repl_marked_lines = getline(firstline, lastline)
+        echom "Range marked."
+    elseif mode() =~# '^[vV]' || mode() ==# "\<C-v>"
+        let t:floaterm_repl_marked_lines = getline(line("'<"), line("'>"))
+        echom "Visual selection marked."
     else
-        " Auto detect visual mode
-        let firstline = line('.')
-        if mode() =~# '^[vV]' || mode() ==# "\<C-v>"
-            let lastline = line("'>")
-            let firstline = line("'<")
-        else
-            let lastline = firstline
-        endif
+        let [start, end] = floaterm#enhance#get_block()
+        let t:floaterm_repl_marked_lines = getline(start, end)
+        echom "Block code marked."
     endif
-    if firstline == 0 || lastline == 0 || firstline > lastline
-        return
-    endif
-    call floaterm#repl#send_range(firstline, lastline, repl_bufnr, a:stay_curr, vmode)
 endfunction
-" ----------------------------------------------
-" Send border
-" ------------------------------------------------------
-function! floaterm#repl#send_border(border, stay_curr) abort
-    let repl_bufnr = floaterm#repl#get_repl_bufnr()
-    if repl_bufnr == 0
-        call floaterm#enhance#showmsg("Do REPLFloatermStart at first.")
+" Using quickfix to show marked contents
+function! floaterm#repl#show_mark() abort
+    if empty(get(t:, 'floaterm_repl_marked_lines', []))
+        echo "t:floaterm_repl_marked_lines is None"
         return
     endif
-    if index(['begin', 'end', 'all', 'block'], a:border) >= 0
-        let border = a:border
-    else
-        let border = 'block'
-    endif
-    if border == 'all'
-        let [firstline, lastline] = floaterm#enhance#get_all()
-    elseif border == 'begin'
-        let [firstline, lastline] = floaterm#enhance#get_begin()
-    elseif border == 'end'
-        let [firstline, lastline] = floaterm#enhance#get_end()
-    elseif border == 'block'
-        let [firstline, lastline] = floaterm#enhance#get_block()
-    else
-        return
-    endif
-    call floaterm#repl#send_range(firstline, lastline, repl_bufnr, a:stay_curr)
+    " Clear quickfix list
+    call setqflist([])
+    " Get current buffer number for location reference
+    let bufnr = bufnr('%')
+    " Prepare quickfix entries
+    let qf_entries = []
+    let line_nr = 1
+    for line in t:floaterm_repl_marked_lines
+        call add(qf_entries, {
+            \ 'bufnr': bufnr,
+            \ 'lnum': line_nr,
+            \ 'text': line,
+            \ 'type': 'I'
+            \ })
+        let line_nr += 1
+    endfor
+    " Set quickfix list with entries
+    call setqflist(qf_entries)
+    " Open quickfix window
+    copen
+    " Set title for quickfix window
+    let w:quickfix_title = 'REPL Marked contents'
 endfunction

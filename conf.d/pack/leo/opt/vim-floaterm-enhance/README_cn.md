@@ -198,6 +198,10 @@ graph TB
 * **`FloatermReplSendMark`**: 发送之前使用 `FloatermReplMark` 命令标记的代码。
 * **`FloatermReplQuickuiMark`**: （可能依赖 `vim-quickui` 插件）快速查看标记的代码。
 
+内部函数说明：
+
+* **`floaterm#repl#send(border, stay_curr, [line1], [line2])`**：统一发送入口；`border` 支持 `block`、`begin`、`end`、`all`、`line`（当前行/可视范围）。
+
 ## 配置
 
 可以通过配置 Vim 全局变量来自定义插件的行为：

@@ -44,11 +44,11 @@ command! -bang FloatermReplSendCrOrStart call floaterm#repl#send_cr_or_start(1, 
 " -------------------------------------------------------------------------------
 " commands. NOTE <bang>0 means ! in Send commands means stay in curr line
 " -------------------------------------------------------------------------------
-command! -bang FloatermReplSendBlock call floaterm#repl#send_border("block", <bang>0)
-command! -bang FloatermReplSendFromBegin call floaterm#repl#send_border("begin", <bang>0)
-command! -bang FloatermReplSendToEnd call floaterm#repl#send_border("end", <bang>0)
-command! -bang FloatermReplSendAll call floaterm#repl#send_border("all", <bang>0)
-command! -bang -range FloatermReplSend call floaterm#repl#send(<bang>0, <line1>, <line2>)
+command! -bang FloatermReplSendBlock call floaterm#repl#send("block", <bang>0)
+command! -bang FloatermReplSendFromBegin call floaterm#repl#send("begin", <bang>0)
+command! -bang FloatermReplSendToEnd call floaterm#repl#send("end", <bang>0)
+command! -bang FloatermReplSendAll call floaterm#repl#send("all", <bang>0)
+command! -bang -range FloatermReplSend call floaterm#repl#send("line", <bang>0, <line1>, <line2>)
 " word
 command! -range FloatermReplSendWord call floaterm#repl#send_word(<line1>, <line2>)
 " mark
