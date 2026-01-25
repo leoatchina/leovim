@@ -136,12 +136,7 @@ function! floaterm#ai#send_dir(stay_curr) abort
 endfunction
 " send a newline
 function! floaterm#ai#send_cr(stay_curr) abort
-    let ai_bufnr = floaterm#ai#get_ai_bufnr()
-    if ai_bufnr
-        call s:send_prompt('cr', a:stay_curr)
-    else
-        call floaterm#enhance#showmsg('No AI floaterm window found', 1)
-    endif
+    call s:send_prompt('cr', a:stay_curr)
 endfunction
 " --------------------------------------------------------------
 " fzf file picker with root dir files -> send paths to latest AI terminal

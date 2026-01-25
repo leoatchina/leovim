@@ -22,7 +22,7 @@ command! -bang FloatermAiStart call floaterm#ai#start(<bang>0)
 " ------------------------------------------------------------
 " SendCrOrStart. NOTE ! = <bang>0 means stay in floaterm
 " ------------------------------------------------------------
-command! -bang FloatermAiSendCr call floaterm#ai#send_cr(0, <bang>0)
+command! -bang FloatermAiSendCr call floaterm#ai#send_cr(<bang>0)
 " -------------------------------------------------------------------------------
 " commands. NOTE <bang>0 means ! in Send commands means stay in floaterm
 " -------------------------------------------------------------------------------

@@ -116,18 +116,6 @@ function! floaterm#repl#start(now) abort
     endif
     call floaterm#enhance#wincmdp()
 endfunction
-" ------------------------------------------------------
-" Send a newline to REPL or start REPL if not running
-" ------------------------------------------------------
-function! floaterm#repl#send_cr_or_start(start, ...) abort
-    let repl_bufnr = floaterm#repl#get_repl_bufnr()
-    if repl_bufnr
-        call floaterm#terminal#send(repl_bufnr, [""])
-        call floaterm#enhance#wincmdp()
-    elseif a:start
-        call floaterm#repl#start(a:0 && a:1 ? 1 : 0)
-    endif
-endfunction
 " ----------------------------------------------------------------------------
 " core function send_contents. contents is the codes/scripts want to send
 " ----------------------------------------------------------------------------
@@ -186,17 +174,6 @@ function! s:send_contents(first, last, ft, repl_bufnr, stay_curr, vmode, ...) ab
     if !has('nvim')
         redraw
     endif
-endfunction
-" -------------------------------------------
-" sent current line or selected contents to repl
-" -------------------------------------------
-function! floaterm#repl#send_range(first, last, repl_bufnr, stay_curr, ...) abort
-    if a:0 && a:1
-        let vmode = 1
-    else
-        let vmode = 0
-    endif
-    call s:send_contents(a:first, a:last, &ft, a:repl_bufnr, a:stay_curr, vmode)
 endfunction
 " ------------------------------------------------------
 " send line/border
@@ -351,4 +328,16 @@ function! floaterm#repl#show_mark() abort
     copen
     " Set title for quickfix window
     let w:quickfix_title = 'REPL Marked contents'
+endfunction
+" --------------------------------------------------------
+" Send a newline to REPL or start REPL if not running
+" --------------------------------------------------------
+function! floaterm#repl#send_cr_or_start(start, ...) abort
+    let repl_bufnr = floaterm#repl#get_repl_bufnr()
+    if repl_bufnr
+        call floaterm#terminal#send(repl_bufnr, [""])
+        call floaterm#enhance#wincmdp()
+    elseif a:start
+        call floaterm#repl#start(a:0 && a:1 ? 1 : 0)
+    endif
 endfunction
