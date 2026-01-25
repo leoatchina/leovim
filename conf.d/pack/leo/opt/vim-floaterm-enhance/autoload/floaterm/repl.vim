@@ -117,9 +117,9 @@ function! floaterm#repl#start(now) abort
     call floaterm#enhance#wincmdp()
 endfunction
 " ----------------------------------------------------------------------------
-" core function send_contents. contents is the codes/scripts want to send
+" core function send_range. contents is the codes/scripts want to send
 " ----------------------------------------------------------------------------
-function! s:send_contents(first, last, ft, repl_bufnr, stay_curr, vmode, ...) abort
+function! s:send_range(first, last, ft, repl_bufnr, stay_curr, vmode, ...) abort
     let repl_bufnr = a:repl_bufnr
     let firstline = a:first
     let lastline = a:last
@@ -149,6 +149,9 @@ function! s:send_contents(first, last, ft, repl_bufnr, stay_curr, vmode, ...) ab
         call add(contents, line)
     endfor
     if !len(contents)
+        if a:stay_curr == 0 && has_range
+            execute "normal! " . lastline . 'Gj'
+        endif
         return
     endif
     if len(contents) > 1 && contents[-1] =~# '^\s\+' && a:ft ==# 'python'
@@ -222,7 +225,15 @@ function! floaterm#repl#send(border, stay_curr, ...) abort
     if firstline == 0 || lastline == 0 || firstline > lastline
         return
     endif
-    call s:send_contents(firstline, lastline, &ft, repl_bufnr, a:stay_curr, vmode)
+    call s:send_range(firstline, lastline, &ft, repl_bufnr, a:stay_curr, vmode)
+endfunction
+" -------------------------------------
+" helper: send content to repl and return to previous window
+" -------------------------------------
+function! s:send_content(repl_bufnr, content) abort
+    let content = type(a:content) == type([]) ? a:content : [a:content]
+    call floaterm#terminal#send(a:repl_bufnr, content)
+    call floaterm#enhance#wincmdp()
 endfunction
 " -------------------------------------
 " send only one word
@@ -242,7 +253,7 @@ function! floaterm#repl#send_word(...) abort
     endif
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
-        call floaterm#terminal#send(repl_bufnr, [word])
+        call s:send_content(repl_bufnr, word)
     endif
 endfunction
 " ------------------------------------------------------
@@ -252,7 +263,7 @@ function! floaterm#repl#send_clear() abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         if has_key(g:floaterm_repl_clear, &ft) && g:floaterm_repl_clear[&ft] != ''
-            call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_clear[&ft]])
+            call s:send_content(repl_bufnr, g:floaterm_repl_clear[&ft])
         endif
     else
         call floaterm#enhance#showmsg("Start REPL first to send clear signal.")
@@ -265,7 +276,7 @@ function! floaterm#repl#send_exit() abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
         if has_key(g:floaterm_repl_exit, &ft) && g:floaterm_repl_exit[&ft] != ''
-            call floaterm#terminal#send(repl_bufnr, [g:floaterm_repl_exit[&ft]])
+            call s:send_content(repl_bufnr, g:floaterm_repl_exit[&ft])
         endif
     else
         call floaterm#enhance#showmsg("Start REPL first to send exit signal.")
@@ -274,14 +285,13 @@ endfunction
 " -------------------------------------
 " mark
 " -------------------------------------
-" sent marked contents
 function! floaterm#repl#send_mark() abort
     if get(t:, 'floaterm_repl_marked_lines', []) == []
         echom "t:floaterm_repl_marked_lines is empty"
     else
         let repl_bufnr = floaterm#repl#get_repl_bufnr()
         if repl_bufnr
-            call s:send_contents(line('.'), line('.'), &ft, repl_bufnr, 1, 0, t:floaterm_repl_marked_lines)
+            call s:send_content(repl_bufnr, t:floaterm_repl_marked_lines)
         endif
     endif
 endfunction
@@ -335,8 +345,7 @@ endfunction
 function! floaterm#repl#send_cr_or_start(start, ...) abort
     let repl_bufnr = floaterm#repl#get_repl_bufnr()
     if repl_bufnr
-        call floaterm#terminal#send(repl_bufnr, [""])
-        call floaterm#enhance#wincmdp()
+        call s:send_content(repl_bufnr, "")
     elseif a:start
         call floaterm#repl#start(a:0 && a:1 ? 1 : 0)
     endif
