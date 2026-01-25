@@ -158,16 +158,16 @@ function! s:send_range(first, last, ft, repl_bufnr, stay_curr, vmode, ...) abort
     call floaterm#terminal#send(repl_bufnr, contents)
     call floaterm#enhance#wincmdp()
     if a:stay_curr == 0
-        execute "normal! " . lastline . 'G'
-        normal! j
         let last_line = line("$")
-        let curr_line = line('.')
-        let line_content = getline('.')
-        while (line_content =~# "^\s*" . comment || line_content =~# "^\s*$") && curr_line < last_line
-            normal! j
-            let curr_line = line('.')
-            let line_content = getline('.')
+        let target_line = lastline + 1
+        while target_line <= last_line
+            let line_content = getline(target_line)
+            if line_content !~# "^\s*" . comment && line_content !~# "^\s*$"
+                break
+            endif
+            let target_line += 1
         endwhile
+        execute "normal! " . target_line . 'G'
     elseif a:stay_curr && a:vmode
         execute "normal! " . lastline . 'G'
     endif
