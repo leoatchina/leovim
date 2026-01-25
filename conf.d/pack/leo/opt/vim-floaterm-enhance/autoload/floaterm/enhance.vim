@@ -320,7 +320,7 @@ function! floaterm#enhance#wincmdp() abort
     if has('nvim')
         stopinsert | noa wincmd p
     else
-        call feedkeys("\<C-\>\<C-n>:wincmd p\<C-m>", "n")
+        wincmd p
     endif
 endfunction
 function! floaterm#enhance#create_idx(...) abort

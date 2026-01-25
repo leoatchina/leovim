@@ -149,9 +149,6 @@ function! s:send_range(first, last, ft, repl_bufnr, stay_curr, vmode, ...) abort
         call add(contents, line)
     endfor
     if !len(contents)
-        if a:stay_curr == 0 && has_range
-            execute "normal! " . lastline . 'Gj'
-        endif
         return
     endif
     if len(contents) > 1 && contents[-1] =~# '^\s\+' && a:ft ==# 'python'
@@ -163,13 +160,13 @@ function! s:send_range(first, last, ft, repl_bufnr, stay_curr, vmode, ...) abort
     if a:stay_curr == 0
         execute "normal! " . lastline . 'G'
         normal! j
-        let t_col = line("$")
-        let c_col = line('.')
-        let line = getline('.')
-        while (line =~# "^\s*" . comment || line =~# "^\s*$") && c_col < t_col
+        let last_line = line("$")
+        let curr_line = line('.')
+        let line_content = getline('.')
+        while (line_content =~# "^\s*" . comment || line_content =~# "^\s*$") && curr_line < last_line
             normal! j
-            let c_col = line('.')
-            let line = getline('.')
+            let curr_line = line('.')
+            let line_content = getline('.')
         endwhile
     elseif a:stay_curr && a:vmode
         execute "normal! " . lastline . 'G'
