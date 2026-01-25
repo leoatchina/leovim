@@ -321,6 +321,7 @@ function! floaterm#enhance#wincmdp() abort
         stopinsert | noa wincmd p
     else
         wincmd p
+        checktime
     endif
 endfunction
 function! floaterm#enhance#create_idx(...) abort
