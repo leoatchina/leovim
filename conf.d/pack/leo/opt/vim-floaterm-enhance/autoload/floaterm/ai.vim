@@ -59,25 +59,10 @@ function! floaterm#ai#start(now) abort
         call floaterm#enhance#fzf_run(programs, 'FloatermAI', 0)
     endif
 endfunction
-" ------------------------------------------------------
-" Send a newline to AI or start AI if not running
-" ------------------------------------------------------
-function! floaterm#ai#send_cr(stay_curr, ...) abort
-    let ai_bufnr = floaterm#ai#get_ai_bufnr()
-    if ai_bufnr
-        call floaterm#terminal#open_existing(ai_bufnr)
-        call floaterm#terminal#send(ai_bufnr, ["\r"], 0)
-        if a:stay_curr
-            call floaterm#enhance#wincmdp()
-        endif
-    else
-        call floaterm#enhance#showmsg('No AI floaterm window found', 1)
-    endif
-endfunction
 " --------------------------------------------------------------
 " format string/list with '@' string
 " --------------------------------------------------------------
-function! floaterm#ai#at(...) abort
+function! s:at_prompt(...) abort
     if !a:0
         return ''
     endif
@@ -96,9 +81,9 @@ function! floaterm#ai#at(...) abort
     endif
 endfunction
 " --------------------------------------------------------------
-" send file path with line range to latest AI terminal
+" XXX: send prompt
 " --------------------------------------------------------------
-function! floaterm#ai#send_to_ai(type, stary_curr, ...) abort
+function! s:send_prompt(type, stary_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if !ai_bufnr
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
@@ -106,14 +91,16 @@ function! floaterm#ai#send_to_ai(type, stary_curr, ...) abort
     endif
     if a:type == 'range'
         if a:0 == 2 && a:1 && a:2 && a:1 <= a:2
-            let content = floaterm#ai#at(floaterm#enhance#get_file_line_range(a:1, a:2))
+            let content = s:at_prompt(floaterm#enhance#get_file_line_range(a:1, a:2))
         else
-            let content = floaterm#ai#at(floaterm#enhance#get_file_abspath())
+            let content = s:at_prompt(floaterm#enhance#get_file_abspath())
         endif
     elseif a:type == 'file'
-        let content = floaterm#ai#at(floaterm#enhance#get_file_abspath())
+        let content = s:at_prompt(floaterm#enhance#get_file_abspath())
     elseif a:type == 'dir'
-        let content = floaterm#ai#at(floaterm#enhance#get_file_absdir())
+        let content = s:at_prompt(floaterm#enhance#get_file_absdir())
+    elseif a:type == 'cr'
+        let content = "\r"
     else
         return
     endif
@@ -126,7 +113,9 @@ function! floaterm#ai#send_to_ai(type, stary_curr, ...) abort
         call floaterm#enhance#wincmdp()
     endif
 endfunction
-" send range
+" --------------------------------------------------------------
+" send file path with line range to latest AI terminal
+" --------------------------------------------------------------
 function! floaterm#ai#send_line_range(stay_curr, ...) abort
     if a:0 >= 2
         let firstline = a:1
@@ -135,15 +124,24 @@ function! floaterm#ai#send_line_range(stay_curr, ...) abort
         let firstline = line('.')
         let lastline = firstline
     endif
-    call floaterm#ai#send_to_ai('range', a:stay_curr, firstline, lastline)
+    call s:send_prompt('range', a:stay_curr, firstline, lastline)
 endfunction
 " send file
 function! floaterm#ai#send_file(stay_curr) abort
-    call floaterm#ai#send_to_ai('file', a:stay_curr)
+    call s:send_prompt('file', a:stay_curr)
 endfunction
 " send dir
 function! floaterm#ai#send_dir(stay_curr) abort
-    call floaterm#ai#send_to_ai('dir', a:stay_curr)
+    call s:send_prompt('dir', a:stay_curr)
+endfunction
+" send a newline
+function! floaterm#ai#send_cr(stay_curr) abort
+    let ai_bufnr = floaterm#ai#get_ai_bufnr()
+    if ai_bufnr
+        call s:send_prompt('cr', a:stay_curr)
+    else
+        call floaterm#enhance#showmsg('No AI floaterm window found', 1)
+    endif
 endfunction
 " --------------------------------------------------------------
 " fzf file picker with root dir files -> send paths to latest AI terminal
@@ -154,7 +152,7 @@ function! floaterm#ai#fzf_file_sink(ai_bufnr, stay_curr, lines) abort
         call floaterm#enhance#showmsg('No file selected', 1)
     else
         call floaterm#terminal#open_existing(ai_bufnr)
-        call floaterm#terminal#send(ai_bufnr, [floaterm#ai#at(a:lines)], 0)
+        call floaterm#terminal#send(ai_bufnr, [s:at_prompt(a:lines)], 0)
         if a:stay_curr
             call floaterm#enhance#wincmdp()
         endif
