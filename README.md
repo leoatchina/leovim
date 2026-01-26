@@ -89,12 +89,13 @@
   - `misc-weather` / `misc-system-info`
 - **项目模板** - 自动识别并生成配置文件
   - `.gitignore`, `.gitconfig`
-  - `.lintr` (R Linter)
+  - `.lintr` (R Linter), `.wildignore`
   - `Rprofile`, `radian_profile`
 
 ### 🌍 跨平台兼容
 - **系统支持** - Linux、Windows、macOS 统一配置
 - **Vim/Neovim 通用** - 同一配置同时支持 Vim  和 Neovim
+- **VSCode Neovim** - `vscode-neovim` 模式专用配置与快捷键
 - **终端/GUI 自适应** - 自动检测环境，优化键位映射和颜色显示
 - **便携打包** - `compress.sh` 打包整个配置，一键迁移到新机器
 
@@ -109,7 +110,7 @@
 ## 📋 系统要求
 
 **必需**
-- Vim 7.4+ 或 Neovim 0.8+ (推荐 0.10+)
+- Vim 7.4.399+ 或 Neovim 0.8+ (VSCode Neovim 推荐 0.10+)
 - Git 1.8.5+
 
 **可选（增强功能）**
@@ -117,6 +118,7 @@
 - Python 3.8+ + neovim + pygments
 - Universal Ctags 5.8+
 - GNU Global 6.6.7+
+- VSCode + `vscode-neovim` (仅 VSCode 模式需要)
 
 ## 🚀 快速安装
 
@@ -145,6 +147,19 @@ install.cmd           # 以管理员权限运行
 ./uninstall.sh        # Linux/macOS
 uninstall.cmd         # Windows
 ```
+
+## 🧩 VSCode Neovim 快速开始
+
+1) 安装 VSCode 与 `vscode-neovim` 扩展，确保 `nvim` 版本 >= 0.10 且在 PATH 中  
+2) 在 VSCode `settings.json` 指定 LeoVim 入口：
+```json
+{
+  "vscode-neovim.neovimInitVimPaths.linux": "~/.leovim/conf.d/init.vim",
+  "vscode-neovim.neovimInitVimPaths.mac": "~/.leovim/conf.d/init.vim",
+  "vscode-neovim.neovimInitVimPaths.windows": "C:\\\\Users\\\\<you>\\\\.leovim\\\\conf.d\\\\init.vim"
+}
+```
+3) 将 `conf.d/init/keybindings.json` 合并到 VSCode 的 `keybindings.json`，以启用专用快捷键  
 
 ## 🎮 快速上手
 
@@ -225,10 +240,12 @@ LeoVim 配置了 **WhichKey** 提示系统，按下任何先导键后会自动�
 <M-h>m          main.vim
 <M-h>v          vscode.vim
 <M-h>k          keybindings.json
-<M-h>p/d/l      plugin/conf.d/leovim 目录
+<M-h>u          utils.vim
+<M-h>a          application.vim
+<M-h>p/d/l      main/plugin、conf.d、~/.leovim 目录
 <M-h>A/P        after.vim/pack.vim
-<M-h>n          snippets
-<M-h>s/f        snippets 目录
+<M-h>n          VsnipOpen
+<M-h>s/f        snippets 目录 (conf.d / friendly-snippets)
 
 # 项目文件
 <M-h>r          README.md
@@ -363,6 +380,7 @@ J               显示变量/诊断
 <M-e>i          FZF 选择文件发送
 ```
 支持模型: DeepSeek, Gemini, OpenAI, Claude (通过 Minuet-AI) 及 Copilot, Windsurf
+配置入口: `~/.vimrc.opt` (设置 `g:floaterm_ai_programs` 与 API Key/模型)
 
 ### 🔄 REPL 交互 (`<M-i>`)
 ```
@@ -456,7 +474,6 @@ Y               复制到系统剪贴板 (与 tmux/系统互通)
 <Leader>yz      Zed
 ```
 
-### 📋 诊断与错误
 
 ## 📚 配置文件说明
 
@@ -465,18 +482,26 @@ Y               复制到系统剪贴板 (与 tmux/系统互通)
 ~/.leovim/
 ├── conf.d/          # 主配置目录
 │   ├── init.vim     # 入口文件
-│   ├── cfg/         # 核心配置
-│   ├── lua/         # Lua 配置
-│   ├── plugin/      # 插件配置
-│   └── dap/         # 调试配置
-├── pack/            # 基础包
-└── scripts/         # 工具脚本
+│   ├── init/        # 轻量/VSCode 配置与 keybindings.json
+│   ├── main/        # 主配置 (plugin/lua/after)
+│   ├── plug/        # 插件清单与分组
+│   ├── snippets/    # 内置 snippets
+│   ├── tasks/       # AsyncTasks 模板
+│   ├── templates/   # .gitignore/.lintr/.wildignore 等模板
+│   ├── dap/         # nvim-dap 配置
+│   ├── vimspector/  # vimspector 配置
+│   └── pack/leo/opt # 内置插件包
+├── pack/            # 扩展包 (fork/clone)
+├── scripts/         # 工具脚本
+├── assets/          # 资源文件
+└── fonts/           # 字体
 ```
 
 ### 自定义配置
 - `~/.vimrc.opt` - 功能开关文件
 - `~/.leovim.d/after.vim` - 用户自定义配置
 - `~/.leovim.d/pack.vim` - 自定义插件列表
+- `~/.leovim.d/ftplugin/` - 语言级局部配置
 
 ## ❓ 常见问题
 
@@ -524,11 +549,16 @@ vim --startuptime startup.log
 
 **Q: 如何切换补全引擎？**
 
-编辑 `~/.vimrc.opt`，启用对应行：
+编辑 `~/.vimrc.opt`，按 Vim/Neovim 取消注释对应行：
 ```vim
-let g:opt_vim_completes = 'mucomplete'  " 基础补全
-let g:opt_vim_completes = 'coc'         " coc.nvim
-let g:opt_vim_completes = 'cmp'         " nvim-cmp
+" Neovim
+call pack#add('blink')   " blink.cmp
+" call pack#add('cmp')   " nvim-cmp
+" call pack#add('builtin')
+
+" Vim
+" call pack#add('coc')
+" call pack#add('mcm')   " mucomplete
 ```
 
 **Q: 快捷键冲突怎么办？**
@@ -543,10 +573,10 @@ nnoremap <M-h> :YourCommand<CR>
 
 **Q: 如何禁用某个插件？**
 
-编辑 `~/.vimrc.opt`，注释对应行：
+编辑 `~/.vimrc.opt` 或 `~/.leovim.d/pack.vim`，注释对应 `pack#add`：
 ```vim
-" let g:opt_fzf = 1          " 禁用 fzf
-" let g:opt_coc = 1          " 禁用 coc.nvim
+" call pack#add('fzf')       " 注释即关闭
+" call pack#add('coc')       " 注释即关闭
 ```
 
 ### 调试问题
