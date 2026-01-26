@@ -7,5 +7,5 @@ vim.keymap.set({ "n", "x" }, "<Tab>ob", function() require("opencode").ask("@buf
 vim.keymap.set({ "n", "x" }, "<Tab>oq", function() require("opencode").ask("@quickfix: ", { submit = true }) end, { desc = "Ask opencode quickfix" })
 vim.keymap.set({ "n", "x" }, "<Tab>og", function() require("opencode").ask("@diff: ", { submit = true }) end, { desc = "Ask opencode gdiff" })
 vim.keymap.set({ "n", "x" }, "<Tab>om", function() require("opencode").ask("@marks: ", { submit = true }) end, { desc = "Ask opencode marks" })
-vim.keymap.set({ "n", "x" }, "<Tab>oe", function() require("opencode").select() end, { desc = "Execute opencode action…" })
+vim.keymap.set({ "n", "x" }, "<Tab>oo", function() require("opencode").select() end, { desc = "Execute opencode action…" })
 vim.keymap.set({ "n", "t" }, "<M-e>o", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
