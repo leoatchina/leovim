@@ -432,17 +432,240 @@ dm              删除标记
 
 ## ❓ 常见问题
 
-**如何禁用某个功能？**
-编辑 `~/.vimrc.opt` 文件，注释掉对应的功能行
+### 安装相关
 
-**补全不工作？**
-确保已安装 Node.js 和对应的 LSP server
+<details>
+<summary><b>Q: 安装后启动很慢怎么办？</b></summary>
 
-**如何更新插件？**
-在 Vim 中执行 `:PlugUpdate`
+```vim
+" 1. 检查是否在首次启动安装插件
+:PlugStatus
 
-**如何添加自定义配置？**
-在 `~/.leovim.d/after.vim` 中添加你的配置
+" 2. 查看启动时间分析
+vim --startuptime startup.log
+" 查看 startup.log 找出耗时插件
+
+" 3. 禁用不需要的功能
+" 编辑 ~/.vimrc.opt，注释掉不需要的模块
+```
+</details>
+
+<details>
+<summary><b>Q: 如何在无网络环境安装？</b></summary>
+
+1. 在有网络的机器上执行 `./install.sh all`
+2. 运行 `scripts/compress.sh` 打包
+3. 复制 `~/leovim.tar.gz` 到目标机器
+4. 解压后执行 `./install.sh`
+</details>
+
+<details>
+<summary><b>Q: Windows 下安装失败？</b></summary>
+
+- 确保以管理员权限运行 `install.cmd`
+- 检查是否安装了 Git for Windows
+- 关闭杀毒软件后重试
+- 检查路径中是否包含中文或特殊字符
+</details>
+
+### 功能使用
+
+<details>
+<summary><b>Q: 补全不工作？</b></summary>
+
+```vim
+" 1. 检查 LSP 状态
+:CocInfo        " 如果使用 coc.nvim
+:LspInfo        " 如果使用 nvim-lsp
+
+" 2. 安装语言服务器
+:CocInstall coc-python coc-go coc-rust-analyzer
+
+" 3. 检查 Node.js 版本
+:!node --version    " 需要 20.0+
+```
+</details>
+
+<details>
+<summary><b>Q: 如何切换补全引擎？</b></summary>
+
+编辑 `~/.vimrc.opt`，启用对应行：
+```vim
+let g:opt_vim_completes = 'mucomplete'  " 基础补全
+let g:opt_vim_completes = 'coc'         " coc.nvim
+let g:opt_vim_completes = 'cmp'         " nvim-cmp
+```
+</details>
+
+<details>
+<summary><b>Q: 快捷键冲突怎么办？</b></summary>
+
+在 `~/.leovim.d/after.vim` 中重新映射：
+```vim
+" 取消原有映射
+unmap <M-h>
+" 设置新映射
+nnoremap <M-h> :YourCommand<CR>
+```
+</details>
+
+<details>
+<summary><b>Q: 如何禁用某个插件？</b></summary>
+
+编辑 `~/.vimrc.opt`，注释对应行：
+```vim
+" let g:opt_fzf = 1          " 禁用 fzf
+" let g:opt_coc = 1          " 禁用 coc.nvim
+```
+</details>
+
+### 调试问题
+
+<details>
+<summary><b>Q: REPL 无法启动？</b></summary>
+
+```bash
+# 检查 Python 环境
+python3 -c "import pynvim"
+
+# 检查浮动终端插件
+vim -c ':echo exists(":FloatermNew")' -c 'q'
+
+# 手动安装 Python 包
+pip3 install pynvim neovim
+```
+</details>
+
+<details>
+<summary><b>Q: Git 功能不可用？</b></summary>
+
+```bash
+# 检查 Git 版本
+git --version    # 需要 1.8.5+
+
+# 检查 fugitive 插件
+vim -c ':scriptnames | grep fugitive'
+
+# 安装 LazyGit（可选）
+brew install lazygit              # macOS
+sudo apt install lazygit          # Ubuntu
+```
+</details>
+
+### 性能优化
+
+<details>
+<summary><b>Q: 大文件编辑卡顿？</b></summary>
+
+在 `~/.leovim.d/after.vim` 添加：
+```vim
+" 大文件自动禁用重功能
+autocmd BufReadPre * if getfsize(expand("%")) > 1000000 |
+    \ setlocal syntax=off |
+    \ setlocal noswapfile |
+    \ endif
+```
+</details>
+
+<details>
+<summary><b>Q: LSP 占用内存过高？</b></summary>
+
+```vim
+" 限制 LSP 工作空间
+let g:coc_workspace_folder_blacklist = ['node_modules', 'target']
+
+" 禁用部分诊断功能
+let g:coc_diagnostic_disable = 1
+```
+</details>
+
+### 更新维护
+
+<details>
+<summary><b>Q: 如何更新 LeoVim？</b></summary>
+
+```bash
+cd ~/.leovim
+git pull
+./install.sh
+```
+</details>
+
+<details>
+<summary><b>Q: 如何更新插件？</b></summary>
+
+```vim
+:PlugUpdate     " 更新所有插件
+:PlugUpgrade    " 更新插件管理器
+:CocUpdate      " 更新 Coc 扩展
+```
+</details>
+
+<details>
+<summary><b>Q: 如何备份配置？</b></summary>
+
+```bash
+# 使用内置打包脚本
+~/.leovim/scripts/compress.sh
+
+# 或手动备份
+tar -czf leovim-backup.tar.gz \
+  ~/.leovim ~/.leovim.d ~/.vimrc ~/.vimrc.opt
+```
+</details>
+
+### 高级技巧
+
+<details>
+<summary><b>Q: 如何添加自定义语言支持？</b></summary>
+
+1. 安装 LSP server：`:CocInstall coc-xxx`
+2. 创建 ftplugin：`~/.leovim.d/ftplugin/xxx.vim`
+3. 添加 snippets：`~/.leovim/conf.d/snippets/xxx.json`
+</details>
+
+<details>
+<summary><b>Q: 如何自定义主题？</b></summary>
+
+在 `~/.leovim.d/after.vim` 中：
+```vim
+colorscheme your_theme
+" 自定义高亮
+highlight Normal guibg=#1e1e1e
+highlight LineNr guifg=#5a5a5a
+```
+</details>
+
+<details>
+<summary><b>Q: 快捷键提示不显示？</b></summary>
+
+```vim
+" 检查 which-key 是否安装
+:echo exists('g:loaded_which_key')
+
+" 手动触发
+:WhichKey '<Leader>'
+:WhichKey '<M-h>'
+```
+</details>
+
+---
+
+## 🤝 参与贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+### 报告问题
+- 使用 Issue 模板
+- 提供详细的复现步骤
+- 附上 `:version` 和 `:checkhealth` 输出
+
+### 贡献代码
+1. Fork 本仓库
+2. 创建特性分支：`git checkout -b feature/xxx`
+3. 提交改动：`git commit -am 'Add xxx'`
+4. 推送分支：`git push origin feature/xxx`
+5. 提交 Pull Request
 
 ## 📄 许可证
 MIT License
