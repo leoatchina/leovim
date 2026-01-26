@@ -343,19 +343,15 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
         return
     endif
     let idx = floaterm#enhance#create_idx()
-    let wincmdp = a:0 && type(a:1) == type(0) && a:1 ? 1 : 0
-    let cmd = a:cmd
+    let cmd = trim(a:cmd)
     let opts = a:opts
     let wintype = floaterm#enhance#get_opt_param(opts, 'wintype')
-    let position = floaterm#enhance#get_opt_param(opts, 'position')
-    " check all bufs to find if the the same command has been opened
-    let check_string = printf("%s-%s-%s", cmd, wintype, position)
+    let check_string = printf("%s-%s", cmd, wintype)
     for bufnr in floaterm#buflist#gather()
-        let buf_cmd = floaterm#config#get(bufnr, 'cmd', '')
+        let buf_cmd = trim(floaterm#config#get(bufnr, 'cmd', ''))
         let buf_wintype = floaterm#config#get(bufnr, 'wintype', '')
-        let buf_position = floaterm#config#get(bufnr, 'position', '')
-        if check_string ==# printf("%s-%s-%s", buf_cmd, buf_wintype, buf_position)
-            call call(a:callback, [bufnr])
+        if check_string ==# printf("%s-%s", buf_cmd, buf_wintype)
+            call floaterm#terminal#open_existing(bufnr)
             return
         endif
     endfor
@@ -368,6 +364,8 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
     elseif type ==# 'repl'
         call floaterm#repl#set_repl_bufnr(bufnr, idx)
     endif
+    " wincmdp
+    let wincmdp = a:0 && type(a:1) == type(0) && a:1 ? 1 : 0
     if wincmdp
         call floaterm#enhance#wincmdp()
     endif

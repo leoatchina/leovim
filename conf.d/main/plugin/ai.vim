@@ -22,3 +22,6 @@ if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') &&
     nnoremap <silent><M-e>0    :FloatermAiFzfFiles!<Cr>
     nnoremap <silent><M-e>i    :FloatermAiFzfFiles<Cr>
 endif
+if pack#installed('opencode.nvim')
+    lua require('cfg/opencode')
+endif
