@@ -439,8 +439,8 @@ xnoremap <M-i><M-i> <ESC><C-w><C-w>
 if pack#installed('vim-floaterm', 'vim-floaterm-enhance')
     tnoremap <M-i><M-i> <C-\><C-n><C-w><C-w>
     " NOTE: ! means keep in current line
+    nnoremap <silent><M-i><M-r> :FloatermReplStart<Cr>
     nnoremap <silent><M-i>r :FloatermReplStart!<Cr>
-    nnoremap <silent><M-i>; :FloatermReplStart<Cr>
     nnoremap <silent><M-i><Cr> :FloatermReplSendCrOrStart!<Cr>
     " repl line send
     nnoremap <silent><M-i>n :FloatermReplSend<Cr>
