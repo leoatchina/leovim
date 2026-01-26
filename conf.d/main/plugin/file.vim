@@ -38,20 +38,18 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-if pack#planned_fzf()
-    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
-else
-    nnoremap <silent><nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
-endif
-if pack#planned_leaderf()
+if pack#planned_leaderf() && !has('nvim')
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
     nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=git#git_root_dir()<Cr><Cr>
+    nnoremap <silent><nowait><C-p>      :LeaderfFile <C-r>=utils#get_root_dir()<Cr><Cr>
 elseif pack#planned_fzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>p  :FzfGitFiles<Cr>
+    nnoremap <silent><nowait><C-p>      :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=git#git_root_dir()<Cr><Cr>
+    nnoremap <silent><nowait><C-p>      :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
 endif
 if pack#pref_fzf()
     nnoremap <nowait>\F :FzfGitFiles <C-r>=@"<Cr>
