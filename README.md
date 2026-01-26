@@ -11,14 +11,31 @@
 - **智能降级** - 根据环境自动选择最佳配置（Vim/Neovim，GUI/终端）
 - **预设模板** - 自动创建 `.gitignore`、`.lintr` 等常用配置文件
 
+### 🤖 AI 增强体系 (双模驱动)
+- **AI 智能补全 (Ghost Text)**
+  - 专注于**代码生成**，实时预测
+  - 引擎：Minuet-AI (DeepSeek/Gemini/OpenAI) / Copilot / Windsurf
+  - 体验：打字时自动出现灰色建议，Tab 键采纳
+- **AI 助手与 REPL (交互式)**
+  - 专注于**代码理解与执行**
+  - **核心机制**：基于同一底层插件 (`vim-floaterm-enhance`) 实现的统一交互体验
+  - **REPL (`<M-i>`)**：将代码发送到解释器 (Python/R/Shell) 执行
+  - **AI 助手 (`<M-e>`)**：将代码发送到 LLM 进行解释、重构或对话
+  - **统一体验**：均使用浮动窗口，支持从 Buffer 发送选中代码、文件或目录
+
 ### 🎯 智能补全，多引擎支持
 - **三层补全体系**
   - 基础：vim-mucomplete（dict + buffer + path）
   - 进阶：coc.nvim（Node.js LSP，插件生态丰富）
-  - 高级：nvim-cmp（原生 Neovim LSP，性能最优）
-- **AI 代码助手** - 集成 Codeium/Copilot，智能代码生成
+  - 高级：blink.cmp / nvim-cmp（原生 Neovim LSP，Rust 加速，性能极致）
 - **代码片段** - VSCode 格式 snippets，支持自定义和共享
-- **多语言支持** - 内置 Python、Go、Rust、C/C++、Java、JavaScript 等语言配置
+- **多语言支持** - 内置 Python, Go, Rust, C/C++, Java, JS/TS, R, Lua, LaTeX 等语言配置
+
+### 🌲 Treesitter 语法感知
+- **智能高亮** - 基于 AST 的精确语法高亮，支持数百种语言
+- **对象操作** - `af`/`if` (函数), `ac`/`ic` (类) 基于语法树的文本对象选择
+- **智能选择** - `sv` 智能扩展选择范围，`m` 智能节点跳转
+- **上下文显示** - 滚动时在顶部固定显示当前函数/类签名 (Context)
 
 ### 🔍 强大搜索，三层查找机制
 - **模糊搜索** - FZF/LeaderF 快速定位文件、buffer、命令
@@ -31,24 +48,28 @@
 - **双调试器支持**
   - Vimspector：跨语言调试器，配置简单
   - nvim-dap：Neovim 原生 DAP 协议，扩展性强
-- **REPL 即时执行** - Python、R、Julia、Shell 等语言的交互式执行
-- **代码块发送** - 支持 `# %%` 标记的代码块发送到 REPL
-- **AI 辅助调试** - 发送代码到 AI 助手进行分析和优化
 
 ### ⚡ 高性能设计
 - **模块化加载** - 功能开关文件 `~/.vimrc.opt` 按需启用模块
-- **延迟加载** - 插件按需加载，启动速度 < 100ms
+- **延迟加载** - 插件按需加载(利用vim-plug 封装)
 - **增量索引** - Ctags/Gtags 增量更新，大项目快速响应
 - **异步执行** - 编译、测试、搜索均在后台异步运行
 
+### 💾 会话管理
+- **自动保存** - 退出时自动保存当前会话（窗口布局、Buffer、光标位置）
+- **可视化管理** - `<Leader>ss` 调出 FZF 面板，快速搜索、加载、删除历史会话
+- **启动页集成** - Startify 启动页显示最近使用的会话，一键恢复工作现场
+
 ### 🎨 现代 IDE 体验
 - **丰富的 UI 组件**
-  - 文件树：coc-explorer/nvim-tree，支持 Git 状态显示
+  - 文件管理：Oil.nvim (像编辑 buffer 一样管理文件) / fern.vim
+  - 导航栏：Dropbar.nvim (Winbar 面包屑导航)
   - 状态栏：lightline，实时显示 Git 分支、LSP 状态、文件信息
   - 标签栏：智能 buffer 管理，支持快速切换和关闭
   - 浮动窗口：终端、REPL、AI 助手均支持浮动窗口
 - **WhichKey 提示系统** - 按下先导键自动显示所有可用命令
-- **主题丰富** - 内置多种配色方案，支持 Fzf 快速切换
+- **主题丰富** - 内置 Catppuccin, TokyoNight, Edge, Gruvbox 等多种配色
+
 
 ### 🔄 完整的 Git 工作流
 - **版本控制集成**
@@ -61,9 +82,19 @@
   - 交互式 rebase
   - Conflict marker 高亮和快速解决
 
+### 🛠️ 任务与模板
+- **全局任务库** - `tasks_common.ini` 内置通用任务
+  - `git-push-master` / `git-checkout`
+  - `net-host-ip` / `net-check-port`
+  - `misc-weather` / `misc-system-info`
+- **项目模板** - 自动识别并生成配置文件
+  - `.gitignore`, `.gitconfig`
+  - `.lintr` (R Linter)
+  - `Rprofile`, `radian_profile`
+
 ### 🌍 跨平台兼容
 - **系统支持** - Linux、Windows、macOS 统一配置
-- **Vim/Neovim 通用** - 同一配置同时支持 Vim 7.4+ 和 Neovim 0.7+
+- **Vim/Neovim 通用** - 同一配置同时支持 Vim  和 Neovim
 - **终端/GUI 自适应** - 自动检测环境，优化键位映射和颜色显示
 - **便携打包** - `compress.sh` 打包整个配置，一键迁移到新机器
 
@@ -78,7 +109,7 @@
 ## 📋 系统要求
 
 **必需**
-- Vim 7.4+ 或 Neovim 0.7.2+
+- Vim 7.4+ 或 Neovim 0.8+ (推荐 0.10+)
 - Git 1.8.5+
 
 **可选（增强功能）**
@@ -235,12 +266,27 @@ s<CR>           全局搜索光标下词
 <M-j>[          水平分割打开
 <M-j>]          垂直分割打开
 
+# Treesitter 智能选择
+sv              Treesitter 智能扩展选择
+m               Treesitter 节点跳转
+
 # Flash 快速跳转 (s 系列)
 ss              Flash 快速跳转
+
 sl              跳转到任意行
 sf/sF/st/sT     跳转到字符
 <M-f/b>         下/上一个单词
 <M-g>           跳转到行（插入模式）
+```
+
+### 🎯 会话管理 (`<Leader>s`)
+```
+<Leader>ss      FZF 会话列表 (搜索/加载/删除)
+<Leader>st      打开 Startify 启动页
+<Leader>sv      保存当前会话
+<Leader>sl      加载会话
+<Leader>sd      删除会话
+<Leader>sc      关闭当前会话
 ```
 
 ### 🔧 LSP 与行搜索 (`<M-l>`)
@@ -316,6 +362,7 @@ J               显示变量/诊断
 <M-e>d          发送当前目录
 <M-e>i          FZF 选择文件发送
 ```
+支持模型: DeepSeek, Gemini, OpenAI, Claude (通过 Minuet-AI) 及 Copilot, Windsurf
 
 ### 🔄 REPL 交互 (`<M-i>`)
 ```
@@ -392,23 +439,24 @@ iv/av           代码块 (# %%)
 <M-+>           切换终端位置
 ```
 
-### 📋 复制粘贴与标记
+### 📋 复制粘贴与外部联动
 ```
-# 复制粘贴
-<M-v>           寄存器选择器
-<Leader>yp/yf   复制路径/文件名
-<Leader>ym      复制位置 (文件:行:列)
-\pw             粘贴到光标下词
+# 智能复制
+<Leader>ya      复制绝对路径
+<Leader>yd      复制目录路径
+<Leader>yb      复制文件名
+<Leader>yl      复制行引用 (@file#L10-20)
+Y               复制到系统剪贴板 (与 tmux/系统互通)
 
-# 标记 (m 先导键)
-m<CR>           切换标记
-m;              下一个标记
-m/              列出 buffer 标记
-dm              删除标记
-;m / ,m         下/上一个标记 (按字母)
-]m / [m         下/上一个标记 (按位置)
-<Leader>M       Fzf 标记列表
+# 外部编辑器联动 (打开当前位置)
+<Leader>yv      VSCode
+<Leader>yc      Cursor
+<Leader>yw      Windsurf
+<Leader>yq      Qoder / Trae
+<Leader>yz      Zed
 ```
+
+### 📋 诊断与错误
 
 ## 📚 配置文件说明
 
@@ -971,4 +1019,4 @@ let $FZF_PREVIEW_COMMAND = 'bat --color=always --style=numbers {}'
 MIT License
 ---
 **最后更新**: 2026-01
-**维护者**: leoatchina 
+**维护者**: leoatchina
