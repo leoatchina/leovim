@@ -33,7 +33,7 @@ let g:floaterm_repl_exit.python = 'exit'
 let g:floaterm_repl_exit.vim = 'vis'
 let g:floaterm_repl_exit.r = 'quit'
 " ------------------------------------------------------------
-" Start. NOTE ! means startnow
+" Start. NOTE ! = <bang>0 means startnow
 " ------------------------------------------------------------
 command! -bang FloatermReplStart call floaterm#repl#start(<bang>0)
 " ------------------------------------------------------------
@@ -42,7 +42,7 @@ command! -bang FloatermReplStart call floaterm#repl#start(<bang>0)
 command! -bang FloatermReplSendCr call floaterm#repl#send_cr_or_start(0)
 command! -bang FloatermReplSendCrOrStart call floaterm#repl#send_cr_or_start(1, <bang>0)
 " -------------------------------------------------------------------------------
-" commands. NOTE <bang>0 means ! in Send commands means stay in curr line
+" commands. NOTE ! = <bang>0 commands means stay in curr line after send
 " -------------------------------------------------------------------------------
 command! -bang FloatermReplSendBlock call floaterm#repl#send("block", <bang>0)
 command! -bang FloatermReplSendFromBegin call floaterm#repl#send("begin", <bang>0)
