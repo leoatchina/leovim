@@ -11,6 +11,8 @@
 - **智能降级** - 根据环境自动选择最佳配置（Vim/Neovim，GUI/终端）
 - **预设模板** - 自动创建 `.gitignore`、`.lintr` 等常用配置文件
 
+> **配置文件**: `install.sh` · `conf.d/pack/` · `conf.d/templates/`
+
 ### 🤖 AI 增强体系 (双模驱动)
 - **AI 智能补全 (Ghost Text)**
   - 专注于**代码生成**，实时预测
@@ -23,6 +25,8 @@
   - **AI 助手 (`<M-e>`)**：将代码发送到 LLM 进行解释、重构或对话
   - **统一体验**：均使用浮动窗口，支持从 Buffer 发送选中代码、文件或目录
 
+> **配置文件**: `conf.d/main/plugin/ai.vim` · `conf.d/main/plugin/debug.vim` (REPL) · `conf.d/pack/leo/opt/vim-floaterm-enhance/`
+
 ### 🎯 智能补全，多引擎支持
 - **三层补全体系**
   - 基础：vim-mucomplete（dict + buffer + path）
@@ -30,6 +34,8 @@
   - 高级：blink.cmp / nvim-cmp（原生 Neovim LSP，Rust 加速，性能极致）
 - **代码片段** - VSCode 格式 snippets，支持自定义和共享
 - **多语言支持** - 内置 Python, Go, Rust, C/C++, Java, JS/TS, R, Lua, LaTeX 等语言配置
+
+> **配置文件**: `conf.d/main/plugin/complete.vim` · `conf.d/main/after/cfg/coc.vim` · `conf.d/main/lua/cfg/cmp_cfg.lua` · `conf.d/main/lua/lsp.lua` · `conf.d/snippets/`
 
 ### 🌲 Treesitter 语法感知
 - **智能高亮** - 基于 AST 的精确语法高亮，支持数百种语言
@@ -49,6 +55,8 @@
   - `sv`: **Flash Treesitter** - 极速跳转到任意语法节点 (带标签)
   - `m`: **Flash Treesitter Search** - (可视/操作模式) 搜索并选中语法节点
 
+> **配置文件**: `conf.d/main/lua/treesitter.lua` · `conf.d/init/plugin/textobj.vim`
+
 ### 🔍 强大搜索，三层查找机制
 - **模糊搜索** - FZF/LeaderF 快速定位文件、buffer、命令
 - **全局搜索** - ripgrep 高性能全文搜索，支持正则表达式
@@ -56,10 +64,14 @@
 - **搜索后替换** - 搜索结果直接按 `r` 进入批量替换模式
 - **增量搜索** - Buffer 内实时搜索，支持多 buffer 联合搜索
 
+> **配置文件**: `conf.d/main/plugin/search.vim` · `conf.d/main/plugin/tags.vim` · `conf.d/main/plugin/atomic.vim` (Flash跳转)
+
 ### 🐛 完整调试体系
 - **双调试器支持**
   - Vimspector：跨语言调试器，配置简单
   - nvim-dap：Neovim 原生 DAP 协议，扩展性强
+
+> **配置文件**: `conf.d/main/plugin/debug.vim` · `conf.d/dap/` · `conf.d/vimspector/` · 项目根目录的 `.vimspector.json` 或 `.vscode/launch.json`
 
 ### ⚡ 高性能设计
 - **模块化加载** - 功能开关文件 `~/.vimrc.opt` 按需启用模块
@@ -67,10 +79,14 @@
 - **增量索引** - Ctags/Gtags 增量更新，大项目快速响应
 - **异步执行** - 编译、测试、搜索均在后台异步运行
 
+> **配置文件**: `~/.vimrc.opt` · `conf.d/init/opt.vim` · `conf.d/plug/` (插件清单) · `conf.d/main/plugin/run.vim` (异步任务)
+
 ### 💾 会话管理
 - **自动保存** - 退出时自动保存当前会话（窗口布局、Buffer、光标位置）
 - **可视化管理** - `<Leader>ss` 调出 FZF 面板，快速搜索、加载、删除历史会话
 - **启动页集成** - Startify 启动页显示最近使用的会话，一键恢复工作现场
+
+> **配置文件**: `conf.d/main/plugin/session.vim` · `conf.d/main/plugin/history.vim` (文件历史)
 
 ### 🎨 现代 IDE 体验
 - **丰富的 UI 组件**
@@ -81,6 +97,8 @@
   - 浮动窗口：终端、REPL、AI 助手均支持浮动窗口
 - **WhichKey 提示系统** - 按下先导键自动显示所有可用命令
 - **主题丰富** - 内置 Catppuccin, TokyoNight, Edge, Gruvbox 等多种配色
+
+> **配置文件**: `conf.d/main/plugin/sidebar.vim` · `conf.d/main/plugin/lightline.vim` · `conf.d/main/plugin/scheme.vim` · `conf.d/main/plugin/indicate.vim` (WhichKey) · `conf.d/main/plugin/buffer.vim` · `conf.d/main/plugin/tab.vim` · `conf.d/main/plugin/window.vim`
 
 
 ### 🔄 完整的 Git 工作流
@@ -94,6 +112,8 @@
   - 交互式 rebase
   - Conflict marker 高亮和快速解决
 
+> **配置文件**: `conf.d/main/plugin/git.vim` · `conf.d/init/autoload/git.vim` (Git 工具函数)
+
 ### 🛠️ 任务与模板
 - **全局任务库** - `tasks_common.ini` 内置通用任务
   - `git-push-master` / `git-checkout`
@@ -104,6 +124,8 @@
   - `.lintr` (R Linter), `.wildignore`
   - `Rprofile`, `radian_profile`
 
+> **配置文件**: `conf.d/main/plugin/run.vim` · `conf.d/tasks/` · `conf.d/templates/` · 项目根目录或 `~/.config/tasks.ini`
+
 ### 🌍 跨平台兼容
 - **系统支持** - Linux、Windows、macOS 统一配置
 - **Vim/Neovim 通用** - 同一配置同时支持 Vim  和 Neovim
@@ -111,11 +133,15 @@
 - **终端/GUI 自适应** - 自动检测环境，优化键位映射和颜色显示
 - **便携打包** - `compress.sh` 打包整个配置，一键迁移到新机器
 
+> **配置文件**: `scripts/compress.sh` · `conf.d/init/vscode.vim` · `conf.d/init/keybindings.json` (VSCode) · `conf.d/main/main.vim` (系统检测)
+
 ### 🛠️ 高度可定制
 - **功能开关** - `~/.vimrc.opt` 控制所有模块的启用/禁用
 - **用户配置** - `~/.leovim.d/after.vim` 添加个人配置，不影响升级
 - **自定义插件** - `~/.leovim.d/pack.vim` 添加额外插件
 - **按文件类型定制** - 丰富的 ftplugin 配置，每种语言独立优化
+
+> **配置文件**: `~/.vimrc.opt` · `~/.leovim.d/after.vim` · `~/.leovim.d/pack.vim` · `conf.d/init/ftplugin/` · `conf.d/main/after/ftplugin/`
 
 ---
 
@@ -190,7 +216,7 @@ uninstall.cmd         # Windows
 
 ## 🧩 VSCode Neovim 快速开始
 
-1) 安装 VSCode 与 `vscode-neovim` 扩展，确保 `nvim` 版本 >= 0.10 且在 PATH 中  
+1) 安装 VSCode 与 `vscode-neovim` 扩展，确保 `nvim` 版本 >= 0.10 且在 PATH 中
 2) 在 VSCode `settings.json` 指定 LeoVim 入口：
 ```json
 {
@@ -199,7 +225,7 @@ uninstall.cmd         # Windows
   "vscode-neovim.neovimInitVimPaths.windows": "C:\\\\Users\\\\<you>\\\\.leovim\\\\conf.d\\\\init.vim"
 }
 ```
-3) 将 `conf.d/init/keybindings.json` 合并到 VSCode 的 `keybindings.json`，以启用专用快捷键  
+3) 将 `conf.d/init/keybindings.json` 合并到 VSCode 的 `keybindings.json`，以启用专用快捷键
 
 ## 🎮 快速上手
 

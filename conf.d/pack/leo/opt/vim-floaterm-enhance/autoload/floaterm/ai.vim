@@ -2,28 +2,28 @@
 " AI buf control
 " --------------------------------------------------------------
 function! floaterm#ai#get_ai_bufnr(...) abort
-    let t:floaterm_ai_lst = get(t:, 'floaterm_ai_lst', [])
+    let g:floaterm_ai_lst = get(g:, 'floaterm_ai_lst', [])
     let all_bufnrs = floaterm#buflist#gather()
-    if empty(all_bufnrs) || empty(t:floaterm_ai_lst)
-        let t:floaterm_ai_lst = []
+    if empty(all_bufnrs) || empty(g:floaterm_ai_lst)
+        let g:floaterm_ai_lst = []
         return 0
     endif
     let ai_bufnr = (a:0 && a:1) ? a:1 : 0
     if ai_bufnr
         call floaterm#ai#set_ai_bufnr(ai_bufnr)
     else
-        call filter(t:floaterm_ai_lst, {_, v -> index(all_bufnrs, v) >= 0})
+        call filter(g:floaterm_ai_lst, {_, v -> index(all_bufnrs, v) >= 0})
     endif
-    if empty(t:floaterm_ai_lst)
+    if empty(g:floaterm_ai_lst)
         return 0
     else
-        let ai_bufnr = t:floaterm_ai_lst[0]
+        let ai_bufnr = g:floaterm_ai_lst[0]
         return ai_bufnr
     endif
 endfunction
 function! floaterm#ai#set_ai_bufnr(...) abort
     " 把 bufnr 放到  floaterm_ai_bufnr的第一个
-    let t:floaterm_ai_lst = get(t:, 'floaterm_ai_lst', [])
+    let g:floaterm_ai_lst = get(g:, 'floaterm_ai_lst', [])
     let all_bufnrs = floaterm#buflist#gather()
     if a:0 && type(a:1) == type(0)
         let bufnr = a:1
@@ -33,9 +33,9 @@ function! floaterm#ai#set_ai_bufnr(...) abort
     if bufnr <= 0
         return
     endif
-    call filter(t:floaterm_ai_lst, {_, v -> v != bufnr && index(all_bufnrs, v) >= 0})
+    call filter(g:floaterm_ai_lst, {_, v -> v != bufnr && index(all_bufnrs, v) >= 0})
     " call floaterm#config#set(bufnr, 'program', 'AI')
-    call insert(t:floaterm_ai_lst, bufnr, 0)
+    call insert(g:floaterm_ai_lst, bufnr, 0)
 endfunction
 " --------------------------------------------------------------
 " get programs

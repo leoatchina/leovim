@@ -2,7 +2,7 @@
 " NOTE: idx/get/set
 " -------------------------------------
 function! floaterm#repl#get_repl_bufnr(...) abort
-    if !exists('t:floaterm_repl_dict')
+    if !exists('g:floaterm_repl_dict')
         return 0
     endif
     if a:0 && type(a:1) == type('') && a:1
@@ -10,26 +10,26 @@ function! floaterm#repl#get_repl_bufnr(...) abort
     else
         let idx = floaterm#enhance#create_idx()
     endif
-    if !has_key(t:floaterm_repl_dict, idx)
+    if !has_key(g:floaterm_repl_dict, idx)
         return 0
     endif
-    let bufnr = t:floaterm_repl_dict[idx]
+    let bufnr = g:floaterm_repl_dict[idx]
     if index(floaterm#buflist#gather(), bufnr) < 0
-        call remove(t:floaterm_repl_dict, idx)
+        call remove(g:floaterm_repl_dict, idx)
         return 0
     endif
     return bufnr
 endfunction
 function! floaterm#repl#set_repl_bufnr(bufnr, ...) abort
-    if !exists('t:floaterm_repl_dict')
-        let t:floaterm_repl_dict = {}
+    if !exists('g:floaterm_repl_dict')
+        let g:floaterm_repl_dict = {}
     endif
     if a:0 && type(a:1) == type('')
         let idx = a:1
     else
         let idx = floaterm#enhance#create_idx()
     endif
-    let t:floaterm_repl_dict[idx] = a:bufnr
+    let g:floaterm_repl_dict[idx] = a:bufnr
 endfunction
 " -------------------------------------
 " set repl program for each filetype
@@ -284,12 +284,12 @@ endfunction
 " mark
 " -------------------------------------
 function! floaterm#repl#send_mark() abort
-    if get(t:, 'floaterm_repl_marked_lines', []) == []
-        echom "t:floaterm_repl_marked_lines is empty"
+    if get(g:, 'floaterm_repl_marked_lines', []) == []
+        echom "g:floaterm_repl_marked_lines is empty"
     else
         let repl_bufnr = floaterm#repl#get_repl_bufnr()
         if repl_bufnr
-            call s:send_content(repl_bufnr, t:floaterm_repl_marked_lines)
+            call s:send_content(repl_bufnr, g:floaterm_repl_marked_lines)
         endif
     endif
 endfunction
@@ -297,21 +297,21 @@ function! floaterm#repl#mark(...) abort
     if a:0 >= 2
         let firstline = a:1
         let lastline = a:2
-        let t:floaterm_repl_marked_lines = getline(firstline, lastline)
+        let g:floaterm_repl_marked_lines = getline(firstline, lastline)
         echom "Range marked."
     elseif mode() =~# '^[vV]' || mode() ==# "\<C-v>"
-        let t:floaterm_repl_marked_lines = getline(line("'<"), line("'>"))
+        let g:floaterm_repl_marked_lines = getline(line("'<"), line("'>"))
         echom "Visual selection marked."
     else
         let [start, end] = floaterm#enhance#get_block()
-        let t:floaterm_repl_marked_lines = getline(start, end)
+        let g:floaterm_repl_marked_lines = getline(start, end)
         echom "Block code marked."
     endif
 endfunction
 " Using quickfix to show marked contents
 function! floaterm#repl#show_mark() abort
-    if empty(get(t:, 'floaterm_repl_marked_lines', []))
-        echo "t:floaterm_repl_marked_lines is None"
+    if empty(get(g:, 'floaterm_repl_marked_lines', []))
+        echo "g:floaterm_repl_marked_lines is None"
         return
     endif
     " Clear quickfix list
@@ -321,7 +321,7 @@ function! floaterm#repl#show_mark() abort
     " Prepare quickfix entries
     let qf_entries = []
     let line_nr = 1
-    for line in t:floaterm_repl_marked_lines
+    for line in g:floaterm_repl_marked_lines
         call add(qf_entries, {
             \ 'bufnr': bufnr,
             \ 'lnum': line_nr,
