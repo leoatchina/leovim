@@ -60,7 +60,7 @@ endif
 " ---------------------------------
 " open gitroot getroot
 " ---------------------------------
-nnoremap <leader><Cr> :e<Space>
+nnoremap <leader><Cr> :e!<Space>
 nnoremap <leader>P :tabe <C-r>=git#git_root_dir()<Cr>/
 nnoremap <leader>E :tabe <C-r>=utils#get_root_dir()<Cr>/
 " ---------------------------------
