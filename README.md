@@ -33,9 +33,21 @@
 
 ### 🌲 Treesitter 语法感知
 - **智能高亮** - 基于 AST 的精确语法高亮，支持数百种语言
-- **对象操作** - `af`/`if` (函数), `ac`/`ic` (类) 基于语法树的文本对象选择
-- **智能选择** - `sv` 智能扩展选择范围，`m` 智能节点跳转
-- **上下文显示** - 滚动时在顶部固定显示当前函数/类签名 (Context)
+- **增量选择** - 语法树级区域扩展
+  - `<M-s>`: 初始化选择 / 扩展到当前范围
+  - `<Tab>`: 扩展到父节点
+  - `<M-S>`: 收缩到子节点
+- **文本对象** - 基于语法树的操作 (`d`, `c`, `y`, `v` 后接)
+  - `af` / `if`: 函数 (Function) 外部/内部
+  - `ac` / `ic`: 类 (Class) 外部/内部
+  - `aL` / `iL`: 循环 (Loop) 外部/内部
+- **快速导航** - 在语法节点间跳转
+  - `;f` / `,f`: 下/上一个函数起始
+  - `;c` / `,c`: 下/上一个类起始
+  - `;l` / `,l`: 下/上一个循环起始
+  - `;z` / `,z`: 下/上一个折叠 (Fold)
+  - `sv`: **Flash Treesitter** - 极速跳转到任意语法节点 (带标签)
+  - `m`: **Flash Treesitter Search** - (可视/操作模式) 搜索并选中语法节点
 
 ### 🔍 强大搜索，三层查找机制
 - **模糊搜索** - FZF/LeaderF 快速定位文件、buffer、命令
@@ -120,6 +132,34 @@
 - GNU Global 6.6.7+
 - VSCode + `vscode-neovim` (仅 VSCode 模式需要)
 
+## 📚 配置文件说明
+
+### 目录结构
+```
+~/.leovim/
+├── conf.d/          # 主配置目录
+│   ├── init.vim     # 入口文件
+│   ├── init/        # 轻量/VSCode 配置与 keybindings.json
+│   ├── main/        # 主配置 (plugin/lua/after)
+│   ├── plug/        # 插件清单与分组
+│   ├── snippets/    # 内置 snippets
+│   ├── tasks/       # AsyncTasks 模板
+│   ├── templates/   # .gitignore/.lintr/.wildignore 等模板
+│   ├── dap/         # nvim-dap 配置
+│   ├── vimspector/  # vimspector 配置
+│   └── pack/leo/opt # 内置插件包
+├── pack/            # 扩展包 (fork/clone)
+├── scripts/         # 工具脚本
+├── assets/          # 资源文件
+└── fonts/           # 字体
+```
+
+### 自定义配置
+- `~/.vimrc.opt` - 功能开关文件
+- `~/.leovim.d/after.vim` - 用户自定义配置
+- `~/.leovim.d/pack.vim` - 自定义插件列表
+- `~/.leovim.d/ftplugin/` - 语言级局部配置
+
 ## 🚀 快速安装
 
 **Linux/macOS**
@@ -186,7 +226,7 @@ uninstall.cmd         # Windows
 | `<M-g>` | **Git 操作** | 版本控制、提交、推送、历史查看 |
 | `;` / `,` | **快速导航** | 前进/后退跳转（buffer、错误、符号等） |
 | `[` / `]` | **成对移动** | 括号、函数、类等结构间移动 |
-| `s` | **快速跳转** | Flash 跳转和文本对象操作 |
+| `s` | **快速跳转** | Flash/easymotion 跳转和文本对象操作, vim-surround/vim-sandiwich 操作 |
 | `m` | **标记管理** | 设置/跳转/删除标记 (marks) |
 | `\` | **窗口布局** | 窗口大小调整和布局切换 |
 | `<Tab>` | **窗口控制** | 分屏、任务停止等窗口操作 |
@@ -198,7 +238,6 @@ uninstall.cmd         # Windows
 |------|------|--------|
 | `H/L` | 行首/行尾 | 屏幕顶/底 |
 | `s` | 跳转/文本对象 | 替换字符 |
-| `\|` | buffer 内搜索 | 列跳转 |
 | `q` → `M` | 宏录制 | 宏录制 |
 | `;` / `,` | 前进/后退导航 | 重复 f/t |
 
@@ -266,13 +305,31 @@ LeoVim 配置了 **WhichKey** 提示系统，按下任何先导键后会自动�
 ```
 
 ### 🔍 搜索与替换
+> 核心配置文件: [conf.d/main/plugin/search.vim](https://github.com/leoatchina/leovim/blob/master/conf.d/main/plugin/search.vim)
+
 ```
-s<CR>           全局搜索光标下词
-|               Buffer 内搜索
-<Leader>/       当前目录搜索
-<Tab>/          Git 仓库搜索
-<C-f><CR>       强力全局搜索
-  → 按 r        搜索后替换
+# Buffer 内搜索 (GrepBuf)
+z/              搜索光标下单词 (Buffer)
+z\              输入搜索词 (Buffer)
+z?              搜索寄存器内容 (Buffer)
+
+# 当前目录搜索 (GrepDir)
+s<CR>           搜索光标下单词 (Current Dir)
+s]              输入搜索词 (Current Dir)
+s[              重复上次目录搜索
+
+# 全局/Git 根目录搜索 (GrepAll)
+s/              搜索光标下单词 (Project Root)
+s\              输入搜索词 (Project Root)
+s.              重复上次全局搜索
+s?              搜索寄存器内容 (Project Root)
+
+# 模糊搜索工具 (FZF/LeaderF)
+<Leader>/       FZF 当前目录搜索
+<Tab>/          FZF Git 根目录搜索
+<C-f><CR>       LeaderF/FZF 强力全局搜索
+  → 按 r        搜索后批量替换 (使用 Quickfix 窗口)
+  → 按 W        保存所有替换
 ```
 
 ### 🎯 跳转与导航
@@ -283,17 +340,15 @@ s<CR>           全局搜索光标下词
 <M-j>[          水平分割打开
 <M-j>]          垂直分割打开
 
-# Treesitter 智能选择
-sv              Treesitter 智能扩展选择
-m               Treesitter 节点跳转
-
 # Flash 快速跳转 (s 系列)
-ss              Flash 快速跳转
+sj              向前跳转 (Flash Jump Forward)
+sk              向后跳转 (Flash Jump Backward)
+so              远程操作 (Flash Remote) - 对远处文本执行操作
+sv              Treesitter 节点跳转 (Flash Treesitter)
 
-sl              跳转到任意行
-sf/sF/st/sT     跳转到字符
-<M-f/b>         下/上一个单词
-<M-g>           跳转到行（插入模式）
+# 增强移动
+s; / s,         下/上一个单词 (Easymotion/Word)
+sl / sL         行内/跨行跳转
 ```
 
 ### 🎯 会话管理 (`<Leader>s`)
@@ -370,29 +425,36 @@ J               显示变量/诊断
 ```
 
 ### 🤖 AI 助手 (`<M-e>`)
+> 核心配置文件: [conf.d/main/plugin/ai.vim](https://github.com/leoatchina/leovim/blob/master/conf.d/main/plugin/ai.vim)
+> 底层依赖: [vim-floaterm-enhance](https://github.com/leoatchina/leovim/blob/master/conf.d/pack/leo/opt/vim-floaterm-enhance/README.md)
+
 ```
-<M-e>r          启动 AI 对话
-<M-e>;          切换到 AI 窗口
-<M-e><CR>       发送换行符
-<M-e>l          发送当前行/选中区域
-<M-e>f          发送当前文件
-<M-e>d          发送当前目录
-<M-e>i          FZF 选择文件发送
+<M-e>r          启动 AI 对话窗口
+<M-e>;          打开/切换到 AI 窗口 (不重置上下文)
+<M-e><CR>       发送回车 (在 AI 窗口内)
+<M-e>l          发送当前行 / 选中区域到 AI
+<M-e><BS>       发送当前行 / 选中区域并立即执行
+<M-e>f / <M-e>= 发送当前文件内容到 AI
+<M-e>d / <M-e>- 发送当前目录结构到 AI
+<M-e>i / <M-e>0 FZF 选择文件发送到 AI
 ```
 支持模型: DeepSeek, Gemini, OpenAI, Claude (通过 Minuet-AI) 及 Copilot, Windsurf
-配置入口: `~/.vimrc.opt` (设置 `g:floaterm_ai_programs` 与 API Key/模型)
 
 ### 🔄 REPL 交互 (`<M-i>`)
+> 核心配置文件: [conf.d/main/plugin/debug.vim](https://github.com/leoatchina/leovim/blob/master/conf.d/main/plugin/debug.vim)
+> 适用于: Python, R, Shell, Lua, Ruby, Julia, JavaScript 等
+
 ```
-<M-i>r          启动 REPL
-<M-i>n          发送当前行
-<M-i><M-e>      发送代码块 (# %%)
+<M-i>r          启动/重启 REPL 环境 (自动识别语言)
+<M-i>;          打开/切换到 REPL 窗口
+<M-i>n          发送当前行 / 选中区域
+<M-i>l          发送当前行 / 选中区域并换行
+<M-i><M-e>      发送代码块 (支持 # %% 标记)
 <M-i>a          发送整个文件
-<M-i>b/e        发送到开头/结尾
+<M-i>b / <M-i>e 发送从开头 / 到结尾的内容
+<M-i>k          发送光标下的单词
 <M-i>q          退出 REPL
-<M-i>k          发送光标下的词
 ```
-支持: Python, R, Shell, Lua, Ruby, Julia, JavaScript 等
 
 ### 🌿 Git 操作 (`<M-g>`)
 ```
@@ -475,33 +537,6 @@ Y               复制到系统剪贴板 (与 tmux/系统互通)
 ```
 
 
-## 📚 配置文件说明
-
-### 目录结构
-```
-~/.leovim/
-├── conf.d/          # 主配置目录
-│   ├── init.vim     # 入口文件
-│   ├── init/        # 轻量/VSCode 配置与 keybindings.json
-│   ├── main/        # 主配置 (plugin/lua/after)
-│   ├── plug/        # 插件清单与分组
-│   ├── snippets/    # 内置 snippets
-│   ├── tasks/       # AsyncTasks 模板
-│   ├── templates/   # .gitignore/.lintr/.wildignore 等模板
-│   ├── dap/         # nvim-dap 配置
-│   ├── vimspector/  # vimspector 配置
-│   └── pack/leo/opt # 内置插件包
-├── pack/            # 扩展包 (fork/clone)
-├── scripts/         # 工具脚本
-├── assets/          # 资源文件
-└── fonts/           # 字体
-```
-
-### 自定义配置
-- `~/.vimrc.opt` - 功能开关文件
-- `~/.leovim.d/after.vim` - 用户自定义配置
-- `~/.leovim.d/pack.vim` - 自定义插件列表
-- `~/.leovim.d/ftplugin/` - 语言级局部配置
 
 ## ❓ 常见问题
 
@@ -967,83 +1002,13 @@ pos=right
 ## 🎓 进阶指南
 
 ### 自定义快捷键
+<M-h>A 打开
 
 ```vim
 " ~/.leovim.d/after.vim
 
-" 自定义保存
-nnoremap <Leader>w :w<CR>
-
-" 快速编辑配置
-nnoremap <Leader>ve :edit ~/.leovim.d/after.vim<CR>
-nnoremap <Leader>vs :source ~/.vimrc<CR>
-
-" 自定义搜索
-nnoremap <Leader>/ :Rg<Space>
-
-" 窗口导航
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 ```
 
-### 自定义命令
-
-```vim
-" 快速运行当前文件
-command! Run !./%
-
-" 打开当前文件所在目录
-command! OpenDir :!open %:p:h
-
-" 删除行尾空格
-command! TrimWhitespace :%s/\s\+$//e
-
-" 转换为 Unix 换行符
-command! ToUnix :set ff=unix
-```
-
-### 集成外部工具
-
-```vim
-" 集成 ripgrep
-if executable('rg')
-  set grepprg=rg\ --vimgrep\ --no-heading
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
-
-" 集成 fd
-if executable('fd')
-  let $FZF_DEFAULT_COMMAND = 'fd --type f'
-endif
-
-" 集成 bat (语法高亮预览)
-let $FZF_PREVIEW_COMMAND = 'bat --color=always --style=numbers {}'
-```
-
-## 🤝 参与贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-### 报告问题
-- 使用 Issue 模板
-- 提供详细的复现步骤
-- 附上 `:version` 和 `:checkhealth` 输出
-
-### 贡献代码
-1. Fork 本仓库
-2. 创建特性分支：`git checkout -b feature/xxx`
-3. 提交改动：`git commit -am 'Add xxx'`
-4. 推送分支：`git push origin feature/xxx`
-5. 提交 Pull Request
-
-## 🔗 相关资源
-
-- [Vim 官方文档](https://www.vim.org/docs.php)
-- [Neovim 文档](https://neovim.io/doc/)
-- [coc.nvim Wiki](https://github.com/neoclide/coc.nvim/wiki)
-- [Awesome Vim](https://github.com/akrawchyk/awesome-vim)
 
 ## 📄 许可证
 MIT License
