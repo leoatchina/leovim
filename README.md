@@ -434,9 +434,7 @@ dm              删除标记
 
 ### 安装相关
 
-<details>
-<summary><b>Q: 安装后启动很慢怎么办？</b></summary>
-
+**Q: 安装后启动很慢怎么办？**
 ```vim
 " 1. 检查是否在首次启动安装插件
 :PlugStatus
@@ -448,31 +446,22 @@ vim --startuptime startup.log
 " 3. 禁用不需要的功能
 " 编辑 ~/.vimrc.opt，注释掉不需要的模块
 ```
-</details>
 
-<details>
-<summary><b>Q: 如何在无网络环境安装？</b></summary>
-
+**Q: 如何在无网络环境安装？**
 1. 在有网络的机器上执行 `./install.sh all`
 2. 运行 `scripts/compress.sh` 打包
 3. 复制 `~/leovim.tar.gz` 到目标机器
 4. 解压后执行 `./install.sh`
-</details>
 
-<details>
-<summary><b>Q: Windows 下安装失败？</b></summary>
-
+**Q: Windows 下安装失败？**
 - 确保以管理员权限运行 `install.cmd`
 - 检查是否安装了 Git for Windows
 - 关闭杀毒软件后重试
 - 检查路径中是否包含中文或特殊字符
-</details>
 
 ### 功能使用
 
-<details>
-<summary><b>Q: 补全不工作？</b></summary>
-
+**Q: 补全不工作？**
 ```vim
 " 1. 检查 LSP 状态
 :CocInfo        " 如果使用 coc.nvim
@@ -484,10 +473,8 @@ vim --startuptime startup.log
 " 3. 检查 Node.js 版本
 :!node --version    " 需要 20.0+
 ```
-</details>
 
-<details>
-<summary><b>Q: 如何切换补全引擎？</b></summary>
+**Q: 如何切换补全引擎？**
 
 编辑 `~/.vimrc.opt`，启用对应行：
 ```vim
@@ -495,10 +482,8 @@ let g:opt_vim_completes = 'mucomplete'  " 基础补全
 let g:opt_vim_completes = 'coc'         " coc.nvim
 let g:opt_vim_completes = 'cmp'         " nvim-cmp
 ```
-</details>
 
-<details>
-<summary><b>Q: 快捷键冲突怎么办？</b></summary>
+**Q: 快捷键冲突怎么办？**
 
 在 `~/.leovim.d/after.vim` 中重新映射：
 ```vim
@@ -507,22 +492,20 @@ unmap <M-h>
 " 设置新映射
 nnoremap <M-h> :YourCommand<CR>
 ```
-</details>
 
-<details>
-<summary><b>Q: 如何禁用某个插件？</b></summary>
+**Q: 如何禁用某个插件？**
 
 编辑 `~/.vimrc.opt`，注释对应行：
 ```vim
 " let g:opt_fzf = 1          " 禁用 fzf
 " let g:opt_coc = 1          " 禁用 coc.nvim
 ```
-</details>
 
 ### 调试问题
 
-<details>
-<summary><b>Q: REPL 无法启动？</b></summary>
+
+
+**Q: REPL 无法启动？**
 
 ```bash
 # 检查 Python 环境
@@ -534,10 +517,11 @@ vim -c ':echo exists(":FloatermNew")' -c 'q'
 # 手动安装 Python 包
 pip3 install pynvim neovim
 ```
-</details>
 
-<details>
-<summary><b>Q: Git 功能不可用？</b></summary>
+
+
+
+**Q: Git 功能不可用？**
 
 ```bash
 # 检查 Git 版本
@@ -550,12 +534,13 @@ vim -c ':scriptnames | grep fugitive'
 brew install lazygit              # macOS
 sudo apt install lazygit          # Ubuntu
 ```
-</details>
+
 
 ### 性能优化
 
-<details>
-<summary><b>Q: 大文件编辑卡顿？</b></summary>
+
+
+**Q: 大文件编辑卡顿？**
 
 在 `~/.leovim.d/after.vim` 添加：
 ```vim
@@ -565,10 +550,11 @@ autocmd BufReadPre * if getfsize(expand("%")) > 1000000 |
     \ setlocal noswapfile |
     \ endif
 ```
-</details>
 
-<details>
-<summary><b>Q: LSP 占用内存过高？</b></summary>
+
+
+
+**Q: LSP 占用内存过高？**
 
 ```vim
 " 限制 LSP 工作空间
@@ -577,32 +563,35 @@ let g:coc_workspace_folder_blacklist = ['node_modules', 'target']
 " 禁用部分诊断功能
 let g:coc_diagnostic_disable = 1
 ```
-</details>
+
 
 ### 更新维护
 
-<details>
-<summary><b>Q: 如何更新 LeoVim？</b></summary>
+
+
+**Q: 如何更新 LeoVim？**
 
 ```bash
 cd ~/.leovim
 git pull
 ./install.sh
 ```
-</details>
 
-<details>
-<summary><b>Q: 如何更新插件？</b></summary>
+
+
+
+**Q: 如何更新插件？**
 
 ```vim
 :PlugUpdate     " 更新所有插件
 :PlugUpgrade    " 更新插件管理器
 :CocUpdate      " 更新 Coc 扩展
 ```
-</details>
 
-<details>
-<summary><b>Q: 如何备份配置？</b></summary>
+
+
+
+**Q: 如何备份配置？**
 
 ```bash
 # 使用内置打包脚本
@@ -612,20 +601,22 @@ git pull
 tar -czf leovim-backup.tar.gz \
   ~/.leovim ~/.leovim.d ~/.vimrc ~/.vimrc.opt
 ```
-</details>
+
 
 ### 高级技巧
 
-<details>
-<summary><b>Q: 如何添加自定义语言支持？</b></summary>
+
+
+**Q: 如何添加自定义语言支持？**
 
 1. 安装 LSP server：`:CocInstall coc-xxx`
 2. 创建 ftplugin：`~/.leovim.d/ftplugin/xxx.vim`
 3. 添加 snippets：`~/.leovim/conf.d/snippets/xxx.json`
-</details>
 
-<details>
-<summary><b>Q: 如何自定义主题？</b></summary>
+
+
+
+**Q: 如何自定义主题？**
 
 在 `~/.leovim.d/after.vim` 中：
 ```vim
@@ -634,10 +625,11 @@ colorscheme your_theme
 highlight Normal guibg=#1e1e1e
 highlight LineNr guifg=#5a5a5a
 ```
-</details>
 
-<details>
-<summary><b>Q: 快捷键提示不显示？</b></summary>
+
+
+
+**Q: 快捷键提示不显示？**
 
 ```vim
 " 检查 which-key 是否安装
@@ -647,9 +639,310 @@ highlight LineNr guifg=#5a5a5a
 :WhichKey '<Leader>'
 :WhichKey '<M-h>'
 ```
-</details>
+
 
 ---
+
+## 💡 使用技巧
+
+### 快速入门工作流
+
+**1. 项目导航**
+```vim
+" 打开项目
+vim .
+
+" 使用快捷键
+<Leader>ff      " 模糊搜索文件
+<Leader>p       " Git 文件搜索
+<Leader>e       " 文件浏览器
+<C-f><CR>       " 全局搜索内容
+```
+
+**2. 代码编辑**
+```vim
+" 智能补全
+<Tab>           " 触发补全
+<CR>            " 确认选择
+
+" 跳转定义
+<C-g>           " LSP 跳转定义
+<C-]>           " 侧栏跳转
+<M-c>           " 预览定义
+
+" 重命名
+F2              " LSP 重命名
+<C-q>           " 格式化代码
+```
+
+**3. 调试代码**
+```vim
+" 设置断点
+<M-d><Space>    " 切换断点
+F9              " 快捷切换
+
+" 开始调试
+<M-d>r          " 启动调试
+F5              " 继续执行
+F10/F11/F12     " 单步调试
+
+" 查看变量
+-               " Watch 变量
+J               " 显示变量值
+```
+
+**4. Git 工作流**
+```vim
+" 查看状态
+<M-g>s          " Git 状态
+<M-g>b          " Git blame
+<M-g>f          " 文件历史
+
+" 提交代码
+<M-g>a          " Git add -A
+<M-g><CR>       " Git commit
+<M-g>u          " Git push
+
+" 可视化操作
+<M-g><M-g>      " LazyGit
+```
+
+**5. REPL 交互**
+```vim
+" Python/R/Julia 等语言
+<M-i>r          " 启动 REPL
+<M-i>n          " 发送当前行
+<M-i><M-e>      " 发送代码块
+<M-i>a          " 发送整个文件
+```
+
+### 按语言配置
+
+
+
+**Python 开发**
+
+```vim
+" ~/.leovim.d/after.vim
+" Python 特定配置
+autocmd FileType python setlocal
+    \ tabstop=4
+    \ shiftwidth=4
+    \ expandtab
+    \ colorcolumn=88
+
+" 安装 Python LSP
+:CocInstall coc-pyright coc-python
+
+" 配置 Python DAP
+" 创建 .vscode/launch.json
+{
+  "configurations": [
+    {
+      "type": "python",
+      "request": "launch",
+      "name": "Python: Current File",
+      "program": "${file}"
+    }
+  ]
+}
+```
+
+
+
+
+**Go 开发**
+
+```vim
+" 安装 Go LSP
+:CocInstall coc-go
+
+" 安装 Go 工具
+:GoInstallBinaries
+
+" 快速运行
+<M-R>           " 运行当前文件
+<M-T>           " 运行测试
+
+" 格式化
+<C-q>           " 自动格式化和导入
+```
+
+
+
+
+**Rust 开发**
+
+```vim
+" 安装 Rust LSP
+:CocInstall coc-rust-analyzer
+
+" Cargo 命令
+<M-R>           " cargo run
+<M-B>           " cargo build
+<M-T>           " cargo test
+
+" 文档查看
+<C-h>           " 查看文档
+```
+
+
+
+
+**Web 开发**
+
+```vim
+" 安装扩展
+:CocInstall coc-tsserver coc-html coc-css coc-json
+
+" 前端框架
+:CocInstall coc-vetur      " Vue
+:CocInstall coc-angular    " Angular
+
+" 格式化
+:CocInstall coc-prettier
+
+" 自动保存并格式化
+autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx :silent! CocCommand prettier.formatFile
+```
+
+
+### 性能优化建议
+
+**1. 减少启动时间**
+```vim
+" ~/.leovim.d/after.vim
+" 延迟加载重量级插件
+let g:coc_start_at_startup = 0
+augroup load_coc
+  autocmd!
+  autocmd InsertEnter * call coc#rpc#start_server() | autocmd! load_coc
+augroup END
+```
+
+**2. 大项目优化**
+```vim
+" 限制 LSP 扫描范围
+let g:coc_global_extensions_blacklist = ['node_modules']
+
+" 禁用实时诊断
+let g:coc_diagnostic_enable = 0
+
+" 手动触发诊断
+nnoremap <Leader>d :CocDiagnostics<CR>
+```
+
+**3. 内存优化**
+```vim
+" 限制历史记录
+set history=100
+set undolevels=100
+
+" 限制 buffer 数量
+set hidden
+set switchbuf=useopen,usetab
+```
+
+### 项目配置示例
+
+**AsyncTasks 配置** (`~/.config/tasks.ini`)
+```ini
+[project-build]
+command=npm run build
+cwd=$(VIM_ROOT)
+output=terminal
+pos=bottom
+
+[project-test]
+command=npm test
+cwd=$(VIM_ROOT)
+output=quickfix
+
+[project-run]
+command=npm start
+cwd=$(VIM_ROOT)
+output=terminal
+pos=right
+```
+
+**调试配置** (`.vscode/launch.json`)
+```json
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/index.js"
+    },
+    {
+      "type": "python",
+      "request": "launch",
+      "name": "Python: Current File",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    }
+  ]
+}
+```
+
+## 🎓 进阶指南
+
+### 自定义快捷键
+
+```vim
+" ~/.leovim.d/after.vim
+
+" 自定义保存
+nnoremap <Leader>w :w<CR>
+
+" 快速编辑配置
+nnoremap <Leader>ve :edit ~/.leovim.d/after.vim<CR>
+nnoremap <Leader>vs :source ~/.vimrc<CR>
+
+" 自定义搜索
+nnoremap <Leader>/ :Rg<Space>
+
+" 窗口导航
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+```
+
+### 自定义命令
+
+```vim
+" 快速运行当前文件
+command! Run !./%
+
+" 打开当前文件所在目录
+command! OpenDir :!open %:p:h
+
+" 删除行尾空格
+command! TrimWhitespace :%s/\s\+$//e
+
+" 转换为 Unix 换行符
+command! ToUnix :set ff=unix
+```
+
+### 集成外部工具
+
+```vim
+" 集成 ripgrep
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
+" 集成 fd
+if executable('fd')
+  let $FZF_DEFAULT_COMMAND = 'fd --type f'
+endif
+
+" 集成 bat (语法高亮预览)
+let $FZF_PREVIEW_COMMAND = 'bat --color=always --style=numbers {}'
+```
 
 ## 🤝 参与贡献
 
@@ -666,6 +959,13 @@ highlight LineNr guifg=#5a5a5a
 3. 提交改动：`git commit -am 'Add xxx'`
 4. 推送分支：`git push origin feature/xxx`
 5. 提交 Pull Request
+
+## 🔗 相关资源
+
+- [Vim 官方文档](https://www.vim.org/docs.php)
+- [Neovim 文档](https://neovim.io/doc/)
+- [coc.nvim Wiki](https://github.com/neoclide/coc.nvim/wiki)
+- [Awesome Vim](https://github.com/akrawchyk/awesome-vim)
 
 ## 📄 许可证
 MIT License
