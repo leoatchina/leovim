@@ -141,7 +141,7 @@ elseif has('patch-9.0.0185') || has('nvim')
         endif
     endif
 endif
-if has('nvim-0.10') && executable('opencode')
+if has('nvim-0.10') && executable('opencode') && pack#get('opencode')
     PlugAdd 'NickvanDyke/opencode.nvim'
 endif
 " ------------------------------
