@@ -29,7 +29,7 @@ if pack#planned('vim-quickui')
         call quickui#preview#open(filename, fopts)
     endfunction
     command! -nargs=1 -complete=file PreviewPopupFile call s:preview_popup_file(<f-args>)
-    nnoremap <Tab>o :PreviewPopupFile
+    nnoremap \o :PreviewPopupFile
     nnoremap <F13> :call quickui#preview#scroll(1)<Cr>
     nnoremap <F14> :call quickui#preview#scroll(-1)<Cr>
     if pack#installed_coc()
@@ -40,7 +40,7 @@ if pack#planned('vim-quickui')
         nmap <silent><expr><C-k> quickui#preview#visible() > 0 ? "\<F14>" : "\g%"
     endif
 else
-    nnoremap <Tab>o :PreviewFile
+    nnoremap \o :PreviewFile
     nnoremap <silent><M-k>m :messages<Cr>
     nmap <C-j> %
     nmap <C-k> g%

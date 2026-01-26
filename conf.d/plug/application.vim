@@ -322,6 +322,9 @@ if has('nvim')
     PlugAdd 'nvim-tree/nvim-web-devicons'
     PlugAdd 'kevinhwang91/promise-async'
     PlugAdd 'kevinhwang91/nvim-bqf'
+    PlugAdd 'MunifTanjim/nui.nvim'
+    PlugAdd 'nvim-lua/plenary.nvim'
+    PlugAdd 'stevearc/dressing.nvim'
     if pack#planned_lsp() || has('nvim-0.11') && pack#planned('nvim-treesitter')
         PlugAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()
@@ -330,11 +333,6 @@ if has('nvim')
     endif
     if pack#planned_lsp() || pack#planned('nvim-dap')
         PlugAdd 'mason-org/mason.nvim'
-    endif
-    if pack#planned_lsp() || pack#planned('nvim-dap') || pack#planned('minuet-ai.nvim')
-        PlugAdd 'MunifTanjim/nui.nvim'
-        PlugAdd 'nvim-lua/plenary.nvim'
-        PlugAdd 'stevearc/dressing.nvim'
     endif
 elseif v:version >= 800
     PlugAdd 'ryanoasis/vim-devicons'

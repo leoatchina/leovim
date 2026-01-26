@@ -257,6 +257,7 @@ function! s:open_link_in_editor(text, col)
     catch /.*/
         let fl = ''
     endtry
+
     if fl != '' && filereadable(fl)
         if location[1] != ''
             if location[2] != ''
