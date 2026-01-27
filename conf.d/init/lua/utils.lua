@@ -69,6 +69,10 @@ function utils.has_gui()
   return fn['utils#has_gui']() > 0
 end
 
+function utils.has_tmux()
+  return fn['utils#is_unix']() > 0 and vim.fn.exists('$TMUX') > 0
+end
+
 -- Package management functions (using utils#)
 function utils.get(name)
   return fn['pack#get'](name) > 0
