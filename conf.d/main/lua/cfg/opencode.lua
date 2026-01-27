@@ -1,3 +1,8 @@
+vim.g.opencode_opts = {
+  provider = {
+    cmd = vim.g.opencode_run_cmd or "opencode --port"
+  }
+}
 vim.keymap.set({ "n", "x" }, '+', function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
 vim.keymap.set({ "n", "x" }, "<Tab>ol", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode this" })
 vim.keymap.set({ "n", "x" }, "<Tab>of", function() require("opencode").ask("@buffer: ", { submit = true }) end, { desc = "Ask opencode buffer" })
