@@ -6,7 +6,7 @@
 
 # AI 集成 (AI Integration)
 
-该模块允许你将上下文（文件、代码行、目录）发送到运行在浮动终端中的 AI 工具。它旨在与接受输入或上下文参数的 CLI AI 工具（如 `mods`, `aichat`, `sgpt` 等）配合使用。
+该模块允许你将上下文（文件、代码行、目录）发送到运行在浮动终端中的 AI 工具。它旨在与接受输入或上下文参数的 CLI AI 工具（如 `claude`, `codex`, `opencode` 等）配合使用。
 
 ## AI 流程概览
 
@@ -205,15 +205,15 @@ graph TB
 # 需求
 
 ## 基础环境
-- 有`:terminal` 命令的 vim 或 neovim, 具体版本需求要比 [vim-floaterm](https://github.com/voldikss/vim-floaterm) 要高一些
+- 有`:terminal` 命令的 vim 或 neovim
 - 安装 [asyncrun.vim](https://github.com/skywind3000/asyncrun.vim)
+- 安装 [fzf.vim](https://github.com/junegunn/fzf.vim) (用于交互式选择功能)
 
 ## AI 功能
 - 安装支持命令行输入/上下文参数的 AI 工具，例如:
-  - [mods](https://github.com/charmbracelet/mods) - 支持多种 AI 模型的命令行工具
-  - [aichat](https://github.com/sigoden/aichat) - 命令行 AI 聊天工具
-  - [sgpt](https://github.com/TheR1D/shell_gpt) - Shell GPT 工具
-  - 其他支持 `@file` 或类似语法传递上下文的 CLI AI 工具
+  - `claude` - Claude AI 命令行工具
+  - `codex` - OpenAI Codex 命令行工具
+  - `opencode` - 开源代码助手工具
 
 ## REPL 功能
 - 安装相应的 REPL 程序，例如:

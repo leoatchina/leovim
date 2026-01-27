@@ -101,7 +101,7 @@ graph TB
 
 # AI Integration
 
-This module allows you to send context (files, lines, directories) to an AI tool running in a floating terminal. It's designed to work with CLI-based AI tools (like `mods`, `aichat`, `sgpt`, etc.) that accept input or context arguments.
+This module allows you to send context (files, lines, directories) to an AI tool running in a floating terminal. It's designed to work with CLI-based AI tools (like `claude`, `codex`, `opencode`, etc.) that accept input or context arguments.
 
 ## AI Commands
 
@@ -121,7 +121,7 @@ This module allows you to send context (files, lines, directories) to an AI tool
 | n | `:FloatermAiFzfFiles` | Select files via FZF to send, jump to AI terminal |
 | n | `:FloatermAiFzfFiles!` | Select files via FZF to send, stay in current buffer |
 
-> **Note**: 
+> **Note**:
 > - Commands with `!` suffix will **keep** focus in the current editor window
 > - Commands without `!` will **jump** to the AI terminal window
 > - Mode: `n` = normal mode, `v` = visual mode
@@ -156,7 +156,7 @@ This module allows you to send code snippets from your editor to a REPL (Read-Ev
 | n | `:FloatermReplSendMark` | Send previously marked code |
 | n | `:FloatermReplShowMark` | Show previously marked code content |
 
-> **Note**: 
+> **Note**:
 > - Commands with `!` suffix will **keep** cursor at current position
 > - Commands without `!` will **move** cursor to next line (for continuous execution)
 > - Mode: `n` = normal mode, `v` = visual mode
@@ -203,15 +203,15 @@ The following runners are registered automatically:
 # Requirements
 
 ## Base Environment
-- Vim or Neovim with the `:terminal` command. The specific version requirement is higher than [vim-floaterm](https://github.com/voldikss/vim-floaterm)
+- Vim or Neovim with the `:terminal` command.
 - Install [asyncrun.vim](https://github.com/skywind3000/asyncrun.vim)
+- Install [fzf.vim](https://github.com/junegunn/fzf.vim) (for interactive selection features)
 
 ## AI Features
 - Install CLI-based AI tools that support input/context arguments, such as:
-  - [mods](https://github.com/charmbracelet/mods) - CLI tool for multiple AI models
-  - [aichat](https://github.com/sigoden/aichat) - Command-line AI chat tool
-  - [sgpt](https://github.com/TheR1D/shell_gpt) - Shell GPT tool
-  - Other CLI AI tools that support `@file` or similar syntax for passing context
+  - `claude` - Claude AI command-line tool
+  - `codex` - OpenAI Codex command-line tool
+  - `opencode` - Open source code assistant tool
 
 ## REPL Features
 - Install corresponding REPL programs, such as:
