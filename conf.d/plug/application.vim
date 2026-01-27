@@ -141,7 +141,7 @@ elseif has('patch-9.0.0185') || has('nvim')
         endif
     endif
 endif
-if has('nvim-0.10') && executable('opencode')
+if has('nvim-0.10') && executable('opencode') && pack#get('opencode')
     PlugAdd 'NickvanDyke/opencode.nvim'
 endif
 " ------------------------------
@@ -162,14 +162,12 @@ if pack#planned_lsp()
     PlugAdd 'leoatchina/nvim-lspimport'
     " codesettings
     PlugAdd 'mrjones2014/codesettings.nvim'
+elseif g:python_version > 3.06 && pack#get('ale')
+    let g:lint_tool = 'ale'
+    PlugAdd 'dense-analysis/ale'
+    PlugAdd 'maximbaz/lightline-ale'
 elseif pack#planned_coc()
-    if g:python_version > 3.06 && pack#get('ale')
-        let g:lint_tool = 'ale'
-        PlugAdd 'dense-analysis/ale'
-        PlugAdd 'maximbaz/lightline-ale'
-    else
-        let g:lint_tool = 'coc'
-    endif
+    let g:lint_tool = 'coc'
 else
     let g:lint_tool = ''
 endif
