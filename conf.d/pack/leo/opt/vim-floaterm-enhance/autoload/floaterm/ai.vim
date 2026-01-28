@@ -58,6 +58,7 @@ function! floaterm#ai#start(now) abort
     else
         call floaterm#enhance#fzf_run(programs, 'FloatermAI')
     endif
+    call floaterm#enhance#wincmdp()
 endfunction
 " --------------------------------------------------------------
 " format string/list with '@' string
