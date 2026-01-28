@@ -9,7 +9,7 @@ set nowrap
 set nolist
 set nobackup
 set nowritebackup
-set swapfile
+set noswapfile
 set splitright
 set splitbelow
 set cursorline
