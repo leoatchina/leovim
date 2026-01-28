@@ -54,11 +54,10 @@ function! floaterm#ai#start(now) abort
     endif
     if a:now
         let [cmd, opts, type] = programs[0]
-        call floaterm#enhance#cmd_run(cmd, opts, type)
+        call floaterm#enhance#cmd_run(cmd, opts, type, 1)
     else
-        call floaterm#enhance#fzf_run(programs, 'FloatermAI')
+        call floaterm#enhance#fzf_run(programs, 'FloatermAI', 1)
     endif
-    call floaterm#enhance#wincmdp()
 endfunction
 " --------------------------------------------------------------
 " format string/list with '@' string
