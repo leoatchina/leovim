@@ -48,10 +48,9 @@ function! pack#installed(...) abort
     endfor
     return 1
 endfunction
-
-" ----------------------------------------
+" -------------------------------------------
 " Extended Check Functions (from check.vim)
-" ----------------------------------------
+" -------------------------------------------
 function! pack#planned_fzf() abort
     return pack#planned('fzf', 'fzf.vim')
 endfunction
@@ -74,6 +73,14 @@ endfunction
 
 function! pack#pref_fzf() abort
     return pack#planned_fzf() && (get(g:, 'prefer_fzf', utils#is_unix()) || !pack#planned_leaderf())
+endfunction
+
+function! pack#installed_fzf() abort
+    return pack#installed('fzf', 'fzf.vim')
+endfunction
+
+function! pack#installed_leaderf()
+    return pack#installed('LeaderF')
 endfunction
 
 function! pack#installed_lsp() abort
