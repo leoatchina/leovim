@@ -174,7 +174,7 @@ if pack#planned_fzf()
     endif
     if executable('git')
         command! -bang -nargs=* FzfGGrep call fzf#vim#grep(
-                    \ 'git grep -I -n --color=always ' . fzf#shellescape(<q-args>) . ' -- ' . git#git_root_dir(),
+                    \ 'git grep -I -n --color=always ' . fzf#shellescape(<q-args>) . ' -- ' . git#root_dir(),
                     \ fzf#vim#with_preview({'options': ' --nth 3..  --delimiter=":"'}),
                     \ <bang>0)
     endif

@@ -31,7 +31,7 @@ nnoremap <leader>fv :DiffVsp<Space>
 " cd dir
 "------------------------
 command! CR execute('cd ' .  utils#get_root_dir())
-command! CG execute('cd ' .  git#git_root_dir()
+command! CG execute('cd ' .  git#root_dir()
 nnoremap cdr :CR<Cr>
 nnoremap cdg :CG<Cr>
 nnoremap cdl :lcd %:p:h<Cr>
@@ -40,7 +40,7 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 if pack#planned_leaderf() && !has('nvim')
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
-    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=git#git_root_dir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=git#root_dir()<Cr><Cr>
     nnoremap <silent><nowait><C-p>      :LeaderfFile <C-r>=utils#get_root_dir()<Cr><Cr>
 elseif pack#planned_fzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
@@ -48,7 +48,7 @@ elseif pack#planned_fzf()
     nnoremap <silent><nowait><C-p>      :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 else
     nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
-    nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=git#git_root_dir()<Cr><Cr>
+    nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=git#root_dir()<Cr><Cr>
     nnoremap <silent><nowait><C-p>      :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
 endif
 if pack#pref_fzf()
@@ -59,7 +59,7 @@ endif
 " open gitroot getroot
 " ---------------------------------
 nnoremap <leader><Cr> :e!<Space>
-nnoremap <leader>P :tabe <C-r>=git#git_root_dir()<Cr>/
+nnoremap <leader>P :tabe <C-r>=git#root_dir()<Cr>/
 nnoremap <leader>E :tabe <C-r>=utils#get_root_dir()<Cr>/
 " ---------------------------------
 " file browser

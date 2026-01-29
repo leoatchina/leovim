@@ -9,7 +9,6 @@ set nowrap
 set nolist
 set nobackup
 set nowritebackup
-set noswapfile
 set splitright
 set splitbelow
 set cursorline
@@ -40,6 +39,14 @@ set textwidth=160
 " switchbuf
 set buftype=
 set switchbuf=useopen,usetab,newtab
+" --------------------------
+" swapfile
+" --------------------------
+if has('nvim')
+    set noswapfile
+else
+    set swapfile
+endif
 " --------------------------
 " wildmenu
 " --------------------------
