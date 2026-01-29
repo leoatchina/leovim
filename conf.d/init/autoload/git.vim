@@ -1,7 +1,7 @@
 " ----------------------------------------
 " Git Functions (from git.vim)
 " ----------------------------------------
-function! git#git_branch() abort
+function! git#branch() abort
     return get(b:, 'git_branch', '')
 endfunction
 
@@ -31,7 +31,7 @@ function! git#lightline_buffers()
     return res
 endfunction
 
-function! git#lcd_and_git_update() abort
+function! git#lcd_and_update() abort
     if utils#is_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern'
         return
     endif
