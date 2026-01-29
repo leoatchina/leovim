@@ -304,10 +304,15 @@ function! floaterm#enhance#parse_programs(programs, type) abort
         let cmd = entry[0]
         if executable(split(cmd, " ")[0])
             let opts = floaterm#enhance#parse_opt(entry[1])
-            let check = cmd . '-' . opts . '-' . a:type
+            if len(entry) >= 3
+                let type = trim(entry[2])
+            else
+                let type = a:type
+            endif
+            let check = cmd . '-' . opts . '-' . type
             if index(check_lst, check) < 0
                 call add(check_lst, check)
-                call add(result, [cmd, opts, a:type])
+                call add(result, [cmd, opts, type])
             endif
         endif
     endfor
