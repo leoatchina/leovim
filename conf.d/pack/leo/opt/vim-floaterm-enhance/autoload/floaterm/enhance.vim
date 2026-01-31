@@ -357,12 +357,7 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
             return
         endif
     endfor
-    " Using FloatermNeow to open new prog floaterm terminal
-    if cmd == 'opencode --port'
-        call execute(printf('FloatermNew! %s %s', opts, cmd))
-    else
-        call execute(printf('FloatermNew %s %s', opts, cmd))
-    endif
+    call execute(printf('FloatermNew %s %s', opts, cmd))
     let bufnr = floaterm#buflist#curr()
     call floaterm#config#set(bufnr, 'program', a:type)
     if type ==# 'ai'
