@@ -9,9 +9,14 @@ vim.g.opencode_opts = {
       end
     end,
     start = function(self)
-      local opts = vim.g.opencode_nvim_opts or '--wintype=vsplit --position=left --width=0.3'
-      vim.fn["floaterm#enhance#cmd_run"]("opencode --port", opts, "AI", 1)
-      vim.g.opencode_bufnr = vim.fn["floaterm#buflist#curr"]()
+      local opencode_bufnr = vim.g.opencode_bufnr
+      if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
+        vim.fn["floaterm#terminal#open_existing"](opencode_bufnr)
+      else
+        local opts = vim.g.opencode_nvim_opts or '--wintype=vsplit --position=left --width=0.3'
+        vim.fn["floaterm#enhance#cmd_run"]("opencode --port", opts, "AI", 1)
+        vim.g.opencode_bufnr = vim.fn["floaterm#buflist#curr"]()
+      end
     end,
     stop = function(self)
       local opencode_bufnr = vim.g.opencode_bufnr
@@ -19,14 +24,6 @@ vim.g.opencode_opts = {
         vim.fn["floaterm#terminal#kill"](opencode_bufnr)
       end
       vim.g.opencode_bufnr = nil
-    end,
-    hide = function(self)
-      local opencode_bufnr = vim.g.opencode_bufnr
-      if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
-        vim.fn["floaterm#window#hide"](opencode_bufnr)
-      else
-        vim.g.opencode_bufnr = nil
-      end
     end,
   }
 }
