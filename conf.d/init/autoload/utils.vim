@@ -324,7 +324,7 @@ endfunction
 let s:autoclose_ft_buf = [
             \ 'netrw', 'tagbar', 'vista', 'vista_kind',
             \ 'qf', 'loclist', 'rg', 'outline', 'nofile',
-            \ 'leaderf', 'fzf', 'help', 'man', 'startify',
+            \ 'leaderf', 'fzf', 'help', 'man',
             \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame', 'diff',
             \ 'vimspector', 'vimspectorprompt',
             \ 'terminal', 'floaterm', 'popup', 'undotree',
