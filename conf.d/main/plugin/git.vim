@@ -17,7 +17,7 @@ endif
 " ----------------------------------------------------------------------
 augroup LcdAndGitUpdate
     au!
-    autocmd BufWinEnter * call git#lcd_and_git_update()
+    autocmd BufWinEnter * call git#lcd_and_update()
 augroup END
 "------------------------
 " fugitve and others

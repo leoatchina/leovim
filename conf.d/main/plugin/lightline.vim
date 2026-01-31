@@ -11,7 +11,7 @@ let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
 function! lightline#bufferline_maxwidht() abort
-    let left = &columns - len(utils#file_readonly() . git#relative_dir() . git#relative_path() . git#git_branch() . utils#mode())
+    let left = &columns - len(utils#file_readonly() . git#relative_dir() . git#relative_path() . git#branch() . utils#mode())
     return left > 60 ? left - 60 : 0
 endfunction
 let g:lightline#bufferline#max_width = "lightline#bufferline_maxwidht"
@@ -110,7 +110,7 @@ endif
 " ---------------------------------------
 " show buffers and current file path
 " ---------------------------------------
-let g:lightline['component_expand']['branch'] = 'git#git_branch'
+let g:lightline['component_expand']['branch'] = 'git#branch'
 let g:lightline['component_expand']['buffers'] = 'git#lightline_buffers'
 let g:lightline['component_expand']['relativepath'] = 'git#relative_path'
 " ------------------------

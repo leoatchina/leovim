@@ -296,13 +296,13 @@ function! floaterm#enhance#parse_programs(programs, type) abort
     for entry in a:programs
         if type(entry) == type('')
             let entry = [entry, '']
-        elseif type(entry) == type([]) && len(entry) >= 2
-            let entry = entry[0:1]
-        else
+        elseif type(entry) != type([]) || !len(entry)
             continue
+        elseif len(entry) == 1
+            call add(entry, '')
         endif
         let cmd = entry[0]
-        if executable(split(cmd, " ")[0])
+        if executable(split(cmd, ' ')[0])
             let opts = floaterm#enhance#parse_opt(entry[1])
             if len(entry) >= 3
                 let type = trim(entry[2])
@@ -344,9 +344,6 @@ function! floaterm#enhance#create_idx(...) abort
 endfunction
 function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
     let type = tolower(a:type)
-    if index(['ai', 'repl'], type) < 0
-        return
-    endif
     let idx = floaterm#enhance#create_idx()
     let cmd = trim(a:cmd)
     let opts = a:opts

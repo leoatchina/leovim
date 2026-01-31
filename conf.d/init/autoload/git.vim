@@ -1,11 +1,11 @@
 " ----------------------------------------
 " Git Functions (from git.vim)
 " ----------------------------------------
-function! git#git_branch() abort
+function! git#branch() abort
     return get(b:, 'git_branch', '')
 endfunction
 
-function! git#git_root_dir() abort
+function! git#root_dir() abort
     return get(b:, 'git_root_dir', '')
 endfunction
 
@@ -31,7 +31,7 @@ function! git#lightline_buffers()
     return res
 endfunction
 
-function! git#lcd_and_git_update() abort
+function! git#lcd_and_update() abort
     if utils#is_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern'
         return
     endif
@@ -72,7 +72,7 @@ endfunction
 
 function! git#relative_dir() abort
     let absdir = utils#abs_dir()
-    let gitroot = git#git_root_dir()
+    let gitroot = git#root_dir()
     if gitroot != '' && len(absdir) > len(gitroot)
         return gitroot
     else
@@ -82,7 +82,7 @@ endfunction
 
 function! git#relative_path() abort
     let abspath = utils#abs_path()
-    let gitroot = git#git_root_dir()
+    let gitroot = git#root_dir()
     if gitroot != '' && len(abspath) > len(gitroot)
         return abspath[len(gitroot)+1:]
     else

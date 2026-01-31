@@ -3,7 +3,7 @@ function! FernOpen(type, ...) abort
     if a:type == 'lcd'
         let l:dir = '.'
     elseif a:type == 'gitroot'
-        let l:dir = git#git_root_dir()
+        let l:dir = git#root_dir()
     else
         let l:dir = utils#get_root_dir()
     endif
