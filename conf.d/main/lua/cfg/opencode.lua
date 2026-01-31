@@ -20,6 +20,14 @@ vim.g.opencode_opts = {
       end
       vim.g.opencode_bufnr = nil
     end,
+    hide = function(self)
+      local opencode_bufnr = vim.g.opencode_bufnr
+      if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
+        vim.fn["floaterm#window#hide"](opencode_bufnr)
+      else
+        vim.g.opencode_bufnr = nil
+      end
+    end,
   }
 }
 vim.keymap.set({ "n", "x" }, '+', function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
