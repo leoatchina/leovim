@@ -1,6 +1,6 @@
 vim.g.opencode_opts = {
   provider = {
-    cmd = vim.g.opencode_run_cmd or "opencode --port"
+    enabled = 'terminal'
   }
 }
 vim.keymap.set({ "n", "x" }, '+', function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
