@@ -348,9 +348,9 @@ function! floaterm#enhance#cmd_run(cmd, opts, type, ...) abort
     let cmd = trim(a:cmd)
     let opts = a:opts
     let wintype = floaterm#enhance#get_opt_param(opts, 'wintype')
-    let check_string = printf("%s-%s", cmd, wintype)
+    let check_string = printf("%s-%s", split(cmd, ' ')[0], wintype)
     for bufnr in floaterm#buflist#gather()
-        let buf_cmd = trim(floaterm#config#get(bufnr, 'cmd', ''))
+        let buf_cmd = split(trim(floaterm#config#get(bufnr, 'cmd', '')), ' ')[0]
         let buf_wintype = floaterm#config#get(bufnr, 'wintype', '')
         if check_string ==# printf("%s-%s", buf_cmd, buf_wintype)
             call floaterm#terminal#open_existing(bufnr)
