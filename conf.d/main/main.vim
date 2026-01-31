@@ -3,6 +3,8 @@
 " ------------------------------------
 if has('gui_running') && has('macunix')
     set macmeta
+elseif !has('nvim') && utils#is_linux()
+    set noesckeys
 endif
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
 for i in range(10)
