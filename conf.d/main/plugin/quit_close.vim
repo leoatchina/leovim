@@ -88,3 +88,10 @@ command! ConfirmQuitAll call s:confirm_quit('all')
 nnoremap <silent><leader><BS> :ConfirmQuitAll<Cr>
 command! Quit call s:confirm_quit('direct')
 nnoremap <silent><leader>q :Quit<Cr>
+" NOTE：FileInsertFix
+if has('nvim')
+    augroup FileInsertFix
+        autocmd!
+        autocmd FileType leaderf,fzf autocmd BufLeave,BufDelete,BufHidden <buffer> stopinsert
+    augroup END
+endif
