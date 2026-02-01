@@ -41,6 +41,7 @@ let g:nvim_treesitter_install = utils#is_unix()
 "     \ "claude",
 "     \ ["opencode", "--wintype=float --position=topright --width=0.45 --height=0.8"]
 "   \ ]
+" let g:opencode_nvim_opts = '--wintype=vsplit --position=left --width=0.3'
 
 " let $XAI_API_KEY=''
 " let $GEMINI_API_KEY=''
