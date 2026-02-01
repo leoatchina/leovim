@@ -13,7 +13,7 @@ vim.g.opencode_opts = {
       if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
         vim.fn["floaterm#terminal#open_existing"](opencode_bufnr)
       else
-        local opts = vim.g.opencode_nvim_opts or '--wintype=vsplit --position=left --width=0.3'
+        local opts = vim.g.opencode_nvim_opts or '--wintype=vsplit --position=right --width=0.3'
         vim.fn["floaterm#enhance#cmd_run"]("opencode --port", opts, "AI", 1)
         vim.g.opencode_bufnr = vim.fn["floaterm#buflist#curr"]()
       end
