@@ -65,9 +65,6 @@ elseif g:complete_engine != ''
     if has('nvim-0.11')
         let g:complete_engine = 'builtin'
         lua require("cfg/builtin")
-    elseif has('patch-9.1.1590')
-        let g:complete_engine = 'builtin'
-        source $CFG_DIR/builtin.vim
     else
         let g:complete_engine = 'mcm'
         source $CFG_DIR/mcm.vim

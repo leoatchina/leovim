@@ -304,7 +304,6 @@ if !pack#planned('nvim-treesitter') && pack#get('c') && pack#planned('advcompeng
 endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
-    PlugAdd 'leoatchina/gruvbox-material'
     if has('nvim')
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'EdenEast/nightfox.nvim'

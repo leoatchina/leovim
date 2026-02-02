@@ -32,13 +32,9 @@ let g:edge_better_performance = 1
 let g:gruvbox_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call scheme#set('gruvbox-material', 'gruvbox')
+    call scheme#set('sonokai', 'sublime')
 elseif g:complete_engine == 'builtin'
-    if has('nvim')
-        call scheme#set('terafox', 'wombat')
-    else
-        call scheme#set('sonokai', 'sublime')
-    endif
+    call scheme#set('terafox', 'wombat')
 elseif g:complete_engine == 'cmp'
     call scheme#set('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
