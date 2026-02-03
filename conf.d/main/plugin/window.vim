@@ -162,23 +162,25 @@ nnoremap <silent>\s     :call window#smart_resize('j', 'j')<Cr>
 " ------------------------
 if has('patch-8.0.1129') && !has('nvim')
     function! s:toggle_winbar(open) abort
-        if utils#is_ignored() || &ft =~ 'fern'
+        if utils#is_ignored() || &ft =~# 'fern' || &bt ==# 'nofile'
             return
         else
             let fname = utils#expand("%:t", 1)
             let ename = utils#escape(fname)
+            let dname = utils#escape('-->Detach')
             if a:open
+                if index(getcompletion('WinBar.', 'menu'), dname) >= 0
+                    execute 'unmenu WinBar.' . dname
+                endif
                 if index(getcompletion('WinBar.', 'menu'), ename) < 0
                     try
-                        execute "nnoremenu 1.00 WinBar." .  ename . ' :echo '. fname
+                        execute "nnoremenu 1.00 WinBar." . ename . ' :echo ' . fname
                     catch
                         call preview#cmdmsg('WinBar Inited.', 1)
                     endtry
                 endif
-            elseif !a:open
-                if index(getcompletion('WinBar.', 'menu'), ename) >= 0
-                    execute 'unmenu WinBar.' . ename
-                endif
+            elseif index(getcompletion('WinBar.', 'menu'), ename) >= 0
+                execute 'unmenu WinBar.' . ename
             endif
         endif
     endfunction
