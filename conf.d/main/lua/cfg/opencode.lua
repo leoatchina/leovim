@@ -1,5 +1,6 @@
 vim.g.opencode_opts = {
   provider = {
+    name = 'floaterm_enhance',
     toggle = function(self)
       local opencode_bufnr = vim.g.opencode_bufnr
       if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
