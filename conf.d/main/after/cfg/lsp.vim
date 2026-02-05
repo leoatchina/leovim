@@ -18,7 +18,7 @@ else
 endif
 if g:node_version > 18
     if executable('unzip')
-        let g:ensure_installed += ['vimls', 'emmylua_ls', 'bashls']
+        let g:ensure_installed += ['vimls', 'bashls']
     else
         let g:ensure_installed += ['vimls']
     endif
@@ -35,8 +35,8 @@ if pack#get('c')
         let g:ensure_installed += ['clangd']
     endif
 endif
-if pack#get('rust') && g:cargo_exe != ''
-    let g:ensure_installed += ['rust_analyzer']
+if g:cargo_exe != ''
+    let g:ensure_installed += ['rust_analyzer', 'fennel_language_server']
 endif
 if pack#get('go') && g:gobin_exe != ''
     let g:gobin_exe_version = matchstr(utils#execute(printf('!%s version', g:gobin_exe)), '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
