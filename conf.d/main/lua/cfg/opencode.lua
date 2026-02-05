@@ -1,5 +1,4 @@
-vim.g.opencode_opts = {
-  provider = {
+local floaterm_enhance_cfg = {
     name = 'floaterm_enhance',
     toggle = function(self)
       local opencode_bufnr = vim.g.opencode_bufnr
@@ -26,7 +25,17 @@ vim.g.opencode_opts = {
       end
       vim.g.opencode_bufnr = nil
     end,
+}
+if vim.g.opencode_enabled and vim.fn.index({'terminal', 'tmux', 'wezterm', 'kitty'}, vim.g.opencode_enabled) >= 0 then
+  local opencode_config = {
+    enabled = vim.g.opencode_enabled
   }
+else
+  local opencode_config = floaterm_enhance_cfg
+end
+
+vim.g.opencode_opts = {
+  provider = opencode_config
 }
 -- XXX
 vim.keymap.set({ "n", "x" }, '+', function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
