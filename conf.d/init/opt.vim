@@ -38,8 +38,8 @@ let g:nvim_treesitter_install = utils#is_unix()
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
 
 " let g:floaterm_ai_programs = [
-"     \ "claude",
-"     \ ["opencode", "--wintype=float --position=topright --width=0.45 --height=0.8"]
+"     \ ["claude", "--wintype=left --position=left --width=0.3"],
+"     \ ["opencode", "--wintype=float --position=topright --width=0.45 --height=0.8", "AI"],
 "   \ ]
 " let g:opencode_nvim_opts = '--wintype=vsplit --position=left --width=0.3'
 
