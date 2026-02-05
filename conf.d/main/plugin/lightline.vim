@@ -131,16 +131,12 @@ let g:lightline.inactive.left = [['mode'], ['abspath']]
 " ---------------------
 function! lightline#upgrade() abort
     let colors_name = get(g:, 'colors_name', '')
-    if index(['sonokai', 'edge', 'codedark', 'one', 'wombat'], colors_name) >= 0
+    if index(['sonokai', 'onedark', 'codedark', 'one', 'wombat'], colors_name) >= 0
         let g:lightline.colorscheme = g:colors_name
     elseif colors_name =~ 'fox' || colors_name =~ 'fly'
         let g:lightline.colorscheme = g:colors_name
     elseif colors_name =~ 'catppuccin'
         let g:lightline.colorscheme = "catppuccin"
-    elseif colors_name == 'gruvbox-material'
-        let g:lightline.colorscheme = "gruvbox_material"
-    elseif colors_name == 'gruvbox'
-        let g:lightline.colorscheme = "gruvboxdark"
     elseif colors_name =~ 'tokyonight'
         let g:lightline.colorscheme = "tokyonight"
     elseif colors_name == 'space-vim-dark'

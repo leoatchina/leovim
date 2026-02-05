@@ -32,7 +32,7 @@ let g:edge_better_performance = 1
 let g:gruvbox_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call scheme#set('sonokai', 'sublime')
+    call scheme#set('moonfly', 'codedark')
 elseif g:complete_engine == 'builtin'
     call scheme#set('terafox', 'wombat')
 elseif g:complete_engine == 'cmp'
@@ -45,12 +45,12 @@ elseif g:complete_engine == 'blink'
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call scheme#set('catppuccin', 'codedark')
+        call scheme#set('catppuccin', 'one')
     else
-        call scheme#set('nightfly', 'codedark')
+        call scheme#set('onedark', 'one')
     endif
 else
-    call scheme#set('edge', 'one')
+    call scheme#set('sonokai', 'sublime')
 endif
 " --------------------------
 " nvim-web-devicons
