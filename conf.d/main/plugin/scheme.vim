@@ -21,7 +21,11 @@ function! scheme#set(scheme, ...) abort
     let scheme = a:scheme
     let defaultscheme = get(a:, 1, 'slate')
     if g:has_truecolor
-        call utils#execute('colorscheme '. scheme)
+        try
+            call utils#execute('colorscheme '. scheme)
+        catch
+            call utils#execute('colorscheme '. defaultscheme)
+        endtry
     else
         call utils#execute('colorscheme '. defaultscheme)
     endif
@@ -29,12 +33,15 @@ endfunction
 " set scheme for different complete_engine
 let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
-let g:gruvbox_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call scheme#set('moonfly', 'codedark')
+    call scheme#set('sonokai', 'sublime')
 elseif g:complete_engine == 'builtin'
-    call scheme#set('terafox', 'wombat')
+    if pack#installed('dropbar.nvim') || !has('nvim')
+        call scheme#set('catppuccin', 'wombat')
+    else
+        call scheme#set('carbonfox', 'codedark')
+    endif
 elseif g:complete_engine == 'cmp'
     call scheme#set('tokyonight', 'space-vim-dark')
 elseif g:complete_engine == 'blink'
@@ -45,12 +52,12 @@ elseif g:complete_engine == 'blink'
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call scheme#set('catppuccin', 'one')
+        call scheme#set('moonfly', 'codedark')
     else
-        call scheme#set('onedark', 'one')
+        call scheme#set('nightfly', 'codedark')
     endif
 else
-    call scheme#set('sonokai', 'sublime')
+    call scheme#set('edge', 'one')
 endif
 " --------------------------
 " nvim-web-devicons

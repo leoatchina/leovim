@@ -303,15 +303,16 @@ if !pack#planned('nvim-treesitter') && pack#get('c') && pack#planned('advcompeng
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
+    PlugAdd 'sainnhe/edge'
     PlugAdd 'sainnhe/sonokai'
     if has('nvim')
+        PlugAdd 'bluz71/vim-moonfly-colors'
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'EdenEast/nightfox.nvim'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
     else
-        PlugAdd 'bluz71/vim-moonfly-colors'
         PlugAdd 'bluz71/vim-nightfly-colors'
-        PlugAdd 'joshdick/onedark.vim'
+        PlugAdd 'catppuccin/vim', {'as': 'catppuccin'}
     endif
 endif
 PlugAdd 'lightline.vim'
