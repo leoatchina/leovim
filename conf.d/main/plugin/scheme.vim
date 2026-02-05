@@ -40,7 +40,7 @@ elseif g:complete_engine == 'builtin'
     if pack#installed('dropbar.nvim') || !has('nvim')
         call scheme#set('catppuccin', 'wombat')
     else
-        call scheme#set('carbonfox', 'codedark')
+        call scheme#set('duskfox', 'codedark')
     endif
 elseif g:complete_engine == 'cmp'
     call scheme#set('tokyonight', 'space-vim-dark')
@@ -48,7 +48,7 @@ elseif g:complete_engine == 'blink'
     if pack#get('blink.lua') || pack#get('blink') && !executable('cargo')
         call scheme#set('nightfox', 'hybrid')
     else
-        call scheme#set('duskfox', 'hybrid')
+        call scheme#set('carbonfox', 'hybrid')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
