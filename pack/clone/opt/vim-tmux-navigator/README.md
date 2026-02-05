@@ -233,6 +233,15 @@ To disable navigation when zoomed, add the following to your ~/.vimrc:
 let g:tmux_navigator_disable_when_zoomed = 1
 ```
 
+If you are using TPM, you can also configure this behavior on the tmux side by
+adding the following to your ~/.tmux.conf:
+
+```tmux
+set -g @tmux_navigator_disable_when_zoomed "1"
+```
+
+This will prevent navigation to other tmux panes when the current pane is zoomed.
+
 ##### Preserve Zoom
 
 As noted above, navigating from a Vim pane to another tmux pane normally causes

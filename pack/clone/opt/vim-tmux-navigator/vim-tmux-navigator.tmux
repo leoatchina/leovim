@@ -25,7 +25,7 @@ get_tmux_option() {
 declare vim_pattern='(\S+/)?g?\.?(view|l?n?vim?x?|fzf)(diff)?(-wrapped)?'
 
 bind_key_vim() {
-  local key tmux_cmd is_vim
+  local key tmux_cmd is_vim tmux_navigator_disable_when_zoomed
   key="$1"
   tmux_cmd="$2"
 
@@ -35,6 +35,11 @@ bind_key_vim() {
       | grep -iqE '^[^TXZ ]+ +"@vim_navigator_pattern"$'"
   is_vim="$(get_tmux_option "@vim_navigator_check" "${is_vim}")"
   is_vim="${is_vim//@vim_navigator_pattern/${vim_pattern}}"
+
+  tmux_navigator_disable_when_zoomed="$(get_tmux_option "@tmux_navigator_disable_when_zoomed" "0")"
+  if [ "$tmux_navigator_disable_when_zoomed" = "1" ]; then
+    tmux_cmd="if-shell -F '#{window_zoomed_flag}' '' '$tmux_cmd'"
+  fi
 
   # sending C-/ according to https://github.com/tmux/tmux/issues/1827
   tmux bind-key -n "$key" if-shell "$is_vim" "send-keys '$key'" "$tmux_cmd"
