@@ -309,10 +309,10 @@ if g:has_truecolor
         PlugAdd 'bluz71/vim-moonfly-colors'
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'EdenEast/nightfox.nvim'
-        PlugAdd 'catppuccin/nvim', {'as': 'catppuccin'}
+        PlugAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
     else
         PlugAdd 'bluz71/vim-nightfly-colors'
-        PlugAdd 'catppuccin/vim', {'as': 'catppuccin'}
+        PlugAdd 'catppuccin/vim', {'as': 'catppuccin-vim'}
     endif
 endif
 PlugAdd 'lightline.vim'
