@@ -86,5 +86,5 @@ inoremap <buffer><< <-
 inoremap <buffer>>> ->
 inoremap <buffer>?? %>%
 inoremap <buffer><M-i> # %%
-inoremap <buffer><M-d> # STEP
+inoremap <buffer><M-e> # STEP
 inoremap <buffer><M-m> # In[]<Left>

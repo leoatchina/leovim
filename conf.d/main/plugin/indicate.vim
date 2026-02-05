@@ -68,7 +68,7 @@ if get(g:, 'leovim_whichkey', 1)
         xnoremap <M-i> :WhichKeyVisual "\<M-i\>"<Cr>
     endif
     if get(g:, 'debug_tool', '') != ''
-        nnoremap <M-d> :WhichKey "\<M-d\>"<Cr>
+        nnoremap <M-e> :WhichKey "\<M-e\>"<Cr>
         nnoremap <M-m> :WhichKey "\<M-m\>"<Cr>
     endif
     if pack#planned('vim-fugitive')

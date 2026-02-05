@@ -257,9 +257,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- lsp info/restart
     map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
     map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
-    -- code action
-    map(n, "<F2>", vim.lsp.buf.rename, opts_echo)
-    map(n, "<leader>a", vim.lsp.buf.code_action, opts_echo)
     -- aerial
     map(nx, "F<Cr>", [[<Cmd>AerialNavToggle<Cr>]], opts_silent)
     -- call-graph
@@ -313,11 +310,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
       end
       M.codelens_toggle()
       map(nx, "<leader>C", require("lsp").codelens_toggle, opts_echo)
-      map(nx, "<M-a>", vim.lsp.codelens.run, opts_echo)
+      map(nx, "<M-c>", vim.lsp.codelens.run, opts_echo)
     else
       map(nx, "<leader>C", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
-      map(nx, "<M-a>", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
+      map(nx, "<M-c>", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
     end
+    -- code action
+    map(n, "<F2>", vim.lsp.buf.rename, opts_echo)
+    map(n, "<M-C>", vim.lsp.buf.code_action, opts_echo)
     -- symbol-usage
     map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
     ---------------------------

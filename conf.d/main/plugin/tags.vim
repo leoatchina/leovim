@@ -374,7 +374,7 @@ nnoremap <silent><C-h> :call <SID>lsp_tag_search("preview")<Cr>
 au FileType help,vimdoc nnoremap <C-]> <C-]>
 nnoremap <silent><C-g> :call <SID>lsp_tag_search("definition")<Cr>
 nnoremap <silent><C-]> :call <SID>lsp_tag_search("definition", "vsplit")<Cr>
-nnoremap <silent><M-c> :call <SID>lsp_tag_search("definition", "list")<Cr>
+nnoremap <silent><M-d> :call <SID>lsp_tag_search("definition", "list")<Cr>
 nnoremap <silent><C-w>g :call <SID>lsp_tag_search("definition", "tabe")<Cr>
 nnoremap <silent><C-w>] :call <SID>lsp_tag_search("definition", "split")<Cr>
 nnoremap <silent><C-w><C-g> :call <SID>lsp_tag_search("definition", "tabe")<Cr>
@@ -383,7 +383,7 @@ nnoremap <silent><C-w><C-]> :call <SID>lsp_tag_search("definition", "split")<Cr>
 nnoremap <silent><M-/> :call <SID>lsp_tag_search("references", "list")<Cr>
 if pack#installed_adv()
     " declaration
-    nnoremap <silent><M-C> :call <SID>lsp_tag_search("declaration", "list")<Cr>
+    nnoremap <silent><M-D> :call <SID>lsp_tag_search("declaration", "list")<Cr>
     " implementation
     nnoremap <silent><M-.> :call <SID>lsp_tag_search("implementation", "list")<Cr>
     " typeDefinition

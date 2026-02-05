@@ -185,12 +185,12 @@ if has('nvim') || has('patch-9.0.0438')
     call coc#config('codeLens.enable', v:true)
     call coc#config('codeLens.display', v:true)
     nmap <leader>C :CocCommand document.toggleCodeLens<Cr>
-    nmap <M-a> <Plug>(coc-codelens-action)
+    nmap <M-c> <Plug>(coc-codelens-action)
 else
     call coc#config('codeLens.enable', v:false)
 endif
 nmap <silent><F2> <Plug>(coc-rename)
-nmap <silent><Leader>A :CocFzfList actions<Cr>
+nmap <silent><M-C> :CocFzfList actions<Cr>
 " codeaction-refactor
 xmap <silent><leader>R <Plug>(coc-codeaction-refactor-selected)
 nmap <silent><leader>R <Plug>(coc-codeaction-refactor)

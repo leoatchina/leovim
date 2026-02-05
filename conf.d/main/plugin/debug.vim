@@ -88,18 +88,18 @@ if pack#planned('vimspector')
     endif
     nmap <leader>rI :VimspectorInstall<Space>
     nmap <leader>rL :call vimspector#GetConfigurations()<Left>
-    nmap <silent><M-d>, <Plug>VimspectorJumpToPreviousBreakpoint
-    nmap <silent><M-d>; <Plug>VimspectorJumpToNextBreakpoint
-    nmap <silent><M-d><Space> <Plug>VimspectorToggleBreakpoint
-    nmap <silent><M-d><M-d> <Plug>VimspectorRunToCursor
-    nmap <silent><M-d><Tab> <Plug>VimspectorDisassemble
-    nmap <silent><M-d><Cr> <Plug>VimspectorContinue
-    nmap <silent><M-d>n <Plug>VimspectorStepOver
-    nmap <silent><M-d>i <Plug>VimspectorStepInto
-    nmap <silent><M-d>o <Plug>VimspectorStepOut
-    nmap <silent><M-d>p <Plug>VimspectorPause
-    nmap <silent><M-d>q :call vimspector#Reset()<Cr>
-    nmap <silent><M-d>r :call vimspector#Launch()<Cr>
+    nmap <silent><M-e>, <Plug>VimspectorJumpToPreviousBreakpoint
+    nmap <silent><M-e>; <Plug>VimspectorJumpToNextBreakpoint
+    nmap <silent><M-e><Space> <Plug>VimspectorToggleBreakpoint
+    nmap <silent><M-e><M-e> <Plug>VimspectorRunToCursor
+    nmap <silent><M-e><Tab> <Plug>VimspectorDisassemble
+    nmap <silent><M-e><Cr> <Plug>VimspectorContinue
+    nmap <silent><M-e>n <Plug>VimspectorStepOver
+    nmap <silent><M-e>i <Plug>VimspectorStepInto
+    nmap <silent><M-e>o <Plug>VimspectorStepOut
+    nmap <silent><M-e>p <Plug>VimspectorPause
+    nmap <silent><M-e>q :call vimspector#Reset()<Cr>
+    nmap <silent><M-e>r :call vimspector#Launch()<Cr>
     nmap <silent><F3> :VimspectorReset<Cr>
     nmap <silent><F4> <Plug>VimspectorRunToCursor
     nmap <silent><F5> <Plug>VimspectorContinue
@@ -111,25 +111,25 @@ if pack#planned('vimspector')
     nmap <silent><F11> <Plug>VimspectorStepInto
     nmap <silent><F12> <Plug>VimspectorStepOut
     " session
-    nnoremap <M-d><M-l> :VimspectorLoadSession
-    nnoremap <M-d><M-m> :VimspectorMkSession<Cr>
-    nnoremap <M-d><M-n> :VimspectorNewSession<Space>
-    nnoremap <M-d><M-q> :VimspectorDestroySession<Space>
-    nnoremap <M-d><M-r> :VimspectorRenameSession<Space>
-    nnoremap <M-d><M-s> :VimspectorSwitchToSession<Space>
+    nnoremap <M-e><M-l> :VimspectorLoadSession
+    nnoremap <M-e><M-m> :VimspectorMkSession<Cr>
+    nnoremap <M-e><M-n> :VimspectorNewSession<Space>
+    nnoremap <M-e><M-q> :VimspectorDestroySession<Space>
+    nnoremap <M-e><M-r> :VimspectorRenameSession<Space>
+    nnoremap <M-e><M-s> :VimspectorSwitchToSession<Space>
     command! VimspectorCommands call FzfCallCommands('VimspectorCommands', 'Vimspector')
-    nnoremap <M-d>: :VimspectorCommands<Cr>
-    nnoremap <M-d>v :call vimspector#
+    nnoremap <M-e>: :VimspectorCommands<Cr>
+    nnoremap <M-e>v :call vimspector#
     " breakpoint
-    nnoremap <silent><M-d>c :call vimspector#ClearBreakpoints()<Cr>
-    nnoremap <silent><M-d>f :call vimspector#AddFunctionBreakpoint('')<left><left>
-    nnoremap <silent><M-d>b :call vimspector#ToggleAllBreakpointsViewBreakpoint()<Cr>
+    nnoremap <silent><M-e>c :call vimspector#ClearBreakpoints()<Cr>
+    nnoremap <silent><M-e>f :call vimspector#AddFunctionBreakpoint('')<left><left>
+    nnoremap <silent><M-e>b :call vimspector#ToggleAllBreakpointsViewBreakpoint()<Cr>
     " start / stop
-    nnoremap <silent><M-d>. :call vimspector#Restart()<Cr>
-    nnoremap <silent><M-d>Q :call vimspector#Stop({'interactive': v:true})<Cr>
+    nnoremap <silent><M-e>. :call vimspector#Restart()<Cr>
+    nnoremap <silent><M-e>Q :call vimspector#Stop({'interactive': v:true})<Cr>
     " function
-    nnoremap <silent><M-d>u :call vimspector#UpFrame()<Cr>
-    nnoremap <silent><M-d>d :call vimspector#DownFrame()<Cr>
+    nnoremap <silent><M-e>u :call vimspector#UpFrame()<Cr>
+    nnoremap <silent><M-e>d :call vimspector#DownFrame()<Cr>
     " --------------------------------------
     " jump/show windows in vimspector
     " --------------------------------------
@@ -234,17 +234,17 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
     nnoremap <leader>rI :DapInstall<Space>
     nnoremap <leader>rU :DapUninstall<Space>
     nnoremap <leader>rL :lua DapLoadConfig()<Left>
-    nnoremap <silent><M-d>, <cmd>lua DapBreakpointPrev()<Cr>
-    nnoremap <silent><M-d>; <cmd>lua DapBreakpointNext()<Cr>
-    nnoremap <silent><M-d><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
-    nnoremap <silent><M-d><M-d> <cmd>lua DapRunToCusor()<Cr>
-    nnoremap <silent><M-d><Cr> <cmd>lua DapContinue()<Cr>
-    nnoremap <silent><M-d>p <cmd>lua DapPause()<Cr>
-    nnoremap <silent><M-d>q <cmd>lua DapReset()<Cr>
-    nnoremap <silent><M-d>n <cmd>lua require"dap".step_over()<Cr>
-    nnoremap <silent><M-d>N <cmd>lua require"dap".step_back()<Cr>
-    nnoremap <silent><M-d>i <cmd>lua require"dap".step_into()<Cr>
-    nnoremap <silent><M-d>o <cmd>lua require"dap".step_out()<Cr>
+    nnoremap <silent><M-e>, <cmd>lua DapBreakpointPrev()<Cr>
+    nnoremap <silent><M-e>; <cmd>lua DapBreakpointNext()<Cr>
+    nnoremap <silent><M-e><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
+    nnoremap <silent><M-e><M-e> <cmd>lua DapRunToCusor()<Cr>
+    nnoremap <silent><M-e><Cr> <cmd>lua DapContinue()<Cr>
+    nnoremap <silent><M-e>p <cmd>lua DapPause()<Cr>
+    nnoremap <silent><M-e>q <cmd>lua DapReset()<Cr>
+    nnoremap <silent><M-e>n <cmd>lua require"dap".step_over()<Cr>
+    nnoremap <silent><M-e>N <cmd>lua require"dap".step_back()<Cr>
+    nnoremap <silent><M-e>i <cmd>lua require"dap".step_into()<Cr>
+    nnoremap <silent><M-e>o <cmd>lua require"dap".step_out()<Cr>
     nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
     nnoremap <silent><F4> <cmd>lua DapRunToCusor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
@@ -255,17 +255,17 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
     nnoremap <silent><F10> <cmd>lua require"dap".step_over()<Cr>
     nnoremap <silent><F11> <cmd>lua require"dap".step_into()<Cr>
     nnoremap <silent><F12> <cmd>lua require"dap".step_out()<Cr>
-    " basic <M-d> map
-    nnoremap <M-d>l :lua require"dap".
-    nnoremap <silent><M-d>. <cmd>lua require"dap".run_last()<Cr>
-    nnoremap <silent><M-d>a <cmd>lua require"dap".attach(vim.fn.input('Attatch to: '))<Cr>
+    " basic <M-e> map
+    nnoremap <M-e>l :lua require"dap".
+    nnoremap <silent><M-e>. <cmd>lua require"dap".run_last()<Cr>
+    nnoremap <silent><M-e>a <cmd>lua require"dap".attach(vim.fn.input('Attatch to: '))<Cr>
     " breakpoints
-    nnoremap <silent><M-d>c <cmd>lua require"dap".clear_breakpoints()<Cr>
-    nnoremap <silent><M-d>e <cmd>lua require"dap".set_exception_breakpoints("")<left><left>
-    nnoremap <silent><M-d>s <cmd>lua require"dap".set_breakpoint()<left>
+    nnoremap <silent><M-e>c <cmd>lua require"dap".clear_breakpoints()<Cr>
+    nnoremap <silent><M-e>e <cmd>lua require"dap".set_exception_breakpoints("")<left><left>
+    nnoremap <silent><M-e>s <cmd>lua require"dap".set_breakpoint()<left>
     " debug
-    nnoremap <silent><M-d>u <cmd>lua require"dap".up()<Cr>
-    nnoremap <silent><M-d>d <cmd>lua require"dap".down()<Cr>
+    nnoremap <silent><M-e>u <cmd>lua require"dap".up()<Cr>
+    nnoremap <silent><M-e>d <cmd>lua require"dap".down()<Cr>
     " auto attach
     au FileType dap-repl lua require('dap.ext.autocompl').attach()
     " --------------------------------------
@@ -341,15 +341,15 @@ elseif v:version >= 801 && !has('nvim') && pack#get('termdebug')
     let g:termdebug_map_K = 1
     let g:termdebug_use_prompt = 1
     packadd termdebug
-    nnoremap <M-d><Space> :Break<Space>
-    nnoremap <M-d><M-d> :Until<Cr>
-    nnoremap <M-d><Cr> :Continue<Cr>
-    nnoremap <M-d>c :Clear<Space>
-    nnoremap <M-d>r :Run<Space>
-    nnoremap <M-d>n :Over<Cr>
-    nnoremap <M-d>i :Step<Cr>
-    nnoremap <M-d>o :Finish<Cr>
-    nnoremap <M-d>a :Arguments<Space>
+    nnoremap <M-e><Space> :Break<Space>
+    nnoremap <M-e><M-e> :Until<Cr>
+    nnoremap <M-e><Cr> :Continue<Cr>
+    nnoremap <M-e>c :Clear<Space>
+    nnoremap <M-e>r :Run<Space>
+    nnoremap <M-e>n :Over<Cr>
+    nnoremap <M-e>i :Step<Cr>
+    nnoremap <M-e>o :Finish<Cr>
+    nnoremap <M-e>a :Arguments<Space>
     nnoremap <F1> :Run<Space>
     nnoremap <F3> :Stop<Space>
     nnoremap <F4> :Until<Cr>

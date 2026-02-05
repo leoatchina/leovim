@@ -43,12 +43,8 @@ function! window#pre_cursor_pos(mode)
     noautocmd silent! wincmd p
 endfunction
 nnoremap <silent><M-Q> :call window#pre_cursor_pos('quit')<Cr>
-nnoremap <silent><M-U> :call window#pre_cursor_pos('ctrlu')<Cr>
-nnoremap <silent><M-D> :call window#pre_cursor_pos('ctrld')<Cr>
 nnoremap <silent><M-E> :call window#pre_cursor_pos('ctrle')<Cr>
 nnoremap <silent><M-Y> :call window#pre_cursor_pos('ctrly')<Cr>
-inoremap <silent><M-U> <C-o>:call window#pre_cursor_pos('ctrlu')<Cr>
-inoremap <silent><M-D> <C-o>:call window#pre_cursor_pos('ctrld')<Cr>
 inoremap <silent><M-E> <C-o>:call window#pre_cursor_pos('ctrle')<Cr>
 inoremap <silent><M-Y> <C-o>:call window#pre_cursor_pos('ctrly')<Cr>
 " -----------------------------------

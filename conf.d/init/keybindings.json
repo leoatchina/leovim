@@ -143,11 +143,6 @@
     "command": "gitlens.views.graph.focus"
   },
   {
-    "key": "alt+c",
-    "command": "-gitlens.showQuickCommitFileDetails",
-    "when": "editorTextFocus && !gitlens:disabled && config.gitlens.keymap == 'alternate'"
-  },
-  {
     "key": "ctrl+alt+-",
     "command": "gitlens.showQuickCommitFileDetails",
     "when": "!gitlens:disabled"
@@ -213,18 +208,18 @@
     "when": "editorTextFocus && !isInEmbeddedEditor"
   },
   {
-    "key": "alt+c",
+    "key": "alt+d",
     "command": "editor.action.peekDefinition",
     "when": "editorTextFocus && !isInEmbeddedEditor"
   },
   // declaration && find source code
   {
-    "key": "shift+alt+c",
+    "key": "shift+alt+d",
     "command": "editor.action.peekDeclaration",
     "when": "editorTextFocus && !isInEmbeddedEditor"
   },
   {
-    "key": "shift+alt+c",
+    "key": "shift+alt+d",
     "command": "typescript.goToSourceDefinition",
     "when": "editorTextFocus && editorLangId == 'typescript'"
   },
@@ -412,12 +407,8 @@
     "command": "workbench.action.debug.configure"
   },
   {
-    "key": "alt+d",
-    "command": "workbench.debug.action.focusCallStackView"
-  },
-  {
     "key": "ctrl+alt+d",
-    "command": "debug.addConfiguration"
+    "command": "workbench.debug.action.focusCallStackView"
   },
   {
     "key": "shift+alt+b",
