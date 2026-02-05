@@ -38,7 +38,7 @@ if g:complete_engine == 'mcm'
     call scheme#set('sonokai', 'sublime')
 elseif g:complete_engine == 'builtin'
     if pack#installed('dropbar.nvim') || !has('nvim')
-        call scheme#set('catppuccin', 'wombat')
+        call scheme#set('catppuccin_mocha', 'wombat')
     else
         call scheme#set('duskfox', 'codedark')
     endif
