@@ -8,7 +8,7 @@ if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') &&
     tnoremap <M-a><M-a> <C-\><C-n><C-w><C-w>
     " start or cr
     nnoremap <silent><M-a><M-r> :FloatermAiStart<Cr>
-    nnoremap <silent><M-a>r :FloatermAiStart!<Cr>
+    nnoremap <silent><M-a><M-i> :FloatermAiStart!<Cr>
     nnoremap <silent><M-a><Cr> :FloatermAiSendCr<Cr>
     " send, NOTE ! means start in curr editing buffer
     nnoremap <silent><M-a><BS> :FloatermAiSendLineRange!<Cr>
