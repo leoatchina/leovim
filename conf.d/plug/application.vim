@@ -306,7 +306,6 @@ if g:has_truecolor
     PlugAdd 'sainnhe/edge'
     PlugAdd 'sainnhe/sonokai'
     if has('nvim')
-        PlugAdd 'bluz71/vim-moonfly-colors'
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'EdenEast/nightfox.nvim'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}

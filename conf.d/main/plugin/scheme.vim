@@ -37,10 +37,12 @@ let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
     call scheme#set('sonokai', 'sublime')
 elseif g:complete_engine == 'builtin'
-    if pack#installed('dropbar.nvim') || !has('nvim')
+    if pack#installed('dropbar.nvim')
+        call scheme#set('catppuccin-mocha', 'wombat')
+    elseif !has('nvim')
         call scheme#set('catppuccin_mocha', 'wombat')
     else
-        call scheme#set('duskfox', 'codedark')
+        call scheme#set('duskfox', 'hybrid')
     endif
 elseif g:complete_engine == 'cmp'
     call scheme#set('tokyonight', 'space-vim-dark')
@@ -48,11 +50,11 @@ elseif g:complete_engine == 'blink'
     if pack#get('blink.lua') || pack#get('blink') && !executable('cargo')
         call scheme#set('nightfox', 'hybrid')
     else
-        call scheme#set('carbonfox', 'hybrid')
+        call scheme#set('terafox', 'codedark')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
-        call scheme#set('moonfly', 'codedark')
+        call scheme#set('carbonfox', 'codedark')
     else
         call scheme#set('nightfly', 'codedark')
     endif
