@@ -32,17 +32,13 @@ function! pack#installed(...) abort
     if empty(a:000)
         return 0
     endif
-    let loaded = exists('*plug#loaded_names') ? plug#loaded_names() : []
-    if empty(loaded)
-        return 0
-    endif
     for pack in a:000
         if !has_key(g:plugs, pack)
             return 0
         endif
         let spec = g:plugs[pack]
         let dir = get(spec, 'dir', '')
-        if index(loaded, pack) < 0 || !isdirectory(dir)
+        if !isdirectory(dir)
             return 0
         endif
     endfor
@@ -123,4 +119,3 @@ endfunction
 function! pack#installed_adv() abort
     return pack#installed('coc.nvim') || pack#installed_lsp()
 endfunction
-
