@@ -7,7 +7,7 @@ xnoremap <M-a><M-a> <ESC><C-w><C-w>
 if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') && !empty(g:floaterm_ai_programs) && type(g:floaterm_ai_programs) == type([])
     tnoremap <M-a><M-a> <C-\><C-n><C-w><C-w>
     " start or cr
-    nnoremap <silent><M-a><M-r> :FloatermAiStart<Cr>
+    nnoremap <silent><M-a><M-;> :FloatermAiStart<Cr>
     nnoremap <silent><M-a><M-i> :FloatermAiStart!<Cr>
     nnoremap <silent><M-a><Cr> :FloatermAiSendCr<Cr>
     " send, NOTE ! means start in curr editing buffer

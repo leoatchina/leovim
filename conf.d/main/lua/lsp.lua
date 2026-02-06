@@ -129,7 +129,8 @@ local function text_format(symbol)
 end
 require('symbol-usage').setup({
   text_format = text_format,
-  references = { enabled = true, include_declaration = false },
+  vt_position = 'end_of_line',
+  references = { enabled = true, include_declaration = true },
   implementation = { enabled = true },
   definition = { enabled = false },
   disable = {
