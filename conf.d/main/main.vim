@@ -154,11 +154,16 @@ endif
 " set PATH && term
 " --------------------------
 if utils#is_win()
-    if get(g:,'leovim_loaded',0) == 0
-        if isdirectory($HOME . "\\.leovim.windows")
-            let $PATH = $HOME . "\\.leovim.windows\\cppcheck;" . $PATH
-            let $PATH = $HOME . "\\.leovim.windows\\gtags\\bin;" . $PATH
-            let $PATH = $HOME . "\\.leovim.windows\\tools;" . $PATH
+    if get(g:, 'leovim_loaded', 0) == 0
+        let local_bin = utils#expand("$HOME/.local/bin")
+        let tools_bin = utils#expand("$HOME/.leovim.windows")
+        if isdirectory(local_bin) && $PATH !~ local_bin
+            let $PATH = local_bin . ';' . $PATH
+        endif
+        if isdirectory(tools_bin)
+            let $PATH = tools_bin . '\gtags\bin;' . $PATH
+            let $PATH = tools_bin . '\cppcheck;' . $PATH
+            let $PATH = tools_bin . '\tools;' . $PATH
         endif
     endif
     set winaltkeys=no
@@ -168,7 +173,7 @@ if utils#is_win()
     endif
     " ToggleFullScreen and SetAlpha moved to utils.vim
     if has('libcall') && !has('nvim') && utils#has_gui()
-        let g:gvimfullscreendll = $HOME ."\\. leovim.windows\\tools\\gvimfullscreen.dll"
+        let g:gvimfullscreendll = $HOME .'\.leovim.windows\tools\gvimfullscreen.dll'
         let g:VimAlpha = 255
         nnoremap <silent><C-cr> <ESC>:call utils#toggle_fullscreen()<Cr>
         nnoremap <silent><M-\>  :call utils#set_alpha(5)<Cr>
