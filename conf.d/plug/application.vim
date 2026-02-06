@@ -394,24 +394,25 @@ xmap g= ga*=
 xmap g: ga*:
 xmap g<Space> ga*<Space>
 " ----------------------------
-" pairs
+" pairs && wiler
 " ----------------------------
 if pack#planned_lsp()
     PlugAdd 'windwp/nvim-autopairs'
 else
+    if v:version >= 800
+        PlugAdd 'tmsvg/pear-tree'
+    elseif has('patch-7.4.849')
+        PlugAdd 'jiangmiao/auto-pairs'
+    endif
+    " wilder
     if g:python_version > 3 && has('nvim') && utils#is_unix()
         function! UpdateRemotePlugins(...)
             let &rtp=&rtp
             UpdateRemotePlugins
         endfunction
         Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
-    elseif !has('nvim') && v:version >= 801 || has('nvim') && !utils#is_win()
+    elseif (!utils#is_win() || pack#get('wilder')) && (!has('nvim') && v:version >= 801 || has('nvim'))
         PlugAdd 'gelguy/wilder.nvim'
-    endif
-    if v:version >= 800
-        PlugAdd 'tmsvg/pear-tree'
-    elseif has('patch-7.4.849')
-        PlugAdd 'jiangmiao/auto-pairs'
     endif
 endif
 " ------------------------------
