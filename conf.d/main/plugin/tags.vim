@@ -356,7 +356,7 @@ function! s:lsp_tag_search(method, ...) abort
             if open_action == 'list'
                 execute g:search_all_cmd . ' ' . tagname
             else
-                call preview#errmsg('Not found by neither lsp nor tags, you should press <M-d> to do grep search.')
+                call preview#errmsg('Not found by neither lsp nor tags, you should press <Alt-d> to do grep search.')
             endif
         else
             call preview#errmsg('Not found by neither lsp nor tags, and could not do grep search.')
