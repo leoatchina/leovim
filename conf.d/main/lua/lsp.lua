@@ -181,19 +181,32 @@ function M.LspAction(method, open_action)
     references = 'textDocument/references',
   }
   local handler = handler_dict[method]
-  local params = vim.tbl_extend('force', vim.lsp.util.make_position_params(), method == 'references' and { context = { includeDeclaration = false } } or {})
-  local results = vim.lsp.buf_request_sync(0, handler, params, 500)
-  if type(results) ~= 'table' then
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  local params
+  if #clients > 0 then
+    params = vim.tbl_extend('force', vim.lsp.util.make_position_params(0, clients[1].offset_encoding), method == 'references' and { context = { includeDeclaration = false } } or {})
+  else
+    params = vim.tbl_extend('force', vim.lsp.util.make_position_params(), method == 'references' and { context = { includeDeclaration = false } } or {})
+  end
+  local all_results = vim.lsp.buf_request_sync(0, handler, params, 500)
+  if type(all_results) ~= 'table' then
     vim.api.nvim_set_var("lsp_found", 0)
     return
   end
-  _, results = next(results)
-  if results == nil or results['result'] == nil then
+  -- collect results from all clients
+  local result = {}
+  for _, client_result in pairs(all_results) do
+    if client_result and client_result['result'] then
+      for _, item in ipairs(client_result['result']) do
+        table.insert(result, item)
+      end
+    end
+  end
+  if #result == 0 then
     vim.api.nvim_set_var("lsp_found", 0)
     return
   end
   local qflist = {}
-  local result = results['result']
   local add_qf = #result > 1 or open_action == 'list'
   for _, value in pairs(result) do
     if value == nil then
