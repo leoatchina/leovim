@@ -42,11 +42,7 @@ set switchbuf=useopen,usetab,newtab
 " --------------------------
 " swapfile
 " --------------------------
-if has('nvim')
-    set noswapfile
-else
-    set swapfile
-endif
+set noswapfile
 " --------------------------
 " wildmenu
 " --------------------------

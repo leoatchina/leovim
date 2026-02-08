@@ -2,12 +2,46 @@
 if utils#is_vscode()
     finish
 endif
-if pack#installed('mason.nvim')
-    lua require("cfg/mason")
+" --------------------------
+" complete options
+" --------------------------
+set completeopt=menu,menuone
+if has('patch-9.0.1568')
+    set sms
+endif
+if has('patch-8.1.1270')
+    set shortmess+=S
+endif
+if has('patch-7.4.1829')
+    set shortmess+=a
+    set shortmess+=c
+endif
+" completion options settings - based on precise version judgment
+if has('patch-7.4.775')
+    set completeopt+=noselect
+endif
+if has('patch-7.4.784')
+    set completeopt+=noinsert
+endif
+if has('nvim-0.11')
+    set completeopt+=fuzzy
+endif
+" Vim 8.1.1880+ popup completion window (requires textprop support, Neovim uses floating window)
+if !has('nvim') && has('patch-8.1.1880') && has('textprop') && exists('+completepopup')
+    set completeopt+=popup
+    set completepopup=align:menu,border:off,highlight:WildMenu
+endif
+" completion menu size settings
+set pumheight=20
+if exists('+pumwidth')
+    set pumwidth=50
 endif
 " -----------------------------
 " lsp && vista_default_executive
 " -----------------------------
+if pack#installed('mason.nvim')
+    lua require("cfg/mason")
+endif
 if pack#installed('codesettings.nvim')
     lua require('cfg/codesettings')
 endif
@@ -30,12 +64,13 @@ if pack#installed_lsp()
     endif
 elseif pack#installed_coc()
     source $CFG_DIR/coc.vim
-elseif g:complete_engine == 'mcm'
-    source $CFG_DIR/mcm.vim
 elseif g:complete_engine != ''
     if has('nvim-0.11')
         let g:complete_engine = 'builtin'
         lua require("cfg/builtin")
+    elseif has('patch-9.1.1590')
+        let g:complete_engine = 'builtin'
+        source $CFG_DIR/builtin.vim
     else
         let g:complete_engine = 'mcm'
         source $CFG_DIR/mcm.vim

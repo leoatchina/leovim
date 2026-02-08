@@ -1,37 +1,3 @@
-" --------------------------
-" complete options
-" --------------------------
-set completeopt=menu,menuone
-if has('patch-9.0.1568')
-    set sms
-endif
-if has('patch-8.1.1270')
-    set shortmess+=S
-endif
-if has('patch-7.4.1829')
-    set shortmess+=a
-    set shortmess+=c
-endif
-" completion options settings - based on precise version judgment
-if has('patch-7.4.775')
-    set completeopt+=noselect
-endif
-if has('patch-7.4.784')
-    set completeopt+=noinsert
-endif
-if has('nvim-0.11')
-    set completeopt+=fuzzy
-endif
-" Vim 8.1.1880+ popup completion window (requires textprop support, Neovim uses floating window)
-if !has('nvim') && has('patch-8.1.1880') && has('textprop') && exists('+completepopup')
-    set completeopt+=popup
-    set completepopup=align:menu,border:off,highlight:WildMenu
-endif
-" completion menu size settings
-set pumheight=20
-if exists('+pumwidth')
-    set pumwidth=50
-endif
 " If completion function is not perfect enough, use mcm as alternative on Unix
 if !has('patch-7.4.775') && utils#is_unix()
     call pack#add('mcm')
