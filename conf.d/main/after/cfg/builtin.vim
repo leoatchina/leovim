@@ -3,46 +3,25 @@ set completeopt=popup,menuone,noselect
 " ============================================================
 " 点号后自动触发 omnifunc（如 os.path.isf）
 " ============================================================
-function! s:DotOmniComplete(timer) abort
-    if mode() !=# 'i' || &omnifunc == ''
-        return
-    endif
-    " Step 1: call omnifunc(1, '') to get the start column
-    let start = call(&omnifunc, [1, ''])
-    if start < 0
-        return
-    endif
-    " Step 2: extract base text (chars typed after the dot)
-    let base = getline('.')[start : col('.') - 2]
-    " Step 3: call omnifunc(0, base) to get completion items
-    let items = call(&omnifunc, [0, base])
-    if type(items) == v:t_dict
-        let items = get(items, 'words', [])
-    endif
-    if empty(items)
-        return
-    endif
-    " Step 4: suppress autocomplete and show omni results via complete()
-    set noautocomplete
-    call complete(start + 1, items)
-endfunction
-
 function! s:DotOmni() abort
     if &omnifunc == ''
         return
     endif
+    " 如果已经在 omni 补全模式中，不要重复触发
+    if pumvisible() && complete_info(['mode']).mode ==# 'omni'
+        return
+    endif
     let line = getline('.')->strpart(0, col('.') - 1)
-    if line =~ '\%(\.\|->\|::\)$'
-        " Delay to let Vim finish processing input events
-        call timer_start(50, function('s:DotOmniComplete'))
+    " 匹配 xxx. 或 xxx.yyy 模式（点号后跟任意关键字字符）
+    if line =~ '\.\k*$'
+        " 关闭已有菜单并立即触发 omni，一次性发送避免 autocomplete 抢占
+        call feedkeys(pumvisible() ? "\<C-e>\<C-x>\<C-o>" : "\<C-x>\<C-o>", 'n')
     endif
 endfunction
 
 augroup DotOmni
     autocmd!
     autocmd TextChangedI *.py,*.lua,*.js,*.java,*.c,*.cpp call <SID>DotOmni()
-    " Restore autocomplete after completion is done
-    autocmd CompleteDone * if !&autocomplete | set autocomplete | endif
 augroup END
 
 if pack#planned('vim-vsnip')
