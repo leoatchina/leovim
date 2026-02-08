@@ -30,6 +30,7 @@ augroup AutoOmni
     autocmd TextChangedI *.py,*.lua,*.js,*.java,*.vim,*.c,*.cpp call builtin#autoomni()
 augroup END
 if pack#installed('vim-vsnip')
+    set completefunc=vsnip#complete
     inoremap <expr> <Tab> vsnip#expandable() ? "\<Plug>(vsnip-expand)"
             \ : vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)"
             \ : pumvisible() && complete_info().selected >= 0 ? "\<C-y>"
