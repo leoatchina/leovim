@@ -109,6 +109,7 @@ cp_n $APP_PATH/scripts/z.sh $HOME/.local/bin
 # enhanced config
 cp_n $APP_PATH/scripts/inputrc $HOME/.inputrc
 cp_n $APP_PATH/scripts/configrc $HOME/.configrc
+cp_n $APP_PATH/scripts/bash_profile $HOME/.bash_profile
 note "Set links, create (neo)vim's configs, and cp start scripts"
 
 # set links
