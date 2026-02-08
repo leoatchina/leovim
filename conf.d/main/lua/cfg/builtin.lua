@@ -8,16 +8,17 @@ local map = vim.keymap.set
 local utils = require('utils')
 local is_win = utils.is_win
 
--- Completion item limits. Omni defaults to `pumheight` to avoid over-filtering.
--- Users can override via: `vim.g.builtin_completion_limits = { omni = 50, dict_normal = 10, ... }`.
+-- Completion item limits.
+-- Omni defaults to unlimited (no cap) to avoid over-filtering; set it to `"pumheight"` if you prefer a visible-size cap.
+-- Users can override via: `vim.g.builtin_completion_limits = { omni = "pumheight", dict_normal = 10, ... }`.
 local default_completion_limits = {
-  omni = 'pumheight',
+  omni = 0, -- 0 => no cap
   dict_normal = 5,
-  buffer_normal = 2,
-  dict_no_omni = 8,
-  buffer_no_omni = 3,
+  buffer_normal = 5,
+  dict_no_omni = 5,
+  buffer_no_omni = 5,
   dict_path = 3,
-  buffer_path = 1,
+  buffer_path = 3,
 }
 
 -- 检查补全菜单是否可见
@@ -562,8 +563,9 @@ local function omni_available()
   local omni_func = vim.bo.omnifunc
   local filetype = vim.bo.filetype
 
-  -- Special handling for Python: if no python3 support, disable omni completion
-  if filetype == 'python' and vim.fn.has('python3') == 0 then
+  -- Special handling for Python: only gate python3complete on python3 support.
+  -- LSP omnifunc works fine without `+python3`.
+  if filetype == 'python' and omni_func == 'python3complete#Complete' and vim.fn.has('python3') == 0 then
     return false
   end
 
@@ -1498,6 +1500,11 @@ vim.api.nvim_create_autocmd('FileType', {
 
               if #prefix >= 2 and char:match('[%w_]') then
                 local ft = vim.bo.filetype
+                -- If omni is available for this context, prefer triggering it.
+                if omni_available() then
+                  builtin_completion()
+                  return
+                end
                 -- Check for snippet matches
                 if #get_snippet_completions(prefix, ft) > 0 then
                   builtin_completion()
