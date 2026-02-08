@@ -1,43 +1,38 @@
 set autocomplete
-set complete=.^5,o^5,t^5,k^5,w^5,b^5,u^5
-let g:auto_omni_busy = v:false
-function! builtin#autoomni() abort
-    " 1. popup 已存在 → 不干扰
-    if pumvisible()
-        return
-    endif
-    " 2. 正在触发中 → 防止递归
-    if g:auto_omni_busy
-        return
-    endif
-    " 3. omnifunc 未设置 → 不触发
+set completeopt=popup,menuone,noselect
+" ============================================================
+" 点号后自动触发 omnifunc（如 os.path.isf）
+" ============================================================
+function! s:DotOmni() abort
     if &omnifunc == ''
         return
     endif
-    " 4. 光标前不是字母/数字 → 不触发
-    if col('.') <= 1 || getline('.')[col('.') - 2] !~ '\k'
+    " 如果已经在 omni 补全模式中，不要重复触发
+    if pumvisible() && complete_info(['mode']).mode ==# 'omni'
         return
     endif
-    " 5. 标记忙碌
-    let g:auto_omni_busy = v:true
-    " 6. 延迟触发 omni（关键）
-    call timer_start(20, {-> execute("call feedkeys(\"\\<C-x>\\<C-o>\", 'n')")})
-    " 7. 解除锁（再延迟一点）
-    call timer_start(50, {-> execute("let g:auto_omni_busy = v:false")})
+    let line = getline('.')->strpart(0, col('.') - 1)
+    " 匹配 xxx. 或 xxx.yyy 模式（点号后跟任意关键字字符）
+    if line =~ '\.\k*$'
+        " 关闭已有菜单并立即触发 omni，一次性发送避免 autocomplete 抢占
+        call feedkeys(pumvisible() ? "\<C-e>\<C-x>\<C-o>" : "\<C-x>\<C-o>", 'n')
+    endif
 endfunction
-augroup AutoOmni
+
+augroup DotOmni
     autocmd!
-    autocmd TextChangedI *.py,*.lua,*.js,*.java,*.vim,*.c,*.cpp call builtin#autoomni()
+    autocmd TextChangedI *.py,*.lua,*.js,*.java,*.c,*.cpp call <SID>DotOmni()
 augroup END
-if pack#installed('vim-vsnip')
-    set completefunc=vsnip#complete
+
+if pack#planned('vim-vsnip')
+    set complete=.,w,b,u,o,k,Fvsnip#completefunc
     inoremap <expr> <Tab> vsnip#expandable() ? "\<Plug>(vsnip-expand)"
             \ : vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)"
             \ : pumvisible() && complete_info().selected >= 0 ? "\<C-y>"
             \ : "\<Tab>"
     snoremap <expr> <Tab> vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)" : "\<Tab>"
 else
+    set complete=.,w,b,u,o,k
     inoremap <expr> <Tab> pumvisible() && complete_info().selected >= 0 ? "\<C-y>" : "\<Tab>"
-
     snoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"
 endif
