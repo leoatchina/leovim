@@ -21,7 +21,7 @@ endfunction
 
 augroup DotOmni
     autocmd!
-    autocmd TextChangedI *.py,*.lua,*.js,*.java,*.c,*.cpp call <SID>DotOmni()
+    autocmd TextChangedI *.py,*.lua,*.vim,*.sh,*.bash,*.zsh,*.rb,*.pl,*.c,*.h,*.cpp,*.hpp,*.cc,*.hh,*.html,*.htm,*.xhtml,*.xml,*.css,*.js,*.ts,*.json,*.sql,*.tex call <SID>DotOmni()
 augroup END
 
 if pack#planned('vim-vsnip')
