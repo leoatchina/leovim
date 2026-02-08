@@ -1,8 +1,6 @@
 set autocomplete
 set complete=.^5,o^5,t^5,k^5,w^5,b^5,u^5
-
 let g:auto_omni_busy = v:false
-
 function! builtin#autoomni() abort
     " 1. popup 已存在 → 不干扰
     if pumvisible()
@@ -27,12 +25,11 @@ function! builtin#autoomni() abort
     " 7. 解除锁（再延迟一点）
     call timer_start(50, {-> execute("let g:auto_omni_busy = v:false")})
 endfunction
-
 augroup AutoOmni
     autocmd!
     autocmd TextChangedI *.py,*.lua,*.js,*.java,*.vim,*.c,*.cpp call builtin#autoomni()
 augroup END
-if pack#planned('vim-vsnip')
+if pack#installed('vim-vsnip')
     inoremap <expr> <Tab> vsnip#expandable() ? "\<Plug>(vsnip-expand)"
             \ : vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)"
             \ : pumvisible() && complete_info().selected >= 0 ? "\<C-y>"
