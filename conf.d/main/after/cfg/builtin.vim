@@ -12,8 +12,8 @@ function! s:DotOmni() abort
         return
     endif
     let line = getline('.')->strpart(0, col('.') - 1)
-    " 匹配 xxx. 或 xxx.yyy 模式（点号后跟任意关键字字符）
-    if line =~ '\.\k*$'
+    " 匹配多种成员访问操作符：. -> :: （支持更多语言）
+    if line =~ '\%(\.\|->\|::\)\k*$'
         " 关闭已有菜单并立即触发 omni，一次性发送避免 autocomplete 抢占
         call feedkeys(pumvisible() ? "\<C-e>\<C-x>\<C-o>" : "\<C-x>\<C-o>", 'n')
     endif
