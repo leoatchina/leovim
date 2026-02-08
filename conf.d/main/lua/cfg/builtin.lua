@@ -8,6 +8,18 @@ local map = vim.keymap.set
 local utils = require('utils')
 local is_win = utils.is_win
 
+-- Completion item limits. Omni defaults to `pumheight` to avoid over-filtering.
+-- Users can override via: `vim.g.builtin_completion_limits = { omni = 50, dict_normal = 10, ... }`.
+local default_completion_limits = {
+  omni = 'pumheight',
+  dict_normal = 5,
+  buffer_normal = 2,
+  dict_no_omni = 8,
+  buffer_no_omni = 3,
+  dict_path = 3,
+  buffer_path = 1,
+}
+
 -- 检查补全菜单是否可见
 local function pumvisible()
   return vim.fn.pumvisible() == 1
@@ -32,6 +44,71 @@ local snippet_mode_active = false
 local snippet_cache = {}
 local pending_timers = {}
 local completion_active = true
+
+local function effective_omni_limit()
+  local ph = tonumber(vim.o.pumheight) or 0
+  if ph == 0 then
+    -- pumheight=0 means "use screen height"; treat as no explicit cap.
+    return math.huge
+  end
+  if ph < 1 then
+    return 1
+  end
+  return ph
+end
+
+local function get_completion_limits()
+  local limits = vim.deepcopy(default_completion_limits)
+  local user = vim.g.builtin_completion_limits
+  if type(user) == 'table' then
+    for k, v in pairs(user) do
+      limits[k] = v
+    end
+  end
+
+  -- Normalize omni limit.
+  if limits.omni == nil or limits.omni == 'pumheight' then
+    limits.omni = effective_omni_limit()
+  elseif type(limits.omni) == 'number' then
+    if limits.omni <= 0 then
+      limits.omni = math.huge
+    end
+  else
+    limits.omni = effective_omni_limit()
+  end
+
+  local function norm_num(v, fallback)
+    v = tonumber(v)
+    if not v or v < 0 then
+      return fallback
+    end
+    if v == 0 then
+      return math.huge
+    end
+    return math.floor(v)
+  end
+
+  limits.dict_normal = norm_num(limits.dict_normal, default_completion_limits.dict_normal)
+  limits.buffer_normal = norm_num(limits.buffer_normal, default_completion_limits.buffer_normal)
+  limits.dict_no_omni = norm_num(limits.dict_no_omni, default_completion_limits.dict_no_omni)
+  limits.buffer_no_omni = norm_num(limits.buffer_no_omni, default_completion_limits.buffer_no_omni)
+  limits.dict_path = norm_num(limits.dict_path, default_completion_limits.dict_path)
+  limits.buffer_path = norm_num(limits.buffer_path, default_completion_limits.buffer_path)
+  limits.omni = norm_num(limits.omni, effective_omni_limit())
+
+  return limits
+end
+
+local function take(list, n)
+  if n == math.huge then
+    return list
+  end
+  local out = {}
+  for i = 1, math.min(#list, n) do
+    out[#out + 1] = list[i]
+  end
+  return out
+end
 
 -- ============================================================================
 -- 代码片段补全功能
@@ -932,6 +1009,8 @@ function _G.builtin_completion()
     return ''
   end
 
+  local limits = get_completion_limits()
+
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
   local prefix = line:sub(1, col):match('[%w_]*$') or ''
@@ -1017,19 +1096,11 @@ function _G.builtin_completion()
 
     -- 3. 字典补全（在路径上下文中受限）
     local dict_matches = get_dictionary_completions(prefix)
-    local dict_limited = {}
-    for i = 1, math.min(#dict_matches, 3) do
-      table.insert(dict_limited, dict_matches[i])
-    end
-    vim.list_extend(base_matches, dict_limited)
+    vim.list_extend(base_matches, take(dict_matches, limits.dict_path))
 
     -- 4. 缓冲区补全（在路径上下文中严格受限）
     local buffer_matches = get_buffer_completions(prefix)
-    local buffer_limited = {}
-    for i = 1, math.min(#buffer_matches, 1) do
-      table.insert(buffer_limited, buffer_matches[i])
-    end
-    vim.list_extend(base_matches, buffer_limited)
+    vim.list_extend(base_matches, take(buffer_matches, limits.buffer_path))
 
   else
     -- 普通优先级: 代码片段 -> omni/字典 -> 缓冲区 -> 路径
@@ -1042,29 +1113,17 @@ function _G.builtin_completion()
       -- STRATEGY 1: Has real omni completion
       -- Priority: snippet -> omni -> dict -> buffer -> path
 
-      -- 2. OMNI COMPLETION (limit to 3 items)
+      -- 2. OMNI COMPLETION (default: limit to pumheight items)
       local omni_matches = get_omni_completions(prefix)
-      local omni_limited = {}
-      for i = 1, math.min(#omni_matches, 3) do
-        table.insert(omni_limited, omni_matches[i])
-      end
-      vim.list_extend(base_matches, omni_limited)
+      vim.list_extend(base_matches, take(omni_matches, limits.omni))
 
       -- 3. DICTIONARY COMPLETION (limit to 5 items)
       local dict_matches = get_dictionary_completions(prefix)
-      local dict_limited = {}
-      for i = 1, math.min(#dict_matches, 5) do
-        table.insert(dict_limited, dict_matches[i])
-      end
-      vim.list_extend(base_matches, dict_limited)
+      vim.list_extend(base_matches, take(dict_matches, limits.dict_normal))
 
       -- 4. BUFFER COMPLETION (limit to 2 items)
       local buffer_matches = get_buffer_completions(prefix)
-      local buffer_limited = {}
-      for i = 1, math.min(#buffer_matches, 2) do
-        table.insert(buffer_limited, buffer_matches[i])
-      end
-      vim.list_extend(base_matches, buffer_limited)
+      vim.list_extend(base_matches, take(buffer_matches, limits.buffer_normal))
 
     else
       -- STRATEGY 2: No real omni completion (dict files, shell scripts, etc.)
@@ -1072,19 +1131,11 @@ function _G.builtin_completion()
 
       -- 2. DICTIONARY COMPLETION (higher priority, limit to 8 items)
       local dict_matches = get_dictionary_completions(prefix)
-      local dict_limited = {}
-      for i = 1, math.min(#dict_matches, 8) do
-        table.insert(dict_limited, dict_matches[i])
-      end
-      vim.list_extend(base_matches, dict_limited)
+      vim.list_extend(base_matches, take(dict_matches, limits.dict_no_omni))
 
       -- 3. BUFFER COMPLETION (limit to 3 items)
       local buffer_matches = get_buffer_completions(prefix)
-      local buffer_limited = {}
-      for i = 1, math.min(#buffer_matches, 3) do
-        table.insert(buffer_limited, buffer_matches[i])
-      end
-      vim.list_extend(base_matches, buffer_limited)
+      vim.list_extend(base_matches, take(buffer_matches, limits.buffer_no_omni))
     end
 
     -- 5. PATH COMPLETION (lowest priority in normal context)
@@ -1640,209 +1691,3 @@ vim.api.nvim_create_user_command('DebugPath', function()
   end
 end, {})
 
--- Debug completion command
-vim.api.nvim_create_user_command('DebugComplete', function()
-  local line = vim.api.nvim_get_current_line()
-  local col = vim.api.nvim_win_get_cursor(0)[2]
-  local prefix = line:sub(1, col):match('[%w_]*$') or ''
-  local path_prefix = extract_path_prefix(line, col)
-  local before_cursor = line:sub(1, col)
-  local filetype = vim.bo.filetype
-
-  local omni_can_trigger = omni_available()
-  local path_can_trigger = path_available()
-
-  print("=== Enhanced Completion Debug Info ===")
-  print("File type: " .. filetype)
-  print("Current line: '" .. line .. "'")
-  print("Cursor position: " .. col)
-  print("Text before cursor: '" .. before_cursor .. "'")
-  print("Prefix: '" .. prefix .. "' (length: " .. #prefix .. ")")
-  print("Path prefix: '" .. path_prefix .. "' (length: " .. #path_prefix .. ")")
-  print("Can trigger omni: " .. tostring(omni_can_trigger))
-  print("Can trigger path: " .. tostring(path_can_trigger))
-  print("Omnifunc: " .. vim.bo.omnifunc)
-  print("Dictionary file: " .. (vim.bo.dictionary or "none"))
-
-  -- Check intelligent priority strategy
-  local omni_func = vim.bo.omnifunc
-  local has_effective_omni = omni_can_trigger and omni_func ~= '' and omni_func ~= 'syntaxcomplete#Complete'
-
-  -- Check path context
-  local strong_path_context = false
-  if path_can_trigger then
-    if before_cursor:match('=[/~%.]') or
-       before_cursor:match('["\'][^"\']*$') or
-       before_cursor:match('/[^%s]*$') or
-       before_cursor:match('~[^%s]*$') then
-      strong_path_context = true
-    end
-  end
-
-  local strategy
-  if strong_path_context then
-    strategy = "S->P->D->B (path-priority)"
-  elseif has_effective_omni then
-    strategy = "S->O->D->B->P (omni-priority)"
-  else
-    strategy = "S->D->B->P (dict-priority)"
-  end
-  print("Strategy: " .. strategy)
-  print("Strong path context: " .. tostring(strong_path_context))
-
-  print("\n=== Completion Results (Intelligent Priority Order) ===")
-
-  -- Test each completion type in intelligent priority order
-  print("1. SNIPPET COMPLETION [S] (always first):")
-  local snippet_matches = get_snippet_completions(prefix, filetype)
-  print("  Found " .. #snippet_matches .. " matches")
-  for i, match in ipairs(snippet_matches) do
-    if i <= 3 then
-      print("  - " .. match.word)
-    end
-  end
-
-  if strong_path_context then
-    print("2. PATH COMPLETION [P] (high priority in path context):")
-    local path_matches = get_path_completions(path_prefix)
-    print("  Found " .. #path_matches .. " matches")
-    for i, match in ipairs(path_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-
-    print("3. DICTIONARY COMPLETION [D] (limited in path context):")
-    local dict_matches = get_dictionary_completions(prefix)
-    print("  Found " .. #dict_matches .. " matches (showing max 3)")
-    for i, match in ipairs(dict_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-
-    print("4. BUFFER COMPLETION [B] (very limited in path context):")
-    local buffer_matches = get_buffer_completions(prefix)
-    print("  Found " .. #buffer_matches .. " matches (showing max 1)")
-    for i, match in ipairs(buffer_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-
-  elseif has_effective_omni then
-    print("2. OMNI COMPLETION [O] (has effective omni):")
-    local omni_matches = get_omni_completions(prefix)
-    print("  Found " .. #omni_matches .. " matches")
-    for i, match in ipairs(omni_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-
-    print("3. DICTIONARY COMPLETION [D]:")
-    local dict_matches = get_dictionary_completions(prefix)
-    print("  Found " .. #dict_matches .. " matches (showing max 5)")
-    for i, match in ipairs(dict_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-
-    print("4. BUFFER COMPLETION [B]:")
-    local buffer_matches = get_buffer_completions(prefix)
-    print("  Found " .. #buffer_matches .. " matches (showing max 2)")
-    for i, match in ipairs(buffer_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-  else
-    print("2. DICTIONARY COMPLETION [D] (higher priority - no effective omni):")
-    local dict_matches = get_dictionary_completions(prefix)
-    print("  Found " .. #dict_matches .. " matches (showing max 8)")
-    for i, match in ipairs(dict_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-
-    print("3. BUFFER COMPLETION [B]:")
-    local buffer_matches = get_buffer_completions(prefix)
-    print("  Found " .. #buffer_matches .. " matches (showing max 3)")
-    for i, match in ipairs(buffer_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-  end
-
-  if not strong_path_context then
-    print((has_effective_omni and "5" or "4") .. ". PATH COMPLETION [P] (lowest priority):")
-    local path_matches = get_path_completions(path_prefix)
-    print("  Found " .. #path_matches .. " matches")
-    for i, match in ipairs(path_matches) do
-      if i <= 3 then
-        print("  - " .. match.word)
-      end
-    end
-  end
-
-  print("\nTriggering manual completion...")
-  if mode() == 'i' then
-    builtin_completion()
-  else
-    print("Note: Can only trigger completion in insert mode")
-  end
-end, {})
-
--- Clear snippet state command
-vim.api.nvim_create_user_command('ClearSnippet', function()
-  current_snippet_placeholders = {}
-  current_placeholder_index = 0
-  snippet_mode_active = false
-  print("Snippet state cleared")
-end, {})
-
--- Reload snippet cache command
-vim.api.nvim_create_user_command('ReloadSnippets', function()
-  snippet_cache = {}
-  print("Snippet cache cleared, will reload on next use")
-end, {})
-
--- Performance management commands
-vim.api.nvim_create_user_command('ToggleBuiltinCompletion', function()
-  completion_active = not completion_active
-  if not completion_active then
-    -- 安全地清除所有待处理的定时器
-    for timer_id, _ in pairs(pending_timers) do
-      if timer_id then
-        pending_timers[timer_id] = nil
-      end
-    end
-    pending_timers = {}
-    print("内置补全已禁用")
-  else
-    print("内置补全已启用")
-  end
-end, {})
-
-vim.api.nvim_create_user_command('BuiltinCompletionStatus', function()
-  local status = completion_active and "启用" or "禁用"
-  local timer_count = 0
-  for _, _ in pairs(pending_timers) do
-    timer_count = timer_count + 1
-  end
-
-  print("=== 内置补全状态 ===")
-  print("状态: " .. status)
-  print("待处理定时器: " .. timer_count)
-  print("代码片段模式: " .. (snippet_mode_active and "开启" or "关闭"))
-  print("")
-  print("=== 代码优化总结 ===")
-  print("✅ 删除未使用变量: buffer_cache, set_hl, is_dir_path")
-  print("✅ 消除重复代码: 100+ 行重复逻辑合并为 handle_directory_navigation()")
-  print("✅ 添加中文注释: 所有关键处理逻辑")
-  print("✅ 优化引号处理: 智能路径分隔符插入")
-  print("✅ 提升代码可维护性: 函数化重复逻辑")
-end, {})
