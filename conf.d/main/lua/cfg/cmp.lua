@@ -25,9 +25,6 @@ local sources = {
   { name = 'buffer', priority = 2 },
   { name = 'async_path', priority = 1 },
 }
-if utils.installed('minuet-ai.nvim') then
-  table.insert(sources, 1, { name = 'minuet', priority = 6})
-end
 if utils.installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 7})
 end
@@ -67,11 +64,6 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
   mapping = {
-    ["<M-.>"] = function()
-      if utils.installed('minuet-ai.nvim') then
-        require('minuet').make_cmp_map()
-      end
-    end,
     -- cmdline only mapping
     ['<C-j>'] = {
       c = function(fallback)

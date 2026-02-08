@@ -29,7 +29,7 @@ require('blink.cmp').setup({
     jump = function(direction) vim.snippet.jump(direction) end,
   },
   sources = {
-    default = vim.list_extend(utils.installed('minuet-ai.nvim') and { 'minuet' } or {}, { 'path', 'buffer', 'lsp', 'snippets' }),
+    default = { 'path', 'buffer', 'lsp', 'snippets' },
     providers = {
       lsp = {
         name = 'LSP',
@@ -48,26 +48,10 @@ require('blink.cmp').setup({
         score_offset = 0, -- Boost/penalize the score of the items
         override = nil, -- Override the source's functions
       },
-      minuet = {
-        name = 'minuet',
-        module = 'minuet.blink',
-        async = true,
-        -- Should match minuet.config.request_timeout * 1000,
-        -- since minuet.config.request_timeout is in seconds
-        timeout_ms = 2500,
-        score_offset = 50, -- Gives minuet higher priority among suggestions
-      },
     },
   },
   completion = { trigger = { prefetch_on_insert = false } },
   keymap = {
     preset = 'super-tab',
-    ['<M-.>'] = {
-      function()
-        if utils.installed('minuet-ai.nvim') then
-          require('minuet').make_blink_map()
-        end
-      end
-    }
   }
 })

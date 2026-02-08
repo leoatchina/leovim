@@ -113,34 +113,8 @@ if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 " ------------------------------
-" AI complete
+" opencode
 " ------------------------------
-if has('nvim-0.10') && pack#get('minuet-ai') && (
-    \  exists('$DEEPSEEK_API_KEY') ||
-    \  exists('$GEMINI_API_KEY') ||
-    \  exists('$OPENAI_API_KEY') ||
-    \  exists('$CODESTRAL_API_KEY') ||
-    \  exists('$ANTHROPIC_API_KEY') ||
-    \  get(g:, 'openai_compatible_api_key', '') != '' &&
-    \  get(g:, 'openai_compatible_model', '') != '' &&
-    \  get(g:, 'openai_compatible_url', '') != ''
-    \  )
-    PlugAdd 'milanglacier/minuet-ai.nvim'
-elseif has('patch-9.0.0185') || has('nvim')
-    if pack#get('windsurf')
-        if has('nvim')
-            PlugAdd 'Exafunction/windsurf.lua'
-        else
-            PlugAdd 'Exafunction/windsurf.vim'
-        endif
-    elseif pack#get('copilot') && g:node_version > 18
-        if has('nvim')
-            PlugAdd 'zbirenbaum/copilot.lua'
-        else
-            PlugAdd 'github/copilot.vim'
-        endif
-    endif
-endif
 if has('nvim-0.10') && executable('opencode') && pack#get('opencode')
     PlugAdd 'NickvanDyke/opencode.nvim'
 endif
