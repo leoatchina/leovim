@@ -329,6 +329,7 @@ function! tags#lsp_tag_search(method, ...) abort
                 endif
             endif
         catch /.*/
+            echohl WarningMsg | echom "CocAction " . jump_command . " error: " . v:exception | echohl None
             let symbol_found = 0
         endtry
     " --------------------------
