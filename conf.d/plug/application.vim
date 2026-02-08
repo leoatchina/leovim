@@ -9,8 +9,12 @@ if pack#get('nocomplete') || pack#get('noc')
     let g:complete_engine = ''
 elseif pack#get('mcm')
     let g:complete_engine = 'mcm'
-elseif pack#get('builtin') && (has('nvim-0.11') || has('patch-9.1.1590'))
-    let g:complete_engine = 'builtin'
+elseif pack#get('builtin')
+    if has('nvim-0.11') || has('patch-9.1.1590')
+        let g:complete_engine = 'builtin'
+    else
+        let g:complete_engine = 'mcm'
+    endif
 elseif pack#get('coc')
     if g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438'))
         let g:complete_engine = 'coc'
