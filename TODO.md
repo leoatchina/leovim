@@ -123,7 +123,6 @@
 - [ ] config formatter.nvim
 - [ ] Ai related
     - [x] ~~yarepl.nvim + aider~~
-    - [ ] copilot plus
     - [ ] minuet.ai
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
