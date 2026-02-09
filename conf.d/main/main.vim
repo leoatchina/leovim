@@ -284,16 +284,11 @@ nnoremap <M-z> :set nowrap! nowrap?<Cr>
 " ------------------------------
 " set mason PATH
 " ------------------------------
-let mason_dirs  = [utils#expand('~/.leovim.d/mason/cmp/bin'), utils#expand('~/.leovim.d/mason/blink/bin')]
-if !pack#planned('mason.nvim') && !get(g:, 'leovim_loaded', 0)
-    for mason_dir in mason_dirs
-        if isdirectory(mason_dir)
-            if utils#is_win()
-                let $PATH = mason_dir . ';' . $PATH
-            else
-                let $PATH = mason_dir . ':' . $PATH
-            endif
-            break
-        endif
-    endfor
+let mason_bin = utils#expand('~/.leovim.d/mason/bin')
+if !pack#planned('mason.nvim') && !get(g:, 'leovim_loaded', 0) && isdirectory(mason_bin)
+    if utils#is_win()
+        let $PATH = mason_bin . ';' . $PATH
+    else
+        let $PATH = mason_bin . ':' . $PATH
+    endif
 endif

@@ -13,7 +13,7 @@ else
 end
 require("mason").setup({
   registries = registries,
-  install_root_dir = vim.fn.expand("~/.leovim.d/mason/" .. vim.g.complete_engine),
+  install_root_dir = vim.fn.expand("~/.leovim.d/mason"),
   ui = {
     icons = {
       package_installed = "✓",

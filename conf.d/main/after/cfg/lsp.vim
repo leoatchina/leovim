@@ -1,4 +1,4 @@
-if (executable('delance-langserver') || g:node_version > 18) && g:complete_engine == 'cmp'
+if g:node_version > 18 && g:complete_engine == 'cmp'
     let g:ensure_installed = ['pyright']
     if g:python_version > 3
         if executable('unzip')

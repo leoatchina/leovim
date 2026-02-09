@@ -26,13 +26,6 @@ require("mason-nvim-dap").setup({
 -- 配置调试适配
 ------------------------------------------------------------
 local mason_dir = fn.expand("~/.leovim.d/mason")
-local cmp_dir = mason_dir .. "/cmp"
-local blink_dir = mason_dir .. "/blink"
-if fn.isdirectory(cmp_dir) == 1 then
-  mason_dir = cmp_dir
-elseif fn.isdirectory(blink_dir) == 1 then
-  mason_dir = blink_dir
-end
 -- bash
 local bash_debug_adapter = mason_dir .. "/bin/bash-debug-adapter"
 local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"

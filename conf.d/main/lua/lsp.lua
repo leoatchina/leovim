@@ -3,6 +3,7 @@ local n = { "n" }
 local x = { "x" }
 local nx = { "n", "x" }
 local map = vim.keymap.set
+local utils = require('utils')
 local autocmd = vim.api.nvim_create_autocmd
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
 lsp_capabilities.textDocument.foldingRange = {
@@ -131,10 +132,9 @@ require('symbol-usage').setup({
   text_format = text_format,
   vt_position = 'end_of_line',
   references = { enabled = true, include_declaration = true },
-  implementation = { enabled = true },
+  implementation = { enabled = false },
   definition = { enabled = false },
   disable = {
-    lsp = { 'vimls' },
     filetypes = { 'txt', 'log' },
   },
 })
@@ -145,7 +145,11 @@ require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed and vim.tbl_filter(function(server)
     return server ~= "debugpy"
   end, vim.g.ensure_installed) or {},
-  automatic_enable = true
+  automatic_enable = {
+    exclude = {
+      utils.installed_blink() and 'pyright' or utils.installed_cmp() and vim.g.node_version > 18 and 'basedpyright'
+    }
+  }
 })
 ---------------------
 -- LspAction
