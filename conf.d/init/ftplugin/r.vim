@@ -69,14 +69,14 @@ if pack#installed('nvim-r')
     nnoremap <buffer><silent>\B :call SendAboveLinesToR()<CR>
     nnoremap <buffer><silent>\E VG:call SendLineToR('down')<CR>
     nnoremap <buffer><silent>\A ggVG:call SendLineToR('down')<CR>
-    nnoremap <buffer><silent><M-i>i :call SendLineToRAndInsertOutput()<CR>^
-    nnoremap <buffer><silent><M-i>f :call SendFunctionToR('echo', "down")<CR>
-    nnoremap <buffer><silent><M-i>h :call SendLineToR("stay")<CR>
-    nnoremap <buffer><silent><M-i>j :call SendLineToR("down")<CR>
-    nnoremap <buffer><silent><M-i>J viB:call SendLineToR("down")<CR>
+    nnoremap <buffer><silent><M-a>i :call SendLineToRAndInsertOutput()<CR>^
+    nnoremap <buffer><silent><M-a>f :call SendFunctionToR('echo', "down")<CR>
+    nnoremap <buffer><silent><M-a>h :call SendLineToR("stay")<CR>
+    nnoremap <buffer><silent><M-a>j :call SendLineToR("down")<CR>
+    nnoremap <buffer><silent><M-a>J viB:call SendLineToR("down")<CR>
     " clear
-    nnoremap <buffer><M-i>c :call RClearConsole()<Cr>
-    nnoremap <buffer><M-i>C :call RClearAll()<Cr>
+    nnoremap <buffer><M-a>c :call RClearConsole()<Cr>
+    nnoremap <buffer><M-a>C :call RClearAll()<Cr>
     " run
     nnoremap <buffer>\r :call StartR('R')<Cr>
     nnoremap <buffer>\q :call RQuit('nosave')<Cr>
@@ -85,6 +85,6 @@ endif
 inoremap <buffer><< <-
 inoremap <buffer>>> ->
 inoremap <buffer>?? %>%
-inoremap <buffer><M-i> # %%
+inoremap <buffer><M-a> # %%
 inoremap <buffer><M-e> # STEP
 inoremap <buffer><M-m> # In[]<Left>

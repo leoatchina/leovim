@@ -18,7 +18,6 @@ function! s:do_quit(save) abort
         q!
     endif
 endfunction
-
 " 执行全部退出
 function! s:do_quit_all() abort
     UndotreeHide
@@ -28,7 +27,6 @@ function! s:do_quit_all() abort
         qall!
     endif
 endfunction
-
 " 处理用户选择
 function! s:handle_choice(choice, type) abort
     if a:choice =~# '^Save'
