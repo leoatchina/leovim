@@ -21,7 +21,7 @@ if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') &&
         xnoremap <silent><M-i><M-l> :FloatermAiSendLineRange!<Cr>
         nnoremap <silent><M-i><M-f> :FloatermAiSendFile!<Cr>
         nnoremap <silent><M-i><M-d> :FloatermAiSendDir!<Cr>
-        nnoremap <silent><M-i><M-p> :FloatermAiFzfFiles<Cr>
+        nnoremap <silent><M-i><M-p> :FloatermAiFzfFiles!<Cr>
     endif
 endif
 if pack#installed('opencode.nvim')
