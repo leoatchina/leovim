@@ -1,4 +1,10 @@
-if g:node_version > 18 && g:complete_engine == 'cmp'
+if g:python_version > 3 && g:complete_engine == 'blink'
+    if executable('unzip')
+        let g:ensure_installed = ['basedpyright', 'debugpy', 'ruff']
+    else
+        let g:ensure_installed = ['basedpyright', 'debugpy']
+    endif
+elseif g:node_version > 18
     let g:ensure_installed = ['pyright']
     if g:python_version > 3
         if executable('unzip')
@@ -6,12 +12,6 @@ if g:node_version > 18 && g:complete_engine == 'cmp'
         else
             let g:ensure_installed += ['debugpy']
         endif
-    endif
-elseif g:python_version > 3
-    if executable('unzip')
-        let g:ensure_installed = ['basedpyright', 'debugpy', 'ruff']
-    else
-        let g:ensure_installed = ['basedpyright', 'debugpy']
     endif
 else
     let g:ensure_installed = []

@@ -147,7 +147,7 @@ require("mason-lspconfig").setup({
   end, vim.g.ensure_installed) or {},
   automatic_enable = {
     exclude = {
-      utils.installed_blink() and 'pyright' or utils.installed_cmp() and vim.g.node_version > 18 and 'basedpyright'
+      vim.fn.index(vim.g.ensure_installed, 'pyright') >= 0 and 'basedpyright' or vim.fn.index(vim.g.ensure_installed, 'basedpyright') >= 0 and 'pyright'
     }
   }
 })
