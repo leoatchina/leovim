@@ -11,19 +11,20 @@ if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') &&
     nnoremap <silent><M-i><Cr>    :FloatermAiStart!<Cr>
     nnoremap <silent><M-i><Space> :FloatermAiSendCr<Cr>
     " send, NOTE ! means start in curr editing buffer
-    nnoremap <silent><M-i>l :FloatermAiSendLineRange<Cr>
-    xnoremap <silent><M-i>l :FloatermAiSendLineRange<Cr>
+    nnoremap <silent><M-i>l :FloatermAiSendLine<Cr>
+    xnoremap <silent><M-i>l :FloatermAiSendLine<Cr>
     nnoremap <silent><M-i>f :FloatermAiSendFile<Cr>
     nnoremap <silent><M-i>d :FloatermAiSendDir<Cr>
     nnoremap <silent><M-i>p :FloatermAiFzfFiles<Cr>
-    nnoremap <silent><M-i><M-l> :FloatermAiSendLineRange!<Cr>
+    nnoremap <silent><M-i><M-l> :FloatermAiSendLine!<Cr>
     nnoremap <silent><M-i><M-f> :FloatermAiSendFile!<Cr>
     nnoremap <silent><M-i><M-d> :FloatermAiSendDir!<Cr>
     nnoremap <silent><M-i><M-p> :FloatermAiFzfFiles!<Cr>
     if has('nvim')
-        xnoremap <silent><M-i><M-l> :FloatermAiSendLineRange!<Cr>
+        xnoremap <silent><M-i><M-l> :FloatermAiSendLine!<Cr>
     else
-        xnoremap <silent><M-i>L :FloatermAiSendLineRange!<Cr>
+        xnoremap <silent><M-i><M-l> :FloatermAiSendLine!<Cr>
+        xnoremap <silent><M-i>L :FloatermAiSendLine!<Cr>
     endif
 endif
 if pack#installed('opencode.nvim')

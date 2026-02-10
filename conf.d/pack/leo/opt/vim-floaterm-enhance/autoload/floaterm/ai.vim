@@ -89,7 +89,7 @@ function! s:send_prompt(type, stary_curr, ...) abort
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
         return
     endif
-    if a:type == 'range'
+    if a:type == 'line'
         if a:0 == 2 && a:1 && a:2 && a:1 <= a:2
             let content = s:at_prompt(floaterm#enhance#get_file_line_range(a:1, a:2))
         else
@@ -108,7 +108,11 @@ function! s:send_prompt(type, stary_curr, ...) abort
         return
     endif
     call floaterm#terminal#open_existing(ai_bufnr)
-    call floaterm#terminal#send(ai_bufnr, [content], 0)
+    if has('nvim') || !a:stary_curr || a:0 == 2 && a:1 == a:2
+        call floaterm#terminal#send(ai_bufnr, [content], 0)
+    else
+        call floaterm#terminal#send(ai_bufnr, [content, "", "\b"], 0)
+    endif
     if a:stary_curr
         call floaterm#enhance#wincmdp()
     endif
@@ -116,7 +120,7 @@ endfunction
 " --------------------------------------------------------------
 " send file path with line range to latest AI terminal
 " --------------------------------------------------------------
-function! floaterm#ai#send_line_range(stay_curr, ...) abort
+function! floaterm#ai#send_line(stay_curr, ...) abort
     if a:0 >= 2
         let firstline = a:1
         let lastline = a:2
@@ -124,7 +128,7 @@ function! floaterm#ai#send_line_range(stay_curr, ...) abort
         let firstline = line('.')
         let lastline = firstline
     endif
-    call s:send_prompt('range', a:stay_curr, firstline, lastline)
+    call s:send_prompt('line', a:stay_curr, firstline, lastline)
 endfunction
 " send file
 function! floaterm#ai#send_file(stay_curr) abort
