@@ -103,13 +103,10 @@ function! which_key#mappings#parse(key, dict, visual) " {{{
     let mapd.rhs = substitute(mapd.rhs, '<SID>', '<SNR>'.mapd['sid'].'_', 'g')
 
     " eval the expression as the final {rhs}
-    try
-        if mapd.expr
-          let mapd.rhs = eval(mapd.rhs)
-        endif
-    catch /.*/
-        continue
-    endtry
+    " Ref #60
+    if mapd.expr
+      let mapd.rhs = eval(mapd.rhs)
+    endif
 
     if mapd.lhs !=# '' && mapd.display !~# 'WhichKey.*'
       if (match(mapd.mode, visual ? '[vx ]' : '[n ]') >= 0)
