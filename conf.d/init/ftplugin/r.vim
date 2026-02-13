@@ -82,9 +82,9 @@ if pack#installed('nvim-r')
     nnoremap <buffer>\q :call RQuit('nosave')<Cr>
     nnoremap <buffer>\Q :call RQuit('save')<Cr>
 endif
-inoremap <buffer><< <-
-inoremap <buffer>>> ->
-inoremap <buffer>?? %>%
-inoremap <buffer><M-a> # %%
-inoremap <buffer><M-e> # STEP
-inoremap <buffer><M-m> # In[]<Left>
+inoremap <buffer> << <-
+inoremap <buffer> >> ->
+inoremap <buffer> ?? %>%
+inoremap <buffer> <M-a> # %%
+inoremap <buffer> <M-e> # STEP
+inoremap <buffer> <M-m> # In[]<Left>
