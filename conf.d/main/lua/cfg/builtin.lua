@@ -46,6 +46,40 @@ local snippet_cache = {}
 local pending_timers = {}
 local completion_active = true
 
+local function reset_snippet_state()
+  current_snippet_placeholders = {}
+  current_placeholder_index = 0
+  snippet_mode_active = false
+end
+
+local function clear_pending_timers()
+  for timer_id in pairs(pending_timers) do
+    pending_timers[timer_id] = nil
+  end
+end
+
+local function select_range_and_start_insert(row, col_start, col_end)
+  local function select_range()
+    pcall(function()
+      vim.api.nvim_win_set_cursor(0, {row, col_start})
+      vim.cmd('normal! v')
+      vim.api.nvim_win_set_cursor(0, {row, col_end})
+      vim.defer_fn(function()
+        vim.cmd('startinsert')
+      end, 50)
+    end)
+  end
+
+  vim.defer_fn(function()
+    if mode() == 'i' then
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
+      vim.defer_fn(select_range, 20)
+    else
+      select_range()
+    end
+  end, 10)
+end
+
 local function effective_omni_limit()
   local ph = tonumber(vim.o.pumheight) or 0
   if ph == 0 then
@@ -405,31 +439,7 @@ local function expand_snippet()
   end
 
   if first_placeholder_pos then
-    vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_start})
-    vim.defer_fn(function()
-      local current_mode = mode()
-      if current_mode == 'i' then
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
-        vim.defer_fn(function()
-          pcall(function()
-            vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_start})
-            vim.cmd('normal! v')
-            vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_end})
-            vim.defer_fn(function()
-              vim.cmd('startinsert')
-            end, 50)
-          end)
-        end, 20)
-      else
-        pcall(function()
-          vim.cmd('normal! v')
-          vim.api.nvim_win_set_cursor(0, {first_placeholder_pos.row + 1, first_placeholder_pos.col_end})
-          vim.defer_fn(function()
-            vim.cmd('startinsert')
-          end, 50)
-        end)
-      end
-    end, 10)
+    select_range_and_start_insert(first_placeholder_pos.row + 1, first_placeholder_pos.col_start, first_placeholder_pos.col_end)
   else
     local final_row = row - 1 + #new_lines - 1
     local final_col = #new_lines[#new_lines] - #after
@@ -443,115 +453,54 @@ local function expand_snippet()
   return true
 end
 
--- Jump to next placeholder
-local function jump_to_next_placeholder()
+local function find_placeholder_position(text)
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  for row, line in ipairs(lines) do
+    local start_pos = line:find(text, 1, true)
+    if start_pos then
+      return row, start_pos - 1, start_pos + #text - 1
+    end
+  end
+end
+
+local function jump_placeholder(direction)
   if vim.tbl_isempty(current_snippet_placeholders) then
     return false
   end
-  current_placeholder_index = current_placeholder_index + 1
 
-  for i = current_placeholder_index, 10 do
+  current_placeholder_index = current_placeholder_index + direction
+  local stop = direction > 0 and 10 or 1
+  local step = direction > 0 and 1 or -1
+
+  for i = current_placeholder_index, stop, step do
     if current_snippet_placeholders[i] and current_snippet_placeholders[i].has_content then
-      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
       local placeholder_text = current_snippet_placeholders[i].text
-
-      for row, line in ipairs(lines) do
-        local start_pos = line:find(placeholder_text, 1, true)
-        if start_pos then
-          local end_col = start_pos + #placeholder_text - 1
-          vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
-
-          vim.defer_fn(function()
-            local current_mode = mode()
-            if current_mode == 'i' then
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
-              vim.defer_fn(function()
-                pcall(function()
-                  vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
-                  vim.cmd('normal! v')
-                  vim.api.nvim_win_set_cursor(0, {row, end_col})
-                  vim.defer_fn(function()
-                    vim.cmd('startinsert')
-                  end, 50)
-                end)
-              end, 20)
-            else
-              pcall(function()
-                vim.cmd('normal! v')
-                vim.api.nvim_win_set_cursor(0, {row, end_col})
-                vim.defer_fn(function()
-                  vim.cmd('startinsert')
-                end, 50)
-              end)
-            end
-          end, 10)
-          current_placeholder_index = i
-          return true
-        end
+      local row, col_start, col_end = find_placeholder_position(placeholder_text)
+      if row then
+        select_range_and_start_insert(row, col_start, col_end)
+        current_placeholder_index = i
+        return true
       end
     end
   end
 
-  current_snippet_placeholders = {}
-  current_placeholder_index = 0
-  snippet_mode_active = false
+  if direction > 0 then
+    reset_snippet_state()
+  elseif current_placeholder_index < 1 then
+    current_placeholder_index = 0
+  end
+
   return false
+end
+
+-- Jump to next placeholder
+local function jump_to_next_placeholder()
+  return jump_placeholder(1)
 end
 
 -- Jump to previous placeholder
 local function jump_to_prev_placeholder()
-  if vim.tbl_isempty(current_snippet_placeholders) then
-    return false
-  end
-
-  current_placeholder_index = current_placeholder_index - 1
-
-  for i = current_placeholder_index, 1, -1 do
-    if current_snippet_placeholders[i] and current_snippet_placeholders[i].has_content then
-      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-      local placeholder_text = current_snippet_placeholders[i].text
-
-      for row, line in ipairs(lines) do
-        local start_pos = line:find(placeholder_text, 1, true)
-        if start_pos then
-          local end_col = start_pos + #placeholder_text - 1
-          vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
-
-          vim.defer_fn(function()
-            local current_mode = mode()
-            if current_mode == 'i' then
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, true, true), 'n', false)
-              vim.defer_fn(function()
-                pcall(function()
-                  vim.api.nvim_win_set_cursor(0, {row, start_pos - 1})
-                  vim.cmd('normal! v')
-                  vim.api.nvim_win_set_cursor(0, {row, end_col})
-                  vim.defer_fn(function()
-                    vim.cmd('startinsert')
-                  end, 50)
-                end)
-              end, 20)
-            else
-              pcall(function()
-                vim.cmd('normal! v')
-                vim.api.nvim_win_set_cursor(0, {row, end_col})
-                vim.defer_fn(function()
-                  vim.cmd('startinsert')
-                end, 50)
-              end)
-            end
-          end, 10)
-          current_placeholder_index = i
-          return true
-        end
-      end
-    end
-  end
-
-  if current_placeholder_index < 1 then
-    current_placeholder_index = 0
-  end
-  return false
+  return jump_placeholder(-1)
 end
 
 -- ============================================================================
@@ -1401,9 +1350,7 @@ end, {expr = true, silent = true})
 -- ESC键: 退出代码片段模式
 map({'i', 's'}, '<Esc>', function()
   if snippet_mode_active then
-    snippet_mode_active = false
-    current_snippet_placeholders = {}
-    current_placeholder_index = 0
+    reset_snippet_state()
   end
   return vim.api.nvim_replace_termcodes('<Esc>', true, true, true)
 end, {expr = true, silent = true})
@@ -1412,36 +1359,31 @@ end, {expr = true, silent = true})
 -- 自动触发逻辑
 -- ============================================================================
 
+local ft_triggers = {
+  lua = { '.', ':', '/', '~' },
+  python = { '.', ':', '/', '~' },
+  javascript = { '.', ':', '/', '~' },
+  typescript = { '.', ':', '/', '~' },
+  cpp = { '.', '::', '->', '/', '~' },
+  c = { '.', '->', '/', '~' },
+  html = { '<', '/', '>', '~' },
+  css = { ':', ';', '/', '~' },
+  vim = { ':', '/', '~' },
+  java = { '.', ':', '/', '~' },
+  php = { '.', '->', '::', '/', '~' },
+  go = { '.', ':', '/', '~' },
+  default = { '.', ':', '>', '/', '~' },
+}
+
 -- 文件类型特定的自动触发配置
 vim.api.nvim_create_autocmd('FileType', {
   pattern = '*',
   callback = function(args)
     local ft = vim.bo[args.buf].filetype
-    local ft_triggers = {
-      lua = { '.', ':', '/', '~' },
-      python = { '.', ':', '/', '~' },
-      javascript = { '.', ':', '/', '~' },
-      typescript = { '.', ':', '/', '~' },
-      cpp = { '.', '::', '->', '/', '~' },
-      c = { '.', '->', '/', '~' },
-      html = { '<', '/', '>', '~' },
-      css = { ':', ';', '/', '~' },
-      vim = { ':', '/', '~' },
-      java = { '.', ':', '/', '~' },
-      php = { '.', '->', '::', '/', '~' },
-      go = { '.', ':', '/', '~' },
-      default = { '.', ':', '>', '/', '~' },
-    }
-
-    -- Add Windows backslash triggers if on Windows
+    local triggers = vim.deepcopy(ft_triggers[ft] or ft_triggers.default)
     if is_win() then
-      for ft, triggers in pairs(ft_triggers) do
-        -- Add backslash to each filetype's triggers
-        table.insert(triggers, '\\')
-      end
+      triggers[#triggers + 1] = '\\'
     end
-
-    local triggers = ft_triggers[ft] or ft_triggers.default
 
     -- Character-triggered completion and smart auto-complete
     vim.api.nvim_create_autocmd('InsertCharPre', {
@@ -1453,12 +1395,7 @@ vim.api.nvim_create_autocmd('FileType', {
           return
         end
         -- Clear any existing pending timers to avoid conflicts
-        for timer_id, _ in pairs(pending_timers) do
-          if timer_id then
-            pending_timers[timer_id] = nil
-          end
-        end
-        pending_timers = {}
+        clear_pending_timers()
 
         -- Check for special trigger characters (highest priority)
         for _, trigger in ipairs(triggers) do
@@ -1537,17 +1474,10 @@ vim.api.nvim_create_autocmd('FileType', {
 -- Auto-clear snippet state and stop all completion tasks
 vim.api.nvim_create_autocmd({'InsertLeave'}, {
   callback = function()
-    current_snippet_placeholders = {}
-    current_placeholder_index = 0
-    snippet_mode_active = false
+    reset_snippet_state()
 
     -- Clear all pending timers to ensure clean Normal mode
-    for timer_id, _ in pairs(pending_timers) do
-      if timer_id then
-        pending_timers[timer_id] = nil
-      end
-    end
-    pending_timers = {}
+    clear_pending_timers()
 
     -- Temporarily disable completion in Normal mode for better performance
     completion_active = false
@@ -1562,17 +1492,10 @@ vim.api.nvim_create_autocmd({'InsertLeave'}, {
 -- Clean up on buffer leave
 vim.api.nvim_create_autocmd({'BufLeave'}, {
   callback = function()
-    current_snippet_placeholders = {}
-    current_placeholder_index = 0
-    snippet_mode_active = false
+    reset_snippet_state()
 
     -- Clear timers safely
-    for timer_id, _ in pairs(pending_timers) do
-      if timer_id then
-        pending_timers[timer_id] = nil
-      end
-    end
-    pending_timers = {}
+    clear_pending_timers()
   end
 })
 
