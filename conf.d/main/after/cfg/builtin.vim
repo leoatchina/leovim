@@ -14,21 +14,33 @@ function! s:DotOmni() abort
     let line = getline('.')->strpart(0, col('.') - 1)
     let ft = &filetype
     let trigger = 0
+    let anchor = ''
     " 默认：匹配 obj. 或 obj.prop（要求点号前有标识符，避免 .class 误触发）
     if line =~ '\k\+\.\k*$'
         let trigger = 1
+        let anchor = matchstr(line, '\k\+\.\ze\k*$')
     endif
     " C/C++：额外支持 ptr-> 与 ns:: 形式
     if !trigger && ft =~# '^\%(c\|cpp\|objc\|objcpp\)$' && line =~ '\k\+\%(->\|::\)\k*$'
         let trigger = 1
+        let anchor = matchstr(line, '\k\+\%(->\|::\)\ze\k*$')
     endif
     " Lua/Vim：额外支持 method: 形式
     if !trigger && ft =~# '^\%(lua\|vim\)$' && line =~ '\k\+:\k*$'
         let trigger = 1
+        let anchor = matchstr(line, '\k\+:\ze\k*$')
     endif
     if trigger
-        " 关闭已有菜单并立即触发 omni，一次性发送避免 autocomplete 抢占
-        call feedkeys(pumvisible() ? "\<C-e>\<C-x>\<C-o>" : "\<C-x>\<C-o>", 'n')
+        " 同一访问链只触发一次，避免 TextChangedI 下连续输入反复触发
+        if get(b:, 'dotomni_last_anchor', '') ==# anchor
+            return
+        endif
+        let b:dotomni_last_anchor = anchor
+        " 先关闭现有菜单，再一次性触发 omni；使用 i 标志优先入队避免被抢占
+        let l:omni_keys = (pumvisible() ? "\<C-e>" : '') . "\<C-x>\<C-o>"
+        call feedkeys(l:omni_keys, 'ni')
+    else
+        let b:dotomni_last_anchor = ''
     endif
 endfunction
 
