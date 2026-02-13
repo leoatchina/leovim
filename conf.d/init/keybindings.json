@@ -583,11 +583,6 @@
   },
   // ---------------------- windsurf --------------------
   // ---------------------- cursor ----------------------
-  {
-    "key": "ctrl+shift+alt+s",
-    "command": "workbench.action.toggleUnifiedSidebar",
-    "when": "cursor.agentIdeUnification.enabled"
-  },
   // ---------------------- lingma ------------------
   {
     "key": "ctrl+shift+l",
@@ -602,49 +597,46 @@
     "key": "ctrl+`",
     "command": "workbench.view.extension.Lingma"
   },
-  // ----------------- kilocode ----------------
+    // ----------------- claude ----------------
   {
-    "key": "ctrl+y",
-    "command": "-kilo-code.addToContext",
-    "when": "editorHasSelection && editorTextFocus"
+    "key": "ctrl+'",
+    "command": "claude-vscode.blur",
+    "when": "!config.claudeCode.useTerminal && !editorTextFocus"
   },
   {
-    "key": "ctrl+shift+a",
-    "command": "-kilo-code.focusChatInput"
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.blur",
+    "when": "!config.claudeCode.useTerminal && !editorTextFocus"
   },
   {
-    "key": "ctrl+l",
-    "command": "-kilo-code.ghost.generateSuggestions",
-    "when": "editorTextFocus && kilocode.ghost.enableSmartInlineTaskKeybinding && !editorTabMovesFocus && !github.copilot.completions.enabled && !inSnippetMode"
+    "key": "ctrl+'",
+    "command": "claude-vscode.focus",
+    "when": "editorTextFocus && !config.claudeCode.useTerminal"
   },
   {
-    "key": "ctrl+l",
-    "command": "-kilo-code.ghost.showIncompatibilityExtensionPopup",
-    "when": "editorTextFocus && github.copilot.completions.enabled && kilocode.ghost.enableSmartInlineTaskKeybinding && !editorTabMovesFocus && !inSnippetMode"
+    "key": "ctrl+'",
+    "command": "claude-vscode.terminal.open.keyboard",
+    "when": "config.claudeCode.useTerminal"
   },
   {
-    "key": "ctrl+shift+g",
-    "command": "-kilo-code.generateTerminalCommand"
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.focus",
+    "when": "editorTextFocus && !config.claudeCode.useTerminal"
   },
   {
-    "key": "ctrl+alt+a",
-    "command": "-kilo-code.toggleAutoApprove"
+    "key": "ctrl+shift+'",
+    "command": "claude-vscode.editor.open",
+    "when": "!config.claudeCode.useTerminal"
   },
   {
-    "key": "ctrl+shift+\\",
-    "command": "kilo-code.focusChatInput"
+    "key": "ctrl+shift+escape",
+    "command": "-claude-vscode.editor.open",
+    "when": "!config.claudeCode.useTerminal"
   },
   {
-    "key": "alt+\\",
-    "command": "kilo-code.ghost.generateSuggestions"
-  },
-  {
-    "key": "shift+alt+\\",
-    "command": "kilo-code.terminalAddToContext"
-  },
-  {
-    "key": "ctrl+\\",
-    "command": "kilo-code.addToContext"
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.terminal.open.keyboard",
+    "when": "config.claudeCode.useTerminal"
   },
   // ----------------- copilot ----------------
   {
