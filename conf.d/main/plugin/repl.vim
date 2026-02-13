@@ -2,7 +2,6 @@ if utils#is_vscode() || !pack#installed('vim-floaterm-enhance')
     finish
 endif
 nnoremap <M-a><M-i> <C-w><C-w>
-inoremap <M-a><M-i> <ESC><C-w><C-w>
 xnoremap <M-a><M-i> <ESC><C-w><C-w>
 tnoremap <M-a><M-i> <C-\><C-n><C-w><C-w>
 " NOTE: ! means keep in current line

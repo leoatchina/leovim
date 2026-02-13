@@ -2,7 +2,6 @@ if utils#is_vscode()
     finish
 endif
 nnoremap <M-i><M-i> <C-w><C-w>
-inoremap <M-i><M-i> <ESC><C-w><C-w>
 xnoremap <M-i><M-i> <ESC><C-w><C-w>
 if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') && !empty(g:floaterm_ai_programs) && type(g:floaterm_ai_programs) == type([])
     tnoremap <M-i><M-i> <C-\><C-n><C-w><C-w>

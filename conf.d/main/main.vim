@@ -4,7 +4,7 @@
 if has('gui_running') && has('macunix')
     set macmeta
 elseif !has('nvim') && utils#is_linux()
-    set noesckeys
+    set esckeys
 endif
 let s:metacode_group = ["'", ",", ".", ";", ":", "/", "?", "{", "}", "-", "_", "=", "+"]
 for i in range(10)
@@ -272,7 +272,7 @@ endfor
 for k in s:metacode_group
     let mkey = '<M-'. k . ">"
     exec "set " . mkey . "=\e" . k
-    let modes = ['n', 'i', 'x', 'o']
+    let modes = ['n', 'x', 'o', 'i']
     for mode in modes
         " maparg returns non-empty characters if mapping exists in that mode
         if empty(maparg(mkey, mode))
