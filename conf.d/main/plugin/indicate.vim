@@ -8,7 +8,7 @@ endif
 filetype plugin indent on
 if pack#installed('indent-blankline.nvim')
     lua require("cfg/ibl")
-elseif pack#planned('indentline')
+elseif pack#planned('indentLine')
     let g:vim_json_conceal = 0
     let g:indentLine_enabled = 0
     let g:markdown_syntax_conceal = 0
