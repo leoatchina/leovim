@@ -12,8 +12,21 @@ function! s:DotOmni() abort
         return
     endif
     let line = getline('.')->strpart(0, col('.') - 1)
-    " 匹配 xxx. 或 xxx.yyy 模式（点号后跟任意关键字字符）
-    if line =~ '\.\k*$'
+    let ft = &filetype
+    let trigger = 0
+    " 默认：匹配 obj. 或 obj.prop（要求点号前有标识符，避免 .class 误触发）
+    if line =~ '\k\+\.\k*$'
+        let trigger = 1
+    endif
+    " C/C++：额外支持 ptr-> 与 ns:: 形式
+    if !trigger && ft =~# '^\%(c\|cpp\|objc\|objcpp\)$' && line =~ '\k\+\%(->\|::\)\k*$'
+        let trigger = 1
+    endif
+    " Lua/Vim：额外支持 method: 形式
+    if !trigger && ft =~# '^\%(lua\|vim\)$' && line =~ '\k\+:\k*$'
+        let trigger = 1
+    endif
+    if trigger
         " 关闭已有菜单并立即触发 omni，一次性发送避免 autocomplete 抢占
         call feedkeys(pumvisible() ? "\<C-e>\<C-x>\<C-o>" : "\<C-x>\<C-o>", 'n')
     endif
