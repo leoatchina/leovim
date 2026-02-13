@@ -42,7 +42,7 @@ set switchbuf=useopen,usetab,newtab
 " --------------------------
 " swapfile
 " --------------------------
-set noswapfile
+set swapfile
 " --------------------------
 " wildmenu
 " --------------------------
