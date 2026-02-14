@@ -57,6 +57,14 @@ function! utils#has_packadd() abort
     return exists(':packadd') > 0
 endfunction
 
+function! utils#has_qfloc() abort
+    if !empty(getqflist()) || !empty(getloclist(0))
+        return 1
+    else
+        return 0
+    endif
+endfunction
+
 function! utils#has_map(key, mode) abort
     try
         let mp = maparg(a:key, a:mode)
@@ -67,7 +75,6 @@ function! utils#has_map(key, mode) abort
         endif
     catch /.*/
         return 0
-
     endtry
 endfunction
 " ----------------------------------------
