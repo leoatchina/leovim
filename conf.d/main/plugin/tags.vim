@@ -169,6 +169,7 @@ function! s:find_with_ctags(...)
             let action_pos = 'edit'
         endif
     endif
+    let v:errmsg = ''
     try
         let tag_found = preview#quickfix_list(tagname, 0, &filetype)
     catch /.*/
@@ -190,7 +191,7 @@ function! s:find_with_ctags(...)
             call feedkeys("zz", "n")
         endif
     endif
-    return tag_found
+    return tag_found && v:errmsg == ''
 endfunction
 " --------------------------
 " use lsp or tag to find
