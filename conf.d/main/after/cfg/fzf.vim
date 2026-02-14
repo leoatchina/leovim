@@ -143,3 +143,49 @@ function FzfCallCommands(prompt, ...)
                 \ 'options': printf('+m --ansi --header-lines=1 --expect=ctrl-e --tiebreak=index --prompt "%s> "', prompt)
                 \ }, l:fzf_layout), 0)
 endfunction
+
+function! fzf#quickfix()
+    let qf_items = getqflist()
+    if empty(qf_items)
+        call preview#errmsg("No Quickfix")
+        return
+    endif
+    let results = []
+    for item in qf_items
+        let filename = get(item, 'filename', '')
+        if empty(filename) && get(item, 'bufnr', 0) > 0
+            let filename = bufname(item.bufnr)
+        endif
+        if empty(filename)
+            continue
+        endif
+        let lnum = get(item, 'lnum', 1)
+        let text = substitute(get(item, 'text', ''), "\t", ' ', 'g')
+        call add(results, printf("%s\t%d\t%s", filename, lnum, text))
+    endfor
+    if empty(results)
+        call preview#errmsg("No Quickfix")
+        return
+    endif
+    let preview_window = g:fzf_vim.preview_window[0]
+    let options = '+m --delimiter="\t" --with-nth=3..,1,2 --expect=ctrl-t,ctrl-x,ctrl-] --tiebreak=index --prompt "Quickfix> " --preview ''bat --style=numbers --color=always --highlight-line {2} -- {1} 2>/dev/null || sed -n "1,200p" {1}'' --preview-window=' . preview_window
+    let picked = fzf#run(extend({
+                \ 'source': results,
+                \ 'options': options
+                \ }, deepcopy(get(g:, 'fzf_layout', {'down': '~30%'}))), 0)
+    if type(picked) != type([]) || len(picked) < 2
+        return
+    endif
+    let key = picked[0]
+    let line = picked[1]
+    let fields = split(line, "\t")
+    if len(fields) < 3
+        return
+    endif
+    let action = get(g:fzf_action, key, 'edit')
+    if type(action) != type('')
+        let action = 'edit'
+    endif
+    execute action . ' ' . fnameescape(fields[0])
+    call cursor(str2nr(fields[1]), max([1, str2nr(fields[2])]))
+endfunction

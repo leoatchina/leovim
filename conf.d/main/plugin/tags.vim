@@ -324,7 +324,6 @@ function! tags#lsp_tag_search(method, ...) abort
                 endif
                 if symbol_found
                     call s:settagstack(winnr, tagname, pos)
-                    call feedkeys("zz", "n")
                     echo "Found by coc " . jump_command
                 endif
             endif
@@ -341,7 +340,6 @@ function! tags#lsp_tag_search(method, ...) abort
         let symbol_found = get(g:, 'lsp_found', 0)
         if symbol_found
             call s:settagstack(winnr, tagname, pos)
-            call feedkeys("zz", "n")
             echo "found by vim.lsp " . method
         endif
     else
@@ -355,7 +353,7 @@ function! tags#lsp_tag_search(method, ...) abort
     if !symbol_found
         if get(g:, 'search_all_cmd', '') != ''
             if open_action == 'list'
-                execute g:search_all_cmd . ' ' . tagname
+                execute 'GrepperAll ' . tagname
             else
                 call preview#errmsg('Not found by neither lsp nor tags, you should press <Alt-d> to do grep search.')
             endif
