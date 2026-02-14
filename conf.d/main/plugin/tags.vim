@@ -294,20 +294,17 @@ function! tags#lsp_tag_search(method, ...) abort
     else
         let symbol_found = 0
     endif
+    " TODO: using gtags to find symbol
     " view_tags
     if !symbol_found && g:ctags_type != '' && method != 'references' && method != 'implementation'
         let symbol_found = s:find_with_ctags(tagname, open_action)
     endif
     " search_all_cmd
     if !symbol_found
-        if get(g:, 'search_all_cmd', '') != ''
-            if open_action == 'list'
-                execute 'GrepAll ' . tagname
-            else
-                call preview#errmsg('Not found by neither lsp nor tags, you should press <Alt-d> to do grep search.')
-            endif
+        if open_action == 'list'
+            execute 'GrepAll ' . tagname
         else
-            call preview#errmsg('Not found by neither lsp nor tags, and could not do grep search.')
+            call preview#errmsg('Not found by neither lsp nor tags.')
         endif
     endif
 endfunction
