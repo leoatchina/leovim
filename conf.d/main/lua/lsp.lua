@@ -248,7 +248,7 @@ function M.LspAction(method, open_action)
   if next(qflist) then
     vim.api.nvim_set_var("lsp_found", 1)
     vim.fn.setqflist(qflist)
-    vim.fn['fzf#quickfix']()
+    vim.fn['fzf#open_qfloc']()
   else
     vim.api.nvim_set_var("lsp_found", 0)
   end

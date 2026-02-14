@@ -161,7 +161,7 @@ function! s:fzf_quickfix_accept(item) abort
     call cursor(str2nr(fields[1]), 1)
 endfunction
 
-function! fzf#quickfix()
+function! fzf#open_qfloc()
     let list_name = 'Quickfix'
     let qf_items = getqflist()
     if empty(qf_items)
