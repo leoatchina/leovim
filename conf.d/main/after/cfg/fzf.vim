@@ -145,9 +145,14 @@ function FzfCallCommands(prompt, ...)
 endfunction
 
 function! fzf#quickfix()
+    let list_name = 'Quickfix'
     let qf_items = getqflist()
     if empty(qf_items)
-        call preview#errmsg("No Quickfix")
+        let qf_items = getloclist(0)
+        let list_name = 'Loclist'
+    endif
+    if empty(qf_items)
+        call preview#errmsg("No Quickfix/Loclist")
         return
     endif
     let results = []
@@ -164,11 +169,11 @@ function! fzf#quickfix()
         call add(results, printf("%s\t%d\t%s", filename, lnum, text))
     endfor
     if empty(results)
-        call preview#errmsg("No Quickfix")
+        call preview#errmsg("No Quickfix/Loclist")
         return
     endif
     let preview_window = g:fzf_vim.preview_window[0]
-    let options = '+m --delimiter="\t" --with-nth=3..,1,2 --expect=ctrl-t,ctrl-x,ctrl-] --tiebreak=index --prompt "Quickfix> " --preview ''bat --style=numbers --color=always --highlight-line {2} -- {1} 2>/dev/null || sed -n "1,200p" {1}'' --preview-window=' . preview_window
+    let options = '+m --delimiter="\t" --with-nth=3..,1,2 --expect=ctrl-t,ctrl-x,ctrl-] --tiebreak=index --prompt "' . list_name . '> " --preview ''bat --style=numbers --color=always --highlight-line {2} -- {1} 2>/dev/null || sed -n "1,200p" {1}'' --preview-window=' . preview_window
     let picked = fzf#run(extend({
                 \ 'source': results,
                 \ 'options': options
