@@ -1,5 +1,10 @@
-local floaterm_enhance_cfg = {
-    name = 'floaterm_enhance',
+local provider_cfg
+if vim.g.opencode_enabled and vim.fn.index({'terminal', 'tmux', 'wezterm', 'kitty'}, vim.g.opencode_enabled) >= 0 then
+  provider_cfg = {
+    enabled = vim.g.opencode_enabled
+  }
+else
+  provider_cfg = {
     toggle = function(self)
       local opencode_bufnr = vim.g.opencode_bufnr
       if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
@@ -24,18 +29,11 @@ local floaterm_enhance_cfg = {
         vim.fn["floaterm#terminal#kill"](opencode_bufnr)
       end
       vim.g.opencode_bufnr = nil
-    end,
-}
-if vim.g.opencode_enabled and vim.fn.index({'terminal', 'tmux', 'wezterm', 'kitty'}, vim.g.opencode_enabled) >= 0 then
-  local opencode_config = {
-    enabled = vim.g.opencode_enabled
+    end
   }
-else
-  local opencode_config = floaterm_enhance_cfg
 end
-
 vim.g.opencode_opts = {
-  provider = opencode_config
+  provider = provider_cfg
 }
 -- XXX
 vim.keymap.set({ "n", "x" }, '+', function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
