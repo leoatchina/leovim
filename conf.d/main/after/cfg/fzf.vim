@@ -144,6 +144,23 @@ function FzfCallCommands(prompt, ...)
                 \ }, l:fzf_layout), 0)
 endfunction
 
+function! s:fzf_quickfix_accept(item) abort
+    if len(a:item) < 2
+        return
+    endif
+    let key = empty(a:item[0]) ? 'enter' : a:item[0]
+    let fields = split(a:item[1], "\t")
+    if len(fields) < 2
+        return
+    endif
+    let action = get(g:fzf_action, key, 'edit')
+    if type(action) != type('')
+        let action = 'edit'
+    endif
+    execute action . ' ' . fnameescape(fields[0])
+    call cursor(str2nr(fields[1]), 1)
+endfunction
+
 function! fzf#quickfix()
     let list_name = 'Quickfix'
     let qf_items = getqflist()
@@ -174,23 +191,9 @@ function! fzf#quickfix()
     endif
     let preview_window = g:fzf_vim.preview_window[0]
     let options = '+m --delimiter="\t" --with-nth=3..,1,2 --expect=ctrl-t,ctrl-x,ctrl-] --tiebreak=index --prompt "' . list_name . '> " --preview ''bat --style=numbers --color=always --highlight-line {2} -- {1} 2>/dev/null || sed -n "1,200p" {1}'' --preview-window=' . preview_window
-    let picked = fzf#run(extend({
+    call fzf#run(extend({
                 \ 'source': results,
+                \ 'sink': function('s:fzf_quickfix_accept'),
                 \ 'options': options
                 \ }, deepcopy(get(g:, 'fzf_layout', {'down': '~30%'}))), 0)
-    if type(picked) != type([]) || len(picked) < 2
-        return
-    endif
-    let key = picked[0]
-    let line = picked[1]
-    let fields = split(line, "\t")
-    if len(fields) < 3
-        return
-    endif
-    let action = get(g:fzf_action, key, 'edit')
-    if type(action) != type('')
-        let action = 'edit'
-    endif
-    execute action . ' ' . fnameescape(fields[0])
-    call cursor(str2nr(fields[1]), max([1, str2nr(fields[2])]))
 endfunction

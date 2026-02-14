@@ -74,6 +74,8 @@ if pack#planned_leaderf()
     endfunction
     command! LeaderfQfLoc call s:leaderf_qf_loc()
     nnoremap <silent><M-:> :LeaderfQfLoc<Cr>
+else
+    nnoremap <silent><M-:> :call fzf#quickfix()<Cr>
 endif
 " ----------------------------
 " bqf
