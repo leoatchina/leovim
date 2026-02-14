@@ -353,7 +353,7 @@ function! tags#lsp_tag_search(method, ...) abort
     if !symbol_found
         if get(g:, 'search_all_cmd', '') != ''
             if open_action == 'list'
-                execute 'GrepperAll ' . tagname
+                execute 'GrepAll ' . tagname
             else
                 call preview#errmsg('Not found by neither lsp nor tags, you should press <Alt-d> to do grep search.')
             endif
