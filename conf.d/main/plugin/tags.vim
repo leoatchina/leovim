@@ -138,57 +138,6 @@ if pack#planned('vim-gutentags')
     nnoremap <leader>g: :GutentagsCommands<Cr>
 endif
 " --------------------------
-" gtags
-" --------------------------
-if pack#planned('gutentags_plus')
-    if has('+cscope') && executable('gtags-cscope')
-        set cscopeprg=gtags-cscope
-    elseif has('+cscope')
-        set cscopeprg=
-    endif
-    let g:gutentags_modules += ['gtags_cscope']
-    let g:gutentags_define_advanced_commands = 1
-    let g:gutentags_auto_add_gtags_cscope = 1
-    let g:gutentags_plus_switch = 1
-    let g:gutentags_plus_nomap  = 1
-    nnoremap <silent><leader>gs :GscopeFind s <C-R><C-W><Cr>
-    nnoremap <silent><leader>gg :GscopeFind g <C-R><C-W><Cr>
-    nnoremap <silent><leader>gt :GscopeFind t <C-R><C-W><Cr>
-    nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><Cr>
-    nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><Cr>
-    nnoremap <silent><leader>gz :GscopeFind z <C-R><C-W><Cr>
-    if pack#installed_adv()
-        nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><Cr>
-        nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><Cr>
-    else
-        nnoremap <silent>gl :GscopeFind d <C-R><C-W><Cr>
-        nnoremap <silent>gh :GscopeFind c <C-R><C-W><Cr>
-    endif
-    " file
-    nnoremap <silent><leader>gf :GscopeFind f <C-R>=utils#expand("<cfile>")<Cr><Cr>
-    nnoremap <silent><leader>gi :GscopeFind i <C-R>=utils#expand("<cfile>")<Cr><Cr>
-    " kill
-    nnoremap <silent><leader>gk :GscopeKill<Cr>
-    " leaderfgtags
-    if pack#planned_leaderf() && utils#is_unix()
-        let g:Lf_Gtags = utils#expand(exepath('gtags'))
-        let g:Lf_Gtagsconf = $GTAGSCONF
-        let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
-        let g:Lf_GtagsGutentags = 1
-        let g:Lf_GtagsSkipSymlink = 'a'
-        let g:Lf_GtagsAutoGenerate = 0
-        let g:Lf_GtagsAcceptDotfiles = 0
-        let g:Lf_GtagsSkipUnreadable = 1
-        nnoremap <silent><leader>G  :Leaderf gtags<Cr>
-        nnoremap <silent><leader>gd :Leaderf gtags -d <C-r><C-w><Cr>
-        nnoremap <silent><leader>gr :Leaderf gtags -r <C-r><C-w><Cr>
-        nnoremap <silent><leader>g? :Leaderf gtags -g <C-r><C-w><Cr>
-        nnoremap <silent><leader>g/ :Leaderf gtags --by-context<Cr>
-    endif
-elseif has('+cscope')
-    set cscopeprg=
-endif
-" --------------------------
 " set tagstack and view tag
 " --------------------------
 function! s:settagstack(winnr, tagname, pos)
@@ -388,4 +337,54 @@ if pack#installed_adv()
     " typeDefinition
     nnoremap <silent><M-?> :call tags#lsp_tag_search("type_definition", "list")<Cr>
 endif
-
+" --------------------------
+" gtags
+" --------------------------
+if pack#planned('gutentags_plus')
+    if has('+cscope') && executable('gtags-cscope')
+        set cscopeprg=gtags-cscope
+    elseif has('+cscope')
+        set cscopeprg=
+    endif
+    let g:gutentags_modules += ['gtags_cscope']
+    let g:gutentags_define_advanced_commands = 1
+    let g:gutentags_auto_add_gtags_cscope = 1
+    let g:gutentags_plus_switch = 1
+    let g:gutentags_plus_nomap  = 1
+    nnoremap <silent><leader>gs :GscopeFind s <C-R><C-W><Cr>
+    nnoremap <silent><leader>gg :GscopeFind g <C-R><C-W><Cr>
+    nnoremap <silent><leader>gt :GscopeFind t <C-R><C-W><Cr>
+    nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><Cr>
+    nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><Cr>
+    nnoremap <silent><leader>gz :GscopeFind z <C-R><C-W><Cr>
+    if pack#installed_adv()
+        nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><Cr>
+        nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><Cr>
+    else
+        nnoremap <silent>gl :GscopeFind d <C-R><C-W><Cr>
+        nnoremap <silent>gh :GscopeFind c <C-R><C-W><Cr>
+    endif
+    " file
+    nnoremap <silent><leader>gf :GscopeFind f <C-R>=utils#expand("<cfile>")<Cr><Cr>
+    nnoremap <silent><leader>gi :GscopeFind i <C-R>=utils#expand("<cfile>")<Cr><Cr>
+    " kill
+    nnoremap <silent><leader>gk :GscopeKill<Cr>
+    " leaderfgtags
+    if pack#planned_leaderf() && utils#is_unix()
+        let g:Lf_Gtags = utils#expand(exepath('gtags'))
+        let g:Lf_Gtagsconf = $GTAGSCONF
+        let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
+        let g:Lf_GtagsGutentags = 1
+        let g:Lf_GtagsSkipSymlink = 'a'
+        let g:Lf_GtagsAutoGenerate = 0
+        let g:Lf_GtagsAcceptDotfiles = 0
+        let g:Lf_GtagsSkipUnreadable = 1
+        nnoremap <silent><leader>G  :Leaderf gtags<Cr>
+        nnoremap <silent><leader>gd :Leaderf gtags -d <C-r><C-w><Cr>
+        nnoremap <silent><leader>gr :Leaderf gtags -r <C-r><C-w><Cr>
+        nnoremap <silent><leader>g? :Leaderf gtags -g <C-r><C-w><Cr>
+        nnoremap <silent><leader>g/ :Leaderf gtags --by-context<Cr>
+    endif
+elseif has('+cscope')
+    set cscopeprg=
+endif
