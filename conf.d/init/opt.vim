@@ -121,9 +121,11 @@ elseif utils#is_unix()
 endif
 
 " NOTE: visit https://ftp.gnu.org/pub/gnu/global/
+" apt-get install libncurses5-dev
+" yum install ncurses-devel
 " wget https://ftp.gnu.org/pub/gnu/global/global-6.6.12.tar.gz && tar xvf global-6.6.12.tar.gz && cd global-6.6.12
-" ./configure --prefix ~/.local/gtags --disable-gtagscscope && make && make install && cd ~/.local/gtags
 " ./configure --prefix ~/.local/gtags && make && make install && cd ~/.local/gtags
+" ./configure --prefix ~/.local/gtags --disable-gtagscscope && make && make install && cd ~/.local/gtags
 " if executable('gtags') && utils#is_unix()
     " let $GTAGSCONF=utils#expand($HOME."/.local/gtags/share/gtags/gtags.conf")
 " endif
