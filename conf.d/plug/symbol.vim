@@ -41,10 +41,8 @@ if get(g:, 'ctags_type', '') != ''
     endif
     if v:version >= 800
         call s:add_symbol("gutentags")
-        if get(g:, 'gtags_version', 0) > 6.0606
-            if executable('gtags-cscope') && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
-                call s:add_symbol('plus')
-            endif
+        if get(g:, 'gtags_version', 0) > 6.0606 && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
+            call s:add_symbol('plus')
         endif
     endif
 endif
