@@ -170,13 +170,7 @@ function! s:find_with_ctags(...)
         endif
     endif
     let v:errmsg = ''
-    try
-        let tag_found = preview#quickfix_list(tagname, 0, &filetype)
-    catch /.*/
-        let tag_found = 0
-    endtry
-    if tag_found
-        silent! pclose
+    if preview#quickfix_list(tagname, 0, &filetype)
         if action_pos == 'list'
             execute "copen " . g:asyncrun_open
         else
@@ -190,14 +184,15 @@ function! s:find_with_ctags(...)
             execute "tag " . tagname
             call feedkeys("zz", "n")
         endif
+        return v:errmsg == ''
     endif
-    return tag_found && v:errmsg == ''
+    return 0
 endfunction
 " --------------------------
 " use lsp or tag to find
 " --------------------------
 function! tags#lsp_tag_search(method, ...) abort
-    let tagname = utils#expand('<cword>')
+    let tagname = expand('<cword>')
     if empty(tagname)
         call preview#errmsg("No symbol under cursor.")
         return
@@ -278,7 +273,6 @@ function! tags#lsp_tag_search(method, ...) abort
                 endif
             endif
         catch /.*/
-            echohl WarningMsg | echom "CocAction " . jump_command . " error: " . v:exception | echohl None
             let symbol_found = 0
         endtry
     " --------------------------
@@ -304,8 +298,6 @@ function! tags#lsp_tag_search(method, ...) abort
     if !symbol_found
         if open_action == 'list'
             execute 'GrepAll ' . tagname
-        else
-            call preview#errmsg('Not found by neither lsp nor tags.')
         endif
     endif
 endfunction
