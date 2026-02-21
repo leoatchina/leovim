@@ -72,11 +72,11 @@ if pack#planned_leaderf()
             call preview#errmsg("Neigher quickfix nor loclist opened!")
         endif
     endfunction
-    command! LeaderfQfLoc call s:leaderf_qf_loc()
-    nnoremap <silent><M-:> :LeaderfQfLoc<Cr>
+    command! OpenQfLoc call s:leaderf_qf_loc()
 else
-    nnoremap <silent><M-:> :call fzf#open_qfloc()<Cr>
+    command! OpenQfLoc call fzf#open_qfloc()
 endif
+nnoremap <silent><M-:> :OpenQfLoc<Cr>
 " ----------------------------
 " bqf
 " ----------------------------
@@ -93,9 +93,7 @@ endif
 " ----------------------------
 " quickfix
 " ----------------------------
-if pack#installed('quicker.nvim')
-    lua require("cfg/quicker")
-elseif pack#installed('vim-qf')
+if pack#installed('vim-qf')
     let g:qf_statusline = {}
     let g:qf_statusline.before = '%<\ '
     let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \'

@@ -157,37 +157,6 @@ function! s:settagstack(winnr, tagname, pos)
                 \ 'items': [{'tagname': a:tagname, 'from': a:pos}]
                 \ }, g:check_settagstack)
 endfunction
-function! s:find_with_ctags(...)
-    if a:0 == 0
-        let tagname = expand('<cword>')
-        let action_pos = 'list'
-    else
-        let tagname = a:1
-        if a:0 >= 2
-            let action_pos = a:2
-        else
-            let action_pos = 'edit'
-        endif
-    endif
-    let v:errmsg = ''
-    if preview#quickfix_list(tagname, 0, &filetype)
-        if action_pos == 'list'
-            execute "copen " . g:asyncrun_open
-        else
-            if action_pos != 'edit'
-                if action_pos == 'tabe'
-                    tabe %
-                else
-                    execute action_pos
-                endif
-            endif
-            execute "tag " . tagname
-            call feedkeys("zz", "n")
-        endif
-        return v:errmsg == ''
-    endif
-    return 0
-endfunction
 " --------------------------
 " use lsp or tag to find
 " --------------------------
@@ -204,11 +173,11 @@ function! tags#lsp_tag_search(method, ...) abort
         else
             try
                 if utils#planned('vim-quickui')
-                    let symbol_found = quickui#tools#preview_tag(tagname, v:false) == 0
+                    let tagname_found = quickui#tools#preview_tag(tagname, v:false) == 0
                 else
-                    let symbol_found = preview#preview_tag(tagname) == 0
+                    let tagname_found = preview#preview_tag(tagname) == 0
                 endif
-                if symbol_found == 0
+                if tagname_found == 0
                     call preview#errmsg("Preview not found.")
                 endif
             catch /.*/
@@ -237,19 +206,9 @@ function! tags#lsp_tag_search(method, ...) abort
     let pos = getcurpos()
     let pos[0] = bufnr('')
     " --------------------------
-    " check if cfile type
-    " --------------------------
-    if index(g:c_filetypes, &ft) >= 0 && index(['definition', 'tags'], method) >= 0 && g:ctags_type != ''
-        let lsp = 0
-    elseif method == "tags"
-        let lsp = 0
-    else
-        let lsp = 1
-    endif
-    " --------------------------
     " coc
     " --------------------------
-    if pack#installed('coc.nvim') && lsp
+    if pack#installed('coc.nvim') && method != 'tags'
         let commands_dict = {
                     \ 'definition' : 'jumpDefinition',
                     \ 'declaration' : 'jumpDeclaration',
@@ -260,42 +219,81 @@ function! tags#lsp_tag_search(method, ...) abort
         let jump_command = commands_dict[method]
         try
             if open_action == 'list'
-                let symbol_found = CocAction(jump_command, v:false)
+                let tagname_found = CocAction(jump_command, v:false)
             else
                 if open_action == 'edit'
-                    let symbol_found = CocAction(jump_command)
+                    let tagname_found = CocAction(jump_command)
                 else
-                    let symbol_found = CocAction(jump_command, open_action)
+                    let tagname_found = CocAction(jump_command, open_action)
                 endif
-                if symbol_found
+                if tagname_found
                     call s:settagstack(winnr, tagname, pos)
                     echo "Found by coc " . jump_command
                 endif
             endif
         catch /.*/
-            let symbol_found = 0
+            let tagname_found = 0
         endtry
     " --------------------------
     " lsp
     " --------------------------
-    elseif pack#installed_lsp() && lsp
+    elseif pack#installed_lsp() && method != 'tags'
         let cmd = printf('lua require("lsp").LspAction("%s", "%s")', method, open_action)
         call utils#execute(cmd)
-        let symbol_found = get(g:, 'lsp_found', 0)
-        if symbol_found
+        let tagname_found = get(g:, 'lsp_found', 0)
+        if tagname_found
             call s:settagstack(winnr, tagname, pos)
-            echo "found by vim.lsp " . method
+            echo "Found by nvim lsp " . method
         endif
     else
-        let symbol_found = 0
+        let tagname_found = 0
     endif
-    " TODO: using gtags to find symbol
-    " view_tags
-    if !symbol_found && g:ctags_type != '' && method != 'references' && method != 'implementation'
-        let symbol_found = s:find_with_ctags(tagname, open_action)
+    function! s:find_with_tags(tagname, open_position, method)
+        let tagname = a:tagname
+        let open_position = a:open_position
+        let method = a:method
+        if preview#quickfix_list(tagname, 0, &filetype)
+            if open_position == 'list'
+                let g:test_ok = 1
+                if pack#installed('gutentags_plus')
+                    let v:errmsg = ''
+                    let b = getqflist({'changedtick': 1, 'size':1})
+                    if method == 'references'
+                        silent! execute 'GscopeFind s ' . tagname
+                    else
+                        silent! execute 'GscopeFind g ' . tagname
+                    endif
+                    let a = getqflist({'changedtick': 1, 'size':1})
+                    let ok = (a.changedtick != b.changedtick) && (a.size > 0) && empty(v:errmsg)
+                endif
+                if ok
+                    OpenQfLoc
+                elseif pack#installed('gutentags_plus') && method != 'references'
+                    execute 'GscopeFind z ' . tagname
+                else
+                    execute "copen " . g:asyncrun_open
+                endif
+            else
+                if open_position != 'edit'
+                    if open_position == 'tabe'
+                        tabe %
+                    else
+                        execute open_position
+                    endif
+                endif
+                execute "tag " . tagname
+                call feedkeys("zz", "n")
+            endif
+            return 1
+        else
+            return 0
+        endif
+    endfunction
+    if !tagname_found && g:ctags_type != ''
+        let tagname_found = s:find_with_tags(tagname, open_action, method)
     endif
     " search_all_cmd
-    if !symbol_found
+    if !tagname_found
         if open_action == 'list'
             execute 'GrepAll ' . tagname
         endif
@@ -305,7 +303,7 @@ endfunction
 " lsp or tag
 " ---------------
 " tags
-nnoremap <silent>g<Cr> :call tags#lsp_tag_search("tags", "list")<Cr>
+nnoremap <silent>g/ :call tags#lsp_tag_search("tags", "list")<Cr>
 " preview
 nnoremap <silent><C-h> :call tags#lsp_tag_search("preview")<Cr>
 " definition

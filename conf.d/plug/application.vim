@@ -283,11 +283,7 @@ if has('nvim')
 elseif v:version >= 800
     PlugAdd 'ryanoasis/vim-devicons'
 endif
-if has('nvim-0.10')
-    PlugAdd 'stevearc/quicker.nvim'
-else
-    PlugAdd 'romainl/vim-qf'
-endif
+PlugAdd 'romainl/vim-qf'
 " -------------------
 " vim-preview
 " -------------------
