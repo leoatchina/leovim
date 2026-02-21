@@ -271,9 +271,8 @@ function! tags#lsp_tag_search(method, ...) abort
                 elseif method != 'references'
                     if pack#installed('gutentags_plus')
                         silent! execute 'GscopeFind z ' . tagname
-                    else
-                        copen
                     endif
+                    execute "copen " . g:asyncrun_open
                 else
                     return 0
                 endif
@@ -297,10 +296,8 @@ function! tags#lsp_tag_search(method, ...) abort
         let tagname_found = s:find_with_tags(tagname, open_action, method)
     endif
     " search_all_cmd
-    if !tagname_found
-        if open_action == 'list'
-            execute 'GrepAll ' . tagname
-        endif
+    if !tagname_found && open_action == 'list' && method == 'references'
+        execute 'GrepAll ' . tagname
     endif
 endfunction
 " ---------------
