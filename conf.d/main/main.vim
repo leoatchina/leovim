@@ -220,10 +220,7 @@ endif
 " ------------------------------
 " tags conf
 " ------------------------------
-if pack#get('notags')
-    let g:ctags_type = ''
-    let g:gtags_version = 0
-elseif utils#is_win() && pack#get('tags') || utils#is_unix()
+if utils#is_win() && pack#get('tags') || utils#is_unix()
     if utils#is_win() && filereadable(utils#expand("~/.leovim.windows/tools/ctags.exe"))
         let g:ctags_type = 'Universal-json'
     elseif executable('ctags')
@@ -242,6 +239,7 @@ elseif utils#is_win() && pack#get('tags') || utils#is_unix()
     else
         let g:ctags_type = ''
     endif
+    " gtags must be set based on ctags
     if utils#is_win()
         let $GTAGSCONF = utils#expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
     endif
@@ -250,8 +248,10 @@ elseif utils#is_win() && pack#get('tags') || utils#is_unix()
         let g:gtags_version = utils#string_to_float(s:gtags_version, 2)
         if get(g:, 'pygments_import', 0)
             let $GTAGSLABEL = 'native-pygments'
+        elseif g:ctags_type =~ 'Universal'
+            let $GTAGSLABEL = 'new-ctags'
         else
-            let $GTAGSLABEL = 'native'
+            let $GTAGSLABEL = 'ctags'
         endif
     else
         let g:gtags_version = 0
