@@ -287,16 +287,14 @@ function! tags#lsp_tag_search(method, ...) abort
     else
         let tagname_found = 0
     endif
-    if tagname_found
-        OpenQfLoc
-    elseif g:ctags_type != ''
+    if g:ctags_type != '' && !tagname_found
         let tagname_found = s:find_with_tags(tagname, open_action, method)
-        if open_action == 'list'
-            if tagname_found
-                OpenQfLoc
-            elseif method == 'references'
-                execute 'GrepAll ' . tagname
-            endif
+    endif
+    if method == 'list'
+        if tagname_found
+            OpenQfLoc
+        elseif method == 'references' && !tagname_found
+            execute 'GrepAll ' . tagname
         endif
     endif
 endfunction
@@ -304,26 +302,27 @@ endfunction
 " lsp or tag
 " ---------------
 " tags
-nnoremap <silent>g/ :call tags#lsp_tag_search("tags", "list")<Cr>
+nnoremap <silent>g/ :call tags#lsp_tag_search("tags")<Cr>
 " preview
 nnoremap <silent><C-h> :call tags#lsp_tag_search("preview")<Cr>
 " definition
 au FileType help,vimdoc nnoremap <C-]> <C-]>
-nnoremap <silent><C-g> :call tags#lsp_tag_search("definition")<Cr>
+nnoremap <silent><C-g> :call tags#lsp_tag_search("definition", "edit")<Cr>
 nnoremap <silent><C-]> :call tags#lsp_tag_search("definition", "vsplit")<Cr>
-nnoremap <silent><M-d> :call tags#lsp_tag_search("definition", "list")<Cr>
 nnoremap <silent><C-w>g :call tags#lsp_tag_search("definition", "tabe")<Cr>
 nnoremap <silent><C-w>] :call tags#lsp_tag_search("definition", "split")<Cr>
 nnoremap <silent><C-w><C-g> :call tags#lsp_tag_search("definition", "tabe")<Cr>
 nnoremap <silent><C-w><C-]> :call tags#lsp_tag_search("definition", "split")<Cr>
+" definition
+nnoremap <silent><M-d> :call tags#lsp_tag_search("definition")<Cr>
 " references
-nnoremap <silent><M-/> :call tags#lsp_tag_search("references", "list")<Cr>
+nnoremap <silent><M-/> :call tags#lsp_tag_search("references")<Cr>
 " declaration
-nnoremap <silent><M-D> :call tags#lsp_tag_search("declaration", "list")<Cr>
+nnoremap <silent><M-D> :call tags#lsp_tag_search("declaration")<Cr>
 " typeDefinition
-nnoremap <silent><M-?> :call tags#lsp_tag_search("type_definition", "list")<Cr>
+nnoremap <silent><M-?> :call tags#lsp_tag_search("type_definition")<Cr>
 " implementation
-nnoremap <silent><M-.> :call tags#lsp_tag_search("implementation", "list")<Cr>
+nnoremap <silent><M-.> :call tags#lsp_tag_search("implementation")<Cr>
 " --------------------------
 " gtags
 " --------------------------
