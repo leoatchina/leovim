@@ -160,13 +160,18 @@ function! s:fzf_quickfix_accept(item) abort
     let matched = matchlist(a:item[1], '\v^(.*):(\d+):(\d+)#\s*\t')
     if empty(matched)
         let lnum = 1
+        let col = 1
         let filename = fields[0]
     else
         let filename = matched[1]
         let lnum = str2nr(matched[2])
+        let col = str2nr(matched[3])
+        if col <= 0
+            let col = 1
+        endif
     endif
     execute action . ' ' . fnameescape(filename)
-    call cursor(lnum, 1)
+    call cursor(lnum, col)
 endfunction
 
 function! fzf#open_qfloc()
@@ -190,9 +195,9 @@ function! fzf#open_qfloc()
             continue
         endif
         let lnum = get(item, 'lnum', 1)
+        let col = get(item, 'col', 1)
         let text = substitute(get(item, 'text', ''), "\t", ' ', 'g')
-        let bufnr = get(item, 'bufnr', bufnr(filename))
-        let quickfix = printf("%s:%d:%d#\t%s", filename, lnum, bufnr, text)
+        let quickfix = printf("%s:%d:%d#\t%s", filename, lnum, col, text)
         call add(candicates, quickfix)
     endfor
     if empty(candicates)
