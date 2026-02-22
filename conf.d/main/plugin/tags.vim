@@ -194,10 +194,10 @@ function! tags#lsp_tag_search(method, ...) abort
     if a:0 == 1
         let open_action = a:1
         if index(['edit', 'tabe', 'split', 'vsplit', 'list'], open_action) < 0
-            let open_action = 'edit'
+            let open_action = 'list'
         endif
     else
-        let open_action = 'edit'
+        let open_action = 'list'
     endif
     " --------------------------
     " variables for tagstack
@@ -254,27 +254,23 @@ function! tags#lsp_tag_search(method, ...) abort
         let method = a:method
         if preview#quickfix_list(tagname, 0, &filetype)
             if open_position == 'list'
-                let ok = 0
                 if pack#installed('gutentags_plus')
                     let v:errmsg = ''
                     let b = getqflist({'changedtick': 1, 'size':1})
                     if method == 'references'
                         silent! execute 'GscopeFind s ' . tagname
                     else
-                        silent! execute 'GscopeFind g ' . tagname
-                    endif
-                    let a = getqflist({'changedtick': 1, 'size':1})
-                    let ok = (a.changedtick != b.changedtick) && (a.size > 0) && empty(v:errmsg)
-                endif
-                if ok
-                    OpenQfLoc
-                elseif method != 'references'
-                    if pack#installed('gutentags_plus')
                         silent! execute 'GscopeFind z ' . tagname
                     endif
-                    execute "copen " . g:asyncrun_open
-                else
+                    let a = getqflist({'changedtick': 1, 'size':1})
+                    if (a.changedtick != b.changedtick) && (a.size > 0) && empty(v:errmsg)
+                        return 1
+                    endif
+                endif
+                if method == 'references'
                     return 0
+                else
+                    return 1
                 endif
             else
                 if open_position != 'edit'
@@ -285,19 +281,22 @@ function! tags#lsp_tag_search(method, ...) abort
                     endif
                 endif
                 execute "tag " . tagname
-                call feedkeys("zz", "n")
+                return 1
             endif
-            return 1
         else
             return 0
         endif
     endfunction
-    if !tagname_found && g:ctags_type != '' && method != 'implementation'
+    if !tagname_found && g:ctags_type != ''
         let tagname_found = s:find_with_tags(tagname, open_action, method)
     endif
     " search_all_cmd
-    if !tagname_found && open_action == 'list' && method == 'references'
-        execute 'GrepAll ' . tagname
+    if open_action == 'list'
+        if tagname_found
+            OpenQfLoc
+        elseif method == 'references'
+            execute 'GrepAll ' . tagname
+        endif
     endif
 endfunction
 " ---------------
