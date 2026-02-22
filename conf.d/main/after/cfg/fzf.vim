@@ -157,8 +157,16 @@ function! s:fzf_quickfix_accept(item) abort
     if type(action) != type('')
         let action = 'edit'
     endif
-    execute action . ' ' . fnameescape(fields[0])
-    call cursor(str2nr(fields[1]), 1)
+    let matched = matchlist(a:item[1], '\v^(.*):(\d+):(\d+)#\s*\t')
+    if empty(matched)
+        let lnum = 1
+        let filename = fields[0]
+    else
+        let filename = matched[1]
+        let lnum = str2nr(matched[2])
+    endif
+    execute action . ' ' . fnameescape(filename)
+    call cursor(lnum, 1)
 endfunction
 
 function! fzf#open_qfloc()
@@ -172,7 +180,7 @@ function! fzf#open_qfloc()
         call preview#errmsg("No Quickfix/Loclist")
         return
     endif
-    let results = []
+    let candicates = []
     for item in qf_items
         let filename = get(item, 'filename', '')
         if empty(filename) && get(item, 'bufnr', 0) > 0
@@ -183,22 +191,28 @@ function! fzf#open_qfloc()
         endif
         let lnum = get(item, 'lnum', 1)
         let text = substitute(get(item, 'text', ''), "\t", ' ', 'g')
-        call add(results, printf("%s\t%d\t%s", filename, lnum, text))
+        let bufnr = get(item, 'bufnr', bufnr(filename))
+        let quickfix = printf("%s:%d:%d#\t%s", filename, lnum, bufnr, text)
+        call add(candicates, quickfix)
+    endfor
+    if empty(candicates)
+        call preview#errmsg("No Quickfix/Loclist")
+        return
+    endif
+    let longest = max(map(copy(candicates), 'strdisplaywidth(split(v:val, "#\t")[0])'))
+    let results = []
+    for each in candicates
+        let length = strdisplaywidth(split(each, "#\t")[0])
+        let quickfix = substitute(each, "#\t", "#" . repeat(" ", longest - length) . "\t", "")
+        call add(results, quickfix)
     endfor
     if empty(results)
         call preview#errmsg("No Quickfix/Loclist")
         return
     endif
-    let preview_window = get(get(g:, 'fzf_vim', {}), 'preview_window', ['right,45%'])[0]
-    let options = [
-                \ '+m',
-                \ '--delimiter=' . "\t",
-                \ '--with-nth=3..,1,2',
-                \ '--expect=ctrl-t,ctrl-x,ctrl-]',
-                \ '--tiebreak=index',
-                \ '--prompt', list_name . '> ',
-                \ '--preview-window', preview_window . ',+{2}-/2'
-                \ ]
+    let options = ['+m', '--ansi', '--nth', '3..,1,2', '--delimiter', ':', '--prompt', list_name . '> ', '--tiebreak', 'index']
+    let options += ['--expect', join(keys(get(g:, 'fzf_action', {'ctrl-t': '', 'ctrl-x': '', 'ctrl-]': ''})), ',')]
+    let options += ['--preview-window', get(get(g:, 'fzf_vim', {}), 'preview_window', ['right,45%'])[0] . ',+{2}-/2']
     let options = fzf#vim#with_preview({'options': options, 'placeholder': ' {1}:{2}'}).options
     call fzf#run(extend({
                 \ 'source': results,
