@@ -1,21 +1,29 @@
-function! funky#qf#show(...) abort
-    let buffers = funky#utils#buffers()
-    if a:0 && a:1 > 0
-        let funkies = funky#funky(1)
-    else
-        let funkies = funky#funky(0)
+function! s:find_col(lnum, func) abort
+    let line = getline(a:lnum)
+    if empty(line) || empty(a:func)
+        return 1
     endif
+    let col = match(line, '\V' . escape(a:func, '\')) + 1
+    if col > 0
+        return col
+    endif
+    let head = matchstr(a:func, '\k\+')
+    if empty(head)
+        return 1
+    endif
+    let col = match(line, '\V' . escape(head, '\')) + 1
+    return col > 0 ? col : 1
+endfunction
+
+function! funky#qf#show(...) abort
+    let funkies = funky#funky(0)
     let candicates = []
+    let fname = bufname(bufnr(''))
     for each in funkies
-        let sp = split(each, "\t")
-        let funky = sp[0]
-        let sp1 = split(sp[1], ":")
-        let bufnr = sp1[1]
-        let lnum = sp1[2]
-        if has_key(buffers, bufnr)
-            let fname = buffers[bufnr]
-            let candicates += [{'filename': fname, 'lnum': lnum, 'text': funky}]
-        endif
+        let lnum = str2nr(matchstr(each, '\d\+$'))
+        let func = split(each, " \t#")[0]
+        let col = s:find_col(lnum, func)
+        let candicates += [{'filename': fname, 'lnum': lnum, 'col': col, 'text': func}]
     endfor
     call setqflist(candicates)
     copen

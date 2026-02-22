@@ -265,14 +265,15 @@ function! tags#lsp_tag_search(method, ...) abort
                 else
                     let tagname_found = CocAction(jump_command, open_action)
                 endif
-                if tagname_found
-                    call s:settagstack(winnr, tagname, pos)
-                    echo "Found by coc " . jump_command
-                endif
             endif
         catch /.*/
             let tagname_found = 0
         endtry
+        if tagname_found
+            call s:settagstack(winnr, tagname, pos)
+            echo "Found by coc " . jump_command
+            return
+        endif
     " --------------------------
     " lsp
     " --------------------------
@@ -283,6 +284,7 @@ function! tags#lsp_tag_search(method, ...) abort
         if tagname_found
             call s:settagstack(winnr, tagname, pos)
             echo "Found by nvim lsp " . method
+            return
         endif
     else
         let tagname_found = 0

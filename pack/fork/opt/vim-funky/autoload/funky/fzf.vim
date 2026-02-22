@@ -41,34 +41,57 @@ function! s:fzf_accept(item) abort
     let item = a:item
     if len(item) < 2 | return | endif
     let lnum = matchstr(item[1], ':\zs\d\+\ze:')
-    let bufnr = matchstr(item[1], ':\zs\d\+\ze#')
-    if bufnr("") != bufnr
-        call execute('buffer ' . bufnr)
-        let s:winnr = bufwinnr("")
-    endif
+    let col = matchstr(item[1], ':\d\+:\zs\d\+\ze#')
+    let lnum = empty(lnum) ? 1 : str2nr(lnum)
+    let col = empty(col) ? 1 : str2nr(col)
     call s:action_for(item[0])
-    call cursor(lnum, 1)
+    call cursor(lnum, col)
     call funky#after_jump()
 endfunction
 
+function! s:find_col(lnum, func) abort
+    let line = getline(a:lnum)
+    if empty(line) || empty(a:func)
+        return 1
+    endif
+    let col = match(line, '\V' . escape(a:func, '\')) + 1
+    if col > 0
+        return col
+    endif
+    let head = matchstr(a:func, '\k\+')
+    if empty(head)
+        return 1
+    endif
+    let col = match(line, '\V' . escape(head, '\')) + 1
+    return col > 0 ? col : 1
+endfunction
+
+function! s:pad_display_right(str, width) abort
+    let pad = a:width - strdisplaywidth(a:str)
+    return pad > 0 ? a:str . repeat(' ', pad) : a:str
+endfunction
+
 function! funky#fzf#funky(funkies)
-    let buffers = funky#utils#buffers()
     let candicates = []
+    let fname = bufname(bufnr(''))
+    let max_fname = 1
+    let max_lnum = 1
+    let max_col = 1
     for each in a:funkies
-        let bufnr = matchstr(each, ':\zs\d\+\ze:')
-        if has_key(buffers, bufnr)
-            let fname = buffers[bufnr]
-            let lnum = matchstr(each, '\d\+$')
-            let func = split(each, " \t#")[0]
-            let funky = printf("%s:%d:%d#\t%s", fname, lnum, bufnr, func)
-            call add(candicates, funky)
-        endif
+        let lnum = matchstr(each, '\d\+$')
+        let func = split(each, " \t#")[0]
+        let col = s:find_col(str2nr(lnum), func)
+        let max_fname = max([max_fname, strdisplaywidth(fname)])
+        let max_lnum = max([max_lnum, len(printf('%d', str2nr(lnum)))])
+        let max_col = max([max_col, len(printf('%d', col))])
+        call add(candicates, [fname, str2nr(lnum), col, func])
     endfor
-    let longest = max(map(copy(candicates), 'strdisplaywidth(split(v:val, "#\t")[0])'))
     let funkies = []
     for each in candicates
-        let length = strdisplaywidth(split(each, "#\t")[0])
-        let funky = substitute(each, "#\t", "#" . repeat(" ", longest - length) . "\t", "")
+        let fname_part = s:pad_display_right(each[0], max_fname)
+        let lnum_part = printf('%' . max_lnum . 'd', each[1])
+        let col_part = printf('%' . max_col . 'd', each[2])
+        let funky = printf("%s:%s:%s#\t%s", fname_part, lnum_part, col_part, each[3])
         call add(funkies, funky)
     endfor
     return funkies
@@ -82,7 +105,7 @@ function! funky#fzf#show(...)
     let options = fzf#vim#with_preview({'options': options, 'placeholder': ' {1}:{2}'}).options
     sleep 128m
     call fzf#run(fzf#wrap('funky', {
-                \ 'source': funky#fzf#funky(a:0 && a:1 > 0 ? funky#funky(1) : funky#funky(0)),
+                \ 'source': funky#fzf#funky(funky#funky(0)),
                 \ 'sink*': function('s:fzf_accept'),
                 \ 'options' : options
                 \ }))
