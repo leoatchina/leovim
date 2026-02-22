@@ -64,10 +64,10 @@ function! funky#fzf#funky(funkies)
             call add(candicates, funky)
         endif
     endfor
-    let longest = max(map(copy(candicates), 'len(split(v:val, "#\t")[0])'))
+    let longest = max(map(copy(candicates), 'strdisplaywidth(split(v:val, "#\t")[0])'))
     let funkies = []
     for each in candicates
-        let length = len(split(each, "#\t")[0])
+        let length = strdisplaywidth(split(each, "#\t")[0])
         let funky = substitute(each, "#\t", "#" . repeat(" ", longest - length) . "\t", "")
         call add(funkies, funky)
     endfor
