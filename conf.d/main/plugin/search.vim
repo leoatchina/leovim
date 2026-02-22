@@ -36,7 +36,7 @@ function! s:search_cur(...)
     endtry
     execute 'vimgrep /' . utils#escape(g:grep_word) . "/j %"
     if len(getqflist())
-        copen
+        execute "copen " . g:asyncrun_open
     endif
 endfunction
 command! -nargs=? GrepBuf call s:search_cur(<f-args>)
@@ -116,7 +116,7 @@ function! s:grep(...)
         endfor
         if !empty(qfl)
             call setqflist(qfl, 'r')
-            copen
+            execute "copen " . g:asyncrun_open
         endif
     else
         if mode == 1
@@ -126,7 +126,7 @@ function! s:grep(...)
         endif
         execute cmd
         if len(getqflist())
-            copen
+            execute "copen " . g:asyncrun_open
         endif
     endif
 endfunction
