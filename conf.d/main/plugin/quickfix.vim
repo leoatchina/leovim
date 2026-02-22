@@ -1,11 +1,11 @@
 if !has('quickfix') || utils#is_vscode()
     finish
 endif
-function! s:loc_opened()
-    return get(getloclist(0, {'winid' : 0}), 'winid', 0) > 0
+function! s:loc_exists()
+    return len(getloclist(0)) > 0
 endfunction
-function! s:qf_opened()
-    return get(getqflist({'winid' : 0}), 'winid', 0) > 0 && !s:loc_opened()
+function! s:qf_exists()
+    return len(getqflist()) > 0
 endfunction
 " open close
 function! s:open_close_qfloc(buftype, type) abort
@@ -18,10 +18,10 @@ function! s:open_close_qfloc(buftype, type) abort
         let type = 2
     endif
     if type < 2
-        if s:qf_opened() && buftype == "qf"
+        if s:qf_exists() && buftype == "qf"
             cclose
             return
-        elseif s:loc_opened()
+        elseif s:loc_exists()
             lclose
             return
         endif
@@ -62,14 +62,12 @@ if g:has_terminal
 endif
 if pack#planned_leaderf()
     function! s:leaderf_qf_loc()
-        if s:loc_opened()
+        if s:loc_exists()
             lclose
             LeaderfLocList
-        elseif s:qf_opened()
+        elseif s:qf_exists()
             cclose
             LeaderfQuickFix
-        else
-            call preview#errmsg("Neigher quickfix nor loclist opened!")
         endif
     endfunction
     command! LeaderfQfLoc call s:leaderf_qf_loc()

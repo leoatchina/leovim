@@ -189,11 +189,20 @@ function! fzf#open_qfloc()
         call preview#errmsg("No Quickfix/Loclist")
         return
     endif
-    let preview_window = g:fzf_vim.preview_window[0]
-    let options = '+m --delimiter="\t" --with-nth=3..,1,2 --expect=ctrl-t,ctrl-x,ctrl-] --tiebreak=index --prompt "' . list_name . '> " --preview ''bat --style=numbers --color=always --highlight-line {2} -- {1} 2>/dev/null || sed -n "1,200p" {1}'' --preview-window=' . preview_window
+    let preview_window = get(get(g:, 'fzf_vim', {}), 'preview_window', ['right,45%'])[0]
+    let options = [
+                \ '+m',
+                \ '--delimiter=' . "\t",
+                \ '--with-nth=3..,1,2',
+                \ '--expect=ctrl-t,ctrl-x,ctrl-]',
+                \ '--tiebreak=index',
+                \ '--prompt', list_name . '> ',
+                \ '--preview-window', preview_window . ',+{2}-/2'
+                \ ]
+    let options = fzf#vim#with_preview({'options': options, 'placeholder': ' {1}:{2}'}).options
     call fzf#run(extend({
                 \ 'source': results,
-                \ 'sink': function('s:fzf_quickfix_accept'),
+                \ 'sink*': function('s:fzf_quickfix_accept'),
                 \ 'options': options
                 \ }, deepcopy(get(g:, 'fzf_layout', {'down': '~30%'}))), 0)
 endfunction
