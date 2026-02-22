@@ -176,7 +176,7 @@ local function get_lsp_loc(value)
   }
 end
 -- main action
-function M.LspAction(method, open_action)
+function M.LspAction(method, open_position)
   local handler_dict = {
     definition = 'textDocument/definition',
     declaration = 'textDocument/declaration',
@@ -211,7 +211,7 @@ function M.LspAction(method, open_action)
     return
   end
   local qflist = {}
-  local add_qf = #result > 1 or open_action == 'list'
+  local add_qf = #result > 1 or open_position == 'quickfix'
   for _, value in pairs(result) do
     if value == nil then
       goto continue
@@ -238,7 +238,7 @@ function M.LspAction(method, open_action)
         })
       else
         vim.api.nvim_set_var("lsp_found", 1)
-        vim.api.nvim_command(open_action .. ' ' .. loc.filename)
+        vim.api.nvim_command(open_position .. ' ' .. loc.filename)
         vim.api.nvim_win_set_cursor(0, {loc.lnum, loc.col})
         return
       end
@@ -248,7 +248,6 @@ function M.LspAction(method, open_action)
   if next(qflist) then
     vim.api.nvim_set_var("lsp_found", 1)
     vim.fn.setqflist(qflist)
-    vim.fn['fzf#open_qfloc']()
   else
     vim.api.nvim_set_var("lsp_found", 0)
   end

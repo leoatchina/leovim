@@ -165,7 +165,7 @@ function! s:find_with_tags(tagname, open_position, method)
     let open_position = a:open_position
     let method = a:method
     if preview#quickfix_list(tagname, 0, &filetype)
-        if open_position == 'list'
+        if open_position == 'quickfix'
             if pack#installed('gutentags_plus')
                 let v:errmsg = ''
                 let b = getqflist({'changedtick': 1, 'size':1})
@@ -231,12 +231,12 @@ function! tags#lsp_tag_search(method, ...) abort
     " open_position
     " --------------------------
     if a:0 == 1
-        let open_action = a:1
-        if index(['edit', 'tabe', 'split', 'vsplit', 'list'], open_action) < 0
-            let open_action = 'list'
+        let open_position = a:1
+        if index(['edit', 'tabe', 'split', 'vsplit', 'quickfix'], open_position) < 0
+            let open_position = 'quickfix'
         endif
     else
-        let open_action = 'list'
+        let open_position = 'quickfix'
     endif
     " --------------------------
     " variables for tagstack
@@ -257,13 +257,13 @@ function! tags#lsp_tag_search(method, ...) abort
                     \ }
         let jump_command = commands_dict[method]
         try
-            if open_action == 'list'
+            if open_position == 'quickfix'
                 let tagname_found = CocAction(jump_command, v:false)
             else
-                if open_action == 'edit'
+                if open_position == 'edit'
                     let tagname_found = CocAction(jump_command)
                 else
-                    let tagname_found = CocAction(jump_command, open_action)
+                    let tagname_found = CocAction(jump_command, open_position)
                 endif
             endif
         catch /.*/
@@ -272,30 +272,28 @@ function! tags#lsp_tag_search(method, ...) abort
         if tagname_found
             call s:settagstack(winnr, tagname, pos)
             echo "Found by coc " . jump_command
-            return
         endif
     " --------------------------
     " lsp
     " --------------------------
     elseif pack#installed_lsp() && method != 'tags'
-        let cmd = printf('lua require("lsp").LspAction("%s", "%s")', method, open_action)
+        let cmd = printf('lua require("lsp").LspAction("%s", "%s")', method, open_position)
         call utils#execute(cmd)
         let tagname_found = get(g:, 'lsp_found', 0)
         if tagname_found
             call s:settagstack(winnr, tagname, pos)
             echo "Found by nvim lsp " . method
-            return
         endif
     else
         let tagname_found = 0
     endif
     if g:ctags_type != '' && !tagname_found
-        let tagname_found = s:find_with_tags(tagname, open_action, method)
+        let tagname_found = s:find_with_tags(tagname, open_position, method)
     endif
-    if method == 'list'
-        if tagname_found
+    if open_position == 'quickfix'
+        if tagname_found && !pack#installed_coc()
             OpenQfLoc
-        elseif method == 'references' && !tagname_found
+        elseif !tagname_found && method == 'references'
             execute 'GrepAll ' . tagname
         endif
     endif
