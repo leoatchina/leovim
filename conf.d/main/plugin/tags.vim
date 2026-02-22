@@ -160,6 +160,45 @@ endfunction
 " --------------------------
 " use lsp or tag to find
 " --------------------------
+function! s:find_with_tags(tagname, open_position, method)
+    let tagname = a:tagname
+    let open_position = a:open_position
+    let method = a:method
+    if preview#quickfix_list(tagname, 0, &filetype)
+        if open_position == 'list'
+            if pack#installed('gutentags_plus')
+                let v:errmsg = ''
+                let b = getqflist({'changedtick': 1, 'size':1})
+                if method == 'references'
+                    silent! execute 'GscopeFind s ' . tagname
+                else
+                    silent! execute 'GscopeFind z ' . tagname
+                endif
+                let a = getqflist({'changedtick': 1, 'size':1})
+                if (a.changedtick != b.changedtick) && (a.size > 0) && empty(v:errmsg)
+                    return 1
+                endif
+            endif
+            if method == 'references'
+                return 0
+            else
+                return 1
+            endif
+        else
+            if open_position != 'edit'
+                if open_position == 'tabe'
+                    tabe %
+                else
+                    execute open_position
+                endif
+            endif
+            execute "tag " . tagname
+            return 1
+        endif
+    else
+        return 0
+    endif
+endfunction
 function! tags#lsp_tag_search(method, ...) abort
     let tagname = expand('<cword>')
     if empty(tagname)
@@ -248,54 +287,16 @@ function! tags#lsp_tag_search(method, ...) abort
     else
         let tagname_found = 0
     endif
-    function! s:find_with_tags(tagname, open_position, method)
-        let tagname = a:tagname
-        let open_position = a:open_position
-        let method = a:method
-        if preview#quickfix_list(tagname, 0, &filetype)
-            if open_position == 'list'
-                if pack#installed('gutentags_plus')
-                    let v:errmsg = ''
-                    let b = getqflist({'changedtick': 1, 'size':1})
-                    if method == 'references'
-                        silent! execute 'GscopeFind s ' . tagname
-                    else
-                        silent! execute 'GscopeFind z ' . tagname
-                    endif
-                    let a = getqflist({'changedtick': 1, 'size':1})
-                    if (a.changedtick != b.changedtick) && (a.size > 0) && empty(v:errmsg)
-                        return 1
-                    endif
-                endif
-                if method == 'references'
-                    return 0
-                else
-                    return 1
-                endif
-            else
-                if open_position != 'edit'
-                    if open_position == 'tabe'
-                        tabe %
-                    else
-                        execute open_position
-                    endif
-                endif
-                execute "tag " . tagname
-                return 1
-            endif
-        else
-            return 0
-        endif
-    endfunction
-    if !tagname_found && g:ctags_type != ''
+    if tagname_found
+        OpenQfLoc
+    elseif g:ctags_type != ''
         let tagname_found = s:find_with_tags(tagname, open_action, method)
-    endif
-    " search_all_cmd
-    if open_action == 'list'
-        if tagname_found
-            OpenQfLoc
-        elseif method == 'references'
-            execute 'GrepAll ' . tagname
+        if open_action == 'list'
+            if tagname_found
+                OpenQfLoc
+            elseif method == 'references'
+                execute 'GrepAll ' . tagname
+            endif
         endif
     endif
 endfunction
