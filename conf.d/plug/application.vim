@@ -93,7 +93,6 @@ if pack#planned_lsp()
     PlugAdd 'Wansmer/symbol-usage.nvim'
     PlugAdd 'ravenxrz/call-graph.nvim'
     PlugAdd 'neovim/nvim-lspconfig'
-    PlugAdd 'mhartington/formatter.nvim'
     " lightline
     PlugAdd 'josa42/nvim-lightline-lsp'
     " lspimport is only for pyright
@@ -127,10 +126,12 @@ endif
 if has('nvim-0.10') && executable('opencode') && pack#get('opencode')
     PlugAdd 'NickvanDyke/opencode.nvim'
 endif
-if pack#planned_lsp() && pack#get('windsurf')
-    PlugAdd 'Exafunction/windsurf.nvim'
-elseif has('nvim') || has('patch-9.0.0185') && pack#get('windsurf')
-    PlugAdd 'Exafunction/windsurf.vim'
+if pack#get('windsurf')
+    if pack#planned_lsp()
+        PlugAdd 'Exafunction/windsurf.nvim'
+    elseif has('nvim') || has('patch-9.0.0185')
+        PlugAdd 'Exafunction/windsurf.vim'
+    endif
 endif
 " ------------------------------
 " textobj install
