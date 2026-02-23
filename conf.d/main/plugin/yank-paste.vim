@@ -240,7 +240,11 @@ xnoremap <M-V> "pp
 " ------------------------
 " pastemode toggle
 " ------------------------
-inoremap <M-I> <C-\><C-o>:set paste<Cr>
+if has('nvim')
+	inoremap <silent><M-I> <C-\><C-o>:set paste<Cr>
+else
+	inoremap <silent><M-I> <C-o>:set paste<Cr>
+endif
 onoremap <M-I> :set paste<CR>
 nnoremap <M-I> :set paste<Cr>
 xnoremap <M-I> :set paste<Cr>

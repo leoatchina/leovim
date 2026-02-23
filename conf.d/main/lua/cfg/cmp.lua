@@ -21,12 +21,15 @@ local lspkind = require('lspkind')
 local sources = {
   { name = 'nvim_lua', priority = 10 },
   { name = 'vsnip', priority = 9 },
-  { name = 'nvim_lsp', priority = 8 },
+  { name = 'nvim_lsp', priority = 5 },
   { name = 'buffer', priority = 2 },
   { name = 'async_path', priority = 1 },
 }
+if utils.installed('windsurf.nvim') then
+  table.insert(sources, 1, { name = 'codeium', priority = 6})
+end
 if utils.installed('jupynium.nvim') then
-  table.insert(sources, 1, { name = 'jupynium', priority = 7})
+  table.insert(sources, 1, { name = 'jupynium', priority = 4})
 end
 -----------------
 -- setup
@@ -226,6 +229,7 @@ cmp.setup({
         abbr = MAX_LABEL_WIDTH, -- actual suggestion item
       },
       ellipsis_char = ELLIPSIS_CHAR,
+      symbol_map = { Codeium = "", },
       show_labelDetails = true,
       before = function(entry, vim_item)
         -- colorful-menu

@@ -127,6 +127,9 @@ endif
 if has('nvim-0.10') && executable('opencode') && pack#get('opencode')
     PlugAdd 'NickvanDyke/opencode.nvim'
 endif
+if pack#planned_lsp() && pack#get('windsurf')
+    PlugAdd 'Exafunction/windsurf.nvim'
+endif
 " ------------------------------
 " textobj install
 " ------------------------------

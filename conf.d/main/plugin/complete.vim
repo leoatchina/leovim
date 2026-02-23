@@ -3,6 +3,38 @@ if utils#is_vscode()
     finish
 endif
 " --------------------------
+" ai complete
+" --------------------------
+if pack#installed('windsurf.nvim')
+    if pack#installed_cmp()
+        lua require('codeium').setup({})
+    else
+        lua require('codeium').setup({enable_cmp_source = false})
+    endif
+elseif pack#installed('windsurf.vim')
+    let g:codeium_disable_bindings = 1
+    let g:codeium_manual = v:true
+    imap <script><silent><nowait><expr> <M-i> codeium#Accept()
+    imap <script><silent><nowait><expr> <M-}> codeium#AcceptNextWord()
+    imap <script><silent><nowait><expr> <M-:> codeium#AcceptNextLine()
+    imap <silent><script><nowait><expr> <M-/> codeium#Clear()
+    imap <M-.> <Plug>(codeium-complete)
+    imap <M-;> <Plug>(codeium-next)
+    imap <M-,> <Plug>(codeium-previous)
+    let g:ai_complete_engine = 'windsurf'
+elseif pack#installed('copilot.vim')
+    au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
+    let g:copilot_no_tab_map = v:true
+    imap <silent><nowait><script><expr><M-i> copilot#Accept("\<CR>")
+    imap <silent><nowait><M-.> <Plug>(copilot-suggest)
+    imap <silent><nowait><M-/> <Plug>(copilot-dismiss)
+    imap <silent><nowait><M-;> <Plug>(copilot-next)
+    imap <silent><nowait><M-,> <Plug>(copilot-previous)
+    imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
+    imap <silent><nowait><M-:> <Plug>(copilot-accept-line)
+    let g:ai_complete_engine = 'copliot'
+endif
+" --------------------------
 " complete options
 " --------------------------
 set completeopt=menu,menuone
