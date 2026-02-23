@@ -11,6 +11,7 @@ if pack#installed('windsurf.nvim')
     else
         lua require('codeium').setup({enable_cmp_source = false})
     endif
+    let g:ai_complete_engine = 'windsurf.nvim'
 elseif pack#installed('windsurf.vim')
     let g:codeium_disable_bindings = 1
     let g:codeium_manual = v:true
@@ -21,7 +22,7 @@ elseif pack#installed('windsurf.vim')
     imap <M-.> <Plug>(codeium-complete)
     imap <M-;> <Plug>(codeium-next)
     imap <M-,> <Plug>(codeium-previous)
-    let g:ai_complete_engine = 'windsurf'
+    let g:ai_complete_engine = 'windsurf.vim'
 elseif pack#installed('copilot.vim')
     au BufEnter,BufWinEnter * let b:copilot_enabled = v:false
     let g:copilot_no_tab_map = v:true
@@ -32,7 +33,7 @@ elseif pack#installed('copilot.vim')
     imap <silent><nowait><M-,> <Plug>(copilot-previous)
     imap <silent><nowait><M-}> <Plug>(copilot-accept-word)
     imap <silent><nowait><M-:> <Plug>(copilot-accept-line)
-    let g:ai_complete_engine = 'copliot'
+    let g:ai_complete_engine = 'copliot.vim'
 endif
 " --------------------------
 " complete options
