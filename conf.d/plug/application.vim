@@ -83,12 +83,6 @@ if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 " ------------------------------
-" opencode
-" ------------------------------
-if has('nvim-0.10') && executable('opencode') && pack#get('opencode')
-    PlugAdd 'NickvanDyke/opencode.nvim'
-endif
-" ------------------------------
 " lsp && linter tool install
 " ------------------------------
 if pack#planned_lsp()
@@ -126,6 +120,12 @@ elseif has('nvim-0.9.5') && pack#get('debug') || pack#planned_lsp() && pack#get(
     PlugAdd 'nvim-neotest/nvim-nio'
     PlugAdd 'rcarriga/nvim-dap-ui'
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+endif
+" ------------------------------
+" opencode
+" ------------------------------
+if has('nvim-0.10') && executable('opencode') && pack#get('opencode')
+    PlugAdd 'NickvanDyke/opencode.nvim'
 endif
 " ------------------------------
 " textobj install
@@ -283,7 +283,6 @@ if has('nvim')
 elseif v:version >= 800
     PlugAdd 'ryanoasis/vim-devicons'
 endif
-PlugAdd 'romainl/vim-qf'
 " -------------------
 " vim-preview
 " -------------------
@@ -298,10 +297,6 @@ if v:version >= 802 || has('nvim')
     let g:quickui_preview_h = 24
     PlugAdd 'vim-quickui'
 endif
-" -------------------
-" startify
-" -------------------
-PlugAdd 'vim-startify'
 " -------------------
 " which-key
 " -------------------
@@ -320,19 +315,6 @@ if get(g:, 'header_field_author', '') != ''
     PlugAdd 'vim-header'
     nnoremap <M-k>a :AddHeader<Cr>
 endif
-" --------------------------
-" easyalign
-" --------------------------
-let g:easy_align_delimiters = {}
-let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
-let g:easy_align_delimiters['*'] = {'pattern': '*', 'ignore_groups': ['String']}
-PlugAdd 'vim-easy-align'
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-xmap g, ga*,
-xmap g= ga*=
-xmap g: ga*:
-xmap g<Space> ga*<Space>
 " ----------------------------
 " pairs && wiler
 " ----------------------------
@@ -375,3 +357,11 @@ endif
 " ------------------------------
 PlugAdd 'kshenoy/vim-signature'
 PlugAdd 'vim-bookmarks'
+" -------------------
+" startify
+" -------------------
+PlugAdd 'vim-startify'
+" -------------------
+" quickfix
+" -------------------
+PlugAdd 'romainl/vim-qf'

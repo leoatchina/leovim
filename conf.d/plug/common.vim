@@ -1,4 +1,17 @@
 PlugAdd 'vim-eunuch'
+" --------------------------
+" easyalign
+" --------------------------
+let g:easy_align_delimiters = {}
+let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
+let g:easy_align_delimiters['*'] = {'pattern': '*', 'ignore_groups': ['String']}
+PlugAdd 'vim-easy-align'
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+xmap g, ga*,
+xmap g= ga*=
+xmap g: ga*:
+xmap g<Space> ga*<Space>
 " ------------------------------
 " conflict marker
 " ------------------------------
