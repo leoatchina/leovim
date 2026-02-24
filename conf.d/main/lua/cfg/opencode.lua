@@ -1,22 +1,17 @@
-local cfg
-if vim.g.opencode_enabled and vim.fn.index({'terminal', 'tmux', 'wezterm', 'kitty'}, vim.g.opencode_enabled) >= 0 then
-  cfg = {
-    enabled = vim.g.opencode_enabled
-  }
-else
-  local function get_opencode_bufnr()
-    local b = vim.g.opencode_bufnr
-    return b and b > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), b) and b or nil
+local function get_opencode_bufnr()
+  local b = vim.g.opencode_bufnr
+  return b and b > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), b) and b or nil
+end
+local function ensure_opencode_bufnr(opts)
+  if not get_opencode_bufnr() then
+    vim.fn["floaterm#enhance#cmd_run"]("opencode --port", opts, "AI", 1)
+    vim.g.opencode_bufnr = vim.fn["floaterm#buflist#curr"]()
   end
-  local function ensure_opencode_bufnr(opts)
-    if not get_opencode_bufnr() then
-      vim.fn["floaterm#enhance#cmd_run"]("opencode --port", opts, "AI", 1)
-      vim.g.opencode_bufnr = vim.fn["floaterm#buflist#curr"]()
-    end
-    return vim.g.opencode_bufnr
-  end
-  local opencode_opts = '--wintype=vsplit --position=left --width=0.3'
-  cfg = {
+  return vim.g.opencode_bufnr
+end
+local opencode_opts = '--wintype=vsplit --position=left --width=0.3'
+vim.g.opencode_opts = {
+  server = {
     stop = function()
       if get_opencode_bufnr() then vim.fn["floaterm#terminal#kill"](vim.g.opencode_bufnr) end
       vim.g.opencode_bufnr = nil
@@ -28,11 +23,7 @@ else
       if get_opencode_bufnr() then cfg.stop() else ensure_opencode_bufnr(vim.g.opencode_nvim_opts or opencode_opts) end
     end
   }
-end
-vim.g.opencode_opts = {
-  server = cfg
 }
--- XXX
 vim.keymap.set({ "n", "x" }, '+', function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
 vim.keymap.set({ "n", "t" }, "<M-i>o", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
 vim.keymap.set({ "n", "x" }, "<M-i>g", function() require("opencode").ask("@diff: ", { submit = true }) end, { desc = "Ask opencode gdiff" })
