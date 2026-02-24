@@ -92,9 +92,9 @@ endif
 " autoread modified file outside (neo)vim
 " ---------------------------------------
 set autoread
-autocmd BufRead acwrite set ma
+au BufRead acwrite set ma
 if has('nvim')
-    autocmd FocusGained,TermLeave,TermClose * if mode() ==# 'n' && &bt !=# 'terminal' | silent! e! | endif
+    autocmd FocusGained,TermLeave,TermClose * if mode() ==# 'n' && &bt !=# 'terminal' | silent! ! | endif
 elseif !utils#has_gui()
     autocmd FocusGained,WinEnter * if index(['terminal', 'nofile'], &bt) < 0 | silent! e! | endif
 endif
