@@ -1,5 +1,5 @@
 local utils = require('utils')
-local default_sources = utils.installed('windsurf.nvim') and { 'path', 'buffer', 'lsp', 'snippets', 'codium' }
+local default_sources = utils.installed('windsurf.nvim') and { 'path', 'buffer', 'lsp', 'snippets', 'codeium' }
   or utils.installed('copilot.lua') and { 'path', 'buffer', 'lsp', 'snippets', 'copilot' }
   or { 'path', 'buffer', 'lsp', 'snippets' }
 require('blink.cmp').setup({
