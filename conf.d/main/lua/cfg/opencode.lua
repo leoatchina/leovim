@@ -1,39 +1,36 @@
-local provider_cfg
+local cfg
 if vim.g.opencode_enabled and vim.fn.index({'terminal', 'tmux', 'wezterm', 'kitty'}, vim.g.opencode_enabled) >= 0 then
-  provider_cfg = {
+  cfg = {
     enabled = vim.g.opencode_enabled
   }
 else
-  provider_cfg = {
-    toggle = function(self)
-      local opencode_bufnr = vim.g.opencode_bufnr
-      if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
-        self:stop()
-      else
-        self:start()
-      end
-    end,
-    start = function(self)
-      local opencode_bufnr = vim.g.opencode_bufnr
-      if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
-        vim.fn["floaterm#terminal#open_existing"](opencode_bufnr)
-      else
-        local opts = vim.g.opencode_nvim_opts or '--wintype=vsplit --position=right --width=0.3'
-        vim.fn["floaterm#enhance#cmd_run"]("opencode --port", opts, "AI", 1)
-        vim.g.opencode_bufnr = vim.fn["floaterm#buflist#curr"]()
-      end
-    end,
-    stop = function(self)
-      local opencode_bufnr = vim.g.opencode_bufnr
-      if opencode_bufnr and opencode_bufnr > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), opencode_bufnr) then
-        vim.fn["floaterm#terminal#kill"](opencode_bufnr)
-      end
+  local function get_opencode_bufnr()
+    local b = vim.g.opencode_bufnr
+    return b and b > 0 and vim.tbl_contains(vim.fn["floaterm#buflist#gather"](), b) and b or nil
+  end
+  local function ensure_opencode_bufnr(opts)
+    if not get_opencode_bufnr() then
+      vim.fn["floaterm#enhance#cmd_run"]("opencode --port", opts, "AI", 1)
+      vim.g.opencode_bufnr = vim.fn["floaterm#buflist#curr"]()
+    end
+    return vim.g.opencode_bufnr
+  end
+  local opencode_opts = '--wintype=vsplit --position=left --width=0.3'
+  cfg = {
+    stop = function()
+      if get_opencode_bufnr() then vim.fn["floaterm#terminal#kill"](vim.g.opencode_bufnr) end
       vim.g.opencode_bufnr = nil
+    end,
+    start = function()
+      vim.fn["floaterm#terminal#open_existing"](ensure_opencode_bufnr(vim.g.opencode_nvim_opts or opencode_opts))
+    end,
+    toggle = function()
+      if get_opencode_bufnr() then cfg.stop() else ensure_opencode_bufnr(vim.g.opencode_nvim_opts or opencode_opts) end
     end
   }
 end
 vim.g.opencode_opts = {
-  provider = provider_cfg
+  server = cfg
 }
 -- XXX
 vim.keymap.set({ "n", "x" }, '+', function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
