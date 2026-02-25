@@ -1,3 +1,4 @@
+" let &termencoding=&enc
 " ------------------------------------
 " Meta key
 " ------------------------------------
@@ -17,12 +18,6 @@ for i in range(26)
     " 97 is ascii of a
     call add(s:metacode_group, nr2char(97 + i))
 endfor
-" ------------------------------------
-" basic setting
-" ------------------------------------
-if !has('nvim-0.11')
-    let &termencoding=&enc
-endif
 " ------------------------------------
 " map enhance
 " ------------------------------------
