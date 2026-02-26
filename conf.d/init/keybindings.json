@@ -40,19 +40,15 @@
     "command": "-tongyi.inline.edit",
     "when": "Lingma.Chat.active"
   },
+  // toggleDevTools
   {
     "key": "ctrl+shift+i",
     "command": "-workbench.action.toggleDevTools",
     "when": "isDevelopment"
   },
   {
-    "key": "ctrl+shift+i",
-    "command": "-composer.newAgentChat"
-  },
-  {
-    "key": "ctrl+shift+i",
-    "command": "-workbench.panel.chatEditing",
-    "when": "workbench.panel.chat.view.edits.active"
+    "key": "ctrl+shift+alt+i",
+    "command": "workbench.action.toggleDevTools"
   },
   // like right click
   {
