@@ -98,6 +98,9 @@ git clone --depth 1 https://github.com/lifepillar/vim-mucomplete.git
 rm -rf undotree
 git clone --depth 1 https://github.com/mbbill/undotree.git
 
+# vim-floaterm
+git clone --depth 1 https://github.com/voldikss/vim-floaterm
+
 # fern
 rm -rf vim-fern* fern-*
 git clone --depth 1 https://github.com/lambdalisue/vim-fern

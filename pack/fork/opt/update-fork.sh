@@ -5,9 +5,6 @@ git clone --depth 1 https://github.com/leoatchina/vim-which-key.git
 rm -rf vista.vim
 git clone --depth 1 https://github.com/leoatchina/vista.vim.git
 
-rm -rf vim-floaterm
-git clone --depth 1 https://github.com/leoatchina/vim-floaterm.git
-
 # delete files
 find . -type f | grep -i \.jpg$ | xargs rm -f
 find . -type f | grep -i \.png$ | xargs rm -f
