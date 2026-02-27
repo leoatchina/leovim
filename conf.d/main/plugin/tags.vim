@@ -164,39 +164,37 @@ function! s:find_with_tags(tagname, open_position, method)
     let tagname = a:tagname
     let open_position = a:open_position
     let method = a:method
-    if preview#quickfix_list(tagname, 0, &filetype)
-        if open_position == 'quickfix'
-            if pack#installed('gutentags_plus')
-                let v:errmsg = ''
-                let b = getqflist({'changedtick': 1, 'size':1})
-                if method == 'references'
-                    silent! execute 'GscopeFind s ' . tagname
-                else
-                    silent! execute 'GscopeFind z ' . tagname
-                endif
-                let a = getqflist({'changedtick': 1, 'size':1})
-                if (a.changedtick != b.changedtick) && (a.size > 0) && empty(v:errmsg)
-                    return 1
-                endif
-            endif
+    if open_position == 'quickfix'
+        let v:errmsg = ''
+        let b = getqflist({'changedtick': 1, 'size':1})
+        if pack#installed('gutentags_plus')
             if method == 'references'
-                return 0
+                silent! execute 'GscopeFind s ' . tagname
             else
-                return 1
+                silent! execute 'GscopeFind z ' . tagname
             endif
+        elseif method == 'references'
+            return 0
+        elseif g:ctags_type != ''
+            silent! call preview#taglist(tagname)
         else
-            if open_position != 'edit'
-                if open_position == 'tabe'
-                    tabe %
-                else
-                    execute open_position
-                endif
-            endif
-            execute "tag " . tagname
-            return 1
+            return 0
         endif
+        let a = getqflist({'changedtick': 1, 'size':1})
+        return (a.changedtick != b.changedtick) && (a.size > 0) && empty(v:errmsg)
     else
-        return 0
+        if method == 'references' || !preview#quickfix_list(tagname, 0, &filetype)
+            return 0
+        endif
+        if open_position != 'edit'
+            if open_position == 'tabe'
+                tabe %
+            else
+                execute open_position
+            endif
+        endif
+        execute "tag " . tagname
+        return 1
     endif
 endfunction
 function! tags#lsp_tag_search(method, ...) abort
