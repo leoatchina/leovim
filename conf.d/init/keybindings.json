@@ -644,5 +644,15 @@
     "key": "ctrl+alt+l",
     "command": "github.copilot.chat.attachFile",
     "when": "editorTextFocus && github.copilot-chat.activated"
+  },
+  {
+    "key": "ctrl+alt+v",
+    "command": "-imageUploader.uploadFromClipboard.editor",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+v",
+    "command": "-imageUploader.uploadFromClipboard.terminal",
+    "when": "terminalFocus"
   }
 ]
