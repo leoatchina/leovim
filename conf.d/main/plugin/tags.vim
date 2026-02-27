@@ -193,7 +193,7 @@ function! s:find_with_tags(tagname, open_position, method)
                 execute open_position
             endif
         endif
-        execute "tag " . tagname
+        silent! call preview#tagfind(tagname)
         return 1
     endif
 endfunction
