@@ -45,21 +45,3 @@ function! s:reveal(dict)
 endfunction
 let g:Fern_mapping_fzf_file_sink = function('s:reveal')
 let g:Fern_mapping_fzf_dir_sink = function('s:reveal')
-PlugAdd 'fern-mapping-fzf.vim'
-" ---------------
-" preview
-" ---------------
-function! s:fern_settings() abort
-    nmap <silent><buffer>p      <Plug>(fern-action-preview:toggle)
-    nmap <silent><buffer><C-p>  <Plug>(fern-action-preview:auto:toggle)
-    nmap <silent><buffer><C-f>  <Plug>(fern-action-preview:scroll:down:half)
-    nmap <silent><buffer><C-b>  <Plug>(fern-action-preview:scroll:up:half)
-    nmap <silent><buffer><expr> <Plug>(fern-quit-or-close-preview) fern_preview#smart_preview("\<Plug>(fern-action-preview:close)", ":q\<CR>")
-    nmap <silent><buffer>q      <Plug>(fern-quit-or-close-preview)
-    nmap <silent><buffer><M-q>  <Plug>(fern-quit-or-close-preview)
-endfunction
-augroup fern-settings
-    autocmd!
-    autocmd FileType fern call s:fern_settings()
-augroup END
-PlugAdd 'fern-preview.vim'

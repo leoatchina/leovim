@@ -234,6 +234,8 @@ if v:version >= 801 || has('nvim')
     PlugAdd 'vim-fern-git-status'
     PlugAdd 'vim-fern-hijack'
     PlugAdd 'vim-fern-renderer-nerdfont'
+    PlugAdd 'fern-mapping-fzf.vim'
+    PlugAdd 'fern-preview.vim'
     augroup my-glyph-palette
         autocmd!
         autocmd FileType fern,startify call glyph_palette#apply()
