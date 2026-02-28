@@ -102,7 +102,7 @@ git clone --depth 1 https://github.com/mbbill/undotree.git
 git clone --depth 1 https://github.com/voldikss/vim-floaterm
 
 # fern
-rm -rf vim-fern* fern-*
+rm -rf vim-fern* fern-* vim-nerdfont vim-glyph-palette
 git clone --depth 1 https://github.com/lambdalisue/vim-fern
 git clone --depth 1 https://github.com/lambdalisue/vim-fern-git-status
 git clone --depth 1 https://github.com/lambdalisue/vim-fern-hijack
