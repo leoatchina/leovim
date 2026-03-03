@@ -321,7 +321,7 @@
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
   {
-    "key": "ctrl+shift+alt+=",
+    "key": "ctrl+shift+alt+`",
     "command": "workbench.action.terminal.openNativeConsole"
   },
   {
@@ -330,17 +330,26 @@
     "when": "terminal.active"
   },
   {
-    "key": "ctrl+shift+=",
+    "key": "alt+shift+=",
     "command": "workbench.action.terminal.newWithProfile"
   },
   {
-    "key": "alt+shift+=",
-    "command": "workbench.action.terminal.new",
-    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+    "key": "ctrl+alt+=",
+    "command": "workbench.action.createTerminalEditor"
   },
   {
-    "key": "ctrl+shift+alt+-",
-    "command": "workbench.action.terminal.killAll"
+    "key": "ctrl+shift+=",
+    "command": "workbench.action.terminal.newInNewWindow",
+    "when": "terminalHasBeenCreated || terminalProcessSupported"
+  },
+  {
+    "key": "ctrl+shift+alt+=",
+    "command": "workbench.action.terminal.moveIntoNewWindow"
+  },
+  {
+    "key": "alt+[",
+    "command": "workbench.action.terminal.new",
+    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
   {
     "key": "alt+]",
@@ -348,7 +357,11 @@
     "when": "terminalFocus"
   },
   {
-    "key": "alt+[",
+    "key": "ctrl+shift+alt+-",
+    "command": "workbench.action.terminal.killAll"
+  },
+  {
+    "key": "alt+\\",
     "command": "workbench.action.terminal.kill",
     "when": "terminalFocus"
   },
@@ -565,8 +578,17 @@
   },
   {
     "key": "alt+[",
-    "command": "workbench.action.splitEditorDown",
-    "when": "editorTextFocus"
+      "command": "workbench.action.splitEditorDown",
+      "when": "editorTextFocus"
+  },
+  // next/previous sidebarView 
+  {
+    "key": "ctrl+\\",
+    "command": "workbench.action.nextAuxiliaryBarView"
+  },
+  {
+    "key": "ctrl+shift+\\",
+    "command": "workbench.action.previousAuxiliaryBarView"
   },
   // multicommand
   {
@@ -577,8 +599,6 @@
     "key": "ctrl+shift+alt+,",
     "command": "AI.generateCommitMessage"
   },
-  // ---------------------- windsurf --------------------
-  // ---------------------- cursor ----------------------
   // ---------------------- lingma ------------------
   {
     "key": "ctrl+shift+l",
@@ -593,12 +613,18 @@
     "key": "ctrl+`",
     "command": "workbench.view.extension.Lingma"
   },
-    // ----------------- claude ----------------
+  // codex
   {
-    "key": "ctrl+'",
-    "command": "claude-vscode.blur",
-    "when": "!config.claudeCode.useTerminal && !editorTextFocus"
+    "key": "ctrl+l",
+    "command": "chatgpt.addToThread",
+    "when": "editorTextFocus && chatgpt.sidebarView.active"
   },
+  {
+    "key": "ctrl+alt+l",
+    "command": "chatgpt.addFileToThread",
+    "when": "editorTextFocus && chatgpt.sidebarView.active"
+  },
+  // ----------------- claude ----------------
   {
     "key": "ctrl+escape",
     "command": "-claude-vscode.blur",
@@ -633,26 +659,18 @@
     "key": "ctrl+escape",
     "command": "-claude-vscode.terminal.open.keyboard",
     "when": "config.claudeCode.useTerminal"
-  },
-  // ----------------- copilot ----------------
-  {
-    "key": "ctrl+l",
-    "command": "github.copilot.chat.attachSelection",
-    "when": "editorTextFocus && github.copilot-chat.activated"
-  },
-  {
-    "key": "ctrl+alt+l",
-    "command": "github.copilot.chat.attachFile",
-    "when": "editorTextFocus && github.copilot-chat.activated"
-  },
-  {
-    "key": "ctrl+alt+v",
-    "command": "-imageUploader.uploadFromClipboard.editor",
-    "when": "editorTextFocus"
-  },
-  {
-    "key": "ctrl+alt+v",
-    "command": "-imageUploader.uploadFromClipboard.terminal",
-    "when": "terminalFocus"
   }
-]
+  // },
+  // ---------------------- windsurf --------------------
+  // ---------------------- cursor ----------------------
+  // ----------------- copilot ----------------
+  // {
+    //  "key": "ctrl+l",
+    //  "command": "github.copilot.chat.attachSelection",
+    // "when": "editorTextFocus && github.copilot-chat.activated"
+    // },
+    // {
+      //   "key": "ctrl+alt+l",
+      //   "command": "github.copilot.chat.attachFile",
+      //   "when": "editorTextFocus && github.copilot-chat.activated"
+    ]
