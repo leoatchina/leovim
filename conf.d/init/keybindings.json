@@ -609,6 +609,58 @@
     "key": "ctrl+shift+alt+,",
     "command": "AI.generateCommitMessage"
   },
+  // ----------------- codex -----------
+  {
+    "key": "ctrl+l",
+    "command": "chatgpt.addToThread",
+    "when": "editorTextFocus && chatgpt.sidebarView.active && chatgpt.sidebarView.visible"
+  },
+  {
+    "key": "ctrl+alt+l",
+    "command": "chatgpt.addFileToThread",
+    "when": "editorTextFocus && chatgpt.sidebarView.active && chatgpt.sidebarView.visible"
+  },
+  // ----------------- claude ----------------
+  {
+    "key": "ctrl+l",
+    "command": "claude-vscode.insertAtMention",
+    "when": "editorTextFocus && claude-vscode.sideBarActive && claudeVSCodeSidebarSecondary.visible"
+  },
+  {
+    "key": "ctrl+alt+l",
+    "command": "claude-code.insertAtMentioned",
+    "when": "editorTextFocus && claude-vscode.sideBarActive && claudeVSCodeSidebarSecondary.visible"
+  },
+  {
+    "key": "ctrl+alt+k",
+    "command": "-claude-code.insertAtMentioned",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+k",
+    "command": "-claude-vscode.insertAtMention",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.blur",
+    "when": "!config.claudeCode.useTerminal && !editorTextFocus"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.focus",
+    "when": "editorTextFocus && !config.claudeCode.useTerminal"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.terminal.open.keyboard",
+    "when": "config.claudeCode.useTerminal"
+  },
+  {
+    "key": "ctrl+shift+escape",
+    "command": "-claude-vscode.editor.open",
+    "when": "!config.claudeCode.useTerminal"
+  },
   // ---------------------- lingma ------------------
   {
     "key": "ctrl+shift+l",
@@ -622,53 +674,6 @@
   {
     "key": "ctrl+`",
     "command": "workbench.view.extension.Lingma"
-  },
-  // codex
-  {
-    "key": "ctrl+l",
-    "command": "chatgpt.addToThread",
-    "when": "editorTextFocus && chatgpt.sidebarView.active && chatgpt.sidebarView.visible"
-  },
-  {
-    "key": "ctrl+alt+l",
-    "command": "chatgpt.addFileToThread",
-    "when": "editorTextFocus && chatgpt.sidebarView.active && chatgpt.sidebarView.visible"
-  },
-  // ----------------- claude ----------------
-  {
-    "key": "ctrl+escape",
-    "command": "-claude-vscode.blur",
-    "when": "!config.claudeCode.useTerminal && !editorTextFocus"
-  },
-  {
-    "key": "ctrl+escape",
-    "command": "-claude-vscode.focus",
-    "when": "editorTextFocus && !config.claudeCode.useTerminal"
-  },
-  {
-    "key": "ctrl+'",
-    "command": "claude-vscode.focus",
-    "when": "editorTextFocus && !config.claudeCode.useTerminal"
-  },
-  {
-    "key": "ctrl+'",
-    "command": "claude-vscode.terminal.open.keyboard",
-    "when": "config.claudeCode.useTerminal"
-  },
-  {
-    "key": "ctrl+shift+'",
-    "command": "claude-vscode.editor.open",
-    "when": "!config.claudeCode.useTerminal"
-  },
-  {
-    "key": "ctrl+shift+escape",
-    "command": "-claude-vscode.editor.open",
-    "when": "!config.claudeCode.useTerminal"
-  },
-  {
-    "key": "ctrl+escape",
-    "command": "-claude-vscode.terminal.open.keyboard",
-    "when": "config.claudeCode.useTerminal"
   }
   // },
   // ---------------------- windsurf --------------------
@@ -683,4 +688,4 @@
       //   "key": "ctrl+alt+l",
       //   "command": "github.copilot.chat.attachFile",
       //   "when": "editorTextFocus && github.copilot-chat.activated"
-    ]
+]
