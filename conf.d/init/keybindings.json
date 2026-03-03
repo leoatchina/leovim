@@ -6,6 +6,16 @@
     "when": "cursor.agentIdeUnification.enabled"
   },
   {
+    "key": "ctrl+i",
+    "command": "-vscode-neovim.send",
+    "when": "editorTextFocus && neovim.ctrlKeysInsert.i && neovim.init && neovim.mode == 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "vscode-neovim.send",
+    "when": "editorTextFocus && neovim.ctrlKeysNormal.i && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+  },
+  {
     "key": "ctrl+l",
     "command": "-vscode-neovim.send",
     "when": "editorTextFocus && neovim.ctrlKeysNormal.l && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
@@ -349,7 +359,7 @@
   {
     "key": "alt+[",
     "command": "workbench.action.terminal.new",
-    "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+    "when": "terminalFocus && (terminalProcessSupported || terminalWebExtensionContributedProfile)"
   },
   {
     "key": "alt+]",
@@ -617,18 +627,23 @@
   {
     "key": "ctrl+l",
     "command": "chatgpt.addToThread",
-    "when": "editorTextFocus && chatgpt.sidebarView.active"
+    "when": "editorTextFocus && chatgpt.sidebarView.active && chatgpt.sidebarView.visible"
   },
   {
     "key": "ctrl+alt+l",
     "command": "chatgpt.addFileToThread",
-    "when": "editorTextFocus && chatgpt.sidebarView.active"
+    "when": "editorTextFocus && chatgpt.sidebarView.active && chatgpt.sidebarView.visible"
   },
   // ----------------- claude ----------------
   {
     "key": "ctrl+escape",
     "command": "-claude-vscode.blur",
     "when": "!config.claudeCode.useTerminal && !editorTextFocus"
+  },
+  {
+    "key": "ctrl+escape",
+    "command": "-claude-vscode.focus",
+    "when": "editorTextFocus && !config.claudeCode.useTerminal"
   },
   {
     "key": "ctrl+'",
@@ -639,11 +654,6 @@
     "key": "ctrl+'",
     "command": "claude-vscode.terminal.open.keyboard",
     "when": "config.claudeCode.useTerminal"
-  },
-  {
-    "key": "ctrl+escape",
-    "command": "-claude-vscode.focus",
-    "when": "editorTextFocus && !config.claudeCode.useTerminal"
   },
   {
     "key": "ctrl+shift+'",
