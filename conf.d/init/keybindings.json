@@ -17,7 +17,7 @@
   },
   {
     "key": "ctrl+i",
-    "command": "vscode-neovim.send",
+    "command": "-vscode-neovim.send",
     "when": "editorTextFocus && neovim.ctrlKeysNormal.i && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
   },
   {
