@@ -685,6 +685,22 @@
     "key": "ctrl+escape",
     "command": "workbench.view.extension.Lingma"
   },
+  // ------------------- cursor ------------------
+  {
+    "key": "ctrl+i",
+    "command": "aipopup.action.modal.generate",
+    "when": "editorFocus && !composerBarIsVisible"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "-aipopup.action.modal.generate",
+    "when": "editorFocus && !composerBarIsVisible"
+  },
+  {
+    "key": "ctrl+shift+k",
+    "command": "-aipopup.action.modal.generate",
+    "when": "editorFocus && !composerBarIsVisible"
+  },
   // ----------------- copilot ----------------
   {
     "key": "ctrl+alt+i",
@@ -697,8 +713,18 @@
     "when": "editorTextFocus && github.copilot-chat.activated"
   },
   {
+    "key": "ctrl+i",
+    "command": "inlineChat.start",
+    "when": "editorFocus && inlineChatHasEditsAgent && inlineChatPossible && !editorReadonly && !editorSimpleInput || editorFocus && inlineChatHasNotebookAgent && inlineChatPossible && !editorReadonly && !editorSimpleInput && activeEditor == 'workbench.editor.notebook' || editorFocus && inlineChatHasNotebookInline && inlineChatPossible && !editorReadonly && !editorSimpleInput && activeEditor == 'workbench.editor.notebook'"
+  },
+  {
     "key": "ctrl+alt+i",
     "command": "github.copilot.chat.attachFile",
     "when": "editorTextFocus && github.copilot-chat.activated"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "-workbench.panel.chatEditing",
+    "when": "workbench.panel.chat.view.edits.active"
   }
 ]
