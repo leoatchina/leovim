@@ -719,6 +719,16 @@
     "command": "composer.startComposerPrompt",
     "when": "composerBarIsVisible"
   },
+  // ----------------- antigravity ----------------
+  {
+    "key": "ctrl+e",
+    "command": "-antigravity.switchBetweenWorkspaceAndAgent"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "antigravity.switchBetweenWorkspaceAndAgent",
+    "when": "editorFocus && antigravity.agentSidePanel.visible"
+  },
   // ----------------- copilot ----------------
   {
     "key": "ctrl+alt+i",
