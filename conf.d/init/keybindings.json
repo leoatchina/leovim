@@ -719,6 +719,11 @@
     "command": "composer.startComposerPrompt",
     "when": "composerBarIsVisible"
   },
+  // ----------------- windsurf ----------------
+  {
+    "key": "ctrl+e",
+    "command": "-workbench.action.quickOpen"
+  },
   // ----------------- antigravity ----------------
   {
     "key": "ctrl+e",
