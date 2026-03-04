@@ -1,6 +1,11 @@
 [
   // some disable
   {
+    "key": "ctrl+alt+e",
+    "command": "-workbench.action.maximizeChatSize",
+    "when": "cursor.agentIdeUnification.enabled"
+  },
+  {
     "key": "ctrl+shift+s",
     "command": "-workbench.action.toggleUnifiedSidebar",
     "when": "cursor.agentIdeUnification.enabled"
@@ -41,14 +46,14 @@
     "when": "notebookEditorFocused"
   },
   {
-    "key": "ctrl+alt+e",
-    "command": "-workbench.action.maximizeChatSize",
-    "when": "cursor.agentIdeUnification.enabled"
+    "key": "ctrl+shift+l",
+    "command": "expandLineSelection",
+    "when": "textInputFocus"
   },
   {
-    "key": "ctrl+shift+i",
-    "command": "-tongyi.inline.edit",
-    "when": "Lingma.Chat.active"
+    "key": "ctrl+shift+l",
+    "command": "notebook.centerActiveCell",
+    "when": "notebookEditorFocused"
   },
   // toggleDevTools
   {
@@ -661,7 +666,12 @@
     "command": "-claude-vscode.editor.open",
     "when": "!config.claudeCode.useTerminal"
   },
-  // ---------------------- lingma ------------------
+  // ------------------- lingma ------------------
+  {
+    "key": "ctrl+shift+i",
+    "command": "-tongyi.inline.edit",
+    "when": "Lingma.Chat.active"
+  },
   {
     "key": "ctrl+shift+l",
     "command": "-tongyi.show.panel.chat"
@@ -672,20 +682,23 @@
     "when": "Lingma.Chat.active"
   },
   {
-    "key": "ctrl+`",
+    "key": "ctrl+escape",
     "command": "workbench.view.extension.Lingma"
-  }
-  // },
-  // ---------------------- windsurf --------------------
-  // ---------------------- cursor ----------------------
+  },
   // ----------------- copilot ----------------
-  // {
-    //  "key": "ctrl+l",
-    //  "command": "github.copilot.chat.attachSelection",
-    // "when": "editorTextFocus && github.copilot-chat.activated"
-    // },
-    // {
-      //   "key": "ctrl+alt+l",
-      //   "command": "github.copilot.chat.attachFile",
-      //   "when": "editorTextFocus && github.copilot-chat.activated"
+  {
+    "key": "ctrl+alt+i",
+    "command": "-workbench.action.chat.open",
+    "when": "!chatSetupDisabled && !chatSetupHidden"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "github.copilot.chat.attachSelection",
+    "when": "editorTextFocus && github.copilot-chat.activated"
+  },
+  {
+    "key": "ctrl+alt+i",
+    "command": "github.copilot.chat.attachFile",
+    "when": "editorTextFocus && github.copilot-chat.activated"
+  }
 ]
