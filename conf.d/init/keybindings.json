@@ -611,7 +611,7 @@
     "command": "multiCommand.reloadFile"
   },
   {
-    "key": "ctrl+shift+alt+,",
+    "key": "ctrl+shift+alt+g",
     "command": "AI.generateCommitMessage"
   },
   // ----------------- codex -----------
