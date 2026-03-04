@@ -709,8 +709,8 @@
   },
   {
     "key": "ctrl+shift+i",
-    "command": "github.copilot.chat.attachSelection",
-    "when": "editorTextFocus && github.copilot-chat.activated"
+    "command": "-workbench.panel.chatEditing",
+    "when": "workbench.panel.chat.view.edits.active"
   },
   {
     "key": "ctrl+i",
@@ -718,13 +718,13 @@
     "when": "editorFocus && inlineChatHasEditsAgent && inlineChatPossible && !editorReadonly && !editorSimpleInput || editorFocus && inlineChatHasNotebookAgent && inlineChatPossible && !editorReadonly && !editorSimpleInput && activeEditor == 'workbench.editor.notebook' || editorFocus && inlineChatHasNotebookInline && inlineChatPossible && !editorReadonly && !editorSimpleInput && activeEditor == 'workbench.editor.notebook'"
   },
   {
-    "key": "ctrl+alt+i",
-    "command": "github.copilot.chat.attachFile",
+    "key": "ctrl+shift+i",
+    "command": "github.copilot.chat.attachSelection",
     "when": "editorTextFocus && github.copilot-chat.activated"
   },
   {
-    "key": "ctrl+shift+i",
-    "command": "-workbench.panel.chatEditing",
-    "when": "workbench.panel.chat.view.edits.active"
+    "key": "ctrl+alt+i",
+    "command": "github.copilot.chat.attachFile",
+    "when": "editorTextFocus && github.copilot-chat.activated"
   }
 ]
