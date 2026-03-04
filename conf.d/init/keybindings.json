@@ -687,9 +687,12 @@
   },
   // ------------------- cursor ------------------
   {
+    "key": "ctrl+shift+l",
+    "command": "-composer.newAgentChat"
+  },
+  {
     "key": "ctrl+i",
-    "command": "aipopup.action.modal.generate",
-    "when": "editorFocus && !composerBarIsVisible"
+    "command": "-composer.startComposerPrompt"
   },
   {
     "key": "ctrl+k",
@@ -700,6 +703,21 @@
     "key": "ctrl+shift+k",
     "command": "-aipopup.action.modal.generate",
     "when": "editorFocus && !composerBarIsVisible"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "aipopup.action.modal.generate",
+    "when": "editorFocus && !composerBarIsVisible"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "composer.newAgentChat",
+    "when": "composerBarIsVisible"
+  },
+  {
+    "key": "ctrl+alt+i",
+    "command": "composer.startComposerPrompt",
+    "when": "composerBarIsVisible"
   },
   // ----------------- copilot ----------------
   {
