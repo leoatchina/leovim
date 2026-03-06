@@ -719,16 +719,36 @@
     "command": "composer.startComposerPrompt",
     "when": "composerBarIsVisible"
   },
-  // ----------------- copilot ----------------
+  // ----------------- windsurf ----------------
+  {
+    "key": "ctrl+e",
+    "command": "-workbench.action.quickOpen"
+  },
+  // ----------------- antigravity ----------------
+  {
+    "key": "ctrl+e",
+    "command": "-antigravity.switchBetweenWorkspaceAndAgent"
+  },
+  {
+    "key": "ctrl+shift+i",
+    "command": "workbench.action.openInAgentManager",
+    "when": "editorFocus && antigravity.agentSidePanel.visible"
+  },
   {
     "key": "ctrl+alt+i",
-    "command": "-workbench.action.chat.open",
-    "when": "!chatSetupDisabled && !chatSetupHidden"
+    "command": "antigravity.switchBetweenWorkspaceAndAgent",
+    "when": "editorFocus && antigravity.agentSidePanel.visible"
   },
+  // ----------------- copilot ----------------
   {
     "key": "ctrl+shift+i",
     "command": "-workbench.panel.chatEditing",
     "when": "workbench.panel.chat.view.edits.active"
+  },
+  {
+    "key": "ctrl+alt+i",
+    "command": "-workbench.panel.chat",
+    "when": "workbench.panel.chat.view.copilot.active"
   },
   {
     "key": "ctrl+i",
