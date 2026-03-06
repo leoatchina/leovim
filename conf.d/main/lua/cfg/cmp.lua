@@ -25,9 +25,6 @@ local sources = {
   { name = 'buffer', priority = 2 },
   { name = 'async_path', priority = 1 },
 }
-if utils.installed('windsurf.nvim') then
-  table.insert(sources, 1, { name = 'codeium', priority = 6})
-end
 if utils.installed('jupynium.nvim') then
   table.insert(sources, 1, { name = 'jupynium', priority = 4})
 end

@@ -1,7 +1,4 @@
 local utils = require('utils')
-local default_sources = utils.installed('windsurf.nvim') and { 'path', 'buffer', 'lsp', 'snippets', 'codeium' }
-  or utils.installed('copilot.lua') and { 'path', 'buffer', 'lsp', 'snippets', 'copilot' }
-  or { 'path', 'buffer', 'lsp', 'snippets' }
 require('blink.cmp').setup({
   appearance = {
     nerd_font_variant = 'mono'
@@ -31,7 +28,7 @@ require('blink.cmp').setup({
     jump = function(direction) vim.snippet.jump(direction) end,
   },
   sources = {
-    default = default_sources,
+    default = { 'path', 'buffer', 'lsp', 'snippets' },
     providers = {
       lsp = {
         name = 'LSP',
