@@ -327,9 +327,6 @@ endfunction
 command! PlugAddUpdate call s:plug_add_update()
 nnoremap <silent><Tab>u :PlugAddUpdate<Cr>
 nnoremap <silent><Tab>i :PlugInstall<Cr>
-nnoremap <silent><Tab>C :PlugClean<Cr>
-nnoremap <silent><Tab>S :PlugStatus<Cr>
-nnoremap <silent><Tab>O :PlugSnapshot<Cr>
 nnoremap <silent><Tab>P :Plug
 " addtional vim packs
 if filereadable(utils#expand("~/.leovim.d/pack.vim"))

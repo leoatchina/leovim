@@ -24,13 +24,14 @@ vim.g.opencode_opts = {
     end
   }
 }
-vim.keymap.set({ "n", "x" }, '+', function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
 vim.keymap.set({ "n", "t" }, "<M-i>o", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
 vim.keymap.set({ "n", "x" }, "<M-i>g", function() require("opencode").ask("@diff: ", { submit = true }) end, { desc = "Ask opencode gdiff" })
+-- <tab>t for this
+vim.keymap.set({ "n", "x" }, '<Tab>t',  function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
+-- <tab>o as prefix
 vim.keymap.set({ "n", "x" }, "<Tab>oo", function() require("opencode").select() end, { desc = "Execute opencode action…" })
 vim.keymap.set({ "n", "x" }, "<Tab>ol", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode this" })
 vim.keymap.set({ "n", "x" }, "<Tab>of", function() require("opencode").ask("@buffer: ", { submit = true }) end, { desc = "Ask opencode buffer" })
--- <tab>o as prefix
 vim.keymap.set({ "n", "x" }, "<Tab>od", function() require("opencode").ask("@diagnositcs: ", { submit = true }) end, { desc = "Ask opencode diagnositcs" })
 vim.keymap.set({ "n", "x" }, "<Tab>ov", function() require("opencode").ask("@visible: ", { submit = true }) end, { desc = "Ask opencode visible" })
 vim.keymap.set({ "n", "x" }, "<Tab>ob", function() require("opencode").ask("@buffers: ", { submit = true }) end, { desc = "Ask opencode buffers" })
