@@ -12,10 +12,8 @@ tmap <expr><C-r> '<C-\><C-n>"'.nr2char(getchar()).'pi'
 if has('nvim')
     command! TermPackD tabe | call termopen([&shell], {'cwd': utils#expand('~/.leovim.d')})
     nnoremap <silent><M-h>D :TermPackD<Cr>i
-    nnoremap <silent>_ :tabnew<Cr>:terminal<Cr>i
 else
     nnoremap <silent><M-h>D :tab terminal<CR>cd ~/.leovim.d<tab><CR>
-    nnoremap <silent>_ :tab terminal<Cr>
 endif
 tnoremap <silent><C-v> <C-\><C-n>
 tnoremap <silent><M-q> <C-\><C-n>:ConfirmQuit<Cr>
@@ -54,7 +52,7 @@ if g:has_popup_floating
     let s:floaterm_parameters.bottomright = " --wintype=float --width=0.45 --height=0.3"
 endif
 function! s:floaterm_select_pos()
-    let positions = ['Right', 'Belowright', 'Center', 'Topright', 'BottomRight']
+    let positions = ['Right', 'Belowright', 'Center', 'Topright', 'Tab', 'BottomRight']
     if g:has_popup_floating == 0
         let positions = positions[:1]
     endif
@@ -63,12 +61,23 @@ function! s:floaterm_select_pos()
     if empty(pos)
         return
     endif
-    let position = " --position=" . pos
-    let cmd = "FloatermNew" . s:floaterm_parameters[pos] . position
-    execute cmd
+    if pos == 'tab'
+        if has('nvim')
+            tabnew | terminal
+            call feedkeys('i')
+        else
+            tab terminal
+        endif
+    else
+        let position = " --position=" . pos
+        let cmd = "FloatermNew" . s:floaterm_parameters[pos] . position
+        execute cmd
+    endif
 endfunction
 command! FloatermOpenPos call s:floaterm_select_pos()
+" ------------------------------
 " find key for floaterm
+" ------------------------------
 function! s:bind_keymap(mapvar, command) abort
     if !utils#has_map(a:mapvar, 'n')
         execute printf('nnoremap <silent>%s :%s<CR>', a:mapvar, a:command)
