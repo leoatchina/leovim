@@ -32,6 +32,10 @@ git clone --depth 1 https://github.com/easymotion/vim-easymotion.git
 rm -rf vim-easymotion-chs
 git clone --depth 1 https://github.com/ZSaberLv0/vim-easymotion-chs.git
 
+# swithc.vim
+rm -rf swith.cim
+git clone --depth 1 https://github.com/AndrewRadev/switch.vim
+
 # clever-f
 rm -rf clever-f.vim
 git clone --depth 1 https://github.com/rhysd/clever-f.vim.git
@@ -99,6 +103,7 @@ rm -rf undotree
 git clone --depth 1 https://github.com/mbbill/undotree.git
 
 # vim-floaterm
+rm -rf vim-floaterm 
 git clone --depth 1 https://github.com/voldikss/vim-floaterm
 
 # fern

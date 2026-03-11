@@ -26,8 +26,8 @@ vim.g.opencode_opts = {
 }
 vim.keymap.set({ "n", "t" }, "<M-i>o", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
 vim.keymap.set({ "n", "x" }, "<M-i>g", function() require("opencode").ask("@diff: ", { submit = true }) end, { desc = "Ask opencode gdiff" })
--- <tab>t for this
-vim.keymap.set({ "n", "x" }, '<Tab>t',  function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
+-- <tab>O for this
+vim.keymap.set({ "n", "x" }, '<Tab>O',  function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
 -- <tab>o as prefix
 vim.keymap.set({ "n", "x" }, "<Tab>oo", function() require("opencode").select() end, { desc = "Execute opencode action…" })
 vim.keymap.set({ "n", "x" }, "<Tab>ol", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode this" })
