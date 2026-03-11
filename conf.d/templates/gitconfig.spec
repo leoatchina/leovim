@@ -4,3 +4,7 @@
     co = checkout
     ci = commit
     br = branch
+[credential]
+	helper = manager
+[core]
+	autocrlf = true
