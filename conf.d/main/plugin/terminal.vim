@@ -56,7 +56,7 @@ function! s:floaterm_select_pos()
     if g:has_popup_floating == 0
         let positions = positions[:1]
     endif
-    let title = 'Choose a Floaterm Position'
+    let title = 'Choose a Terminal Position'
     let pos = tolower(utils#choose_one(positions, title, 0))
     if empty(pos)
         return
