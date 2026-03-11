@@ -52,9 +52,9 @@ if g:has_popup_floating
     let s:floaterm_parameters.bottomright = " --wintype=float --width=0.45 --height=0.3"
 endif
 function! s:floaterm_select_pos()
-    let positions = ['Right', 'Belowright', 'Center', 'Topright', 'Tab', 'BottomRight']
+    let positions = ['Right', 'Belowright', 'Tab', 'Center', 'Topright', 'BottomRight']
     if g:has_popup_floating == 0
-        let positions = positions[:1]
+        let positions = positions[:2]
     endif
     let title = 'Choose a Terminal Position'
     let pos = tolower(utils#choose_one(positions, title, 0))

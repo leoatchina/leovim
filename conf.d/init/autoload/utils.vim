@@ -357,36 +357,58 @@ endfunction
 " ----------------------------------------
 " choose one
 " ----------------------------------------
-function! utils#get_char_form_lst(lst, cmd) abort
-    let lst = a:lst
-    let cmd = a:cmd
-    for i in range(len(cmd))
-        if index(lst, cmd[i]) < 0
-            call add(lst, cmd[i])
-            if i == 0
-                return [lst, '&' . cmd]
+function! s:get_char_from_used(used, text) abort
+    " 作用: 为菜单项字符串 text 选择一个未被占用的快捷键，并插入 '&' 标记。
+    " 参数:
+    "   a:used -> 已占用的快捷键列表(单字符)，用于避免冲突。
+    "   a:text -> 原始菜单文本。
+    " 返回:
+    "   new_used: 追加了新快捷键后的列表
+    "   marked  : 带 '&' 的菜单文本(例如 "&Open" 或 "O&pen")
+    let used = a:used
+    let lowered = map(copy(a:used), 'tolower(v:val)')
+    let text = a:text
+    " 第一阶段: 优先从 text 自身字符中挑选未占用字符。
+    " pos: 当前检查的字符下标。
+    for pos in range(len(text))
+        if index(lowered, tolower(text[pos])) < 0
+            call add(used, text[pos])
+            if pos == 0
+                return [used, '&' . text]
             else
-                return [lst,  cmd[:i-1] . '&' . cmd[i:]]
+                return [used, text[:pos-1] . '&' . text[pos:]]
             endif
         endif
     endfor
-    " if failed to find
-    let ext = '123456789!@#$%^*-=_+'
-    let l_e = len(ext)
-    for i in range(l_e)
-        if index(lst, ext[i]) < 0
-            call add(lst, ext[i])
-            return [lst, '&' . ext[i] . cmd]
+    " 第二阶段(兜底): 若 text 全部字符都已占用，从 fallback 常量中找可用字符。
+    " fallback: 候选兜底快捷键集合(数字+符号常量)。
+    " fb_len: fallback 的长度，避免重复计算。
+    let fallback = '123456789!@#$%^*-=_+'
+    let fb_len = len(fallback)
+    for pos in range(fb_len)
+        if index(used, fallback[pos]) < 0
+            call add(used, fallback[pos])
+            return [used, '&' . fallback[pos] . text]
         endif
     endfor
-    return [lst, cmd]
+    " 全部占用时退化为原始文本。
+    return [used, text]
 endfunction
 function! utils#choose_one(lst, ...) abort
-    let cmds = a:lst
-    if len(cmds) == 0
+    " 作用: 在一组字符串中让用户选择一项，返回被选中的原始字符串。
+    " 参数:
+    "   a:lst      -> 候选项列表。
+    "   a:1(可选)  -> 对话框标题 title，默认 "Please choose one."。
+    "   a:2(可选)  -> add_num，>=1 时使用数字快捷键(&1..&9)。
+    "   a:3(可选)  -> 取消项文本，默认 "0None"。
+    " 返回:
+    "   选中的 items[sel]；取消或无效选择返回 ""。
+    let items = a:lst
+    if len(items) == 0
         return ""
-    elseif len(cmds) > 9
-        let cmds=cmds[:8]
+    elseif len(items) > 9
+        " confirm() 模式下仅支持最多 9 个有效候选项。
+        let items = items[:8]
     endif
     if a:0 && a:1 != ''
         let title = a:1
@@ -394,41 +416,48 @@ function! utils#choose_one(lst, ...) abort
         let title = "Please choose one."
     endif
     if a:0 >= 2 && a:2 >= 1
-        let add_num = 1
+        let use_num = 1
     else
-        let add_num = 0
+        let use_num = 0
     endif
-    let cnt = 0
-    let lines = []
-    for cmd in cmds
-        let cnt += 1
-        if add_num
-            call add(lines, '&' . cnt . ' '. cmd)
+    " num: 当前菜单项计数；menu: 传给 quickui/confirm 的展示文本列表。
+    let num = 0
+    let menu = []
+    for item in items
+        let num += 1
+        if use_num
+            call add(menu, '&' . num . ' ' . item)
         else
-            if !exists('char_lst')
-                let char_lst = []
+            " used_char: 已占用的快捷键集合，仅在非数字模式使用。
+            if !exists('used_char')
+                let used_char = []
             endif
-            let [char_lst, cmd] = utils#get_char_form_lst(char_lst, cmd)
-            call add(lines, cmd)
+            let [used_char, item] = s:get_char_from_used(used_char, item)
+            call add(menu, item)
         endif
     endfor
+    " 优先使用 vim-quickui 的 listbox；不存在时回退到内置 confirm()。
     if pack#planned('vim-quickui')
-        let opts = {'title': title, 'index':g:quickui#listbox#cursor, 'w': 64}
-        let idx = quickui#listbox#inputlist(lines, opts)
-        if idx >= 0
-            return cmds[idx]
+        " boxopt 常量说明:
+        "   title -> 窗口标题
+        "   index -> 默认光标位置(读取 g:quickui#listbox#cursor)
+        "   w     -> 列表宽度(64)
+        let boxopt = {'title': title, 'index':g:quickui#listbox#cursor, 'w': 64}
+        let sel = quickui#listbox#inputlist(menu, boxopt)
+        if sel >= 0
+            return items[sel]
         endif
     else
-        let cnt += 1
+        let num += 1
         if a:0 >= 3 && a:3 != ''
-            call add(lines, '&' . a:3)
+            call add(menu, '&' . a:3)
         else
-            call add(lines, '&0None')
+            call add(menu, '&0None')
         endif
-        let content = join(lines, "\n")
-        let idx = confirm(title, content, cnt)
-        if idx > 0 && idx < cnt
-            return cmds[idx-1]
+        let text = join(menu, "\n")
+        let sel = confirm(title, text, num)
+        if sel > 0 && sel < num
+            return items[sel - 1]
         endif
     endif
     return ""
