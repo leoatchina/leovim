@@ -106,8 +106,9 @@ elseif utils#is_unix()
     if has('nvim')
         " let g:python3_host_prog=exepath('python3')
     else
-        " In Vim, set pythonthreedll=libpython3.10.so or similar,
-        " use the shell command sudo ldconfig -p | grep libpython3 to find the library name.
+        " In Vim,
+        " set pythonthreedll=libpython3.10.so
+        " use the shell command: ldconfig -p | grep libpython3 to find the library name.
         " See :help +python3/dyn-stable.
     endif
     " let g:code_user_dir = utils#expand("$HOME/.config/Code/User")
