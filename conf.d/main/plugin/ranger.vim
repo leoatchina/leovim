@@ -2,7 +2,7 @@
 if utils#is_vscode()
     finish
 endif
-if pack#installed('nvim-treesitter', 'hlargs.nvim')
+if pack#installed('nvim-treesitter', 'hlargs.nvim', 'nvim-treesitter-textobjects', 'nvim-treesitter-context', 'nvim-treesitter-refactor')
     if utils#is_win()
         function! s:cleanup_ts() abort
             let dir = $HOME . '\.leovim.d\pack\add\opt\nvim-treesitter'
