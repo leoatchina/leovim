@@ -30,7 +30,7 @@ function! floaterm#asyncrun#run(opts, floaterm_wintype, position)
         elseif floaterm_wintype == 'float'
             let cmd .= " --width=0.7"
         elseif floaterm_wintype == 'vsplit'
-            let cmd .= " --width=0.45"
+            let cmd .= " --width=0.3"
         endif
         if has_key(opts, 'height')
             let cmd .= " --height=" . opts.height
