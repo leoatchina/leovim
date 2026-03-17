@@ -1,23 +1,27 @@
+function! s:get_asyncrun_bufnr(program)
+    let buflist = floaterm#buflist#gather()
+    if empty(buflist)
+        return 0
+    endif
+    for bufnr in buflist
+        if floaterm#config#get(bufnr, 'program', '') ==# a:program
+            return bufnr
+        endif
+    endfor
+    return 0
+endfunction
+
 function! floaterm#asyncrun#run(opts, floaterm_wintype, position)
     let opts = copy(a:opts)
     let floaterm_wintype = copy(a:floaterm_wintype)
     let position = copy(a:position)
+    let asyncrun_program = 'ASYNCRUN_' . toupper(position)
     if !g:has_popup_floating && floaterm_wintype == 'float'
         call preview#errmsg("Please update to vim8.1+/nvim0.6+ to run script in floating or popup window.")
         return
     endif
-    let found_floaterm = 0
-    let buflist = floaterm#buflist#gather()
-    if len(buflist) > 0
-        for floaterm_bufnr in buflist
-            " NOTE: found floaterm of same floaterm wintype and position
-            if floaterm#config#get(floaterm_bufnr, 'wintype') == floaterm_wintype && floaterm#config#get(floaterm_bufnr, 'position') == position
-                let found_floaterm = 1
-                break
-            endif
-        endfor
-    endif
-    if found_floaterm
+    let floaterm_bufnr = s:get_asyncrun_bufnr(asyncrun_program)
+    if floaterm_bufnr > 0
         call floaterm#terminal#open_existing(floaterm_bufnr)
     else
         let cmd = 'FloatermNew --wintype=' . floaterm_wintype
@@ -36,6 +40,7 @@ function! floaterm#asyncrun#run(opts, floaterm_wintype, position)
         let cmd .= " --position=" . position
         exec cmd
         let floaterm_bufnr = floaterm#buflist#curr()
+        call floaterm#config#set(floaterm_bufnr, 'program', asyncrun_program)
     endif
     if has_key(a:opts, 'silent') && a:opts.silent == 1
         FloatermHide!
