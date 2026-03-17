@@ -39,3 +39,7 @@ function! s:k()
 endfunction
 command! K call s:k()
 nnoremap <silent>K :K<Cr>
+" --------------------------
+" helpful
+" --------------------------
+au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
