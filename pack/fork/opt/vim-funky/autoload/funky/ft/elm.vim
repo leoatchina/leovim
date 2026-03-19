@@ -4,17 +4,17 @@
 
 let s:pat = {}
 
-function! funky#ft#elm#filters()
-    let s:pat.func = '\v^([a-zA-Z0-9\(].*)\s*:'
+function! ctrlp#funky#ft#elm#filters()
+  let s:pat.func = '\v^([a-zA-Z0-9\(].*)\s*:'
 
-    let filters = [
-                \ { 'pattern': s:pat.func,
-                \   'formatter': ['\m\C^[\t ]*', '', ''] }
-                \ ]
+  let filters = [
+        \ { 'pattern': s:pat.func,
+        \   'formatter': ['\m\C^[\t ]*', '', ''] }
+  \ ]
 
-    return filters
+  return filters
 endfunction
 
-function! funky#ft#elm#strippers()
-    return [ { 'pattern': s:pat.func, 'position': 1 } ]
+function! ctrlp#funky#ft#elm#strippers()
+  return [ { 'pattern': s:pat.func, 'position': 1 } ]
 endfunction

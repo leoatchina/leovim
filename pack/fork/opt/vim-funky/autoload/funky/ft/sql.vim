@@ -5,17 +5,17 @@
 let s:pattern = '\V\c\<function\>\s\+\(\k\|.\)\+\((\_.\{-})\)\?'
 let s:function_name = '\V\cfunction\s\+\(\(\k\|\.\)\+\)'
 
-function! funky#ft#sql#filters()
-    " By default, remove whitespace and arguments
-    return [{
-                \ 'pattern': s:pattern,
-                \ 'formatter': ['\V\c\^\s\+\|\%((\.\*\$\)', '', 'g']
-                \ }]
+function! ctrlp#funky#ft#sql#filters()
+  " By default, remove whitespace and arguments
+  return [{
+        \ 'pattern': s:pattern,
+        \ 'formatter': ['\V\c\^\s\+\|\%((\.\*\$\)', '', 'g']
+        \ }]
 endfunction
 
-function! funky#ft#sql#strippers()
-    return [{
-                \ 'pattern': s:function_name,
-                \ 'position': 1,
-                \ }]
+function! ctrlp#funky#ft#sql#strippers()
+  return [{
+        \ 'pattern': s:function_name,
+        \ 'position': 1,
+        \ }]
 endfunction

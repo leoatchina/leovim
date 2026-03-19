@@ -1,10 +1,10 @@
-" Language: Rust
+" Language: TOML
 " Author: Takahiro Yoshihara
 " License: The MIT License
 
-function! ctrlp#funky#ft#rust#filters()
+function! ctrlp#funky#ft#toml#filters()
   let filters = [
-        \ { 'pattern': '\m\Cfn[\t ]\+',
+        \ { 'pattern': '\v\C^\[\S+\]$',
         \   'formatter': [] }
   \ ]
   return filters
