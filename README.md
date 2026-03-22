@@ -811,7 +811,7 @@ vim .
 " 使用快捷键
 <Leader>ff      " 模糊搜索文件
 <Leader>p       " Git 文件搜索
-<C-t>           " 文件树状浏览器
+<C-b>           " 文件树状浏览器
 <C-p>           " 文件浏览器
 <C-f><CR>       " 全局搜索内容
 ```
@@ -871,6 +871,37 @@ J               " 显示变量值
 <M-a>n          " 发送当前行
 <M-a><M-a>      " 发送代码块
 <M-a>a          " 发送整个文件
+```
+
+**6. Symbol/Tags 系统**
+
+符号跳转采用多层 fallback 机制（见 `conf.d/main/plugin/tags.vim` 中 `tags#lsp_tag_search`）：
+
+```
+LSP (coc/nvim_lsp) → ctags/gtags → GrepAll
+```
+
+以 `<M-d>`（definition）和 `<M-/>`（references）为例：
+1. 优先使用 LSP（coc `jumpDefinition` 或 nvim_lsp）
+2. LSP 未找到且 ctags 可用时，fallback 到 ctags/gtags 查找
+3. references 仍未找到时，最终 fallback 到 `GrepAll` 全局搜索
+
+```vim
+" 常用跳转键位
+<C-g>           " 定义（当前窗口）
+<C-]>           " 定义（垂直分屏）
+<M-/>           " 引用（quickfix）
+<M-d>           " 定义（quickfix）
+<M-D>           " 声明（quickfix）
+<M-?>           " 类型（quickfix）
+<M-.>           " 实现（quickfix）
+<C-h>           " 预览定义（需 ctags）
+
+" 符号浏览
+<leader>t       " Vista finder（LSP 符号）
+t<CR>           " 当前缓冲区大纲
+f<CR>           " 函数列表 (vim-funky)
+<leader>g       " 调用gtags系统
 ```
 
 ### 9.2. 按语言配置
