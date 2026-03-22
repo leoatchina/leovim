@@ -7,12 +7,30 @@
 
 ### 开箱即用，零配置启动
 - **一键安装** - 单条命令完成安装，无需手动配置插件
+  - Linux/macOS: `git clone https://gitee.com/leoatchina/leovim ~/.leovim && cd ~/.leovim && ./install.sh`
+  - Windows: `git clone https://gitee.com/leoatchina/leovim %USERPROFILE%\.leovim` 后以管理员权限运行 `install.cmd`
 - **离线可用** - 内置 `pack` 基础包，无网络也能正常使用
 - **智能降级** - 根据环境自动选择最佳配置（Vim/Neovim，GUI/终端）
 - **预设模板** - 自动创建 `.gitignore`、`.lintr` 等常用配置文件
 
 > **配置文件**: [`install.sh`](install.sh) · [`conf.d/pack/`](conf.d/pack/) · [`conf.d/templates/`](conf.d/templates/)
 
+### 跨平台兼容
+- **系统支持** - Linux、Windows、macOS 统一配置
+- **Vim/Neovim 通用** - 同一配置同时支持 Vim 和 Neovim
+- **VSCode Neovim** - `vscode-neovim` 模式专用配置与快捷键
+- **终端/GUI 自适应** - 自动检测环境，优化键位映射和颜色显示
+- **便携打包** - `compress.sh` 打包整个配置，一键迁移到新机器
+
+> **配置文件**: [`scripts/compress.sh`](scripts/compress.sh) · [`conf.d/init/vscode.vim`](conf.d/init/vscode.vim) · [`conf.d/init/keybindings.json`](conf.d/init/keybindings.json) (VSCode) · [`conf.d/main/main.vim`](conf.d/main/main.vim) (环境检测)
+
+### 高度可定制
+- **功能开关** - `~/.vimrc.opt` 控制所有模块的启用/禁用
+- **用户配置** - `~/.leovim.d/after.vim` 添加个人配置，不影响升级
+- **自定义插件** - `~/.leovim.d/pack.vim` 添加额外插件
+- **按文件类型定制** - 丰富的 ftplugin 配置，每种语言独立优化
+
+> **配置文件**: `~/.vimrc.opt` · `~/.leovim.d/after.vim` · `~/.leovim.d/pack.vim` · [`conf.d/init/ftplugin/`](conf.d/init/ftplugin/)
 ### AI 增强体系
 - **AI 助手 (`<M-i>`)**
   - 专注于**代码理解与对话**
@@ -124,22 +142,6 @@
 
 > **配置文件**: [`conf.d/main/plugin/run.vim`](conf.d/main/plugin/run.vim) · [`conf.d/tasks/`](conf.d/tasks/) · [`conf.d/templates/`](conf.d/templates/) · 项目根目录或 `~/.config/tasks.ini`
 
-### 跨平台兼容
-- **系统支持** - Linux、Windows、macOS 统一配置
-- **Vim/Neovim 通用** - 同一配置同时支持 Vim 和 Neovim
-- **VSCode Neovim** - `vscode-neovim` 模式专用配置与快捷键
-- **终端/GUI 自适应** - 自动检测环境，优化键位映射和颜色显示
-- **便携打包** - `compress.sh` 打包整个配置，一键迁移到新机器
-
-> **配置文件**: [`scripts/compress.sh`](scripts/compress.sh) · [`conf.d/init/vscode.vim`](conf.d/init/vscode.vim) · [`conf.d/init/keybindings.json`](conf.d/init/keybindings.json) (VSCode) · [`conf.d/main/main.vim`](conf.d/main/main.vim) (环境检测)
-
-### 高度可定制
-- **功能开关** - `~/.vimrc.opt` 控制所有模块的启用/禁用
-- **用户配置** - `~/.leovim.d/after.vim` 添加个人配置，不影响升级
-- **自定义插件** - `~/.leovim.d/pack.vim` 添加额外插件
-- **按文件类型定制** - 丰富的 ftplugin 配置，每种语言独立优化
-
-> **配置文件**: `~/.vimrc.opt` · `~/.leovim.d/after.vim` · `~/.leovim.d/pack.vim` · [`conf.d/init/ftplugin/`](conf.d/init/ftplugin/)
 
 ---
 

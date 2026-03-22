@@ -42,22 +42,6 @@ let g:nvim_treesitter_install = utils#is_unix()
 "   \ ]
 " let g:opencode_nvim_opts = '--wintype=vsplit --position=left --width=0.3'
 
-" let $XAI_API_KEY=''
-" let $GEMINI_API_KEY=''
-" let $OPENAI_API_KEY=''
-" let $DEEPSEEK_API_KEY=''
-" let $ANTHROPIC_API_KEY=''
-
-" let g:xai_model = 'grok-beta'
-" let g:openai_model = 'gpt4o'
-" let g:claude_model = 'claude-3.5-sonnet'
-" let g:gemini_model = 'gemini-2.5-flash'
-" let g:deepseek_model = 'deepseek-chat'
-
-
-" let g:openai_compatible_api_key = ''
-" let g:openai_compatible_model = ''
-" let g:openai_compatible_url = ''
 
 
 if has('nvim')
