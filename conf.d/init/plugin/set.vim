@@ -9,14 +9,12 @@ set nowrap
 set nolist
 set nobackup
 set nowritebackup
-set splitright
-set splitbelow
+set vb
 set cursorline
 set incsearch
 set ruler
 set hlsearch
 set showmode
-set vb
 set autochdir
 set smartcase
 set ignorecase
@@ -83,10 +81,12 @@ if has('nvim') || has('jumpoptions')
     endif
 endif
 " --------------------------
-" splitkeep
+" splitposition
 " --------------------------
+set splitright
+set splitbelow
 if has('nvim-0.9') || has('patch-9.0.0647')
-    set splitkeep=screen
+    set splitkeep=cursor
 endif
 " ---------------------------------------
 " autoread modified file outside (neo)vim
