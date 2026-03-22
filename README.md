@@ -14,14 +14,10 @@
 > **配置文件**: [`install.sh`](install.sh) · [`conf.d/pack/`](conf.d/pack/) · [`conf.d/templates/`](conf.d/templates/)
 
 ### AI 增强体系
-- **AI 智能补全 (Ghost Text)**
-  - 专注于**代码生成**，实时预测
-  - 引擎：Minuet-AI (DeepSeek/Gemini/OpenAI) / Copilot / Windsurf
-  - 体验：打字时自动出现灰色建议，Tab 键采纳
 - **AI 助手 (`<M-i>`)**
   - 专注于**代码理解与对话**
-  - 基于 `vim-floaterm-enhance` 的统一交互体验
-  - 将代码/文件/目录发送到 LLM 进行解释、重构或对话
+  - 基于 `vim-floaterm-enhance` 的统一交互体验，将代码/文件/目录发送到 LLM 进行解释、重构或对话
+  - **opencode.nvim**：Neovim 原生 AI 编码助手，`<M-i>o` 切换窗口，`<Tab>o` 系列操作（ask/select/diff 等）
 - **REPL 交互 (`<M-a>`)**
   - 将代码发送到解释器 (Python/R/Shell) 执行
   - 支持行发送、块发送、整文件发送
@@ -31,9 +27,9 @@
 ### 智能补全，多引擎支持
 - **多层补全体系**
   - 基础：vim-mucomplete（dict + buffer + path）
+  - 内建：builtin（Neovim 0.11+ / Vim 9.1.1590+ 原生补全）
   - 进阶：coc.nvim（Node.js LSP，插件生态丰富）
   - 高级：blink.cmp / nvim-cmp（原生 Neovim LSP，Rust 加速，性能极致）
-  - 内建：builtin（Neovim 0.11+ / Vim 9.1.1590+ 原生补全）
 - **代码片段** - VSCode 格式 snippets，支持自定义和共享
 - **多语言支持** - 内置 Python, Go, Rust, C/C++, Java, JS/TS, R, Lua, LaTeX 等语言配置
 
