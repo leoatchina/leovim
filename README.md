@@ -35,11 +35,11 @@
 ### 1.4. AI 增强体系
 - **AI 助手 (`<M-i>`)**
   - 专注于**代码理解与对话**
-  - 基于 `vim-floaterm-enhance` 的统一交互体验，将代码/文件/目录发送到 LLM 进行解释、重构或对话
+  - 基于 `vim-floaterm-enhance` 的统一交互体验，将代码/文件/目录发送到 CLI AI 工具（如 `claude`, `codex`, `opencode` 等）
   - **opencode.nvim**：Neovim 原生 AI 编码助手，`<M-i>o` 切换窗口，`<Tab>o` 系列操作（ask/select/diff 等）
 - **REPL 交互 (`<M-a>`)**
   - 将代码发送到解释器 (Python/R/Shell) 执行
-  - 支持行发送、块发送、整文件发送
+  - 支持行发送、块发送、整文件发送、标记发送
 
 > **配置文件**: [`conf.d/main/plugin/complete.vim`](conf.d/main/plugin/complete.vim) (AI 快捷键) · [`conf.d/main/plugin/repl.vim`](conf.d/main/plugin/repl.vim) (REPL) · [`conf.d/pack/leo/opt/vim-floaterm-enhance/`](conf.d/pack/leo/opt/vim-floaterm-enhance/)
 
@@ -222,12 +222,12 @@ conf.d/init.vim (入口)
   ├── source ~/.leovim.d/pack.vim (用户额外插件)
   ├── [VSCode 模式] → source conf.d/init/vscode.vim
   ├── [正常模式]   → source conf.d/main/main.vim
-  │     ├── Meta 键设置
+  │     ├── Meta 键映射 (Alt 键设置)
   │     ├── Python/Node/Git 版本检测
   │     ├── 终端/Truecolor 配置
   │     ├── Ctags/Gtags 配置
   │     ├── source conf.d/plug/*.vim (所有插件声明)
-  │     └── Mason PATH 设置
+  │     └── Mason/工具 PATH 设置
   ├── source ~/.leovim.d/after.vim (用户自定义配置)
   └── plug#end()
         └── Vim 自动加载 runtimepath 中的:
@@ -302,12 +302,15 @@ uninstall.cmd         # Windows
 | `<M-j>` | **跳转文件** | 打开文件（edit/tab/split/vsplit） |
 | `<M-k>` | **功能开关** | 切换编辑器功能（主题、只读、命令等） |
 | `<M-l>` | **LSP/行搜索** | LSP 操作 (CocInfo/LspInfo) + Buffer 行搜索 |
-| `<M-r>` | **运行任务** | 编译、运行、构建等任务执行 |
+| `<M-r>` | **运行任务** | 异步任务选择菜单 (FzfAsyncTasks) |
 | `<M-e>` | **调试器** | 断点、单步、变量查看等调试功能 |
+| `<M-m>` | **调试 UI** | 调试窗口/UI 切换（Gdb/Source/Asm/DapUI 等） |
 | `<M-i>` | **AI 助手** | AI 代码辅助（发送代码、文件、目录到 AI） |
 | `<M-a>` | **REPL 交互** | 代码发送到 REPL 环境执行 |
 | `<M-g>` | **Git 操作** | 版本控制、提交、推送、历史查看 |
-| `<M-y>` | **复制系列** | 路径复制、外部编辑器打开等 |
+| `<M-y>` | **复制系列** | 寄存器 yank / 路径复制、外部编辑器打开等 |
+| `<M-v>` | **粘贴系列** | 寄存器 paste / 粘贴模式 |
+| `<M-t>` | **浮动终端** | 浮动终端操作 |
 | `;` / `,` | **快速导航** | 前进/后退跳转（buffer、错误、符号等） |
 | `[` / `]` | **成对移动** | 括号、函数、类等结构间移动 |
 | `s` | **快速跳转** | Flash/easymotion 跳转和文本对象操作, vim-surround/vim-sandwich 操作 |
@@ -475,8 +478,9 @@ F2              重命名符号
 <C-t>           符号大纲侧边栏
 ```
 
-### 7.7. 调试功能 (`<M-e>`)
+### 7.7. 调试功能 (`<M-e>` + `<M-m>`)
 ```
+# 调试控制 (<M-e>)
 <M-e>r          启动调试
 <M-e><CR>       继续执行
 <M-e><Space>    切换断点
@@ -487,6 +491,10 @@ F2              重命名符号
 <M-e>c          清除所有断点
 <M-e><M-e>      运行到光标
 
+# 调试 UI (<M-m>)
+<M-m>           调试窗口/界面切换 (Gdb/Source/DapUI 等)
+
+# 功能键
 F5              开始/继续
 F9              切换断点
 F10/F11/F12     StepOver/Into/Out
@@ -516,16 +524,18 @@ J               显示变量/诊断
 需要在 `~/.vimrc.opt` 中设置 `g:floaterm_ai_programs` 来启用。
 
 ```
-<M-i><M-r>      启动 AI 对话窗口
-<M-i><Cr>       启动 AI（在当前 buffer）
-<M-i><Space>    发送回车 (在 AI 窗口内)
-<M-i>l          发送当前行 / 选中区域到 AI
-<M-i>f          发送当前文件内容到 AI
-<M-i>d          发送当前目录结构到 AI
-<M-i>p          FZF 选择文件发送到 AI
-<M-i><M-l>      发送当前行并立即执行 (!)
-<M-i><M-f>      发送文件并立即执行 (!)
-<M-i><M-d>      发送目录并立即执行 (!)
+<M-i><M-i>      在编辑器和 AI 窗口间切换焦点
+<M-i><M-r>      启动 AI (交互式选择)
+<M-i><Cr>       启动默认 AI (立即执行)
+<M-i><Space>    发送回车键到 AI 终端
+<M-i>l          发送当前行 / 选中区域到 AI，跳转到 AI 终端
+<M-i>f          发送当前文件路径到 AI，跳转到 AI 终端
+<M-i>d          发送当前目录路径到 AI，跳转到 AI 终端
+<M-i>p          FZF 选择文件发送到 AI，跳转到 AI 终端
+<M-i><M-l>      发送当前行 / 选中区域 (保持在当前 buffer)
+<M-i><M-f>      发送文件路径 (保持在当前 buffer)
+<M-i><M-d>      发送目录路径 (保持在当前 buffer)
+<M-i><M-p>      FZF 选择文件发送 (保持在当前 buffer)
 ```
 
 ### 7.10. REPL 交互 (`<M-a>`)
@@ -533,19 +543,22 @@ J               显示变量/诊断
 > 适用于: Python, R, Shell, Lua, Ruby, Julia, JavaScript 等
 
 ```
-<M-a><M-r>      启动/重启 REPL 环境 (自动识别语言)
-<M-a><Cr>       发送回车或启动 REPL
-<M-a>n          发送当前行 / 选中区域
-<M-a>l          发送当前行 / 选中区域 (不换行)
-<M-a><M-a>      发送代码块 (支持 # %% 标记)
-<M-a><Space>    发送代码块 (不换行)
-<M-a>b          发送从开头到当前行
-<M-a>e          发送从当前行到结尾
+<M-a><M-i>      在编辑器和 REPL 窗口间切换焦点
+<M-a><M-r>      启动 REPL (交互式选择)
+<M-a><Cr>       发送回车键或启动 REPL
+<M-a>n          发送当前行 / 选中区域，光标移动到下一行
+<M-a>l          发送当前行 / 选中区域，光标保持当前位置
+<M-a><M-a>      发送代码块 (支持 # %% 标记)，光标移动到下一行
+<M-a><Space>    发送代码块，光标保持当前位置
+<M-a>b          发送从文件开头到当前行
+<M-a>e          发送从当前行到文件末尾
 <M-a>a          发送整个文件
 <M-a>k          发送光标下的单词
 <M-a>m          标记代码区域
 <M-a>s          发送已标记区域
+<M-a>S          显示已标记区域
 <M-a>q          退出 REPL
+<M-a>L          清屏 REPL
 ```
 
 ### 7.11. Git 操作 (`<M-g>`)
@@ -564,15 +577,17 @@ J               显示变量/诊断
 
 ### 7.12. 功能开关 (`<M-k>`)
 ```
-<M-k>Space      切换只读模式
+<M-k><Space>    切换只读模式
 <M-k>t          切换主题 (colorscheme)
 <M-k>f          切换文件类型
 <M-k>v          显示版本/配置信息
+<M-k>V          显示 Vim 版本
 <M-k><M-k>      命令列表
 <M-k><M-f>      Fzf 命令搜索
 <M-k><M-l>      Leaderf 自身命令
 <M-k>m          显示消息历史
 <M-k>u          转换为 Unix 格式
+<M-k>z          切换折叠开关
 <M-k>r          显示项目根目录
 <M-z>           切换软换行
 <Leader>o/O     切换诊断/诊断高亮
@@ -599,12 +614,13 @@ iv/av           代码块 (# %%)
 ### 7.15. 窗口与终端
 ```
 # 窗口布局 (<Tab> + \)
-<Tab>v/x        垂直/水平分割
+<Tab>]/[        垂直/水平分割打开
 \a/d/w/s        调整窗口大小
 <M-HJKL>        窗口间跳转
 
 # 标签页
 <M-n/p>         下/上一个标签页
+<M-N/P>         移动标签页位置
 <M-1>~<M-9>     跳转到标签 1-9
 <M-0>           最后一个标签
 <M-w/W>         关闭当前/其他标签
@@ -867,10 +883,11 @@ J               " 显示变量值
 **5. REPL 交互**
 ```vim
 " Python/R/Julia 等语言
-<M-a><M-r>      " 启动 REPL
-<M-a>n          " 发送当前行
-<M-a><M-a>      " 发送代码块
+<M-a><M-r>      " 启动 REPL (交互式选择)
+<M-a>n          " 发送当前行 (光标下移)
+<M-a><M-a>      " 发送代码块 (光标下移)
 <M-a>a          " 发送整个文件
+<M-a>q          " 退出 REPL
 ```
 
 **6. Symbol/Tags 系统**
