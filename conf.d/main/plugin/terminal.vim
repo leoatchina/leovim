@@ -31,10 +31,10 @@ let g:floaterm_position = 'belowright'
 let g:floaterm_height = 0.3
 if utils#is_win()
     let g:floaterm_shell = get(g:, 'floaterm_shell', 'cmd.exe')
-elseif executable('zsh') && has('nvim') && pack#installed_adv()
-    let g:floaterm_shell = get(g:, 'floaterm_shell', 'zsh.exe')
+elseif executable('zsh') && has('nvim')
+    let g:floaterm_shell = get(g:, 'floaterm_shell', 'zsh')
 else
-    let g:floaterm_shell = get(g:, 'floaterm_shell', 'bash.exe')
+    let g:floaterm_shell = get(g:, 'floaterm_shell', 'bash')
 endif
 command! FloatermCommands call FzfCallCommands('FloatermCommands', 'Floaterm')
 nnoremap <silent><leader>: :FloatermCommands<Cr>
