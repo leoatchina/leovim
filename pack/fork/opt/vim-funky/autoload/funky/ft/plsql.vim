@@ -6,7 +6,7 @@
 let s:pattern = '\V\c\<function\>\s\+\(\k\|\.\)\+\((\_.\{-})\)\?'
 let s:function_name = '\V\cfunction\s\+\(\(\k\|\.\)\+\)'
 
-function! ctrlp#funky#ft#plsql#filters()
+function! funky#ft#plsql#filters()
   " By default, remove whitespace and arguments
   return [{
         \ 'pattern': s:pattern,
@@ -14,7 +14,7 @@ function! ctrlp#funky#ft#plsql#filters()
         \ }]
 endfunction
 
-function! ctrlp#funky#ft#plsql#strippers()
+function! funky#ft#plsql#strippers()
   return [{
         \ 'pattern': s:function_name,
         \ 'position': 1,

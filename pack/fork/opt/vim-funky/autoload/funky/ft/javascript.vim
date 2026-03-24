@@ -2,7 +2,7 @@
 " Author: curist
 " License: The MIT License
 
-function! ctrlp#funky#ft#javascript#filters()
+function! funky#ft#javascript#filters()
   let filters = [
         \ { 'pattern': '\v\S+\s+\=\s+(\(?\S+.*\)?|\(\))\s+\=\>',
         \   'formatter': ['\v(^\s*(const|let|var)\s*)|(\s*\{.*\ze \t#)', '', 'g'] },
@@ -20,7 +20,7 @@ function! ctrlp#funky#ft#javascript#filters()
   return filters
 endfunction
 
-function! ctrlp#funky#ft#javascript#post_extract_hook(list)
+function! funky#ft#javascript#post_extract_hook(list)
   " wtf??
   let l = filter(copy(a:list), "v:val !~# '^[\\t ]*\\(\\(else\\)\\?[\\t ]*if\\|switch[\\t ]*\\)'")
   return filter(l, "v:val !~# '^[\\t ]*for[\\t ]\\+('")

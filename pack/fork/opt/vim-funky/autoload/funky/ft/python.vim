@@ -3,7 +3,7 @@
 " Contributor: dusans
 " License: The MIT License
 
-function! ctrlp#funky#ft#python#filters()
+function! funky#ft#python#filters()
   let filters = [
         \ { 'pattern': '\v\C^\s*(class\s+\w+\s*(\([^\)]+\))?|(async\s+)?def\s+\w+\s*(\_.{-})):',
         \   'formatter': ['\v\C^\s*', '', ''] }

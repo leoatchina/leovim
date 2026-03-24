@@ -18,7 +18,7 @@
 " local functions is that the same syntax is used for record data type
 " entries.
 
-function! ctrlp#funky#ft#haskell#filters()
+function! funky#ft#haskell#filters()
   let filters = [
         \ { 'pattern': '^[^ ,]\+ *::.*$',
         \   'formatter': [] }

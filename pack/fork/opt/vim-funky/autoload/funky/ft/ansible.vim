@@ -2,7 +2,7 @@
 " Author: Takahiro Yoshihara
 " License: The MIT License
 
-function! ctrlp#funky#ft#ansible#filters()
+function! funky#ft#ansible#filters()
   return [
     \ { 'pattern': '\m\C^[\t ]*- \S\+:',
     \   'formatter': [] }

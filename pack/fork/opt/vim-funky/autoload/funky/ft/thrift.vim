@@ -2,7 +2,7 @@
 " Author: timfeirg
 " License: The MIT License
 
-function! ctrlp#funky#ft#thrift#filters()
+function! funky#ft#thrift#filters()
   let filters = [
         \ { 'pattern': '\m\C^[\t ]*\(struct\|service\)[\t ]\+',
         \   'formatter': [] },

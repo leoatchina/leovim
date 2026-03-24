@@ -2,6 +2,6 @@
 " Author: YOSHIHARA Takahiro
 " License: The MIT License
 
-function! ctrlp#funky#ft#terraform#filters()
-  return ctrlp#funky#ft#tf#filters()
+function! funky#ft#terraform#filters()
+  return funky#ft#tf#filters()
 endfunction

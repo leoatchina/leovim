@@ -2,7 +2,7 @@
 " Author: melhakim
 " License: The MIT License
 
-function! ctrlp#funky#ft#fish#filters()
+function! funky#ft#fish#filters()
   " TODO - Add following options:
   " -d DESCRIPTION or --description=DESCRIPTION
   " -w WRAPPED_COMMAND or --wraps=WRAPPED_COMMAND
@@ -21,6 +21,6 @@ function! ctrlp#funky#ft#fish#filters()
   return filters
 endfunction
 
-function! ctrlp#funky#ft#fish#is_kinda_sh()
+function! funky#ft#fish#is_kinda_sh()
   return 1
 endfunction

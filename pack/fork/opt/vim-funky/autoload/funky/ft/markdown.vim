@@ -2,7 +2,7 @@
 " Author: Takahiro Yoshihara
 " License: The MIT License
 
-function! ctrlp#funky#ft#markdown#filters()
+function! funky#ft#markdown#filters()
   let filters = [
         \ { 'pattern': '\m\C^#\{1,6}[\t ]\+\S\+',
         \   'formatter': [] },
@@ -13,6 +13,6 @@ function! ctrlp#funky#ft#markdown#filters()
   return filters
 endfunction
 
-function! ctrlp#funky#ft#markdown#post_extract_hook(list)
+function! funky#ft#markdown#post_extract_hook(list)
   return filter(copy(a:list), "v:val !~# '^[\\t ]*#:\\d\\+:\\d\\+$'")
 endfunction

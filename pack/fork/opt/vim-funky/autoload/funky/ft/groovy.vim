@@ -2,7 +2,7 @@
 " Author: Takahiro YOSHIHARA <tacahiroy@gmail.com>
 " License: The MIT License
 
-function! ctrlp#funky#ft#groovy#filters()
+function! funky#ft#groovy#filters()
   let p = '\m\C^[\t ]*'
   let p .= '\(def\|task\)[\t ]\+\w\+([^)]*)[\t ]*\n*{'
 

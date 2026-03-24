@@ -2,7 +2,7 @@
 " Author: kirstein
 " License: The MIT License
 
-function! ctrlp#funky#ft#coffee#filters()
+function! funky#ft#coffee#filters()
   let filters = [
         \ { 'pattern'   : '\v\C\w.+\s*\=\s*(-|\=)\>',
         \   'formatter' : ['\v(^\s*)|((-|\=)\>.*\ze \t#)', '', 'g']

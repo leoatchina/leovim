@@ -4,7 +4,7 @@
 
 let s:pat = {}
 
-function! ctrlp#funky#ft#crystal#filters()
+function! funky#ft#crystal#filters()
   let s:pat.method = '\m\C^[\t ]*def[\t ]\+\(\w\+\)'
 
   let filters = [
@@ -58,6 +58,6 @@ function! ctrlp#funky#ft#crystal#filters()
 endfunction
 
 " Tells how to strip clothes
-function! ctrlp#funky#ft#crystal#strippers()
+function! funky#ft#crystal#strippers()
   return [ {'pattern': s:pat.method, 'position': 1 } ]
 endfunction

@@ -2,7 +2,7 @@
 " Author: prabirshrestha
 " License: The MIT License
 
-function! ctrlp#funky#ft#typescript#filters()
+function! funky#ft#typescript#filters()
   let filters = [
       \ { 'pattern': '\v^[ \t]*(export)?[ \t]*((module)|(class)|(interface)|(enum)|(function))[ \t]+([a-zA-Z0-9_]+)',
       \   'formatter': []},

@@ -2,6 +2,6 @@
 " Author: Cenk Soykan
 " License: The MIT License
 
-function! ctrlp#funky#ft#rmd#filters()
-  return ctrlp#funky#ft#markdown#filters()
+function! funky#ft#rmd#filters()
+  return funky#ft#markdown#filters()
 endfunction

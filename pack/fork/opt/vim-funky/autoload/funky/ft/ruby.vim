@@ -2,10 +2,10 @@
 " Author: Takahiro Yoshihara <tacahiroy@gmail.com>
 " License: The MIT License
 
-let s:fu = ctrlp#funky#getutils()
+let s:fu = funky#getutils()
 let s:pat = {}
 
-function! ctrlp#funky#ft#ruby#filters()
+function! funky#ft#ruby#filters()
   let s:pat.method = '\m\C^[\t ]*def[\t ]\+\(\w\+\)'
 
   let filters = [
@@ -56,13 +56,13 @@ function! ctrlp#funky#ft#ruby#filters()
   endif
 
   if get(g:, 'ctrlp_funky_ruby_chef_words', 0)
-    call extend(filters, ctrlp#funky#ft#chef#filters())
+    call extend(filters, funky#ft#chef#filters())
   endif
 
   return filters
 endfunction
 
 " Tells how to strip clothes
-function! ctrlp#funky#ft#ruby#strippers()
+function! funky#ft#ruby#strippers()
   return [ {'pattern': s:pat.method, 'position': 1 } ]
 endfunction

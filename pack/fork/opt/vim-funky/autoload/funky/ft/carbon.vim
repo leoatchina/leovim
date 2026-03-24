@@ -2,10 +2,10 @@
 " Author: Takahiro Yoshihara <tacahiroy@gmail.com>
 " License: The MIT License
 
-function! ctrlp#funky#ft#carbon#filters()
+function! funky#ft#carbon#filters()
   let filters = [
         \ { 'pattern': '\v^[\t ]*(fn|class)[\t ]+',
-        \   'formatter': [] 
+        \   'formatter': []
         \ }
   \ ]
   return filters

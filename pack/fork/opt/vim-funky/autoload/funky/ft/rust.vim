@@ -2,7 +2,7 @@
 " Author: Takahiro Yoshihara
 " License: The MIT License
 
-function! ctrlp#funky#ft#rust#filters()
+function! funky#ft#rust#filters()
   let filters = [
         \ { 'pattern': '\m\Cfn[\t ]\+',
         \   'formatter': [] }

@@ -2,7 +2,7 @@
 " Author: sqlmap3
 " License: The MIT License
 
-function! ctrlp#funky#ft#systemverilog#filters()
+function! funky#ft#systemverilog#filters()
   " Match declarations that may have extern, virtual, void function, function or task
   let regex = '\v^\s*'                " Match leading whitespace
   let regex .= '(extern\s+)?'          " Optional match for extern keyword
@@ -22,7 +22,7 @@ function! ctrlp#funky#ft#systemverilog#filters()
   return filters
 endfunction
 
-function! ctrlp#funky#ft#systemverilog#post_extract_hook(list)
+function! funky#ft#systemverilog#post_extract_hook(list)
   " Filter out non-essential content from the extracted list, such as `else` and `if`
   return filter(copy(a:list), "v:val !~# '^[\\t ]*else[\\t ]\\+if'")
 endfunction

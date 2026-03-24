@@ -2,10 +2,10 @@
 " Author: robmiller
 " License: The MIT License
 
-let s:li = ctrlp#funky#literals#new()
+let s:li = funky#literals#new()
 let s:pat = {}
 
-function! ctrlp#funky#ft#php#filters()
+function! funky#ft#php#filters()
   let s:pat.func = '\v^\s*\w*%(\s*\w*)\s*function\s+[&]*(\w+)\s*\(.*$'
 
   let filters = [
@@ -30,6 +30,6 @@ function! ctrlp#funky#ft#php#filters()
   return filters
 endfunction
 
-function! ctrlp#funky#ft#php#strippers()
+function! funky#ft#php#strippers()
   return [ { 'pattern': s:pat.func, 'position': 1 } ]
 endfunction

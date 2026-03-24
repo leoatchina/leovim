@@ -67,7 +67,7 @@ if pack#planned('neoformat')
         endtry
         return 1
     endfunction
-    command! -bang -range ChooseFormatPrg call format#choose_fmtprgg(<bang>0)
+    command! -bang -range ChooseFormatPrg call format#choose_fmtprg(<bang>0)
     nnoremap <silent>Q :ChooseFormatPrg<Cr>
     xnoremap <silent>Q :ChooseFormatPrg!<Cr>
 else

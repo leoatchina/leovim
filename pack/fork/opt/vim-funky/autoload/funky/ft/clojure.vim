@@ -2,7 +2,7 @@
 " Author: curist
 " License: The MIT License
 
-function! ctrlp#funky#ft#clojure#filters()
+function! funky#ft#clojure#filters()
   " matches (def) and (defn)
   let filters = [
         \ { 'pattern': '^[\t ]*(def\(n-\?\)\?[\t ]\+\D.*',

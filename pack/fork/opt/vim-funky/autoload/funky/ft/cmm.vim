@@ -2,7 +2,7 @@
 " Author: yalin.wang
 " License: The MIT License
 
-function! ctrlp#funky#ft#cmm#filters()
+function! funky#ft#cmm#filters()
   let filters = [
         \ { 'pattern': '\m^\w\+:$',
         \   'formatter': []}

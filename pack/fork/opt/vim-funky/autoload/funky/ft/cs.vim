@@ -4,7 +4,7 @@
 " This is based on Java filter by pydave
 " ctrlp/funky/ft/java.vim
 
-function! ctrlp#funky#ft#cs#filters()
+function! funky#ft#cs#filters()
   let regex = '\v^\s+'                " preamble
   let regex .= '%(<\w+>\s+){0,3}'     " visibility, static, final
   let regex .= '%(\w|[<>[\]])+\s+'    " return type

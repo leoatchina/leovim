@@ -2,7 +2,7 @@
 " Author: Takahiro Yoshihara <tacahiroy@gmail.com>
 " License: The MIT License
 
-function! ctrlp#funky#ft#Jenkinsfile#filters()
+function! funky#ft#Jenkinsfile#filters()
   let pat = '\m\C^[\t ]*'
   let pat .= '\('
   let pat .= 'agent\|parameters[\t ]*{\|environment\|post\|stage[\t ]*([^)]*)'
@@ -13,7 +13,7 @@ function! ctrlp#funky#ft#Jenkinsfile#filters()
         \   'formatter': ['^[\t ]*', '', ''] }
   \ ]
 
-  call extend(filters, ctrlp#funky#ft#groovy#filters())
+  call extend(filters, funky#ft#groovy#filters())
 
   return filters
 endfunction
