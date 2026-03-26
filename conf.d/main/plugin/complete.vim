@@ -62,7 +62,7 @@ if pack#installed_lsp()
     elseif pack#installed_cmp()
         lua require("cfg/cmp")
     endif
-elseif pack#installed_coc()
+elseif pack#planned_coc()
     source $CFG_DIR/coc.vim
 elseif g:complete_engine != ''
     if has('nvim-0.11')
