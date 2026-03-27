@@ -23,7 +23,7 @@ if g:node_version > 18
         let g:ensure_installed += ['vimls']
     endif
     if pack#get('web')
-        let g:ensure_installed += ['cssls', 'eslint', 'html', 'vuels', 'angularls']
+        let g:ensure_installed += ['cssls', 'eslint', 'html', 'vuels', 'angularls', 'ts_ls']
     endif
 endif
 if pack#get('R') && g:R_exe != ''

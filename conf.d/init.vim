@@ -70,6 +70,10 @@ if has('gui_running')
     endif
 elseif utils#is_neovide()
     let g:neovide_cursor_animation_length = 0
+    let g:neovide_cursor_trail_size = 0
+    let g:neovide_scroll_animation_length = 0
+    let g:neovide_position_animation_length = 0
+    let g:neovide_cursor_animate_in_insert_mode = v:false
 endif
 " ------------------------
 " mapleader
