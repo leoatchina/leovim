@@ -149,15 +149,6 @@
     "command": "workbench.view.scm",
     "when": "workbench.scm.active"
   },
-  {
-    "key": "ctrl+shift+-",
-    "command": "gitlens.views.graph.focus"
-  },
-  {
-    "key": "ctrl+alt+-",
-    "command": "gitlens.showQuickCommitFileDetails",
-    "when": "!gitlens:disabled"
-  },
   // ctrl o
   {
     "key": "ctrl+o",
