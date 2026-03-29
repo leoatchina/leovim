@@ -154,6 +154,10 @@
     "command": "git-graph.view"
   },
   {
+    "key": "ctrl+shift+alt+h",
+    "command": "git.viewHistory"
+  },
+  {
     "key": "ctrl+o",
     "command": "-workbench.action.files.openFile"
   },
