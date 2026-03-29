@@ -145,7 +145,7 @@
     "command": "-editor.action.inPlaceReplace.up"
   },
   {
-    "key": "ctrl+shift+,",
+    "key": "ctrl+shift+g",
     "command": "workbench.view.scm",
     "when": "workbench.scm.active"
   },
