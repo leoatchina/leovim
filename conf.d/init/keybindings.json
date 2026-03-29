@@ -128,10 +128,6 @@
     "command": "-git.viewFileHistory"
   },
   {
-    "key": "shift+alt+g",
-    "command": "git.viewFileHistory"
-  },
-  {
     "key": "ctrl+alt+t",
     "command": "timeline.focus"
   },
@@ -141,10 +137,22 @@
     "when": "workbench.scm.active"
   },
   {
+    "key": "shift+alt+g",
+    "command": "git.viewLineHistory"
+  },
+  {
     "key": "ctrl+shift+g",
+    "command": "git.viewFileHistory"
+  },
+  {
+    "key": "ctrl+shift+alt+g",
+    "command": "-editor.action.announceCursorPosition",
+    "when": "accessibilityModeEnabled && editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+alt+g",
     "command": "git-graph.view"
   },
-  // ctrl o
   {
     "key": "ctrl+o",
     "command": "-workbench.action.files.openFile"
@@ -552,14 +560,9 @@
     "command": "-workbench.action.openGlobalKeybindings"
   },
   {
-    "key": "ctrl+alt+,",
+    "key": "shift+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
   },
-  {
-    "key": "shift+alt+,",
-    "command": "workbench.action.openGlobalKeybindingsFile"
-  },
-  // split
   {
     "key": "ctrl+\\",
     "command": "-workbench.action.splitEditor"
@@ -597,7 +600,7 @@
     "command": "multiCommand.reloadFile"
   },
   {
-    "key": "ctrl+shift+alt+g",
+    "key": "ctrl+alt+,",
     "command": "AI.generateCommitMessage"
   },
   // ----------------- codex -----------
