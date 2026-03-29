@@ -259,8 +259,12 @@ end
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(args)
-    local bufnr = tonumber(args.bufnr)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    local bufnr = tonumber(args.buf or args.bufnr)
+    local client_id = args.data and args.data.client_id or nil
+    local client = client_id and vim.lsp.get_client_by_id(client_id) or nil
+    if not bufnr or not client then
+      return
+    end
     local opts_echo = { noremap = true, silent = false, nowait= true, buffer = bufnr }
     local opts_silent = { noremap = true, silent = true, nowait = true, buffer = bufnr }
     if client.server_capabilities.completionProvider then
@@ -353,7 +357,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
           end,
         })
         -- fire it first time on load as well
-        vim.lsp.semantic_tokens.start(bufnr, client)
+        vim.lsp.semantic_tokens.start(bufnr, client.id)
       end
     end
   end
