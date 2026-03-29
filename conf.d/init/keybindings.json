@@ -135,6 +135,15 @@
     "key": "ctrl+alt+t",
     "command": "timeline.focus"
   },
+  {
+    "key": "ctrl+shift+,",
+    "command": "workbench.view.scm",
+    "when": "workbench.scm.active"
+  },
+  {
+    "key": "ctrl+shift+g",
+    "command": "git-graph.view"
+  },
   // ctrl o
   {
     "key": "ctrl+o",
@@ -313,8 +322,12 @@
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
   {
-    "key": "ctrl+shift+alt+`",
+    "key": "ctrl+shift+-",
     "command": "workbench.action.terminal.openNativeConsole"
+  },
+  {
+    "key": "ctrl+alt+-",
+    "command": "workbench.action.createTerminalEditor"
   },
   {
     "key": "alt+=",
@@ -326,16 +339,12 @@
     "command": "workbench.action.terminal.newWithProfile"
   },
   {
-    "key": "ctrl+alt+=",
-    "command": "workbench.action.createTerminalEditor"
-  },
-  {
     "key": "ctrl+shift+=",
     "command": "workbench.action.terminal.newInNewWindow",
     "when": "terminalHasBeenCreated || terminalProcessSupported"
   },
   {
-    "key": "ctrl+shift+alt+=",
+    "key": "ctrl+alt+=",
     "command": "workbench.action.terminal.moveIntoNewWindow"
   },
   {
