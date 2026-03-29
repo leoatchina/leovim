@@ -128,21 +128,8 @@
     "command": "-git.viewFileHistory"
   },
   {
-    "key": "shift+alt+g",
-    "command": "git.viewFileHistory"
-  },
-  {
     "key": "ctrl+alt+t",
     "command": "timeline.focus"
-  },
-  {
-    "key": "ctrl+shift+g",
-    "command": "-workbench.view.scm",
-    "when": "workbench.scm.active"
-  },
-  {
-    "key": "ctrl+shift+,",
-    "command": "-editor.action.inPlaceReplace.up"
   },
   {
     "key": "ctrl+shift+,",
@@ -150,15 +137,26 @@
     "when": "workbench.scm.active"
   },
   {
-    "key": "ctrl+shift+-",
-    "command": "gitlens.views.graph.focus"
+    "key": "shift+alt+g",
+    "command": "git.viewLineHistory"
   },
   {
-    "key": "ctrl+alt+-",
-    "command": "gitlens.showQuickCommitFileDetails",
-    "when": "!gitlens:disabled"
+    "key": "ctrl+shift+g",
+    "command": "git.viewFileHistory"
   },
-  // ctrl o
+  {
+    "key": "ctrl+shift+alt+g",
+    "command": "-editor.action.announceCursorPosition",
+    "when": "accessibilityModeEnabled && editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+alt+g",
+    "command": "git-graph.view"
+  },
+  {
+    "key": "ctrl+shift+alt+h",
+    "command": "git.viewHistory"
+  },
   {
     "key": "ctrl+o",
     "command": "-workbench.action.files.openFile"
@@ -336,8 +334,12 @@
     "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
   },
   {
-    "key": "ctrl+shift+alt+`",
+    "key": "ctrl+shift+-",
     "command": "workbench.action.terminal.openNativeConsole"
+  },
+  {
+    "key": "ctrl+alt+-",
+    "command": "workbench.action.createTerminalEditor"
   },
   {
     "key": "alt+=",
@@ -349,16 +351,12 @@
     "command": "workbench.action.terminal.newWithProfile"
   },
   {
-    "key": "ctrl+alt+=",
-    "command": "workbench.action.createTerminalEditor"
-  },
-  {
     "key": "ctrl+shift+=",
     "command": "workbench.action.terminal.newInNewWindow",
     "when": "terminalHasBeenCreated || terminalProcessSupported"
   },
   {
-    "key": "ctrl+shift+alt+=",
+    "key": "ctrl+alt+=",
     "command": "workbench.action.terminal.moveIntoNewWindow"
   },
   {
@@ -566,14 +564,9 @@
     "command": "-workbench.action.openGlobalKeybindings"
   },
   {
-    "key": "ctrl+alt+,",
+    "key": "shift+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
   },
-  {
-    "key": "shift+alt+,",
-    "command": "workbench.action.openGlobalKeybindingsFile"
-  },
-  // split
   {
     "key": "ctrl+\\",
     "command": "-workbench.action.splitEditor"
@@ -611,7 +604,7 @@
     "command": "multiCommand.reloadFile"
   },
   {
-    "key": "ctrl+shift+alt+g",
+    "key": "ctrl+alt+,",
     "command": "AI.generateCommitMessage"
   },
   // ----------------- codex -----------
