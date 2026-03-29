@@ -135,20 +135,6 @@
     "key": "ctrl+alt+t",
     "command": "timeline.focus"
   },
-  {
-    "key": "ctrl+shift+g",
-    "command": "-workbench.view.scm",
-    "when": "workbench.scm.active"
-  },
-  {
-    "key": "ctrl+shift+,",
-    "command": "-editor.action.inPlaceReplace.up"
-  },
-  {
-    "key": "ctrl+shift+g",
-    "command": "workbench.view.scm",
-    "when": "workbench.scm.active"
-  },
   // ctrl o
   {
     "key": "ctrl+o",
