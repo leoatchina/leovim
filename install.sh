@@ -226,15 +226,15 @@ if [ $# -gt 0 ]; then
             # wget according to os
             case "$os" in
                 "macos-arm64")
-                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-macos-arm64.tar.gz
+                    wget https://github.com/neovim/neovim/releases/download/v0.11.7/nvim-macos-arm64.tar.gz
                     tar xzf nvim-macos-arm64.tar.gz
                     ;;
                 "macos-x64")
-                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-macos-x86_64.tar.gz
+                    wget https://github.com/neovim/neovim/releases/download/v0.11.7/nvim-macos-x86_64.tar.gz
                     tar xzf nvim-macos-x86_64.tar.gz
                     ;;
                 *)
-                    wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz
+                    wget https://github.com/neovim/neovim/releases/download/v0.11.7/nvim-linux-x86_64.tar.gz
                     tar xzf nvim-linux-x86_64.tar.gz
                     ;;
             esac

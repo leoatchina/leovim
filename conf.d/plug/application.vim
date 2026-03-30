@@ -129,13 +129,13 @@ endif
 " ------------------------------
 " textobj install
 " ------------------------------
-" if has('nvim-0.9.2') && get(g:, 'nvim_treesitter_install', utils#is_uni
-"     PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
-"     PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master'}
-"     PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
-"     PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
-"     PlugAdd 'm-demare/hlargs.nvim'
-if exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
+if has('nvim-0.9.2') && !has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
+    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master'}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
+    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
+    PlugAdd 'm-demare/hlargs.nvim'
+elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
     PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
     PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
