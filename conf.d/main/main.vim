@@ -94,7 +94,7 @@ endif
 " has_terminal
 " --------------------------
 if exists(':tnoremap')
-    if has('patch-8.1.1')
+    if has('patch-8.1.1') && !has('nvim')
         set termwinkey=<C-_>
         let g:has_terminal = 2
     else

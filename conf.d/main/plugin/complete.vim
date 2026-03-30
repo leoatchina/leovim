@@ -9,7 +9,7 @@ set completeopt=menu,menuone
 if has('patch-9.0.1568')
     set sms
 endif
-if has('patch-8.1.1270')
+if has('patch-8.1.1270') && !has('nvim')
     set shortmess+=S
 endif
 if has('patch-7.4.1829')
