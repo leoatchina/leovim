@@ -142,5 +142,6 @@
     "typescript": [
       "javascript"
     ]
-  }
+  },
+  "typescript.autoClosingTags": false
 }
