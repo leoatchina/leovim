@@ -115,15 +115,16 @@
 - [x] optimize nvim-0.11 builtin completion
 - [x] builtin的snippets问题
 - [x] utils.lua NO global functions
-- [ ] replace neoconf
-- [ ] neoconf -> codesettings.nvim
-    - [ ] https://github.com/mrjones2014/codesettings.nvim
-- [ ] windows gvim add DETACH to winbar
-- [ ] gtags without cscope
-- [ ] config formatter.nvim
-- [ ] Ai related
+- [x] neoconf -> codesettings.nvim
+    - [x] https://github.com/mrjones2014/codesettings.nvim
+- [x] gtags without cscope
+- [x] add ai intergration in vim-floaterm-enhance
+    - [x] using different idx for ai, repl
+- [x] Ai related
     - [x] ~~yarepl.nvim + aider~~
-    - [ ] minuet.ai
+    - [x] ~minuet.ai~
+- [ ] FzfVcsFiles, LeaderfVcsFiles without git, only use .git .svn
+- [ ] windows gvim add DETACH to winbar
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
 ## MyPlugins:
@@ -153,24 +154,10 @@
         - [x] intergrated with asyncrun.vim
         - [x] fork vim-floaterm
         - [x] Run is current tab related only, could not be used in other tabs,
-    - [ ] add ai intergration in vim-floaterm-enhance
-        - [ ] using different idx for ai, repl
-        - refs
-            - https://github.com/folke/sidekick.nvim
-            - https://github.com/aweis89/ai-terminals.nvim
-            - https://github.com/coder/claudecode.nvim
-            - https://github.com/azorng/goose.nvim
-            - https://github.com/marcinjahn/gemini-cli.nvim
-- [ ] vim-plug update
-    - [x] reorganize leovim's structure to use vim-plug's lazy load
-    - [ ] floating or popup window.
-    - [ ] mix `vim-plug` and `vim-jetpack` together
 ## Plenty of works
 - [x] ReWrite readme
 - [ ] vista
     - [ ] icons bug in windows-terminal
     - [ ] open shortcuts
     - [ ] ctags enhanced, according to zhihu user `成隽`
-- [ ] vim-zeal
-    - [ ] view document in (neo)vim
 - [ ] Introduce video
