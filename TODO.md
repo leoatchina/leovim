@@ -120,10 +120,7 @@
 - [x] gtags without cscope
 - [x] add ai intergration in vim-floaterm-enhance
     - [x] using different idx for ai, repl
-- [x] Ai related
-    - [x] ~~yarepl.nvim + aider~~
-    - [x] ~minuet.ai~
-- [ ] FzfVcsFiles, LeaderfVcsFiles without git, only use .git .svn
+- [x] FzfVcsFiles, LeaderfVcsFiles without git, only use .git .svn
 - [ ] windows gvim add DETACH to winbar
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
@@ -138,22 +135,11 @@
     - [x] ~~ctrlp intergrated~~, using funky#qf#show() instead
     - [ ] README
     - [ ] deploy to github
-- [x] vim-floaterm-repl updates.
-    - [x] use <M-e> as prefix key
-    - [x] update repl_floaterm block send command. Updated with Find_Side
-    - [x] send block, but keep cusor position, NOTE:fixed by Find_Side function
-    - [x] g:repl_floaterm_block_mark find without textobj.
-    - [x] if REPL started, send enter in repl terminal. If not start REPL.
-    - [x] g:repl_floaterm_clear for each ft
-    - [x] g:repl_floaterm_quit for each ft
-    - [x] send current word to terminal.
-    - [x] mark content, and resend/show marked content if `quickui` installed
-    - [x] README
-    - [x] deploy to github
-    - [x] name vim-floaterm-repl to vim-floaterm-enhance
-        - [x] intergrated with asyncrun.vim
-        - [x] fork vim-floaterm
-        - [x] Run is current tab related only, could not be used in other tabs,
+- [x] vim-floaterm-enhance
+    - [x] ai
+    - [x] fzf
+    - [x] repl 
+    - [x] asyncrun
 ## Plenty of works
 - [x] ReWrite readme
 - [ ] vista

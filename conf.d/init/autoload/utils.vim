@@ -135,6 +135,9 @@ function! utils#get_root_dir(...) abort
     endwhile
 endfunction
 
+function! utils#get_vcs_dir() abort
+    return utils#get_root_dir('.git', '.svn', '.hg', '.cvs', '.bzr')
+endfunction
 " ----------------------------------------
 " String Utility Functions
 " ----------------------------------------
