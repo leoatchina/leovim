@@ -259,7 +259,7 @@ install.cmd           # 以管理员权限运行
 **安装选项**
 ```bash
 ./install.sh neovim   # 安装最新 Neovim
-./install.sh nodejs   # 安装最新 Node.js
+./install.sh nvm      # 安装/升级 nvm latest release，并切换到 Node.js 20
 ./install.sh rc       # 安装优化的 bashrc
 ./install.sh z.lua    # 安装路径跳转工具
 ./install.sh leotmux  # 安装 tmux 增强

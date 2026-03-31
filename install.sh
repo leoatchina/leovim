@@ -254,16 +254,27 @@ if [ $# -gt 0 ]; then
         fi
         [ $mode == 'z.lua' ] && exit 0
     fi
-    # fnm 
-    if [[ $mode == 'all' || $mode == 'basic' || $mode == 'fnm' ]]; then
-        if [[ -f $HOME/.local/share/fnm/fnm ]]; then
-            info "fnm version tool fnm allready installed"
+    # nvm
+    if [[ $mode == 'all' || $mode == 'basic' || $mode == 'nvm' ]]; then
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        NVM_VERSION="$(curl -fsSI https://github.com/nvm-sh/nvm/releases/latest | awk -F'/tag/' '/^location:/ {gsub("\r","",$2); print $2}')"
+        if [[ -z "$NVM_VERSION" ]]; then
+            error "failed to resolve latest nvm release version"
+            exit 1
+        fi
+        curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
+        info "nvm version ${NVM_VERSION} installed"
+        if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+            . "$NVM_DIR/nvm.sh"
+            nvm install 20
+            nvm alias default 20
+            nvm use 20
+            nvm ls
+            [ $mode == 'nvm' ] && exit 0
         else
-            curl -fsSL https://fnm.vercel.app/install | bash
-            info "fnm version tool fnm newly installed"
-        fi 
-        $HOME/.local/share/fnm/fnm ls
-        [ $mode == 'fnm' ] && exit 0
+            error "nvm installation failed: $NVM_DIR/nvm.sh not found"
+            [ $mode == 'nvm' ] && exit 1
+        fi
     fi
     # rust
     if [[ $mode == 'all' || $mode == 'rust' ]]; then
