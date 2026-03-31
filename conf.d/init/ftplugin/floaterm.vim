@@ -1,3 +1,3 @@
 setlocal statusline=
-autocmd BufEnter <buffer> setlocal laststatus=0 noshowmode noruler
-autocmd BufLeave <buffer> setlocal laststatus=2 showmode ruler
+autocmd BufEnter <buffer> call lightline#disable()
+autocmd BufLeave <buffer> call lightline#enable() | call lightline#update()
