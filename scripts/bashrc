@@ -13,6 +13,14 @@ else
     export PATH=/usr/sbin:$PATH
 fi
 
+if [ -d /run/current-system/sw/bin ]; then
+    export PATH=/run/current-system/sw/bin:$PATH
+fi
+
+if [ -d /run/wrappers/bin ]; then
+    export PATH=/run/wrappers/bin:$PATH
+fi
+
 [ -z "$PS1" ] && return
 export CLICOLOR=1
 export LSCOLORS=GxFxBxDxCxegedabagaced
