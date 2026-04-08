@@ -10,7 +10,8 @@ nul
 null
 NUL
 NULL
-*/pack/*/*/compare
+*/pack/**/compare
+/fzf/
 .aider*
 .plan/
 .update/
