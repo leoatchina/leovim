@@ -92,7 +92,6 @@ endif
 " autoread modified file outside (neo)vim
 " ---------------------------------------
 set autoread
-au BufRead acwrite set ma
 if has('nvim')
     autocmd FocusGained,TermLeave,TermClose * if index(['terminal', 'nofile'], &bt) < 0 | silent! checktime | endif
 elseif !utils#has_gui()
@@ -133,10 +132,18 @@ endif
 " -----------------------------------
 " hightlight todo note
 " -----------------------------------
+function! s:specialtodo_highlight() abort
+    if exists('w:specialtodo_match_ids')
+        return
+    endif
+    let w:specialtodo_match_ids = [
+                \ matchadd('Todo', '\v\W\zs' . g:todo_patterns . '(\(.{-}\))?:?', -1),
+                \ matchadd('Todo', '\v\W\zs' . g:note_patterns . '(\(.{-}\))?:?', -2)
+                \ ]
+endfunction
 augroup SPECIALSTINGS
     autocmd!
-    autocmd Syntax * call matchadd('Todo', '\v\W\zs' . g:todo_patterns . '(\(.{-}\))?:?', -1)
-    autocmd Syntax * call matchadd('Todo', '\v\W\zs' . g:note_patterns . '(\(.{-}\))?:?', -2)
+    autocmd Syntax * call s:specialtodo_highlight()
 augroup END
 " -----------------------------------
 " not automatical add comments when o/O
