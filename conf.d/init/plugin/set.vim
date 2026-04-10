@@ -94,9 +94,11 @@ endif
 set autoread
 au BufRead acwrite set ma
 if has('nvim')
-    autocmd FocusGained,TermLeave,TermClose * if mode() ==# 'n' && &bt !=# 'terminal' | silent! ! | endif
+    autocmd FocusGained,TermLeave,TermClose * if index(['terminal', 'nofile'], &bt) < 0 | silent! checktime | endif
 elseif !utils#has_gui()
-    autocmd FocusGained,WinEnter * if index(['terminal', 'nofile'], &bt) < 0 | silent! e! | endif
+    " Vim terminal: do NOT hook WinEnter with :e! — it reloads on every split/window switch, discards
+    " unsaved edits, and can leave buffers empty/broken with fzf/Leaderf. Use checktime + autoread instead.
+    autocmd FocusGained * if index(['terminal', 'nofile'], &bt) < 0 | silent! checktime | endif
 endif
 " -----------------------------------
 " swap exists ignore
