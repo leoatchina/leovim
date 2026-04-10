@@ -164,13 +164,9 @@ endif
 if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
     PlugAdd 'junegunn/fzf.vim'
     if utils#is_win()
-        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\AppData\\Local\\fzf')}
+        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\.leovim\\fzf')}
     else
-        if pack#get('fzfbin')
-            PlugAdd 'junegunn/fzf', {'do': './install --bin', 'dir': utils#expand('~/.local/fzf')}
-        else
-            PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf')}
-        endif
+        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.leovim/fzf')}
     endif
     PlugAdd 'fzf-registers'
     PlugAdd 'fzf-tabs'
