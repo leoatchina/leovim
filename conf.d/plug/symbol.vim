@@ -41,7 +41,7 @@ if get(g:, 'ctags_type', '') != ''
     endif
     if v:version >= 800
         call s:add_symbol("gutentags")
-        if get(g:, 'gtags_version', 0) > 6.0606 && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
+        if get(g:, 'gtags_version', 0) > 6.0606 && exists('$GTAGSCONF') && filereadable($GTAGSCONF) && !has('nvim')
             call s:add_symbol('plus')
         endif
     endif
