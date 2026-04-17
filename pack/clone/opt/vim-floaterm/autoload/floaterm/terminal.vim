@@ -48,7 +48,7 @@ function! s:on_floaterm_close(bufnr, callback, job, data, ...) abort
   else
     let bufnr = a:bufnr
   endif
-  let opener = floaterm#config#get(bufnr, 'opener')
+  let opener = floaterm#config#get(a:bufnr, 'opener')
   call setbufvar(bufnr, '&bufhidden', 'wipe')
   call floaterm#config#set(bufnr, 'jobexists', v:false)
   let autoclose = floaterm#config#get(bufnr, 'autoclose')

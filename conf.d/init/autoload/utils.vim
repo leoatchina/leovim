@@ -341,6 +341,10 @@ let s:autoclose_ft_buf = [
             \ 'dropbar', 'dropbar_preview',
             \ ]
 function! s:autoclose(check_last_win) abort
+    " 跳过 popup 窗口（floaterm 等），避免 BufEnter 里 q! 触发 E994
+    if exists('*win_gettype') && win_gettype() ==# 'popup'
+        return 0
+    endif
     let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
     let bt = tolower(getbufvar(winbufnr(winnr()), '&bt'))
     if a:check_last_win == 0

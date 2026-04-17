@@ -35,6 +35,10 @@ function! git#lcd_and_update() abort
     if utils#is_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern'
         return
     endif
+    " 跳过 popup 窗口（floaterm 等），避免 E994: 不允许在弹出窗口中使用
+    if exists('*win_gettype') && win_gettype() ==# 'popup'
+        return
+    endif
     try
         let l:cur_dir = utils#abs_dir()
         if l:cur_dir != ''

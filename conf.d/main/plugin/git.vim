@@ -100,9 +100,9 @@ if pack#installed('blamer.nvim')
 elseif pack#planned_leaderf()
     if has('patch-9.0.200') || has('nvim')
         nnoremap <silent><Tab><Cr> :LeaderfGitInlineBlameToggle<Cr>
-        command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['Gutentag', 'Grep', 'Get'])
+        command! GCommands call FzfCallCommands('GCommands', 'LeaderfGit', 'G', ['Gutentag', 'Grep', 'Get'])
     else
-        command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
+        command! GCommands call FzfCallCommands('GCommands', 'LeaderfGit', 'G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
     endif
 else
     command! GCommands call FzfCallCommands('GCommands', 'G', ['Gutentag', 'Grep', 'Get'])
@@ -114,9 +114,9 @@ nnoremap <silent><M-g>: :GCommands<Cr>
 if pack#installed('vim-floaterm') && executable('lazygit')
     command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
     if has('nvim')
-        nnoremap <silent><M-g><M-g> :GLazyGit<Cr>
+        nnoremap <M-g><M-g> :GLazyGit<Cr>
     else
-        nnoremap <silent><M-g><M-g> :GLazyGit<Cr>i
+        nnoremap <M-g><M-g> :GLazyGit<Cr>i
     endif
 endif
 " -----------------------------------------------------
