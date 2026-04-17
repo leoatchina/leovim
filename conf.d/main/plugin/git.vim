@@ -79,16 +79,6 @@ else
         nnoremap <M-g>U :!git push<Space>
     endif
 endif
-" blamer on left
-if pack#planned_leaderf()
-    nnoremap <silent><M-g>i :Leaderf git<Cr>
-    nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
-    nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
-    nnoremap <silent><M-g>f :Leaderf git log --side-by-side --current-file<Cr>
-    nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
-    nnoremap <silent><M-g>s :Leaderf git status --side-by-side<Cr>
-    nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
-endif
 " inline blame
 if pack#installed('blamer.nvim')
     let g:blamer_date_format = '%Y/%m/%d'
@@ -120,17 +110,27 @@ if pack#installed('vim-floaterm') && executable('lazygit')
     endif
 endif
 " -----------------------------------------------------
-" vim-signify
+" leaderf git && vim-signify
 " -----------------------------------------------------
-if pack#planned('vim-signify')
-    let g:signify_disable_by_default = 0
-    function! s:SignifyDiff()
+if pack#planned_leaderf()
+    nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
+    nnoremap <silent><M-g>i :Leaderf git<Cr>
+    nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
+    nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
+    nnoremap <silent><M-g>f :Leaderf git log --side-by-side --current-file<Cr>
+    nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
+    nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
+elseif pack#planned('vim-signify')
+    function! git#SignifyDiff()
         SignifyDiff
         if winnr('$') == 2
             wincmd H
         endif
     endfunction
-    nnoremap <silent>\| :call <SID>SignifyDiff()<CR>
+    nnoremap <silent>\| :call git#SignifyDiff()<CR>
+endif
+if pack#planned('vim-signify')
+    let g:signify_disable_by_default = 0
     nnoremap \<Cr> :SignifyRefresh<Cr>
     nnoremap \<Tab> :SignifyToggle<Cr>
     nnoremap \<Space> :SignifyHunkDiff<Cr>
