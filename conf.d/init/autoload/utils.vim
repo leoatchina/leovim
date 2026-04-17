@@ -331,18 +331,20 @@ endfunction
 " ----------------------------------------
 " AutoClose
 " ----------------------------------------
+function! utils#is_popup()
+    return exists('*win_gettype') && win_gettype() ==# 'popup'
+endfunction
 let s:autoclose_ft_buf = [
             \ 'netrw', 'tagbar', 'vista', 'vista_kind',
             \ 'qf', 'loclist', 'rg', 'outline', 'nofile',
             \ 'leaderf', 'fzf', 'help', 'man',
             \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame', 'diff',
             \ 'vimspector', 'vimspectorprompt',
-            \ 'terminal', 'floaterm', 'popup', 'undotree',
+            \ 'terminal', 'floaterm', 'undotree',
             \ 'dropbar', 'dropbar_preview',
             \ ]
 function! s:autoclose(check_last_win) abort
-    " 跳过 popup 窗口（floaterm 等），避免 BufEnter 里 q! 触发 E994
-    if exists('*win_gettype') && win_gettype() ==# 'popup'
+    if utils#is_popup()
         return 0
     endif
     let ft = tolower(getbufvar(winbufnr(winnr()), '&ft'))
