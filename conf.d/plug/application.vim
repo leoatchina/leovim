@@ -1,7 +1,3 @@
-" If completion function is not perfect enough, use mcm as alternative on Unix
-if !has('patch-7.4.775') && utils#is_unix()
-    call pack#add('mcm')
-endif
 " ------------------------------
 " complete_engine select
 " ------------------------------
@@ -15,6 +11,8 @@ elseif pack#get('cmp') && has('nvim-0.11')
     let g:complete_engine = 'cmp'
 elseif (pack#get('blink') || pack#get('blink.lua')) && has('nvim-0.11')
     let g:complete_engine = 'blink'
+else
+    let g:complete_engine = 'mcm'
 endif
 " ------------------------------
 " complete_engine install

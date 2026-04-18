@@ -62,13 +62,13 @@ if pack#installed_lsp()
     elseif pack#installed_cmp()
         lua require("cfg/cmp")
     endif
-elseif pack#planned_coc()
+elseif pack#installed_coc()
     source $CFG_DIR/coc.vim
 elseif get(g:, 'complete_engine', '') != ''
-    if has('nvim-0.11')
+    if has('nvim-0.11') && g:complete_engine != 'mcm'
         let g:complete_engine = 'builtin'
         lua require("cfg/builtin")
-    elseif has('patch-9.1.1590')
+    elseif has('patch-9.1.1590') && g:complete_engine != 'mcm'
         let g:complete_engine = 'builtin'
         source $CFG_DIR/builtin.vim
     else
