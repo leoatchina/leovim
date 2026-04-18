@@ -7,42 +7,14 @@ endif
 " ------------------------------
 if pack#get('nocomplete') || pack#get('noc')
     let g:complete_engine = ''
-elseif pack#get('mcm')
-    let g:complete_engine = 'mcm'
-elseif pack#get('builtin')
-    if has('nvim-0.11') || has('patch-9.1.1590')
-        let g:complete_engine = 'builtin'
-    else
-        let g:complete_engine = 'mcm'
-    endif
-elseif pack#get('coc')
-    if g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438'))
-        let g:complete_engine = 'coc'
-    else
-        let s:smart_engine_select = 1
-    endif
-elseif pack#get('cmp')
-    if has('nvim-0.11')
-        let g:complete_engine = 'cmp'
-    else
-        let s:smart_engine_select = 1
-    endif
-elseif pack#get('blink') || pack#get('blink.lua')
-    if has('nvim-0.11')
-        let g:complete_engine = 'blink'
-    else
-        let s:smart_engine_select = 1
-    endif
-else
-    let s:smart_engine_select = 1
-endif
-if get(s:, 'smart_engine_select', 0)
-    if has('nvim-0.11')
-        call pack#add('builtin')
-        let g:complete_engine = 'builtin'
-    else
-        let g:complete_engine = 'mcm'
-    endif
+elseif pack#get('builtin') && (has('nvim-0.11') || has('patch-9.1.1590'))
+    let g:complete_engine = 'builtin'
+elseif pack#get('coc') && (g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438')))
+    let g:complete_engine = 'coc'
+elseif pack#get('cmp') && has('nvim-0.11')
+    let g:complete_engine = 'cmp'
+elseif (pack#get('blink') || pack#get('blink.lua')) && has('nvim-0.11')
+    let g:complete_engine = 'blink'
 endif
 " ------------------------------
 " complete_engine install

@@ -45,5 +45,3 @@ else
     let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict']
 endif
 let g:mucomplete#chains.markdown = ['path', 'cmd', 'keyn']
-" installed this complete
-PlugAdd 'vim-mucomplete'

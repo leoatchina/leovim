@@ -64,7 +64,7 @@ if pack#installed_lsp()
     endif
 elseif pack#planned_coc()
     source $CFG_DIR/coc.vim
-elseif g:complete_engine != ''
+elseif get(g:, 'complete_engine', '') != ''
     if has('nvim-0.11')
         let g:complete_engine = 'builtin'
         lua require("cfg/builtin")
@@ -74,6 +74,7 @@ elseif g:complete_engine != ''
     else
         let g:complete_engine = 'mcm'
         source $CFG_DIR/mcm.vim
+        set rtp+=$CLONE_OPT_DIR/vim-mucomplete
     endif
 endif
 " ------------------------------
