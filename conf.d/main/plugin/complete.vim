@@ -64,18 +64,15 @@ if pack#installed_lsp()
     endif
 elseif pack#installed_coc()
     source $CFG_DIR/coc.vim
-elseif get(g:, 'complete_engine', '') != ''
-    if has('nvim-0.11') && g:complete_engine != 'mcm'
-        let g:complete_engine = 'builtin'
+elseif get(g:, 'complete_engine', '') == 'builtin'
+    if has('nvim-0.11')
         lua require("cfg/builtin")
-    elseif has('patch-9.1.1590') && g:complete_engine != 'mcm'
-        let g:complete_engine = 'builtin'
-        source $CFG_DIR/builtin.vim
     else
-        let g:complete_engine = 'mcm'
-        source $CFG_DIR/mcm.vim
-        set rtp+=$CLONE_OPT_DIR/vim-mucomplete
+        source $CFG_DIR/builtin.vim
     endif
+elseif get(g:, 'complete_engine', '') != ''
+    let g:complete_engine = 'mcm'
+    source $CFG_DIR/mcm.vim
 endif
 " ------------------------------
 " vsnip

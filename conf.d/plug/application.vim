@@ -48,9 +48,6 @@ endif
 if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'rafamadriz/friendly-snippets'
     PlugAdd 'hrsh7th/vim-vsnip'
-    if g:complete_engine == 'mcm'
-        PlugAdd 'hrsh7th/vim-vsnip-integ'
-    endif
 endif
 " ------------------------------
 " lsp && linter tool install
