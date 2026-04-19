@@ -9,10 +9,8 @@ elseif pack#get('cmp') && has('nvim-0.11')
     let g:complete_engine = 'cmp'
 elseif (pack#get('blink') || pack#get('blink.lua')) && has('nvim-0.11')
     let g:complete_engine = 'blink'
-elseif !pack#get('mcm') && (has('nvim-0.11') || has('patch-9.1.1590'))
-    let g:complete_engine = 'builtin'
 else
-    let g:complete_engine = 'mcm'
+    let g:complete_engine = 'basic'
 endif
 " ------------------------------
 " complete_engine install
