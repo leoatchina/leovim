@@ -32,10 +32,29 @@ let $CLONE_OPT_DIR = expand($PACK_DIR . '/clone/opt')
 " --------------------------
 set rtp^=$PACK_DIR
 set rtp^=$INIT_DIR
-" if exists(':packadd')
-"     set packpath^=$LEOVIM_DIR
-"     set packpath^=$CONF_D_DIR
-" endif
+" --------------------------
+" gui_running && OS
+" --------------------------
+if utils#is_vscode() && !has('nvim-0.10')
+    echoe "vscode-neovim required nvim-0.10+!"
+    finish
+elseif utils#is_win() && !has('nvim') && v:version < 900
+    echoe "In windows, please update to vim9.0+."
+    finish
+endif
+if has('gui_running') && get(g:, 'leovim_loaded', 0) == 0
+    " NOTE :h guioptions
+    set guioptions=
+elseif utils#is_neovide()
+    let g:neovide_cursor_animation_length = 0
+    let g:neovide_cursor_trail_size = 0
+    let g:neovide_scroll_animation_length = 0
+    let g:neovide_position_animation_length = 0
+    let g:neovide_cursor_animate_in_insert_mode = v:false
+endif
+" --------------------------
+" plugs
+" --------------------------
 let s:opt_plugs = {}
 for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
     for plug_dir in globpath(opt_dir, '*', 0, 1)
@@ -47,40 +66,6 @@ for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
         let s:opt_plugs[plugin] = abs_dir
     endfor
 endfor
-" --------------------------
-" gui_running && OS
-" --------------------------
-if utils#is_vscode() && !has('nvim-0.10')
-    echoe "vscode-neovim required nvim-0.10+!"
-    finish
-elseif utils#is_win() && !has('nvim') && v:version < 900
-    echoe "In windows, please update to vim9.0+."
-    finish
-endif
-if has('gui_running')
-    if get(g:, 'leovim_loaded', 0) == 0
-        " e: GUI tabline, T: toolbar, t: tear-off menu, m: menu bar
-        " r/R/l/L: right/left scrollbars, b: bottom scrollbar
-        " set guioptions-=e
-        " set guioptions-=T
-        " set guioptions-=t
-        " set guioptions-=m
-        " set guioptions-=r
-        " set guioptions-=R
-        " set guioptions-=l
-        " set guioptions-=L
-        " set guioptions-=b
-        " set guioptions-=B
-        " set guioptions-=g
-        set guioptions=
-    endif
-elseif utils#is_neovide()
-    let g:neovide_cursor_animation_length = 0
-    let g:neovide_cursor_trail_size = 0
-    let g:neovide_scroll_animation_length = 0
-    let g:neovide_position_animation_length = 0
-    let g:neovide_cursor_animate_in_insert_mode = v:false
-endif
 " ------------------------
 " mapleader
 " ------------------------
