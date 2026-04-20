@@ -59,15 +59,9 @@ elseif utils#is_win() && !has('nvim') && v:version < 900
 endif
 if has('gui_running')
     if get(g:, 'leovim_loaded', 0) == 0
-        set guioptions-=e
-        set guioptions-=T
-        set guioptions-=t
-        set guioptions-=r
-        set guioptions-=R
-        set guioptions-=l
-        set guioptions-=L
-        set guioptions-=m
-        set guioptions-=
+        " e: GUI tabline, T: toolbar, t: tear-off menu, m: menu bar
+        " r/R/l/L: right/left scrollbars, b: bottom scrollbar
+        set guioptions-=eTtmrRlLb
     endif
 elseif utils#is_neovide()
     let g:neovide_cursor_animation_length = 0
