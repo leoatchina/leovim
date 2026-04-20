@@ -49,11 +49,11 @@ else
     nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=utils#get_vcs_dir()<Cr><Cr>
 endif
 if pack#planned_fzf()
-    nnoremap <silent><nowait>\F :FzfGitFiles <C-r>=@"<Cr>
-    xnoremap <silent><nowait>\F :<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
-    nnoremap <silent><nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
+    nnoremap <nowait>\F :FzfGitFiles <C-r>=@"<Cr>
+    xnoremap <nowait>\F :<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
+    nnoremap <nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 else
-    nnoremap <silent><nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
+    nnoremap <nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
 endif
 " ---------------------------------
 " open gitroot getroot

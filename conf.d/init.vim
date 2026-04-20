@@ -61,7 +61,18 @@ if has('gui_running')
     if get(g:, 'leovim_loaded', 0) == 0
         " e: GUI tabline, T: toolbar, t: tear-off menu, m: menu bar
         " r/R/l/L: right/left scrollbars, b: bottom scrollbar
-        set guioptions-=eTtmrRlLb
+        " set guioptions-=e
+        " set guioptions-=T
+        " set guioptions-=t
+        " set guioptions-=m
+        " set guioptions-=r
+        " set guioptions-=R
+        " set guioptions-=l
+        " set guioptions-=L
+        " set guioptions-=b
+        " set guioptions-=B
+        " set guioptions-=g
+        set guioptions=
     endif
 elseif utils#is_neovide()
     let g:neovide_cursor_animation_length = 0
