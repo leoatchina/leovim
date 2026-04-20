@@ -121,7 +121,7 @@
 - [x] add ai intergration in vim-floaterm-enhance
     - [x] using different idx for ai, repl
 - [x] FzfVcsFiles, LeaderfVcsFiles without git, only use .git .svn
-- [ ] windows gvim add DETACH to winbar
+- [x] windows gvim add DETACH to winbar
 - [ ] R.exe exepath in windows
 - [ ] Fzf --no-sort option for different commands
 ## MyPlugins:

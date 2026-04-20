@@ -61,6 +61,7 @@ if has('gui_running')
     if get(g:, 'leovim_loaded', 0) == 0
         set guioptions-=e
         set guioptions-=T
+        set guioptions-=t
         set guioptions-=r
         set guioptions-=R
         set guioptions-=l

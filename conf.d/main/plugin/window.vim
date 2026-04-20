@@ -168,11 +168,7 @@ if has('patch-8.0.1129') && !has('nvim')
         else
             let fname = utils#expand("%:t", 1)
             let ename = utils#escape(fname)
-            let dname = utils#escape('-->Detach')
             if a:open
-                if index(getcompletion('WinBar.', 'menu'), dname) >= 0
-                    execute 'unmenu WinBar.' . dname
-                endif
                 if index(getcompletion('WinBar.', 'menu'), ename) < 0
                     try
                         execute "nnoremenu 1.00 WinBar." . ename . ' :echo ' . fname
