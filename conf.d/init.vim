@@ -340,10 +340,11 @@ endif
 " -----------------------------------------------------------
 " NOTE: plug install and config end
 " -----------------------------------------------------------
-if !pack#installed_coc() && !pack#installed_lsp() || g:complete_engine == 'basic'
+if !pack#installed_coc() && !pack#installed_lsp() && g:complete_engine != ''
     if !pack#get('mcm') && (has('nvim-0.11') || has('patch-9.1.1590'))
         let g:complete_engine = 'builtin'
     else
+        let g:complete_engine = 'mcm'
         PlugAdd 'vim-mucomplete'
         PlugAdd 'hrsh7th/vim-vsnip-integ'
     endif
