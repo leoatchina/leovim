@@ -127,8 +127,15 @@ function FzfCallCommands(prompt, ...)
         let l:fzf_layout = {'down': '~30%'}
     endif
     function! s:fzf_execute(item) abort
+        " Guard against cancel (ESC / Ctrl-C) which returns [] or ['']
+        if empty(a:item) || len(a:item) < 2
+            return
+        endif
         let key = a:item[0]
         let cmd = a:item[1]
+        if empty(cmd)
+            return
+        endif
         call histadd(':', cmd)
         if key == 'ctrl-e'
             redraw
