@@ -322,7 +322,8 @@ endfunction
 command! PlugAddUpdate call s:plug_add_update()
 nnoremap <silent><Tab>u :PlugAddUpdate<Cr>
 nnoremap <silent><Tab>i :PlugInstall<Cr>
-nnoremap <silent><Tab>P :Plug
+command! PlugCommands call FzfCallCommands('PlugCommands', 'Plug')
+nnoremap <silent><Tab>: :PlugCommands<Cr>
 " addtional vim packs
 if filereadable(utils#expand("~/.leovim.d/pack.vim"))
     source ~/.leovim.d/pack.vim
