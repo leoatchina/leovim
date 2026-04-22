@@ -4,7 +4,7 @@ if pack#installed('rust.vim')
     nnoremap <buffer><silent><M-M> :RustCommands<Cr>
 endif
 if pack#installed_coc()
-    nnoremap <buffer>q<Cr> :CocCommand rust-analyzer.
+    nnoremap <buffer>M<Cr> :CocCommand rust-analyzer.
 endif
 inoremap <buffer>!! !=
 inoremap <buffer><< <-

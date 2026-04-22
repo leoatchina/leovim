@@ -117,10 +117,6 @@ endif
 " -----------------------------------
 " map
 " -----------------------------------
-nmap q <Nop>
-nmap M q
-xmap M q
-omap M q
 map ÏP <F1>
 map ÏQ <F2>
 map ÏR <F3>

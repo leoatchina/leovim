@@ -5,7 +5,7 @@ if pack#installed('vim-go')
     nnoremap <buffer><silent>gl :GoDefPop<Cr>
     nnoremap <buffer><silent><leader>A :GoImports<Cr>
     if InstalledAdv()
-        nnoremap <buffer><silent>gx :GoDoc<Cr>
+        nnoremap <buffer><silent>gm :GoDoc<Cr>
     else
         nnoremap <buffer><silent><C-g> :GoDef<Cr>
         nnoremap <buffer><silent><M-/> :GoReferrers<Cr>
@@ -15,8 +15,8 @@ if pack#installed('vim-go')
 endif
 " NOTE: below in order to be comparable with vscode-neovim
 if pack#installed('coc.nvim')
-    nmap <buffer>qtj :CocCommand go.tags.add json<cr>
-    nmap <buffer>qty :CocCommand go.tags.add yaml<cr>
-    nmap <buffer>qtx :CocCommand go.tags.clear<cr>
+    nmap <buffer>Mtj :CocCommand go.tags.add json<cr>
+    nmap <buffer>Mty :CocCommand go.tags.add yaml<cr>
+    nmap <buffer>Mtx :CocCommand go.tags.clear<cr>
 endif
 inoremap <buffer>:: :=

@@ -58,10 +58,10 @@ if pack#installed('nvim-r')
             let t:robjrb_status = 0
         endif
     endfunction
-    nnoremap <buffer><silent>q<Space> :call ToggleRObjBrowser()<Cr>
-    nnoremap <buffer><silent>q<Tab> :call ToggleEnvLib()<Cr>
-    au FileType rbrowser nnoremap <silent>q<Space> :call ToggleRObjBrowser()<Cr>
-    au FileType rbrowser nnoremap <silent>q<Tab> :call ToggleEnvLib()<Cr>
+    nnoremap <buffer><silent>M<Space> :call ToggleRObjBrowser()<Cr>
+    nnoremap <buffer><silent>M<Tab> :call ToggleEnvLib()<Cr>
+    au FileType rbrowser nnoremap <buffer><silent>M<Space> :call ToggleRObjBrowser()<Cr>
+    au FileType rbrowser nnoremap <buffer><silent>M<Tab> :call ToggleEnvLib()<Cr>
     " view variable
     nnoremap <buffer><silent>J :call RAction('print')<CR>
     nnoremap <buffer><silent>- :call RAction('viewobj')<CR>
@@ -82,12 +82,12 @@ if pack#installed('nvim-r')
     nnoremap <buffer>\q :call RQuit('nosave')<Cr>
     nnoremap <buffer>\Q :call RQuit('save')<Cr>
 endif
-inoremap <buffer> <M-a>  # %%
-inoremap <buffer> <Esc>a # %%
-inoremap <buffer> <M-e>  # STEP
-inoremap <buffer> <Esc>e # STEP
-inoremap <buffer> <M-m>  # In[]<Left>
-inoremap <buffer> <Esc>m # In[]<Left>
-inoremap <buffer> >> ->
-inoremap <buffer> << <-
-inoremap <buffer> ?? %>%
+inoremap <buffer><M-a>  # %%
+inoremap <buffer><Esc>a # %%
+inoremap <buffer><M-e>  # STEP
+inoremap <buffer><Esc>e # STEP
+inoremap <buffer><M-m>  # In[]<Left>
+inoremap <buffer><Esc>m # In[]<Left>
+inoremap <buffer>>> ->
+inoremap <buffer><< <-
+inoremap <buffer>?? %>%
