@@ -27,9 +27,9 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap [ :WhichKey '['<Cr>
     nnoremap ] :WhichKey ']'<Cr>
     " basic keys
+    " nnoremap q :WhichKey 'q'<Cr>
     nnoremap <Tab> :WhichKey '<Tab>'<Cr>
     nnoremap <Space> :WhichKey ' '<Cr>
-    nnoremap q :WhichKey 'q'<Cr>
     nnoremap , :WhichKey ','<Cr>
     nnoremap ; :WhichKey ';'<Cr>
     nnoremap \ :WhichKey '\'<Cr>
