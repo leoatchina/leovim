@@ -64,14 +64,6 @@ if pack#installed_lsp()
     endif
 elseif pack#planned_coc()
     source $CFG_DIR/coc.vim
-elseif g:complete_engine == 'builtin'
-    if has('nvim-0.11')
-        lua require("cfg/builtin")
-    else
-        source $CFG_DIR/builtin.vim
-    endif
-elseif g:complete_engine = 'mcm'
-    source $CFG_DIR/mcm.vim
 endif
 " ------------------------------
 " vsnip
