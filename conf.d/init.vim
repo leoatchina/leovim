@@ -44,7 +44,7 @@ elseif utils#is_win() && !has('nvim') && v:version < 900
 endif
 if has('gui_running') && get(g:, 'leovim_loaded', 0) == 0
     " NOTE :h guioptions
-    set guioptions=
+    set guioptions=g
 elseif utils#is_neovide()
     let g:neovide_cursor_animation_length = 0
     let g:neovide_cursor_trail_size = 0
