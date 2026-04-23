@@ -42,7 +42,7 @@ elseif utils#is_win() && !has('nvim') && v:version < 900
     echoe "In windows, please update to vim9.0+."
     finish
 endif
-if has('gui_running') && get(g:, 'leovim_loaded', 0) == 0
+if has('gui_running') && !has('nvim') && get(g:, 'leovim_loaded', 0) == 0
     " NOTE :h guioptions
     set guioptions=g
 elseif utils#is_neovide()
