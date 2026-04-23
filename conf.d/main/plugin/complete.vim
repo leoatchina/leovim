@@ -70,7 +70,7 @@ elseif g:complete_engine == 'builtin'
     else
         source $CFG_DIR/builtin.vim
     endif
-elseif g:complete_engine = 'mcm'
+elseif g:complete_engine == 'mcm'
     source $CFG_DIR/mcm.vim
 endif
 " ------------------------------
