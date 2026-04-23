@@ -340,8 +340,14 @@ endif
 if !pack#installed_coc() && !pack#installed_lsp() && get(g:, 'complete_engine', '') != ''
     if !pack#get('mcm') && (has('nvim-0.11') || has('patch-9.1.1590'))
         let g:complete_engine = 'builtin'
+        if has('nvim-0.11')
+            lua require("cfg/builtin")
+        else
+            source $CFG_DIR/builtin.vim
+        endif
     else
         let g:complete_engine = 'mcm'
+        source $CFG_DIR/mcm.vim
         PlugAdd 'vim-mucomplete'
         PlugAdd 'hrsh7th/vim-vsnip-integ'
     endif
