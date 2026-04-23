@@ -28,9 +28,9 @@ if g:complete_engine == 'cmp'
     PlugAdd 'xzbdmw/colorful-menu.nvim'
 elseif g:complete_engine == 'blink'
     if executable('cargo') && !pack#get('blink.lua')
-        PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release'}
+        PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release', 'branch': 'v1'}
     else
-        PlugAdd 'Saghen/blink.cmp'
+        PlugAdd 'Saghen/blink.cmp', {'branch': 'v1'}
     endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
