@@ -196,13 +196,18 @@ nnoremap <silent>d<space> :call utils#trip_whitespace()<Cr>
 " ------------------------
 if has('nvim')
     function! s:open_in_other()
-        if utils#is_vscode() && executable(get(g:, 'open_neovim', ''))
-            silent! exec printf('!%s +%d "%s"', g:open_neovim, line('.'), utils#abs_path())
-        elseif !utils#is_vscode() && executable(get(g:, 'open_editor', 'code'))
-            silent! exec printf("!%s --goto %s:%d:%d", g:open_editor, utils#abs_path(), line("."), col("."))
+        if utils#is_vscode()
+            let opener = get(g:, 'open_neovim', '')
+            let target = printf('+%d %s', line('.'), shellescape(utils#abs_path()))
         else
-            echom "Cannot open current file in other editor."
+            let opener = get(g:, 'open_editor', 'code')
+            let target = printf('--goto %s', shellescape(printf('%s:%d:%d', utils#abs_path(), line('.'), col('.'))))
         endif
+        if !executable(opener)
+            echom "Cannot open current file in other editor."
+            return
+        endif
+        silent! execute '!' . shellescape(opener) . ' ' . target
     endfunction
     command! OpenInOther call s:open_in_other()
     nnoremap <silent><nowait>g<tab> :OpenInOther<Cr>
@@ -211,17 +216,19 @@ endif
 " open url/file under cursor
 " ------------------------
 function! s:get_cursor_pos(text, col)
-    " Find the start location
-    let col = a:col
-    while col >= 0 && a:text[col] =~ '\f'
-        let col = col - 1
+    let cursor = a:col - 1
+    let start = 0
+    while 1
+        let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', start)
+        if empty(m)
+            break
+        endif
+        let begin = match(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', start)
+        if begin <= cursor && cursor < begin + strlen(m[0])
+            return [m[1], m[2], m[3]]
+        endif
+        let start = begin + 1
     endwhile
-    let col = col + 1
-    " Match file name and position
-    let m = matchlist(a:text, '\v(\f+)%([#:](\d+))?%(:(\d+))?', col)
-    if len(m) > 0
-        return [m[1], m[2], m[3]]
-    endif
     return []
 endfunction
 function! s:open_link_in_editor(text, col)
@@ -234,33 +241,24 @@ function! s:open_link_in_editor(text, col)
         echom "No file under cursor"
         return
     endif
-    if executable(get(g:, 'open_editor', 'code'))
-        let editor = get(g:, 'open_editor', 'code') . ' --goto'
-    else
+    let editor = get(g:, 'open_editor', 'code')
+    if !executable(editor)
         echom "Neither URL nor file found, and no editor executable"
         return
     endif
-    " location 0: file, 1: row, 2: column
     let location = s:get_cursor_pos(a:text, a:col)
-    try
-        let fl = location[0]
-    catch /.*/
-        let fl = ''
-    endtry
-
-    if fl != '' && filereadable(fl)
-        if location[1] != ''
-            if location[2] != ''
-                exec "!" . editor . " " . fl . ":" . str2nr(location[1]) . ":" . str2nr(location[2])
-            else
-                exec "!" . editor . " " . fl . ":" . str2nr(location[1])
-            endif
-        else
-            exec "!" . editor . " " . fl
-        endif
-    else
+    if empty(location) || !filereadable(location[0])
         echo "Neither URL nor file path under cursor."
+        return
     endif
+    let target = location[0]
+    if location[1] != ''
+        let target .= ':' . str2nr(location[1])
+        if location[2] != ''
+            let target .= ':' . str2nr(location[2])
+        endif
+    endif
+    execute '!' . shellescape(editor) . ' --goto ' . shellescape(target)
 endfunction
 command! OpenLink call s:open_link_in_editor(getline("."), col("."))
 nnoremap <silent>gx :OpenLink<cr>
