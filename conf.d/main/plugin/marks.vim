@@ -3,7 +3,7 @@ if utils#is_vscode()
     finish
 endif
 if pack#planned_fzf()
-    nnoremap <silent><leader>M :FzfMarks<CR>
+    nnoremap <silent><leader>m :FzfMarks<CR>
 endif
 if pack#installed('vim-signature')
     let g:SignatureMap = {

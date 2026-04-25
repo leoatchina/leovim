@@ -15,7 +15,7 @@ nnoremap <C-x> x
 " quickfix
 nnoremap <C-.> <Cmd>lua require('vscode-neovim').action("keyboard-quickfix.openQuickFix")<CR>
 " open mru view
-nnoremap <leader>m <Cmd>lua require('vscode-neovim').action("workbench.action.openRecent")<Cr>
+nnoremap <leader>u <Cmd>lua require('vscode-neovim').action("workbench.action.openRecent")<Cr>
 " open view
 nnoremap <leader>s <Cmd>lua require('vscode-neovim').action("workbench.action.openView")<Cr>
 " open file

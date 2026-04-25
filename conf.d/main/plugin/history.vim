@@ -3,11 +3,11 @@ if utils#is_vscode()
     finish
 endif
 if pack#planned_leaderf()
-    nnoremap <silent><leader>m :LeaderfMru<Cr>
+    nnoremap <silent><M-u> :LeaderfMru<Cr>
 elseif pack#planned_fzf()
-    nnoremap <silent><leader>m :FzfHistory<Cr>
+    nnoremap <silent><M-u> :FzfHistory<Cr>
 else
-    nnoremap <silent><leader>m :CtrlPMRU<Cr>
+    nnoremap <silent><M-u> :CtrlPMRU<Cr>
 endif
 " --------------------------
 " jumpoption
@@ -26,7 +26,7 @@ endif
 " undotree
 if pack#planned('undotree')
     let g:undotree_WindowLayout = 4
-    nnoremap <silent><M-u> :UndotreeToggle<Cr>
+    nnoremap <silent><leader>u :UndotreeToggle<Cr>
 endif
 " ------------------------------
 " Fzf jumps
