@@ -50,7 +50,7 @@ elseif g:complete_engine == 'blink'
     if pack#get('blink.lua') || pack#get('blink') && !executable('cargo')
         call scheme#set('nightfox', 'hybrid')
     else
-        call scheme#set('duskfox', 'hybrid')
+        call scheme#set('terafox', 'hybrid')
     endif
 elseif g:complete_engine == 'coc'
     if has('nvim')
