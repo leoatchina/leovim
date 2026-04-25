@@ -125,7 +125,7 @@ if has('termguicolors') || utils#is_win() || utils#has_gui()
         let g:has_truecolor = 0
     endtry
 else
-    let g:has_tricolor = 0
+    let g:has_truecolor = 0
 endif
 " -----------------------------------
 " git version

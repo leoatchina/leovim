@@ -96,8 +96,6 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vU vau
     nmap <leader>vb vib
     nmap <leader>vB vaB
-    nmap <leader>vn vin
-    nmap <leader>vN vaN
     " -------------------
     " indent textobj
     " -------------------

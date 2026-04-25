@@ -144,7 +144,7 @@ function! window#smart_resize(line, move) abort
             endif
         endif
     endif
-    if empty('cmd')
+    if empty(cmd)
         return
     else
         noautocmd silent! execute cmd
