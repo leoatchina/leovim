@@ -32,7 +32,7 @@ git clone --depth 1 https://github.com/easymotion/vim-easymotion.git
 rm -rf vim-easymotion-chs
 git clone --depth 1 https://github.com/ZSaberLv0/vim-easymotion-chs.git
 
-# swithc.vim
+# switch.vim
 rm -rf swith.cim
 git clone --depth 1 https://github.com/AndrewRadev/switch.vim
 
@@ -104,18 +104,22 @@ git clone --depth 1 https://github.com/mbbill/undotree.git
 
 # vim-floaterm
 rm -rf vim-floaterm 
-git clone --depth 1 https://github.com/voldikss/vim-floaterm
+git clone --depth 1 https://github.com/voldikss/vim-floaterm.git
+
+# vim-quickui
+rm -rf vim-quickui 
+git clone --depth 1 https://github.com/skywind3000/vim-quickui.git
 
 # fern
 rm -rf vim-fern* fern-* vim-nerdfont vim-glyph-palette
-git clone --depth 1 https://github.com/lambdalisue/vim-fern
-git clone --depth 1 https://github.com/lambdalisue/vim-fern-git-status
-git clone --depth 1 https://github.com/lambdalisue/vim-fern-hijack
-git clone --depth 1 https://github.com/lambdalisue/vim-fern-renderer-nerdfont
-git clone --depth 1 https://github.com/lambdalisue/vim-nerdfont
-git clone --depth 1 https://github.com/lambdalisue/vim-glyph-palette
-git clone --depth 1 https://github.com/LumaKernel/fern-mapping-fzf.vim
-git clone --depth 1 https://github.com/yuki-yano/fern-preview.vim
+git clone --depth 1 https://github.com/lambdalisue/vim-fern.git
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-git-status.git
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-hijack.git
+git clone --depth 1 https://github.com/lambdalisue/vim-fern-renderer-nerdfont.git
+git clone --depth 1 https://github.com/lambdalisue/vim-nerdfont.git
+git clone --depth 1 https://github.com/lambdalisue/vim-glyph-palette.git
+git clone --depth 1 https://github.com/LumaKernel/fern-mapping-fzf.vim.git
+git clone --depth 1 https://github.com/yuki-yano/fern-preview.vim.git
 
 # zfvim
 rm -rf ZFVim*
