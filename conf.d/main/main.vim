@@ -93,7 +93,7 @@ endif
 " has_terminal
 " --------------------------
 if exists(':tnoremap')
-    if has('patch-8.1.1') && !has('nvim')
+    if has('patch-8.1.875') && !has('nvim')
         set termwinkey=<C-_>
         let g:has_terminal = 2
     else
@@ -187,7 +187,9 @@ else
     " --------------------------
     " terminal comparability
     " --------------------------
-    set t_ut=
+    if exists('+t_ut')
+        set t_ut=
+    endif
     if exists('+t_TI') && exists('+t_TE')
         let &t_TI = ''
         let &t_TE = ''
@@ -256,8 +258,8 @@ endif
 " ------------------------------
 " install packs
 " ------------------------------
-for cfg in split(glob("$PLUG_DIR/*.vim"), "\n")
-    exec "source " . cfg
+for s:cfg in glob("$PLUG_DIR/*.vim", 0, 1)
+    exec "source " . s:cfg
 endfor
 " ------------------------------
 " <M-Key> map
