@@ -40,11 +40,10 @@ xnoremap <M-w> <ESC>
 cnoremap <M-w> <ESC>
 " basic set
 nnoremap <M-k>z :set nofoldenable! nofoldenable?<Cr>
-nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//g<Cr>
+nnoremap <M-k>u :set ff=unix<Cr>:%s/\r//ge<Cr>
 if has('nvim')
     nnoremap <M-k>U :UpdateRemotePlugins<Cr>
 endif
-nnoremap = :<C-r>=
 " ------------------------------
 " file functions
 " ------------------------------
@@ -61,10 +60,10 @@ if utils#is_win32unix()
 else
     " NOTE, cannot use pyxeval/py3eval/pyeval, otherwise neovim will error when pip packages are not installed.
     try
-        let py_version = utils#execute('py3 print(sys.version)')
+        let py_version = utils#execute('py3 import sys; print(sys.version)')
     catch
         try
-            let py_version = utils#execute('py print(sys.version)')
+            let py_version = utils#execute('py import sys; print(sys.version)')
         catch
             let py_version = ""
         endtry
@@ -114,7 +113,6 @@ endif
 if has('termguicolors') || utils#is_win() || utils#has_gui()
     try
         set termguicolors
-        hi LineNr ctermbg=NONE guibg=NONE
         if !has('nvim')
             let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
             let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -131,7 +129,7 @@ endif
 " git version
 " -----------------------------------
 if executable('git')
-    let s:git_version_raw = matchstr(system('git --version'), '\v\zs\d{1,4}.\d{1,4}.\d{1,4}\ze')
+    let s:git_version_raw = matchstr(system('git --version'), '\v\zs\d+\.\d+\.\d+\ze')
     let g:git_version = utils#string_to_float(s:git_version_raw)
 else
     let g:git_version = 0
@@ -140,7 +138,7 @@ endif
 " node install tool
 " ------------------------------
 if executable('node') && executable('npm')
-    let s:node_version_raw = matchstr(system('node --version'), '\vv\zs\d{1,4}.\d{1,4}\ze')
+    let s:node_version_raw = matchstr(system('node --version'), '\vv\zs\d+\.\d+\ze')
     let g:node_version = utils#string_to_float(s:node_version_raw)
 else
     let g:node_version = 0
@@ -239,7 +237,7 @@ if utils#is_win() && pack#get('tags') || utils#is_unix()
         let $GTAGSCONF = utils#expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
     endif
     if executable('gtags') && get(g:, 'ctags_type', '') != '' && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
-        let s:gtags_version = matchstr(system('gtags --version'), '\v\zs\d{1,2}.\d{1,2}.\d{1,2}\ze')
+        let s:gtags_version = matchstr(system('gtags --version'), '\v\zs\d+\.\d+\.\d+\ze')
         let g:gtags_version = utils#string_to_float(s:gtags_version, 2)
         if get(g:, 'pygments_import', 0)
             let $GTAGSLABEL = 'native-pygments'
@@ -258,8 +256,8 @@ endif
 " ------------------------------
 " install packs
 " ------------------------------
-for vim in split(glob("$PLUG_DIR/*.vim"), "\n")
-    exec "source " . vim
+for cfg in split(glob("$PLUG_DIR/*.vim"), "\n")
+    exec "source " . cfg
 endfor
 " ------------------------------
 " <M-Key> map
