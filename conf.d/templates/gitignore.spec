@@ -49,6 +49,7 @@ venv/
 .vscode/
 .vercel/
 .vs/
+.deepseek/
 .ccls-cache/
 __pycache__/
 
