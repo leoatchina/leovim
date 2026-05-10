@@ -197,9 +197,9 @@ xnoremap X <Esc>`.``gvp``P
 " m-v paste
 cnoremap <M-v> <C-r>"
 if g:has_terminal == 1
-    tnoremap <M-v> <C-\><C-n>""pa
+    tnoremap <M-'> <C-\><C-n>""pa
 elseif g:has_terminal == 2
-    tnoremap <M-v> <C-_>""
+    tnoremap <M-'> <C-_>""
 endif
 " ------------------------------------
 " registers plugins with fzf

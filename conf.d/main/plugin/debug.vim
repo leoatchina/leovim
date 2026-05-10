@@ -156,7 +156,7 @@ if pack#planned('vimspector')
             execute windowNr . 'wincmd w'
         endif
     endfunction
-    nnoremap <silent><M-'>  :call vimspector#ListBreakpoints()<Cr>
+    nnoremap <silent><M-m>b :call vimspector#ListBreakpoints()<Cr>
     nnoremap <silent><M-m>i :call GoToVimspectorWindow('important')<Cr>
     nnoremap <silent><M-m>s :call GoToVimspectorWindow('server')<Cr>
     nnoremap <silent><M-m>e :call GoToVimspectorWindow('stderr')<Cr>
@@ -288,7 +288,7 @@ elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'maso
             endif
         endtry
     endfunction
-    nnoremap <silent><M-'>  <Cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
+    nnoremap <silent><M-m>b <Cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
     nnoremap <silent><M-m>1 <Cmd>call GoToDAPWindows("DAP Scopes")<Cr>
     nnoremap <silent><M-m>2 <Cmd>call GoToDAPWindows("DAP Watches")<Cr>
     nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
