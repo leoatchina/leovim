@@ -194,8 +194,9 @@ cnoremap <S-insert> <C-r>"
 inoremap <S-Insert> <C-r>"
 " switch 2 words
 xnoremap X <Esc>`.``gvp``P
-" m-v paste
-cnoremap <M-v> <C-r>"
+" m-' paste
+cnoremap <M-'> <C-r>"
+" M-' for tevminal
 if g:has_terminal == 1
     tnoremap <M-'> <C-\><C-n>""pa
 elseif g:has_terminal == 2
