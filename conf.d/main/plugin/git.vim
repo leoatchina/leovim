@@ -120,6 +120,11 @@ if pack#planned_leaderf()
     nnoremap <silent><M-g>f :Leaderf git log --side-by-side --current-file<Cr>
     nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
     nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
+    let g:Lf_GitKeyMap = {
+                \ 'diff_get_ours': '<leader>1',
+                \ 'diff_get_base': '<leader>2',
+                \ 'diff_get_theirs': '<leader>3',
+                \ }
 elseif pack#planned('vim-signify')
     function! git#SignifyDiff()
         SignifyDiff
