@@ -148,26 +148,14 @@ nnoremap <silent> gj j
 nnoremap <silent> gk k
 nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
 nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
-" z remap
-nnoremap zs <Nop>
-nnoremap zS <Nop>
-nnoremap zw <Nop>
-nnoremap zW <Nop>
-nnoremap zg <Nop>
-nnoremap zG <Nop>
-nnoremap zl zL
-nnoremap zh zH
-nnoremap zr zR
-nnoremap z= zT
-nnoremap z- zB
-nnoremap ZT zt
 " bs tab
 nnoremap <Bs> :set nohlsearch? nohlsearch!<Cr>
 nnoremap <Cr> <C-i>
 nnoremap gb 2g;I
-" case change
+" case change && Z map
 nnoremap ZU m1gUiw`1
 nnoremap ZD m1guiw`1
+nnoremap ZT zt
 " home end
 cmap <C-a> <Home>
 cmap <C-e> <End>

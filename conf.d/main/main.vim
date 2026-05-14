@@ -24,6 +24,18 @@ endfor
 nnoremap <M-A> ggVG
 nnoremap gQ gw
 xnoremap gQ gw
+" z remap
+nnoremap zs <Nop>
+nnoremap zS <Nop>
+nnoremap zw <Nop>
+nnoremap zW <Nop>
+nnoremap zg <Nop>
+nnoremap zG <Nop>
+nnoremap zl zL
+nnoremap zh zH
+nnoremap zr zR
+nnoremap z= zT
+nnoremap z- zB
 " remap for cusor move insert mode
 inoremap <M-l> <Right>
 inoremap <M-h> <Left>
