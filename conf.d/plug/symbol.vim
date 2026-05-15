@@ -63,7 +63,7 @@ if s:planned_symbol('plus')
     PlugAdd 'skywind3000/gutentags_plus'
 endif
 if s:planned_symbol('aerial')
-    PlugAdd 'stevearc/aerial.nvim'
+    PlugAdd 'stevearc/aerial.nvim', {'branch': 'nvim-0.11'}
 endif
 if s:planned_symbol('vista')
     PlugAdd 'vista.vim'
