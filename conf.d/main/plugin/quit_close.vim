@@ -90,7 +90,7 @@ nnoremap <silent><leader>q :Quit<Cr>
 if has('nvim')
     augroup FileInsertFix
         autocmd!
-        autocmd TermClose * if &ft == 'fzf' | call feedkeys("\<C-\>\<C-n>", 'n') | endif
+        autocmd FileType fzf autocmd TermClose <buffer> call feedkeys("\<C-\>\<C-n>", 'n')
         autocmd FileType leaderf,fzf autocmd WinClosed <buffer> call timer_start(1, {-> execute('stopinsert')})
     augroup END
 endif
