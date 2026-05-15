@@ -91,6 +91,6 @@ if has('nvim')
     augroup FileInsertFix
         autocmd!
         autocmd TermClose * if &ft == 'fzf' | call feedkeys("\<C-\>\<C-n>", 'n') | endif
-        autocmd WinClosed * if mode() =~# '[it]' | call timer_start(1, {-> execute('stopinsert')}) | endif
+        autocmd FileType leaderf,fzf autocmd WinClosed <buffer> call timer_start(1, {-> execute('stopinsert')})
     augroup END
 endif
