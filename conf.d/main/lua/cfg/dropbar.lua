@@ -24,7 +24,7 @@ dropbar.setup({
       end
       if vim.bo[buf].buftype == 'terminal' then
         return {
-          sources.terminal,
+          nil,
         }
       end
       return {
