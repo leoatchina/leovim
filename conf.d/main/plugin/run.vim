@@ -277,9 +277,9 @@ if pack#planned('asyncrun.vim')
     command! AsyncTaskDeploy call s:tasks_open()
     command! AsyncTaskCommon call s:tasks_open(0)
     command! AsyncTaskTemplate call s:tasks_open(1)
-    nnoremap <leader>r<Cr> :AsyncTaskDeploy<Cr>
-    nnoremap <leader>r<Tab> :AsyncTaskTemplate<Cr>
-    nnoremap <leader>r<Space> :AsyncTaskCommon<Cr>
+    nnoremap <leader>rD :AsyncTaskDeploy<Cr>
+    nnoremap <leader>rC :AsyncTaskCommon<Cr>
+    nnoremap <leader>rE :AsyncTaskTemplate<Cr>
     " asynctask shortcuts
     command! AsyncTaskCommands call FzfCallCommands('AsyncTaskCommands', 'AsyncTask')
     nnoremap <leader>r: :AsyncTaskCommands<Cr>
