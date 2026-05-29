@@ -3,7 +3,7 @@
 " ------------------------------
 if pack#get('nocomplete') || pack#get('noc')
     let g:complete_engine = ''
-elseif pack#get('coc') && (g:node_version >= 16.18 && (has('nvim') || has('patch-9.0.0438')))
+elseif pack#get('coc') && (g:node_version >= 22 && (has('nvim') || has('patch-9.0.0438')))
     let g:complete_engine = 'coc'
 elseif pack#get('cmp') && has('nvim-0.11')
     let g:complete_engine = 'cmp'
