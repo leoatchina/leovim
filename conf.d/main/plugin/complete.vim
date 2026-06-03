@@ -62,7 +62,7 @@ if pack#installed_lsp()
     elseif pack#installed_cmp()
         lua require("cfg/cmp")
     endif
-elseif pack#planned_coc()
+elseif pack#installed_coc()
     source $CFG_DIR/coc.vim
 endif
 " ------------------------------
