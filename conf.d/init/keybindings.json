@@ -611,23 +611,23 @@
   {
     "key": "ctrl+l",
     "command": "chatgpt.addToThread",
-    "when": "editorTextFocus && chatgpt.sidebarView.active && chatgpt.sidebarView.visible"
+    "when": "editorTextFocus && chatgpt.sidebarView.visible"
   },
   {
     "key": "ctrl+alt+l",
     "command": "chatgpt.addFileToThread",
-    "when": "editorTextFocus && chatgpt.sidebarView.active && chatgpt.sidebarView.visible"
+    "when": "editorTextFocus && chatgpt.sidebarView.visible"
   },
   // ----------------- claude ----------------
   {
     "key": "ctrl+l",
     "command": "claude-vscode.insertAtMention",
-    "when": "editorTextFocus && claude-vscode.sideBarActive && claudeVSCodeSidebarSecondary.visible"
+    "when": "editorTextFocus && claude-vscode.sideBarActive"
   },
   {
     "key": "ctrl+alt+l",
     "command": "claude-code.insertAtMentioned",
-    "when": "editorTextFocus && claude-vscode.sideBarActive && claudeVSCodeSidebarSecondary.visible"
+    "when": "editorTextFocus && claude-vscode.sideBarActive"
   },
   {
     "key": "ctrl+alt+k",
