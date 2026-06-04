@@ -29,6 +29,7 @@ core.[0-9]*
 *.wildignore
 *.tar.*
 *DS_Store
+reasonix.toml
 
 # 文件夹
 build/
@@ -37,7 +38,6 @@ target/
 release/
 venv/
 .venv/
-.hg/
 .idea/
 .ipynb_checkpoints/
 .local/
@@ -46,7 +46,11 @@ venv/
 .svn/
 .vim/
 .nim/
+.hg/
+.fleet/
 .vscode/
+.cursor/
+.devin/
 .vercel/
 .vs/
 .deepseek/

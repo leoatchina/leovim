@@ -25,6 +25,7 @@ NULL
 .vercel/
 .theia/
 .vs/
+.devin/
 .fleet/
 .idea/
 .claude/
@@ -38,6 +39,7 @@ NULL
 .tasks/
 .npm/
 __pycache__/
+reasonix.toml
 /*.lua
 /*.json
 /*.vim
