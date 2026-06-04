@@ -79,11 +79,11 @@ if utils#is_win()
         " See :help +python3/dyn-stable.
     endif
     " let g:code_user_dir = 'C:\Users\Admin\AppData\Roaming\Code\User'
-    " let g:kiro_user_dir = 'C:\Users\Admin\AppData\Roaming\Kiro\User'
     " let g:trae_user_dir = 'C:\Users\Admin\AppData\Roaming\Trae\User'
+    " let g:devin_user_dir = 'C:\Users\Admin\AppData\Roaming\Devin\User'
     " let g:qoder_user_dir = 'C:\Users\Admin\AppData\Roaming\Qoder\User'
     " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
-    " let g:windsurf_user_dir = 'C:\Users\Admin\AppData\Roaming\Windsurf\User'
+    " let g:vscodium_user_dir = 'C:\Users\Admin\AppData\Roaming\VSCodium\User'
     " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
     " let g:antigravity_user_dir = 'C:\Users\Admin\AppData\Roaming\Antigravity\User'
 elseif utils#is_unix()
@@ -96,11 +96,11 @@ elseif utils#is_unix()
         " See :help +python3/dyn-stable.
     endif
     " let g:code_user_dir = utils#expand("$HOME/.config/Code/User")
-    " let g:kiro_user_dir = utils#expand("$HOME/.config/Kiro/User")
     " let g:trae_user_dir = utils#expand("$HOME/.config/Trae/User")
+    " let g:devin_user_dir = utils#expand("$HOME/.config/Devin/User")
     " let g:qoder_user_dir = utils#expand("$HOME/.config/Qoder/User")
     " let g:cursor_user_dir = utils#expand("$HOME/.config/Cursor/User")
-    " let g:windsurf_user_dir = utils#expand("$HOME/.config/Windsurf/User")
+    " let g:vscodium_user_dir = utils#expand("$HOME/.config/VSCodium/User")
     " let g:positron_user_dir = utils#expand("$HOME/.config/Positron/User")
     " let g:antigravity_user_dir = utils#expand("$HOME/.config/Antigravity/User")
 endif

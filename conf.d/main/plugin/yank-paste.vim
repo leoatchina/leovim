@@ -39,7 +39,7 @@ endif
 " yank command and position to editors
 " --------------------------------------------
 function! s:yank_position_to_editor(editor) abort
-    if index(['code', 'devin', 'vscodeium', 'qoder', 'trae', 'positron', 'zed', 'edit'], a:editor) >= 0
+    if index(['code', 'devin', 'vscodeium', 'qoder', 'trae', 'positron', 'antigravity', 'zed', 'edit'], a:editor) >= 0
         let editor = a:editor
     else
         return
@@ -60,20 +60,22 @@ function! s:yank_position_to_editor(editor) abort
     endif
     echo '=== Yank current position to ' . editor . ' ==='
 endfunction
-command! YankPositionToVSCode   call s:yank_position_to_editor('code')
-command! YankPositionToDevin    call s:yank_position_to_editor('devin')
-command! YankPositionToQoder    call s:yank_position_to_editor('qoder')
-command! YankPositionToTrae     call s:yank_position_to_editor('trae')
-command! YankPositionToEdit     call s:yank_position_to_editor('edit')
-command! YankPositionToZed      call s:yank_position_to_editor('zed')
-command! YankPositionToPositron call s:yank_position_to_editor('positron')
-nnoremap <silent><leader>yv :YankPositionToVSCode<Cr>
-nnoremap <silent><leader>yc :YankPositionToDevin<Cr>
+command! YankPositionToCode        call s:yank_position_to_editor('code')
+command! YankPositionToDevin       call s:yank_position_to_editor('devin')
+command! YankPositionToQoder       call s:yank_position_to_editor('qoder')
+command! YankPositionToTrae        call s:yank_position_to_editor('trae')
+command! YankPositionToPositron    call s:yank_position_to_editor('positron')
+command! YankPositionToAntigravity call s:yank_position_to_editor('antigravity')
+command! YankPositionToZed         call s:yank_position_to_editor('zed')
+command! YankPositionToEdit        call s:yank_position_to_editor('edit')
+nnoremap <silent><leader>yc :YankPositionToCode<Cr>
+nnoremap <silent><leader>yv :YankPositionToDevin<Cr>
 nnoremap <silent><leader>yq :YankPositionToQoder<Cr>
 nnoremap <silent><leader>yt :YankPositionToTrae<Cr>
-nnoremap <silent><leader>ye :YankPositionToEdit<Cr>
-nnoremap <silent><leader>yz :YankPositionToZed<Cr>
 nnoremap <silent><leader>yp :YankPositionToPositron<Cr>
+nnoremap <silent><leader>ya :YankPositionToAntigravity<Cr>
+nnoremap <silent><leader>yz :YankPositionToZed<Cr>
+nnoremap <silent><leader>ye :YankPositionToEdit<Cr>
 " --------------------------------------------
 " yank line ref with range
 " --------------------------------------------
