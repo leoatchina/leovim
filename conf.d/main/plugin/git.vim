@@ -120,11 +120,19 @@ if pack#planned_leaderf()
     nnoremap <silent><M-g>f :Leaderf git log --side-by-side --current-file<Cr>
     nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
     nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
-    let g:Lf_GitKeyMap = {
+    let g:Lf_GitKeyMap = extend({
+                \ 'previous_change': '[c',
+                \ 'next_change': ']c',
+                \ 'edit_file': '<CR>',
+                \ 'open_navigation': '<',
+                \ 'stage_unstage_hunk': 's',
+                \ 'stage_unstage_all_hunk': 'S',
+                \ 'discard_hunk': 'd',
+                \ 'discard_hunk_no_prompt': 'D',
                 \ 'diff_get_ours': '<leader>1',
                 \ 'diff_get_base': '<leader>2',
                 \ 'diff_get_theirs': '<leader>3',
-                \ }
+                \ }, get(g:, 'Lf_GitKeyMap', {}))
 elseif pack#planned('vim-signify')
     function! git#SignifyDiff()
         SignifyDiff
