@@ -58,6 +58,7 @@ reasonix.toml
 *.temp
 *.tmp
 .netrwhist
+.vibeyardignore
 core
 core.[0-9]*
 Gemfile

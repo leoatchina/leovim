@@ -205,7 +205,7 @@ PlugAdd 'lightline-bufferline'
 " ----------------------------
 " scheme
 " ----------------------------
-if !pack#planned('nvim-treesitter') && pack#get('c') && pack#planned('advcompeng')
+if !pack#planned('nvim-treesitter') && pack#get('c') && pack#planned_adv_comp_eng()
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
@@ -221,8 +221,6 @@ if g:has_truecolor
         PlugAdd 'catppuccin/vim', {'as': 'catppuccin-vim'}
     endif
 endif
-PlugAdd 'lightline.vim'
-PlugAdd 'lightline-bufferline'
 " --------------------------
 " ui && frame
 " --------------------------
