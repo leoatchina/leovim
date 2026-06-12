@@ -67,6 +67,18 @@ function! pack#planned_adv_comp_eng() abort
     return pack#planned_coc() || pack#planned_lsp()
 endfunction
 
+function! pack#planned_treesitter() abort
+    return pack#planned('nvim-treesitter')
+endfunction
+
+function! pack#planned_dap() abort
+    return pack#planned('nvim-dap')
+endfunction
+
+function! pack#planned_mason() abort
+    return pack#planned('mason.nvim')
+endfunction
+
 function! pack#pref_fzf() abort
     return pack#planned_fzf() && (get(g:, 'prefer_fzf', utils#is_unix()) || !pack#planned_leaderf())
 endfunction
@@ -113,6 +125,30 @@ function! pack#installed_cmp() abort
                 \ 'friendly-snippets',
                 \ 'nvim-autopairs',
                 \ )
+endfunction
+
+function! pack#installed_treesitter() abort
+    return pack#installed(
+                \ 'nvim-treesitter',
+                \ 'hlargs.nvim',
+                \ 'nvim-treesitter-textobjects',
+                \ 'nvim-treesitter-context',
+                \ 'nvim-treesitter-refactor',
+                \ )
+endfunction
+
+function! pack#installed_dap() abort
+    return pack#installed(
+                \ 'nvim-dap',
+                \ 'nvim-dap-ui',
+                \ 'nvim-nio',
+                \ 'mason.nvim',
+                \ 'mason-nvim-dap.nvim',
+                \ )
+endfunction
+
+function! pack#installed_mason() abort
+    return pack#installed('mason.nvim')
 endfunction
 
 function! pack#installed_adv() abort

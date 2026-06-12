@@ -205,7 +205,7 @@ PlugAdd 'lightline-bufferline'
 " ----------------------------
 " scheme
 " ----------------------------
-if !pack#planned('nvim-treesitter') && pack#get('c') && pack#planned_adv_comp_eng()
+if !pack#planned_treesitter() && pack#get('c') && pack#planned_adv_comp_eng()
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
@@ -231,13 +231,13 @@ if has('nvim')
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
     PlugAdd 'stevearc/dressing.nvim'
-    if pack#planned_lsp() || has('nvim-0.11') && pack#planned('nvim-treesitter')
+    if pack#planned_lsp() || has('nvim-0.11') && pack#planned_treesitter()
         PlugAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()
             PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
         endif
     endif
-    if pack#planned_lsp() || pack#planned('nvim-dap')
+    if pack#planned_lsp() || pack#planned_dap()
         PlugAdd 'mason-org/mason.nvim'
     endif
 elseif v:version >= 800

@@ -37,7 +37,7 @@ let g:coc_global_extensions = [
             \ 'coc-basedpyright',
             \ '@yaegassy/coc-ruff',
             \ ]
-if has('nvim') && !pack#planned('nvim-treesitter')
+if has('nvim') && !pack#planned_treesitter()
     let g:coc_global_extensions += ['coc-symbol-line']
 endif
 if utils#is_unix()

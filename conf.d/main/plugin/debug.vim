@@ -208,7 +208,7 @@ if pack#planned('vimspector')
     nnoremap <silent>J :BalloonEval<Cr>
     " deletewatch
     au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteWatch()<Cr>
-elseif pack#installed('nvim-dap', 'nvim-dap-ui', 'nvim-nio', 'mason.nvim', 'mason-nvim-dap.nvim')
+elseif pack#installed_dap()
     let g:debug_tool = 'nvim-dap'
     lua require("cfg/dap")
     " load template

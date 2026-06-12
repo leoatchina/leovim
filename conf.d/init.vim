@@ -11,6 +11,24 @@ else
     endif
 endif
 " --------------------------
+" load contract
+" --------------------------
+" This file is the only supported entrypoint. It must initialize directory
+" variables, runtimepath, g:packs, g:plugs, PlugAdd, and the user config hooks
+" before plugin modules are loaded.
+"
+" Load order:
+"   1. scan local opt plugin directories into s:opt_plugs
+"   2. source ~/.vimrc.opt so users fill g:packs through pack#add()
+"   3. plug#begin() and define PlugAdd for both local and remote plugins
+"   4. source ~/.leovim.d/pack.vim, then vscode.vim or main.vim
+"   5. source ~/.leovim.d/after.vim, apply first-run completion fallback
+"   6. plug#end()
+"
+" The completion fallback before plug#end() is intentional: when advanced
+" completion plugins are planned but not installed yet, the current session
+" falls back to builtin/mcm so LeoVim remains usable during first install.
+" --------------------------
 " set dirs
 " --------------------------
 let $LEOVIM_DIR = expand('~/.leovim')

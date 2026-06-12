@@ -39,7 +39,7 @@ endif
 " -----------------------------
 " lsp && vista_default_executive
 " -----------------------------
-if pack#installed('mason.nvim')
+if pack#installed_mason()
     lua require("cfg/mason")
 endif
 if pack#installed('codesettings.nvim')
