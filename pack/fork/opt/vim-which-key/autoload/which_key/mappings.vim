@@ -41,6 +41,13 @@ function! s:get_raw_map_info(key) abort
   return split(s:execute('map '.a:key), "\n")
 endfunction
 
+function! s:strip_prefix(lhs, prefix) abort
+  if a:lhs[0 : strlen(a:prefix) - 1] ==# a:prefix
+    return a:lhs[strlen(a:prefix) :]
+  endif
+  return a:lhs
+endfunction
+
 " Parse key-mappings gathered by `:map` and feed them into dict
 function! which_key#mappings#parse(key, dict, visual) " {{{
   let key = a:key ==? ' ' ? '<Space>' : (a:key ==? '<C-I>' ? '<Tab>' : a:key)
@@ -120,7 +127,7 @@ function! which_key#mappings#parse(key, dict, visual) " {{{
       endif
     endif
 
-    let mapd.lhs = substitute(mapd.lhs, key, '', '')
+    let mapd.lhs = s:strip_prefix(mapd.lhs, key)
     " EasyMotion workaround, <leader><leader> is default easymotion prefix
     if mapd.lhs ==? '<Space>' && mapcheck('<leader><space>', 'n') =~ 'easymotion'
       continue

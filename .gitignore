@@ -57,6 +57,7 @@ reasonix.toml
 *.rar
 *.temp
 *.tmp
+nvim.log
 .netrwhist
 .vibeyardignore
 core

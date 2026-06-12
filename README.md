@@ -807,7 +807,7 @@ highlight LineNr guifg=#5a5a5a
 
 ```vim
 " 检查 which-key 是否安装
-:echo exists('g:loaded_which_key')
+:echo exists('g:loaded_vim_which_key')
 
 " 手动触发
 :WhichKey '<Leader>'

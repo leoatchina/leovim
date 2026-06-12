@@ -262,6 +262,8 @@ endif
 " -------------------
 if get(g:, 'leovim_whichkey', 1)
     let g:which_key_group_dicts = ''
+    let g:which_key_fallback_to_native_key = 1
+    let g:which_key_run_map_on_popup = 0
     let g:which_key_use_floating_win = g:has_popup_floating
     PlugAdd 'vim-which-key'
 endif
