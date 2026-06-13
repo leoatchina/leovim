@@ -302,7 +302,7 @@ function! floaterm#enhance#parse_programs(programs, type) abort
             call add(entry, '')
         endif
         let cmd = entry[0]
-        if executable(split(cmd, ' ')[0])
+        if get(g:,"floaterm_enhance_checkexe", 1) == 0 || executable(split(cmd, ' ')[0])
             let opts = floaterm#enhance#parse_opt(entry[1])
             if len(entry) >= 3
                 let type = trim(entry[2])

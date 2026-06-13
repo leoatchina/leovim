@@ -59,7 +59,7 @@ function! floaterm#repl#update_program(ft, programs, ...) abort
             continue
         endif
         let lst = split(cmd, ' ')
-        if !executable(lst[0])
+        if get(g:, 'floaterm_enhance_checkexe', 1) && !executable(lst[0])
             continue
         endif
         let entry = [cmd, opts, 'REPL']
