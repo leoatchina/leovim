@@ -196,7 +196,7 @@ onoremap g_ $
 " enhanced edit
 " ------------------------
 inoremap <silent><C-j> <C-\><C-n>:call utils#move_to_end_and_add_semicolon()<CR>
-nnoremap <silent>d<space> :call utils#trip_whitespace()<Cr>
+nnoremap <silent>d<space> :call utils#trim_whitespace()<Cr>
 " ------------------------
 " open_in_other_editor
 " ------------------------
@@ -213,7 +213,7 @@ if has('nvim')
             echom "Cannot open current file in other editor."
             return
         endif
-        silent! execute '!' . shellescape(opener) . ' ' . target
+        silent! execute '!' . opener . ' ' . target
     endfunction
     command! OpenInOther call s:open_in_other()
     nnoremap <silent><nowait>g<tab> :OpenInOther<Cr>
