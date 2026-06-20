@@ -155,7 +155,7 @@ augroup END
 " trim
 augroup TripSpaces
     autocmd FileType vim,c,cpp,java,go,php,javascript,typescript,python,rust,twig,xml,yml,perl,sql,r,conf,lua
-                \ autocmd! BufWritePre <buffer> :call utils#trip_whitespace()
+                \ autocmd! BufWritePre <buffer> :call utils#trim_whitespace()
 augroup END
 " --------------------------
 " file templates

@@ -194,7 +194,7 @@ function! utils#escape(param) abort
     return substitute(escape(a:param, '/\.*$^~['), '\n', '\\n', 'g')
 endfunction
 
-function! utils#trip_whitespace() abort
+function! utils#trim_whitespace() abort
     let _s=@/
     let l = line(".")
     let c = col(".")
