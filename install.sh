@@ -266,9 +266,9 @@ if [ $# -gt 0 ]; then
         info "nvm version ${NVM_VERSION} installed"
         if [[ -s "$NVM_DIR/nvm.sh" ]]; then
             . "$NVM_DIR/nvm.sh"
-            nvm install 22
-            nvm alias default 22
-            nvm use 22
+            nvm install 24
+            nvm alias default 24
+            nvm use 24
             nvm ls
             [ $mode == 'nvm' ] && exit 0
         else
