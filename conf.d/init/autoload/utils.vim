@@ -1,6 +1,17 @@
 " ----------------------------------------
 " System Detection Functions
 " ----------------------------------------
+function! utils#execute(cmd) abort
+    if exists("*execute")
+        return execute(a:cmd)
+    else
+        redir => output
+        silent! execute a:cmd
+        redir END
+        return output
+    endif
+endfunction
+
 function! utils#is_neovide() abort
     return exists('g:neovide') && has('nvim')
 endfunction
@@ -142,6 +153,11 @@ endfunction
 " ----------------------------------------
 " String Utility Functions
 " ----------------------------------------
+function! utils#has_backspace() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1] =~ '\s'
+endfunction
+
 function! utils#trim(str) abort
     return substitute(a:str, "^\s\+\|\s\+$", "", "g")
 endfunction
@@ -151,17 +167,6 @@ function! utils#expand(path, ...) abort
         return substitute(fnameescape(expand(a:path)), '\', '/', 'g')
     else
         return fnameescape(expand(a:path))
-    endif
-endfunction
-
-function! utils#execute(cmd) abort
-    if exists("*execute")
-        return execute(a:cmd)
-    else
-        redir => output
-        silent! execute a:cmd
-        redir END
-        return output
     endif
 endfunction
 
