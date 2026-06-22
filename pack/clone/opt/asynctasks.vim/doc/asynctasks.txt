@@ -602,7 +602,7 @@ global configurations:
       \ '~/.config/tasks/local_tasks.ini',
       \ ]
 <
-Then, these two additional globla configurations will be loaded after reading
+Then, these two additional global configurations will be loaded after reading
 '~/.vim/tasks.ini'.
 
 -------------------------------------------------------------------------------

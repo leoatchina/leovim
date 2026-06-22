@@ -917,33 +917,72 @@ endfunc
 "----------------------------------------------------------------------
 function! quickui#utils#hide_system_cursor(hide) abort
 	if !exists('s:cursor_highlight')
-		let s:cursor_highlight = hlget('Cursor')
+		let s:cursor_highlight = quickui#highlight#get('Cursor')
 	endif
 	if !exists('s:cursor_guicursor')
 		let s:cursor_guicursor = &guicursor
 	endif
 	if !exists('s:cursor_tve')
-		let s:cursor_tve = &t_ve
+		let s:cursor_tve = exists('&t_ve')? &t_ve : ''
 	endif
 	if !exists('s:cursor_current')
 		let s:cursor_current = 0
 	endif
 	if a:hide == 0
-		call hlset(s:cursor_highlight)
+		call quickui#highlight#set(s:cursor_highlight)
 		let &guicursor = s:cursor_guicursor
-		let &t_ve = s:cursor_tve
+		if exists('&t_ve')
+			let &t_ve = s:cursor_tve
+		endif
 		let s:cursor_current = 0
 	else
 		if s:cursor_current == 0
 			let s:cursor_current = 1
-			let s:cursor_highlight = hlget('Cursor')
+			let s:cursor_highlight = quickui#highlight#get('Cursor')
 			let s:cursor_guicursor = &guicursor
-			let s:cursor_tve = &t_ve
+			if exists('&t_ve')
+				let s:cursor_tve = &t_ve
+			endif
 		endif
 		exec 'hi! clear Cursor'
 		exec 'hi! link Cursor Normal'
-		exec 'set t_ve='
+		if exists('&t_ve')
+			exec 'set t_ve='
+		endif
 		exec 'set guicursor=a:ver25-Cursor/lCursor'
+	endif
+endfunc
+
+
+"----------------------------------------------------------------------
+" backup variable
+"----------------------------------------------------------------------
+function! quickui#utils#backup_variable(name)
+	if !exists('s:backup_variables')
+		let s:backup_variables = {}
+	endif
+	if exists(a:name)
+		let s:backup_variables[a:name] = deepcopy(eval(a:name))
+	else
+		let s:backup_variables[a:name] = '__QUICKUI_UNDEFINED__'
+	endif
+endfunc
+
+
+"----------------------------------------------------------------------
+" restore variable
+"----------------------------------------------------------------------
+function! quickui#utils#restore_variable(name)
+	if !exists('s:backup_variables') || !has_key(s:backup_variables, a:name)
+		return
+	endif
+	let value = s:backup_variables[a:name]
+	if value == '__QUICKUI_UNDEFINED__'
+		if exists(a:name)
+			exec 'unlet ' . a:name
+		endif
+	else
+		exec 'let ' . a:name . ' = ' . string(value)
 	endif
 endfunc
 

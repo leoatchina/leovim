@@ -699,7 +699,7 @@ let g:asynctasks_extra_config = [
     \ ]
 ```
 
-Then, these two additional globla configurations will be loaded after reading `~/.vim/tasks.ini`.
+Then, these two additional global configurations will be loaded after reading `~/.vim/tasks.ini`.
 
 ##### The `g:asynctasks_term_pos` option
 
