@@ -216,6 +216,7 @@ if pack#planned('fzf-registers')
 else
     nnoremap <silent><M-v> :registers<Cr>
 endif
+cnoremap <M-v> <C-r>"
 " ------------------------
 " paste
 " ------------------------
