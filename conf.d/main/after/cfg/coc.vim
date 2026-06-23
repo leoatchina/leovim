@@ -12,11 +12,6 @@ autocmd BufAdd * if getfsize(utils#expand('<afile>')) > 1024*1024 |
 " set coc data $PATH
 " ----------------------------
 let g:coc_config_home = utils#expand("$CFG_DIR")
-if utils#is_win()
-    let g:coc_data_home = $LEOVIMD_DIR . "\\coc"
-else
-    let g:coc_data_home = $LEOVIMD_DIR . "/coc"
-endif
 call coc#config('python.pythonPath', g:python_prog)
 call coc#config('python.venvPath', ['.venv', 'venv', '../venv', '../.venv'])
 if pack#planned('nvim-web-devicons')
@@ -152,6 +147,11 @@ omap ac <Plug>(coc-classobj-a)
 " ------------------------
 " coc-global-extensions
 " ------------------------
+if utils#is_win()
+    let g:coc_data_home = $LEOVIMD_DIR . "\\coc"
+else
+    let g:coc_data_home = $LEOVIMD_DIR . "/coc"
+endif
 let g:coc_global_extensions = [
             \ 'coc-lists',
             \ 'coc-marketplace',
