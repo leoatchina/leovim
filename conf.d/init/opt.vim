@@ -85,6 +85,7 @@ if utils#is_win()
     " let g:cursor_user_dir = 'C:\Users\Admin\AppData\Roaming\Cursor\User'
     " let g:vscodium_user_dir = 'C:\Users\Admin\AppData\Roaming\VSCodium\User'
     " let g:positron_user_dir = 'C:\Users\Admin\AppData\Roaming\Positron\User'
+    " let g:codebuddy_user_dir = 'C:\Users\Admin\AppData\Roaming\Codebuddy\User'
 elseif utils#is_unix()
     if has('nvim')
         " let g:python3_host_prog=exepath('python3')
@@ -101,6 +102,7 @@ elseif utils#is_unix()
     " let g:cursor_user_dir = utils#expand("$HOME/.config/Cursor/User")
     " let g:vscodium_user_dir = utils#expand("$HOME/.config/VSCodium/User")
     " let g:positron_user_dir = utils#expand("$HOME/.config/Positron/User")
+    " let g:codebuddy_user_dir = utils#expand("$HOME/.config/CodeBuddy/User")
 endif
 
 " NOTE: visit https://ftp.gnu.org/pub/gnu/global/
