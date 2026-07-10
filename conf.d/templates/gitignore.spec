@@ -47,11 +47,11 @@ venv/
 .vim/
 .nim/
 .hg/
-.fleet/
 .vscode/
 .cursor/
 .devin/
 .vercel/
+.orca/
 .vs/
 .deepseek/
 .ccls-cache/
