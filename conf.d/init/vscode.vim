@@ -8,7 +8,7 @@ xnoremap <C-c> <Cmd>lua require('vscode-neovim').action('editor.action.clipboard
 nnoremap <C-s> <Cmd>lua require('vscode-neovim').action('workbench.action.files.save')<CR>
 nnoremap <C-h> <Cmd>lua require('vscode-neovim').action("editor.action.startFindReplaceAction")<CR>
 nnoremap <C-n> <Cmd>lua require('vscode-neovim').action("editor.action.addSelectionToNextFindMatch")<CR>
-nnoremap s<Cr> <Cmd>lua require('vscode-neovim').action('workbench.action.findInFiles', {args = {query = vim.fn.utils#expand('<cword>')}})<CR>
+nnoremap s<Cr> <Cmd>lua require('vscode-neovim').action('workbench.action.findInFiles', {args = {query = vim.fn['utils#expand']('<cword>')}})<CR>
 nnoremap <C-a> <Cmd>lua require('vscode-neovim').action("editor.action.selectAll")<Cr>
 xnoremap <C-x> <Cmd>call VSCodeNotifyVisual("editor.action.clipboardCutAction", 1)<Cr>
 nnoremap <C-x> x
@@ -50,7 +50,7 @@ function! VSCodeNotifyVisual(cmd, leaveSelection, ...)
         let endPos = getpos('.')
         call VSCodeNotifyRangePos(a:cmd, startPos[1], endPos[1], startPos[2], endPos[2] + 1, a:leaveSelection, a:000)
     else
-        lua require('vscode-neovim').action(a:cmd, a:000)
+        call VSCodeNotify(a:cmd, a:000)
     endif
 endfunction
 xnoremap <C-S-P> <Cmd>call VSCodeNotifyVisual("workbench.action.showCommands", 1)<CR>

@@ -452,12 +452,12 @@ function! utils#choose_one(lst, ...) abort
         endif
     endfor
     " 优先使用 vim-quickui 的 listbox；不存在时回退到内置 confirm()。
-    if pack#planned('vim-quickui')
+    if pack#installed('vim-quickui')
         " boxopt 常量说明:
         "   title -> 窗口标题
         "   index -> 默认光标位置(读取 g:quickui#listbox#cursor)
         "   w     -> 列表宽度(64)
-        let boxopt = {'title': title, 'index':g:quickui#listbox#cursor, 'w': 64}
+        let boxopt = {'title': title, 'index': get(g:, 'quickui#listbox#cursor', -1), 'w': 64}
         let sel = quickui#listbox#inputlist(menu, boxopt)
         if sel >= 0
             return items[sel]
