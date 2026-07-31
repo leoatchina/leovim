@@ -165,7 +165,7 @@ function! s:open_or_create_file(file, ...) abort
                 elseif type(each) == v:t_dict
                     let content += keys(each)
                 elseif type(each) == v:t_number
-                    call add(content, string(num))
+                    call add(content, string(each))
                 elseif type(each) == v:t_string
                     call add(content, each)
                 elseif index([v:t_func, v:t_job, v:t_none, v:t_channel]) < 0

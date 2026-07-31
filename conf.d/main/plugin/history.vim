@@ -69,7 +69,7 @@ if pack#pref_fzf()
         " Not opened
         if l:bn == -1
             if filereadable(l:file_name)
-                execute 'e ' . 'l:file_name'
+                execute 'e ' . fnameescape(l:file_name)
             endif
         else
             execute 'buffer ' . l:bn
