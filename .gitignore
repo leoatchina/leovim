@@ -14,6 +14,7 @@ NUL
 NULL
 */pack/**/compare
 /fzf/
+/docs/
 .aider*
 .plan/
 .update/
