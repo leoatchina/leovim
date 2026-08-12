@@ -135,18 +135,18 @@ command! -nargs=1 GrepDir call s:grep(<q-args>, 1)
 command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
 " search
-nnoremap s<Cr> :GrepDir <C-r><C-w><Cr>
-xnoremap s<Cr> :<C-u>GrepDir <C-r>=utils#get_visual()<Cr><Cr>
+nnoremap s\ :GrepDir <C-r><C-w><Cr>
+xnoremap s\ :<C-u>GrepDir <C-r>=utils#get_visual()<Cr><Cr>
 nnoremap s[ :GrepDirLast<Cr>
 nnoremap s] :GrepDir <C-r><C-w>
 xnoremap s] :<C-u>GrepDir <C-r>=utils#get_visual()<Cr>
 nnoremap s} :GrepDir <C-r>=@"<Cr><Cr>
 " searchall
-nnoremap s/ :GrepAll <C-r><C-w><Cr>
-xnoremap s/ :<C-u>GrepAll <C-r>=utils#get_visual()<Cr><Cr>
+nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
+xnoremap s<Cr> :<C-u>GrepAll <C-r>=utils#get_visual()<Cr><Cr>
 nnoremap s. :GrepAllLast<Cr>
-nnoremap s\ :GrepAll <C-r><C-w>
-xnoremap s\ :<C-u>GrepAll <C-r>=utils#get_visual()<Cr>
+nnoremap s/ :GrepAll <C-r><C-w>
+xnoremap s/ :<C-u>GrepAll <C-r>=utils#get_visual()<Cr>
 nnoremap s? :GrepAll <C-r>=@"<Cr><Cr>
 " --------------------------
 " replace in filetype qf
