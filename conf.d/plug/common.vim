@@ -94,8 +94,8 @@ if exists('*search') && exists('*getpos')
     nmap <leader>vC vico
     nmap <leader>vu viu
     nmap <leader>vU vau
-    nmap <leader>vb vib
-    nmap <leader>vB vaB
+    nmap <leader>vq viq
+    nmap <leader>vQ vaq
     " -------------------
     " indent textobj
     " -------------------
@@ -140,6 +140,6 @@ if exists('*search') && exists('*getpos')
     PlugAdd 'vim-sandwich'
     nmap <leader>vs vis
     nmap <leader>vS vas
-    nmap <leader>vq viq
-    nmap <leader>vQ vaq
+    nmap <leader>vb vib
+    nmap <leader>vB vaB
 endif
