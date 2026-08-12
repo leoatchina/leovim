@@ -196,12 +196,10 @@ endfunction
 
 function! utils#escape(param, ...) abort
     " Escape search-special chars but allow literal '#'.
-    " Optional 2nd arg: extra custom characters to escape, merged into the
-    " default set. e.g. utils#escape(str, '\') or utils#escape(path, ' ')
-    let chars = '/\.*$^~['
-    if a:0
-        let chars .= a:1
-    endif
+    " Optional 2nd arg: custom characters to escape. When given, it REPLACES
+    " the default set (escape only those chars). e.g. utils#escape(str, '\')
+    " or utils#escape(path, ' ')
+    let chars = a:0 ? a:1 : '/\.*$^~['
     return substitute(escape(a:param, chars), '\n', '\\n', 'g')
 endfunction
 
