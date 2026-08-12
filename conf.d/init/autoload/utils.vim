@@ -194,9 +194,15 @@ function! utils#string_to_float(str, ...) abort
     endif
 endfunction
 
-function! utils#escape(param) abort
-    " Escape search-special chars but allow literal '#'
-    return substitute(escape(a:param, '/\.*$^~['), '\n', '\\n', 'g')
+function! utils#escape(param, ...) abort
+    " Escape search-special chars but allow literal '#'.
+    " Optional 2nd arg: extra custom characters to escape, merged into the
+    " default set. e.g. utils#escape(str, '\') or utils#escape(path, ' ')
+    let chars = '/\.*$^~['
+    if a:0
+        let chars .= a:1
+    endif
+    return substitute(escape(a:param, chars), '\n', '\\n', 'g')
 endfunction
 
 function! utils#trim_whitespace() abort

@@ -264,7 +264,7 @@ if pack#planned('asyncrun.vim')
                 tabe ~/.leovim/conf.d/tasks/tasks_common.ini
             endif
         else
-            call mkdir("$HOME/.leovim.d/tasks", "p")
+            call mkdir(utils#expand("$HOME/.leovim.d/tasks"), "p")
             tabe ~/.leovim.d/tasks/tasks.ini
             if &columns > &lines * 3
                 vsplit ~/.leovim/conf.d/tasks/tasks_example.ini

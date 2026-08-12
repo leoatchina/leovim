@@ -116,9 +116,9 @@ if pack#planned('vim-gutentags')
             for [key, path] in items(b:gutentags_files)
                 if filereadable(path)
                     if utils#is_win()
-                        let cmd = printf('!del %s /a /q' % path)
+                        let cmd = printf('!del %s /a /q', path)
                     else
-                        let cmd = printf('!rm -f %s' % path)
+                        let cmd = printf('!rm -f %s', path)
                     endif
                     call add(del_cmds, cmd)
                 endif
@@ -209,7 +209,7 @@ function! tags#lsp_tag_search(method, ...) abort
             call preview#errmsg("Preview need ctags.")
         else
             try
-                if utils#planned('vim-quickui')
+                if pack#planned('vim-quickui')
                     let tagname_found = quickui#tools#preview_tag(tagname, v:false) == 0
                 else
                     let tagname_found = preview#preview_tag(tagname) == 0

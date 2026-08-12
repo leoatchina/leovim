@@ -138,14 +138,6 @@ if exists('*search') && exists('*getpos')
     " sandwich
     " -------------------
     PlugAdd 'vim-sandwich'
-    xmap is <Plug>(textobj-sandwich-auto-i)
-    xmap as <Plug>(textobj-sandwich-auto-a)
-    omap is <Plug>(textobj-sandwich-auto-i)
-    omap as <Plug>(textobj-sandwich-auto-a)
-    xmap iq <Plug>(textobj-sandwich-query-i)
-    xmap aq <Plug>(textobj-sandwich-query-a)
-    omap iq <Plug>(textobj-sandwich-query-i)
-    omap aq <Plug>(textobj-sandwich-query-a)
     nmap <leader>vs vis
     nmap <leader>vS vas
     nmap <leader>vq viq
