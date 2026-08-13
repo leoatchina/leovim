@@ -1,3 +1,4 @@
+!deploy*.ini
 # 特定文件
 GPATH
 GRTAGS
@@ -39,7 +40,6 @@ release/
 venv/
 .venv/
 .idea/
-.ipynb_checkpoints/
 .local/
 .cache/
 .root/
@@ -52,9 +52,11 @@ venv/
 .devin/
 .vercel/
 .orca/
+.pi/
 .vs/
 .deepseek/
 .ccls-cache/
+.ipynb_checkpoints/
 __pycache__/
 
 # loadrunner
