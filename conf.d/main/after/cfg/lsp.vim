@@ -39,8 +39,8 @@ if pack#get('rust') && g:cargo_exe != ''
     let g:ensure_installed += ['rust_analyzer']
 endif
 if pack#get('go') && g:gobin_exe != ''
-    let g:gobin_exe_version = matchstr(utils#execute(printf('!%s version', g:gobin_exe)), '\v\zs\d{1,}.\d{1,}.\d{1,}\ze')
-    let g:gobin_exe_version = utils#string_to_float(gobin_exe_version, 2)
+    let g:gobin_exe_version = matchstr(system(printf('%s version', g:gobin_exe)), '\v\zs\d{1,}\.\d{1,}\.\d{1,}\ze')
+    let g:gobin_exe_version = utils#string_to_float(g:gobin_exe_version, 2)
     let g:ensure_installed += ['gopls']
 endif
 if pack#installed('spring-boot.nvim')

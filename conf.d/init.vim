@@ -210,7 +210,11 @@ if has('nvim')
             let target = printf('--goto %s', shellescape(printf('%s:%d:%d', utils#abs_path(), line('.'), col('.'))))
         endif
         if !executable(opener)
-            echom "Cannot open current file in other editor."
+            if utils#is_vscode()
+                echoe 'g:open_neovim is not set or not executable.'
+            else
+                echoe 'g:open_editor is not executable: ' . opener
+            endif
             return
         endif
         silent! execute '!' . opener . ' ' . target
