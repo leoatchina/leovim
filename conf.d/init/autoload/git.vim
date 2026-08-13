@@ -31,44 +31,52 @@ function! git#lightline_buffers()
     return res
 endfunction
 
+let s:git_cache = {}   " dir -> [git_root_dir, git_branch]
+
 function! git#lcd_and_update() abort
     if utils#is_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || utils#is_popup()
         return
     endif
-    try
-        let l:cur_dir = utils#abs_dir()
-        if l:cur_dir != ''
-            execute 'lcd ' . l:cur_dir
-        endif
-    catch
+    let l:cur_dir = utils#abs_dir()
+    if l:cur_dir == ''
         return
-    endtry
+    endif
+    " 仅在目录变化时切换窗口 cwd（getcwd(winnr()) 为窗口局部 cwd）
+    if getcwd(winnr()) !=# fnamemodify(expand('%:p:h'), ':p')
+        try
+            execute 'lcd ' . l:cur_dir
+        catch
+        endtry
+    endif
+    " 目录级缓存：同一目录只 fork 一次 git
+    if has_key(s:git_cache, l:cur_dir)
+        let [b:git_root_dir, b:git_branch] = s:git_cache[l:cur_dir]
+        return
+    endif
+    let b:git_root_dir = ''
+    let b:git_branch = ''
     if g:git_version > 1.8
         try
-            let l:git_root = system('git -C ' . l:cur_dir . ' rev-parse --show-toplevel')
-            let b:git_root_dir = substitute(l:git_root, '\n\+$', '', '')
-            if v:shell_error != 0 || b:git_root_dir =~ 'fatal:' || b:git_root_dir == ''
-                let b:git_root_dir = ''
-                let b:git_branch = ''
-            else
-                let l:branch = system('git -C ' . l:cur_dir . ' rev-parse --abbrev-ref HEAD')
-                " TODO: change branch icon according to branch status, referring https://www.nerdfonts.com/cheat-sheet
-                let icon = ' '
-                let b:git_branch = icon . substitute(l:branch, '\n\+$', '', '')
-                if v:shell_error != 0 || b:git_branch =~ 'fatal:' || b:git_branch == ''
-                    let b:git_root_dir = ''
-                    let b:git_branch = ''
+            " 一次 fork 输出三行：is-inside-work-tree / root / branch
+            let l:out = system('git -C ' . l:cur_dir . ' rev-parse --is-inside-work-tree --show-toplevel --abbrev-ref HEAD 2>/dev/null')
+            if v:shell_error == 0
+                let l:lines = split(l:out, "\n")
+                if len(l:lines) >= 3 && get(l:lines, 0, '') ==# 'true' && l:lines[1] != ''
+                    let b:git_root_dir = l:lines[1]
+                    let icon = ' '
+                    let b:git_branch = icon . l:lines[2]
                 endif
             endif
         catch
             let b:git_root_dir = ''
             let b:git_branch = ''
         endtry
-    else
-        let b:git_root_dir = ''
-        let b:git_branch = ''
     endif
+    let s:git_cache[l:cur_dir] = [b:git_root_dir, b:git_branch]
 endfunction
+
+" 切换分支 / rebase 后缓存过期时手动刷新
+command! GitRefresh let s:git_cache = {} | call git#lcd_and_update()
 
 function! git#relative_dir() abort
     let absdir = utils#abs_dir()

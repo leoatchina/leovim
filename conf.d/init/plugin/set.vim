@@ -15,7 +15,6 @@ set incsearch
 set ruler
 set hlsearch
 set showmode
-set autochdir
 set smartcase
 set ignorecase
 set showmatch
