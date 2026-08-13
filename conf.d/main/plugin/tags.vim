@@ -291,7 +291,7 @@ function! tags#lsp_tag_search(method, ...) abort
     if open_position == 'quickfix'
         if tagname_found && !pack#installed_coc()
             OpenQfLoc
-        elseif !tagname_found && method == 'references'
+        elseif !tagname_found && (method == 'references' || method == 'tags')
             execute 'GrepAll ' . tagname
         endif
     endif
