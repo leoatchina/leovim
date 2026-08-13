@@ -108,8 +108,8 @@ function! s:version()
     let params_dict = {
                 \ 'version':         s:getVimVersion(),
                 \ 'python_version':  g:python_version,
-                \ 'tree_browser':    g:tree_browser,
-                \ 'colors_name':     g:colors_name,
+                \ 'tree_browser':    get(g:, 'tree_browser', ''),
+                \ 'colors_name':     get(g:, 'colors_name', ''),
                 \ 'complete_engine': g:complete_engine
                 \ }
     if get(g:, 'python3_host_prog', '') != ''

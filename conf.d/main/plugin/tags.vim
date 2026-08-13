@@ -304,7 +304,7 @@ nnoremap <silent>g/ :call tags#lsp_tag_search("tags")<Cr>
 " preview
 nnoremap <silent><C-h> :call tags#lsp_tag_search("preview")<Cr>
 " definition
-au FileType help,vimdoc nnoremap <C-]> <C-]>
+au FileType help,vimdoc nnoremap <buffer> <C-]> <C-]>
 nnoremap <silent><C-g> :call tags#lsp_tag_search("definition", "edit")<Cr>
 nnoremap <silent><C-]> :call tags#lsp_tag_search("definition", "vsplit")<Cr>
 nnoremap <silent><C-w>g :call tags#lsp_tag_search("definition", "tabe")<Cr>

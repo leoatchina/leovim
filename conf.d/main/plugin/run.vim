@@ -128,7 +128,7 @@ function! s:asyncrun(...)
     elseif ft ==# 'javascript' && executable('node')
         let run_cmd = s:run_command . params . ' node %'
     elseif ft ==# 'vue' && executable('npm')
-        let run_cmd = s:run_command . params . ' npm run %'
+        let run_cmd = s:run_command . params . ' npm run dev'
     elseif ft ==# 'typescript' && executable('ts-node')
         let run_cmd = s:run_command . params . ' ts-node %'
     elseif ft ==# 'javascript' && executable('node')

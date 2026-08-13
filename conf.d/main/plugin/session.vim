@@ -59,12 +59,7 @@ nnoremap <leader>sd :SDelete<Space>
 " --------------------------------
 if pack#planned_fzf()
     function! s:session_list()
-        let lines = split(globpath(g:startify_session_dir, '*'), '\n')
-        if len(lines) > 1
-            return lines[1:]
-        else
-            return lines
-        endif
+        return split(globpath(g:startify_session_dir, '*'), '\n')
     endfunction
     function! s:session_load(lines)
         if len(a:lines) == 0
