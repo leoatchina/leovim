@@ -8,10 +8,6 @@ if pack#installed('nvim-hlslens')
     nnoremap <silent><nowait>g# g#``<Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait><C-n> *``<Cmd>lua require('hlslens').start()<Cr>cgn
 else
-    nnoremap <silent><nowait>* *``
-    nnoremap <silent><nowait># #``
-    nnoremap <silent><nowait>g* g*``
-    nnoremap <silent><nowait>g# g#``
     nnoremap <silent><nowait><C-n> *``cgn
 endif
 let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"

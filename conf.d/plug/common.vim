@@ -1,4 +1,13 @@
 PlugAdd 'vim-eunuch'
+" ----------------------------------
+" hl searchindex && multi replace
+" ----------------------------------
+if has('nvim')
+    PlugAdd 'nvim-hlslens'
+else
+    PlugAdd 'vim-searchindex'
+endif
+xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " --------------------------
 " easyalign
 " --------------------------
@@ -43,15 +52,6 @@ let g:NERDToggleCheckAllLines = 1
 PlugAdd 'nerdcommenter'
 nnoremap <silent><leader>c] V}:call nerdcommenter#Comment('x', 'toggle')<CR>
 nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
-" ----------------------------------
-" hl searchindex && multi replace
-" ----------------------------------
-if has('nvim')
-    PlugAdd 'nvim-hlslens'
-else
-    PlugAdd 'vim-searchindex'
-endif
-xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " ------------------------
 " quick jump in buffer
 " ------------------------
