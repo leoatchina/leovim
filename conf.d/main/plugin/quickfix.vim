@@ -119,5 +119,5 @@ else
                     \ 'printf(fmt, v:val.filename . "|" . v:val.lnum, "|" . v:val.text)'))
         setlocal nomodifiable nomodified
     endfunction
-    autocmd BufReadPost quickfix call QuickFixFormat()
+    autocmd BufReadPost quickfix call quickfix#format()
 endif

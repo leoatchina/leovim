@@ -161,7 +161,7 @@ function! s:asyncrun(...)
         endif
     else
         if type == 'qf'
-            if a:0 >= 3 || a:3
+            if get(a:, 3, 0)
                 let asyncrun_open = g:asyncrun_open
                 let g:asyncrun_open = 0
                 exec run_cmd

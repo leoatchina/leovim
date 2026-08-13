@@ -182,7 +182,7 @@ function! utils#string_to_float(str, ...) abort
         let rst = []
         for each in lst[1:]
             if len(each) >= digit
-                let e = each[:digit]
+                let e = each[:digit-1]
             else
                 let e = repeat('0', digit - len(each)) . each
             endif
@@ -272,7 +272,7 @@ function! utils#get_python_prog()
 endfunction
 
 function! utils#move_to_end_and_add_semicolon() abort
-    execute "normal! :s/\\s\\+$//e\\r"
+    execute "normal! :s/\\s\\+$//e\<CR>"
     normal! g_
     if index(['c', 'cpp', 'csharp', 'rust', 'java', 'perl', 'php', 'javascript', 'typescript', 'go', 'r'], &ft) >= 0
         if index([';', '{', '}'], getline('.')[col('.') - 1]) >= 0
