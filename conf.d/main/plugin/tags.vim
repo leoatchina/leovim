@@ -300,7 +300,7 @@ endfunction
 " lsp or tag
 " ---------------
 " tags
-nnoremap <silent>g/ :call tags#lsp_tag_search("tags")<Cr>
+nnoremap <silent>g<Cr> :call tags#lsp_tag_search("tags")<Cr>
 " preview
 nnoremap <silent><C-h> :call tags#lsp_tag_search("preview")<Cr>
 " definition
