@@ -300,16 +300,7 @@ function! s:plug_add(plugin, ...) abort
     if plugin =~ '/'
         call plug#(plugin, opts)
     elseif has_key(s:opt_plugs, plugin)
-        let local_dir = s:opt_plugs[plugin]
-        if get(opts, 'now', 0)
-            if exists(':packadd')
-                execute 'packadd ' . plugin
-            else
-                execute 'set rtp^=' . local_dir
-            endif
-        else
-            call plug#(local_dir, opts)
-        endif
+        call plug#(s:opt_plugs[plugin], opts)
     else
         echoe plugin . " not exists"
     endif

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 ############################  SETUP PARAMETERS
 app_name='leovim'
-[ -z "$APP_PATH" ] && APP_PATH="$PWD"
+if [ -z "$APP_PATH" ]; then
+    # resolve to the directory containing this script (BUG-002)
+    APP_PATH="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
+fi
 ############################  BASIC SETUP TOOLS
 
 msg() {
@@ -95,6 +98,8 @@ if [ "$OS" = "Darwin" ]; then
     elif [ "$ARCH" = "x86_64" ]; then
         os="macos-x64"
     fi
+elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+    os="linux-arm64"
 fi
 
 # mkdir
@@ -117,7 +122,19 @@ if [ "$APP_PATH" == "$HOME/.leovim" ]; then
     info "leovim has been already installed in $HOME/.leovim"
 else
     info "leovim is going to be linked to $HOME/.leovim"
-    rm -rf $HOME/.leovim
+    if [ -e "$HOME/.leovim" ] || [ -L "$HOME/.leovim" ]; then
+        if [ -L "$HOME/.leovim" ] && [ "$(readlink "$HOME/.leovim")" == "$APP_PATH" ]; then
+            info "$HOME/.leovim already links to $APP_PATH, keeping it"
+        else
+            backup="$HOME/.leovim.bak.$(date +%Y%m%d%H%M%S)"
+            if mv "$HOME/.leovim" "$backup"; then
+                note "Old $HOME/.leovim has been backed up to $backup"
+            else
+                error "Failed to backup $HOME/.leovim, abort for safety"
+                exit 1
+            fi
+        fi
+    fi
     create_symlinks "$APP_PATH" "$HOME/.leovim"
     success "leovim has been linked to $HOME/.leovim"
 fi
@@ -213,33 +230,22 @@ if [ $# -gt 0 ]; then
         note "Install softwares"
     fi
     # neovim
-    if [[ $mode == 'all' || $mode == 'basic'|| $mode == 'neovim' ]]; then
-        if [ $os == 'macos-arm64' ] && [ -d ~/.local/nvim-macos-arm64 ] && [ $mode != 'neovim' ]; then
-            info "neovim already installed"
-        elif [ $os == 'macos-x64' ] && [ -d ~/.local/nvim-macos-x86_64 ] && [ $mode != 'neovim' ]; then
-            info "neovim already installed"
-        elif [ $os == 'linux' ] && [ -d ~/.local/nvim-linux-x86_64 ] && [ $mode != 'neovim' ]; then
+    if [[ $mode == 'all' || $mode == 'basic' || $mode == 'neovim' ]]; then
+        case "$os" in
+            'macos-arm64') nvim_pkg='nvim-macos-arm64' ;;
+            'macos-x64')   nvim_pkg='nvim-macos-x86_64' ;;
+            'linux-arm64') nvim_pkg='nvim-linux-arm64' ;;
+            *)             nvim_pkg='nvim-linux-x86_64' ;;
+        esac
+        if [ -d ~/.local/$nvim_pkg ] && [ $mode != 'neovim' ]; then
             info "neovim already installed"
         else
             cd ~/.local
             rm -rf nvim-*
-            # wget according to os
-            case "$os" in
-                "macos-arm64")
-                    wget https://github.com/neovim/neovim/releases/download/v0.11.7/nvim-macos-arm64.tar.gz
-                    tar xzf nvim-macos-arm64.tar.gz
-                    ;;
-                "macos-x64")
-                    wget https://github.com/neovim/neovim/releases/download/v0.11.7/nvim-macos-x86_64.tar.gz
-                    tar xzf nvim-macos-x86_64.tar.gz
-                    ;;
-                *)
-                    wget https://github.com/neovim/neovim/releases/download/v0.11.7/nvim-linux-x86_64.tar.gz
-                    tar xzf nvim-linux-x86_64.tar.gz
-                    ;;
-            esac
-            rm nvim-*.tar.gz
-            success "neovim installed"
+            wget https://github.com/neovim/neovim/releases/download/v0.11.7/$nvim_pkg.tar.gz
+            tar xzf $nvim_pkg.tar.gz
+            rm $nvim_pkg.tar.gz
+            success "neovim installed ($nvim_pkg)"
         fi
         [ $mode == 'neovim' ] && exit 0
     fi

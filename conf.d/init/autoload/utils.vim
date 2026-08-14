@@ -218,18 +218,52 @@ function! utils#get_cword() abort
     return expand('<cword>')
 endfunction
 
+function! s:char2byte(str, charidx) abort
+    " 0-based byte offset of character number {charidx} (1-based);
+    " returns len(a:str) when past the end. Vim 7.4 compatible.
+    let l:byte = 0
+    let l:n = 1
+    let l:len = len(a:str)
+    while l:n < a:charidx && l:byte < l:len
+        let l:byte += strlen(matchstr(strpart(a:str, l:byte), '.'))
+        let l:n += 1
+    endwhile
+    return l:byte
+endfunction
+
+function! s:mark_charcol(mark) abort
+    " character column of mark; charcol() needs vim 8.2.2324, fall back to
+    " a col()/strpart() scan for vim 7.4.399+
+    if exists('*charcol')
+        return charcol(a:mark)
+    endif
+    let l:byte = col(a:mark)
+    if l:byte <= 1
+        return 1
+    endif
+    let l:str = getline(line(a:mark))
+    let l:b = 0
+    let l:n = 1
+    while l:b < l:byte - 1 && l:b < len(l:str)
+        let l:b += strlen(matchstr(strpart(l:str, l:b), '.'))
+        let l:n += 1
+    endwhile
+    return l:n
+endfunction
+
 function! utils#get_visual(...) abort
     " call with visualmode() as the argument
-    let [line_start, column_start] = [line("'<"), charcol("'<")]
-    let [line_end, column_end]     = [line("'>"), charcol("'>")]
+    let [line_start, column_start] = [line("'<"), s:mark_charcol("'<")]
+    let [line_end, column_end]     = [line("'>"), s:mark_charcol("'>")]
     let lines = getline(line_start, line_end)
     if len(lines) != 1
         return ""
     endif
     let inclusive = (&selection == 'inclusive')? 1 : 2
-    " Must trim the end before the start, the begin will shift left.
-    let lines[-1] = list2str(str2list(lines[-1])[:column_end - inclusive])
-    let lines[0] = list2str(str2list(lines[0])[column_start - 1:])
+    " keep characters from column_start to column_end - inclusive + 1
+    let start_off = s:char2byte(lines[0], column_start)
+    let end_off   = s:char2byte(lines[0], column_end - inclusive + 2)
+    let lines[0]  = strpart(lines[0], start_off, end_off - start_off)
     if a:0 && a:1
         return utils#escape(join(lines, "\n"))
     else
