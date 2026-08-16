@@ -3,7 +3,7 @@
 " ------------------------------
 if pack#get('nocomplete') || pack#get('noc')
     let g:complete_engine = ''
-elseif pack#get('coc') && (g:node_version >= 22 && (has('nvim') || has('patch-9.0.0438')))
+elseif pack#get('coc') && (g:node_version >= 24 && (has('nvim') || has('patch-9.0.0438')))
     let g:complete_engine = 'coc'
 elseif pack#get('cmp') && has('nvim-0.11')
     let g:complete_engine = 'cmp'
@@ -34,9 +34,9 @@ elseif g:complete_engine == 'blink'
     endif
 elseif g:complete_engine == 'coc'
     if get(g:, 'coc_install_release', 0)
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'release'}
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}
     else
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
+        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci', 'dir': utils#expand("~/.leovim.d/coc/master")}
     endif
     PlugAdd 'coc-fzf'
 endif
