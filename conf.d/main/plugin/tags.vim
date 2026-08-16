@@ -52,7 +52,7 @@ if get(g:, 'ctags_type', '') != ''
     elseif g:symbol_tool =~ 'ctrlptags'
         nnoremap <silent><leader>T :CtrlPTags<Cr>
     endif
-    if pack#installed_coc && utils#is_unix() && g:ctags_type != ''
+    if pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
         nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
     elseif pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
         nnoremap <silent>t<Cr> :Vista finder ctags<Cr>
