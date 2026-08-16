@@ -1,21 +1,4 @@
-" ------------------------------
-" complete_engine select
-" ------------------------------
-if pack#get('nocomplete') || pack#get('noc')
-    let g:complete_engine = ''
-elseif pack#get('coc') && (g:node_version >= 24 && (has('nvim') || has('patch-9.0.0438')))
-    let g:complete_engine = 'coc'
-elseif pack#get('cmp') && has('nvim-0.11')
-    let g:complete_engine = 'cmp'
-elseif (pack#get('blink') || pack#get('blink.lua')) && has('nvim-0.11')
-    let g:complete_engine = 'blink'
-else
-    let g:complete_engine = 'basic'
-endif
-" ------------------------------
-" complete_engine install
-" ------------------------------
-if g:complete_engine == 'cmp'
+if pack#planned_cmp()
     PlugAdd 'hrsh7th/nvim-cmp'
     PlugAdd 'hrsh7th/cmp-nvim-lsp'
     PlugAdd 'hrsh7th/cmp-nvim-lua'
@@ -26,13 +9,13 @@ if g:complete_engine == 'cmp'
     PlugAdd 'FelipeLema/cmp-async-path'
     PlugAdd 'onsails/lspkind-nvim'
     PlugAdd 'xzbdmw/colorful-menu.nvim'
-elseif g:complete_engine == 'blink'
+elseif pack#planned_blink()
     if executable('cargo') && !pack#get('blink.lua')
         PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release', 'branch': 'v1'}
     else
         PlugAdd 'Saghen/blink.cmp', {'branch': 'v1'}
     endif
-elseif g:complete_engine == 'coc'
+elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
         PlugAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}
     else
@@ -43,7 +26,7 @@ endif
 " ------------------------------
 " snippets install
 " ------------------------------
-if g:complete_engine != '' && exists('v:true') && exists("##TextChangedP")
+if !pack#get('nocomplete') && exists('v:true') && exists("##TextChangedP")
     PlugAdd 'rafamadriz/friendly-snippets'
     PlugAdd 'hrsh7th/vim-vsnip'
 endif
@@ -100,7 +83,7 @@ if has('nvim-0.9.2') && !has('nvim-0.12') && get(g:, 'nvim_treesitter_install', 
     PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
     PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
     PlugAdd 'm-demare/hlargs.nvim'
-elseif exists('*search') && exists('*getpos') && g:complete_engine != 'coc'
+elseif exists('*search') && exists('*getpos') && pack#planned_coc()
     PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
     PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
     PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}

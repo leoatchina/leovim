@@ -17,7 +17,7 @@ if pack#planned_lsp()
     call s:add_symbol('nvimlsp')
     call s:add_symbol('aerial')
     call s:add_symbol('vista')
-elseif g:complete_engine == 'coc'
+elseif pack#planned_coc()
     call s:add_symbol('coc')
     call s:add_symbol('vista')
 elseif v:version >= 800 && get(g:, 'ctags_type', '') =~ 'Universal'

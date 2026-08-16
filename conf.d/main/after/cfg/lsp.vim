@@ -1,4 +1,4 @@
-if g:python_version > 3 && g:complete_engine == 'blink'
+if g:python_version > 3 && pack#installed_blink()
     if executable('unzip')
         let g:ensure_installed = ['basedpyright', 'debugpy', 'ruff']
     else

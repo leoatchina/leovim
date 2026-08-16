@@ -56,12 +56,10 @@ endif
 " ------------------------------
 " normal complete_engine
 " ------------------------------
-if pack#installed_lsp()
-    if pack#installed_blink()
-        lua require("cfg/blink")
-    elseif pack#installed_cmp()
-        lua require("cfg/cmp")
-    endif
+if pack#installed_blink()
+    lua require("cfg/blink")
+elseif pack#installed_cmp()
+    lua require("cfg/cmp")
 elseif pack#installed_coc()
     source $CFG_DIR/coc.vim
 endif
