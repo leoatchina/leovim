@@ -50,7 +50,7 @@ else
 endif
 if pack#planned_fzf()
     nnoremap <nowait>\F :FzfGitFiles <C-r>=@"<Cr>
-    xnoremap <nowait>\F :<C-u>FzfGitFiles <C-r>=GetVisualSelection()<Cr>
+    xnoremap <nowait>\F :<C-u>FzfGitFiles <C-r>=utils#get_visual(1)<Cr>
     nnoremap <nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 else
     nnoremap <nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>

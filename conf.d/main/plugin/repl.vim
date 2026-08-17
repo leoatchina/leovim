@@ -46,7 +46,7 @@ if pack#installed('jupynium.nvim')
     function! s:jupynium_run(...)
         let jupynium_urls = get(g:, 'jupynium_urls', [g:jupynium_url])
         if len(jupynium_urls) == 1
-            let tLjupynium_url = jupynium_urls[0]
+            let t:jupynium_url = jupynium_urls[0]
         else
             let t:jupynium_url = utils#choose_one(jupynium_urls, 'Choose a jupynium url', 1)
         endif

@@ -140,13 +140,13 @@ local function dap_load_run(json_file, run, run_to_cursor)
 end
 local function get_json_file(json_file)
   local json_file = json_file or utils.get_root_dir() .. '/.vim/dap.json'
-  if fn.filereadable(json_file) then
+  if fn.filereadable(json_file) == 1 then
     return json_file
   else
     return nil
   end
 end
-function _G.DapRunToCusor(json_file)
+function _G.DapRunToCursor(json_file)
   local json_file = get_json_file(json_file)
   if json_file then
     ok = dap_load_run(json_file, true, true)

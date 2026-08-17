@@ -11,10 +11,10 @@ if pack#installed('md-img-paste.vim')
 endif
 if pack#installed('render-markdown.nvim')
     nnoremap <silent><buffer><M-F> :RenderMarkdown buf_toggle<Cr>
-    augroup SetupRenderMarkdown
-        autocmd!
-        autocmd FileType markdown,vimwiki ++once lua utils#is_require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
-    augroup END
+    if !exists('g:render_markdown_setup')
+        let g:render_markdown_setup = 1
+        lua local ok, render_markdown = pcall(require, 'render-markdown'); if ok then render_markdown.setup({ file_types = { "markdown", "vimwiki" }}) end
+    endif
 endif
 if pack#installed('markdown-preview.nvim') || pack#installed('markdown-preview.vim')
     nnoremap <silent><buffer><M-R> :MarkdownPreview<Cr>

@@ -10,6 +10,21 @@ local function ensure_opencode_bufnr(opts)
   return vim.g.opencode_bufnr
 end
 local opencode_opts = '--wintype=vsplit --position=left --width=0.3'
+local function ask_git_diff()
+  local file = vim.fn.expand('%:p')
+  local diff = ''
+  if file ~= '' then
+    diff = vim.fn.system({ 'git', 'diff', '--', file })
+  end
+  if diff == '' then
+    diff = vim.fn.system({ 'git', 'diff' })
+  end
+  if diff == '' then
+    require('opencode').ask('Review current git changes: ', { submit = true })
+  else
+    require('opencode').ask('Review this git diff:\n' .. diff, { submit = true })
+  end
+end
 vim.g.opencode_opts = {
   server = {
     stop = function()
@@ -25,14 +40,14 @@ vim.g.opencode_opts = {
   }
 }
 vim.keymap.set({ "n", "t" }, "<M-i>o", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
-vim.keymap.set({ "n", "x" }, "<M-i>g", function() require("opencode").ask("@diff: ", { submit = true }) end, { desc = "Ask opencode gdiff" })
+vim.keymap.set({ "n", "x" }, "<M-i>g", ask_git_diff, { desc = "Ask opencode git diff" })
 -- <tab>O for this
 vim.keymap.set({ "n", "x" }, '<Tab>O',  function() return require("opencode").operator("@this ") end, { desc = "Add range to opencode", expr = true })
 -- <tab>o as prefix
 vim.keymap.set({ "n", "x" }, "<Tab>oo", function() require("opencode").select() end, { desc = "Execute opencode action…" })
 vim.keymap.set({ "n", "x" }, "<Tab>ol", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode this" })
 vim.keymap.set({ "n", "x" }, "<Tab>of", function() require("opencode").ask("@buffer: ", { submit = true }) end, { desc = "Ask opencode buffer" })
-vim.keymap.set({ "n", "x" }, "<Tab>od", function() require("opencode").ask("@diagnositcs: ", { submit = true }) end, { desc = "Ask opencode diagnositcs" })
+vim.keymap.set({ "n", "x" }, "<Tab>od", function() require("opencode").ask("@diagnostics: ", { submit = true }) end, { desc = "Ask opencode diagnostics" })
 vim.keymap.set({ "n", "x" }, "<Tab>ov", function() require("opencode").ask("@visible: ", { submit = true }) end, { desc = "Ask opencode visible" })
 vim.keymap.set({ "n", "x" }, "<Tab>ob", function() require("opencode").ask("@buffers: ", { submit = true }) end, { desc = "Ask opencode buffers" })
 vim.keymap.set({ "n", "x" }, "<Tab>oq", function() require("opencode").ask("@quickfix: ", { submit = true }) end, { desc = "Ask opencode quickfix" })

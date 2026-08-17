@@ -237,7 +237,7 @@ elseif pack#installed_dap()
     nnoremap <silent><M-e>, <cmd>lua DapBreakpointPrev()<Cr>
     nnoremap <silent><M-e>; <cmd>lua DapBreakpointNext()<Cr>
     nnoremap <silent><M-e><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
-    nnoremap <silent><M-e><M-e> <cmd>lua DapRunToCusor()<Cr>
+    nnoremap <silent><M-e><M-e> <cmd>lua DapRunToCursor()<Cr>
     nnoremap <silent><M-e><Cr> <cmd>lua DapContinue()<Cr>
     nnoremap <silent><M-e>p <cmd>lua DapPause()<Cr>
     nnoremap <silent><M-e>q <cmd>lua DapReset()<Cr>
@@ -246,7 +246,7 @@ elseif pack#installed_dap()
     nnoremap <silent><M-e>i <cmd>lua require"dap".step_into()<Cr>
     nnoremap <silent><M-e>o <cmd>lua require"dap".step_out()<Cr>
     nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
-    nnoremap <silent><F4> <cmd>lua DapRunToCusor()<Cr>
+    nnoremap <silent><F4> <cmd>lua DapRunToCursor()<Cr>
     nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
     nnoremap <silent><F6> <cmd>lua DapPause()<Cr>
     nnoremap <silent><F7> <cmd>lua DapBreakpointPrev()<Cr>
