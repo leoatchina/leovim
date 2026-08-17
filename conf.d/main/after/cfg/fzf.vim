@@ -33,8 +33,8 @@ if has('nvim') || has('patch-8.2.191')
     au VimResized * call s:fzf_updata_position()
 else
     let g:fzf_layout = {'down': '~30%'}
-    let g:vista_fzf_preview = g:fzf_vim.preview_window
     let g:fzf_vim.preview_window = ['right,45%', 'ctrl-l']
+    let g:vista_fzf_preview = g:fzf_vim.preview_window
 endif
 " Use fzf to view highlight configuration
 function! s:get_highlight_list()

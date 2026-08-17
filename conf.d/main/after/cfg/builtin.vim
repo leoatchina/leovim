@@ -50,7 +50,7 @@ augroup DotOmni
 augroup END
 
 if pack#planned('vim-vsnip')
-    set complete=.,w,b,u,o,k,Fvsnip#completefunc
+    set complete=.,w,b,u,o,k,vsnip#completefunc
     inoremap <expr> <Tab> vsnip#expandable() ? "\<Plug>(vsnip-expand)"
             \ : vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)"
             \ : pumvisible() && complete_info().selected >= 0 ? "\<C-y>"
