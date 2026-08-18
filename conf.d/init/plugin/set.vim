@@ -62,7 +62,9 @@ if has('wildignore')
     set wildignore+=*\\tmp\\*,*/tmp/*,*.swp,*.exe,*.dll,*.so,*.zip,*.tar*,*.7z,*.rar,*.gz,*.pyd,*.pyc,*.ipynb
     set wildignore+=.ccls-cache/*,.idea/*,.vscode/*,__pycache__/*,.git/*,.svn/*,.hg/*,root/*
     " home-level index bloat guard (gutentags/LeaderF reads &wildignore)
-    set wildignore+=node_modules,*/node_modules/*,build,*/build/*,dist,*/dist/*,miniconda3,*/miniconda3/*,backups,*/backups/*,downloads,*/downloads/*,.venv,*/.venv/*,*.lock,*.sqlite,*.sqlite3,*/data.db
+    set wildignore+=node_modules,*/node_modules/*,build,*/build/*,dist,*/dist/*,miniconda3,*/miniconda3/*,anaconda3,*/anaconda3/*
+    set wildignore+=backups,*/backups/*,downloads,*/downloads/*,.venv,*/.venv/*,venv,*/venv/*,*.lock,*.sqlite,*.sqlite3,*.db
+    set wildignore+=.hermes,.omp,.config,.pi,.vscode,.idea
 endif
 " --------------------------
 " signcolumn
