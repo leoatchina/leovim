@@ -69,12 +69,6 @@ elseif has('nvim-0.9.5') && pack#get('debug') || pack#planned_lsp() && pack#get(
     PlugAdd 'jay-babu/mason-nvim-dap.nvim'
 endif
 " ------------------------------
-" opencode
-" ------------------------------
-if has('nvim-0.10') && executable('opencode') && pack#get('opencode')
-    PlugAdd 'NickvanDyke/opencode.nvim'
-endif
-" ------------------------------
 " textobj install
 " ------------------------------
 if has('nvim-0.9.2') && !has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
