@@ -33,6 +33,10 @@ else
         tnoremap <M-L> <C-\><C-n><C-w><C-l>
         tnoremap <M-J> <C-\><C-n><C-w><C-j>
         tnoremap <M-K> <C-\><C-n><C-w><C-k>
+        tnoremap <C-w><C-h> <C-\><C-n><C-w><C-h>
+        tnoremap <C-w><C-l> <C-\><C-n><C-w><C-l>
+        tnoremap <C-w><C-j> <C-\><C-n><C-w><C-j>
+        tnoremap <C-w><C-k> <C-\><C-n><C-w><C-k>
         tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
     endif
 endif
