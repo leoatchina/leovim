@@ -4,7 +4,7 @@ function! textobj#viw() abort
     call feedkeys("viwo",'n')
 endfunction
 
-function! textobj#current_lina_a() abort
+function! textobj#current_line_a() abort
     normal! ^
     let head_pos = getpos('.')
     normal! $

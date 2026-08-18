@@ -13,7 +13,7 @@ if pack#installed('render-markdown.nvim')
     nnoremap <silent><buffer><M-F> :RenderMarkdown buf_toggle<Cr>
     if !exists('g:render_markdown_setup')
         let g:render_markdown_setup = 1
-        lua local ok, render_markdown = pcall(require, 'render-markdown'); if ok then render_markdown.setup({ file_types = { "markdown", "vimwiki" }}) end
+        lua require('render-markdown').setup({ file_types = { "markdown", "vimwiki" }})
     endif
 endif
 if pack#installed('markdown-preview.nvim') || pack#installed('markdown-preview.vim')

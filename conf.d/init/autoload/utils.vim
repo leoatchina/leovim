@@ -286,7 +286,7 @@ function! utils#get_python_prog()
     if !empty(l:venv_path)
         if has('win32') || has('win64')
             let l:python_prog = l:venv_path . '/Scripts/python.exe'
-            let $PATH = l:venv_path . '\bin;'. $PATH
+            let $PATH = l:venv_path . '\Scripts;'. $PATH
         else
             let l:python_prog = l:venv_path . '/bin/python'
             let $PATH = l:venv_path . '/bin:'. $PATH
