@@ -18,11 +18,6 @@ if has('clipboard')
         else
             set clipboard=
         endif
-        execute 'xnoremap Y "' . a:register . 'y:echo "Yank selection to ' . a:label . ' clipboard."<Cr>'
-        execute 'nnoremap <leader>yf :let @' . a:register . '=utils#abs_path()<Cr>:echo "-= File abspath copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>yd :let @' . a:register . '=utils#abs_dir()<Cr>:echo "-= File dir copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>yb :let @' . a:register . '=utils#file_name()<Cr>:echo "-= File basename copied to ' . a:label . ' clipboard=-"<Cr>'
-        execute 'nnoremap <leader>yu _"' . a:register . 'yg_:echo "-= Yanked line without leading whitespaces and line break to ' . a:label . ' clipboard=-"<Cr>'
     endfunction
     if utils#is_linux() && (utils#is_vscode() || exists('$TMUX'))
         call s:setup_clipboard('+', 'unnamedplus', 'x11')
@@ -33,8 +28,44 @@ else
     let s:register = ""
     let s:clipboard = ""
     set clipboard=
-    xnoremap Y y:echo 'Yank selection to internal clipboard.'<Cr>
 endif
+if exists("##TextYankPost") && utils#is_unix() && !utils#is_vscode()
+    function! s:raw_echo(str)
+        if filewritable('/dev/fd/2') && !utils#has_gui()
+            call writefile([a:str], '/dev/fd/2', 'b')
+        else
+            call system("!echo " . shellescape(a:str))
+            redraw!
+        endif
+    endfunction
+    function! s:copy_osc52(content) abort
+        if empty(utils#trim(a:content))
+            return
+        endif
+        let c64 = substitute(system('base64', a:content), '\n', '', 'g')
+        if $HERDR_PANE_ID ==# '' && $TMUX !=# ''
+            let sequence = "\ePtmux;\e\e]52;c;" . c64 . "\x07\e\\"
+        else
+            let sequence = "\e]52;c;" . c64 . "\x07"
+        endif
+        call s:raw_echo(sequence)
+    endfunction
+    autocmd TextYankPost * call s:copy_osc52(join(v:event.regcontents, "\n"))
+endif
+function! s:copy_clipboard(content) abort
+    if utils#is_vscode()
+        call setreg(s:register, a:content)
+    elseif exists("##TextYankPost") && utils#is_unix()
+        call s:copy_osc52(a:content)
+    else
+        call setreg(empty(s:register) ? '"' : s:register, a:content)
+    endif
+endfunction
+xnoremap <silent>Y y:echo "Yank selection to clipboard."<Cr>
+nnoremap <silent><leader>yf :call <SID>copy_clipboard(utils#abs_path())<Cr>
+nnoremap <silent><leader>yd :call <SID>copy_clipboard(utils#abs_dir())<Cr>
+nnoremap <silent><leader>yb :call <SID>copy_clipboard(utils#file_name())<Cr>
+nnoremap <silent><leader>yu _yg_:echo "-= Yanked line to clipboard =-"<Cr>
 " --------------------------------------------
 " yank command and position to editors
 " --------------------------------------------
@@ -250,30 +281,3 @@ augroup AutoPasteMode
     autocmd!
     autocmd InsertLeave,CmdlineLeave * set nopaste
 augroup END
-" -------------------------------
-" clipboard from remote to local
-" -------------------------------
-if exists("##TextYankPost") && utils#is_unix()
-    function! s:raw_echo(str)
-        if filewritable('/dev/fd/2') && !utils#has_gui()
-            call writefile([a:str], '/dev/fd/2', 'b')
-        else
-            call system("!echo " . shellescape(a:str))
-            redraw!
-        endif
-    endfunction
-    function! s:copy() abort
-        let c = join(v:event.regcontents,"\n")
-        if len(utils#trim(c)) == 0
-            return
-        endif
-        let c64 = system("base64", c)
-        if $TMUX == ''
-            let s = "\e]52;c;" . utils#trim(c64) . "\x07"
-        else
-            let s = "\ePtmux;\e\e]52;c;" . utils#trim(c64) . "\x07\e\\"
-        endif
-        call s:raw_echo(s)
-    endfunction
-    autocmd TextYankPost * call s:copy()
-endif
