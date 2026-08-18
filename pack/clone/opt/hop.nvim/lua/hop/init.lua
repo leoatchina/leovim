@@ -17,7 +17,7 @@ local function check_opts(opts)
     return
   end
 
-  if vim.version.cmp({ 0, 10, 0 }, vim.version()) < 0 then
+  if vim.version.cmp({ 0, 10, 0 }, vim.version()) > 0 then
     local hint = require('hop.hint')
     opts.hint_type = hint.HintType.OVERLAY
   end
@@ -498,15 +498,9 @@ function M.setup(opts)
   M.opts = setmetatable(opts or {}, { __index = require('hop.defaults') })
   M.initialized = true
 
-  -- Load dict of match mappings
+  -- Prepare dict of match mappings
   if #M.opts.match_mappings > 0 then
     M.opts.loaded_mappings = {}
-    for _, map in ipairs(M.opts.match_mappings) do
-      local val = require('hop.mappings.' .. map)
-      if val ~= nil then
-        M.opts.loaded_mappings[map] = val
-      end
-    end
   end
 
   -- Insert the highlights and register the autocommand if asked to.

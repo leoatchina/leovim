@@ -56,12 +56,10 @@ endif
 " ------------------------------
 " normal complete_engine
 " ------------------------------
-if pack#installed_lsp()
-    if pack#installed_blink()
-        lua require("cfg/blink")
-    elseif pack#installed_cmp()
-        lua require("cfg/cmp")
-    endif
+if pack#installed_blink()
+    lua require("cfg/blink")
+elseif pack#installed_cmp()
+    lua require("cfg/cmp")
 elseif pack#installed_coc()
     source $CFG_DIR/coc.vim
 endif
@@ -226,7 +224,4 @@ if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') &&
     nnoremap <silent><M-i><M-f> :FloatermAiSendFile!<Cr>
     nnoremap <silent><M-i><M-d> :FloatermAiSendDir!<Cr>
     nnoremap <silent><M-i><M-p> :FloatermAiFzfFiles!<Cr>
-endif
-if pack#installed('opencode.nvim')
-    lua require('cfg/opencode')
 endif

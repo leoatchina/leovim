@@ -1,7 +1,7 @@
 return {
   filetypes = { "lua" },
   root_markers = function ()
-    local lst = vim.g.root_parterns
+    local lst = vim.g.root_patterns
     table.insert(lst, '.luarc.json')
     return lst
   end,

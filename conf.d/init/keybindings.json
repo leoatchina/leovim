@@ -244,7 +244,7 @@
     "command": "-auto-close-tag.closeTag"
   },
   {
-    "key": "shfit+alt+f12",
+    "key": "shift+alt+f12",
     "command": "jdk.java.goto.super.implementation",
     "when": "editorHasCodeActionsProvider && editorTextFocus && editorLangId == 'java'"
   },

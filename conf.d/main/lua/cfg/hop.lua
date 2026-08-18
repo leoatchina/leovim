@@ -1,4 +1,4 @@
-require"hop".setup({ keys = vim.g.search_keys })
+require"hop".setup({ keys = vim.g.EasyMotion_keys })
 local map = vim.keymap.set
 local opt = { remap=true }
 map({'n', 'x', 'o'}, 'sL', [[<Cmd>HopLineStart<Cr>]], opt)

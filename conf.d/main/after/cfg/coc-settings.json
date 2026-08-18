@@ -23,14 +23,14 @@
     "previousKeymap": "<C-k>",
     "extendedSearchMode": true,
     "insertMappings": {
-      "<C-n>": off,
-      "<C-p>": off,
+      "<C-n>": "off",
+      "<C-p>": "off",
       "<C-j>": "normal:j",
       "<C-k>": "normal:k"
     },
     "normalMappings": {
-      "<C-n>": off,
-      "<C-p>": off,
+      "<C-n>": "off",
+      "<C-p>": "off",
       "<C-j>": "normal:next",
       "<C-k>": "normal:previous"
     }

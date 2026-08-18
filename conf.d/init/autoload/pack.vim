@@ -56,7 +56,15 @@ function! pack#planned_leaderf() abort
 endfunction
 
 function! pack#planned_coc() abort
-    return pack#get('coc') && g:node_version >= 22 && (has('nvim') || has('patch-9.0.0438'))
+    return pack#get('coc') && g:node_version >= 24 && (has('nvim') || has('patch-9.0.0438'))
+endfunction
+
+function! pack#planned_cmp() abort
+    return pack#get('cmp') && has('nvim-0.11')
+endfunction
+
+function! pack#planned_blink() abort
+    return (pack#get('blink') || pack#get('blink.lua')) && has('nvim-0.11')
 endfunction
 
 function! pack#planned_lsp() abort

@@ -11,7 +11,7 @@ local exclude = {
 }
 -- NOTE: treesitter related mved to lsp.lua
 require("flash").setup({
-  labels = vim.g.EasyMotion_key,
+  labels = vim.g.EasyMotion_keys,
   search = {
     exclude = exclude,
   },
@@ -25,7 +25,7 @@ require("flash").setup({
       keys = {'f', 'F', 't', 'T'},
     },
     treesitter = {
-      labels = vim.g.EasyMotion_key
+      labels = vim.g.EasyMotion_keys
     }
   }
 })

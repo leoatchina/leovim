@@ -10,7 +10,7 @@ if pack#installed('nvim-hlslens')
 else
     nnoremap <silent><nowait><C-n> *``cgn
 endif
-let g:EasyMotion_key = "123456789asdghklqwertyuiopzxcvbnmfj,;"
+let g:EasyMotion_keys = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 let g:EasyMotion_leader_key = 's'
 if pack#installed('hop.nvim')
     imap <C-a> <ESC>ggVG

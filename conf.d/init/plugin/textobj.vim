@@ -2,7 +2,7 @@ nnoremap SS :call textobj#viw()<Cr>
 if pack#installed("vim-textobj-user")
     call textobj#user#plugin('line', {
                 \   '-': {
-                \     'select-a-function': 'textobj#current_lina_a',
+                \     'select-a-function': 'textobj#current_line_a',
                 \     'select-a': 'ak',
                 \     'select-i-function': 'textobj#current_line_i',
                 \     'select-i': 'ik',

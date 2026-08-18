@@ -335,7 +335,13 @@ endif
 " -----------------------------------------------------------
 " NOTE: plug install and config end
 " -----------------------------------------------------------
-if !pack#installed_coc() && !pack#installed_lsp() && get(g:, 'complete_engine', '') != ''
+if pack#installed_coc()
+    let g:complete_engine = 'coc'
+elseif pack#installed_cmp()
+    let g:complete_engine = 'cmp'
+elseif pack#installed_blink()
+    let g:complete_engine = 'blink'
+elseif !pack#get('nocomplete')
     if !pack#get('mcm') && (has('nvim-0.11') || has('patch-9.1.1590'))
         let g:complete_engine = 'builtin'
         if has('nvim-0.11')

@@ -15,8 +15,8 @@ function! s:toggle_bg()
     endif
     call preview#cmdmsg(&background, 1)
 endf
-command! ToggleBackgroud call s:toggle_bg()
-nnoremap <M-k>b :ToggleBackgroud<Cr>
+command! ToggleBackground call s:toggle_bg()
+nnoremap <M-k>b :ToggleBackground<Cr>
 function! scheme#set(scheme, ...) abort
     let scheme = a:scheme
     let defaultscheme = get(a:, 1, 'slate')

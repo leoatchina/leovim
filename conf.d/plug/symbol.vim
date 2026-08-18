@@ -17,7 +17,7 @@ if pack#planned_lsp()
     call s:add_symbol('nvimlsp')
     call s:add_symbol('aerial')
     call s:add_symbol('vista')
-elseif g:complete_engine == 'coc'
+elseif pack#planned_coc()
     call s:add_symbol('coc')
     call s:add_symbol('vista')
 elseif v:version >= 800 && get(g:, 'ctags_type', '') =~ 'Universal'
@@ -48,9 +48,9 @@ if get(g:, 'ctags_type', '') != ''
 endif
 PlugAdd 'vim-funky'
 if g:has_popup_floating
-    let g:matchup_matchparen_offscreen = {'methed': 'popup'}
+    let g:matchup_matchparen_offscreen = {'method': 'popup'}
 else
-    let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
+    let g:matchup_matchparen_offscreen = {'method': 'status_manual'}
 endif
 PlugAdd 'vim-matchup'
 " ------------------------------
