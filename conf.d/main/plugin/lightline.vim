@@ -10,11 +10,11 @@ let g:lightline#bufferline#show_number = 0
 let g:lightline#bufferline#unicode_symbols = 1
 let g:lightline#bufferline#enable_devicons = 0
 let g:lightline#bufferline#enable_nerdfont = 1
-function! lightline#bufferline_maxwidht() abort
+function! lightline#bufferline_maxwidth() abort
     let left = &columns - len(utils#file_readonly() . git#relative_dir() . git#relative_path() . git#branch() . utils#mode())
     return left > 60 ? left - 60 : 0
 endfunction
-let g:lightline#bufferline#max_width = "lightline#bufferline_maxwidht"
+let g:lightline#bufferline#max_width = "lightline#bufferline_maxwidth"
 function! lightline#bufferline_filter(buffer) abort
     return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# '' && getbufvar(a:buffer, '&filetype') !=# 'startify'
 endfunction

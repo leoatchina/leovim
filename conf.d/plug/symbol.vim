@@ -48,9 +48,9 @@ if get(g:, 'ctags_type', '') != ''
 endif
 PlugAdd 'vim-funky'
 if g:has_popup_floating
-    let g:matchup_matchparen_offscreen = {'methed': 'popup'}
+    let g:matchup_matchparen_offscreen = {'method': 'popup'}
 else
-    let g:matchup_matchparen_offscreen = {'methed': 'status_manual'}
+    let g:matchup_matchparen_offscreen = {'method': 'status_manual'}
 endif
 PlugAdd 'vim-matchup'
 " ------------------------------

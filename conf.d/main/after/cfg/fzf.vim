@@ -20,7 +20,7 @@ if has('nvim') || has('patch-8.2.191')
     let g:fzf_layout = {
                 \ 'window': {'width': 0.9, 'height': 0.9, 'border': 'rounded'}
                 \ }
-    function s:fzf_updata_position()
+    function s:fzf_update_position()
         if &columns > &lines * 3
             let g:fzf_vim.preview_window = ['right,45%', 'ctrl-l']
         else
@@ -29,8 +29,8 @@ if has('nvim') || has('patch-8.2.191')
         let g:vista_fzf_preview = g:fzf_vim.preview_window
         let g:coc_fzf_preview = g:fzf_vim.preview_window
     endfunction
-    call s:fzf_updata_position()
-    au VimResized * call s:fzf_updata_position()
+    call s:fzf_update_position()
+    au VimResized * call s:fzf_update_position()
 else
     let g:fzf_layout = {'down': '~30%'}
     let g:fzf_vim.preview_window = ['right,45%', 'ctrl-l']
@@ -192,7 +192,7 @@ function! fzf#open_qfloc()
         call preview#errmsg("No Quickfix/Loclist")
         return
     endif
-    let candicates = []
+    let candidates = []
     for item in qf_items
         let filename = get(item, 'filename', '')
         if empty(filename) && get(item, 'bufnr', 0) > 0
@@ -205,15 +205,15 @@ function! fzf#open_qfloc()
         let col = get(item, 'col', 1)
         let text = substitute(get(item, 'text', ''), "\t", ' ', 'g')
         let quickfix = printf("%s:%d:%d#\t%s", filename, lnum, col, text)
-        call add(candicates, quickfix)
+        call add(candidates, quickfix)
     endfor
-    if empty(candicates)
+    if empty(candidates)
         call preview#errmsg("No Quickfix/Loclist")
         return
     endif
-    let longest = max(map(copy(candicates), 'strdisplaywidth(split(v:val, "#\t")[0])'))
+    let longest = max(map(copy(candidates), 'strdisplaywidth(split(v:val, "#\t")[0])'))
     let results = []
-    for each in candicates
+    for each in candidates
         let length = strdisplaywidth(split(each, "#\t")[0])
         let quickfix = substitute(each, "#\t", "#" . repeat(" ", longest - length) . "\t", "")
         call add(results, quickfix)

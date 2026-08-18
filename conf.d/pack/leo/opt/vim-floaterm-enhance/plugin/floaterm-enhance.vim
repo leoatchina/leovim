@@ -2,7 +2,7 @@ if exists('g:floaterm_enhance_loaded')
     finish
 endif
 let g:floaterm_enhance_loaded = 1
-let g:floaterm_prog_postion = get(g:, 'floaterm_prog_postion', 'auto')
+let g:floaterm_prog_position = get(g:, 'floaterm_prog_position', 'auto')
 let g:floaterm_prog_col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 2.5)
 let g:floaterm_prog_split_ratio = get(g:, 'floaterm_prog_split_ratio', 0.38)
 let g:floaterm_prog_float_ratio = get(g:, 'floaterm_prog_float_ratio', 0.45)

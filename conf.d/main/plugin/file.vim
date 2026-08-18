@@ -278,8 +278,8 @@ function! s:toggle_modify() abort
         echo 'Current buffer is now modifiable'
     endif
 endfunction
-command! ToggleModity call s:toggle_modify()
-nnoremap <M-k><space> :ToggleModity<Cr>
+command! ToggleModify call s:toggle_modify()
+nnoremap <M-k><space> :ToggleModify<Cr>
 " -----------------------------
 " mklink
 " -----------------------------

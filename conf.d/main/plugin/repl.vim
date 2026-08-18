@@ -66,7 +66,7 @@ if pack#installed('jupynium.nvim')
     command! JupyniumRun call s:jupynium_run()
     command! JupyniumRunInTerminal call s:jupynium_run(1)
     command! JupyniumCommands call FzfCallCommands('JupyniumCommands', 'Jupynium', ['JupyniumRun'])
-    function! s:execute_and_forword() abort
+    function! s:execute_and_forward() abort
         JupyniumExecuteSelectedCells
         let endline = search('^# %%', 'nW')
         if endline == 0
@@ -76,7 +76,7 @@ if pack#installed('jupynium.nvim')
         endif
         execute "normal! " . endline . 'G'
     endfunction
-    command JupyniumExecuteSelectedCellsForword call s:execute_and_forword()
+    command JupyniumExecuteSelectedCellsForward call s:execute_and_forward()
     function! s:map() abort
         nnoremap <buffer><silent>q<Cr> <Cmd>JupyniumRun<Cr>
         nnoremap <buffer><silent>qr <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
@@ -91,7 +91,7 @@ if pack#installed('jupynium.nvim')
         xnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
         nnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
         xnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        nnoremap <buffer><silent>qf <Cmd>JupyniumExecuteSelectedCellsForword<Cr>
+        nnoremap <buffer><silent>qf <Cmd>JupyniumExecuteSelectedCellsForward<Cr>
         nnoremap <buffer><silent><M-M> <Cmd>JupyniumCommands<Cr>
     endfunction
     au FileType python,r call s:map()

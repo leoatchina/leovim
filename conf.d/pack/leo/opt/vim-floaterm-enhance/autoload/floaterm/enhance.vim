@@ -192,13 +192,13 @@ function! floaterm#enhance#get_opt_param(optstr, check) abort
 endfunction
 function! floaterm#enhance#parse_opt(...) abort
     let col_row_ratio = get(g:, 'floaterm_prog_col_row_ratio', 2.5)
-    let split_ration = get(g:, 'floaterm_prog_split_ratio', 0.38)
+    let split_ratio = get(g:, 'floaterm_prog_split_ratio', 0.38)
     let float_ratio = get(g:, 'floaterm_prog_float_ratio', 0.45)
-    " postions
-    let basic_postions = ['auto', 'center', 'right', 'bottom', 'left', 'top', 'leftabove', 'aboveleft', 'rightbelow', 'belowright', 'botright']
-    let float_postions = ['topleft', 'topright', 'bottomleft', 'bottomright', 'cusor']
-    let all_postions = basic_postions + float_postions
-    let open_position = get(g:, 'floaterm_prog_open_postion', 'auto')
+    " positions
+    let basic_positions = ['auto', 'center', 'right', 'bottom', 'left', 'top', 'leftabove', 'aboveleft', 'rightbelow', 'belowright', 'botright']
+    let float_positions = ['topleft', 'topright', 'bottomleft', 'bottomright', 'cursor']
+    let all_positions = basic_positions + float_positions
+    let open_position = get(g:, 'floaterm_prog_open_position', 'auto')
     " wintypes
     if has('nvim')
         let wintypes = ['split', 'vsplit', 'float']
@@ -236,9 +236,9 @@ function! floaterm#enhance#parse_opt(...) abort
         " NOTE: open_position
         let pos = floaterm#enhance#get_opt_param(optstr, 'position')
         if !empty(pos)
-            if has('nvim') && index(all_postions, pos) >= 0
+            if has('nvim') && index(all_positions, pos) >= 0
                 let open_position = pos
-            elseif index(basic_postions, pos) >= 0
+            elseif index(basic_positions, pos) >= 0
                 let open_position = pos
             else
                 let open_position = 'auto'
@@ -258,9 +258,9 @@ function! floaterm#enhance#parse_opt(...) abort
         endif
     endif
     if open_position == 'right' && empty(width_opt)
-        let width_opt = '--width=' . split_ration
+        let width_opt = '--width=' . split_ratio
     elseif open_position == 'bottom' && empty(height_opt)
-        let height_opt = '--height=' . split_ration
+        let height_opt = '--height=' . split_ratio
     else
         if empty(width_opt)
             let width_opt = '--width=' . float_ratio

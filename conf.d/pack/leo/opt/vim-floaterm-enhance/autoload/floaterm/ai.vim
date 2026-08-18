@@ -83,7 +83,7 @@ endfunction
 " --------------------------------------------------------------
 " XXX: send prompt
 " --------------------------------------------------------------
-function! s:send_prompt(type, stary_curr, ...) abort
+function! s:send_prompt(type, stay_curr, ...) abort
     let ai_bufnr = floaterm#ai#get_ai_bufnr()
     if !ai_bufnr
         call floaterm#enhance#showmsg('No AI floaterm window found', 1)
@@ -108,12 +108,12 @@ function! s:send_prompt(type, stary_curr, ...) abort
         return
     endif
     call floaterm#terminal#open_existing(ai_bufnr)
-    if has('nvim') || !a:stary_curr || a:0 == 2 && a:1 == a:2
+    if has('nvim') || !a:stay_curr || a:0 == 2 && a:1 == a:2
         call floaterm#terminal#send(ai_bufnr, [content], 0)
     else
         call floaterm#terminal#send(ai_bufnr, [content, "", "\b"], 0)
     endif
-    if a:stary_curr
+    if a:stay_curr
         call floaterm#enhance#wincmdp()
     endif
 endfunction
