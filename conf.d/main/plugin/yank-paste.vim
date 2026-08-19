@@ -53,13 +53,10 @@ if exists("##TextYankPost") && utils#is_unix() && !utils#is_vscode()
     autocmd TextYankPost * call s:copy_osc52(join(v:event.regcontents, "\n"))
 endif
 function! s:copy_clipboard(content) abort
-    if utils#is_vscode()
-        call setreg(s:register, a:content)
-    elseif exists("##TextYankPost") && utils#is_unix()
+    if !utils#is_vscode() && exists("##TextYankPost") && utils#is_unix()
         call s:copy_osc52(a:content)
-    else
-        call setreg(empty(s:register) ? '"' : s:register, a:content)
     endif
+    call setreg(empty(s:register) ? '"' : s:register, a:content)
 endfunction
 xnoremap <silent>Y y:echo "Yank selection to clipboard."<Cr>
 nnoremap <silent><leader>yf :call <SID>copy_clipboard(utils#abs_path())<Cr>
@@ -82,13 +79,7 @@ function! s:yank_position_to_editor(editor) abort
     else
         let cmd = printf('%s --goto %s:%d:%d', editor, utils#abs_path(), line("."), col("."))
     endif
-    if s:register == '+'
-        let @+ = cmd
-    elseif s:register == '*'
-        let @* = cmd
-    else
-        let @" = cmd
-    endif
+    call s:copy_clipboard(cmd)
     echo '=== Yank current position to ' . editor . ' ==='
 endfunction
 command! YankPositionToCode     call s:yank_position_to_editor('code')
@@ -111,13 +102,7 @@ function! s:yank_line_ref(start, end) range abort
     if a:start != a:end
         let ref .= '-L' . a:end
     endif
-    if s:register == '+'
-        let @+ = ref
-    elseif s:register == '*'
-        let @* = ref
-    else
-        let @" = ref
-    endif
+    call s:copy_clipboard(ref)
     echo '=== Yank line reference === '
 endfunction
 command! -range YankLineRef call s:yank_line_ref(<line1>, <line2>)
