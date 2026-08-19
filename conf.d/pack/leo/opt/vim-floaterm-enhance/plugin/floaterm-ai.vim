@@ -2,7 +2,6 @@ if exists('g:floaterm_ai_loaded')
     finish
 endif
 let g:floaterm_ai_loaded = 1
-command! FloatermAiFzfFiles call floaterm#ai#fzf_file_list()
 command! -bang -range FloatermAiFileLine call floaterm#ai#send_line(<bang>0, <line1>, <line2>)
 command! FloatermAiStart call floaterm#ai#start()
 function! s:update_ai_bufnr() abort

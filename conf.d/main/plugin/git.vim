@@ -6,7 +6,7 @@ endif
 " git global set
 " ---------------------------------
 if executable('git') && get(g:, 'header_field_author', '') != '' && get(g:, 'header_field_author_email', '') != ''
-    command! GitSet utils#execute(printf(
+    command! GitSet call utils#execute(printf(
                 \ '!git config user.name "%s" && git config user.email "%s"',
                 \ g:header_field_author,
                 \ g:header_field_author_email))

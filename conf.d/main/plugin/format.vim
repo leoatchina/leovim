@@ -21,7 +21,7 @@ endfunction
 " ----------------------------
 " neoformat
 " ----------------------------
-if pack#planned('neoformat')
+if pack#installed('neoformat')
     function! format#choose_fmtprg(visual) abort
         let filetype = &ft
         let visual = a:visual
