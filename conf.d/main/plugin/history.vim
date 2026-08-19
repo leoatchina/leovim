@@ -3,11 +3,11 @@ if utils#is_vscode()
     finish
 endif
 if pack#planned_leaderf()
-    nnoremap <silent><M-u> :LeaderfMru<Cr>
+    nnoremap <silent><leader>u :LeaderfMru<Cr>
 elseif pack#planned_fzf()
-    nnoremap <silent><M-u> :FzfHistory<Cr>
+    nnoremap <silent><leader>u :FzfHistory<Cr>
 else
-    nnoremap <silent><M-u> :CtrlPMRU<Cr>
+    nnoremap <silent><leader>u :CtrlPMRU<Cr>
 endif
 " --------------------------
 " jumpoption
@@ -22,11 +22,6 @@ endtry
 " --------------------------
 if pack#installed('nvim-fundo')
     lua require('fundo').setup()
-endif
-" undotree
-if pack#planned('undotree')
-    let g:undotree_WindowLayout = 4
-    nnoremap <silent><leader>u :UndotreeToggle<Cr>
 endif
 " ------------------------------
 " Fzf jumps
@@ -125,5 +120,5 @@ function! s:recent_project_files()
                 \ }))
 endfunction
 command! FzfProjectMru call s:recent_project_files()
-nnoremap <M-U> :FzfProjectMru<Cr>
+nnoremap <leader>U :FzfProjectMru<Cr>
 

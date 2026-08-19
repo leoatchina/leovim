@@ -384,8 +384,7 @@ let s:autoclose_ft_buf = [
             \ 'leaderf', 'fzf', 'help', 'man',
             \ 'git', 'gitcommit', 'fugitive', 'fugtiveblame', 'diff',
             \ 'vimspector', 'vimspectorprompt',
-            \ 'terminal', 'floaterm', 'undotree',
-            \ 'dropbar', 'dropbar_preview',
+            \ 'terminal', 'floaterm', 'dropbar', 'dropbar_preview',
             \ ]
 function! s:autoclose(check_last_win) abort
     if utils#is_popup()

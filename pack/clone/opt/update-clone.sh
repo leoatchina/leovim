@@ -98,10 +98,6 @@ git clone --depth 1 https://github.com/skywind3000/asynctasks.vim.git
 rm -rf vim-mucomplete
 git clone --depth 1 https://github.com/lifepillar/vim-mucomplete.git
 
-# undotree
-rm -rf undotree
-git clone --depth 1 https://github.com/mbbill/undotree.git
-
 # vim-floaterm
 rm -rf vim-floaterm 
 git clone --depth 1 https://github.com/voldikss/vim-floaterm.git

@@ -11,7 +11,6 @@ augroup END
 " -------------------------
 " 执行退出操作
 function! s:do_quit(save) abort
-    UndotreeHide
     if a:save
         wq!
     else
@@ -20,7 +19,6 @@ function! s:do_quit(save) abort
 endfunction
 " 执行全部退出
 function! s:do_quit_all() abort
-    UndotreeHide
     if exists(':cquit')
         cquit
     else

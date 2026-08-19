@@ -282,7 +282,6 @@ endif
 if has('nvim') && utils#is_unix()
     PlugAdd 'kevinhwang91/nvim-fundo'
 endif
-PlugAdd 'undotree'
 " ----------------------------
 " indentLine plugins
 " ----------------------------
