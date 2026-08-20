@@ -302,7 +302,9 @@ endfunction
 " tags
 nnoremap <silent>g<Cr> :call tags#lsp_tag_search("tags")<Cr>
 " preview
-nnoremap <silent><C-h> :call tags#lsp_tag_search("preview")<Cr>
+if !pack#planned('vim-herdr-navigation')
+    nnoremap <silent><C-h> :call tags#lsp_tag_search("preview")<Cr>
+endif
 " definition
 au FileType help,vimdoc nnoremap <buffer> <C-]> <C-]>
 nnoremap <silent><C-g> :call tags#lsp_tag_search("definition", "edit")<Cr>

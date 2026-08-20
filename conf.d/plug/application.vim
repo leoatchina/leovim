@@ -148,9 +148,13 @@ if g:has_terminal
     PlugAdd 'vim-floaterm'
     PlugAdd 'vim-floaterm-enhance'
 endif
-if utils#is_unix() && utils#has_gui() == 0 && executable('tmux') && v:version >= 800
-    PlugAdd 'vim-tmux-navigator'
-    PlugAdd 'vim-tmux-clipboard'
+if utils#is_unix() && utils#has_gui() == 0 && v:version >= 800
+    if $TMUX != ''
+        PlugAdd 'vim-tmux-navigator'
+        PlugAdd 'vim-tmux-clipboard'
+    elseif $HERDR_TAB_ID != ''
+        PlugAdd 'vim-herdr-navigation'
+    endif
 endif
 " --------------------------
 " sidebar
