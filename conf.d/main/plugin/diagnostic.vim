@@ -110,7 +110,7 @@ if pack#installed('coc.nvim')
         " toggle diagnostic
         function! s:CocDiagnosticToggleBuffer()
             call CocAction('diagnosticToggleBuffer')
-            if b:coc_diagnostic_disable > 0
+            if get(b:, 'coc_diagnostic_disable', 0) > 0
                 setlocal signcolumn=no
             else
                 setlocal signcolumn=yes
@@ -170,7 +170,6 @@ if pack#planned('ale')
     let g:ale_python_flake8_options = "--max-line-length=200 --ignore=" . s:python_lint_ignore
     " map
     command! ALECommands call FzfCallCommands('ALECommands', 'ALE')
-    command! -bang -nargs=* ALEDiag call s:ale_diag()
     if !pack#installed('coc.nvim')
         nnoremap <silent><leader>d :ALELint<Cr>
         nnoremap <silent><leader>o :ALEToggleBuffer<Cr>

@@ -42,9 +42,9 @@ function! git#lcd_and_update() abort
         return
     endif
     " 仅在目录变化时切换窗口 cwd（getcwd(winnr()) 为窗口局部 cwd）
-    if getcwd(winnr()) !=# fnamemodify(expand('%:p:h'), ':p')
+    if getcwd(winnr()) !=# l:cur_dir
         try
-            execute 'lcd ' . l:cur_dir
+            execute 'lcd ' . fnameescape(l:cur_dir)
         catch
         endtry
     endif
@@ -58,7 +58,9 @@ function! git#lcd_and_update() abort
     if g:git_version > 1.8
         try
             " 一次 fork 输出三行：is-inside-work-tree / root / branch
-            let l:out = system('git -C ' . l:cur_dir . ' rev-parse --is-inside-work-tree --show-toplevel --abbrev-ref HEAD 2>/dev/null')
+            let l:null = utils#is_win() ? '2>nul' : '2>/dev/null'
+            let l:cmd = printf('git -C %s rev-parse --is-inside-work-tree --show-toplevel --abbrev-ref HEAD %s', shellescape(l:cur_dir), l:null)
+            let l:out = system(l:cmd)
             if v:shell_error == 0
                 let l:lines = split(l:out, "\n")
                 if len(l:lines) >= 3 && get(l:lines, 0, '') ==# 'true' && l:lines[1] != ''
