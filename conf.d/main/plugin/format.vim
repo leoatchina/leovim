@@ -71,7 +71,7 @@ if pack#installed('neoformat')
     nnoremap <silent>Q :ChooseFormatPrg<Cr>
     xnoremap <silent>Q :ChooseFormatPrg!<Cr>
 else
-    nnoremap <silent>Q :call format#builtin_fmt()<Cr>
+    nnoremap <silent>Q :call format#builtin_fmt(0)<Cr>
 endif
 " ----------------------------
 " table_mode

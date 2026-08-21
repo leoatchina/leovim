@@ -168,7 +168,7 @@ function! s:open_or_create_file(file, ...) abort
                     call add(content, string(each))
                 elseif type(each) == v:t_string
                     call add(content, each)
-                elseif index([v:t_func, v:t_job, v:t_none, v:t_channel]) < 0
+                elseif index([v:t_func, v:t_job, v:t_none, v:t_channel], type(each)) < 0
                     call add(content, string(each))
                 endif
             endfor
