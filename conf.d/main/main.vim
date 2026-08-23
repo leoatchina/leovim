@@ -234,7 +234,7 @@ if utils#is_win() && pack#get('tags') || utils#is_unix()
         try
             let g:ctags_type = split(system('ctags --version'), ' ')[0]
             if g:ctags_type =~ 'Universal'
-                if system('ctags --list-features | grep json') =~ 'json'
+                if system('ctags --list-features') =~# 'json'
                     let g:ctags_type = 'Universal-json'
                 else
                     let g:ctags_type = 'Universal'

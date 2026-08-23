@@ -38,7 +38,7 @@ let g:startify_list_order = [
             \ 'bookmarks',
             \ ]
 let g:startify_commands = [
-            \ {'v': ['重要插件', 'call Version()']},
+            \ {'v': ['重要插件', 'Version']},
             \ {'V': ['基本信息', 'version']},
             \ ]
 if has('nvim')

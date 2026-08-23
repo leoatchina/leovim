@@ -97,7 +97,7 @@ if pack#installed('vim-qf')
     let g:qf_statusline.after = '\ %f%=%l\/%-6L\ \ \ \ \'
 elseif exists('&quickfixtextfunc')
     function! quickfix#format(info)
-        let qflist = getqflist({'id' : a:info.id, 'items' : 1}).items
+        let qflist = a:info.quickfix ? getqflist({'id': a:info.id, 'items': 1}).items : getloclist(a:info.winid, {'id': a:info.id, 'items': 1}).items
         let qflist = map(qflist,
                     \ 'extend(v:val, {"filename" : bufname(v:val.bufnr)})')
         let prefix_len = 2 + max(map(copy(qflist),

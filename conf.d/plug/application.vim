@@ -104,7 +104,7 @@ endif
 " fuzzy finders
 " ------------------------------
 if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
-    PlugAdd 'junegunn/fzf.vim'
+    PlugAdd 'junegunn/fzf.vim', {'dir': utils#expand('~/.leovim/fzf/vim')}
     if utils#is_win()
         PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\.leovim\\fzf')}
     else
@@ -148,9 +148,13 @@ if g:has_terminal
     PlugAdd 'vim-floaterm'
     PlugAdd 'vim-floaterm-enhance'
 endif
-if utils#is_unix() && utils#has_gui() == 0 && executable('tmux') && v:version >= 800
-    PlugAdd 'vim-tmux-navigator'
-    PlugAdd 'vim-tmux-clipboard'
+if utils#is_unix() && utils#has_gui() == 0 && v:version >= 800
+    if $TMUX != ''
+        PlugAdd 'vim-tmux-navigator'
+        PlugAdd 'vim-tmux-clipboard'
+    elseif $HERDR_TAB_ID != ''
+        PlugAdd 'vim-herdr-navigation'
+    endif
 endif
 " --------------------------
 " sidebar

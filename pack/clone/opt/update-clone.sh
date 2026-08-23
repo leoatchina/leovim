@@ -72,7 +72,9 @@ git clone --depth 1 https://github.com/wellle/targets.vim
 rm -rf vindent.vim
 git clone --depth 1 https://github.com/jessekelighine/vindent.vim
 
-# tmux
+# tmux && herdr
+rm -rf vim-herdr-navigation
+git clone --depth 1 https://github.com/paulbkim-dev/vim-herdr-navigation.git
 rm -rf vim-tmux-navigator
 git clone --depth 1 https://github.com/christoomey/vim-tmux-navigator.git
 rm -rf vim-tmux-clipboard

@@ -51,7 +51,9 @@ venv/
 .cursor/
 .devin/
 .vercel/
+.codex/
 .orca/
+.omp/
 .pi/
 .vs/
 .deepseek/
