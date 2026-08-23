@@ -58,11 +58,11 @@ function! s:copy_clipboard(content) abort
     endif
     call setreg(empty(s:register) ? '"' : s:register, a:content)
 endfunction
-xnoremap <silent>Y y:echo "Yank selection to clipboard."<Cr>
 nnoremap <silent><leader>yf :call <SID>copy_clipboard(utils#abs_path())<Cr>
 nnoremap <silent><leader>yd :call <SID>copy_clipboard(utils#abs_dir())<Cr>
 nnoremap <silent><leader>yb :call <SID>copy_clipboard(utils#file_name())<Cr>
-nnoremap <silent><leader>yu _yg_:echo "-= Yanked line to clipboard =-"<Cr>
+nnoremap <silent><leader>yu :call <SID>copy_clipboard(utils#trim(getline('.')))<Cr>
+xnoremap <silent>Y y:call <SID>copy_clipboard(@")<Cr>
 " --------------------------------------------
 " yank command and position to editors
 " --------------------------------------------
