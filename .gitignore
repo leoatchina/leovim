@@ -28,6 +28,8 @@ NULL
 .vercel/
 .theia/
 .vs/
+.pi/
+.omp/
 .devin/
 .fleet/
 .idea/
