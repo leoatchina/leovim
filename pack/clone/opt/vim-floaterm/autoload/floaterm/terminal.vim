@@ -45,6 +45,7 @@ function! s:on_floaterm_close(bufnr, callback, job, data, ...) abort
         break
       endif
     endfor
+    let bufnr = a:bufnr
   else
     let bufnr = a:bufnr
   endif
