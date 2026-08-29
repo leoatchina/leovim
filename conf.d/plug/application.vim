@@ -148,11 +148,11 @@ if g:has_terminal
     PlugAdd 'vim-floaterm'
     PlugAdd 'vim-floaterm-enhance'
 endif
-if utils#is_unix() && utils#has_gui() == 0 && v:version >= 800
-    if $TMUX != ''
+if v:version >= 800 && utils#has_gui() == 0
+    if utils#is_unix() && $TMUX != ''
         PlugAdd 'vim-tmux-navigator'
         PlugAdd 'vim-tmux-clipboard'
-    elseif $HERDR_TAB_ID != ''
+    else
         PlugAdd 'vim-herdr-navigation'
     endif
 endif
