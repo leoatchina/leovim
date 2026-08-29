@@ -152,7 +152,7 @@ if v:version >= 800 && utils#has_gui() == 0
     if utils#is_unix() && $TMUX != ''
         PlugAdd 'vim-tmux-navigator'
         PlugAdd 'vim-tmux-clipboard'
-    else
+    elseif $ echo $HERDR_PANE_ID != ''
         PlugAdd 'vim-herdr-navigation'
     endif
 endif

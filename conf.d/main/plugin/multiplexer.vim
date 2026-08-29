@@ -2,7 +2,7 @@
 if utils#is_vscode()
     finish
 endif
-if pack#planned('vim-tmux-navigator')
+if pack#installed('vim-tmux-navigator')
     let g:tmux_navigator_no_mappings = 1
     nnoremap <silent><M-H> :TmuxNavigateLeft<cr>
     nnoremap <silent><M-J> :TmuxNavigateDown<cr>
@@ -19,12 +19,11 @@ if pack#planned('vim-tmux-navigator')
         tnoremap <silent><M-L> <C-\><C-n>:TmuxNavigateRight<cr>
         tnoremap <silent><C-w><C-w> <C-\><C-n>:TmuxNavigatePrevious<cr>
     endif
-elseif pack#planned('vim-herdr-navigation')
+elseif pack#installed('vim-herdr-navigation')
     function! s:HerdrFocus(dir) abort
         let l:herdr = empty($HERDR_BIN_PATH) ? 'herdr' : $HERDR_BIN_PATH
         call system(shellescape(l:herdr) . ' pane focus --direction ' . a:dir . ' --current')
     endfunction
-
     function! s:Navigate(wincmd, dir) abort
         let l:prev = winnr()
         execute 'wincmd ' . a:wincmd
@@ -33,19 +32,19 @@ elseif pack#planned('vim-herdr-navigation')
             call s:HerdrFocus(a:dir)
         endif
     endfunction
-    nnoremap <silent><C-h> :call <SID>Navigate('h', 'left')<cr>
-    nnoremap <silent><C-j> :call <SID>Navigate('j', 'down')<cr>
-    nnoremap <silent><C-k> :call <SID>Navigate('k', 'up')<cr>
-    nnoremap <silent><C-l> :call <SID>Navigate('l', 'right')<cr>
-    inoremap <silent><C-h> <C-o>:call <SID>Navigate('h', 'left')<cr>
-    inoremap <silent><C-j> <C-o>:call <SID>Navigate('j', 'down')<cr>
-    inoremap <silent><C-k> <C-o>:call <SID>Navigate('k', 'up')<cr>
-    inoremap <silent><C-l> <C-o>:call <SID>Navigate('l', 'right')<cr>
+    nnoremap <silent><M-H> :call <SID>Navigate('h', 'left')<cr>
+    nnoremap <silent><M-J> :call <SID>Navigate('j', 'down')<cr>
+    nnoremap <silent><M-K> :call <SID>Navigate('k', 'up')<cr>
+    nnoremap <silent><M-L> :call <SID>Navigate('l', 'right')<cr>
+    inoremap <silent><M-H> <C-o>:call <SID>Navigate('h', 'left')<cr>
+    inoremap <silent><M-J> <C-o>:call <SID>Navigate('j', 'down')<cr>
+    inoremap <silent><M-K> <C-o>:call <SID>Navigate('k', 'up')<cr>
+    inoremap <silent><M-L> <C-o>:call <SID>Navigate('l', 'right')<cr>
     if g:has_terminal
-        tnoremap <silent><C-h> <C-\><C-n>:call <SID>Navigate('h', 'left')<cr>
-        tnoremap <silent><C-j> <C-\><C-n>:call <SID>Navigate('j', 'down')<cr>
-        tnoremap <silent><C-k> <C-\><C-n>:call <SID>Navigate('k', 'up')<cr>
-        tnoremap <silent><C-l> <C-\><C-n>:call <SID>Navigate('l', 'right')<cr>
+        tnoremap <silent><M-H> <C-\><C-n>:call <SID>Navigate('h', 'left')<cr>
+        tnoremap <silent><M-J> <C-\><C-n>:call <SID>Navigate('j', 'down')<cr>
+        tnoremap <silent><M-K> <C-\><C-n>:call <SID>Navigate('k', 'up')<cr>
+        tnoremap <silent><M-L> <C-\><C-n>:call <SID>Navigate('l', 'right')<cr>
         tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
     endif
 else
