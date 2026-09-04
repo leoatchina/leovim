@@ -204,8 +204,18 @@
   // definition
   {
     "key": "ctrl+alt+g",
-    "command": "workbench.action.gotoLine"
+    "command": "workbench.action.gotoLine",
+    "when": "editorTextFocus"
   },
+  {
+    "key": "ctrl+shift+g",
+    "command": "-workbench.action.gotoLine",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+g",
+    "command": "-workbench.action.toggleWindsurfAgentWindow",
+    "when": "!agentWorkspaceConversionInFlight && !findInputFocussed && !findWidgetVisible && !isAgentSessionsWorkspace && !terminalFindVisible"
   {
     "key": "ctrl+g",
     "command": "editor.action.revealDefinition",
@@ -642,6 +652,11 @@
     "when": "composerBarIsVisible"
   },
   // ----------------- devin ----------------
+  {
+    "key": "shift+alt+a",
+    "command": "workbench.action.toggleWindsurfAgentWindow",
+    "when": "!agentWorkspaceConversionInFlight && !findInputFocussed && !findWidgetVisible && !isAgentSessionsWorkspace && !terminalFindVisible"
+  },
   {
     "key": "ctrl+e",
     "command": "-workbench.action.quickOpen"
