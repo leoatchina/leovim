@@ -381,7 +381,7 @@
     "when": "terminalFocus"
   },
   {
-    "key": "ctrl+shift+alt+-",
+    "key": "ctrl+shift+alt+\\",
     "command": "workbench.action.terminal.killAll"
   },
   {
@@ -391,7 +391,7 @@
   },
   {
     "key": "shift+alt+[",
-      "command": "workbench.action.terminal.focusPrevious"
+    "command": "workbench.action.terminal.focusPrevious"
   },
   {
     "key": "shift+alt+]",
@@ -415,12 +415,12 @@
     "command": "workbench.action.nextPanelView"
   },
   {
-    "key": "ctrl+shift+alt+[",
+    "key": "alt+`",
       "command": "workbench.action.terminal.focusPreviousPane",
       "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
   },
   {
-    "key": "ctrl+shift+alt+]",
+    "key": "shift+alt+`",
     "command": "workbench.action.terminal.focusNextPane",
     "when": "terminalFocus && terminalHasBeenCreated || terminalFocus && terminalProcessSupported"
   },
