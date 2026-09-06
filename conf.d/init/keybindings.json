@@ -566,6 +566,10 @@
   },
   // open keybindings
   {
+    "key": "ctrl+e",
+    "command": "-workbench.action.quickOpen"
+  },
+  {
     "key": "ctrl+k ctrl+s",
     "command": "-workbench.action.openGlobalKeybindings"
   },
@@ -574,7 +578,7 @@
     "command": "-workbench.action.openGlobalKeybindings"
   },
   {
-    "key": "shift+alt+,",
+    "key": "ctrl+alt+,",
     "command": "workbench.action.openGlobalKeybindings"
   },
   {
@@ -614,8 +618,14 @@
     "command": "multiCommand.reloadFile"
   },
   {
-    "key": "ctrl+alt+,",
+    "key": "shift+alt+,",
     "command": "AI.generateCommitMessage"
+  },
+  // ----------------- devin ----------------
+  {
+    "key": "shift+alt+a",
+    "command": "workbench.action.toggleWindsurfAgentWindow",
+    "when": "!agentWorkspaceConversionInFlight && !findInputFocussed && !findWidgetVisible && !isAgentSessionsWorkspace && !terminalFindVisible"
   },
   // ------------------- cursor ------------------
   {
@@ -650,68 +660,6 @@
     "key": "ctrl+alt+i",
     "command": "composer.startComposerPrompt",
     "when": "composerBarIsVisible"
-  },
-  // ----------------- devin ----------------
-  {
-    "key": "shift+alt+a",
-    "command": "workbench.action.toggleWindsurfAgentWindow",
-    "when": "!agentWorkspaceConversionInFlight && !findInputFocussed && !findWidgetVisible && !isAgentSessionsWorkspace && !terminalFindVisible"
-  },
-  {
-    "key": "ctrl+e",
-    "command": "-workbench.action.quickOpen"
-  },
-  // ----------------- codex -----------
-  {
-    "key": "ctrl+l",
-    "command": "chatgpt.addToThread",
-    "when": "editorTextFocus && chatgpt.sidebarView.visible"
-  },
-  {
-    "key": "ctrl+alt+l",
-    "command": "chatgpt.addFileToThread",
-    "when": "editorTextFocus && chatgpt.sidebarView.visible"
-  },
-  // ----------------- claude ----------------
-  {
-    "key": "ctrl+l",
-    "command": "claude-vscode.insertAtMention",
-    "when": "editorTextFocus && claude-vscode.sideBarActive"
-  },
-  {
-    "key": "ctrl+alt+l",
-    "command": "claude-code.insertAtMentioned",
-    "when": "editorTextFocus && claude-vscode.sideBarActive"
-  },
-  {
-    "key": "ctrl+alt+k",
-    "command": "-claude-code.insertAtMentioned",
-    "when": "editorTextFocus"
-  },
-  {
-    "key": "alt+k",
-    "command": "-claude-vscode.insertAtMention",
-    "when": "editorTextFocus"
-  },
-  {
-    "key": "ctrl+escape",
-    "command": "-claude-vscode.blur",
-    "when": "!config.claudeCode.useTerminal && !editorTextFocus"
-  },
-  {
-    "key": "ctrl+escape",
-    "command": "-claude-vscode.focus",
-    "when": "editorTextFocus && !config.claudeCode.useTerminal"
-  },
-  {
-    "key": "ctrl+escape",
-    "command": "-claude-vscode.terminal.open.keyboard",
-    "when": "config.claudeCode.useTerminal"
-  },
-  {
-    "key": "ctrl+shift+escape",
-    "command": "-claude-vscode.editor.open",
-    "when": "!config.claudeCode.useTerminal"
   },
   // ----------------- copilot ----------------
   {
