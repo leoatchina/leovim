@@ -163,7 +163,7 @@ let g:coc_global_extensions = [
             \ 'coc-sql',
             \ 'coc-xml',
             \ 'coc-sh',
-            \ 'coc-vimlsp',
+            \ 'coc-vimls',
             \ 'coc-basedpyright',
             \ '@yaegassy/coc-ruff',
             \ ]
