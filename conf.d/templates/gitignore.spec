@@ -39,6 +39,10 @@ target/
 release/
 venv/
 .venv/
+# editor
+.vscode/
+.cursor/
+.devin/
 .idea/
 .local/
 .cache/
@@ -47,16 +51,17 @@ venv/
 .vim/
 .nim/
 .hg/
-.vscode/
-.cursor/
-.devin/
+.vs/
+# ai agent
+.command-code/
 .vercel/
 .codex/
+.claude/
 .orca/
 .omp/
 .pi/
-.vs/
 .deepseek/
+# cache
 .ccls-cache/
 .ipynb_checkpoints/
 __pycache__/
