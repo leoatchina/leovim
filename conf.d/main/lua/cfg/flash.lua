@@ -31,14 +31,14 @@ require("flash").setup({
 })
 local map = vim.keymap.set
 -- jump forward
-map({ 'n', 'x'}, 'sj', function()
+map({ 'n', 'x'}, 'sn', function()
   require("flash").jump({search = { forward = true,  wrap = false, multi_window = false }})
 end, { silent = true })
 map({ 'o' }, 'j', function()
   require("flash").remote({search = { forward = true,  wrap = false, multi_window = false }})
 end, { silent = true })
 -- jump backward
-map({ 'n', 'x' }, 'sk', function()
+map({ 'n', 'x' }, 'sp', function()
   require("flash").jump({search = { forward = false, wrap = false, multi_window = false }})
 end, { silent = true })
 map({ 'o' }, 'k', function()
