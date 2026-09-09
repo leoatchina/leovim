@@ -94,7 +94,7 @@ function! s:grep(...)
             if utils#is_win()
                 let l = substitute(l, '\r', '', 'g')
             endif
-            let m = matchlist(l, '^\v(\f+):(\d+)(:(\d+))?:')
+            let m = matchlist(l, '^\v%([a-zA-Z]:)?(\f+):(\d+)(:(\d+))?:')
             if empty(m)
                 continue
             endif
