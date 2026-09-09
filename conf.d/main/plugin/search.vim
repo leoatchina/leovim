@@ -51,7 +51,8 @@ nnoremap z? :GrepBuf <C-r>=utils#escape(@")<Cr><Cr>
 " using rg to search
 " ----------------------------
 if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --color=never
+    " NOTE: use --line-number --column instead of --vimgrep so that old rg versions work too
+    set grepprg=rg\ --line-number\ --column\ --no-heading\ --smart-case\ --color=never
 endif
 function! s:grep(...)
     if a:0 == 0
@@ -88,30 +89,16 @@ function! s:grep(...)
             if empty(l)
                 continue
             endif
-            let parts = split(l, ':')
-            " accept outputs with or without column numbers
-            if utils#is_win() && len(parts) >= 5 && parts[0] =~# '^[A-Za-z]$'
-                let fname = parts[1]
-                let lnum = parts[2]
-                let col = parts[3]
-                let text = join(parts[4:], ':')
-            elseif len(parts) >= 4
-                let fname = parts[0]
-                let lnum = parts[1]
-                let col = parts[2]
-                " if a column exists it lives at parts[3], otherwise it's text
-                if len(parts) >= 5 && !has('nvim')
-                    let text = join(parts[4:], ':')
-                else
-                    let text = join(parts[3:], ':')
-                endif
-            else
+            " rg output: file:line:col:text, Windows: D:file:line:col:text
+            " text itself may contain ':', so only match the prefix, take the rest as text
+            if utils#is_win()
+                let l = substitute(l, '\r', '', 'g')
+            endif
+            let m = matchlist(l, '^\v%([a-zA-Z]:)?(\f+):(\d+)(:(\d+))?:')
+            if empty(m)
                 continue
             endif
-            if utils#is_win()
-                let text = substitute(text, '\r', '', 'g')
-            endif
-            let data = {'filename': fname, 'lnum': lnum, 'col': col, 'text': text}
+            let data = {'filename': m[1], 'lnum': m[2], 'col': m[4] != '' ? m[4] : 0, 'text': strpart(l, strlen(m[0]))}
             call add(qfl, data)
         endfor
         if !empty(qfl)
@@ -130,17 +117,17 @@ function! s:grep(...)
         endif
     endif
 endfunction
-command! GrepDirLast call s:grep(1)
-command! -nargs=1 GrepDir call s:grep(<q-args>, 1)
+command! GrepCurLast call s:grep(1)
+command! -nargs=1 GrepCur call s:grep(<q-args>, 1)
 command! GrepAllLast call s:grep(2)
 command! -nargs=1 GrepAll call s:grep(<q-args>, 2)
 " search
-nnoremap s\ :GrepDir <C-r><C-w><Cr>
-xnoremap s\ :<C-u>GrepDir <C-r>=utils#get_visual()<Cr><Cr>
-nnoremap s[ :GrepDirLast<Cr>
-nnoremap s] :GrepDir <C-r><C-w>
-xnoremap s] :<C-u>GrepDir <C-r>=utils#get_visual()<Cr>
-nnoremap s} :GrepDir <C-r>=@"<Cr><Cr>
+nnoremap s\ :GrepCur <C-r><C-w><Cr>
+xnoremap s\ :<C-u>GrepCur <C-r>=utils#get_visual()<Cr><Cr>
+nnoremap s[ :GrepCurLast<Cr>
+nnoremap s] :GrepCur <C-r><C-w>
+xnoremap s] :<C-u>GrepCur <C-r>=utils#get_visual()<Cr>
+nnoremap s} :GrepCur <C-r>=@"<Cr><Cr>
 " searchall
 nnoremap s<Cr> :GrepAll <C-r><C-w><Cr>
 xnoremap s<Cr> :<C-u>GrepAll <C-r>=utils#get_visual()<Cr><Cr>
