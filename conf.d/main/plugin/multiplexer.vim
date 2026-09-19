@@ -24,27 +24,32 @@ elseif pack#installed('vim-herdr-navigation')
         let l:herdr = empty($HERDR_BIN_PATH) ? 'herdr' : $HERDR_BIN_PATH
         call system(shellescape(l:herdr) . ' pane focus --direction ' . a:dir . ' --current')
     endfunction
-    function! s:Navigate(wincmd, dir) abort
+    function! multiplexer#Navigate(wincmd, dir) abort
         let l:prev = winnr()
-        execute 'wincmd ' . a:wincmd
+        execute 'noautocmd silent! wincmd ' . a:wincmd
+        sleep 100m
         if winnr() == l:prev
             " No Vim window that way: cross into the herdr pane.
             call s:HerdrFocus(a:dir)
         endif
     endfunction
-    nnoremap <silent><M-H> :call <SID>Navigate('h', 'left')<cr>
-    nnoremap <silent><M-J> :call <SID>Navigate('j', 'down')<cr>
-    nnoremap <silent><M-K> :call <SID>Navigate('k', 'up')<cr>
-    nnoremap <silent><M-L> :call <SID>Navigate('l', 'right')<cr>
-    inoremap <silent><M-H> <C-o>:call <SID>Navigate('h', 'left')<cr>
-    inoremap <silent><M-J> <C-o>:call <SID>Navigate('j', 'down')<cr>
-    inoremap <silent><M-K> <C-o>:call <SID>Navigate('k', 'up')<cr>
-    inoremap <silent><M-L> <C-o>:call <SID>Navigate('l', 'right')<cr>
+    command! MultiplexerNavigateLeft call multiplexer#Navigate('h', 'left')
+    command! MultiplexerNavigateDown call multiplexer#Navigate('j', 'down')
+    command! MultiplexerNavigateUp call multiplexer#Navigate('k', 'up')
+    command! MultiplexerNavigateRight call multiplexer#Navigate('l', 'right')
+    nnoremap <silent><M-H> :MultiplexerNavigateLeft<cr>
+    nnoremap <silent><M-J> :MultiplexerNavigateDown<cr>
+    nnoremap <silent><M-K> :MultiplexerNavigateUp<cr>
+    nnoremap <silent><M-L> :MultiplexerNavigateRight<cr>
+    inoremap <silent><M-H> <C-o>:MultiplexerNavigateLeft<cr>
+    inoremap <silent><M-J> <C-o>:MultiplexerNavigateDown<cr>
+    inoremap <silent><M-K> <C-o>:MultiplexerNavigateUp<cr>
+    inoremap <silent><M-L> <C-o>:MultiplexerNavigateRight<cr>
     if g:has_terminal
-        tnoremap <silent><M-H> <C-\><C-n>:call <SID>Navigate('h', 'left')<cr>
-        tnoremap <silent><M-J> <C-\><C-n>:call <SID>Navigate('j', 'down')<cr>
-        tnoremap <silent><M-K> <C-\><C-n>:call <SID>Navigate('k', 'up')<cr>
-        tnoremap <silent><M-L> <C-\><C-n>:call <SID>Navigate('l', 'right')<cr>
+        tnoremap <silent><M-H> <C-\><C-n>:MultiplexerNavigateLeft<cr>
+        tnoremap <silent><M-J> <C-\><C-n>:MultiplexerNavigateDown<cr>
+        tnoremap <silent><M-K> <C-\><C-n>:MultiplexerNavigateUp<cr>
+        tnoremap <silent><M-L> <C-\><C-n>:MultiplexerNavigateRight<cr>
         tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
     endif
 else

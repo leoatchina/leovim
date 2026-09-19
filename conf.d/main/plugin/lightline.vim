@@ -163,4 +163,4 @@ augroup LightlineUpgrade
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
 augroup END
-nnoremap <C-l> :redraw \| call lightline#update()<Cr>
+" nnoremap <C-l> :redraw \| call lightline#update()<Cr>
