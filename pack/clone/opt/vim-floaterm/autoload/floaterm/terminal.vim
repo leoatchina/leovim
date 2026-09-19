@@ -10,12 +10,20 @@ let s:channel_map = {}
 
 function! s:on_floaterm_create(bufnr) abort
   call setbufvar(a:bufnr, '&buflisted', 0)
-  call setbufvar(a:bufnr, '&filetype', 'floaterm')
+  " already set before termopen() on nvim (#438)
+  if getbufvar(a:bufnr, '&filetype') !=# 'floaterm'
+    call setbufvar(a:bufnr, '&filetype', 'floaterm')
+  endif
   augroup floaterm_enter_insertmode
     autocmd! * <buffer>
     autocmd! User FloatermOpen
     autocmd User FloatermOpen call floaterm#util#startinsert()
     autocmd BufEnter <buffer> call floaterm#util#startinsert()
+    " record the cursor position when leaving the floaterm window without
+    " hiding it (e.g. `<C-w>w`), used by the smart mode of
+    " `g:floaterm_autoinsert`. `BufLeave` alone suffices: switching windows
+    " always changes the current buffer as well
+    autocmd BufLeave <buffer> call floaterm#window#record_cursor(bufnr())
     execute printf(
           \ 'autocmd BufHidden,BufWipeout <buffer=%s> call floaterm#window#hide(%s)',
           \ a:bufnr,
@@ -39,13 +47,13 @@ function! s:on_floaterm_close(bufnr, callback, job, data, ...) abort
     " impossible to pass the bufnr to a job's callback function. Also change
     " callback after a job was spawned seem not feasible. Therefore, iterate s:
     " channel_map and get the bufnr whose channel matches the channel of a:job
+    let bufnr = a:bufnr
     for [buf, chan] in items(s:channel_map)
       if chan == job_getchannel(a:job)
         let bufnr = str2nr(buf)
         break
       endif
     endfor
-    let bufnr = a:bufnr
   else
     let bufnr = a:bufnr
   endif
@@ -53,7 +61,7 @@ function! s:on_floaterm_close(bufnr, callback, job, data, ...) abort
   call setbufvar(bufnr, '&bufhidden', 'wipe')
   call floaterm#config#set(bufnr, 'jobexists', v:false)
   let autoclose = floaterm#config#get(bufnr, 'autoclose')
-  if (autoclose == 1 && a:data == 0) || (autoclose == 2) || (a:callback isnot v:null)
+  if (autoclose ==# 'smart' && a:data == 0) || autoclose ==# 'always'
     call floaterm#window#hide(bufnr)
     " if the floaterm is created with --silent, delete the buffer explicitly
     silent! execute bufnr . 'bdelete!'
@@ -118,7 +126,13 @@ function! s:spawn_terminal(cmd, jobopts, config) abort
           \ [bufnr, get(a:jobopts, 'on_exit', v:null)]
           \ )
     let config = floaterm#config#parse(bufnr, a:config)
+    call floaterm#config#set(bufnr, 'cmd', a:cmd)
     call floaterm#window#open(bufnr, config)
+    " the filetype must be set before termopen() so that the TermOpen and
+    " FileType events already see 'floaterm' and the b:floaterm_ variables
+    " (#438); in vim the buffer isn't known before term_start(), so this only
+    " works on nvim
+    call setbufvar(bufnr, '&filetype', 'floaterm')
     let ch = termopen(a:cmd, a:jobopts)
     let s:channel_map[bufnr] = ch
   else
@@ -145,9 +159,9 @@ function! s:spawn_terminal(cmd, jobopts, config) abort
     let s:channel_map[bufnr] = job_getchannel(job)
     let config = floaterm#config#parse(bufnr, a:config)
     call floaterm#window#open(bufnr, config)
+    call floaterm#config#set(bufnr, 'cmd', a:cmd)
   endif
   call floaterm#config#set(bufnr, 'jobexists', v:true)
-  call floaterm#config#set(bufnr, 'cmd', a:cmd)
   call s:on_floaterm_create(bufnr)
   return bufnr
 endfunction
@@ -194,8 +208,11 @@ function! floaterm#terminal#get_bufnr(termname) abort
   return -1
 endfunction
 
-function! floaterm#terminal#kill(bufnr) abort
-  call floaterm#window#hide(a:bufnr)
+function! floaterm#terminal#kill(bufnr, ...) abort
+  " The optional argument skips hiding when called from window#hide().
+  if !a:0 || !a:1
+    call floaterm#window#hide(a:bufnr)
+  endif
   if has('nvim')
     let job = getbufvar(a:bufnr, '&channel')
     if jobwait([job], 0)[0] == -1
@@ -218,7 +235,12 @@ endfunction
 function! s:ensure_terminal_kill(bufnr) abort
   try
     if bufexists(a:bufnr)
-      execute a:bufnr . 'bwipeout!'
+      let cmd = a:bufnr . 'bwipeout!'
+      if win_gettype() ==# 'popup'
+        call win_execute(win_getid(1), cmd)
+      else
+        execute cmd
+      endif
     else
       call timer_stop(s:timer_map[a:bufnr])
       call remove(s:timer_map, a:bufnr)

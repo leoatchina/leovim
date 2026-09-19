@@ -58,18 +58,40 @@ function! floaterm#util#open(locations, ...) abort
   endfor
 endfunction
 
-function! floaterm#util#startinsert() abort
-  if &ft != 'floaterm'
-    return
-  endif
-  if !g:floaterm_autoinsert
-    call feedkeys("\<C-\>\<C-n>", 'n')
-  elseif mode() != 'i'
+function! s:enter_insert() abort
+  if mode() !~# '[it]'
     if has('nvim')
       startinsert
     else
       silent! execute 'normal! i'
     endif
+  endif
+endfunction
+
+" The value of `g:floaterm_autoinsert` (or the per-floaterm `autoinsert`
+" config) is guaranteed to be one of 'always', 'never' and 'smart' since it
+" is normalized in plugin/floaterm.vim
+function! floaterm#util#startinsert() abort
+  if &ft != 'floaterm'
+    return
+  endif
+  let bufnr = bufnr('%')
+  let autoinsert = floaterm#config#get(bufnr, 'autoinsert', g:floaterm_autoinsert)
+  if autoinsert ==# 'always'
+    let enter_insert = 1
+  elseif autoinsert ==# 'never'
+    let enter_insert = 0
+  else " smart: `cursorline` is unset on the first open; afterwards it is the
+    " position recorded when the floaterm was left or hidden (see
+    " floaterm#window#record_cursor()) — if the cursor was at or beyond the
+    " last non-blank line, the user was probably at the shell prompt
+    let curlnum = floaterm#config#get(bufnr, 'cursorline', -1)
+    let enter_insert = curlnum < 0 || curlnum >= prevnonblank(line('$'))
+  endif
+  if enter_insert
+    call s:enter_insert()
+  else
+    call feedkeys("\<C-\>\<C-n>", 'n')
   endif
 endfunction
 
@@ -81,7 +103,12 @@ function! floaterm#util#get_selected_text(visualmode, range, line1, line2) abort
   else
     let [lnum1, col1] = getpos("'<")[1:2]
     let [lnum2, col2] = getpos("'>")[1:2]
+    " The visual marks are only meaningful when they match the range given on
+    " the command line; otherwise the range was typed explicitly (e.g.
+    " `:2,3FloatermSend`) and the stale marks of an earlier selection must be
+    " ignored
     if lnum1 == 0 || col1 == 0 || lnum2 == 0 || col2 == 0
+          \ || a:line1 != lnum1 || a:line2 != lnum2
       let lines = getline(a:line1, a:line2)
     else
       let lines = getline(lnum1, lnum2)
@@ -117,6 +144,18 @@ function! floaterm#util#leftalign_lines(lines) abort
   return linelist
 endfunction
 
+" Return the directory of the current buffer for use by the file-manager
+" wrappers. Falls back to the current working directory when the buffer has no
+" file name (e.g. an unnamed scratch buffer) or its parent is not accessible,
+" so that `lcd %:p:h` never throws and aborts the wrapper (#293, #383).
+function! floaterm#util#bufdir() abort
+  let path = expand('%:p:h')
+  if empty(path) || !isdirectory(path)
+    return getcwd()
+  endif
+  return path
+endfunction
+
 function! floaterm#util#use_sh_or_cmd() abort
   let [shell, shellslash, shellcmdflag, shellxquote] = [&shell, &shellslash, &shellcmdflag, &shellxquote]
   if has('win32')
@@ -146,6 +185,10 @@ endfunction
 
 let s:home = fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
 let s:binpath = fnamemodify(s:home . '/../bin', ':p')
+
+" Environment variables set to the floaterm editor when
+" `g:floaterm_giteditor` is enabled.
+let s:editor_env_names = ['GIT_EDITOR', 'HGEDITOR', 'JJ_EDITOR']
 function! floaterm#util#setenv() abort
   let env = {}
   " bin/floaterm.cmd
@@ -161,8 +204,9 @@ function! floaterm#util#setenv() abort
   let editor = floaterm#edita#setup#EDITOR()
   let env.FLOATERM = editor
   if g:floaterm_giteditor
-    let env.GIT_EDITOR = editor
-    let env.HGEDITOR = editor
+    for name in s:editor_env_names
+      let env[name] = editor
+    endfor
   endif
   return env
 endfunction

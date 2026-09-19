@@ -81,13 +81,13 @@ spec (disable its mappings, then load this one — single source of truth):
     vim.g.tmux_navigator_no_mappings = 1
   end,
   config = function()
-    dofile(vim.fn.expand("~/src/personal/vim-herdr-navigation/editor/nvim.lua"))
+    dofile(vim.fn.expand("~/src/vim-herdr-navigation/editor/nvim.lua"))
   end,
 }
 ```
 
 No plugin manager? Drop it in `after/plugin` instead:
-`cp editor/nvim.lua ~/.config/nvim/after/plugin/herdr_nav.lua`.
+`cp editor/nvim.lua ~/.config/nvim/after/plugin/herdr-navigation.lua`.
 
 It falls back to tmux (if `$TMUX` is set) or plain `wincmd` when you're not in a
 herdr pane, so an existing tmux setup keeps working — no need to remove
@@ -99,7 +99,18 @@ herdr pane, so an existing tmux setup keeps working — no need to remove
 source /path/to/vim-herdr-navigation/editor/vim.vim
 ```
 
-or, simply copy and pasta.
+or, simply copy and paste.
+
+## Development
+
+The repository exposes the standard local loops through `make`:
+
+```bash
+make dev    # run the focused integration tests
+make test   # test Herdr dispatch and Vim/Neovim split/edge behavior
+make lint   # shellcheck and Lua syntax checks
+make build  # lint and validate the plugin manifest
+```
 
 ## Notes & tradeoffs
 

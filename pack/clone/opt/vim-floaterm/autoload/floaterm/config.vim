@@ -7,7 +7,10 @@
 function! floaterm#config#get(bufnr, key, ...) abort
   let key = 'floaterm_' . a:key
   let val = getbufvar(a:bufnr, key)
-  if val == '' && a:0 == 1
+  " only fall back to the default for an unset (empty-string) value; compare
+  " by type first so that a stored Float or Number is not compared to a String
+  " (which raises E892) and is returned as-is
+  if type(val) == v:t_string && val ==# '' && a:0 == 1
     return a:1
   endif
   return val
@@ -39,13 +42,25 @@ endfunction
 " @return: config, generated from `a:config`, has more additional info, used to
 "   config the floaterm style
 function! floaterm#config#parse(bufnr, config) abort
-  let a:config.title          = get(a:config, 'title', g:floaterm_title)
+  " title defaults to g:floaterm_title; when the user did not pass --title,
+  " did not customize g:floaterm_title, but gave --name, use the name as the
+  " title so named floaterms are shown with a meaningful title out of the box
+  " (#369). A custom g:floaterm_title (possibly containing $3) is always
+  " honored
+  if !has_key(a:config, 'title')
+        \ && g:floaterm_title ==# 'floaterm($1/$2)'
+        \ && !empty(get(a:config, 'name', ''))
+    let a:config.title = get(a:config, 'name', '')
+  else
+    let a:config.title = get(a:config, 'title', g:floaterm_title)
+  endif
   let a:config.width          = get(a:config, 'width', g:floaterm_width)
   let a:config.height         = get(a:config, 'height', g:floaterm_height)
   let a:config.opener         = get(a:config, 'opener', g:floaterm_opener)
   let a:config.wintype        = get(a:config, 'wintype', floaterm#window#win_gettype())
   let a:config.position       = get(a:config, 'position', g:floaterm_position)
   let a:config.autoclose      = get(a:config, 'autoclose', g:floaterm_autoclose)
+  let a:config.autoinsert     = get(a:config, 'autoinsert', g:floaterm_autoinsert)
   let a:config.borderchars    = get(a:config, 'borderchars', g:floaterm_borderchars)
   let a:config.titleposition  = get(a:config, 'titleposition', g:floaterm_titleposition)
 

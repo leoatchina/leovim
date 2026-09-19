@@ -15,7 +15,11 @@ endif
 
 function! s:HerdrFocus(dir) abort
   let l:herdr = empty($HERDR_BIN_PATH) ? 'herdr' : $HERDR_BIN_PATH
-  call system(shellescape(l:herdr) . ' pane focus --direction ' . a:dir . ' --current')
+  " Target this pane explicitly: --current resolves to the server's globally
+  " focused pane, which is not necessarily the Vim instance making the call.
+  call system(shellescape(l:herdr)
+        \ . ' pane focus --direction ' . shellescape(a:dir)
+        \ . ' --pane ' . shellescape($HERDR_PANE_ID))
 endfunction
 
 function! s:Navigate(wincmd, dir) abort

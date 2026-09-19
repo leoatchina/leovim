@@ -103,6 +103,7 @@ external terminals.
   - `wintype` see `g:floaterm_wintype`
   - `position` see `g:floaterm_position`
   - `autoclose` see `g:floaterm_autoclose`
+  - `autoinsert` see `g:floaterm_autoinsert`
   - `borderchars` see `g:floaterm_borderchars`
   - `titleposition` see `g:floaterm_titleposition`
 - This command basically shares the consistent behaviors with the builtin `:terminal`:
@@ -119,7 +120,7 @@ external terminals.
 For example, the command
 
 ```vim
-:FloatermNew --height=0.6 --width=0.4 --wintype=float --name=floaterm1 --position=topleft --autoclose=2 ranger --cmd="cd ~"
+:FloatermNew --height=0.6 --width=0.4 --wintype=float --name=floaterm1 --position=topleft --autoclose=always ranger --cmd="cd ~"
 ```
 
 will open a new floating/popup floaterm instance named `floaterm1` running
@@ -128,7 +129,7 @@ will open a new floating/popup floaterm instance named `floaterm1` running
 The following command allows you to compile and run your C code in the floaterm window:
 
 ```vim
-:FloatermNew --autoclose=0 gcc % -o %< && ./%<
+:FloatermNew --autoclose=never gcc % -o %< && ./%<
 ```
 
 #### `:FloatermPrev` Switch to the previous floaterm instance
@@ -139,19 +140,20 @@ The following command allows you to compile and run your C code in the floaterm 
 
 #### `:FloatermLast` Switch to the last floaterm instance
 
-#### `:FloatermUpdate [options]` Update floaterm window attributes(`height`, `width`, etc.).
+#### `:FloatermUpdate[!] [options]` Update floaterm window attributes(`height`, `width`, etc.).
 
 - The `options` is the same as in `:FloatermNew` (except `--silent`).
+- With `!`, apply the update to every floaterm instance.
 - Use `<TAB>` to get completion.
 
 #### `:[N]FloatermToggle[!] [floaterm_name]` Open or hide the floaterm window.
 
 - If `N` is given, toggle the floaterm whose buffer number is `N`
 - If `floaterm_name` is given, toggle the floaterm instance whose `name`
-  attribute is `floaterm_name`. Otherwise create a new floaterm named
-  `floaterm_name`.
+  attribute is `floaterm_name`. If no floaterm with that name exists, create
+  a new floaterm named `floaterm_name`.
 - Use `<TAB>` to get completion.
-- If `!` is given, toggle all floaterms (`:FloatermHide!` or `: FloatermShow!`)
+- If `!` is given, toggle all floaterms (`:FloatermHide!` or `:FloatermShow!`)
 
 #### `:[N]FloatermShow[!] [floaterm_name]` Show the current floaterm window.
 
@@ -163,7 +165,7 @@ The following command allows you to compile and run your C code in the floaterm 
 #### `:[N]FloatermHide[!] [floaterm_name]` Hide the current floaterms window.
 
 - If `N` is given, hide the floaterm whose buffer number is `N`
-- If `floaterm_name` is given, show the floaterm named `floaterm_name`.
+- If `floaterm_name` is given, hide the floaterm named `floaterm_name`.
 - If `!` is given, hide all floaterms
 
 #### `:[N]FloatermKill[!] [floaterm_name]` Kill the current floaterm instance
@@ -171,6 +173,10 @@ The following command allows you to compile and run your C code in the floaterm 
 - If `N` is given, kill the floaterm whose buffer number is `N`
 - If `floaterm_name` is given, kill the floaterm instance named `floaterm_name`.
 - If `!` is given, kill all floaterms
+
+Note that the `floaterm_name` argument of `:FloatermToggle`, `:FloatermShow`,
+`:FloatermHide` and `:FloatermKill` can also be given in the form
+`--name=floaterm_name`.
 
 #### `:FloatermSend[!] [--name=floaterm_name] [cmd]` Send command to a job in floaterm.
 
@@ -210,7 +216,11 @@ floaterms in total and the current is the first one) at the top left corner of
 floaterm window.
 
 Default: `'floaterm: $1/$2'`(`$1` and `$2` will be substituted by 'the index of
-the current floaterm' and 'the count of all floaterms' respectively)
+the current floaterm' and 'the count of all floaterms' respectively, and `$3`
+by the floaterm name given via `--name`, empty when no name was set).
+
+When `--title` is not passed to `:FloatermNew`, `g:floaterm_title` is left at
+its default, and `--name` is provided, the name is used as the title directly.
 
 Example: `'floaterm($1|$2)'`
 
@@ -268,7 +278,7 @@ Default: `['.project', '.git', '.hg', '.svn', '.root']`
 
 Type `Boolean`. Whether to override `$GIT_EDITOR` in floaterm terminals so git commands can
 open open an editor in the same neovim instance. See [git](#git) for details.
-This flag also overrides `$HGEDITOR` for Mercurial.
+This flag also overrides `$HGEDITOR` for Mercurial and `JJ_EDITOR` for Jujutsu.
 
 Default: `v:true`
 
@@ -283,32 +293,48 @@ Default: `'split'`
 
 #### **`g:floaterm_autoclose`**
 
-Type `Number`. Whether to close floaterm window once the job gets finished.
+Type `String`. Whether to close floaterm window once the job gets finished.
 
-- `0`: Always do NOT close floaterm window
-- `1`: Close window if the job exits normally, otherwise stay it with messages
-  like `[Process exited 101]`
-- `2`: Always close floaterm window
+- `'never'`: Always do NOT close floaterm window
+- `'smart'`: Close window if the job exits normally, otherwise stay it with
+  messages like `[Process exited 101]`
+- `'always'`: Always close floaterm window
 
-Default: `1`.
+For backward compatibility, `0` is treated as `'never'`, `1` as `'smart'` and
+`2` as `'always'`.
+
+Default: `'smart'`.
 
 #### **`g:floaterm_autohide`**
 
-Type `Number`. Whether to hide previous floaterms before switching to or
+Type `String`. Whether to hide previous floaterms before switching to or
 opening a another one.
 
-- `0`: Always do NOT hide previous floaterm windows
-- `1`: Only hide those whose position (`b:floaterm_position`) is identical to
-  that of the floaterm which will be opened
-- `2`: Always hide them
+- `'never'`: Always do NOT hide previous floaterm windows
+- `'smart'`: Only hide those whose position (`b:floaterm_position`) is identical
+  to that of the floaterm which will be opened
+- `'always'`: Always hide them
 
-Default: `1`.
+For backward compatibility, `0` is treated as `'never'`, `1` as `'smart'` and
+`2` as `'always'`.
+
+Default: `'smart'`.
 
 #### **`g:floaterm_autoinsert`**
 
-Type `Boolean`. Whether to enter Terminal-mode after opening a floaterm.
+Type `String`. Whether to enter Terminal-mode after opening a floaterm.
 
-Default: `v:true`
+- `'never'`: Always do NOT enter Terminal-mode (stay in normal mode)
+- `'always'`: Always enter Terminal-mode
+- `'smart'`: enter Terminal-mode the first time a floaterm is opened; when
+  the floaterm is hidden and reopened, enter Terminal-mode only if the cursor
+  is at or beyond the last non-blank line (i.e., you were at the shell prompt),
+  otherwise stay in normal mode
+
+For backward compatibility, `v:false` is treated as `'never'` and `v:true` is
+treated as `'smart'`.
+
+Default: `'smart'`.
 
 #### **`g:floaterm_titleposition`**
 
@@ -388,7 +414,7 @@ tnoremap <silent> <F6>  <C-\><C-n>:<c-u>FloatermToggle<cr>
 
 ### Highlights
 
-There are two `highlight-groups` to specify the color of floaterm (also the
+There are some `highlight-groups` to specify the color of floaterm (also the
 border color if `g: floaterm_wintype` is `'float'`) window.
 
 To customize, use `hi` command together with the colors you prefer.
@@ -400,7 +426,12 @@ To customize, use `hi` command together with the colors you prefer.
 hi Floaterm guibg=black
 " Set floating window border line color to cyan, and background to orange
 hi FloatermBorder guibg=orange guifg=cyan
+" Set the title of floaterm window to red (defaults to FloatermBorder)
+hi FloatermTitle guifg=red
 ```
+
+Note: on vim the title is drawn by the popup window itself and always uses
+the color of the border; `FloatermTitle` has no effect there.
 
 <details>
 <summary>Demo</summary>

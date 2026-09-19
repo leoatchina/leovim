@@ -15,9 +15,9 @@ let s:broot_wrapper_config = [
       \ '		{',
       \ '			invocation: terminal',
       \ '			key: enter',
-      \ '			execution: "echo {line} {file}"',
+      \ '			external: "echo {line} {file}"',
       \ '			leave_broot: true',
-      \ '			apply_to: file',
+      \ '			apply_to: text_file',
       \ '		}',
       \ '	]',
       \ '}',
@@ -25,9 +25,11 @@ let s:broot_wrapper_config = [
 call writefile(s:broot_wrapper_config, s:broot_wrapper_confpath)
 
 function! floaterm#wrapper#broot#(cmd, jobopts, config) abort
+  " pickers are expected to be closed once they exit
+  let a:config.autoclose = get(a:config, 'autoclose', 'always')
   let s:broot_tmpfile = tempname()
   let original_dir = getcwd()
-  lcd %:p:h
+  execute 'lcd' fnameescape(floaterm#util#bufdir())
 
   let cmdlist = split(a:cmd)
   let cmd = printf(

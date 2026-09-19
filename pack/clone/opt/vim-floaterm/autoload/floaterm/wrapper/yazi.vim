@@ -6,9 +6,11 @@
 " ============================================================================
 
 function! floaterm#wrapper#yazi#(cmd, jobopts, config) abort
+  " pickers are expected to be closed once they exit
+  let a:config.autoclose = get(a:config, 'autoclose', 'always')
   let s:yazi_tmpfile = tempname()
   let original_dir = getcwd()
-  lcd %:p:h
+  execute 'lcd' fnameescape(floaterm#util#bufdir())
 
   let cmdlist = split(a:cmd)
   let cmd = 'yazi --chooser-file "' . s:yazi_tmpfile . '"'

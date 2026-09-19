@@ -46,7 +46,14 @@ g:floaterm_title                                 *g:floaterm_title*
 	Type |String|.
 	Title format in the floating/popup terminal window.
 	If empty, the title won't be show.
-	Default value is 'floaterm: $1/$2'
+	`$1` is substituted with the index of the current floaterm, `$2`
+	with the total count of floaterms, and `$3` with the floaterm name
+	(see the `--name` option of |FloatermNew|), empty when no name was
+	set.
+	When `--title` is not given to |FloatermNew|, |g:floaterm_title| is
+	left at its default and `--name` is provided, the name is used as
+	the title directly.
+	Default value is 'floaterm($1/$2)'
 
 g:floaterm_wintype                               *g:floaterm_wintype*
     Type |String|.
@@ -62,6 +69,9 @@ g:floaterm_height                                *g:floaterm_height*
     Type |Number| (number of lines) or |Float| (between 0 and 1).
     If |Float|, the height is relative to 'lines'.
     Default value is 0.6.
+
+Visible floaterms are automatically resized and repositioned after
+|VimResized|, so windows sized with a |Float| follow the new editor size.
 
 g:floaterm_position                              *g:floaterm_position*
 	Type |String|.
@@ -99,33 +109,63 @@ g:floaterm_opener
     Default: 'split'
 
 g:floaterm_autoclose                             *g:floaterm_autoclose*
-	Type |Number|.
+	Type |String|.
 	Whether to close floaterm window once a job gets finished.
-        0 - Always do NOT close floaterm window.
-        1 - Close window only if the job exits normally
-        2 - Always close floaterm window.
-	Default value is 1.
+        'never' - Always do NOT close floaterm window.
+        'smart' - Close window only if the job exits normally
+        'always' - Always close floaterm window.
+	For backward compatibility, 0 is treated as 'never', 1 as 'smart' and
+	2 as 'always'.
+	Default value is 'smart'.
 
 g:floaterm_autohide                              *g:floaterm_autohide*
-	Type |Number|.
+	Type |String|.
     Whether to hide previous floaterms before switching to or opening a another
     one.
-        0 - Always do NOT hide previous floaterm windows
-        1 - Only hide those whose position (`b:floaterm_position`) is identical to
-            that of the floaterm which will be opened
-        2 - Always hide them
-	Default value is 1.
+        'never' - Always do NOT hide previous floaterm windows
+        'smart' - Only hide those whose position (`b:floaterm_position`) is
+            identical to that of the floaterm which will be opened
+        'always' - Always hide them
+	For backward compatibility, 0 is treated as 'never', 1 as 'smart' and
+	2 as 'always'.
+	Default value is 'smart'.
 
 g:floaterm_autoinsert                            *g:floaterm_autoinsert*
-	Type |Boolean|.
+	Type |String|.
 	Whether to enter |Terminal-mode| after opening a floaterm.
-	Default value is |v:true|.
+        'never' - Always do NOT enter Terminal-mode (stay in normal mode)
+        'always' - Always enter Terminal-mode
+        'smart' - Enter Terminal-mode the first time a floaterm is opened;
+            when the floaterm is hidden and reopened, enter Terminal-mode
+            only if the cursor is at or beyond the last non-blank line
+            (i.e., the user was at the shell prompt), otherwise stay in
+            normal mode
+	For backward compatibility, |v:false| is treated as 'never' and
+	|v:true| is treated as 'smart'.
+	Default value is 'smart'.
 
 g:floaterm_titleposition                        *g:floaterm_titleposition*
     Type |String|.
     The position of the floaterm title.
     Available: 'left', 'center', 'right'
     Default value is 'left'.
+
+g:floaterm_giteditor                             *g:floaterm_giteditor*
+    Type |Boolean|.
+    Whether to override `$GIT_EDITOR` in floaterm terminals so git commands
+    can open an editor in the same neovim instance.
+    This flag also overrides `$HGEDITOR` for Mercurial and `$JJ_EDITOR` for
+    Jujutsu.
+    Default value is |v:true|.
+
+g:floaterm_checktime                             *g:floaterm_checktime*
+    Type |Boolean|.
+    Whether to run `:checktime` after hiding a floaterm, so that buffers
+    modified on disk while the floaterm was visible are refreshed. The scan
+    walks every listed buffer and can be slow with many buffers; set this to
+    |v:false| to skip it. Errors caused by buffers whose files were renamed or
+    removed are always suppressed.
+    Default value is |v:true|.
 
 ==============================================================================
 MAPPINGS                                         *floaterm-mappings*
@@ -174,6 +214,9 @@ COMMANDS                                         *floaterm-commands*
 
 :FloatermNew[!] [options] [cmd]                  *FloatermNew*
 	Open a floaterm window.
+	Invalid values for enumerated options (`--wintype`, `--position`,
+	`--autoclose`, `--autoinsert`, `--titleposition`, `--opener`) are
+	reported and rejected.
 
 :FloatermPrev                                    *FloatermPrev*
 	Switch to the previous floaterm instance
@@ -187,11 +230,13 @@ COMMANDS                                         *floaterm-commands*
 :FloatermLast                                    *FloatermLast*
 	Switch to the last floaterm instance
 
-:FloatermUpdate [options]                        *FloatermUpdate*
+:FloatermUpdate[!] [options]                       *FloatermUpdate*
 	Update floaterm window attributes(`height`, `width`, etc.).
+	With [!] the attributes are applied to every floaterm.
 
 :[N]FloatermToggle[!] [floaterm_name]            *FloatermToggle*
-	Open or hide the floaterm window.
+	Open or hide the floaterm window. If the name doesn't match any
+	floaterm, a new floaterm with that name is created.
 
 :[N]FloatermShow[!] [floaterm_name]              *FloatermShow*
 	Show the current floaterm window.
@@ -202,6 +247,10 @@ COMMANDS                                         *floaterm-commands*
 :[N]FloatermKill[!] [floaterm_name]              *FloatermKill*
 	Kill the current floaterm instance
 
+The floaterm_name argument of |FloatermToggle|, |FloatermShow|,
+|FloatermHide| and |FloatermKill| can also be given in the form
+`--name=floaterm_name`.
+
 :FloatermSend[!] [--name=floaterm_name] [cmd]    *FloatermSend*
 	Send command to a job in floaterm.
 
@@ -211,8 +260,8 @@ https://github.com/voldikss/vim-floaterm#commands
 ==============================================================================
 HIGHLIGHT                                        *floaterm-highlight*
 
-This plugin provides two |highlight-groups| to specify the bg/fg color of
-floaterm (also the border color if |g:floaterm_wintype| is 'float')window.
+This plugin provides these |highlight-groups| to specify the bg/fg color of
+floaterm (also the border color if |g:floaterm_wintype| is 'float') window.
 
 To customize, use |hi| command together with the colors you prefer.  For example,
  >
@@ -220,9 +269,24 @@ To customize, use |hi| command together with the colors you prefer.  For example
 	hi Floaterm guibg=black
 	" Set floating window border line color to cyan, and background to orange
 	hi FloatermBorder guibg=orange guifg=cyan
+	" Set the title (see |g:floaterm_title|) to red
+	hi FloatermTitle guifg=red
 <
+
+The title of the floaterm window is colored by the FloatermTitle highlight
+group, which defaults to FloatermBorder.
+
 Besides, there is a neovim only |hi-group| which can be used to configure
 no-current-focused window(:help |hl-NormalNC|).
+
+On neovim 0.11+, if the 'winborder' option is set to a value other than
+"none", the border is drawn by neovim itself instead of this plugin: no
+border window is created and |g:floaterm_borderchars| is ignored. The
+title (see |g:floaterm_title|) is rendered inside that border, colored by
+the FloatermTitle highlight group.
+
+Note: on vim the title is drawn by the popup window itself and always uses
+the color of the border (FloatermBorder); FloatermTitle has no effect there.
 
 ==============================================================================
 EXTENSIONS                                       *floaterm-extensions*

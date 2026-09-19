@@ -6,9 +6,11 @@
 " ============================================================================
 
 function! floaterm#wrapper#joshuto#(cmd, jobopts, config) abort
+  " pickers are expected to be closed once they exit
+  let a:config.autoclose = get(a:config, 'autoclose', 'always')
   let s:joshuto_tmpfile = tempname()
   let original_dir = getcwd()
-  lcd %:p:h
+  execute 'lcd' fnameescape(floaterm#util#bufdir())
 
   let cmdlist = split(a:cmd)
   let cmd = 'joshuto --file-chooser --output-file="' . s:joshuto_tmpfile . '"'
