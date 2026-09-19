@@ -106,8 +106,8 @@ function! s:yank_line_ref(start, end) range abort
     echo '=== Yank line reference === '
 endfunction
 command! -range YankLineRef call s:yank_line_ref(<line1>, <line2>)
-nnoremap <silent><leader>yl :YankLineRef<Cr>
-xnoremap <silent><leader>yl :YankLineRef<Cr>
+nnoremap <silent>yl :YankLineRef<Cr>
+xnoremap <silent>yl :YankLineRef<Cr>
 " ------------------------
 " special yank
 " ------------------------
