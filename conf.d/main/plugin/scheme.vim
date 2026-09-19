@@ -38,11 +38,11 @@ if g:complete_engine == 'mcm'
     call scheme#set('sonokai', 'sublime')
 elseif g:complete_engine == 'builtin'
     if !has('nvim')
-        call scheme#set('nightfly', 'codedark')
+        call scheme#set('catppuccin_mocha', 'wombat')
     elseif pack#installed('dropbar.nvim')
-        call scheme#set('moonfly', 'codedark')
+        call scheme#set('catppuccin-mocha', 'wombat')
     else
-        call scheme#set('carbonfox', 'codedark')
+        call scheme#set('moonfly', 'codedark')
     endif
 elseif g:complete_engine == 'cmp'
     call scheme#set('tokyonight', 'space-vim-dark')
@@ -53,11 +53,7 @@ elseif g:complete_engine == 'blink'
         call scheme#set('terafox', 'hybrid')
     endif
 elseif g:complete_engine == 'coc'
-    if has('nvim')
-        call scheme#set('catppuccin-mocha', 'wombat')
-    else
-        call scheme#set('catppuccin_mocha', 'wombat')
-    endif
+    call scheme#set('nightfly', 'codedark')
 else
     call scheme#set('edge', 'one')
 endif
