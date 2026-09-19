@@ -58,6 +58,7 @@ function! s:copy_clipboard(content) abort
     endif
     call setreg(empty(s:register) ? '"' : s:register, a:content)
 endfunction
+nnoremap <silent>yL :call <SID>copy_clipboard(utils#abs_path())<Cr>
 nnoremap <silent><leader>yf :call <SID>copy_clipboard(utils#abs_path())<Cr>
 nnoremap <silent><leader>yd :call <SID>copy_clipboard(utils#abs_dir())<Cr>
 nnoremap <silent><leader>yb :call <SID>copy_clipboard(utils#file_name())<Cr>
