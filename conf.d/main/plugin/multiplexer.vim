@@ -24,19 +24,17 @@ elseif pack#installed('vim-herdr-navigation')
         let l:herdr = empty($HERDR_BIN_PATH) ? 'herdr' : $HERDR_BIN_PATH
         call system(shellescape(l:herdr) . ' pane focus --direction ' . a:dir . ' --current')
     endfunction
-    function! multiplexer#Navigate(wincmd, dir) abort
+    function! s:Navigate(wincmd, dir) abort
         let l:prev = winnr()
         execute 'noautocmd silent! wincmd ' . a:wincmd
-        sleep 100m
         if winnr() == l:prev
-            " No Vim window that way: cross into the herdr pane.
             call s:HerdrFocus(a:dir)
         endif
     endfunction
-    command! MultiplexerNavigateLeft call multiplexer#Navigate('h', 'left')
-    command! MultiplexerNavigateDown call multiplexer#Navigate('j', 'down')
-    command! MultiplexerNavigateUp call multiplexer#Navigate('k', 'up')
-    command! MultiplexerNavigateRight call multiplexer#Navigate('l', 'right')
+    command! MultiplexerNavigateLeft call s:Navigate('h', 'left')
+    command! MultiplexerNavigateDown call s:Navigate('j', 'down')
+    command! MultiplexerNavigateUp call s:Navigate('k', 'up')
+    command! MultiplexerNavigateRight call s:Navigate('l', 'right')
     nnoremap <silent><M-H> :MultiplexerNavigateLeft<cr>
     nnoremap <silent><M-J> :MultiplexerNavigateDown<cr>
     nnoremap <silent><M-K> :MultiplexerNavigateUp<cr>
