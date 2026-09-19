@@ -12,10 +12,12 @@
     "messageLevel": "error",
     "listOfWorkspaceEdit": "location",
     "hoverTarget": "float",
-    "enableFloatHighlight": true
+    "enableFloatHighlight": true,
+    "currentFunctionSymbolAutoUpdate": true
   },
   "coc.source.file.triggerCharacters": ["/"],
   "coc.source.buffer.disableSyntaxes": [],
+  "explorer.icon.source": "vim-devicons",
   "semanticTokens.enable": true,
   "semanticTokens.filetypes": ["*"],
   "list": {
@@ -89,6 +91,9 @@
   "dialog.floatBorderHighlight": "Normal",
   "git.enableGutters": false,
   "git.realtimeGutters": false,
+  "inlayHint.enable": true,
+  "codeLens.enable": true,
+  "codeLens.display": true,
   "languageserver": {
     "dockerfile": {
       "command": "docker-langserver",
@@ -111,6 +116,7 @@
   "python.analysis.typeCheckingMode": "off",
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
+  "python.venvPath": [".venv", "venv", "../.venv", "../venv"],
   "lua.colors.enable": true,
   "java.enabled": true,
   "java.codeGeneration.useBlocks": true,
@@ -120,7 +126,8 @@
   "go.goplsPath": "gopls",
   "go.goplsUseDaemon": false,
   "go.goplsOptions": {
-    "usePlaceholders": true
+    "usePlaceholders": true,
+    "semanticTokens": true
   },
   "rust-analyzer.trace.server": "off",
   "rust-analyzer.server.path": "rust-analyzer",

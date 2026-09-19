@@ -1,6 +1,7 @@
-" ------------------------
-" coc-fzf
-" ------------------------
+" ----------------------------
+" set coc data $PATH
+" ----------------------------
+let g:coc_config_home = utils#expand("$CFG_DIR")
 let g:coc_fzf_location_delay = 100
 " ----------------------------
 " Disable file with size > 1MB
@@ -8,29 +9,10 @@ let g:coc_fzf_location_delay = 100
 autocmd BufAdd * if getfsize(utils#expand('<afile>')) > 1024*1024 |
             \ let b:coc_enabled=0 |
             \ endif
-" ----------------------------
-" set coc data $PATH
-" ----------------------------
-let g:coc_config_home = utils#expand("$CFG_DIR")
-call coc#config('python.pythonPath', g:python_prog)
-call coc#config('python.venvPath', ['.venv', 'venv', '../venv', '../.venv'])
-if pack#planned('nvim-web-devicons')
-    call coc#config('explorer.icon.source', 'nvim-web-devicons')
-elseif pack#planned('vim-devicons')
-    call coc#config('explorer.icon.source', 'vim-devicons')
-endif
-" ------------------------
-" symbol line and other
-" ------------------------
-if has('nvim')
-    call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:false)
-else
-    call coc#config("coc.preferences.currentFunctionSymbolAutoUpdate", v:true)
-endif
 " ------------------------
 " ColorScheme
 " ------------------------
-call coc#config('go.goplsOptions.semanticTokens', v:true)
+hi! link CocCodeLens CocListBgGrey
 augroup FixCocColorScheme
     autocmd!
     autocmd ColorScheme edge,sonokai,gruvbox-material,gruvbox hi! CocExplorerIndentLine ctermbg=NONE guibg=NONE
@@ -62,24 +44,6 @@ command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
-" ----------------------------
-" inlayHint/codeLens/codeaction
-" ----------------------------
-if has('nvim') || has('patch-9.0.0252')
-    call coc#config('inlayHint.enable', v:true)
-    nnoremap <silent><leader>i :CocCommand document.toggleInlayHint<Cr>
-else
-    call coc#config('inlayHint.enable', v:false)
-endif
-if has('nvim') || has('patch-9.0.0438')
-    hi! link CocCodeLens CocListBgGrey
-    call coc#config('codeLens.enable', v:true)
-    call coc#config('codeLens.display', v:true)
-    nmap <leader>C :CocCommand document.toggleCodeLens<Cr>
-    nmap <M-c> <Plug>(coc-codelens-action)
-else
-    call coc#config('codeLens.enable', v:false)
-endif
 " ----------------------------
 " completion map
 " ----------------------------
@@ -113,6 +77,10 @@ xnoremap <leader>w :<C-u>CocFzfList symbols <C-r>=utils#get_visual()<Cr>
 " scroll
 imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<C-\><C-n>:call utils#move_to_end_and_add_semicolon()\<CR>"
 imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-k>"
+" inlayHint/codeLens/codeaction
+nmap <silent><leader>i :CocCommand document.toggleInlayHint<Cr>
+nmap <leader>C :CocCommand document.toggleCodeLens<Cr>
+nmap <M-c> <Plug>(coc-codelens-action)
 " call hierarchy
 nnoremap <silent>gh :call CocAction('showIncomingCalls')<Cr>
 nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>
@@ -167,9 +135,6 @@ let g:coc_global_extensions = [
             \ 'coc-basedpyright',
             \ '@yaegassy/coc-ruff',
             \ ]
-if has('nvim') && !pack#planned_treesitter()
-    let g:coc_global_extensions += ['coc-symbol-line']
-endif
 if utils#is_unix()
     let g:coc_global_extensions += ['coc-lua']
 elseif utils#is_win()
@@ -192,6 +157,7 @@ if pack#get('c')
         let g:coc_global_extensions += ['coc-clangd']
     endif
 endif
+call coc#config('python.pythonPath', g:python_prog)
 if pack#get('ccls') && g:ccls_exe != ''
     call coc#config('languageserver.ccls', {
                 \ "command": "ccls",

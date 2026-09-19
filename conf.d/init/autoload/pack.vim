@@ -56,7 +56,7 @@ function! pack#planned_leaderf() abort
 endfunction
 
 function! pack#planned_coc() abort
-    return pack#get('coc') && g:node_version >= 24 && (has('nvim') || has('patch-9.0.0438'))
+    return pack#get('coc') && g:node_version >= 24 && has('nvim')
 endfunction
 
 function! pack#planned_cmp() abort
