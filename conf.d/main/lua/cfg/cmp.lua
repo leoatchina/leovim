@@ -174,7 +174,8 @@ cmp.setup({
           if cmp.get_active_entry() then
             cmp.confirm({ select = false })
           else
-            fallback()
+            -- 同 <C-y>: 关闭补全菜单并保留已输入文本，不换行
+            cmp.close()
           end
         else
           fallback()
@@ -284,5 +285,7 @@ cmp.setup.cmdline(':', {
 ----------------------------------
 -- autopairs
 ----------------------------------
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+-- NOTE: 不挂 confirm_done 钩子：确认函数补全后 nvim-autopairs 会自动补 ()，
+-- 与 coc.vim 行为不一致（coc 不加括号）；括号配对仍由 autopairs 正常处理
+-- local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+-- cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
