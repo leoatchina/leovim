@@ -104,11 +104,11 @@ endif
 " fuzzy finders
 " ------------------------------
 if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
-    PlugAdd 'junegunn/fzf.vim', {'dir': utils#expand('~/.leovim/pack/clone/opt/fzf.vim')}
+    PlugAdd 'junegunn/fzf.vim'
     if utils#is_win()
-        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\.leovim\\fzf')}
+        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\.local\\fzf')}
     else
-        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.leovim/fzf')}
+        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf')}
     endif
     PlugAdd 'fzf-registers'
     PlugAdd 'fzf-tabs'
