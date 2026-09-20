@@ -10,14 +10,6 @@ autocmd BufAdd * if getfsize(utils#expand('<afile>')) > 1024*1024 |
             \ let b:coc_enabled=0 |
             \ endif
 " ------------------------
-" ColorScheme
-" ------------------------
-hi! link CocCodeLens CocListBgGrey
-augroup FixCocColorScheme
-    autocmd!
-    autocmd ColorScheme edge,sonokai,gruvbox-material,gruvbox hi! CocExplorerIndentLine ctermbg=NONE guibg=NONE
-augroup END
-" ------------------------
 " coc root_patterns
 " ------------------------
 autocmd FileType css,html let b:coc_additional_keywords = ["-"] + g:root_patterns
@@ -47,16 +39,15 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " ----------------------------
 " completion map
 " ----------------------------
-inoremap <silent><expr> <Cr> coc#pum#visible() ?
+imap <silent><expr> <Cr> coc#pum#visible() ?
             \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<Cr>" : coc#pum#select_confirm()
             \ : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 let g:coc_snippet_next = '<tab>'
-inoremap <silent><expr><TAB> coc#pum#visible() ? coc#pum#next(1) :
-            \ utils#has_backspace() ? "\<TAB>" :
-            \ coc#refresh()
-inoremap <silent><expr><S-TAB> coc#pum#visible() ? coc#pum#prev(0) : "\<C-h>"
-inoremap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
-inoremap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
+" imap <silent><expr><tab> coc#pum#visible() ? coc#pum#next(1) : coc#inline#visible() ? coc#inline#next() : "\<Tab>"
+imap <silent><expr><TAB> coc#pum#visible() ? "\<C-n>" : utils#has_backspace() ? "\<TAB>" : coc#refresh()
+imap <silent><expr><S-TAB> coc#pum#visible() ? "\<C-p>" : "\<S-Tab>>"
+imap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
+imap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
 " ----------------------------
 " map
 " ----------------------------
@@ -184,3 +175,34 @@ endif
 if pack#get('writing')
     let g:coc_global_extensions += ['coc-vimtex']
 endif
+" ------------------------
+" ColorScheme
+" ------------------------
+hi! link CocCodeLens CocListBgGrey
+augroup FixCocColorScheme
+    autocmd!
+    autocmd ColorScheme edge,sonokai,gruvbox-material,gruvbox hi! CocExplorerIndentLine ctermbg=NONE guibg=NONE
+    " Patch: coc pum 选中行高亮靠 sign linehl（CocCurrentLine -> CocMenuSel），
+    " Vim popup 滚动（firstline 变化）后最上面一行 linehl 不重绘，
+    " 导致往上翻到顶时选中词条看不到高亮。
+    " 用窗口内 matchaddpos 补画选中行（match 随滚动正确重绘）。
+    " 仅 Vim（popup_list 是 Vim 专有）。
+    function! s:CocPumSelFix() abort
+        if !exists('*coc#pum#visible') || !coc#pum#visible()
+            return
+        endif
+        let info = coc#pum#info()
+        if info['index'] < 0
+            return
+        endif
+        let line = info['reversed'] ? info['size'] - info['index'] : info['index'] + 1
+        " coc pum 窗口带 winvar kind == 'pum'（coc pum.vim setwinvar）
+        for winid in popup_list()
+            if winbufnr(winid) > 0 && getwinvar(winid, 'kind', '') ==# 'pum'
+                call win_execute(winid, 'silent! call clearmatches()')
+                call win_execute(winid, 'call matchaddpos(''CocMenuSel'', ['.line.'])')
+            endif
+        endfor
+    endfunction
+    autocmd SafeStateAgain,InsertEnter * call s:CocPumSelFix()
+augroup END
