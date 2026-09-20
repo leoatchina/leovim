@@ -281,25 +281,10 @@ local function get_snippet_completions(prefix, filetype)
   return matches
 end
 
--- Expand snippet function
-local function expand_snippet()
-  local item = vim.v.completed_item
-  if not item or vim.tbl_isempty(item) then
-    return false
-  end
-
-  if not item.user_data or not item.user_data.snippet then
-    return false
-  end
-
-  local body = item.user_data.body
-  if not body then
-    return false
-  end
-
+-- Snippet expansion core: replace the prefix before cursor with processed body
+local function expand_snippet_core(body, prefix_len)
   local line = vim.api.nvim_get_current_line()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local prefix_len = item.word and #item.word or 0
 
   local processed_body = body
   local placeholders = {}
@@ -451,6 +436,47 @@ local function expand_snippet()
   snippet_mode_active = true
 
   return true
+end
+
+-- Expand from completed item (after <C-y> confirm)
+local function expand_snippet()
+  local item = vim.v.completed_item
+  if not item or vim.tbl_isempty(item) then
+    return false
+  end
+  if not item.user_data or not item.user_data.snippet then
+    return false
+  end
+  local body = item.user_data.body
+  if not body then
+    return false
+  end
+  return expand_snippet_core(body, item.word and #item.word or 0)
+end
+
+-- Find snippet whose trigger exactly matches the word before cursor (no mutation)
+local function find_snippet_at_cursor()
+  local line = vim.api.nvim_get_current_line()
+  local _, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local word = line:sub(1, col):match('[%w_]+$')
+  if not word or #word == 0 then
+    return nil
+  end
+  for _, snippet in ipairs(get_snippet_completions(word, vim.bo.filetype)) do
+    if snippet.word == word then
+      return snippet
+    end
+  end
+  return nil
+end
+
+-- Expand when the word before cursor is exactly a snippet trigger
+local function expand_snippet_at_cursor()
+  local snippet = find_snippet_at_cursor()
+  if not snippet then
+    return false
+  end
+  return expand_snippet_core(snippet.user_data.body, #snippet.word)
 end
 
 local function find_placeholder_position(text)
@@ -1195,38 +1221,35 @@ vim.api.nvim_create_autocmd('FileType', {
 -- 按键绑定配置
 -- ============================================================================
 
--- Tab键: 补全菜单下翻（同 <C-n>）
-map('i', '<Tab>', function()
-  if pumvisible() then
-    return '<C-n>'
-  else
-    return vim.api.nvim_replace_termcodes('<Tab>', true, true, true)
-  end
-end, {expr = true, silent = true})
-
 -- Shift-Tab: 补全菜单上翻（同 <C-p>）
 map('i', '<S-Tab>', function()
   if pumvisible() then
     return '<C-p>'
   else
-    return vim.api.nvim_replace_termcodes('<S-Tab>', true, true, true)
+    return '<C-h>'
   end
 end, {expr = true, silent = true})
 
--- Enter键: 已选中则确认并展开代码片段；未选中则同 <C-e> 结束补全
+
+-- Enter键: 触发词直接展开 / snippet 内跳下一占位符 / 选中确认并展开，否则换行
 map('i', '<CR>', function()
-  if pumvisible() then
-    if vim.fn.complete_info({ 'selected' }).selected >= 0 then
-      -- 确认当前选择，延时展开代码片段
-      vim.defer_fn(expand_snippet, 10)
-      return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
-    else
-      -- 同 <C-e>: 结束当前补全
-      return vim.api.nvim_replace_termcodes('<C-e>', true, true, true)
-    end
-  else
-    return vim.api.nvim_replace_termcodes('<CR>', true, true, true)
+  if find_snippet_at_cursor() then
+    -- E565: <expr> 求值期间禁止改文本，延时展开
+    vim.defer_fn(expand_snippet_at_cursor, 10)
+    return ''
   end
+  if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
+    if not jump_to_next_placeholder() then
+      snippet_mode_active = false
+    end
+    return ''
+  end
+  if pumvisible() and vim.fn.complete_info({ 'selected' }).selected >= 0 then
+    -- 确认当前选择，延时展开代码片段
+    vim.defer_fn(expand_snippet, 10)
+    return '<C-y>'
+  end
+  return vim.api.nvim_replace_termcodes('<CR>', true, true, true)
 end, {expr = true, silent = true})
 
 -- 处理目录导航的辅助函数
