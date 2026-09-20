@@ -1195,43 +1195,35 @@ vim.api.nvim_create_autocmd('FileType', {
 -- 按键绑定配置
 -- ============================================================================
 
--- Tab键: 补全和代码片段展开
+-- Tab键: 补全菜单下翻（同 <C-n>）
 map('i', '<Tab>', function()
   if pumvisible() then
-    -- 检查是否已经选择了项目
-    local completed_item = vim.v.completed_item or {}
-    if vim.tbl_isempty(completed_item) then
-      -- 没有选择项目，选择第一个并确认
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n><C-y>', true, true, true), 'n', false)
-    else
-      -- 已选择项目，直接确认
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-y>', true, true, true), 'n', false)
-    end
-    -- 延迟代码片段展开
-    vim.defer_fn(function()
-      expand_snippet()
-    end, 10)
-    return ''
+    return '<C-n>'
   else
-    -- 菜单不可见，正常Tab行为
     return vim.api.nvim_replace_termcodes('<Tab>', true, true, true)
   end
 end, {expr = true, silent = true})
 
--- Shift-Tab: 补全菜单中的上一个选择
+-- Shift-Tab: 补全菜单上翻（同 <C-p>）
 map('i', '<S-Tab>', function()
   if pumvisible() then
-    return vim.api.nvim_replace_termcodes('<C-p>', true, true, true)
+    return '<C-p>'
   else
     return vim.api.nvim_replace_termcodes('<S-Tab>', true, true, true)
   end
 end, {expr = true, silent = true})
 
--- Enter键: 确认选择（不展开代码片段）
+-- Enter键: 已选中则确认并展开代码片段；未选中则同 <C-e> 结束补全
 map('i', '<CR>', function()
   if pumvisible() then
-    -- 直接确认选择而不展开代码片段
-    return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
+    if vim.fn.complete_info({ 'selected' }).selected >= 0 then
+      -- 确认当前选择，延时展开代码片段
+      vim.defer_fn(expand_snippet, 10)
+      return vim.api.nvim_replace_termcodes('<C-y>', true, true, true)
+    else
+      -- 同 <C-e>: 结束当前补全
+      return vim.api.nvim_replace_termcodes('<C-e>', true, true, true)
+    end
   else
     return vim.api.nvim_replace_termcodes('<CR>', true, true, true)
   end

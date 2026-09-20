@@ -53,5 +53,10 @@ require('blink.cmp').setup({
   completion = { trigger = { prefetch_on_insert = false } },
   keymap = {
     preset = 'super-tab',
+    -- Tab/S-Tab: 补全菜单下翻/上翻（同 <C-n>/<C-p>）
+    ['<Tab>'] = { 'select_next', 'fallback' },
+    ['<S-Tab>'] = { 'select_prev', 'fallback' },
+    -- Enter: 已选中则确认并展开 snippet，未选中则同 <C-e>（cancel）结束补全
+    ['<CR>'] = { 'accept', 'cancel', 'fallback' },
   }
 })

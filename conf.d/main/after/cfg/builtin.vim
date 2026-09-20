@@ -51,13 +51,21 @@ augroup END
 
 if pack#planned('vim-vsnip')
     set complete=.,w,b,u,o,k,Fvsnip#completefunc
-    inoremap <expr> <Tab> vsnip#expandable() ? "\<Plug>(vsnip-expand)"
-            \ : vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)"
-            \ : pumvisible() && complete_info().selected >= 0 ? "\<C-y>"
-            \ : "\<Tab>"
-    snoremap <expr> <Tab> vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)" : "\<Tab>"
+    imap <expr><silent><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    imap <expr><silent><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+    " NOTE: 必须用 imap（递归），<expr> 返回 <Plug> 才会被再次映射；
+    " inoremap 的返回值不再走映射，会把 <Plug>(...) 字面插入 buffer
+    imap <expr><silent><Cr> vsnip#expandable() ? "\<Plug>(vsnip-expand)"
+                \ : vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)"
+                \ : pumvisible() && complete_info().selected >= 0 ? "\<C-y>"
+                \ : "\<Cr>"
+    smap <expr><silent><Tab> vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)" : "\<Tab>"
 else
     set complete=.,w,b,u,o,k
-    inoremap <expr> <Tab> pumvisible() && complete_info().selected >= 0 ? "\<C-y>" : "\<Tab>"
-    snoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"
+    inoremap <expr><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    inoremap <expr><Cr> pumvisible() ?
+            \ (complete_info(['selected']).selected >= 0 ? "\<C-y>" : "\<C-e>")
+            \ : "\<Cr>"
+    snoremap <expr><Cr> pumvisible() ? "\<C-y>" : "\<Tab>"
 endif

@@ -159,12 +159,17 @@ cmp.setup({
     ['<Cr>'] = {
       i = function(fallback)
         if cmp.visible() then
-          cmp.close()
+          if cmp.get_active_entry() then
+            cmp.confirm({ select = false })
+          else
+            -- same as <C-e>: end current completion
+            cmp.abort()
+          end
         else
           fallback()
         end
       end,
-      c = cmp.confirm()
+      c = cmp.confirm(),
     },
     ['<S-Tab>'] = {
       i = function(fallback)
@@ -185,9 +190,7 @@ cmp.setup({
     ['<Tab>'] = {
       i = function(fallback)
         if cmp.visible() then
-          cmp.confirm({ select = true })
-        elseif has_words_before() then
-          cmp.complete()
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
         else
           fallback()
         end

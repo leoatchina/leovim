@@ -47,13 +47,12 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " ----------------------------
 " completion map
 " ----------------------------
-inoremap <silent><expr> <Cr> coc#pum#visible() ? coc#pum#stop() : "\<C-g>u\<Cr>\<C-r>=coc#on_enter()\<Cr>"
-inoremap <silent><expr> <TAB> coc#pum#visible() == v:false ? "\<Tab>" :
-            \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<Cr>" :
-            \ utils#has_backspace() ? coc#refresh() :
-            \ coc#_select_confirm()
-inoremap <silent><expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr><C-l> coc#refresh()
+inoremap <silent><expr><Cr> coc#pum#visible() ? coc#pum#select_confirm(): "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+let g:coc_snippet_next = '<tab>'
+inoremap <silent><expr><TAB> coc#pum#visible() ? coc#pum#next(1) :
+            \ utils#has_backspace() ? "\<TAB>" :
+            \ coc#refresh()
+inoremap <silent><expr><S-TAB> coc#pum#visible() ? coc#pum#prev(0) : "\<C-h>"
 inoremap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
 inoremap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
 " ----------------------------

@@ -13,33 +13,30 @@ let g:mucomplete#chains = {}
 " vsnip
 if pack#installed('vim-vsnip', 'vim-vsnip-integ')
     let g:mucomplete#chains.default = ['path', 'omni', 'vsnip', 'keyn', 'dict']
-    function! MapTabCr(tab) abort
+    function! MapTabCr(key) abort
         if pumvisible()
-            if a:tab
-                if empty(get(v:, 'completed_item', {}))
-                    if vsnip#available(1)
-                        return "\<Plug>(vsnip-expand-or-jump)"
-                    else
-                        return "\<C-n>"
-                    endif
-                elseif vsnip#available(1)
-                    return "\<Plug>(vsnip-expand-or-jump)"
-                else
-                    return "\<C-y>"
-                endif
-            else
-                return "\<C-y>"
+            if a:key ==? 'tab'
+                return "\<C-n>"
+            elseif a:key ==? 'stab'
+                return "\<C-p>"
             endif
+            " <Cr>: 已选中则确认并展开 snippet，未选中则同 <C-e> 结束补全
+            let l:selected = exists('*complete_info') ?
+                        \ complete_info(['selected']).selected >= 0 :
+                        \ !empty(get(v:, 'completed_item', {}))
+            return l:selected ? "\<C-y>\<Plug>(vsnip-expand-or-jump)" : "\<C-e>"
         else
-            if a:tab
+            if a:key ==? 'tab'
                 return "\<Tab>"
-            else
-                return "\<Cr>"
+            elseif a:key ==? 'stab'
+                return "\<S-Tab>"
             endif
+            return "\<Cr>"
         endif
     endfunction
-    imap <expr><silent><Tab> MapTabCr(1)
-    imap <expr><silent><Cr> MapTabCr(0)
+    imap <expr><silent><Tab> MapTabCr('tab')
+    imap <expr><silent><S-Tab> MapTabCr('stab')
+    imap <expr><silent><Cr> MapTabCr('cr')
     imap <expr><silent><down> mucomplete#extend_fwd("\<down>")
 else
     let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict']
