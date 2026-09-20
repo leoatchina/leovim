@@ -328,16 +328,12 @@ if [ $installplug != 'no' ]; then
     note "Install (neo)vim plugins"
     if [ -f $HOME/.vimrc.local ]; then
         setup_plug "$HOME/.local/bin/vi.sh"
+        # cmp
+        setup_plug "$HOME/.local/bin/ni.sh"
+        # blink
+        setup_plug "$HOME/.local/bin/nv.sh"
     else
         setup_plug "vim"
-    fi
-    # cmp
-    setup_plug "$HOME/.local/bin/nv.sh"
-    # blink
-    setup_plug "$HOME/.local/bin/nn.sh"
-    # coc
-    if program_exists node; then
-        setup_plug "$HOME/.local/bin/ni.sh"
     fi
 fi
 ############################### copyright ##################################
