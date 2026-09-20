@@ -265,7 +265,9 @@ if pack#planned_lsp()
     PlugAdd 'windwp/nvim-autopairs'
 else
     if v:version >= 800
-        PlugAdd 'tmsvg/pear-tree'
+        if !pack#planned_coc()
+            PlugAdd 'tmsvg/pear-tree'
+        endif
     elseif has('patch-7.4.849')
         PlugAdd 'jiangmiao/auto-pairs'
     endif

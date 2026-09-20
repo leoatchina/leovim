@@ -133,6 +133,7 @@ let g:coc_global_extensions = [
             \ 'coc-xml',
             \ 'coc-sh',
             \ 'coc-vimls',
+            \ 'coc-pairs',
             \ 'coc-basedpyright',
             \ '@yaegassy/coc-ruff',
             \ ]
