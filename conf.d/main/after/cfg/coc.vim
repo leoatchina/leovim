@@ -45,7 +45,7 @@ imap <silent><expr> <Cr> coc#pum#visible() ?
 let g:coc_snippet_next = '<tab>'
 " imap <silent><expr><tab> coc#pum#visible() ? coc#pum#next(1) : coc#inline#visible() ? coc#inline#next() : "\<Tab>"
 imap <silent><expr><TAB> coc#pum#visible() ? "\<C-n>" : utils#has_backspace() ? "\<TAB>" : coc#refresh()
-imap <silent><expr><S-TAB> coc#pum#visible() ? "\<C-p>" : "\<S-Tab>>"
+imap <silent><expr><S-TAB> coc#pum#visible() ? "\<C-p>" : "\<S-Tab>"
 imap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
 imap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
 " ----------------------------
