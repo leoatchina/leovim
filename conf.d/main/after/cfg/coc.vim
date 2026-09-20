@@ -40,8 +40,8 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " completion map
 " ----------------------------
 imap <silent><expr> <Cr> coc#pum#visible() ?
-            \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<Cr>" : coc#pum#select_confirm()
-            \ : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+            \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<Cr>" : coc#pum#confirm()
+            \ : "\<CR>"
 let g:coc_snippet_next = '<tab>'
 " imap <silent><expr><tab> coc#pum#visible() ? coc#pum#next(1) : coc#inline#visible() ? coc#inline#next() : "\<Tab>"
 imap <silent><expr><TAB> coc#pum#visible() ? "\<C-n>" : utils#has_backspace() ? "\<TAB>" : coc#refresh()
@@ -182,25 +182,30 @@ hi! link CocCodeLens CocListBgGrey
 augroup FixCocColorScheme
     autocmd!
     autocmd ColorScheme edge,sonokai,gruvbox-material,gruvbox hi! CocExplorerIndentLine ctermbg=NONE guibg=NONE
-    " Patch: coc pum 选中行高亮靠 sign linehl（CocCurrentLine -> CocMenuSel），
-    " Vim popup 滚动（firstline 变化）后最上面一行 linehl 不重绘，
-    " 导致往上翻到顶时选中词条看不到高亮。
-    " 用窗口内 matchaddpos 补画选中行（match 随滚动正确重绘）。
+    " Patch: coc Vim popup 第一行有时压到 cursor line，最上面的候选 label
+    " 会与 buffer 文本/光标重叠。SafeStateAgain 后检测 overlap 并下移 pum。
+    " 同时用窗口内 matchaddpos 补画选中行（match 随滚动正确重绘）。
     " 仅 Vim（popup_list 是 Vim 专有）。
     function! s:CocPumSelFix() abort
         if !exists('*coc#pum#visible') || !coc#pum#visible()
             return
         endif
         let info = coc#pum#info()
-        if info['index'] < 0
-            return
-        endif
-        let line = info['reversed'] ? info['size'] - info['index'] : info['index'] + 1
+        let line = info['index'] < 0 ? 0 : info['reversed'] ? info['size'] - info['index'] : info['index'] + 1
         " coc pum 窗口带 winvar kind == 'pum'（coc pum.vim setwinvar）
         for winid in popup_list()
             if winbufnr(winid) > 0 && getwinvar(winid, 'kind', '') ==# 'pum'
+                " coc Vim popup 在部分终端/字体下会把第一行压到 cursor line，
+                " 导致最上面的候选 label 与 buffer 文本/光标重叠。检测并下移一行。
+                let pos = popup_getpos(winid)
+                let cur = screenpos(0, line('.'), col('.'))
+                if get(pos, 'line', 0) <= cur['row'] && get(pos, 'line', 0) + get(pos, 'core_height', get(pos, 'height', 0)) > cur['row']
+                    call popup_move(winid, {'line': cur['row'] + 1})
+                endif
                 call win_execute(winid, 'silent! call clearmatches()')
-                call win_execute(winid, 'call matchaddpos(''CocMenuSel'', ['.line.'])')
+                if line > 0
+                    call win_execute(winid, 'call matchaddpos(''CocMenuSel'', ['.line.'])')
+                endif
             endif
         endfor
     endfunction

@@ -11,22 +11,6 @@
     "enableFloatHighlight": true,
     "currentFunctionSymbolAutoUpdate": true
   },
-  // ---- 补全 ----
-  "suggest.enablePreselect": true,
-  "suggest.noselect": true,
-  "suggest.defaultSortMethod": "none",
-  "suggest.snippetIndicator": "",
-  "suggest.languageSourcePriority": 99,
-  "suggest.triggerCompletionWait": 50,
-  "suggest.acceptSuggestionOnCommitCharacter": true,
-  "suggest.labelMaxLength": 48,
-  "suggest.floatEnable": true,
-  "suggest.floatConfig": {
-    "winblend": 0
-  },
-  "colors.enable": true,
-  "semanticTokens.enable": true,
-  "semanticTokens.filetypes": ["*"],
   // ---- list / explorer / source ----
   "list": {
     "nextKeymap": "<C-j>",
@@ -111,6 +95,23 @@
       "javascript"
     ]
   },
+  // ---- 补全 ----
+  "suggest.enablePreselect": true,
+  "suggest.noselect": true,
+  "suggest.defaultSortMethod": "none",
+  "suggest.snippetIndicator": "",
+  "suggest.languageSourcePriority": 99,
+  "suggest.triggerCompletionWait": 50,
+  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.labelMaxLength": 48,
+  "suggest.floatEnable": true,
+  "suggest.floatConfig": {
+    "winblend": 0
+  },
+  // ---- color ---- 
+  "colors.enable": true,
+  "semanticTokens.enable": true,
+  "semanticTokens.filetypes": ["*"],
   // ============ 各语言 ============
   // ---- c/cpp/java/rust/ts/js: codeLens 分隔符 ----
   "[c][cpp][java][rust][typescript][javascript]": {
