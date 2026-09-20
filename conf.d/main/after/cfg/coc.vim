@@ -122,6 +122,7 @@ else
     let g:coc_data_home = $LEOVIMD_DIR . "/coc"
 endif
 let g:coc_global_extensions = [
+            \ 'coc-lua',
             \ 'coc-lists',
             \ 'coc-marketplace',
             \ 'coc-snippets',
@@ -137,9 +138,7 @@ let g:coc_global_extensions = [
             \ 'coc-basedpyright',
             \ '@yaegassy/coc-ruff',
             \ ]
-if utils#is_unix()
-    let g:coc_global_extensions += ['coc-lua']
-elseif utils#is_win()
+if utils#is_win()
     let g:coc_global_extensions += ['coc-powershell']
 endif
 if pack#get('web')
