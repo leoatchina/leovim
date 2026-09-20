@@ -13,30 +13,15 @@ let g:mucomplete#chains = {}
 " vsnip
 if pack#installed('vim-vsnip', 'vim-vsnip-integ')
     let g:mucomplete#chains.default = ['path', 'omni', 'vsnip', 'keyn', 'dict']
-    function! MapTabCr(key) abort
-        if pumvisible()
-            if a:key ==? 'tab'
-                return "\<C-n>"
-            elseif a:key ==? 'stab'
-                return "\<C-p>"
-            endif
-            " <Cr>: 已选中则确认并展开 snippet，未选中则同 <C-e> 结束补全
-            let l:selected = exists('*complete_info') ?
-                        \ complete_info(['selected']).selected >= 0 :
-                        \ !empty(get(v:, 'completed_item', {}))
-            return l:selected ? "\<C-y>\<Plug>(vsnip-expand-or-jump)" : "\<C-e>"
-        else
-            if a:key ==? 'tab'
-                return "\<Tab>"
-            elseif a:key ==? 'stab'
-                return "\<S-Tab>"
-            endif
-            return "\<Cr>"
-        endif
-    endfunction
-    imap <expr><silent><Tab> MapTabCr('tab')
-    imap <expr><silent><S-Tab> MapTabCr('stab')
-    imap <expr><silent><Cr> MapTabCr('cr')
+    imap <expr><silent><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    imap <expr><silent><S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+    " NOTE: 必须用 imap（递归），<expr> 返回 <Plug> 才会被再次映射；
+    " inoremap 的返回值不再走映射，会把 <Plug>(...) 字面插入 buffer
+    imap <expr><silent><Cr> vsnip#expandable() ? "\<Plug>(vsnip-expand)"
+                \ : vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)"
+                \ : pumvisible() && complete_info().selected >= 0 ? "\<C-y>"
+                \ : "\<Cr>"
+    smap <expr><silent><Tab> vsnip#jumpable(1) ? "\<Plug>(vsnip-jump-next)" : "\<Tab>"
     imap <expr><silent><down> mucomplete#extend_fwd("\<down>")
 else
     let g:mucomplete#chains.default = ['path', 'omni', 'keyn', 'dict']
