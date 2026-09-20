@@ -158,12 +158,23 @@ cmp.setup({
     },
     ['<Cr>'] = {
       i = function(fallback)
+        if utils.installed('vim-vsnip') then
+          -- 光标前是完整 vsnip 触发词 -> 展开
+          if vim.fn['vsnip#expandable']() == 1 then
+            vim.fn['vsnip#expand']()
+            return
+          end
+          -- snippet 会话内 -> 跳下一占位符
+          if vim.fn['vsnip#jumpable'](1) == 1 then
+            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Plug>(vsnip-jump-next)', true, false, true), 'm', true)
+            return
+          end
+        end
         if cmp.visible() then
           if cmp.get_active_entry() then
             cmp.confirm({ select = false })
           else
-            -- same as <C-e>: end current completion
-            cmp.abort()
+            fallback()
           end
         else
           fallback()
