@@ -6,6 +6,11 @@ require('blink.cmp').setup({
   fuzzy = { implementation = executable("cargo") and not utils.get('blink.lua') and "prefer_rust_with_warning" or 'lua'},
   signature = { enabled = true },
   completion = {
+    trigger = { prefetch_on_insert = false },
+    accept = {
+      -- 确认函数补全后不自动加 ()（blink 默认开启，括号来源就在这里）
+      auto_brackets = { enabled = false },
+    },
     ghost_text = {
       enabled = false,
       -- Show the ghost text when an item has been selected
@@ -50,13 +55,12 @@ require('blink.cmp').setup({
       codeium = { name = 'Codeium', module = 'codeium.blink', async = true },
     },
   },
-  completion = { trigger = { prefetch_on_insert = false } },
   keymap = {
     preset = 'super-tab',
     -- Tab/S-Tab: 补全菜单下翻/上翻（同 <C-n>/<C-p>）
     ['<Tab>'] = { 'select_next', 'fallback' },
     ['<S-Tab>'] = { 'select_prev', 'fallback' },
-    -- Enter: 已选中则确认并展开 snippet，未选中则同 <C-e>（cancel）结束补全
-    ['<CR>'] = { 'accept', 'cancel', 'fallback' },
+    -- Enter: 已选中则确认并展开 snippet；未选中仅隐藏菜单保留文本（同 cmp.close，不换行不回滚）
+    ['<CR>'] = { 'accept', 'hide', 'fallback' },
   }
 })
