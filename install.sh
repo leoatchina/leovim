@@ -326,7 +326,7 @@ fi
 ############################### install plugins ##################################
 if [ $installplug != 'no' ]; then
     note "Install (neo)vim plugins"
-    if [ -f $HOME/.vimrc.local ]; then
+    if [ -f $HOME/.vimrc.opt ]; then
         setup_plug "$HOME/.local/bin/vi.sh"
         # cmp
         setup_plug "$HOME/.local/bin/ni.sh"
