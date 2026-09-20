@@ -61,6 +61,7 @@ function! s:handle_char_on_start_is_ok(c) abort
   endif
   let displaynames = which_key#renderer#get_displaynames()
   let s:which_key_trigger .= ' '.get(displaynames, toupper(char), char)
+  let s:which_key_raw .= char
   let next_level = get(s:runtime, char)
   let ty = type(next_level)
   if ty == s:TYPE.dict
@@ -74,6 +75,9 @@ function! s:handle_char_on_start_is_ok(c) abort
   elseif g:which_key_fallback_to_native_key
     call s:execute_native_fallback(0)
     return 1
+  elseif g:which_key_ignore_invalid_key
+    " Silently ignore an undefined key.
+    return 1
   else
     call which_key#error#undefined_key(s:which_key_trigger)
     return 1
@@ -86,6 +90,9 @@ function! which_key#start(vis, bang, prefix) " {{{
   let prefix = a:prefix
   let s:count = v:count != 0 ? v:count : ''
   let s:which_key_trigger = ''
+  " Raw (feedable) key sequence, kept separately from the display-only trigger.
+  let s:which_key_raw = a:prefix
+  let s:last_raw_stack = []
 
   if s:should_note_winid
     let g:which_key_origin_winid = win_getid()
@@ -261,8 +268,8 @@ function! s:show_upper_level_mappings() abort
   let last_runtime = s:last_runtime_stack[-1]
   let s:runtime = last_runtime
 
-  if len(s:last_runtime_stack) > 1
-    let s:which_key_trigger = join(split(s:which_key_trigger)[:-2], ' ')
+  if len(s:last_runtime_stack) > 1 && !empty(s:last_raw_stack)
+    let s:which_key_raw = remove(s:last_raw_stack, -1)
   endif
 
   unlet s:last_runtime_stack[-1]
@@ -338,7 +345,8 @@ endfunction
 function! s:show_next_level_mappings(next_runtime) abort
   let displaynames = which_key#renderer#get_displaynames()
   let s:which_key_trigger .= ' '.get(displaynames, toupper(s:cur_char), s:cur_char)
-  call add(s:last_runtime_stack, copy(s:runtime))
+  let s:last_raw_stack = add(get(s:, 'last_raw_stack', []), s:which_key_raw)
+  let s:which_key_raw .= s:cur_char
   let s:runtime = a:next_runtime
   call which_key#window#show(s:runtime)
 endfunction
@@ -374,9 +382,11 @@ endfunction
 
 function! s:execute_native_fallback(append) abort
   let l:reg = s:get_register()
-  let l:fallback_cmd = s:vis.l:reg.s:count.substitute(substitute(s:which_key_trigger, ' ', '', 'g'), '<Space>', ' ', 'g')
+  " Replay the raw key sequence, NOT s:which_key_trigger which holds the
+  " display names (e.g. 'SPC i') and would be fed back as literal keys.
+  let l:fallback_cmd = s:vis.l:reg.s:count.s:which_key_raw
   if (a:append)
-    let l:fallback_cmd = l:fallback_cmd.get(s:, 'cur_char', '')
+    let l:fallback_cmd .= get(s:, 'cur_char', '')
   endif
   try
     call feedkeys(l:fallback_cmd, 'n')
