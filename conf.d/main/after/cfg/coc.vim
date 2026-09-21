@@ -133,13 +133,14 @@ let g:coc_global_extensions = [
             \ 'coc-sql',
             \ 'coc-xml',
             \ 'coc-sh',
-            \ 'coc-vimls',
             \ 'coc-pairs',
             \ 'coc-basedpyright',
             \ '@yaegassy/coc-ruff',
             \ ]
 if utils#is_win()
-    let g:coc_global_extensions += ['coc-powershell']
+    let g:coc_global_extensions += ['coc-powershell', 'coc-vimls']
+else
+    let g:coc_global_extensions += ['coc-vimls']
 endif
 if pack#get('web')
     let g:coc_global_extensions += [

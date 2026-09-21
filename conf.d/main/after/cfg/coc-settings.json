@@ -167,7 +167,6 @@
 "yaml.format.singleQuote": true,
 "yaml.completion": true,
 // ---- vim ----
-"vimls.command": "~/.leovim.d/coc/extensions/coc-vimls-data/server-LyZZYV/vimls",
 "vimlsp.trace.server": "off",
 // ---- lua ----
 "lua.colors.enable": true
