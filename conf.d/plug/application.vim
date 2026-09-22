@@ -199,6 +199,7 @@ if g:has_truecolor
     else
         PlugAdd 'bluz71/vim-moonfly-colors'
         PlugAdd 'bluz71/vim-nightfly-colors'
+        PlugAdd 'catppuccin/vim', {'as': 'catppuccin-vim'}
     endif
 endif
 " --------------------------
