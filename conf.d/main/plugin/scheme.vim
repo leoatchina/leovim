@@ -35,11 +35,10 @@ let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    " call scheme#set('sonokai', 'sublime')
     call scheme#set('moonfly', 'codedark')
 elseif g:complete_engine == 'builtin'
     if has('nvim')
-        call scheme#set('terafox', 'hybrid')
+        call scheme#set('carbonfox', 'hybrid')
     else
         call scheme#set('nightfly', 'codedark')
     endif
@@ -52,9 +51,10 @@ elseif g:complete_engine == 'blink'
         call scheme#set('nightfox', 'hybrid')
     endif
 elseif g:complete_engine == 'coc'
-    call scheme#set('catppuccin_mocha', 'wombat')
+    call scheme#set('catppuccin', 'wombat')
 else
-    call scheme#set('edge', 'one')
+    " call scheme#set('edge', 'one')
+    call scheme#set('sonokai', 'sublime')
 endif
 " --------------------------
 " nvim-web-devicons
