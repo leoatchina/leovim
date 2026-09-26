@@ -40,10 +40,10 @@ endfunction
 function! s:fzf_accept(item) abort
     let item = a:item
     if len(item) < 2 | return | endif
-    let lnum = matchstr(item[1], ':\zs\d\+\ze:')
-    let col = matchstr(item[1], ':\d\+:\zs\d\+\ze#')
-    let lnum = empty(lnum) ? 1 : str2nr(lnum)
-    let col = empty(col) ? 1 : str2nr(col)
+    let location = matchlist(item[1], ':\s*\(\d\+\):\s*\(\d\+\)#\t')
+    if empty(location) | return | endif
+    let lnum = str2nr(location[1])
+    let col = str2nr(location[2])
     call s:action_for(item[0])
     call cursor(lnum, col)
     call funky#after_jump()
