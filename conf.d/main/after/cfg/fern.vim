@@ -17,9 +17,7 @@ command! FernLCD call FernOpen('lcd', 1)
 command! FernSideLCD call FernOpen('lcd')
 command! FernSideGitRoot call FernOpen('gitroot')
 command! FernSideGetRoot call FernOpen('getroot')
-nnoremap <leader>fn :Fern
-nnoremap <silent><leader>f. :Fern ./ -reveal=%:p<Cr>
-nnoremap <silent><leader>fl :FernSideLCD<Cr>
+nnoremap <silent><leader>F  :FernSideLCD<Cr>
 nnoremap <silent><leader>fg :FernSideGitRoot<Cr>
 nnoremap <silent><leader>fr :FernSideGetRoot<Cr>
 " ---------------
