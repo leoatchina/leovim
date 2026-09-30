@@ -1,11 +1,3 @@
-" Copy file path
-nnoremap <leader>YF :let @"=utils#abs_path()<Cr>:echo "-= File abspath copied=-"<Cr>
-" Copy file dir
-nnoremap <leader>YD :let @"=utils#abs_dir()<Cr>:echo "-= File dir copied=-"<Cr>
-" Copy file name
-nnoremap <leader>YB :let @"=utils#file_name()<Cr>:echo "-= File basename copied=-"<Cr>
-" Yank a line without leading whitespaces and line break
-nnoremap <leader>YU _yg_:echo "-= Yanked line without leading whitespaces and line break=-"<Cr>
 " ------------------------------------
 " clipboard
 " ------------------------------------
@@ -58,12 +50,11 @@ function! s:copy_clipboard(content) abort
     endif
     call setreg(empty(s:register) ? '"' : s:register, a:content)
 endfunction
-nnoremap <silent>yL :call <SID>copy_clipboard(utils#abs_path())<Cr>
-nnoremap <silent><leader>yf :call <SID>copy_clipboard(utils#abs_path())<Cr>
-nnoremap <silent><leader>yd :call <SID>copy_clipboard(utils#abs_dir())<Cr>
-nnoremap <silent><leader>yb :call <SID>copy_clipboard(utils#file_name())<Cr>
-nnoremap <silent><leader>yu :call <SID>copy_clipboard(utils#trim(getline('.')))<Cr>
-xnoremap <silent>Y y:call <SID>copy_clipboard(@")<Cr>
+nnoremap <silent>yL :call  <SID>copy_clipboard(utils#abs_path())<Cr>
+nnoremap <silent>yd :call  <SID>copy_clipboard(utils#abs_dir())<Cr>
+nnoremap <silent>yb :call  <SID>copy_clipboard(utils#file_name())<Cr>
+nnoremap <silent>yu :call  <SID>copy_clipboard(utils#trim(getline('.')))<Cr>
+xnoremap <silent>Y  y:call <SID>copy_clipboard(@")<Cr>
 " --------------------------------------------
 " yank command and position to editors
 " --------------------------------------------
@@ -162,9 +153,9 @@ command! YankToFileEnd call s:yank_border('to_file_end')
 command! YankFromLineBegin call s:yank_border('from_line_begin')
 command! YankToLineEnd call s:yank_border('to_line_end')
 command! YankWord call s:yank_border('word')
-nnoremap <silent>yY :YankWord<Cr>
-nnoremap <silent><leader>YY :YankFile<Cr>
-nnoremap <silent><leader>yy :YankLine<Cr>
+nnoremap <silent>yw :YankWord<Cr>
+nnoremap <silent>yy :YankLine<Cr>
+nnoremap <silent>yY :YankFile<Cr>
 if utils#is_vscode()
     nnoremap <silent>Y :YankToLineEnd<Cr>
 else
