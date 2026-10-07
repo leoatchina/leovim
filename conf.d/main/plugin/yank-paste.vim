@@ -53,7 +53,6 @@ endfunction
 nnoremap <silent>yL :call  <SID>copy_clipboard(utils#abs_path())<Cr>
 nnoremap <silent>yd :call  <SID>copy_clipboard(utils#abs_dir())<Cr>
 nnoremap <silent>yb :call  <SID>copy_clipboard(utils#file_name())<Cr>
-nnoremap <silent>yu :call  <SID>copy_clipboard(utils#trim(getline('.')))<Cr>
 xnoremap <silent>Y  y:call <SID>copy_clipboard(@")<Cr>
 " --------------------------------------------
 " yank command and position to editors
@@ -124,7 +123,7 @@ function! s:yank_border(...) abort
         let action = '%'
         let target = 'whole file'
     elseif mode ==# 'line'
-        let action = '0v$'
+        let action = '0vg_'
         let target = 'line'
     elseif mode ==# 'from_file_begin'
         let action = 'vgg0o'
@@ -155,6 +154,7 @@ command! YankToLineEnd call s:yank_border('to_line_end')
 command! YankWord call s:yank_border('word')
 nnoremap <silent>yw :YankWord<Cr>
 nnoremap <silent>yY :YankFile<Cr>
+nnoremap <silent>yu :YankLine<Cr>
 if utils#is_vscode()
     nnoremap <silent>Y :YankToLineEnd<Cr>
 else
