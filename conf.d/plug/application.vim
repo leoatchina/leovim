@@ -212,7 +212,7 @@ if has('nvim')
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
     PlugAdd 'stevearc/dressing.nvim'
-    if pack#planned_lsp() || has('nvim-0.11') && pack#planned_treesitter()
+    if  has('nvim-0.11')
         PlugAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()
             PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
