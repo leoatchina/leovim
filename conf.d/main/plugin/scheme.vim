@@ -35,10 +35,10 @@ let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call scheme#set('moonfly', 'codedark')
+    call scheme#set('edge', 'one')
 elseif g:complete_engine == 'builtin'
     if has('nvim')
-        call scheme#set('carbonfox', 'hybrid')
+        call scheme#set('moonfly', 'hybrid')
     else
         call scheme#set('nightfly', 'codedark')
     endif
@@ -53,7 +53,6 @@ elseif g:complete_engine == 'blink'
 elseif g:complete_engine == 'coc'
     call scheme#set('catppuccin', 'wombat')
 else
-    " call scheme#set('edge', 'one')
     call scheme#set('sonokai', 'sublime')
 endif
 " --------------------------
