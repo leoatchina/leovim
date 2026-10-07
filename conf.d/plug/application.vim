@@ -192,10 +192,10 @@ endif
 if g:has_truecolor
     PlugAdd 'sainnhe/edge'
     PlugAdd 'sainnhe/sonokai'
-    PlugAdd 'bluz71/vim-moonfly-colors'
     if has('nvim')
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'EdenEast/nightfox.nvim'
+        PlugAdd 'bluz71/vim-moonfly-colors'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
     else
         PlugAdd 'bluz71/vim-nightfly-colors'

@@ -37,10 +37,12 @@ let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
     call scheme#set('edge', 'one')
 elseif g:complete_engine == 'builtin'
-    if has('nvim')
-        call scheme#set('moonfly', 'hybrid')
-    else
+    if !has('nvim')
         call scheme#set('nightfly', 'codedark')
+    elseif pack#installed('dropbar.nvim')
+        call scheme#set('moonfly', 'codedark')
+    else
+        call scheme#set('carbonfox', 'codedark')
     endif
 elseif g:complete_engine == 'cmp'
     call scheme#set('catppuccin', 'wombat')
