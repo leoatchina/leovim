@@ -59,10 +59,10 @@ if pack#installed('flash.nvim')
     nmap SJ vt<Space><Cr>S
     nmap SK vT<Space><Cr>S
 else
-    nmap ;s <Plug>(clever-f-repeat-forward)
-    xmap ;s <Plug>(clever-f-repeat-forward)
-    nmap ,s <Plug>(clever-f-repeat-back)
-    xmap ,s <Plug>(clever-f-repeat-back)
+    nmap ;; <Plug>(clever-f-repeat-forward)
+    xmap ;; <Plug>(clever-f-repeat-forward)
+    nmap ,, <Plug>(clever-f-repeat-back)
+    xmap ,, <Plug>(clever-f-repeat-back)
     nmap SJ vt<Space>S
     nmap SK vT<Space>S
 endif
