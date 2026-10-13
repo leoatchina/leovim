@@ -35,25 +35,19 @@ let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call scheme#set('edge', 'one')
+    call scheme#set('moonfly', 'codedark')
 elseif g:complete_engine == 'builtin'
-    if !has('nvim')
+    if has('nvim')
+        call scheme#set('solarized-osaka-vivid', 'codedark')
+    else
         call scheme#set('nightfly', 'codedark')
-    elseif pack#installed('dropbar.nvim')
-        call scheme#set('moonfly', 'codedark')
-    else
-        call scheme#set('carbonfox', 'codedark')
-    endif
-elseif g:complete_engine == 'cmp'
-    call scheme#set('catppuccin', 'wombat')
-elseif g:complete_engine == 'blink'
-    if pack#get('blink.lua') || pack#get('blink') && !executable('cargo')
-        call scheme#set('tokyonight', 'space-vim-dark')
-    else
-        call scheme#set('nightfox', 'hybrid')
     endif
 elseif g:complete_engine == 'coc'
     call scheme#set('catppuccin', 'wombat')
+elseif g:complete_engine == 'cmp'
+    call scheme#set('catppuccin', 'wombat')
+elseif g:complete_engine == 'blink'
+    call scheme#set('tokyonight', 'space-vim-dark')
 else
     call scheme#set('sonokai', 'sublime')
 endif
