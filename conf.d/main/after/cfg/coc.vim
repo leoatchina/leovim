@@ -44,10 +44,15 @@ imap <silent><expr> <Cr> coc#pum#visible() ?
             \ : "\<CR>"
 let g:coc_snippet_next = '<tab>'
 " imap <silent><expr><tab> coc#pum#visible() ? coc#pum#next(1) : coc#inline#visible() ? coc#inline#next() : "\<Tab>"
-imap <silent><expr><TAB> coc#pum#visible() ? "\<C-n>" : utils#has_backspace() ? "\<TAB>" : coc#refresh()
-imap <silent><expr><S-TAB> coc#pum#visible() ? "\<C-p>" : "\<S-Tab>"
-imap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
-imap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
+inoremap <silent><expr><TAB> coc#pum#visible() ? "\<C-n>" : utils#has_backspace() ? "\<TAB>" : coc#refresh()
+inoremap <silent><expr><S-TAB> coc#pum#visible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <silent><expr> <C-n>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<C-n>" :
+      \ coc#refresh()
+inoremap <silent><expr><C-p> coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"
+inoremap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
+inoremap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
 " ----------------------------
 " map
 " ----------------------------
