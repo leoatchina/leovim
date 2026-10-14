@@ -40,7 +40,7 @@ if pack#planned('vim-fugitive')
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
     nnoremap <silent><M-g>[ :Gdiffsplit!<Cr>
     " GV
-    if pack#planned('GV.vim')
+    if pack#planned('gv.vim')
         nnoremap <silent><M-g>! :GV!<Cr>
         nnoremap <silent><M-g>v :GV<Cr>
         nnoremap <silent><M-g>? :GV?<Cr>
@@ -103,9 +103,9 @@ nnoremap <silent><M-g>: :GCommands<Cr>
 if pack#installed('vim-floaterm') && executable('lazygit')
     command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
     if has('nvim')
-        nnoremap <M-g><M-g> :GLazyGit<Cr>
+        nnoremap <M-g><M-l> :GLazyGit<Cr>
     else
-        nnoremap <M-g><M-g> :GLazyGit<Cr>i
+        nnoremap <M-g><M-l> :GLazyGit<Cr>i
     endif
 endif
 " -----------------------------------------------------
