@@ -58,6 +58,19 @@ if pack#planned('vim-fugitive')
     au FileType fugitive nmap <buffer><nowait><Space> =
     au FileType fugitive nmap <buffer><nowait><Tab> -
     au FileType fugitive nmap <buffer><nowait>s -
+    " status header: extend "Help: g?" hint with c?/d?/r?
+    au User FugitiveIndex call s:FugitiveHelpHint()
+    function! s:FugitiveHelpHint() abort
+        if &filetype !=# 'fugitive'
+            return
+        endif
+        let lnum = match(getline(1, '$'), '^Help: g?$') + 1
+        if lnum > 0
+            setlocal modifiable noreadonly
+            call setline(lnum, 'Help: g? c? d? r?')
+            setlocal nomodifiable readonly
+        endif
+    endfunction
 else
     if pack#installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
         nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 git add -A<Cr>
