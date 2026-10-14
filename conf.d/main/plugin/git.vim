@@ -20,7 +20,7 @@ augroup LcdAndGitUpdate
     autocmd BufEnter,WinEnter * call git#lcd_and_update()
 augroup END
 "------------------------
-" fugitve and others
+" fugitive and others
 "------------------------
 if pack#planned('vim-fugitive')
     nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
@@ -33,7 +33,6 @@ if pack#planned('vim-fugitive')
     let g:fugitive_summary_format = "%as-[%an]: %s"
     au FileType git nnoremap <silent><buffer><tab> 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
     au FileType git nnoremap <silent><buffer><space> 0"ayiw:bw<cr>:rightbelow Gdiff <c-r>a<cr>
-    au FileType git nnoremap <silent><buffer>q <Nop>
     au FileType git nnoremap <silent><buffer>\ <Nop>
     " git diff
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
@@ -64,7 +63,7 @@ if pack#planned('vim-fugitive')
     au FileType fugitive nmap <buffer><nowait>\ c?
 else
     if pack#installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
-        nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 add -A<Cr>
+        nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 git add -A<Cr>
         nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
         nnoremap <silent><M-g><Cr> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
         nnoremap <M-G> :AsyncRun -mode=term -focus=1 git
@@ -111,7 +110,7 @@ else
 endif
 nnoremap <silent><M-g>: :GCommands<Cr>
 " ---------------------------------
-" lazygit intergrated
+" lazygit integrated
 " ---------------------------------
 if pack#installed('vim-floaterm') && executable('lazygit')
     command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
@@ -122,24 +121,24 @@ if pack#installed('vim-floaterm') && executable('lazygit')
     endif
 endif
 " -----------------------------------------------------
-" Primary diff workspace: prefer diffview-plus on Neovim and LeaderF on Vim.
+" Primary diff workspace: preserve LeaderF and use editor-specific fallbacks.
 " -----------------------------------------------------
-if pack#planned('diffview-plus.nvim')
-    nnoremap <silent>\| :DiffviewOpen<Cr>
-elseif pack#planned_leaderf()
+if pack#planned_leaderf()
     nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
+elseif pack#planned('diffview-plus.nvim')
+    nnoremap <silent>\| :DiffviewOpen<Cr>
 elseif pack#planned('gv.vim')
     nnoremap <silent>\| :Git<Cr>
 elseif pack#planned('vim-signify')
-    function! git#SignifyDiff()
+    function! s:signifyDiff() abort
         SignifyDiff
         if winnr('$') == 2
             wincmd H
         endif
     endfunction
-    nnoremap <silent>\| :call git#SignifyDiff()<CR>
+    nnoremap <silent>\| :call <SID>signifyDiff()<CR>
 endif
-" Git browsers: keep the same semantic shortcuts across backends.
+" Git browser shortcuts by backend.
 if pack#planned_leaderf()
     nnoremap <silent><M-g>i :Leaderf git<Cr>
     nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
@@ -148,8 +147,8 @@ if pack#planned_leaderf()
     nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
     nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
     let g:Lf_GitKeyMap = extend({
-                \ 'previous_change': '[c',
-                \ 'next_change': ']c',
+                \ 'previous_change': ',g',
+                \ 'next_change': ';g',
                 \ 'edit_file': '<CR>',
                 \ 'open_navigation': '<',
                 \ 'stage_unstage_hunk': 's',
@@ -161,17 +160,11 @@ if pack#planned_leaderf()
                 \ 'diff_get_theirs': '<leader>3',
                 \ }, get(g:, 'Lf_GitKeyMap', {}))
 elseif pack#planned('diffview-plus.nvim')
-    nnoremap <silent><M-g>i :DiffviewOpen<Cr>
     nnoremap <silent><M-g>o :DiffviewFileHistory<Cr>
-    nnoremap <silent><M-g>e :DiffviewFileHistory<Cr>
-    nnoremap <silent><M-g>f :DiffviewFileHistory %<Cr>
     nnoremap <silent><M-g>l :.DiffviewFileHistory --follow<Cr>
     nnoremap <silent><M-g>b :Gitsigns blame<Cr>
 elseif pack#planned('gv.vim')
-    nnoremap <silent><M-g>i :Git<Cr>
     nnoremap <silent><M-g>o :GV<Cr>
-    nnoremap <silent><M-g>e :GV<Cr>
-    nnoremap <silent><M-g>f :GV!<Cr>
     nnoremap <silent><M-g>l V:GV<Cr>
     nnoremap <silent><M-g>b :Git blame -w<Cr>
 endif
