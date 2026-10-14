@@ -19,9 +19,20 @@ augroup LcdAndGitUpdate
     au!
     autocmd BufEnter,WinEnter * call git#lcd_and_update()
 augroup END
-"------------------------
-" fugitive and others
-"------------------------
+"------------------------------------
+" fugitive and others git FileType
+"------------------------------------
+if pack#planned('vim-git-diffview')
+    let g:gdv_keymap = 'df'
+endif
+if pack#planned('gv.vim')
+    nnoremap <silent><M-g>v :GV<Cr>
+    nnoremap <silent><M-g>? :GV?<Cr>
+    xnoremap <silent><M-g>v :GV<Cr>
+    xnoremap <silent><M-g>? :GV?<Cr>
+    au FileType GV nmap <buffer><nowait><M-q> q
+    au FileType GV nmap <buffer><nowait>Q q
+endif
 if pack#planned('vim-fugitive')
     nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
     nnoremap <silent><M-g>a :Git add -A<CR>
@@ -37,19 +48,6 @@ if pack#planned('vim-fugitive')
     " git diff
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
     nnoremap <silent><M-g>[ :Gdiffsplit!<Cr>
-    " GV
-    if pack#planned('gv.vim')
-        nnoremap <silent><M-g>! :GV!<Cr>
-        nnoremap <silent><M-g>v :GV<Cr>
-        nnoremap <silent><M-g>? :GV?<Cr>
-        xnoremap <silent><M-g>v :GV<Cr>
-        xnoremap <silent><M-g>? :GV?<Cr>
-        au FileType GV nmap <buffer><nowait><M-q> q
-        au FileType GV nmap <buffer><nowait>Q q
-    endif
-    if pack#planned('vim-git-diffview')
-        let g:gdv_keymap = 'df'
-    endif
     " buffer map, nnoremap
     au FileType fugitive,git,fugitiveblame nnoremap <silent><buffer><nowait>q :q!<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
