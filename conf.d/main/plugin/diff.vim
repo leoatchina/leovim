@@ -90,7 +90,5 @@ if pack#installed('ZFVimDirDiff')
     nnoremap <Leader>fd :ZFDirDiff<Space>
     nnoremap <Leader>fm :ZFDirDiffMark<Cr>
     nnoremap <Leader>fu :ZFDirDiffUnmark<Cr>
-    au FileType ZFDirDiff nnoremap g?    :tabe $HOME/.leovim/conf.d/main/plugin/diff.vim<Cr>/ZFVimDirDiff<Cr>zz
-    au FileType ZFDirDiff nnoremap <F1>  :tabe $HOME/.leovim/conf.d/main/plugin/diff.vim<Cr>/ZFVimDirDiff<Cr>zz
-    au FileType ZFDirDiff nnoremap <Tab> :tabe $HOME/.leovim/conf.d/main/plugin/diff.vim<Cr>/ZFVimDirDiff<Cr>zz
+    au FileType ZFDirDiff nnoremap <F1> :tabe $HOME/.leovim/conf.d/main/plugin/diff.vim<Cr>/ZFVimDirDiff<Cr>zz
 endif

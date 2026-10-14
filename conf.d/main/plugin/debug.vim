@@ -203,7 +203,7 @@ if pack#planned('vimspector')
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :TerminalOrFloatermNewOrFzfList<Cr>
     " VimspectorDisassemble
-    nmap <silent><F1> <Plug>VimspectorDisassemble
+    nmap <silent><M-e>a <Plug>VimspectorDisassemble
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
     " deletewatch
@@ -350,12 +350,11 @@ elseif v:version >= 801 && !has('nvim') && pack#get('termdebug')
     nnoremap <M-e>i :Step<Cr>
     nnoremap <M-e>o :Finish<Cr>
     nnoremap <M-e>a :Arguments<Space>
-    nnoremap <F1> :Run<Space>
     nnoremap <F3> :Stop<Space>
     nnoremap <F4> :Until<Cr>
     nnoremap <F5> :Continue<Cr>
     nnoremap <F6> :Pause<Cr>
-    nnoremap <F7> :Clear<Space>
+    nnoremap <F7> :Run<Space>
     nnoremap <F8> :Clear<Space>
     nnoremap <F9> :Break<Space>
     nnoremap <F10> :Over<Cr>
