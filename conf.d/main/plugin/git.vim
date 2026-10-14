@@ -137,8 +137,6 @@ if pack#planned_leaderf()
     nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
 elseif pack#planned('diffview-plus.nvim')
     nnoremap <silent>\| :DiffviewOpen<Cr>
-elseif pack#planned('gv.vim')
-    nnoremap <silent>\| :Git<Cr>
 elseif pack#planned('vim-signify')
     function! s:signifyDiff() abort
         SignifyDiff
