@@ -213,7 +213,6 @@ if g:has_truecolor
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
     else
         PlugAdd 'bluz71/vim-nightfly-colors'
-        PlugAdd 'wadackel/vim-dogrun'
     endif
 endif
 " --------------------------
