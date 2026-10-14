@@ -206,12 +206,12 @@ if !pack#planned_treesitter() && pack#get('c') && pack#planned_adv_comp_eng()
 endif
 if g:has_truecolor
     PlugAdd 'sainnhe/sonokai'
-    PlugAdd 'joshdick/onedark.vim'
     if has('nvim')
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'craftzdog/solarized-osaka.nvim'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
     else
+        PlugAdd 'joshdick/onedark.vim'
         PlugAdd 'bluz71/vim-nightfly-colors'
     endif
 endif
