@@ -54,13 +54,16 @@ if pack#planned('vim-fugitive')
     au FileType fugitive,git,fugitiveblame nnoremap <silent><buffer><nowait>q :q!<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
     au FileType fugitive,git nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
-    au FileType fugitive nnoremap <buffer><nowait>gg gg
     " buffer map, nmap
     au FileType fugitiveblame nmap <buffer><silent><nowait><Cr> o
+    au FileType fugitive nnoremap <buffer><nowait>gg gg
     au FileType fugitive nmap <buffer><nowait><Space> =
     au FileType fugitive nmap <buffer><nowait><Tab> -
-    au FileType fugitive nmap <buffer><nowait>, g?
-    au FileType fugitive nmap <buffer><nowait>\ c?
+    au FileType fugitive nmap <buffer><nowait>s -
+    au FileType fugitive nmap <buffer><nowait>g<space> g?
+    au FileType fugitive nmap <buffer><nowait>r<space> r?
+    au FileType fugitive nmap <buffer><nowait>c<space> c?
+    au FileType fugitive nmap <buffer><nowait>d<space> d?
 else
     if pack#installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
         nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 git add -A<Cr>
