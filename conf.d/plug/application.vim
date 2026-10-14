@@ -127,19 +127,34 @@ endif
 " ------------------------------
 " Git
 " ------------------------------
-if executable('git') && v:version >= 800 && g:git_version >= 1.85
-    PlugAdd 'tpope/vim-fugitive'
-    PlugAdd 'junegunn/gv.vim'
-    " blamer.nvim installed when without virtual text or without leaderf
-    if g:has_popup_floating
-        PlugAdd 'skywind3000/vim-git-diffview'
-        if utils#is_unix() && (!pack#planned_leaderf() || pack#planned_leaderf() && !has('nvim') && !has('patch-9.0.200'))
-            PlugAdd 'APZelos/blamer.nvim'
+if executable('git')
+    if v:version >= 800 && g:git_version >= 1.85
+        PlugAdd 'tpope/vim-fugitive'
+        if has('nvim')
+            if has('nvim-0.10') && g:git_version >= 2.31
+                PlugAdd 'dlyongemallo/diffview-plus.nvim'
+            endif
+            if has('nvim-0.11')
+                PlugAdd 'lewis6991/gitsigns.nvim'
+            elseif has('nvim-0.9')
+                PlugAdd 'lewis6991/gitsigns.nvim', {'tag': 'v1.0.2'}
+            endif
+        else
+            if !pack#planned_leaderf()
+                PlugAdd 'junegunn/gv.vim'
+            endif
+            if g:has_popup_floating
+                PlugAdd 'skywind3000/vim-git-diffview'
+                " LeaderF supplies inline blame on recent Vim versions.
+                if utils#is_unix() && (!pack#planned_leaderf() || !has('patch-9.0.200'))
+                    PlugAdd 'APZelos/blamer.nvim'
+                endif
+            endif
         endif
     endif
-endif
-if has('nvim') || has('patch-8.0.902')
-    PlugAdd 'vim-signify'
+    if !has('nvim') && has('patch-8.0.902')
+        PlugAdd 'vim-signify'
+    endif
 endif
 " --------------------------
 " terminal && tmux

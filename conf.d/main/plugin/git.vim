@@ -31,7 +31,6 @@ if pack#planned('vim-fugitive')
     nnoremap <M-g>U :Git push<Space>
     " compare with history version
     let g:fugitive_summary_format = "%as-[%an]: %s"
-    nnoremap <silent>g\ :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<cr>
     au FileType git nnoremap <silent><buffer><tab> 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
     au FileType git nnoremap <silent><buffer><space> 0"ayiw:bw<cr>:rightbelow Gdiff <c-r>a<cr>
     au FileType git nnoremap <silent><buffer>q <Nop>
@@ -78,8 +77,22 @@ else
         nnoremap <M-g>U :!git push<Space>
     endif
 endif
-" inline blame
-if pack#installed('blamer.nvim')
+" Current-file history: keep g\ stable and select the best available backend.
+if pack#planned('diffview-plus.nvim')
+    nnoremap <silent>g\ :DiffviewFileHistory %<Cr>
+elseif pack#planned_leaderf()
+    nnoremap <silent>g\ :Leaderf git log --side-by-side --current-file<Cr>
+elseif pack#planned('gv.vim')
+    nnoremap <silent>g\ :GV!<Cr>
+elseif pack#planned('vim-fugitive')
+    nnoremap <silent>g\ :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<Cr>
+endif
+" inline blame: keep the shortcut stable while selecting the native backend.
+if pack#installed('gitsigns.nvim')
+    lua require('cfg/gitsigns')
+    nnoremap <silent><Tab><Cr> :Gitsigns toggle_current_line_blame<Cr>
+    command! GCommands call FzfCallCommands('GCommands', 'Gitsigns', 'Diffview', 'LeaderfGit', 'G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
+elseif pack#installed('blamer.nvim')
     let g:blamer_date_format = '%Y/%m/%d'
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '
@@ -109,10 +122,25 @@ if pack#installed('vim-floaterm') && executable('lazygit')
     endif
 endif
 " -----------------------------------------------------
-" leaderf git && vim-signify
+" Primary diff workspace: prefer diffview-plus on Neovim and LeaderF on Vim.
 " -----------------------------------------------------
-if pack#planned_leaderf()
+if pack#planned('diffview-plus.nvim')
+    nnoremap <silent>\| :DiffviewOpen<Cr>
+elseif pack#planned_leaderf()
     nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
+elseif pack#planned('gv.vim')
+    nnoremap <silent>\| :Git<Cr>
+elseif pack#planned('vim-signify')
+    function! git#SignifyDiff()
+        SignifyDiff
+        if winnr('$') == 2
+            wincmd H
+        endif
+    endfunction
+    nnoremap <silent>\| :call git#SignifyDiff()<CR>
+endif
+" Git browsers: keep the same semantic shortcuts across backends.
+if pack#planned_leaderf()
     nnoremap <silent><M-g>i :Leaderf git<Cr>
     nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
     nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
@@ -132,14 +160,20 @@ if pack#planned_leaderf()
                 \ 'diff_get_base': '<leader>2',
                 \ 'diff_get_theirs': '<leader>3',
                 \ }, get(g:, 'Lf_GitKeyMap', {}))
-elseif pack#planned('vim-signify')
-    function! git#SignifyDiff()
-        SignifyDiff
-        if winnr('$') == 2
-            wincmd H
-        endif
-    endfunction
-    nnoremap <silent>\| :call git#SignifyDiff()<CR>
+elseif pack#planned('diffview-plus.nvim')
+    nnoremap <silent><M-g>i :DiffviewOpen<Cr>
+    nnoremap <silent><M-g>o :DiffviewFileHistory<Cr>
+    nnoremap <silent><M-g>e :DiffviewFileHistory<Cr>
+    nnoremap <silent><M-g>f :DiffviewFileHistory %<Cr>
+    nnoremap <silent><M-g>l :.DiffviewFileHistory --follow<Cr>
+    nnoremap <silent><M-g>b :Gitsigns blame<Cr>
+elseif pack#planned('gv.vim')
+    nnoremap <silent><M-g>i :Git<Cr>
+    nnoremap <silent><M-g>o :GV<Cr>
+    nnoremap <silent><M-g>e :GV<Cr>
+    nnoremap <silent><M-g>f :GV!<Cr>
+    nnoremap <silent><M-g>l V:GV<Cr>
+    nnoremap <silent><M-g>b :Git blame -w<Cr>
 endif
 if pack#planned('vim-signify')
     let g:signify_disable_by_default = 0
@@ -200,4 +234,8 @@ function! s:createMergeTab(...)
     exec l:mergeBufIndex . 'wincmd w'
 endfunc
 command! -nargs=* GMergeTab call s:createMergeTab(<f-args>)
-nnoremap <M-g>m :GMergeTab<space>
+if pack#planned('diffview-plus.nvim')
+    nnoremap <M-g>m :DiffviewMergeFiles<Space>
+else
+    nnoremap <M-g>m :GMergeTab<space>
+endif
