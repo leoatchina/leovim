@@ -35,12 +35,12 @@ let g:terminal_color_13 = ''
 let g:edge_better_performance = 1
 let g:sonokai_better_performance = 1
 if g:complete_engine == 'mcm'
-    call scheme#set('edge', 'one')
+    call scheme#set('sonokai', 'sublime')
 elseif g:complete_engine == 'builtin'
     if has('nvim')
         call scheme#set('solarized-osaka-vivid', 'solarized')
     else
-        call scheme#set('sonokai', 'sublime')
+        call scheme#set('onedark', 'one')
     endif
 elseif g:complete_engine == 'coc'
     call scheme#set('nightfly', 'codedark')

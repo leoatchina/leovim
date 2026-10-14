@@ -205,14 +205,15 @@ if !pack#planned_treesitter() && pack#get('c') && pack#planned_adv_comp_eng()
     PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
-    PlugAdd 'sainnhe/edge'
     PlugAdd 'sainnhe/sonokai'
+    PlugAdd 'joshdick/onedark.vim'
     if has('nvim')
         PlugAdd 'folke/tokyonight.nvim'
         PlugAdd 'craftzdog/solarized-osaka.nvim'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
     else
         PlugAdd 'bluz71/vim-nightfly-colors'
+        PlugAdd 'wadackel/vim-dogrun'
     endif
 endif
 " --------------------------
