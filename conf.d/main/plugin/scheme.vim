@@ -46,9 +46,9 @@ elseif g:complete_engine == 'builtin'
 elseif g:complete_engine == 'coc'
     call scheme#set('catppuccin', 'wombat')
 elseif g:complete_engine == 'cmp'
-    call scheme#set('catppuccin', 'wombat')
-elseif g:complete_engine == 'blink'
     call scheme#set('tokyonight', 'space-vim-dark')
+elseif g:complete_engine == 'blink'
+    call scheme#set('nightfox', 'hybrid')
 else
     call scheme#set('onedark', 'one')
 endif
