@@ -39,13 +39,16 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " ----------------------------
 " completion map
 " ----------------------------
+let g:coc_snippet_next = '<tab>'
+" 菜单未选中时回车仅结束补全，保留输入且不换行；选中后保持原确认逻辑。
 imap <silent><expr><Cr> coc#pum#visible() ?
+            \ !coc#pum#has_item_selected() ? coc#pum#stop() :
             \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<Cr>" : coc#pum#confirm()
             \ : "\<CR>"
-let g:coc_snippet_next = '<tab>'
-inoremap <silent><expr><TAB> coc#pum#visible() ? "\<C-n>" : utils#has_backspace() ? "\<TAB>" : coc#refresh()
-inoremap <silent><expr><S-TAB> coc#pum#visible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <silent><expr> <C-n>
+" Tab / Shift-Tab 与 C-n / C-p 使用同一套 Coc 菜单导航接口。
+inoremap <silent><expr><TAB> coc#pum#visible() ? coc#pum#next(1) : utils#has_backspace() ? "\<TAB>" : coc#refresh()
+inoremap <silent><expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
+inoremap <silent><expr><C-n>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<C-n>" :
       \ coc#refresh()
