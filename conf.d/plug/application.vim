@@ -211,7 +211,8 @@ if g:has_truecolor
         PlugAdd 'craftzdog/solarized-osaka.nvim'
         PlugAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
     else
-        PlugAdd 'joshdick/onedark.vim'
+        " PlugAdd 'joshdick/onedark.vim'
+        PlugAdd 'catppuccin/vim', {'as': 'catppuccin-vim'}
         PlugAdd 'bluz71/vim-moonfly-colors'
         PlugAdd 'bluz71/vim-nightfly-colors'
     endif

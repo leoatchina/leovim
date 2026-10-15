@@ -136,7 +136,11 @@ function! lightline#upgrade() abort
     elseif colors_name =~ 'fox' || colors_name =~ 'fly'
         let g:lightline.colorscheme = colors_name
     elseif colors_name =~ 'catppuccin'
-        let g:lightline.colorscheme = colors_name
+        if has('nvim')
+            let g:lightline.colorscheme = colors_name
+        else
+            let g:lightline.colorscheme = 'catppuccin'
+        endif
     elseif colors_name =~ 'tokyonight'
         let g:lightline.colorscheme = "tokyonight"
     elseif colors_name =~ 'solarized-osaka'
