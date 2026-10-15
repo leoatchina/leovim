@@ -67,7 +67,7 @@ if pack#planned('vim-fugitive')
         let lnum = match(getline(1, '$'), '^Help: g?$') + 1
         if lnum > 0
             setlocal modifiable noreadonly
-            call setline(lnum, 'Help: g? c? d? r?')
+            call setline(lnum, 'Help: <f1> g? c? d? r?')
             setlocal nomodifiable readonly
         endif
     endfunction
