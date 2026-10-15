@@ -158,16 +158,6 @@ if pack#get('c')
     endif
 endif
 call coc#config('python.pythonPath', g:python_prog)
-if pack#get('ccls') && g:ccls_exe != ''
-    call coc#config('languageserver.ccls', {
-                \ "command": "ccls",
-                \ "filetypes": g:c_filetypes,
-                \ "rootPatterns": g:root_patterns,
-                \ "initializationOptions": {
-                \ "cache": {
-                \ "directory": $HOME . "/.leovim.d/ccls"
-                \ }}})
-endif
 if pack#get('R') && g:R_exe != ''
     let g:coc_global_extensions += ['coc-r-lsp']
 endif

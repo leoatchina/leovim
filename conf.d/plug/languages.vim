@@ -54,12 +54,6 @@ if pack#get('clangd') && executable(utils#expand(get(g:, 'clangd_exe', 'clangd')
 else
     let g:clangd_exe = ''
 endif
-if pack#get('ccls') && executable(utils#expand(get(g:, 'ccls_exe', 'ccls')))
-    let g:ccls_exe = utils#expand(exepath(get(g:, 'ccls_exe', 'ccls')))
-    PlugAdd 'm-pilia/vim-ccls', {'for': g:c_filetypes}
-else
-    let g:ccls_exe = ''
-endif
 " --------------------------
 " rust
 " --------------------------
