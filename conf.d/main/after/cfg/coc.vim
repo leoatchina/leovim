@@ -39,11 +39,10 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " ----------------------------
 " completion map
 " ----------------------------
-imap <silent><expr> <Cr> coc#pum#visible() ?
+imap <silent><expr><Cr> coc#pum#visible() ?
             \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<Cr>" : coc#pum#confirm()
             \ : "\<CR>"
 let g:coc_snippet_next = '<tab>'
-" imap <silent><expr><tab> coc#pum#visible() ? coc#pum#next(1) : coc#inline#visible() ? coc#inline#next() : "\<Tab>"
 inoremap <silent><expr><TAB> coc#pum#visible() ? "\<C-n>" : utils#has_backspace() ? "\<TAB>" : coc#refresh()
 inoremap <silent><expr><S-TAB> coc#pum#visible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <silent><expr> <C-n>

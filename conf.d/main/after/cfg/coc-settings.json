@@ -11,6 +11,8 @@
     "enableFloatHighlight": true,
     "currentFunctionSymbolAutoUpdate": true
   },
+  // 弹出补全菜单时不预选，第一次 <C-n> 从第一项开始。
+  "suggest.noselect": true,
   // ---- list / explorer / source ----
   "list": {
     "nextKeymap": "<C-j>",
