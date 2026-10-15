@@ -111,7 +111,7 @@
   "java.trace.server": "off",
   // ---- go ----
   "go.trace.server": "off",
-  "go.goplsPath": "gopls",
+  // 不固定 goplsPath，由 coc-go 安装并使用其管理的 gopls。
   "go.goplsUseDaemon": false,
   "go.goplsOptions": {
     "usePlaceholders": true,
