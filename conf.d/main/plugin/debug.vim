@@ -110,6 +110,8 @@ if pack#planned('vimspector')
     nmap <silent><F10> <Plug>VimspectorStepOver
     nmap <silent><F11> <Plug>VimspectorStepInto
     nmap <silent><F12> <Plug>VimspectorStepOut
+    " VimspectorDisassemble
+    nmap <silent><M-e>D <Plug>VimspectorDisassemble
     " session
     nnoremap <M-e><M-l> :VimspectorLoadSession
     nnoremap <M-e><M-m> :VimspectorMkSession<Cr>
@@ -117,9 +119,6 @@ if pack#planned('vimspector')
     nnoremap <M-e><M-q> :VimspectorDestroySession<Space>
     nnoremap <M-e><M-r> :VimspectorRenameSession<Space>
     nnoremap <M-e><M-s> :VimspectorSwitchToSession<Space>
-    command! VimspectorCommands call FzfCallCommands('VimspectorCommands', 'Vimspector')
-    nnoremap <M-e>: :VimspectorCommands<Cr>
-    nnoremap <M-e>v :call vimspector#
     " breakpoint
     nnoremap <silent><M-e>c :call vimspector#ClearBreakpoints()<Cr>
     nnoremap <silent><M-e>f :call vimspector#AddFunctionBreakpoint('')<left><left>
@@ -130,6 +129,10 @@ if pack#planned('vimspector')
     " function
     nnoremap <silent><M-e>u :call vimspector#UpFrame()<Cr>
     nnoremap <silent><M-e>d :call vimspector#DownFrame()<Cr>
+    " commands
+    command! VimspectorCommands call FzfCallCommands('VimspectorCommands', 'Vimspector')
+    nnoremap <M-e>: :VimspectorCommands<Cr>
+    nnoremap <M-e>v :call vimspector#
     " --------------------------------------
     " jump/show windows in vimspector
     " --------------------------------------
@@ -202,8 +205,6 @@ if pack#planned('vimspector')
     nnoremap <silent><M-m>0 :FocusCode<Cr>
     nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
     nnoremap <silent><M-=> :TerminalOrFloatermNewOrFzfList<Cr>
-    " VimspectorDisassemble
-    nmap <silent><M-e>a <Plug>VimspectorDisassemble
     " view variables
     nnoremap <silent>J :BalloonEval<Cr>
     " deletewatch
