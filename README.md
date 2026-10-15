@@ -88,6 +88,9 @@
   - Vimspector：跨语言调试器，配置简单
   - nvim-dap：Neovim 原生 DAP 协议，扩展性强
 
+- **Vimspector 运行要求** - 启用 `debug`，Python 3.10+；Vim 需要 8.2.4797+ 且编译了 `+python3`，Neovim 需要 0.8+ 和可用的 Python 3 provider。
+- **Go 单文件调试** - 执行 `:VimspectorInstall delve` 安装适配器，将 [`go_file.json`](conf.d/vimspector/go_file.json) 复制为项目根目录的 `.vimspector.json`，打开带 `main` 的 Go 文件后启动调试。模板使用当前文件及其目录；多文件程序将 `program` 改为 `${fileDirname}` 或实际入口包目录。Delve 与 Go 工具链版本需兼容。
+
 > **配置文件**: [`conf.d/main/plugin/debug.vim`](conf.d/main/plugin/debug.vim) · [`conf.d/dap/`](conf.d/dap/) · [`conf.d/vimspector/`](conf.d/vimspector/) · 项目根目录的 `.vimspector.json` 或 `.vscode/launch.json`
 
 ### 1.9. 高性能设计

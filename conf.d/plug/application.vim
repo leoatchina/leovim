@@ -59,7 +59,11 @@ endif
 " ------------------------------
 " debug tool install
 " ------------------------------
-if g:python_version >= 3.1 && pack#get('debug') && (has('patch-8.2.4797') || has('nvim') && !pack#planned_lsp())
+" Python versions use two digits per component: 3.10.0 -> 3.1000.
+" Vimspector requires Python 3.10+, Vim 8.2.4797+ or Neovim 0.8+.
+if pack#get('debug') && g:python_version >= 3.10
+            \ && ((!has('nvim') && has('patch-8.2.4797'))
+            \ || (has('nvim-0.8') && !pack#planned_lsp()))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PlugAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install }
 elseif has('nvim-0.9.5') && pack#get('debug') || pack#planned_lsp() && pack#get('java')
