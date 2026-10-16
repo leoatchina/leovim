@@ -279,6 +279,9 @@ flowchart TD
 
 会话功能由 [`session.vim`](conf.d/main/plugin/session.vim) 配置。不要把可保存会话等同于退出时必定自动保存所有工作。
 
+Vim 的菜单式 WinBar 保留文件名，并显示 [coc-symbol-line](https://github.com/xiyaowong/coc-symbol-line) 提供的当前符号路径。扩展已加入 Coc 自动安装列表，也可执行 `:CocInstall coc-symbol-line`。使用 `b:coc_symbol_line_plain` 并清除其中的状态栏格式码；光标停留时刷新，未提供符号时只显示文件名。这是菜单文本展示，不提供扩展状态栏版本的逐符号点击功能。Neovim 的 Dropbar 分支不变。
+
+
 ### 7.2. 配置文件入口
 
 `g:leovim_openmap` 控制大部分相关打开映射，具体定义见 [`file.vim`](conf.d/main/plugin/file.vim)；`<M-h>o` 在该开关判断之前定义。常用项：

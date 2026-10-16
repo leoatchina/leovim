@@ -170,23 +170,44 @@ if has('patch-8.0.1129') && !has('nvim')
         endif
     endfunction
     function! s:toggle_winbar(open) abort
+        let previous = get(w:, 'leovim_winbar_label', '')
+        if previous != ''
+            let escaped = escape(substitute(previous, '&', '&&', 'g'), ' .\\|')
+            if index(s:winbar_menu_names(), previous) >= 0
+                execute 'nunmenu WinBar.' . escaped
+            endif
+            unlet w:leovim_winbar_label
+        endif
+        if !a:open
+            return
+        endif
         if utils#is_ignored() || &ft =~# 'fern' || &bt ==# 'nofile'
             return
         else
             let fname = expand('%:t')
-            let ename = escape(substitute(fname, '&', '&&', 'g'), ' .\\')
+            let symbols = get(b:, 'coc_symbol_line_plain', '')
+            " The extension's plain variant still contains statusline formatting.
+            let symbols = substitute(symbols, '%#[^#]*#', '', 'g')
+            let symbols = substitute(symbols, '%\d*@[^@]*@', '', 'g')
+            let symbols = substitute(symbols, '%X', '', 'g')
+            if symbols =~# '%f'
+                let symbols = ''
+            endif
+            if symbols != ''
+                let fname .= ' > ' . symbols
+            endif
+            let ename = escape(substitute(fname, '&', '&&', 'g'), ' .\\|')
             let rhs = ':echo ' . string(fname) . "<CR>"
             let menu_names = s:winbar_menu_names()
             if a:open
                 if index(menu_names, fname) < 0 && index(menu_names, ename) < 0
                     try
                         execute 'nnoremenu 1.00 WinBar.' . ename . ' ' . rhs
+                        let w:leovim_winbar_label = fname
                     catch
                         call preview#cmdmsg('WinBar Inited.', 1)
                     endtry
                 endif
-            elseif index(menu_names, fname) >= 0 || index(menu_names, ename) >= 0
-                execute 'nunmenu WinBar.' . ename
             endif
         endif
     endfunction
@@ -194,11 +215,9 @@ if has('patch-8.0.1129') && !has('nvim')
     command! CloseWinBar call s:toggle_winbar(0)
     augroup WindowBarGroup
         autocmd!
-        autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost * OpenWinBar
+        autocmd WinNew,WinEnter,TabNew,TabEnter,BufReadPost,CursorHold * OpenWinBar
         autocmd WinClosed,WinLeave,TabClosed,TabLeave,BufLeave * CloseWinBar
     augroup END
 elseif pack#installed('dropbar.nvim')
     lua require('cfg/dropbar')
-elseif pack#installed_coc() && has('nvim')
-    lua require('cfg/coc_symboline')
 endif
