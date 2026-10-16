@@ -405,6 +405,14 @@ LeoVim 的 nvim-dap 入口默认不读取 `.vscode/launch.json`。
 
 多文件程序将 `program` 改为 `${fileDirname}` 或实际入口包目录。Delve 与 Go 工具链版本应兼容，不建议关闭版本检查来掩盖不兼容。
 
+nvim-dap 底部常驻 REPL 和断点列表，不常驻 Console。`Alt+-` 使用 dap-ui 原生接口显示浮动 Console，已打开时聚焦该窗口；无调试界面时切换 Floaterm。REPL 用于表达式求值和 DAP 输出事件；Console 用于已连接的程序终端，程序输出的位置取决于适配器及 JSON 的输出设置。
+
+| 按键 | nvim-dap 输出窗口 |
+|---|---|
+| `<M-m>r` | 浮动打开 REPL，查看 Go 程序输出 |
+| `<M-m>c` | 浮动打开集成终端 Console |
+
+
 #### Vimspector / nvim-dap 按键
 
 | 按键 | 功能 |
@@ -435,7 +443,7 @@ Floaterm 操作需要已安装 `vim-floaterm`。普通模式下：
 
 | 按键 | Vimspector 窗口已打开 | nvim-dap UI 已打开 | 没有对应调试界面 |
 |---|---|---|---|
-| `Alt+-` | 显示 Console | 浮动显示 REPL | 切换 Floaterm |
+| `Alt+-` | 显示 Console | 显示／聚焦浮动 Console | 切换 Floaterm |
 | `Alt+=` | 聚焦调试终端 | 选择浮动显示的 DAP UI 元素 | 没有当前 Floaterm 时新建，否则显示列表 |
 | `Alt+_` | 隐藏 Floaterm | 隐藏 Floaterm | 隐藏 Floaterm |
 | `Alt++` | 选择位置并新建 Floaterm | 选择位置并新建 Floaterm | 选择位置并新建 Floaterm |
@@ -615,6 +623,7 @@ pos=right
       "request": "launch",
       "mode": "debug",
       "stopOnEntry": false,
+      "outputMode": "remote",
       "cwd": "${fileDirname}",
       "program": "${file}",
       "args": [],

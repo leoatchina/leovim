@@ -331,47 +331,14 @@ elseif pack#installed_dap()
     command! DapUIEval call s:dap_or_floaterm("eval")
     command! FocusCode call s:dap_or_floaterm("focus")
     command! ReplOrFloatermToggle call s:dap_or_floaterm("repl")
-    command! FloatElementOrFloatermNewOrFzfList call s:dap_or_floaterm("element")
+    command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
+    command! ElementOrFloatermNewOrFzfList call s:dap_or_floaterm("element")
     " other important map
     nnoremap <silent><M-m>0 :FocusCode<Cr>
-    nnoremap <silent><M--> :ReplOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :FloatElementOrFloatermNewOrFzfList<Cr>
+    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
+    nnoremap <silent><M-=> :ElementOrFloatermNewOrFzfList<Cr>
     " view variables
     nnoremap <silent>J :DapUIEval<Cr>
-elseif v:version >= 801 && !has('nvim') && pack#get('termdebug')
-    let g:debug_tool = 'termdebug'
-    let g:termdebug_map_K = 1
-    let g:termdebug_use_prompt = 1
-    packadd termdebug
-    nnoremap <M-e><Space> :Break<Space>
-    nnoremap <M-e><M-e> :Until<Cr>
-    nnoremap <M-e><Cr> :Continue<Cr>
-    nnoremap <M-e>c :Clear<Space>
-    nnoremap <M-e>r :Run<Space>
-    nnoremap <M-e>n :Over<Cr>
-    nnoremap <M-e>i :Step<Cr>
-    nnoremap <M-e>o :Finish<Cr>
-    nnoremap <M-e>a :Arguments<Space>
-    nnoremap <F3> :Stop<Space>
-    nnoremap <F4> :Until<Cr>
-    nnoremap <F5> :Continue<Cr>
-    nnoremap <F6> :Pause<Cr>
-    nnoremap <F7> :Run<Space>
-    nnoremap <F8> :Clear<Space>
-    nnoremap <F9> :Break<Space>
-    nnoremap <F10> :Over<Cr>
-    nnoremap <F11> :Step<Cr>
-    nnoremap <F12> :Finish<Cr>
-    " debug
-    nnoremap J :Evaluate <C-r><C-w><Cr>
-    " other
-    nnoremap <M-m>d :Termdebug<Space>
-    nnoremap <M-m>c :TermdebugCommand<Space>
-    nnoremap <silent><M-m>w :Winbar<Cr>
-    nnoremap <silent><M-m>p :Program<Cr>
-    nnoremap <silent><M-m>a :Asm<Cr>
-    nnoremap <silent><M-m>s :Source<Cr>
-    nnoremap <silent><M-m>g :Gdb<Cr>
 endif
 " watch Variable
 function! s:watch() range

@@ -4,6 +4,7 @@
   "request": "launch",
   "mode": "debug",
   "stopOnEntry": false,
+  "outputMode": "remote",
   "cwd": "${fileDirname}",
   "program": "${file}",
   "args": [],

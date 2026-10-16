@@ -19,7 +19,7 @@ require("mason-nvim-dap").setup({
   handlers = {
     function(config)
       require('mason-nvim-dap').default_setup(config)
-    end
+    end,
   }
 })
 ------------------------------------------------------------
@@ -244,10 +244,10 @@ local layouts = {
     size = 0.25,
     position = "left",
   },
-  --  console / breakpoints on bottom
+  -- Keep REPL output visible; the Console is opened separately.
   {
     elements = {
-      { id = "console",     size = 0.7 },
+      { id = "repl",        size = 0.7 },
       { id = "breakpoints", size = 0.3 },
     },
     size = 0.2,
