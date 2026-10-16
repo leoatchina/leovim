@@ -34,7 +34,6 @@ if pack#planned('gv.vim')
     au FileType GV nmap <buffer><nowait>Q q
 endif
 if pack#planned('vim-fugitive')
-    nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
     nnoremap <silent><M-g><Cr> :Git commit -av<Cr>
@@ -99,6 +98,7 @@ endif
 " inline blame: keep the shortcut stable while selecting the native backend.
 if pack#installed('gitsigns.nvim')
     lua require('cfg/gitsigns')
+    nnoremap <silent><Tab><Tab> :Gitsigns blame<Cr>
     nnoremap <silent><Tab><Cr> :Gitsigns toggle_current_line_blame<Cr>
     command! GCommands call FzfCallCommands('GCommands', 'Gitsigns', 'Diffview', 'LeaderfGit', 'G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
 elseif pack#installed('blamer.nvim')
@@ -108,7 +108,13 @@ elseif pack#installed('blamer.nvim')
     let g:blamer_delay = 500
     nnoremap <silent><Tab><Cr> :BlamerToggle<Cr>
     command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
+    if pack#planned_leaderf()
+        nnoremap <silent><Tab><Tab> :Leaderf git blame -w<Cr>
+    else
+        nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
+    endif
 elseif pack#planned_leaderf()
+    nnoremap <silent><Tab><Tab> :Leaderf git blame -w<Cr>
     if has('patch-9.0.200') || has('nvim')
         nnoremap <silent><Tab><Cr> :LeaderfGitInlineBlameToggle<Cr>
         command! GCommands call FzfCallCommands('GCommands', 'LeaderfGit', 'G', ['Gutentag', 'Grep', 'Get'])
@@ -148,12 +154,6 @@ elseif pack#planned('vim-signify')
 endif
 " Git browser shortcuts by backend.
 if pack#planned_leaderf()
-    nnoremap <silent><M-g>i :Leaderf git<Cr>
-    nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
-    nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
-    nnoremap <silent><M-g>f :Leaderf git log --side-by-side --current-file<Cr>
-    nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
-    nnoremap <silent><M-g>b :Leaderf git blame -w<Cr>
     let g:Lf_GitKeyMap = extend({
                 \ 'previous_change': ',g',
                 \ 'next_change': ';g',
@@ -167,14 +167,17 @@ if pack#planned_leaderf()
                 \ 'diff_get_base': '<leader>2',
                 \ 'diff_get_theirs': '<leader>3',
                 \ }, get(g:, 'Lf_GitKeyMap', {}))
+    nnoremap <silent><M-g>i :Leaderf git<Cr>
+    nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
+    nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
+    nnoremap <silent><M-g>f :Leaderf git log --side-by-side --current-file<Cr>
+    nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
 elseif pack#planned('diffview-plus.nvim')
     nnoremap <silent><M-g>o :DiffviewFileHistory<Cr>
     nnoremap <silent><M-g>l :.DiffviewFileHistory --follow<Cr>
-    nnoremap <silent><M-g>b :Gitsigns blame<Cr>
 elseif pack#planned('gv.vim')
     nnoremap <silent><M-g>o :GV<Cr>
     nnoremap <silent><M-g>l V:GV<Cr>
-    nnoremap <silent><M-g>b :Git blame -w<Cr>
 endif
 if pack#planned('vim-signify')
     let g:signify_disable_by_default = 0

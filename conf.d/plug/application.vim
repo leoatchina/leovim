@@ -147,17 +147,17 @@ if executable('git')
             if !pack#planned_leaderf()
                 PlugAdd 'junegunn/gv.vim'
             endif
-            if g:has_popup_floating
-                PlugAdd 'skywind3000/vim-git-diffview'
-                " LeaderF supplies inline blame on recent Vim versions.
-                if utils#is_unix() && (!pack#planned_leaderf() || !has('patch-9.0.200'))
-                    PlugAdd 'APZelos/blamer.nvim'
-                endif
-            endif
         endif
     endif
     if !has('nvim') && has('patch-8.0.902')
         PlugAdd 'vim-signify'
+    endif
+    if g:has_popup_floating
+        PlugAdd 'skywind3000/vim-git-diffview'
+        " LeaderF supplies inline blame on recent Vim versions.
+        if utils#is_unix() && (!pack#planned_leaderf() || !has('patch-9.0.200'))
+            PlugAdd 'APZelos/blamer.nvim'
+        endif
     endif
 endif
 " --------------------------

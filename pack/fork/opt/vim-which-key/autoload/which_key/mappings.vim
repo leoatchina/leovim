@@ -68,14 +68,16 @@ function! which_key#mappings#parse(key, dict, visual) " {{{
   endif
   for line in lines
     let raw_sp = split(line[3:])
+    if empty(raw_sp)
+      continue
+    endif
     let mapd = maparg(raw_sp[0], line[0], 0, 1)
     if empty(mapd) || mapd.lhs =~? '<Plug>.*' || mapd.lhs =~? '<SNR>.*'
       continue
     endif
 
-    if has_key(mapd, 'desc')
-      let mapd.display = copy(mapd.desc)
-      unlet mapd.desc
+    if get(mapd, 'desc', '') !=# ''
+      let mapd.display = mapd.desc
     endif
 
     " NOTE: newer nvim may expose `callback` as a Funcref directly.
