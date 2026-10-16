@@ -338,6 +338,22 @@ Flash、Easymotion、Treesitter 和 Vim 文本对象是按环境提供的不同�
 | `<M-g>f` / `<M-g>l` | 文件 / 行历史 |
 | `<M-g><M-l>` | LazyGit，检测到可执行文件才定义；不是 `<M-g><M-g>` |
 
+gitsigns 附着到 Git 文件后，会添加以下 buffer 局部映射；普通模式的 `gh` 前缀用于 hunk 操作，会影响原生 `gh` 进入 Select 模式的按键等待。
+
+| 按键 | 模式 | 功能 |
+|---|---|---|
+| `;g` / `,g` | 普通 | 下一个 / 上一个 hunk；diff 窗口保留原生差异导航 |
+| `ghs` | 普通 / 可视 | 暂存当前 hunk / 选中行 |
+| `ghp` | 普通 | 行内预览当前 hunk |
+| `ghb` | 普通 | 浮窗查看当前行 blame |
+| `ghr` | 普通 / 可视 | 确认后丢弃当前 hunk / 选中行的工作区改动；默认取消 |
+| `\` → `Space` | 普通 | 浮窗预览当前 hunk |
+| `\` → `Tab` | 普通 | 显示 / 隐藏变更标记 |
+| `\` → `Enter` | 普通 | 刷新变更标记 |
+| `ig` / `ag` | 可视 / 操作符等待 | 选择 hunk 文本对象 |
+
+`ghr` 不等于取消暂存，丢弃的未提交改动不能通过 Git 恢复。原来不经确认就重置 hunk 的 `\` → `Backspace` 映射已移除。实现见 [`gitsigns.lua`](conf.d/main/lua/cfg/gitsigns.lua)。
+
 ### 7.6. 任务与运行
 
 配置见 [`run.vim`](conf.d/main/plugin/run.vim)，示例见第 9 节。
@@ -368,6 +384,8 @@ Flash、Easymotion、Treesitter 和 Vim 文本对象是按环境提供的不同�
 | termdebug | 前两种未选中，Vim 8.1+ 且启用 `termdebug` | 使用 Vim 的 GDB 调试配置 |
 
 Vimspector 在 Vim 中运行需要 `+python3`，在 Neovim 中需要可用的 Python 3 provider。安装条件来自 [`application.vim`](conf.d/plug/application.vim)，运行与按键来自 [`debug.vim`](conf.d/main/plugin/debug.vim)。
+
+Neovim 保留 gitsigns，nvim-dap 打开调试界面不依赖 vim-signify，也不调用 `SignifyDisable`。Vimspector 仅在选择了 vim-signify 时注册调试期间禁用 Signify 的事件。
 
 #### Go 单文件模板
 

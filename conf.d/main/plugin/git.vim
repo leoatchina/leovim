@@ -197,46 +197,46 @@ endif
 " -----------------------------------------------------
 " Merge
 " -----------------------------------------------------
-let s:mergeSources = {
-            \  'L':      1,
-            \  'LOCAL':  1,
-            \  'B':      2,
-            \  'BASE':   2,
-            \  'R':      3,
-            \  'REMOTE': 3,
-            \  'M':      4,
-            \  'MERGE':  4,
-            \}
-function! s:createMergeTab(...)
-    " Map source name to buffer number
-    if a:0 > 0
-        let l:sources = []
-        for item in a:000
-            if has_key(s:mergeSources, toupper(item))
-                call add(l:sources, get(s:mergeSources, toupper(item)))
-            else
-                echo 'Unrecognized source: ' . item
-                return
-            endif
-        endfor
-    else
-        let l:sources = [1, 4, 3]
-    endif
-    let l:mergeBufIndex = max([index(l:sources, 4), 0]) + 1
-    tabnew
-    let i = 0
-    while i < len(l:sources) - 1
-        exec 'buf ' . l:sources[i]
-        rightbelow vsp
-        let i = i + 1
-    endwhile
-    exec 'buf ' . l:sources[i]
-    windo diffthis
-    exec l:mergeBufIndex . 'wincmd w'
-endfunc
-command! -nargs=* GMergeTab call s:createMergeTab(<f-args>)
 if pack#planned('diffview-plus.nvim')
     nnoremap <M-g>m :DiffviewMergeFiles<Space>
 else
+    let s:mergeSources = {
+                \  'L':      1,
+                \  'LOCAL':  1,
+                \  'B':      2,
+                \  'BASE':   2,
+                \  'R':      3,
+                \  'REMOTE': 3,
+                \  'M':      4,
+                \  'MERGE':  4,
+                \}
+    function! s:createMergeTab(...)
+        " Map source name to buffer number
+        if a:0 > 0
+            let l:sources = []
+            for item in a:000
+                if has_key(s:mergeSources, toupper(item))
+                    call add(l:sources, get(s:mergeSources, toupper(item)))
+                else
+                    echo 'Unrecognized source: ' . item
+                    return
+                endif
+            endfor
+        else
+            let l:sources = [1, 4, 3]
+        endif
+        let l:mergeBufIndex = max([index(l:sources, 4), 0]) + 1
+        tabnew
+        let i = 0
+        while i < len(l:sources) - 1
+            exec 'buf ' . l:sources[i]
+            rightbelow vsp
+            let i = i + 1
+        endwhile
+        exec 'buf ' . l:sources[i]
+        windo diffthis
+        exec l:mergeBufIndex . 'wincmd w'
+    endfunc
+    command! -nargs=* GMergeTab call s:createMergeTab(<f-args>)
     nnoremap <M-g>m :GMergeTab<space>
 endif

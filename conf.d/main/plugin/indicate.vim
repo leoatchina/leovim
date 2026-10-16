@@ -39,6 +39,9 @@ if get(g:, 'leovim_whichkey', 1)
     xnoremap ; :WhichKeyVisual ';'<Cr>
     xnoremap \ :WhichKeyVisual '\'<Cr>
     " gmzs whichkey
+    if pack#installed('gitsigns.nvim')
+        nnoremap gh :WhichKey 'gh'<Cr>
+    endif
     nnoremap g<Space> :WhichKey 'g'<Cr>
     nnoremap m<Space> :WhichKey 'm'<Cr>
     nnoremap s<Space> :WhichKey 's'<Cr>

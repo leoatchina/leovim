@@ -174,7 +174,9 @@ if pack#planned('vimspector')
     function! s:vimspector_opened()
         return bufwinnr('vimspector.Variables') >= 0 || bufwinnr('vimspector.Watches') >= 0 || bufwinnr('vimspector.StackTrace') >= 0
     endfunction
-    au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
+    if pack#planned('vim-signify')
+        au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
+    endif
     function! s:vimspector_or_floaterm(type)
         if s:vimspector_opened()
             if index(['code', 'terminal'], a:type) >= 0
@@ -297,7 +299,6 @@ elseif pack#installed_dap()
     function! s:dapui_opened()
         return bufwinnr("DAP Scopes") >= 0 || bufwinnr("DAP Watches") >= 0 || bufwinnr("DAP Stacks") >= 0
     endfunction
-    au BufEnter * if s:dapui_opened() | SignifyDisable | endif
     " --------------------------------------
     " special map
     " ---------------------------------------
