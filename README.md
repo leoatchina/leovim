@@ -1,1039 +1,619 @@
 # LeoVim
 
-> 面向开发人员的 Vim/Neovim IDE 配置框架
-> 开箱即用 · 功能完备 · 高度可定制 · 同时支持 Vim 和 Neovim
+面向开发的 Vim / Neovim 配置。以 Vimscript 为入口，按编辑器版本、外部工具和用户开关选择补全、搜索、语言工具与调试方案；VSCode Neovim 使用独立配置分支。
 
-## 1. 核心特性
+本文描述仓库提供的能力和启用条件，不表示所有插件都默认安装。快捷键可能受模式、文件类型、插件是否安装及用户配置影响，最终以 `:verbose nmap` / `:verbose imap` / `:verbose xmap` 的结果为准。
 
-### 1.1. 开箱即用，零配置启动
-- **一键安装** - 单条命令完成安装，无需手动配置插件
-  - Linux/macOS: `git clone https://gitee.com/leoatchina/leovim ~/.leovim && cd ~/.leovim && ./install.sh`
-  - Windows: `git clone https://gitee.com/leoatchina/leovim %USERPROFILE%\.leovim` 后以管理员权限运行 `install.cmd`
-- **离线可用** - 内置 `pack` 基础包，无网络也能正常使用
-- **智能降级** - 根据环境自动选择最佳配置（Vim/Neovim，GUI/终端）
-- **预设模板** - 自动创建 `.gitignore`、`.lintr` 等常用配置文件
+## 1. 功能概览
 
-> **配置文件**: [`install.sh`](install.sh) · [`conf.d/pack/`](conf.d/pack/) · [`conf.d/templates/`](conf.d/templates/)
+| 功能 | 实现与配置入口 |
+|---|---|
+| 补全、片段与语言服务 | builtin / mucomplete / Coc / nvim-cmp / blink.cmp；[`application.vim`](conf.d/plug/application.vim)、[`complete.vim`](conf.d/main/plugin/complete.vim)、[`lsp.lua`](conf.d/main/lua/lsp.lua) |
+| 文件、内容与符号搜索 | FZF、LeaderF、CtrlP；LSP、Ctags/Gtags 与 Grep；[`search.vim`](conf.d/main/plugin/search.vim)、[`tags.vim`](conf.d/main/plugin/tags.vim) |
+| 语法树与文本对象 | 符合版本条件时使用 Treesitter，另有 Vim 文本对象插件；[`treesitter.lua`](conf.d/main/lua/treesitter.lua)、[`textobj.vim`](conf.d/init/plugin/textobj.vim) |
+| 文件树、符号侧栏与状态栏 | 根据已选插件启用；[`sidebar.vim`](conf.d/main/plugin/sidebar.vim)、[`lightline.vim`](conf.d/main/plugin/lightline.vim) |
+| 主题、窗口与标签页 | [`scheme.vim`](conf.d/main/plugin/scheme.vim)、[`window.vim`](conf.d/main/plugin/window.vim)、[`tab.vim`](conf.d/main/plugin/tab.vim) |
+| Git | Fugitive、GV、LeaderF Git、可选 LazyGit；[`git.vim`](conf.d/main/plugin/git.vim) |
+| 异步任务与文件运行 | AsyncRun / AsyncTasks；[`run.vim`](conf.d/main/plugin/run.vim)、[`任务模板`](conf.d/tasks/) |
+| 调试 | Vimspector、nvim-dap 或 Vim termdebug；[`debug.vim`](conf.d/main/plugin/debug.vim) |
+| 终端、REPL 与 AI CLI | Floaterm 及本地增强插件；[`terminal.vim`](conf.d/main/plugin/terminal.vim)、[`repl.vim`](conf.d/main/plugin/repl.vim)、[`vim-floaterm-enhance`](conf.d/pack/leo/opt/vim-floaterm-enhance/) |
+| 会话与文件历史 | Startify、FZF 会话选择与历史工具；[`session.vim`](conf.d/main/plugin/session.vim)、[`history.vim`](conf.d/main/plugin/history.vim) |
+| 项目文件模板 | 新建 `.gitignore`、`.gitconfig`、`.lintr`、`.Rprofile`、`.wildignore`、`.radian_profile` 时插入对应模板；[`set.vim`](conf.d/init/plugin/set.vim)、[`templates`](conf.d/templates/) |
 
-### 1.2. 跨平台兼容
-- **系统支持** - Linux、Windows、macOS 统一配置
-- **Vim/Neovim 通用** - 同一配置同时支持 Vim 和 Neovim
-- **VSCode Neovim** - `vscode-neovim` 模式专用配置与快捷键
-- **终端/GUI 自适应** - 自动检测环境，优化键位映射和颜色显示
-- **便携打包** - `compress.sh` 打包整个配置，一键迁移到新机器
+新建文件时插入模板不等于自动为所有项目创建这些文件。离线运行也需要事先准备所选插件、语言服务器及外部工具。
 
-> **配置文件**: [`scripts/compress.sh`](scripts/compress.sh) · [`conf.d/init/vscode.vim`](conf.d/init/vscode.vim) · [`conf.d/init/keybindings.json`](conf.d/init/keybindings.json) (VSCode) · [`conf.d/main/main.vim`](conf.d/main/main.vim) (环境检测)
+## 2. 系统要求与补全选型
 
-### 1.3. 高度可定制
-- **功能开关** - `~/.vimrc.opt` 控制所有模块的启用/禁用
-- **用户配置** - `~/.leovim.d/after.vim` 添加个人配置，不影响升级
-- **自定义插件** - `~/.leovim.d/pack.vim` 添加额外插件
-- **按文件类型定制** - 丰富的 ftplugin 配置，每种语言独立优化
+### 2.1. 入口与工具要求
 
-> **配置文件**: `~/.vimrc.opt` · `~/.leovim.d/after.vim` · `~/.leovim.d/pack.vim` · [`conf.d/init/ftplugin/`](conf.d/init/ftplugin/)
+| 用途 | 当前配置条件 |
+|---|---|
+| 配置入口 | Vim 7.4.399+ 或 Neovim 0.8+；Windows 上的 Vim 另要求 9.0+ |
+| VSCode Neovim 分支 | Neovim 0.10+，并安装 VSCode 的 `vscode-neovim` 扩展 |
+| 安装与更新 | Git；Unix 安装脚本使用 Bash，下载步骤还会调用 curl / wget、tar 等工具 |
+| Coc | `coc` 开关、检测到 Node.js 24+，且 `has('patch-9.0.0438')` 成立；master 分支安装钩子运行 `npm ci` |
+| Neovim 原生 LSP | Neovim 0.11+，并选择 `cmp`、`blink` 或 `blink.lua` |
+| Treesitter | Neovim 0.9.2+ 且低于 0.12，`g:nvim_treesitter_install` 为真；模板默认在 Unix 启用此开关 |
+| Vimspector | 编辑器内可用的 Python 3.10+；Vim 8.2.4797+ 或 Neovim 0.8+，具体选择见第 7.7 节 |
 
-### 1.4. AI 增强体系
-- **AI 助手 (`<M-i>`)**
-  - 专注于**代码理解与对话**
-  - 基于 `vim-floaterm-enhance` 的统一交互体验，将代码/文件/目录发送到 CLI AI 工具（如 `claude`, `codex`, `opencode` 等）
-  - **opencode.nvim**：Neovim 原生 AI 编码助手，`<M-i>o` 切换窗口，`<Tab>o` 系列操作（ask/select/diff 等）
-- **REPL 交互 (`<M-a>`)**
-  - 将代码发送到解释器 (Python/R/Shell) 执行
-  - 支持行发送、块发送、整文件发送、标记发送
+最低入口版本只保证通过入口检查，不保证所有可选插件能在该版本运行。语言服务器、调试器、AI CLI、解释器及编译器有各自的运行要求。Ctags/Gtags、ripgrep、FZF、Python provider 等按所选功能准备，不是互相的替代品。
 
-> **配置文件**: [`conf.d/main/plugin/complete.vim`](conf.d/main/plugin/complete.vim) (AI 快捷键) · [`conf.d/main/plugin/repl.vim`](conf.d/main/plugin/repl.vim) (REPL) · [`conf.d/pack/leo/opt/vim-floaterm-enhance/`](conf.d/pack/leo/opt/vim-floaterm-enhance/)
+### 2.2. 补全引擎
 
-### 1.5. 智能补全，多引擎支持
-- **多层补全体系**
-  - 基础：vim-mucomplete（dict + buffer + path）
-  - 内建：builtin（Neovim 0.11+ / Vim 9.1.1590+ 原生补全）
-  - 进阶：coc.nvim（Node.js LSP，插件生态丰富）
-  - 高级：blink.cmp / nvim-cmp（原生 Neovim LSP，Rust 加速，性能极致）
-- **代码片段** - VSCode 格式 snippets，支持自定义和共享
-- **多语言支持** - 内置 Python, Go, Rust, C/C++, Java, JS/TS, R, Lua, LaTeX 等语言配置
+在 `~/.vimrc.opt` 中选择所需方案。高级引擎声明顺序为 **cmp → blink → Coc**，不要同时启用多个方案来依赖这个优先级。
 
-> **配置文件**: [`conf.d/main/plugin/complete.vim`](conf.d/main/plugin/complete.vim) · [`conf.d/plug/application.vim`](conf.d/plug/application.vim) (引擎选择) · [`conf.d/main/after/cfg/coc.vim`](conf.d/main/after/cfg/coc.vim) · [`conf.d/main/lua/lsp.lua`](conf.d/main/lua/lsp.lua) · [`conf.d/snippets/`](conf.d/snippets/)
+| 方案 | 配置方式 | 说明 |
+|---|---|---|
+| nvim-cmp | `call pack#add('cmp')` | Neovim 0.11+，配合原生 LSP |
+| blink.cmp | `call pack#add('blink')` | Neovim 0.11+；有 cargo 时声明构建钩子 |
+| blink Lua 方案 | `call pack#add('blink.lua')` | 不走配置中的 cargo 构建分支 |
+| Coc | `call pack#add('coc')` | 满足上表 Node.js 和编辑器检测条件后声明插件；通过 Coc 扩展提供语言功能 |
+| builtin | 不选择高级引擎，也不强制 `mcm` | Neovim 0.11+ 或 Vim 9.1.1590+ 自动选择原生补全；不等于自动启用完整 LSP 配置 |
+| mucomplete | `call pack#add('mcm')`，或旧编辑器自动回退 | 路径、omni、关键字、字典等补全；不需要 Node.js |
+| 关闭基础补全回退 | `call pack#add('nocomplete')` | 同时不要选择高级补全引擎 |
 
-### 1.6. Treesitter 语法感知
-- **智能高亮** - 基于 AST 的精确语法高亮，支持数百种语言
-- **增量选择** - 语法树级区域扩展
-  - `<M-s>`: 初始化选择 / 扩展到当前范围
-  - `<Tab>`: 扩展到父节点
-  - `<M-S>`: 收缩到子节点
-- **文本对象** - 基于语法树的操作 (`d`, `c`, `y`, `v` 后接)
-  - `af` / `if`: 函数 (Function) 外部/内部
-  - `ac` / `ic`: 类 (Class) 外部/内部
-  - `aL` / `iL`: 循环 (Loop) 外部/内部
-- **快速导航** - 在语法节点间跳转
-  - `;f` / `,f`: 下/上一个函数起始
-  - `;c` / `,c`: 下/上一个类起始
-  - `;l` / `,l`: 下/上一个循环起始
-  - `;z` / `,z`: 下/上一个折叠 (Fold)
-  - `sv`: **Flash Treesitter** - 极速跳转到任意语法节点 (带标签)
-  - `m`: **Flash Treesitter Search** - (可视/操作模式) 搜索并选中语法节点
+高级插件已声明但尚未安装时，当前会话会回退到 builtin / mucomplete。安装后重启编辑器再检查 `g:complete_engine`。代码片段主要由 vim-vsnip、friendly-snippets 和 [`conf.d/snippets/`](conf.d/snippets/) 提供，实际按键随补全方案变化。
 
-> **配置文件**: [`conf.d/main/lua/treesitter.lua`](conf.d/main/lua/treesitter.lua) · [`conf.d/init/plugin/textobj.vim`](conf.d/init/plugin/textobj.vim)
+仓库的 [`opt.vim`](conf.d/init/opt.vim) 是开关示例：语言、调试、Coc、cmp、blink 等 `pack#add` 行多数默认注释，不应把示例当作已启用配置。
 
-### 1.7. 强大搜索，三层查找机制
-- **模糊搜索** - FZF/LeaderF 快速定位文件、buffer、命令
-- **全局搜索** - ripgrep 高性能全文搜索，支持正则表达式
-- **符号导航** - LSP → Ctags → 全局搜索，三层智能回退
-- **搜索后替换** - 搜索结果直接按 `r` 进入批量替换模式
-- **增量搜索** - Buffer 内实时搜索，支持多 buffer 联合搜索
+## 3. 安装、更新与卸载
 
-> **配置文件**: [`conf.d/main/plugin/search.vim`](conf.d/main/plugin/search.vim) · [`conf.d/main/plugin/tags.vim`](conf.d/main/plugin/tags.vim) · [`conf.d/main/plugin/atomic.vim`](conf.d/main/plugin/atomic.vim) (Flash 跳转)
+### 3.1. Linux / macOS
 
-### 1.8. 完整调试体系
-- **双调试器支持**
-  - Vimspector：跨语言调试器，配置简单
-  - nvim-dap：Neovim 原生 DAP 协议，扩展性强
+先备份现有 Vim、Neovim 和 Zed 配置，再执行：
 
-- **Vimspector 运行要求** - 启用 `debug`，Python 3.10+；Vim 需要 8.2.4797+ 且编译了 `+python3`，Neovim 需要 0.8+ 和可用的 Python 3 provider。
-- **Go 单文件调试** - 执行 `:VimspectorInstall delve` 安装适配器，将 [`go_file.json`](conf.d/vimspector/go_file.json) 复制为项目根目录的 `.vimspector.json`，打开带 `main` 的 Go 文件后启动调试。模板使用当前文件及其目录；多文件程序将 `program` 改为 `${fileDirname}` 或实际入口包目录。Delve 与 Go 工具链版本需兼容。
-
-> **配置文件**: [`conf.d/main/plugin/debug.vim`](conf.d/main/plugin/debug.vim) · [`conf.d/dap/`](conf.d/dap/) · [`conf.d/vimspector/`](conf.d/vimspector/) · 项目根目录的 `.vimspector.json` 或 `.vscode/launch.json`
-
-### 1.9. 高性能设计
-- **模块化加载** - 功能开关文件 `~/.vimrc.opt` 按需启用模块
-- **延迟加载** - 插件按需加载（利用 vim-plug 封装的 PlugAdd）
-- **增量索引** - Ctags/Gtags 增量更新，大项目快速响应
-- **异步执行** - 编译、测试、搜索均在后台异步运行
-
-> **配置文件**: `~/.vimrc.opt` · [`conf.d/init/opt.vim`](conf.d/init/opt.vim) (opt 模板) · [`conf.d/plug/`](conf.d/plug/) (插件清单) · [`conf.d/main/plugin/run.vim`](conf.d/main/plugin/run.vim) (异步任务)
-
-### 1.10. 会话管理
-- **自动保存** - 退出时自动保存当前会话（窗口布局、Buffer、光标位置）
-- **可视化管理** - `<Leader>ss` 调出 FZF 面板，快速搜索、加载、删除历史会话
-- **启动页集成** - Startify 启动页显示最近使用的会话，一键恢复工作现场
-
-> **配置文件**: [`conf.d/main/plugin/session.vim`](conf.d/main/plugin/session.vim) · [`conf.d/main/plugin/history.vim`](conf.d/main/plugin/history.vim) (文件历史)
-
-### 1.11. 现代 IDE 体验
-- **丰富的 UI 组件**
-  - 文件管理：Oil.nvim (像编辑 buffer 一样管理文件) / fern.vim
-  - 导航栏：Dropbar.nvim (Winbar 面包屑导航)
-  - 状态栏：lightline，实时显示 Git 分支、LSP 状态、文件信息
-  - 标签栏：智能 buffer 管理，支持快速切换和关闭
-  - 浮动窗口：终端、REPL、AI 助手均支持浮动窗口
-- **WhichKey 提示系统** - 按下先导键自动显示所有可用命令
-- **主题丰富** - 内置 Catppuccin, TokyoNight, Edge, Gruvbox 等多种配色
-
-> **配置文件**: [`conf.d/main/plugin/sidebar.vim`](conf.d/main/plugin/sidebar.vim) · [`conf.d/main/plugin/lightline.vim`](conf.d/main/plugin/lightline.vim) · [`conf.d/main/plugin/scheme.vim`](conf.d/main/plugin/scheme.vim) · [`conf.d/main/plugin/indicate.vim`](conf.d/main/plugin/indicate.vim) (WhichKey) · [`conf.d/main/plugin/buffer.vim`](conf.d/main/plugin/buffer.vim) · [`conf.d/main/plugin/tab.vim`](conf.d/main/plugin/tab.vim) · [`conf.d/main/plugin/window.vim`](conf.d/main/plugin/window.vim)
-
-### 1.12. 完整的 Git 工作流
-- **版本控制集成**
-  - fugitive：Vim 内 Git 操作，`:Git` 系列命令
-  - LazyGit：TUI Git 客户端，可视化操作
-  - Leaderf Git：模糊搜索 Git 历史、状态、blame
-- **增强功能**
-  - 行级 blame 显示
-  - 文件历史对比
-  - 交互式 rebase
-  - Conflict marker 高亮和快速解决
-
-> **配置文件**: [`conf.d/main/plugin/git.vim`](conf.d/main/plugin/git.vim) · [`conf.d/init/autoload/git.vim`](conf.d/init/autoload/git.vim) (Git 工具函数)
-
-### 1.13. 任务与模板
-- **全局任务库** - `tasks_common.ini` 内置通用任务
-  - `git-push-master` / `git-checkout`
-  - `net-host-ip` / `net-check-port`
-  - `misc-weather` / `misc-system-info`
-- **项目模板** - 自动识别并生成配置文件
-  - `.gitignore`, `.gitconfig`
-  - `.lintr` (R Linter), `.wildignore`
-  - `Rprofile`, `radian_profile`
-
-> **配置文件**: [`conf.d/main/plugin/run.vim`](conf.d/main/plugin/run.vim) · [`conf.d/tasks/`](conf.d/tasks/) · [`conf.d/templates/`](conf.d/templates/) · 项目根目录或 `~/.config/tasks.ini`
-
----
-
-## 2. 系统要求
-
-**必需**
-- Vim 7.4.399+ 或 Neovim 0.8+ (VSCode Neovim 需要 0.10+)
-- Git 1.8.5+
-
-**可选（增强功能）**
-- Node.js 16.18+ (coc.nvim LSP 支持)
-- Python 3.8+ + neovim + pygments
-- Universal Ctags 5.8+
-- GNU Global 6.6.7+
-- VSCode + `vscode-neovim` (仅 VSCode 模式需要)
-
-## 3. 配置文件说明
-
-### 3.1. 目录结构
-```
-~/.leovim/
-├── conf.d/                      # 主配置目录
-│   ├── init.vim                 # 入口文件 (所有配置的起点)
-│   ├── init/                    # 初始化阶段配置
-│   │   ├── opt.vim              # ~/.vimrc.opt 模板/示例
-│   │   ├── vscode.vim           # VSCode Neovim 专用配置
-│   │   ├── keybindings.json     # VSCode 快捷键配置
-│   │   ├── autoload/            # 核心工具函数 (utils.vim, pack.vim, git.vim, textobj.vim)
-│   │   ├── plugin/              # 基础设置 (set.vim, textobj.vim, ftdetect.vim)
-│   │   ├── ftplugin/            # 文件类型配置 (python, go, rust, c, java 等)
-│   │   └── lua/                 # Neovim Lua 工具 (utils.lua)
-│   ├── main/                    # 主配置 (非 VSCode 模式)
-│   │   ├── main.vim             # Meta 键/环境检测/加载 plug/ 目录
-│   │   ├── autoload/            # plug.vim (PlugAdd 相关)
-│   │   ├── plugin/              # 功能模块 (30+ 个配置文件)
-│   │   ├── lua/                 # Neovim Lua 配置
-│   │   │   ├── lsp.lua          # LSP 核心配置
-│   │   │   ├── treesitter.lua   # Treesitter 配置
-│   │   │   └── cfg/             # 插件 Lua 配置 (blink, cmp, dap, flash, oil 等)
-│   │   └── after/
-│   │       ├── cfg/             # 插件 VimScript 配置 (coc, fzf, leaderf, fern 等)
-│   │       └── lsp/             # LSP 服务器配置 (pyright, clangd, rust_analyzer 等)
-│   ├── plug/                    # 插件声明清单
-│   │   ├── application.vim      # 补全引擎/LSP/调试器/搜索工具/UI
-│   │   ├── common.vim           # 通用插件 (surround, comment, pairs 等)
-│   │   ├── languages.vim        # 语言相关插件
-│   │   ├── symbol.vim           # 符号/大纲插件
-│   │   └── zfvim.vim            # ZFVim 系列插件
-│   ├── pack/leo/opt/            # 内置自有插件
-│   │   ├── vim-floaterm-enhance/  # 浮动终端增强 (AI/REPL)
-│   │   ├── fzf-registers/      # FZF 寄存器浏览
-│   │   └── fzf-tabs/           # FZF 标签页管理
-│   ├── snippets/                # VSCode 格式代码片段 (global, go, python)
-│   ├── tasks/                   # AsyncTasks 任务模板
-│   ├── templates/               # 项目文件模板 (.gitignore, .lintr 等)
-│   ├── dap/                     # nvim-dap 启动配置
-│   └── vimspector/              # Vimspector 调试配置
-├── pack/                        # 扩展包
-│   ├── fork/opt/                # Fork 修改的插件
-│   ├── clone/opt/               # 直接克隆的插件
-│   ├── colors/                  # 配色方案
-│   └── doc/                     # 文档
-├── scripts/                     # 工具脚本 (compress.sh, bashrc, zshrc 等)
-├── assets/                      # 资源文件
-└── fonts/                       # 字体
-```
-
-### 3.2. 加载流程
-
-```
-conf.d/init.vim (入口)
-  ├── 设置目录变量 ($CONF_D_DIR, $INIT_DIR, $MAIN_DIR, $PLUG_DIR 等)
-  ├── 添加 $PACK_DIR, $INIT_DIR 到 runtimepath
-  ├── 扫描 opt 插件目录 (leo/opt, fork/opt, clone/opt)
-  ├── 设置 mapleader=空格, maplocalleader=q
-  ├── 基础键位映射
-  ├── source ~/.vimrc.opt (用户功能开关)
-  ├── plug#begin() → 定义 PlugAdd 命令
-  ├── source ~/.leovim.d/pack.vim (用户额外插件)
-  ├── [VSCode 模式] → source conf.d/init/vscode.vim
-  ├── [正常模式]   → source conf.d/main/main.vim
-  │     ├── Meta 键映射 (Alt 键设置)
-  │     ├── Python/Node/Git 版本检测
-  │     ├── 终端/Truecolor 配置
-  │     ├── Ctags/Gtags 配置
-  │     ├── source conf.d/plug/*.vim (所有插件声明)
-  │     └── Mason/工具 PATH 设置
-  ├── source ~/.leovim.d/after.vim (用户自定义配置)
-  └── plug#end()
-        └── Vim 自动加载 runtimepath 中的:
-              ├── conf.d/init/plugin/*.vim
-              ├── conf.d/main/plugin/*.vim (功能模块)
-              ├── conf.d/main/after/cfg/*.vim (插件配置)
-              └── conf.d/main/lua/*.lua (Neovim Lua)
-```
-
-### 3.3. 自定义配置
-- `~/.vimrc.opt` - 功能开关文件（参考 [`conf.d/init/opt.vim`](conf.d/init/opt.vim) 模板）
-- `~/.leovim.d/after.vim` - 用户自定义配置
-- `~/.leovim.d/pack.vim` - 自定义插件列表
-- `~/.leovim.d/ftplugin/` - 语言级局部配置
-
-## 4. 快速安装
-
-**Linux/macOS**
 ```bash
-./install.sh          # 基础安装
-./install.sh all      # 完整安装（推荐）
+git clone https://gitee.com/leoatchina/leovim ~/.leovim
+cd ~/.leovim
+./install.sh
 ```
 
-**Windows**
+**无参数运行也会联网并安装/更新插件**：脚本建立入口配置和启动脚本，克隆或更新 `~/.leovim.unix`，在缺失时复制 `~/.vimrc.opt`，默认调用启动包装脚本运行 `PlugAddUpdate`。
+
+主要文件行为：
+
+- 缺失时创建 `~/.vimrc`、`~/.config/nvim/init.vim`，不直接覆盖已有入口文件。已有入口需自行接入 `source ~/.leovim/conf.d/init.vim`。
+- 复制启动脚本到 `~/.local/bin`；复制部分 shell 配置时使用不覆盖方式。
+- 强制链接 Zed 的 `~/.config/zed/keymap.json`，已有该文件时应先备份。
+- 从其他位置安装时，若 `~/.leovim` 已存在且不是目标链接，会先改名备份。
+
+| 命令 | 额外行为 |
+|---|---|
+| `./install.sh normal no` | 跳过最后的插件更新步骤，仍会执行基础配置和 `leovim.unix` 联网步骤 |
+| `./install.sh basic` | 增加 Neovim、nvm / Node.js 安装步骤 |
+| `./install.sh all` | 在 basic 基础上增加 Rust、gvm 安装步骤，可能运行外部安装脚本 |
+| `./install.sh neovim` | 当前下载脚本指定的 Neovim **v0.11.7**，不是自动选择最新版本 |
+| `./install.sh nvm` | 安装/更新 nvm，安装 Node.js 24 并设为默认版本 |
+| `./install.sh rc` | 单独处理 Bash/Zsh 配置，可能询问是否备份已有配置 |
+| `./install.sh leotmux` | 安装/更新 leotmux、TPM、tmux-fzf，可能链接 `~/.tmux.conf` |
+
+安装步骤依赖网络、平台、可执行文件及权限，不承诺 `all` 能在任意环境一次成功。执行前可先阅读 [`install.sh`](install.sh)。
+
+### 3.2. Windows
+
+在 Git for Windows 可用的环境中，以具备创建符号链接权限的命令提示符执行：
+
 ```cmd
-install.cmd           # 以管理员权限运行
+git clone https://gitee.com/leoatchina/leovim %USERPROFILE%\.leovim
+cd /d %USERPROFILE%\.leovim
+install.cmd
 ```
 
-**安装选项**
-```bash
-./install.sh neovim   # 安装最新 Neovim
-./install.sh nvm      # 安装/升级 nvm latest release，并切换到 Node.js 24
-./install.sh rc       # 安装优化的 bashrc
-./install.sh z.lua    # 安装路径跳转工具
-./install.sh leotmux  # 安装 tmux 增强
-```
+[`install.cmd`](install.cmd) 创建缺失的入口配置，处理 Zed 键位链接，并克隆/更新 `~/.leovim.windows`。它与 Unix 安装器并非相同流程：没有 Unix 安装器末尾的插件更新步骤，需进入编辑器执行 `:PlugInstall`。已有 Zed 键位文件会被删除再建立链接，应先备份。
 
-**卸载**
-```bash
-./uninstall.sh        # Linux/macOS
-uninstall.cmd         # Windows
-```
-
-## 5. VSCode Neovim 快速开始
-
-1) 安装 VSCode 与 `vscode-neovim` 扩展，确保 `nvim` 版本 >= 0.10 且在 PATH 中
-2) 在 VSCode `settings.json` 指定 LeoVim 入口：
-```json
-{
-  "vscode-neovim.neovimInitVimPaths.linux": "~/.leovim/conf.d/init.vim",
-  "vscode-neovim.neovimInitVimPaths.mac": "~/.leovim/conf.d/init.vim",
-  "vscode-neovim.neovimInitVimPaths.windows": "C:\\\\Users\\\\<you>\\\\.leovim\\\\conf.d\\\\init.vim"
-}
-```
-3) 将 `conf.d/init/keybindings.json` 合并到 VSCode 的 `keybindings.json`，以启用专用快捷键
-
-## 6. 快速上手
-
-### 6.1. Leader 键说明
-- `<Leader>` = `空格` (主导航键)
-- `<LocalLeader>` = `q` (文件类型专用)
-- `<M->` = `Alt` 键
-
-### 6.2. 核心先导键速查
-
-按下以下先导键会进入对应的功能域：
-
-| 先导键 | 功能域 | 说明 |
-|--------|--------|------|
-| `<Leader>` (空格) | **主功能菜单** | 文件、搜索、项目、Git 等主要操作 |
-| `<M-h>` | **配置文件** | 快速打开配置文件和项目文件 |
-| `<M-j>` | **跳转文件** | 打开文件（edit/tab/split/vsplit） |
-| `<M-k>` | **功能开关** | 切换编辑器功能（主题、只读、命令等） |
-| `<M-l>` | **LSP/行搜索** | LSP 操作 (CocInfo/LspInfo) + Buffer 行搜索 |
-| `<M-r>` | **运行任务** | 异步任务选择菜单 (FzfAsyncTasks) |
-| `<M-e>` | **调试器** | 断点、单步、变量查看等调试功能 |
-| `<M-m>` | **调试 UI** | 调试窗口/UI 切换（Gdb/Source/Asm/DapUI 等） |
-| `<M-i>` | **AI 助手** | AI 代码辅助（发送代码、文件、目录到 AI） |
-| `<M-a>` | **REPL 交互** | 代码发送到 REPL 环境执行 |
-| `<M-g>` | **Git 操作** | 版本控制、提交、推送、历史查看 |
-| `<M-y>` | **复制系列** | 寄存器 yank / 路径复制、外部编辑器打开等 |
-| `<M-v>` | **粘贴系列** | 寄存器 paste / 粘贴模式 |
-| `<M-t>` | **浮动终端** | 浮动终端操作 |
-| `;` / `,` | **快速导航** | 前进/后退跳转（buffer、错误、符号等） |
-| `[` / `]` | **成对移动** | 括号、函数、类等结构间移动 |
-| `s` | **快速跳转** | Flash/easymotion 跳转和文本对象操作, vim-surround/vim-sandwich 操作 |
-| `m` | **标记管理** | 设置/跳转/删除标记 (marks) |
-| `\` | **窗口布局** | 窗口大小调整和布局切换 |
-| `<Tab>` | **窗口控制** | 分屏、任务停止等窗口操作 |
-
-> 提示: 按下任意先导键后会自动弹出 WhichKey 提示窗口，显示该功能域下的所有可用快捷键
-
-### 6.3. 重要修改的原生键位
-| 键位 | 功能 | 原功能 |
-|------|------|--------|
-| `H/L` | 行首/行尾 | 屏幕顶/底 |
-| `s` | 跳转/文本对象 | 替换字符 |
-| `q` → `M` | 宏录制 | 宏录制 |
-| `;` / `,` | 前进/后退导航 | 重复 f/t |
-
-### 6.4. 快捷键提示系统
-
-LeoVim 配置了 **WhichKey** 提示系统，按下任何先导键后会自动显示可用的子命令。例如：
-- 按 `<M-h>` 会显示所有配置文件快捷键
-- 按 `<M-e>` 会显示所有调试操作
-- 按 `<Leader>` 会显示主菜单
-
-**查看所有键位映射**：
-```vim
-:map          " 查看所有映射
-:nmap         " 查看 normal 模式映射
-:imap         " 查看 insert 模式映射
-:vmap         " 查看 visual 模式映射
-```
-
-## 7. 常用功能速查
-
-### 7.1. 文件与项目 (`<Leader>` 空格键)
-```
-<Leader>ff      文件搜索
-<Leader>p       Git 文件搜索
-<Leader>w       保存所有
-<Leader>Q       关闭 buffer
-<C-p>           工程浏览
-;b / ,b         切换 buffer
-<M-n/p>         切换标签页
-<M-1~9>         跳转到标签页 1-9
-```
-
-### 7.2. 快速打开配置 (`<M-h>`)
-```
-# LeoVim 配置
-<M-h>i          init.vim
-<M-h>o          .vimrc.opt 功能开关
-<M-h>O          opt.vim
-<M-h>m          main.vim
-<M-h>v          vscode.vim
-<M-h>k          keybindings.json
-<M-h>u          utils.vim
-<M-h>a          application.vim
-<M-h>p/d/l      main/plugin、conf.d、~/.leovim 目录
-<M-h>A/P        after.vim/pack.vim
-<M-h>n          VsnipOpen
-<M-h>s/f        snippets 目录 (conf.d / friendly-snippets)
-
-# 项目文件
-<M-h>r          README.md
-<M-h>t          TODO.md
-<M-h>g          .gitignore
-<M-h>w          .wildignore
-
-# 系统配置
-<M-h>b/z        .bashrc/.zshrc
-<M-h>c          .configrc
-<M-h>G          .gitconfig
-<M-h>C          .ssh/config
-
-# 其他
-<M-h><CR>       重新加载 init.vim
-<M-h>S          重新加载 .vimrc.opt
-<M-h><M-h>      帮助文档搜索
-```
-
-### 7.3. 搜索与替换
-> 核心配置文件: [`conf.d/main/plugin/search.vim`](conf.d/main/plugin/search.vim)
-
-```
-# Buffer 内搜索 (GrepBuf)
-z/              搜索光标下单词 (Buffer)
-z\              输入搜索词 (Buffer)
-z?              搜索寄存器内容 (Buffer)
-
-# 当前目录搜索 (GrepDir)
-s<CR>           搜索光标下单词 (Current Dir)
-s]              输入搜索词 (Current Dir)
-s[              重复上次目录搜索
-
-# 全局/Git 根目录搜索 (GrepAll)
-s/              搜索光标下单词 (Project Root)
-s\              输入搜索词 (Project Root)
-s.              重复上次全局搜索
-s?              搜索寄存器内容 (Project Root)
-
-# 模糊搜索工具 (FZF/LeaderF)
-<Leader>/       FZF 当前目录搜索
-<Tab>/          FZF Git 根目录搜索
-<C-f><CR>       LeaderF/FZF 强力全局搜索
-  → 按 r        搜索后批量替换 (使用 Quickfix 窗口)
-  → 按 W        保存所有替换
-```
-
-### 7.4. 跳转与导航
-```
-# 文件跳转 (<M-j>)
-<M-j>e          打开光标下文件
-<M-j>t          新标签打开文件
-<M-j>[          水平分割打开
-<M-j>]          垂直分割打开
-
-# Flash 快速跳转 (s 系列)
-sj              向前跳转 (Flash Jump Forward)
-sk              向后跳转 (Flash Jump Backward)
-so              远程操作 (Flash Remote) - 对远处文本执行操作
-sv              Treesitter 节点跳转 (Flash Treesitter)
-
-# 增强移动
-s; / s,         下/上一个单词 (Easymotion/Word)
-sl / sL         行内/跨行跳转
-```
-
-### 7.5. 会话管理 (`<Leader>s`)
-```
-<Leader>ss      FZF 会话列表 (搜索/加载/删除)
-<Leader>st      打开 Startify 启动页
-<Leader>sv      保存当前会话
-<Leader>sl      加载会话
-<Leader>sd      删除会话
-<Leader>sc      关闭当前会话
-```
-
-### 7.6. LSP 与行搜索 (`<M-l>`)
-```
-# LSP 功能
-<M-l>i          LSP/Coc Info
-<M-l>r          LSP/Coc Restart
-<M-l>e          Coc 扩展列表
-<M-l>:          Coc 命令列表
-<M-l>;/,        下/上一个补全
-
-# 行搜索
-<M-l><M-l>      当前 buffer 行搜索
-<M-l><M-a>      所有 buffer 行搜索
-
-# 补全
-<Tab>           触发补全 / 下一个
-<C-n/p>         下/上一个补全项
-<CR>            确认选择
-
-# 代码导航
-<C-h>           查看文档
-<C-g>           跳转定义
-<C-]>           侧栏跳转定义
-<M-c>           预览定义
-<M-/>           预览引用
-<M-d>           LSP 定义搜索
-<C-q>           格式化代码
-F2              重命名符号
-<C-t>           符号大纲侧边栏
-```
-
-### 7.7. 调试功能 (`<M-e>` + `<M-m>`)
-```
-# 调试控制 (<M-e>)
-<M-e>r          启动调试
-<M-e><CR>       继续执行
-<M-e><Space>    切换断点
-<M-e>;/,        下/上一个断点
-<M-e>n/i/o      StepOver/Into/Out
-<M-e>p          暂停
-<M-e>q          停止调试
-<M-e>c          清除所有断点
-<M-e><M-e>      运行到光标
-
-# 调试 UI (<M-m>)
-<M-m>           调试窗口/界面切换 (Gdb/Source/DapUI 等)
-
-# 功能键
-F5              开始/继续
-F9              切换断点
-F10/F11/F12     StepOver/Into/Out
--               Watch 变量
-J               显示变量/诊断
-```
-
-### 7.8. 运行任务
-```
-<M-r>           任务选择菜单 (FzfAsyncTasks)
-<M-B>           Build 任务 / 底部窗口运行
-<M-R>           Run 任务 / 右侧窗口运行
-<M-T>           Test 任务 / 外部终端
-<M-F>           Finalize 任务 / 浮动窗口
-<Tab>q          停止任务
-!               可视模式运行选中代码
-
-# 智能模式
-如果定义了 AsyncTasks 配置，会运行对应任务
-否则根据文件类型智能运行当前文件
-```
-
-### 7.9. AI 助手 (`<M-i>`)
-> 底层依赖: [`vim-floaterm-enhance`](conf.d/pack/leo/opt/vim-floaterm-enhance/)
-> 快捷键配置: [`conf.d/main/plugin/complete.vim`](conf.d/main/plugin/complete.vim)
-
-需要在 `~/.vimrc.opt` 中设置 `g:floaterm_ai_programs` 来启用。
-
-```
-<M-i><M-i>      在编辑器和 AI 窗口间切换焦点
-<M-i><M-r>      启动 AI (交互式选择)
-<M-i><Cr>       启动默认 AI (立即执行)
-<M-i><Space>    发送回车键到 AI 终端
-<M-i>l          发送当前行 / 选中区域到 AI，跳转到 AI 终端
-<M-i>f          发送当前文件路径到 AI，跳转到 AI 终端
-<M-i>d          发送当前目录路径到 AI，跳转到 AI 终端
-<M-i>p          FZF 选择文件发送到 AI，跳转到 AI 终端
-<M-i><M-l>      发送当前行 / 选中区域 (保持在当前 buffer)
-<M-i><M-f>      发送文件路径 (保持在当前 buffer)
-<M-i><M-d>      发送目录路径 (保持在当前 buffer)
-<M-i><M-p>      FZF 选择文件发送 (保持在当前 buffer)
-```
-
-### 7.10. REPL 交互 (`<M-a>`)
-> 核心配置文件: [`conf.d/main/plugin/repl.vim`](conf.d/main/plugin/repl.vim)
-> 适用于: Python, R, Shell, Lua, Ruby, Julia, JavaScript 等
-
-```
-<M-a><M-i>      在编辑器和 REPL 窗口间切换焦点
-<M-a><M-r>      启动 REPL (交互式选择)
-<M-a><Cr>       发送回车键或启动 REPL
-<M-a>n          发送当前行 / 选中区域，光标移动到下一行
-<M-a>l          发送当前行 / 选中区域，光标保持当前位置
-<M-a><M-a>      发送代码块 (支持 # %% 标记)，光标移动到下一行
-<M-a><Space>    发送代码块，光标保持当前位置
-<M-a>b          发送从文件开头到当前行
-<M-a>e          发送从当前行到文件末尾
-<M-a>a          发送整个文件
-<M-a>k          发送光标下的单词
-<M-a>m          标记代码区域
-<M-a>s          发送已标记区域
-<M-a>S          显示已标记区域
-<M-a>q          退出 REPL
-<M-a>L          清屏 REPL
-```
-
-### 7.11. Git 操作 (`<M-g>`)
-```
-<M-g>a          Git add -A
-<M-g>u          Git push
-<M-g><CR>       Git commit -av
-<M-g>v          查看 Git 历史 (GV)
-<M-g>s          查看 Git 状态 (Leaderf)
-<M-g>b          查看 Git blame (Leaderf)
-<M-g>f/l        当前文件/行的 Git 历史
-<M-g>]/[        垂直/水平 diff
-<M-g><M-g>      打开 LazyGit
-<M-g>:          Git 命令列表
-```
-
-### 7.12. 功能开关 (`<M-k>`)
-```
-<M-k><Space>    切换只读模式
-<M-k>t          切换主题 (colorscheme)
-<M-k>f          切换文件类型
-<M-k>v          显示版本/配置信息
-<M-k>V          显示 Vim 版本
-<M-k><M-k>      命令列表
-<M-k><M-f>      Fzf 命令搜索
-<M-k><M-l>      Leaderf 自身命令
-<M-k>m          显示消息历史
-<M-k>u          转换为 Unix 格式
-<M-k>z          切换折叠开关
-<M-k>r          显示项目根目录
-<M-z>           切换软换行
-<Leader>o/O     切换诊断/诊断高亮
-```
-
-### 7.13. 诊断与错误
-```
-<Leader>d       诊断列表
-;d / ,d         下/上一个诊断
-;e / ,e         下/上一个错误
-<Leader>o/O     切换诊断/高亮
-```
-
-### 7.14. 文本对象与编辑
-```
-af/if           函数外部/内部
-ac/ic           类外部/内部
-ik/ak           当前行
-iv/av           代码块 (# %%)
-<M-s>           智能扩展选择
-;f/c / ,f/c     下/上一个函数/类
-```
-
-### 7.15. 窗口与终端
-```
-# 窗口布局 (<Tab> + \)
-<Tab>]/[        垂直/水平分割打开
-\a/d/w/s        调整窗口大小
-<M-HJKL>        窗口间跳转
-
-# 标签页
-<M-n/p>         下/上一个标签页
-<M-N/P>         移动标签页位置
-<M-1>~<M-9>     跳转到标签 1-9
-<M-0>           最后一个标签
-<M-w/W>         关闭当前/其他标签
-
-# 浮动终端
-<M-->           切换浮动终端
-<M-=>           新建终端或列表
-<M-+>           切换终端位置
-```
-
-### 7.16. 复制粘贴与外部联动
-```
-# 智能复制
-<Leader>ya      复制绝对路径
-<Leader>yd      复制目录路径
-<Leader>yb      复制文件名
-<Leader>yl      复制行引用 (@file#L10-20)
-Y               复制到系统剪贴板 (与 tmux/系统互通)
-
-# 外部编辑器联动 (打开当前位置)
-<Leader>yv      VSCode
-<Leader>yc      Cursor
-<Leader>yw      Windsurf
-<Leader>yq      Qoder / Trae
-<Leader>yz      Zed
-```
-
-
-
-## 8. 常见问题
-
-### 8.1. 安装相关
-
-**Q: 安装后启动很慢怎么办？**
-```vim
-" 1. 检查是否在首次启动安装插件
-:PlugStatus
-
-" 2. 查看启动时间分析
-vim --startuptime startup.log
-" 查看 startup.log 找出耗时插件
-
-" 3. 禁用不需要的功能
-" 编辑 ~/.vimrc.opt，注释掉不需要的模块
-```
-
-**Q: 如何在无网络环境安装？**
-1. 在有网络的机器上执行 `./install.sh all`
-2. 运行 `scripts/compress.sh` 打包
-3. 复制 `~/leovim.tar.gz` 到目标机器
-4. 解压后执行 `./install.sh`
-
-**Q: Windows 下安装失败？**
-- 确保以管理员权限运行 `install.cmd`
-- 检查是否安装了 Git for Windows
-- 关闭杀毒软件后重试
-- 检查路径中是否包含中文或特殊字符
-
-### 8.2. 功能使用
-
-**Q: 补全不工作？**
-```vim
-" 1. 检查 LSP 状态
-:CocInfo        " 如果使用 coc.nvim
-:LspInfo        " 如果使用 nvim-lsp
-
-" 2. 安装语言服务器
-:CocInstall coc-python coc-go coc-rust-analyzer
-
-" 3. 检查 Node.js 版本
-:!node --version    " coc.nvim 需要 16.18+
-```
-
-**Q: 如何切换补全引擎？**
-
-编辑 `~/.vimrc.opt`，按 Vim/Neovim 取消注释对应行：
-```vim
-" Neovim 0.11+
-call pack#add('blink')    " blink.cmp (推荐)
-" call pack#add('cmp')    " nvim-cmp
-" call pack#add('builtin') " 原生补全
-
-" Vim / Neovim (需要 Node.js)
-" call pack#add('coc')    " coc.nvim
-" call pack#add('mcm')    " mucomplete (最轻量)
-```
-
-**Q: 快捷键冲突怎么办？**
-
-在 `~/.leovim.d/after.vim` 中重新映射：
-```vim
-" 取消原有映射
-unmap <M-h>
-" 设置新映射
-nnoremap <M-h> :YourCommand<CR>
-```
-
-**Q: 如何禁用某个插件？**
-
-编辑 `~/.vimrc.opt` 或 `~/.leovim.d/pack.vim`，注释对应 `pack#add`：
-```vim
-" call pack#add('fzf')       " 注释即关闭
-" call pack#add('coc')       " 注释即关闭
-```
-
-### 8.3. 调试问题
-
-**Q: REPL 无法启动？**
-
-```bash
-# 检查 Python 环境
-python3 -c "import pynvim"
-
-# 检查浮动终端插件
-vim -c ':echo exists(":FloatermNew")' -c 'q'
-
-# 手动安装 Python 包
-pip3 install pynvim neovim
-```
-
-**Q: Git 功能不可用？**
-
-```bash
-# 检查 Git 版本
-git --version    # 需要 1.8.5+
-
-# 检查 fugitive 插件
-vim -c ':scriptnames | grep fugitive'
-
-# 安装 LazyGit（可选）
-brew install lazygit              # macOS
-sudo apt install lazygit          # Ubuntu
-```
-
-
-### 8.4. 更新维护
-
-**Q: 如何更新 LeoVim？**
+### 3.3. 更新与离线迁移
 
 ```bash
 cd ~/.leovim
 git pull
-./install.sh
 ```
 
-**Q: 如何更新插件？**
+先保留本地修改，不要通过重置仓库强行更新。在编辑器中按需要执行：
 
 ```vim
-:PlugUpdate     " 更新所有插件
-:PlugUpgrade    " 更新插件管理器
-:CocUpdate      " 更新 Coc 扩展
+:PlugStatus
+:PlugInstall
+:PlugUpdate
+:CocUpdate
 ```
 
-**Q: 如何备份配置？**
+`CocUpdate` 只适用于 Coc。`PlugAddUpdate` 是 LeoVim 包装命令，会重新读取 `~/.vimrc.opt` 后调用 `PlugUpdate`；开关或插件声明变化后，重启再更新更容易确认实际选择。
 
-```bash
-# 使用内置打包脚本
-~/.leovim/scripts/compress.sh
+[`scripts/compress.sh`](scripts/compress.sh) 输出 `~/leovim.tar.gz`，打包指定的 `.local` 工具、`.leovim`、`.leovim.d` 和 `.leovim.unix`，并排除 `.git`。它不是完整的个人配置备份：`~/.vimrc.opt` 和编辑器入口文件需单独备份，用户钩子随 `.leovim.d` 打包；缺失的工具路径也可能令 tar 报错。不同平台的二进制、Python 环境和动态库不能仅靠复制保证可用，解压后直接运行安装器仍可能联网。
 
-# 或手动备份
-tar -czf leovim-backup.tar.gz \
-  ~/.leovim ~/.leovim.d ~/.vimrc ~/.vimrc.opt
+### 3.4. 卸载风险
+
+仓库提供 [`uninstall.sh`](uninstall.sh) 和 [`uninstall.cmd`](uninstall.cmd)，执行前必须阅读脚本并备份。
+
+**Unix 卸载脚本会删除入口文件、`~/.vimrc.opt`，并递归删除匹配 `~/.leovim*` 的路径，包括用户数据、工具目录及同前缀备份。** 它不只是移除软链接，不建议在未确认这些路径内容时执行。
+
+## 4. 配置结构与加载顺序
+
+### 4.1. 目录职责
+
+```text
+~/.leovim/
+├── conf.d/
+│   ├── init.vim              # 唯一受支持入口
+│   ├── init/
+│   │   ├── opt.vim           # 用户开关模板
+│   │   ├── vscode.vim        # VSCode Neovim 分支
+│   │   ├── keybindings.json  # VSCode 键位参考
+│   │   ├── autoload/         # utils、pack 等工具
+│   │   ├── plugin/           # 基础设置、文件类型检测、文本对象
+│   │   ├── ftplugin/         # 随仓库维护的文件类型配置
+│   │   └── lua/              # Neovim 工具模块
+│   ├── plug/                 # 插件声明：application/common/languages/symbol/zfvim
+│   ├── main/
+│   │   ├── main.vim          # 环境检测和插件声明加载
+│   │   ├── plugin/           # 各功能模块
+│   │   ├── autoload/         # vim-plug 等运行时函数
+│   │   ├── lua/              # LSP、Treesitter 与 cfg 插件模块
+│   │   └── after/
+│   │       ├── cfg/          # 按条件 source 的 Vimscript 配置
+│   │       └── lsp/          # 语言服务器 Lua 配置
+│   ├── pack/leo/opt/         # 本地插件，包含 Floaterm 增强
+│   ├── snippets/             # VSCode 格式片段
+│   ├── tasks/                # AsyncTasks 全局任务和示例
+│   ├── templates/            # 新文件模板
+│   ├── dap/                  # nvim-dap 单个配置对象模板
+│   └── vimspector/           # Vimspector 完整项目模板
+├── pack/                     # 随仓库提供的插件、主题和基础运行时
+├── scripts/                  # 启动、打包和 shell 工具
+├── docs/                     # 补充记录
+├── fonts/                    # 字体
+├── assets/                   # 图片等资源
+├── install.sh / install.cmd
+└── uninstall.sh / uninstall.cmd
 ```
 
-### 8.5. 高级技巧
+### 4.2. 启动流程
 
-**Q: 如何添加自定义语言支持？**
-
-1. 安装 LSP server：`:CocInstall coc-xxx` 或通过 Mason
-2. 创建 ftplugin：`~/.leovim.d/ftplugin/xxx.vim`
-3. 添加 snippets：`~/.leovim/conf.d/snippets/xxx.json`
-
-**Q: 如何自定义主题？**
-
-在 `~/.leovim.d/after.vim` 中：
-```vim
-colorscheme your_theme
-" 自定义高亮
-highlight Normal guibg=#1e1e1e
-highlight LineNr guifg=#5a5a5a
+```mermaid
+flowchart TD
+    A[conf.d/init.vim] --> B[目录与运行时路径、扫描本地 opt 插件]
+    B --> C[加载 ~/.vimrc.opt]
+    C --> D[plug#begin 与 PlugAdd]
+    D --> E[加载 ~/.leovim.d/pack.vim]
+    E --> F{VSCode 模式?}
+    F -->|是| G[init/vscode.vim]
+    F -->|否| H[main/main.vim：环境检测与 plug 声明]
+    G --> I[加载 ~/.leovim.d/after.vim]
+    H --> I
+    I --> J[确认已安装补全引擎或选择基础回退]
+    J --> K[plug#end]
+    K --> L[Vim 启动阶段加载 plugin 配置]
 ```
 
-**Q: 快捷键提示不显示？**
+`after/cfg/*.vim` 不会全部自动执行；功能模块按条件 `source` 它们。Lua 文件也由对应的 `require` 加载，不是因为放在 `lua/` 下就全部自动执行。
 
-```vim
-" 检查 which-key 是否安装
-:echo exists('g:loaded_vim_which_key')
+### 4.3. 用户修改放在哪里
 
-" 手动触发
-:WhichKey '<Leader>'
-:WhichKey '<M-h>'
-```
----
+| 文件 | 用途 |
+|---|---|
+| `~/.vimrc.opt` | 功能开关、工具路径、插件配置变量，尽早设置 |
+| `~/.leovim.d/pack.vim` | 通过 `PlugAdd` 声明额外插件 |
+| `~/.leovim.d/after.vim` | 用户配置钩子；它在后续 `plugin/*.vim` 自动加载之前执行，不能保证直接写的映射一定最后生效 |
 
-## 9. 使用技巧
+文件类型定制可在 `after.vim` 中使用带分组的 `FileType` 自动命令。不要假定 `~/.leovim.d/ftplugin/` 自动加入了 runtimepath；仓库未为该目录建立通用自动加载约定。
 
-### 9.1. 快速入门工作流
+## 5. VSCode Neovim
 
-**1. 项目导航**
-```vim
-" 打开项目
-vim .
+安装 VSCode 的 `vscode-neovim` 扩展，准备 Neovim 0.10+。将入口配置指向 `conf.d/init.vim`，例如 `settings.json`：
 
-" 使用快捷键
-<Leader>ff      " 模糊搜索文件
-<Leader>p       " Git 文件搜索
-<C-b>           " 文件树状浏览器
-<C-p>           " 文件浏览器
-<C-f><CR>       " 全局搜索内容
-```
-
-**2. 代码编辑**
-```vim
-" 智能补全
-<Tab>           " 触发补全
-<CR>            " 确认选择
-
-" 跳转定义
-<C-g>           " LSP 跳转定义
-<C-]>           " 侧栏跳转
-<M-c>           " 预览定义
-
-" 重命名
-F2              " LSP 重命名
-<C-q>           " 格式化代码
-```
-
-**3. 调试代码**
-```vim
-" 设置断点
-<M-e><Space>    " 切换断点
-F9              " 快捷切换
-
-" 开始调试
-<M-e>r          " 启动调试
-F5              " 继续执行
-F10/F11/F12     " 单步调试
-
-" 查看变量
--               " Watch 变量
-J               " 显示变量值
-```
-
-**4. Git 工作流**
-```vim
-" 查看状态
-<M-g>s          " Git 状态
-<M-g>b          " Git blame
-<M-g>f          " 文件历史
-
-" 提交代码
-<M-g>a          " Git add -A
-<M-g><CR>       " Git commit
-<M-g>u          " Git push
-
-" 可视化操作
-<M-g><M-g>      " LazyGit
-```
-
-**5. REPL 交互**
-```vim
-" Python/R/Julia 等语言
-<M-a><M-r>      " 启动 REPL (交互式选择)
-<M-a>n          " 发送当前行 (光标下移)
-<M-a><M-a>      " 发送代码块 (光标下移)
-<M-a>a          " 发送整个文件
-<M-a>q          " 退出 REPL
-```
-
-**6. Symbol/Tags 系统**
-
-符号跳转采用多层 fallback 机制（见 `conf.d/main/plugin/tags.vim` 中 `tags#lsp_tag_search`）：
-
-```
-LSP (coc/nvim_lsp) → ctags/gtags → GrepAll
-```
-
-以 `<M-d>`（definition）和 `<M-/>`（references）为例：
-1. 优先使用 LSP（coc `jumpDefinition` 或 nvim_lsp）
-2. LSP 未找到且 ctags 可用时，fallback 到 ctags/gtags 查找
-3. references 仍未找到时，最终 fallback 到 `GrepAll` 全局搜索
-
-```vim
-" 常用跳转键位
-<C-g>           " 定义（当前窗口）
-<C-]>           " 定义（垂直分屏）
-<M-/>           " 引用（quickfix）
-<M-d>           " 定义（quickfix）
-<M-D>           " 声明（quickfix）
-<M-?>           " 类型（quickfix）
-<M-.>           " 实现（quickfix）
-<C-h>           " 预览定义（需 ctags）
-
-" 符号浏览
-<leader>t       " Vista finder（LSP 符号）
-t<CR>           " 当前缓冲区大纲
-f<CR>           " 函数列表 (vim-funky)
-<leader>g       " 调用gtags系统
-```
-
-### 9.2. 按语言配置
-
-**Python 开发**
-
-```vim
-" ~/.leovim.d/after.vim
-autocmd FileType python setlocal
-    \ tabstop=4
-    \ shiftwidth=4
-    \ expandtab
-    \ colorcolumn=88
-
-" 安装 Python LSP
-:CocInstall coc-pyright coc-python
-
-" 配置 Python DAP (.vscode/launch.json)
+```json
 {
-  "configurations": [
-    {
-      "type": "python",
-      "request": "launch",
-      "name": "Python: Current File",
-      "program": "${file}"
-    }
-  ]
+  "vscode-neovim.neovimInitVimPaths.linux": "/home/you/.leovim/conf.d/init.vim",
+  "vscode-neovim.neovimInitVimPaths.darwin": "/Users/you/.leovim/conf.d/init.vim",
+  "vscode-neovim.neovimInitVimPaths.win32": "C:\\Users\\you\\.leovim\\conf.d\\init.vim"
 }
 ```
 
-**Go 开发**
+平台键及路径设置以所安装扩展的[设置 schema](https://github.com/vscode-neovim/vscode-neovim/blob/master/package.json) 为准，路径请替换为本机绝对路径。参考 [`conf.d/init/keybindings.json`](conf.d/init/keybindings.json) 合并需要的键位，而不是直接覆盖已有文件。
+
+该模式走 [`init/vscode.vim`](conf.d/init/vscode.vim)，不加载常规 `main/main.vim` 的整套配置。下面的终端、调试和插件键位主要描述普通 Vim / Neovim；例如 VSCode 分支把 `M` 映射为 VSCode 格式化操作，不能直接套用普通模式说明。
+
+## 6. 快捷键约定与核查
+
+| 按键记法 | 实际按法 |
+|---|---|
+| `<Leader>` | 空格 |
+| `<LocalLeader>` | `q` |
+| `<M-e>D` | 先按 `Alt+e`，再按大写 `D` |
+| `<M-+>` | `Alt++` |
+
+- 除非特别标注，下面描述普通模式。`nmap`、`imap`、`xmap`、`tmap` 分别用于普通、插入、可视和终端输入模式。
+- WhichKey 由 `g:leovim_whichkey` 控制；只有配置过提示的前缀才会显示菜单，不是任意按键都能自动显示所有命令。
+
+| 前缀 | 功能域 |
+|---|---|
+| `<M-h>` | 配置与项目文件 |
+| `<M-j>` | 打开光标下文件 |
+| `<M-k>` | 功能开关、信息与命令 |
+| `<M-l>` | 语言服务及行搜索 |
+| `<M-r>` | 任务选择命令，不是多键前缀 |
+| `<M-e>` / `<M-m>` | 调试控制 / 调试窗口 |
+| `<M-i>` / `<M-a>` | AI CLI / REPL |
+| `<M-g>` | Git |
+| `s`、`;`、`,`、`[`、`]`、`<Tab>`、`\` | 按模块提供跳转、移动、窗口等组合键 |
+
+| 原生按键 | 当前行为与条件 |
+|---|---|
+| `H` | 定位到首个非空白字符 |
+| `L` | 定位到行末非空白字符 |
+| `s` | 作为组合键前缀 |
+| `J` | 普通模式在调试配置生效时用于变量求值/诊断 |
+| `q` | 仍用于原生宏录制 |
+| `M` | 普通配置中可作为 WhichKey 前缀，不是宏录制替代键 |
+
+查看实际映射及定义位置：
 
 ```vim
-" 安装 Go LSP
+:verbose nmap <F5>
+:verbose nmap <C-h>
+:verbose imap <Tab>
+:verbose xmap Y
+:verbose tmap <M-->
+:scriptnames
+```
+
+## 7. 常用功能
+
+### 7.1. 文件、侧栏、标签页与会话
+
+| 按键 | 功能与条件 |
+|---|---|
+| `<Leader>ff` | 当前目录文件搜索，按配置使用 LeaderF / FZF 等 |
+| `<Leader>p` | 在版本控制目录下搜索文件，不等于 `git ls-files` |
+| `<C-p>` | 文件搜索入口，具体后端与目录以当前映射为准，不是固定的树浏览器 |
+| `<C-b>` | 文件树侧栏，需已配置对应插件 |
+| `<C-t>` | 符号侧栏，取决于 Aerial / Vista / Tagbar 是否可用 |
+| `<Leader>Q` | 关闭其他 buffer，不是关闭当前 buffer |
+| `;b` / `,b` | buffer 导航 |
+| `<M-n>` / `<M-p>` | 下一个 / 上一个标签页 |
+| `<M-1>` … `<M-9>` | 按编号切换标签页 |
+| `<Leader>st` | Startify 启动页 |
+| `<Leader>ss` | FZF 会话选择，需 FZF |
+| `<Leader>sv` / `sl` / `sd` | 预填保存 / 加载 / 删除会话命令，需继续输入或确认 |
+| `<Leader>sc` | 关闭当前会话 |
+
+会话功能由 [`session.vim`](conf.d/main/plugin/session.vim) 配置。不要把可保存会话等同于退出时必定自动保存所有工作。
+
+### 7.2. 配置文件入口
+
+`g:leovim_openmap` 控制大部分相关打开映射，具体定义见 [`file.vim`](conf.d/main/plugin/file.vim)；`<M-h>o` 在该开关判断之前定义。常用项：
+
+| 按键 | 目标 |
+|---|---|
+| `<M-h>i` / `<M-h>m` | 入口 `init.vim` / `main.vim` |
+| `<M-h>o` / `<M-h>O` | 用户 `.vimrc.opt` / 仓库开关模板 |
+| `<M-h>A` / `<M-h>P` | 用户 `after.vim` / `pack.vim` |
+| `<M-h>a` | `application.vim` 插件声明 |
+| `<M-h>v` / `<M-h>k` | VSCode 配置 / 键位参考 |
+| `<M-h>r` / `<M-h>t` | 项目 README / TODO |
+
+### 7.3. 内容搜索与替换
+
+见 [`search.vim`](conf.d/main/plugin/search.vim)。后端依赖已配置的搜索工具，不能假定所有环境都使用 ripgrep。
+
+| 按键 | 功能 |
+|---|---|
+| `z/` / `z\` | 当前 buffer 搜索光标下词 / 输入搜索词 |
+| `s<CR>` / `s]` | 当前目录搜索光标下词 / 输入搜索词 |
+| `s/` / `s\` | 项目范围搜索光标下词 / 输入搜索词 |
+| `s.` | 重复上次项目搜索 |
+| `<C-f><CR>` | LeaderF / FZF 内容搜索入口 |
+| `<M-l><M-l>` | 当前 buffer 行搜索 |
+| `<M-l><M-a>` | 所有 buffer 行搜索 |
+| Quickfix 中的 `r` | 预填 `cdo!` 替换命令，修改表达式并确认后执行 |
+
+替换前检查 Quickfix 结果范围，保存前检查改动；这不是在任何搜索界面都能直接执行的替换操作。
+
+### 7.4. 符号导航与语法结构
+
+| 按键 | 功能 |
+|---|---|
+| `<C-g>` | 当前窗口跳转定义 |
+| `<C-]>` | 垂直分屏跳转定义 |
+| `<M-d>` / `<M-/>` | 定义 / 引用查找，默认走 Quickfix 结果处理 |
+| `<M-D>` / `<M-?>` / `<M-.>` | 声明 / 类型定义 / 实现 |
+| `<C-h>` | 基于 Ctags 的定义预览，不是通用 LSP 文档悬浮 |
+| `K` | 语言文档/悬浮入口，具体取决于补全与语言配置 |
+
+[`tags#lsp_tag_search`](conf.d/main/plugin/tags.vim) 先尝试已安装的 Coc 或 Neovim LSP，未找到且 Ctags 可用时再查 tags。只有 Quickfix 路径中的 `references` / `tags` 未找到时才回退到 `GrepAll`，并非所有定义跳转都会自动全局搜索。
+
+Flash、Easymotion、Treesitter 和 Vim 文本对象是按环境提供的不同实现；不要把全部节点操作视为 Vim / Neovim 通用按键。语法树选区与移动见 [`treesitter.lua`](conf.d/main/lua/treesitter.lua)，其他文本对象见 [`textobj.vim`](conf.d/init/plugin/textobj.vim)。
+
+### 7.5. Git
+
+见 [`git.vim`](conf.d/main/plugin/git.vim)，Git 必须在当前环境可用，部分入口另需 GV、LeaderF 或 LazyGit。
+
+| 按键 | 功能 |
+|---|---|
+| `<M-g>a` | `Git add -A`，会暂存仓库全部改动 |
+| `<M-g>u` | `Git push`，会推送远端 |
+| `<M-g><CR>` | `Git commit -av`，不是仅提交已暂存内容 |
+| `<M-g>v` | GV 历史视图，需 GV |
+| `<M-g>s` / `<M-g>b` | LeaderF Git 状态 / blame，需相应后端 |
+| `<M-g>f` / `<M-g>l` | 文件 / 行历史 |
+| `<M-g><M-l>` | LazyGit，检测到可执行文件才定义；不是 `<M-g><M-g>` |
+
+### 7.6. 任务与运行
+
+配置见 [`run.vim`](conf.d/main/plugin/run.vim)，示例见第 9 节。
+
+| 按键 | 优先匹配的任务名 | 功能或未找到任务时的行为 |
+|---|---|---|
+| `<M-B>` | `task-build` | 底部运行当前文件，具体取决于终端能力 |
+| `<M-R>` | `task-run` | 右侧运行当前文件 |
+| `<M-T>` | `task-test` | 标签页终端运行当前文件，不保证自动生成语言测试命令 |
+| `<M-F>` | `task-finalize` | Neovim 使用浮动终端；Vim 使用 Quickfix 路径 |
+| `<M-r>` | — | 打开任务选择入口 |
+| `<Tab>q` | — | 停止任务 |
+
+项目任务文件按配置查找 `.vim/tasks.ini`、`.git/tasks.ini`、`.vscode/tasks.ini`；用户全局任务放 `~/.leovim.d/tasks/tasks.ini`，仓库通用任务见 [`tasks_common.ini`](conf.d/tasks/tasks_common.ini)。`~/.config/tasks.ini` 不是这里配置的默认全局路径。
+
+运行和测试按钮不天然等价于所有语言的 `run` / `test`；为项目定义任务可避免单文件运行器的限制。
+
+### 7.7. 调试
+
+#### 选择条件与项目文件
+
+调试配置在 VSCode 模式跳过，也要求编辑器有终端支持。
+
+| 方案 | 当前选择条件 | 项目文件 |
+|---|---|---|
+| Vimspector | `debug` 开关、检测到 Python 3.10+；Vim 8.2.4797+，或 Neovim 0.8+ 且未选原生 LSP | 从当前文件目录向上查找 `.vimspector.json` |
+| nvim-dap | 未选中 Vimspector，Neovim 0.9.5+ 且启用 `debug`；原生 LSP 配合 `java` 也会声明该插件 | 默认由项目根目录定位 `.vim/dap.json` |
+| termdebug | 前两种未选中，Vim 8.1+ 且启用 `termdebug` | 使用 Vim 的 GDB 调试配置 |
+
+Vimspector 在 Vim 中运行需要 `+python3`，在 Neovim 中需要可用的 Python 3 provider。安装条件来自 [`application.vim`](conf.d/plug/application.vim)，运行与按键来自 [`debug.vim`](conf.d/main/plugin/debug.vim)。
+
+#### Go 单文件模板
+
+| 方案 | 适配器安装 | 模板用法 |
+|---|---|---|
+| Vimspector | `:VimspectorInstall delve` | 将 [`vimspector/go_file.json`](conf.d/vimspector/go_file.json) 整体复制为项目 `.vimspector.json` |
+| nvim-dap | `:MasonInstall delve` | 将 [`dap/go_file.json`](conf.d/dap/go_file.json) 的单个对象加入 `.vim/dap.json` 的 `configurations` 数组，见第 9.3 节 |
+
+| 按键 | 模板操作（需启用 FZF） |
+|---|---|
+| `<Leader>rl` | 选择模板并分屏打开模板与项目配置，**不会自动合并** |
+| `<Leader>ro` | 打开或创建项目配置，仍需自行填入内容 |
+
+LeoVim 的 nvim-dap 入口默认不读取 `.vscode/launch.json`。
+
+两个模板都使用 Delve `debug` 模式：`program` 为 `${file}`，`cwd` 为 `${fileDirname}`，`stopOnEntry` 为 `false`。打开含 `main` 的 Go 文件，在函数内可执行语句上设断点后启动；没有有效断点时程序可能直接执行结束。`import`、字段声明、注释、空行不是语句断点。需要启动后先停住时，可将 `stopOnEntry` 改为 `true`。
+
+多文件程序将 `program` 改为 `${fileDirname}` 或实际入口包目录。Delve 与 Go 工具链版本应兼容，不建议关闭版本检查来掩盖不兼容。
+
+#### Vimspector / nvim-dap 按键
+
+| 按键 | 功能 |
+|---|---|
+| `F5` / `<M-e><CR>` | 启动或继续 |
+| `F3` / `<M-e>q` | 重置调试 |
+| `F4` / `<M-e><M-e>` | 运行到光标 |
+| `F6` / `<M-e>p` | 暂停 |
+| `F7` / `F8` | 跳到上一个 / 下一个断点位置，不是执行程序 |
+| `F9` / `<M-e><Space>` | 切换断点 |
+| `F10` / `<M-e>n` | 单步跳过 |
+| `F11` / `<M-e>i` | 单步进入 |
+| `F12` / `<M-e>o` | 单步跳出 |
+| `<M-e>c` | 清除断点 |
+| `-` | 添加光标下变量到 Watch，需已启动调试；可视模式也绑定 Watch 命令 |
+| `J` | 调试时变量求值，否则显示诊断 |
+| `<M-m>0` | 聚焦源码窗口 |
+| `<M-e>r` | Vimspector 启动；nvim-dap 未定义此映射 |
+| `<M-e>D` | Vimspector 反汇编，需适配器支持 |
+| `_` | 非递归执行 Vim 原生 `-`：上移一行并停在首个非空白字符，**不是 Watch 别名** |
+| `=` | 未在调试和终端配置中重映射，保留原生缩进操作符行为 |
+| `+` | 未在调试和终端配置中重映射，保留原生向下移动到首个非空白字符的行为 |
+
+
+### 7.8. 终端与调试窗口分流
+
+Floaterm 操作需要已安装 `vim-floaterm`。普通模式下：
+
+| 按键 | Vimspector 窗口已打开 | nvim-dap UI 已打开 | 没有对应调试界面 |
+|---|---|---|---|
+| `Alt+-` | 显示 Console | 浮动显示 REPL | 切换 Floaterm |
+| `Alt+=` | 聚焦调试终端 | 选择浮动显示的 DAP UI 元素 | 没有当前 Floaterm 时新建，否则显示列表 |
+| `Alt+_` | 隐藏 Floaterm | 隐藏 Floaterm | 隐藏 Floaterm |
+| `Alt++` | 选择位置并新建 Floaterm | 选择位置并新建 Floaterm | 选择位置并新建 Floaterm |
+
+插入和终端输入模式的这些 Alt 键直接操作 Floaterm，不走调试分流。`Alt++` 不是移动已有终端。配置见 [`terminal.vim`](conf.d/main/plugin/terminal.vim)。
+
+### 7.9. AI CLI 与 REPL
+
+AI 入口由 Floaterm 增强插件提供；AI CLI 本身需自行安装并完成认证。设置示例放在 `~/.vimrc.opt`：
+
+```vim
+let g:floaterm_ai_programs = [
+      \ ['claude', '--wintype=vsplit --position=left --width=0.3'],
+      \ ['opencode', '--wintype=float --position=topright --width=0.45 --height=0.8', 'AI'],
+      \ ]
+```
+
+这里的 `opencode` 是 CLI 程序，不表示仓库已声明 `opencode.nvim`。当前仓库只有相关开关示例，不能据此承诺原生插件的 `<Tab>o` 等映射可用。
+
+| 按键 | AI 操作 |
+|---|---|
+| `<M-i><M-r>` / `<M-i><CR>` | 交互选择 / 启动默认 AI |
+| `<M-i>l` | 发送当前行或选区并切到 AI |
+| `<M-i>f` / `<M-i>d` | 发送文件路径 / 目录路径 |
+| `<M-i>p` | FZF 选文件发送 |
+| `<M-i><M-l>` / `<M-i><M-f>` / `<M-i><M-d>` / `<M-i><M-p>` | 对应发送操作但保持编辑窗口 |
+| `<M-i><Space>` | 向 AI 终端发送回车 |
+
+REPL 见 [`repl.vim`](conf.d/main/plugin/repl.vim)，实际解释器需可执行：
+
+| 按键 | REPL 操作 |
+|---|---|
+| `<M-a><M-r>` | 选择并启动 REPL |
+| `<M-a>n` / `<M-a>l` | 发送当前行或选区；前者移动到下一行，后者保留位置 |
+| `<M-a><M-a>` / `<M-a><Space>` | 发送代码块；前者移动光标，后者保留位置 |
+| `<M-a>a` | 发送整文件 |
+| `<M-a>m` / `<M-a>s` / `<M-a>S` | 标记 / 发送 / 显示标记区域 |
+| `<M-a>q` / `<M-a>L` | 退出 / 清屏 |
+
+### 7.10. 复制、剪贴板与外部编辑器
+
+见 [`yank-paste.vim`](conf.d/main/plugin/yank-paste.vim)。
+
+| 按键 | 实际功能 |
+|---|---|
+| `yf` / `yd` / `yb` | 复制绝对文件路径 / 目录路径 / 文件名 |
+| `yl` | 复制 `@绝对路径#L行号` 引用；可视模式可复制行范围 |
+| 可视模式 `Y` | 复制选区到配置使用的系统剪贴板或回退寄存器 |
+| `<Leader>yc` / `<Leader>yv` / `<Leader>yq` | 复制 Code / Devin / Qoder 的当前位置启动命令 |
+| `<Leader>yp` / `<Leader>yz` / `<Leader>ye` | 复制 Positron / Zed / Vim edit 的当前位置命令 |
+
+上述“外部编辑器”键只生成并复制命令，**不会自动执行或打开编辑器**。系统剪贴板和 OSC52 是否可用取决于 Vim 编译选项、终端和 tmux 配置，不能保证所有远程终端自动互通。
+
+## 8. 排查与维护
+
+### 8.1. 从实际状态开始
+
+在编辑器中检查：
+
+```vim
+:version
+:echo g:packs
+:echo get(g:, 'complete_engine', '')
+:echo get(g:, 'debug_tool', '')
+:PlugStatus
+:messages
+:scriptnames
+```
+
+终端中分析启动耗时，不要把 shell 命令当作 Vim 命令输入：
+
+```bash
+vim --startuptime startup.log
+```
+
+### 8.2. 补全与语言服务器
+
+- Coc：检查 `:CocInfo`、`:CocList extensions` 和实际 Node.js 路径。当前配置门槛是 Node.js 24+，不是旧文档的 16.18。
+- Neovim 原生 LSP：检查 `:LspInfo`、`:Mason`，并确认服务器附着到当前 buffer。
+- builtin / mucomplete：不会因为能补全关键字就自动拥有跳转、重命名和诊断能力。
+- 扩展与语言服务器不是一回事。例如 C/C++ 需要实际 clangd，Go 需要 gopls；安装后仍需正确的项目配置、编译选项或模块环境。
+- 先只选择一个高级补全引擎，更新插件并重启。仓库支持的开关以 [`pack.vim`](conf.d/init/autoload/pack.vim) 和插件声明为准，不要照搬其他发行版的 `Lazy` / `Packer` 命令。
+
+### 8.3. 调试、REPL 与快捷键
+
+- 调试先确认真正读取了哪份项目配置。Vimspector 会向父目录查找 `.vimspector.json`，父目录遗留文件也可能生效。
+- 断点跳过时检查是否设置在可执行行、运行的入口/包是否正确、日志中的 `verified` 和 `stopped` 事件；日志记录暂停但界面没有显示，不能直接认定为配置正确或程序已退出。
+- Vimspector 日志通常在 `~/.vimspector.log`，nvim-dap 可用其日志入口。不要把其他调试会话的结果当作当前会话证据。
+- REPL 先检查解释器可执行文件、`:FloatermNew` 和 Floaterm 增强插件。普通解释器 REPL 不通用依赖 `pynvim`；Python provider 的问题另行检查。
+- 按键冲突使用 `:verbose nmap 完整按键` 查看最后来源。不要直接 `unmap <M-h>`：它是多键前缀，未必存在独立映射，还可能破坏整组操作。
+- WhichKey 检查 `g:leovim_whichkey` 和已声明插件；可试 `:WhichKey '<M-h>'`。它不是每个插件键位都已注册的保证。
+
+Windows 安装问题优先检查符号链接权限、Git、工具路径及错误输出，不建议为了安装而直接关闭安全软件。
+
+### 8.4. 安全修改用户配置
+
+在 `~/.leovim.d/after.vim` 中按文件类型设置：
+
+```vim
+augroup leovim_user_filetypes
+  autocmd!
+  autocmd FileType python setlocal tabstop=4 shiftwidth=4 expandtab colorcolumn=88
+augroup END
+```
+
+若要覆盖后续插件初始化产生的全局键位，可在用户钩子中延迟到 `VimEnter`，再用 `:verbose nmap` 确认。例如保留普通模式原生 `J`：
+
+```vim
+augroup leovim_user_maps
+  autocmd!
+  autocmd VimEnter * nnoremap J J
+augroup END
+```
+
+这不是运行中重载所有配置的通用方法；修改选型后优先重启。主题、高亮和插件变量同样应考虑后续加载覆盖，不应假定名为 `after.vim` 就最后执行。
+
+## 9. 项目示例
+
+### 9.1. 语言功能开关
+
+在 `~/.vimrc.opt` 中按需添加：
+
+```vim
+call pack#add('go')
+call pack#add('debug')
+" 其他可选开关包括 c、rust、java、web、r、markdown 等，
+" 具体有效开关以 conf.d/plug/languages.vim 和各功能声明为准。
+```
+
+Coc 扩展安装命令仅适用于选择了 Coc 的环境：
+
+```vim
+:CocInstall coc-pyright
 :CocInstall coc-go
-
-" 快速运行
-<M-R>           " 运行当前文件
-<M-T>           " 运行测试
-
-" 格式化
-<C-q>           " 自动格式化和导入
-```
-
-**Rust 开发**
-
-```vim
-" 安装 Rust LSP
 :CocInstall coc-rust-analyzer
-
-" Cargo 命令
-<M-R>           " cargo run
-<M-B>           " cargo build
-<M-T>           " cargo test
-
-" 文档查看
-<C-h>           " 查看文档
-```
-
-**Web 开发**
-
-```vim
-" 安装扩展
 :CocInstall coc-tsserver coc-html coc-css coc-json
-
-" 前端框架
-:CocInstall coc-vetur      " Vue
-:CocInstall coc-angular    " Angular
-
-" 格式化
-:CocInstall coc-prettier
 ```
 
-### 9.3. 项目配置示例
+不要同时照搬旧 `coc-python` 与 pyright 示例。Neovim 原生 LSP 环境使用 Mason 和仓库中的服务器配置，不用 `CocInstall`。语言工具安装、编译器和项目配置仍需单独完成；Go 调试见第 7.7 节。
 
-**AsyncTasks 配置** (`~/.config/tasks.ini`)
+### 9.2. AsyncTasks 项目任务
+
+保存为项目 `.vim/tasks.ini`。任务名使用按钮实际匹配的 `task-*`，以下是 npm 项目示例：
+
 ```ini
-[project-build]
+[task-build]
 command=npm run build
 cwd=$(VIM_ROOT)
 output=terminal
 pos=bottom
 
-[project-test]
+[task-test]
 command=npm test
 cwd=$(VIM_ROOT)
 output=quickfix
 
-[project-run]
+[task-run]
 command=npm start
 cwd=$(VIM_ROOT)
 output=terminal
 pos=right
 ```
 
-**调试配置** (`.vscode/launch.json`)
+仓库通用任务是另一个来源，不需要把所有任务复制到每个项目。任务会执行实际命令，先确认项目脚本和工作目录。
+
+### 9.3. nvim-dap Go 单文件项目配置
+
+先执行 `:MasonInstall delve`，再保存为项目 `.vim/dap.json`。同目录模板 [`conf.d/dap/go_file.json`](conf.d/dap/go_file.json) 只包含数组中的单个对象，不能直接当作整个项目文件。
+
 ```json
 {
+  "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "type": "delve",
+      "name": "Go : Current File",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/index.js"
-    },
-    {
-      "type": "python",
-      "request": "launch",
-      "name": "Python: Current File",
+      "mode": "debug",
+      "stopOnEntry": false,
+      "cwd": "${fileDirname}",
       "program": "${file}",
-      "console": "integratedTerminal"
+      "args": [],
+      "env": {}
     }
   ]
 }
 ```
+
+Vimspector 不使用此数组格式，应采用 [`conf.d/vimspector/go_file.json`](conf.d/vimspector/go_file.json) 的完整内容作为项目 `.vimspector.json`。
+
+## 10. 参考入口
+
+- [功能开关模板](conf.d/init/opt.vim)
+- [插件声明目录](conf.d/plug/)
+- [功能模块目录](conf.d/main/plugin/)
+- [补全与 LSP 配置](conf.d/main/after/cfg/)
+- [语言服务器配置](conf.d/main/after/lsp/)
+- [VSCode 配置](conf.d/init/vscode.vim)
+- [许可证](LICENSE)

@@ -1,0 +1,11 @@
+{
+  "type": "delve",
+  "name": "Go : Current File",
+  "request": "launch",
+  "mode": "debug",
+  "stopOnEntry": false,
+  "cwd": "${fileDirname}",
+  "program": "${file}",
+  "args": [],
+  "env": {}
+}
