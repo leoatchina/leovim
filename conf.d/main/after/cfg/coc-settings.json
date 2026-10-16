@@ -13,6 +13,8 @@
   },
   // 弹出补全菜单时不预选，第一次 <C-n> 从第一项开始。
   "suggest.noselect": true,
+  // 保留同类型的嵌套符号层级，WinBar 使用 full_plain 避免 maxItems 截断。
+  "symbol-line.onlyNearestKinds": [],
   // ---- list / explorer / source ----
   "list": {
     "nextKeymap": "<C-j>",

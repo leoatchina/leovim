@@ -185,19 +185,18 @@ if has('patch-8.0.1129') && !has('nvim')
             return
         else
             let fname = expand('%:t')
-            let symbols = get(b:, 'coc_symbol_line_plain', '')
-            " The extension's plain variant still contains statusline formatting.
-            let symbols = substitute(symbols, '%#[^#]*#', '', 'g')
-            let symbols = substitute(symbols, '%\d*@[^@]*@', '', 'g')
-            let symbols = substitute(symbols, '%X', '', 'g')
-            if symbols =~# '%f'
-                let symbols = ''
-            endif
-            if symbols != ''
-                let fname .= ' > ' . symbols
+            if pack#installed_coc()
+                let symbols = get(b:, 'coc_symbol_line_full_plain', '')
+                " The full plain variant keeps all filtered levels, but has highlights.
+                let symbols = substitute(symbols, '%#[^#]*#', '', 'g')
+                let symbols = substitute(symbols, '%\d*@[^@]*@', '', 'g')
+                let symbols = substitute(symbols, '%X', '', 'g')
+                if symbols !~# '%f' && symbols != ''
+                    let fname .= ' > ' . symbols
+                endif
             endif
             let ename = escape(substitute(fname, '&', '&&', 'g'), ' .\\|')
-            let rhs = ':echo ' . string(fname) . "<CR>"
+            let rhs = ':echo ' . substitute(string(fname), '|', '<Bar>', 'g') . "<CR>"
             let menu_names = s:winbar_menu_names()
             if a:open
                 if index(menu_names, fname) < 0 && index(menu_names, ename) < 0
