@@ -140,7 +140,7 @@ if executable('git')
             endif
         else
             if !pack#planned_leaderf()
-                PlugAdd 'junegunn/gv.vim'
+                PlugAdd 'junegunn/gv.vim', {'on': 'GV'}
             endif
         endif
     endif
@@ -270,7 +270,11 @@ if get(g:, 'header_field_author', '') != ''
     let g:header_auto_add_header = 0
     let g:header_auto_update_header = 0
     let g:header_field_timestamp_format = '%Y.%m.%d'
-    PlugAdd 'vim-header'
+    PlugAdd 'vim-header', {'on': [
+                \ 'AddHeader', 'AddMinHeader',
+                \ 'AddAGPLicense', 'AddApacheLicense', 'AddSHLLicense', 'AddEUPLicense',
+                \ 'AddGNULicense', 'AddLGPLLicense', 'AddMITLicense', 'AddMPLLicense',
+                \ 'AddWTFPLLicense', 'AddZlibLicense']}
     nnoremap <M-k>a :AddHeader<Cr>
 endif
 " ----------------------------

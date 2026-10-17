@@ -14,7 +14,10 @@ xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
 let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
 let g:easy_align_delimiters['*'] = {'pattern': '*', 'ignore_groups': ['String']}
-PlugAdd 'vim-easy-align'
+PlugAdd 'vim-easy-align', {'on': [
+            \ 'EasyAlign', 'LiveEasyAlign',
+            \ '<Plug>(EasyAlign)', '<Plug>(LiveEasyAlign)',
+            \ '<Plug>(EasyAlignRepeat)', '<Plug>(EasyAlignOperator)']}
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 xmap g, ga*,

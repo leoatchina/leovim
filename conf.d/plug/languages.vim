@@ -119,5 +119,8 @@ endif
 " translate
 " ------------------------------
 if pack#get('translate') && v:version >= 800 && g:python_version >= 3.06
-    PlugAdd 'voldikss/vim-translator'
+    PlugAdd 'voldikss/vim-translator', {'on': [
+                \ 'Translate', 'TranslateW', 'TranslateR', 'TranslateX', 'TranslateH', 'TranslateL',
+                \ '<Plug>Translate', '<Plug>TranslateV', '<Plug>TranslateW', '<Plug>TranslateWV',
+                \ '<Plug>TranslateR', '<Plug>TranslateRV', '<Plug>TranslateX']}
 endif
