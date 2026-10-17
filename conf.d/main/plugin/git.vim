@@ -70,20 +70,18 @@ if pack#planned('vim-fugitive')
             setlocal nomodifiable readonly
         endif
     endfunction
+elseif pack#installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
+    nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 git add -A<Cr>
+    nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
+    nnoremap <silent><M-g><Cr> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
+    nnoremap <M-G> :AsyncRun -mode=term -focus=1 git
+    nnoremap <M-g>U :AsyncRun -mode=term -focus=1 git push<Space>
 else
-    if pack#installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
-        nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 git add -A<Cr>
-        nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
-        nnoremap <silent><M-g><Cr> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
-        nnoremap <M-G> :AsyncRun -mode=term -focus=1 git
-        nnoremap <M-g>U :AsyncRun -mode=term -focus=1 git push<Space>
-    else
-        nnoremap <silent><M-g>a :!git add -A<Cr>
-        nnoremap <silent><M-g>u :!git push<Cr>
-        nnoremap <silent><M-g><Cr> :!git commit -a -m ""<Left>
-        nnoremap <M-G> :!git
-        nnoremap <M-g>U :!git push<Space>
-    endif
+    nnoremap <silent><M-g>a :!git add -A<Cr>
+    nnoremap <silent><M-g>u :!git push<Cr>
+    nnoremap <silent><M-g><Cr> :!git commit -a -m ""<Left>
+    nnoremap <M-G> :!git
+    nnoremap <M-g>U :!git push<Space>
 endif
 " Current-file history: keep g\ stable and select the best available backend.
 if pack#planned('diffview-plus.nvim')
