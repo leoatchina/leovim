@@ -359,7 +359,7 @@ elseif !pack#get('nocomplete')
     endif
 endif
 " Baseline finder only when neither advanced finder is actually installed.
-if !has('nvim') && has('vim9script') && has('popupwin')
+if !pack#installed_fzf() && !pack#installed_leaderf() && !has('nvim') && has('vim9script') && has('popupwin')
     source $CFG_DIR/fuzzbox.vim
     PlugAdd 'fuzzbox.vim'
 endif
