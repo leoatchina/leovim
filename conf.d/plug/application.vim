@@ -90,7 +90,7 @@ endif
 " -----------------------
 " format install
 " -----------------------
-PlugAdd 'sbdchd/neoformat'
+PlugAdd 'sbdchd/neoformat', {'on': 'Neoformat'}
 " --------------------------------
 " run
 " --------------------------------
@@ -223,7 +223,7 @@ endif
 if has('nvim')
     PlugAdd 'nvim-tree/nvim-web-devicons'
     PlugAdd 'kevinhwang91/promise-async'
-    PlugAdd 'kevinhwang91/nvim-bqf'
+    PlugAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
     PlugAdd 'MunifTanjim/nui.nvim'
     PlugAdd 'nvim-lua/plenary.nvim'
     PlugAdd 'stevearc/dressing.nvim'

@@ -131,10 +131,10 @@ endif
 " -----------------------------------------------------
 " Primary diff workspace: preserve LeaderF and use editor-specific fallbacks.
 " -----------------------------------------------------
-if pack#planned_leaderf()
-    nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
-elseif pack#planned('diffview-plus.nvim')
+if pack#planned('diffview-plus.nvim')
     nnoremap <silent>\| :DiffviewOpen<Cr>
+elseif pack#planned_leaderf()
+    nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
 elseif pack#planned('vim-signify')
     function! s:signifyDiff() abort
         SignifyDiff

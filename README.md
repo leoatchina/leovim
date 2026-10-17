@@ -191,7 +191,7 @@ flowchart TD
 
 `after/cfg/*.vim` 不会全部自动执行；功能模块按条件 `source` 它们。Lua 文件也由对应的 `require` 加载，不是因为放在 `lua/` 下就全部自动执行。
 
-EasyAlign、GV、vim-header、vim-translator 按命令或 `<Plug>` 懒加载，原快捷键不变。
+EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf 按 `qf`、render-markdown 按 `markdown`/`vimwiki` 加载。原快捷键不变。
 
 ### 4.3. 用户修改放在哪里
 
