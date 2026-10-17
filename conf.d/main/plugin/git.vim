@@ -70,12 +70,6 @@ if pack#planned('vim-fugitive')
             setlocal nomodifiable readonly
         endif
     endfunction
-elseif pack#installed('asyncrun.vim') && g:has_terminal && utils#is_unix()
-    nnoremap <silent><M-g>a :AsyncRun -mode=term -focus=1 git add -A<Cr>
-    nnoremap <silent><M-g>u :AsyncRun -mode=term -focus=1 git push<Cr>
-    nnoremap <silent><M-g><Cr> :AsyncRun -mode=term -focus=1 git commit -a -m ""<Left>
-    nnoremap <M-G> :AsyncRun -mode=term -focus=1 git
-    nnoremap <M-g>U :AsyncRun -mode=term -focus=1 git push<Space>
 else
     nnoremap <silent><M-g>a :!git add -A<Cr>
     nnoremap <silent><M-g>u :!git push<Cr>
@@ -104,13 +98,13 @@ elseif pack#installed('blamer.nvim')
     let g:blamer_show_in_insert_modes = 0
     let g:blamer_prefix = ' >> '
     let g:blamer_delay = 500
-    nnoremap <silent><Tab><Cr> :BlamerToggle<Cr>
     command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
     if pack#planned_leaderf()
         nnoremap <silent><Tab><Tab> :Leaderf git blame -w<Cr>
     else
         nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
     endif
+    nnoremap <silent><Tab><Cr> :BlamerToggle<Cr>
 elseif pack#planned_leaderf()
     nnoremap <silent><Tab><Tab> :Leaderf git blame -w<Cr>
     if has('patch-9.0.200') || has('nvim')
