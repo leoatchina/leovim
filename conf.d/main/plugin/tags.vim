@@ -49,8 +49,8 @@ if get(g:, 'ctags_type', '') != ''
         nnoremap <silent>T<Cr> :LeaderfBufTagAll<Cr>
     elseif g:symbol_tool =~ 'fzftags' && executable('perl')
         nnoremap <silent><leader>T :FzfTags<Cr>
-    elseif g:symbol_tool =~ 'ctrlptags'
-        nnoremap <silent><leader>T :CtrlPTags<Cr>
+    elseif pack#installed('fuzzbox.vim')
+        nnoremap <silent><leader>T :FuzzyTags<Cr>
     endif
     if pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
         nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
@@ -60,14 +60,14 @@ if get(g:, 'ctags_type', '') != ''
         nnoremap <silent>t<Cr> :LeaderfBufTag<Cr>
     elseif g:symbol_tool =~ 'fzftags'
         nnoremap <silent>t<Cr> :FzfBTags<Cr>
-    elseif g:symbol_tool =~ 'ctrlptags'
-        nnoremap <silent>t<Cr> :CtrlPBufTag<Cr>
+    elseif pack#installed('fuzzbox.vim')
+        nnoremap <silent>t<Cr> :FuzzboxBufferTags<Cr>
     endif
 endif
 " f<Cr> to useing native functions show
 if pack#planned('vim-funky')
     command! QfFunky call funky#qf#show()
-    if pack#installed('fzf', 'fzf.vim')
+    if pack#installed_fzf()
         command! FzfFunky call funky#fzf#show()
         nnoremap <silent>f<Cr> :w!<Cr>:FzfFunky<Cr>
     else

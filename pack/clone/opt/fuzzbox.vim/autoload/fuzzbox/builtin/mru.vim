@@ -1,0 +1,115 @@
+vim9script
+
+import autoload '../internal/selector.vim'
+import autoload '../internal/previewer.vim'
+import autoload '../internal/devicons.vim'
+import autoload '../internal/utils.vim'
+import autoload '../internal/actions.vim'
+
+var mru_origin_list: list<string>
+var cwd: string
+var cwd_filter: bool
+var cwdlen: number
+var fs = utils.PathSep()
+var menu_wid: number
+
+# Options
+var file_exclude = exists('g:fuzzbox_mru_exclude_file')
+    && type(g:fuzzbox_mru_exclude_file) == v:t_list ?
+    g:fuzzbox_mru_exclude_file : g:fuzzbox_exclude_file
+var dir_exclude = exists('g:fuzzbox_mru_exclude_dir')
+    && type(g:fuzzbox_mru_exclude_dir) == v:t_list ?
+    g:fuzzbox_mru_exclude_dir : g:fuzzbox_exclude_dir
+var cwd_only = exists('g:fuzzbox_mru_cwd_only') && g:fuzzbox_mru_cwd_only
+# For CTRL-K backwards compatibility only
+var emacs_keys = exists('g:fuzzbox_emacs_keys') && g:fuzzbox_emacs_keys
+
+def ToggleScope()
+    cwd_filter = cwd_filter ? 0 : 1
+    var mru_list: list<string> = copy(mru_origin_list)
+    if cwd_filter
+        mru_list = filter(mru_list, (_, val) => {
+            return stridx(fnamemodify(val, ':p'), cwd) >= 0
+        })
+        mru_list = reduce(mru_list, (acc, val) => {
+            acc->add(strpart(fnamemodify(val, ':p'), len(cwd) + 1))
+            return acc
+        }, [])
+    else
+        mru_list = reduce(mru_list, (acc, val) => {
+            acc->add(fnamemodify(val, ':~:.'))
+            return acc
+        }, [])
+    endif
+    var len_list = len(mru_list)
+    selector.UpdateResults(mru_list, [], len_list, len_list)
+enddef
+
+export def Start(opts: dict<any> = {})
+    opts.title = has_key(opts, 'title') ? opts.title : 'Recent Files'
+
+    cwd = len(get(opts, 'cwd', '')) > 0 ? opts.cwd : getcwd()
+    cwdlen = len(cwd)
+    cwd_filter = cwd_only || len(get(opts, 'cwd', '')) > 0
+    # sorted files from buffers opened during this session, including unlisted
+    var mru_buffers = split(execute('buffers! t'), '\n')->map((_, val) => {
+            var bufnumber = str2nr(matchstr(val, '\M\s\*\(\d\+\)'))
+            if match(val, 'line 0$') == -1 # opened files have buffer line >= 1
+                return fnamemodify(bufname(bufnumber), ':p')
+            else
+                return ''
+            endif
+        })->filter((_, val) => filereadable(val))
+    # oldfiles that are not already included in buffers from this session
+    var mru_oldfiles = copy(v:oldfiles)->map((_, val) => {
+            return fnamemodify(val, ':p')
+        })->filter((_, val) => {
+            return filereadable(val) && index(mru_buffers, val) == -1
+        })
+    mru_origin_list = mru_buffers + mru_oldfiles
+    filter(mru_origin_list, (_, val) => {
+        for dir in dir_exclude
+            if val =~# glob2regpat('**/' .. dir .. '/**')
+                return false
+            endif
+        endfor
+        for glob in file_exclude
+            if fnamemodify(val, ':t') =~# glob2regpat(glob)
+                return false
+            endif
+        endfor
+        return true
+    })
+    var mru_list: list<string> = copy(mru_origin_list)
+    if cwd_filter
+        mru_list = filter(mru_list, (_, val) => {
+            return stridx(fnamemodify(val, ':p'), cwd .. fs) >= 0
+        })
+        mru_list = reduce(mru_list, (acc, val) => {
+            acc->add(strpart(fnamemodify(val, ':p'), cwdlen + 1))
+            return acc
+        }, [])
+    else
+        mru_list = reduce(mru_list, (acc, val) => {
+            acc->add(fnamemodify(val, ':~:.'))
+            return acc
+        }, [])
+    endif
+
+    var _actions = { "\<c-y>": function('ToggleScope') }
+    if !emacs_keys
+        _actions["\<c-k>"] = () => {
+            utils.Warn('Fuzzbox: CTRL-K mapping deprecated, use CTRL-Y')
+            function('ToggleScope')()
+        }
+    endif
+
+    var wids = selector.Start(mru_list, extend(opts, {
+        async: true,
+        devicons: true,
+        select_cb: actions.OpenFile,
+        preview_cb: actions.PreviewFile,
+        actions: _actions
+    }))
+    menu_wid = wids.menu
+enddef

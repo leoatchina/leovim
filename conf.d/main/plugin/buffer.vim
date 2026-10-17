@@ -2,14 +2,14 @@
 if utils#is_vscode()
     finish
 endif
-if pack#planned_leaderf()
+if pack#installed_leaderf()
     nnoremap <silent><leader>b :LeaderfBuffer<Cr>
-elseif pack#planned_fzf()
+elseif pack#installed_fzf()
     nnoremap <silent><leader>b :FzfBuffers<Cr>
+elseif pack#installed('fuzzbox.vim')
+    nnoremap <silent><leader>b :FuzzyBuffers<Cr>
 elseif pack#planned('vim-quickui')
     nnoremap <silent><leader>b :call quickui#tools#list_buffer('e')<Cr>
-else
-    nnoremap <silent><leader>b :CtrlPBuffer<Cr>
 endif
 " kill other buffers
 command! BdOther silent! execute "%bd|e#|bd#"

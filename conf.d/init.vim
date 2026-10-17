@@ -358,5 +358,10 @@ elseif !pack#get('nocomplete')
         PlugAdd 'hrsh7th/vim-vsnip-integ'
     endif
 endif
+" Baseline finder only when neither advanced finder is actually installed.
+if !pack#installed_leaderf() && !pack#installed_fzf() && !has('nvim') && has('vim9script') && has('popupwin')
+    source $CFG_DIR/fuzzbox.vim
+    PlugAdd 'fuzzbox.vim'
+endif
 call plug#end()
 let g:leovim_loaded = 1

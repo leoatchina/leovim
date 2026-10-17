@@ -136,3 +136,8 @@ make build  # lint and validate the plugin manifest
   `<BS>` separately if it starts navigating.
 - The editor maps are normal-mode only. Add `t`/`i` modes yourself if you want
   to navigate out of terminal/insert mode.
+- **Stale `HERDR_BIN_PATH` after `herdr update`.** If herdr updates itself while
+  the server keeps running, the server-injected `HERDR_BIN_PATH` can point at a
+  deleted binary and every keypress would fail with exit 127. `navigate.sh`
+  detects this and falls back to `herdr` on `PATH`; if neither is usable it
+  fails loudly instead of silently doing nothing.

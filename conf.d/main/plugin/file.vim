@@ -38,22 +38,22 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-if pack#planned_leaderf() && !has('nvim')
+if pack#installed_leaderf() && !has('nvim')
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
     nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=utils#get_vcs_dir()<Cr><Cr>
-elseif pack#planned_fzf()
+elseif pack#installed_fzf()
     nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>p  :FzfFiles <C-r>=utils#get_vcs_dir()<Cr><Cr>
-else
-    nnoremap <silent><nowait><leader>ff :CtrlPCurFile<Cr>
-    nnoremap <silent><nowait><leader>p  :CtrlP <C-r>=utils#get_vcs_dir()<Cr><Cr>
+elseif pack#installed('fuzzbox.vim')
+    nnoremap <silent><nowait><leader>ff :call fuzzbox#Launch('files', {'cwd': expand('%:p') == '' ? getcwd() : expand('%:p:h')})<Cr>
+    nnoremap <silent><nowait><leader>p :call fuzzbox#Launch('files', {'cwd': utils#get_vcs_dir()})<Cr>
 endif
-if pack#planned_fzf()
+if pack#installed_fzf()
     nnoremap <nowait>\F :FzfGitFiles <C-r>=@"<Cr>
     xnoremap <nowait>\F :<C-u>FzfGitFiles <C-r>=utils#get_visual(1)<Cr>
     nnoremap <nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
-else
-    nnoremap <nowait><C-p> :CtrlP <C-r>=utils#get_root_dir()<Cr><Cr>
+elseif pack#installed('fuzzbox.vim')
+    nnoremap <silent><nowait><C-p> :call fuzzbox#Launch('files', {'cwd': utils#get_root_dir()})<Cr>
 endif
 " ---------------------------------
 " open gitroot getroot

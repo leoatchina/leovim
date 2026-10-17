@@ -1,0 +1,131 @@
+vim9script
+
+import autoload '../internal/selector.vim'
+import autoload '../internal/previewer.vim'
+
+var jumplist: list<any>
+var jumplast: number
+
+var separator = g:fuzzbox_menu_separator
+
+def ParseResult(result: string): list<any>
+    var idx = str2nr(split(result, separator)[0]) - 1
+    var jump = jumplist[idx]
+    return [jump.bufnr, jump.lnum, jump.col]
+enddef
+
+def Select(wid: number, result: string)
+    if empty(result)
+        return
+    endif
+    var [bufnr, lnum, col] = ParseResult(result)
+    exe 'buffer ' .. bufnr
+    cursor(lnum, col)
+    exe 'norm! zz'
+enddef
+
+def Preview(wid: number, result: string)
+    if empty(result)
+        previewer.PreviewText(wid, '')
+        return
+    endif
+    var [bufnr, lnum, col] = ParseResult(result)
+    var file = bufname(bufnr)
+    if filereadable(fnamemodify(file, ':p'))
+        previewer.PreviewFile(wid, fnamemodify(file, ':p'), lnum, col)
+    elseif bufloaded(bufnr)
+        previewer.PreviewText(wid, getbufline(bufnr, 1, '$'), lnum, col)
+    else
+        previewer.PreviewText(wid, '')
+    endif
+enddef
+
+def OpenFileTab(wid: number, result: string)
+    if empty(result)
+        return
+    endif
+    popup_close(wid)
+    var [bufnr, lnum, col] = ParseResult(result)
+    exe 'tabnew'
+    exe 'buffer ' .. bufnr
+    cursor(lnum, col)
+    exe 'norm! zz'
+enddef
+
+def OpenFileVSplit(wid: number, result: string)
+    if empty(result)
+        return
+    endif
+    popup_close(wid)
+    var [bufnr, lnum, col] = ParseResult(result)
+    exe 'vsplit'
+    exe 'buffer ' .. bufnr
+    cursor(lnum, col)
+    exe 'norm! zz'
+enddef
+
+def OpenFileSplit(wid: number, result: string)
+    if empty(result)
+        return
+    endif
+    popup_close(wid)
+    var [bufnr, lnum, col] = ParseResult(result)
+    exe 'split'
+    exe 'buffer ' .. bufnr
+    cursor(lnum, col)
+    exe 'norm! zz'
+enddef
+
+export def Start(opts: dict<any> = {})
+    opts.title = has_key(opts, 'title') ? opts.title : 'Jumps'
+
+    jumplist = getjumplist()[0]
+    jumplast = getjumplist()[1]
+
+    var size = len(jumplist)
+    var fmt = ' %' ..  len(string(size)) .. 'd ' .. separator .. ' '
+    var lines = jumplist->mapnew((idx, jump) => {
+        var fname = bufname(jump.bufnr)
+        if empty(fname)
+            fname = "[No Name]"
+        endif
+        var text: string
+        if bufloaded(jump.bufnr)
+            # note: getbufoneline() only added in vim 9.1.0916
+            var lines = getbufline(jump.bufnr, jump.lnum)
+            if !empty(lines)
+                text = lines[0]
+            endif
+        endif
+        return printf($"{fmt}%s:%d:%d:%s", idx + 1, fname, jump.lnum, jump.col, text)
+    })
+    reverse(lines) # Reverse list so we start at the end of the jumplist
+
+    var wids = selector.Start(lines, extend(opts, {
+        select_cb: function('Select'),
+        preview_cb: function('Preview'),
+        default_actions: false,
+        actions: {
+            "\<c-v>": function('OpenFileVSplit'),
+            "\<c-s>": function('OpenFileSplit'),
+            "\<c-x>": function('OpenFileSplit'),
+            "\<c-t>": function('OpenFileTab'),
+        }
+    }))
+
+    if jumplast != len(jumplist)
+        win_execute(wids.menu, $'syn match Number "^\s\+{jumplast + 1}\s"')
+    endif
+
+    # Move cursor to the current item in the jump list
+    if jumplast != len(jumplist)
+        var move = len(jumplist) - jumplast - 1
+        if move > 0
+            if opts.dropdown
+                win_execute(wids.menu, "norm! " .. move .. "j")
+            else
+                win_execute(wids.menu, "norm! " .. move .. "k")
+            endif
+        endif
+    endif
+enddef

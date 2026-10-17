@@ -2,17 +2,17 @@
 if utils#is_vscode()
     finish
 endif
-if pack#planned_leaderf()
+if pack#installed_leaderf()
     nnoremap <nowait><M-l><M-l> :Leaderf line --fuzzy --no-sort<Cr>
-elseif pack#planned_fzf() && executable('rg')
+elseif pack#installed_fzf() && executable('rg')
     nnoremap <nowait><M-l><M-l> :FzfBLines<Cr>
+elseif pack#installed('fuzzbox.vim')
+    nnoremap <silent><nowait><M-l><M-l> :FuzzyInBuffer<Cr>
 endif
-if pack#planned_leaderf()
+if pack#installed_leaderf()
     nnoremap <nowait><M-l><M-a> :Leaderf line --fuzzy --all --no-sort<Cr>
-elseif pack#planned_fzf()
+elseif pack#installed_fzf()
     nnoremap <nowait><M-l><M-a> :FzfLines<Cr>
-else
-    nnoremap <nowait><M-l><M-l> :CtrlPLine<Cr>
 endif
 " ------------------------
 " y register for replace

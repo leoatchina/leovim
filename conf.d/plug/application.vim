@@ -124,11 +124,6 @@ endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 3 && !pack#get('noleaderf') && !pack#get('no-leaderf')
     PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
-if !pack#planned_leaderf() && !pack#planned_fzf()
-    source $CFG_DIR/ctrlp.vim
-    PlugAdd 'ctrlp.vim'
-endif
-" ------------------------------
 " Git
 " ------------------------------
 if executable('git')

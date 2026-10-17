@@ -1,8 +1,8 @@
 #!/bin/env bash
 
-# ctrlp
-rm -rf ctrlp.vim
-git clone --depth 1 https://github.com/ctrlpvim/ctrlp.vim.git
+# fuzzbox (Vim9 baseline fuzzy finder)
+rm -rf fuzzbox.vim
+git clone --depth 1 https://github.com/vim-fuzzbox/fuzzbox.vim.git
 
 # tagbar
 rm -rf tagbar

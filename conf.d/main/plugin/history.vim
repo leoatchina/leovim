@@ -2,12 +2,12 @@
 if utils#is_vscode()
     finish
 endif
-if pack#planned_leaderf()
+if pack#installed_leaderf()
     nnoremap <silent><leader>u :LeaderfMru<Cr>
-elseif pack#planned_fzf()
+elseif pack#installed_fzf()
     nnoremap <silent><leader>u :FzfHistory<Cr>
-else
-    nnoremap <silent><leader>u :CtrlPMRU<Cr>
+elseif pack#installed('fuzzbox.vim')
+    nnoremap <silent><leader>u :FuzzyMru<Cr>
 endif
 " --------------------------
 " jumpoption
