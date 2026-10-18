@@ -42,7 +42,6 @@ function! s:buffer_tags() abort
                 \ 'default_actions': 0,
                 \ 'actions': {
                 \ "\<C-x>": function('s:jump', ['sbuffer', target]),
-                \ "\<C-s>": function('s:jump', ['sbuffer', target]),
                 \ "\<C-]>": function('s:jump', ['vertical sbuffer', target]),
                 \ "\<C-t>": function('s:jump', ['tab sbuffer', target]),
                 \ }})

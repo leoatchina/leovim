@@ -101,7 +101,15 @@ endif
 " markdown
 " ------------------------------
 if has('nvim-0.10.3')
-    PlugAdd 'MeanderingProgrammer/render-markdown.nvim'
+    let g:lazyload_render_markdown_config = {'file_types': ['markdown', 'vimwiki']}
+    PlugAdd 'MeanderingProgrammer/render-markdown.nvim', {'for': ['markdown', 'vimwiki']}
+    augroup LeoRenderMarkdown
+        autocmd!
+        " Reattach the first buffer using only the renderer's own FileType hook.
+        autocmd User render-markdown.nvim ++once lua
+                    \ require('render-markdown').setup(vim.g.lazyload_render_markdown_config);
+                    \ vim.api.nvim_exec_autocmds('FileType', { group = 'RenderMarkdown', buffer = 0 })
+    augroup END
 endif
 if pack#get('markdown')
     PlugAdd 'leoatchina/vim-table-mode'
@@ -119,5 +127,8 @@ endif
 " translate
 " ------------------------------
 if pack#get('translate') && v:version >= 800 && g:python_version >= 3.06
-    PlugAdd 'voldikss/vim-translator'
+    PlugAdd 'voldikss/vim-translator', {'on': [
+                \ 'Translate', 'TranslateW', 'TranslateR', 'TranslateX', 'TranslateH', 'TranslateL',
+                \ '<Plug>Translate', '<Plug>TranslateV', '<Plug>TranslateW', '<Plug>TranslateWV',
+                \ '<Plug>TranslateR', '<Plug>TranslateRV', '<Plug>TranslateX']}
 endif

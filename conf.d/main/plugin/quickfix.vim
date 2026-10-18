@@ -86,7 +86,10 @@ if pack#installed('nvim-bqf')
     hi link BqfPreviewRange Search
     hi default BqfSign ctermfg=14 guifg=Cyan
     hi BqfPreviewBorder guifg=#50a14f ctermfg=71
-    lua require("cfg/bqf")
+    augroup LeoBqf
+        autocmd!
+        autocmd User nvim-bqf lua require("cfg/bqf")
+    augroup END
 endif
 " ----------------------------
 " quickfix

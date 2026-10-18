@@ -23,6 +23,7 @@ endfunction
 " ----------------------------
 if pack#installed('neoformat')
     function! format#choose_fmtprg(visual) abort
+        call plug#load('neoformat')
         let filetype = &ft
         let visual = a:visual
         if &formatprg != '' && neoformat#utils#var('neoformat_try_formatprg')
