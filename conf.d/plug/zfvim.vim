@@ -1,5 +1,5 @@
-PlugAdd 'ZFVimJob'
-PlugAdd 'ZFVimDirDiff'
+PackAdd 'ZFVimJob'
+PackAdd 'ZFVimDirDiff'
 " --------------------
 " ZFIgnore
 " --------------------
@@ -22,7 +22,7 @@ let g:ZFIgnore_ignore_gitignore_detectOption = {
             \ 'parentRecursive' : 0,
             \ }
 autocmd User ZFIgnoreOnToggle let &wildignore = join(ZFIgnoreToWildignore(ZFIgnoreGet()), ',')
-PlugAdd 'ZFVimIgnore'
+PackAdd 'ZFVimIgnore'
 " --------------------
 " ZFVimBackup
 " --------------------
@@ -51,19 +51,19 @@ function! zfvim#zfbackup_savedir() abort
     endif
 endfunction
 nnoremap <silent><M-j><M-b> :call zfvim#zfbackup_savedir()<Cr>
-PlugAdd 'ZFVimBackup'
+PackAdd 'ZFVimBackup'
 " ------------------------------
 " ZFVimIM
 " ------------------------------
 if (pack#get('wubi') || pack#get('pinyin')) && g:has_terminal && utils#is_unix()
-    PlugAdd 'ZSaberLv0/ZFVimIM'
+    PackAdd 'ZSaberLv0/ZFVimIM'
     if pack#get('wubi')
-        PlugAdd 'ZSaberLv0/ZFVimIM_wubi_base'
+        PackAdd 'ZSaberLv0/ZFVimIM_wubi_base'
         let g:input_method = 'zfvim_wubi'
     else
         let g:input_method = 'zfvim_pinyin'
     endif
-    PlugAdd 'ZSaberLv0/ZFVimIM_pinyin'
+    PackAdd 'ZSaberLv0/ZFVimIM_pinyin'
 else
     finish
 endif

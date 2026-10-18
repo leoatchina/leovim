@@ -79,9 +79,9 @@ create_symlinks() {
     success "Setted up symlinks from $source_path to $target_path"
 }
 
-setup_plug() {
+setup_pack() {
     info "Starting update/install plugins for $1"
-    "$1" +PlugAddUpdate +qall
+    "$1" +PackUpdate +qall
     success "Successfully updated/installed plugins for $1"
 }
 
@@ -331,13 +331,13 @@ fi
 if [ $installplug != 'no' ]; then
     note "Install (neo)vim plugins"
     if [ -f $HOME/.vimrc.opt ]; then
-        setup_plug "$HOME/.local/bin/vi.sh"
+        setup_pack "$HOME/.local/bin/vi.sh"
         # cmp
-        setup_plug "$HOME/.local/bin/ni.sh"
+        setup_pack "$HOME/.local/bin/ni.sh"
         # blink
-        setup_plug "$HOME/.local/bin/nv.sh"
+        setup_pack "$HOME/.local/bin/nv.sh"
     else
-        setup_plug "vim"
+        setup_pack "vim"
     fi
 fi
 ############################### copyright ##################################

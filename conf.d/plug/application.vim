@@ -1,34 +1,34 @@
 if pack#planned_cmp()
-    PlugAdd 'hrsh7th/nvim-cmp'
-    PlugAdd 'hrsh7th/cmp-nvim-lsp'
-    PlugAdd 'hrsh7th/cmp-nvim-lua'
-    PlugAdd 'hrsh7th/cmp-buffer'
-    PlugAdd 'hrsh7th/cmp-cmdline'
-    PlugAdd 'hrsh7th/cmp-vsnip'
-    PlugAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
-    PlugAdd 'FelipeLema/cmp-async-path'
-    PlugAdd 'onsails/lspkind-nvim'
-    PlugAdd 'xzbdmw/colorful-menu.nvim'
+    PackAdd 'hrsh7th/nvim-cmp'
+    PackAdd 'hrsh7th/cmp-nvim-lsp'
+    PackAdd 'hrsh7th/cmp-nvim-lua'
+    PackAdd 'hrsh7th/cmp-buffer'
+    PackAdd 'hrsh7th/cmp-cmdline'
+    PackAdd 'hrsh7th/cmp-vsnip'
+    PackAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
+    PackAdd 'FelipeLema/cmp-async-path'
+    PackAdd 'onsails/lspkind-nvim'
+    PackAdd 'xzbdmw/colorful-menu.nvim'
 elseif pack#planned_blink()
     if executable('cargo') && !pack#get('blink.lua')
-        PlugAdd 'Saghen/blink.cmp', {'do': 'cargo build --release', 'branch': 'v1'}
+        PackAdd 'Saghen/blink.cmp', {'do': 'cargo build --release', 'branch': 'v1'}
     else
-        PlugAdd 'Saghen/blink.cmp', {'branch': 'v1'}
+        PackAdd 'Saghen/blink.cmp', {'branch': 'v1'}
     endif
 elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}
+        PackAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}
     else
-        PlugAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci', 'dir': utils#expand("~/.leovim.d/coc/master")}
+        PackAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci', 'dir': utils#expand("~/.leovim.d/coc/master")}
     endif
-    PlugAdd 'coc-fzf'
+    PackAdd 'coc-fzf'
 endif
 " ------------------------------
 " snippets install
 " ------------------------------
 if !pack#get('nocomplete') && exists('v:true') && exists("##TextChangedP")
-    PlugAdd 'rafamadriz/friendly-snippets'
-    PlugAdd 'hrsh7th/vim-vsnip'
+    PackAdd 'rafamadriz/friendly-snippets'
+    PackAdd 'hrsh7th/vim-vsnip'
 endif
 " ------------------------------
 " lsp && linter tool install
@@ -36,21 +36,21 @@ endif
 if pack#planned_lsp()
     let g:lint_tool = 'lsp'
     " lsp related
-    PlugAdd 'mason-org/mason-lspconfig.nvim'
-    PlugAdd 'camilledejoye/nvim-lsp-selection-range'
-    PlugAdd 'Wansmer/symbol-usage.nvim'
-    PlugAdd 'ravenxrz/call-graph.nvim'
-    PlugAdd 'neovim/nvim-lspconfig'
+    PackAdd 'mason-org/mason-lspconfig.nvim'
+    PackAdd 'camilledejoye/nvim-lsp-selection-range'
+    PackAdd 'Wansmer/symbol-usage.nvim'
+    PackAdd 'ravenxrz/call-graph.nvim'
+    PackAdd 'neovim/nvim-lspconfig'
     " lightline
-    PlugAdd 'josa42/nvim-lightline-lsp'
+    PackAdd 'josa42/nvim-lightline-lsp'
     " lspimport is only for pyright
-    PlugAdd 'leoatchina/nvim-lspimport'
+    PackAdd 'leoatchina/nvim-lspimport'
     " codesettings
-    PlugAdd 'mrjones2014/codesettings.nvim'
+    PackAdd 'mrjones2014/codesettings.nvim'
 elseif g:python_version > 3.06 && pack#get('ale')
     let g:lint_tool = 'ale'
-    PlugAdd 'dense-analysis/ale'
-    PlugAdd 'maximbaz/lightline-ale'
+    PackAdd 'dense-analysis/ale'
+    PackAdd 'maximbaz/lightline-ale'
 elseif pack#planned_coc()
     let g:lint_tool = 'coc'
 else
@@ -65,93 +65,93 @@ if pack#get('debug') && g:python_version >= 3.10
             \ && ((!has('nvim') && has('patch-8.2.4797'))
             \ || (has('nvim-0.8') && !pack#planned_lsp()))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PlugAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install }
+    PackAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install }
 elseif has('nvim-0.9.5') && pack#get('debug') || pack#planned_lsp() && pack#get('java')
-    PlugAdd 'mfussenegger/nvim-dap'
-    PlugAdd 'nvim-neotest/nvim-nio'
-    PlugAdd 'rcarriga/nvim-dap-ui'
-    PlugAdd 'jay-babu/mason-nvim-dap.nvim'
+    PackAdd 'mfussenegger/nvim-dap'
+    PackAdd 'nvim-neotest/nvim-nio'
+    PackAdd 'rcarriga/nvim-dap-ui'
+    PackAdd 'jay-babu/mason-nvim-dap.nvim'
 endif
 " ------------------------------
 " textobj install
 " ------------------------------
 if has('nvim-0.9.2') && !has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
-    PlugAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master'}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
-    PlugAdd 'nvim-treesitter/nvim-treesitter-refactor'
-    PlugAdd 'm-demare/hlargs.nvim'
+    PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
+    PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master'}
+    PackAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
+    PackAdd 'nvim-treesitter/nvim-treesitter-refactor'
+    PackAdd 'm-demare/hlargs.nvim'
 elseif exists('*search') && exists('*getpos') && pack#planned_coc()
-    PlugAdd 'bps/vim-textobj-python', {'for': 'python'}
-    PlugAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
-    PlugAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
-    PlugAdd 'gcmt/wildfire.vim'
+    PackAdd 'bps/vim-textobj-python', {'for': 'python'}
+    PackAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
+    PackAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+    PackAdd 'gcmt/wildfire.vim'
 endif
 " -----------------------
 " format install
 " -----------------------
-PlugAdd 'sbdchd/neoformat', {'on': 'Neoformat'}
+PackAdd 'sbdchd/neoformat', {'on': 'Neoformat'}
 " --------------------------------
 " run
 " --------------------------------
 if has('nvim') || has('timers') && has('channel') && has('job')
-    PlugAdd 'asyncrun.vim'
+    PackAdd 'asyncrun.vim'
     if !has("nvim")
         let g:lightline#asyncrun#indicator_none = ''
-        PlugAdd 'lightline-asyncrun'
+        PackAdd 'lightline-asyncrun'
     endif
 endif
 if has('nvim') || v:version >= 801
-    PlugAdd 'asynctasks.vim'
+    PackAdd 'asynctasks.vim'
 endif
 " ------------------------------
 " fuzzy finders
 " ------------------------------
 if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
-    PlugAdd 'junegunn/fzf.vim'
+    PackAdd 'junegunn/fzf.vim'
     if utils#is_win()
-        PlugAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\.local\\fzf')}
+        PackAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\.local\\fzf')}
     else
-        PlugAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf')}
+        PackAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf')}
     endif
-    PlugAdd 'fzf-registers'
-    PlugAdd 'fzf-tabs'
+    PackAdd 'fzf-registers'
+    PackAdd 'fzf-tabs'
     if has('nvim')
-        PlugAdd 'stevearc/oil.nvim'
-        PlugAdd 'benomahony/oil-git.nvim'
+        PackAdd 'stevearc/oil.nvim'
+        PackAdd 'benomahony/oil-git.nvim'
     endif
 endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 3 && !pack#get('noleaderf') && !pack#get('no-leaderf')
-    PlugAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
+    PackAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
 endif
 " Git
 " ------------------------------
 if executable('git')
     if v:version >= 800 && g:git_version >= 1.85
-        PlugAdd 'tpope/vim-fugitive'
+        PackAdd 'tpope/vim-fugitive'
         if has('nvim')
             if has('nvim-0.10') && g:git_version >= 2.31
-                PlugAdd 'dlyongemallo/diffview-plus.nvim'
+                PackAdd 'dlyongemallo/diffview-plus.nvim'
             endif
             if has('nvim-0.11')
-                PlugAdd 'lewis6991/gitsigns.nvim'
+                PackAdd 'lewis6991/gitsigns.nvim'
             elseif has('nvim-0.9')
-                PlugAdd 'lewis6991/gitsigns.nvim', {'tag': 'v1.0.2'}
+                PackAdd 'lewis6991/gitsigns.nvim', {'tag': 'v1.0.2'}
             endif
         else
             if !pack#planned_leaderf()
-                PlugAdd 'junegunn/gv.vim', {'on': 'GV'}
+                PackAdd 'junegunn/gv.vim', {'on': 'GV'}
             endif
         endif
     endif
     if !has('nvim') && has('patch-8.0.902')
-        PlugAdd 'vim-signify'
+        PackAdd 'vim-signify'
     endif
     if g:has_popup_floating
-        PlugAdd 'skywind3000/vim-git-diffview'
+        PackAdd 'skywind3000/vim-git-diffview'
         " LeaderF supplies inline blame on recent Vim versions.
         if utils#is_unix() && (!pack#planned_leaderf() || !has('patch-9.0.200'))
-            PlugAdd 'APZelos/blamer.nvim'
+            PackAdd 'APZelos/blamer.nvim'
         endif
     endif
 endif
@@ -159,99 +159,99 @@ endif
 " terminal && tmux
 " --------------------------
 if g:has_terminal
-    PlugAdd 'vim-floaterm'
-    PlugAdd 'vim-floaterm-enhance'
+    PackAdd 'vim-floaterm'
+    PackAdd 'vim-floaterm-enhance'
 endif
 if v:version >= 800 && utils#has_gui() == 0
     if utils#is_unix() && $TMUX != ''
-        PlugAdd 'vim-tmux-navigator'
-        PlugAdd 'vim-tmux-clipboard'
+        PackAdd 'vim-tmux-navigator'
+        PackAdd 'vim-tmux-clipboard'
     elseif $HERDR_PANE_ID != ''
-        PlugAdd 'vim-herdr-navigation'
+        PackAdd 'vim-herdr-navigation'
     endif
 endif
 " --------------------------
 " sidebar
 " --------------------------
-PlugAdd 'vim-sidebar-manager'
+PackAdd 'vim-sidebar-manager'
 if v:version >= 801 || has('nvim')
     let g:fern_disable_startup_warnings = 1
     let g:fern#renderer = "nerdfont"
-    PlugAdd 'vim-fern'
-    PlugAdd 'vim-nerdfont'
-    PlugAdd 'vim-glyph-palette'
-    PlugAdd 'vim-fern-git-status'
-    PlugAdd 'vim-fern-hijack'
-    PlugAdd 'vim-fern-renderer-nerdfont'
-    PlugAdd 'fern-mapping-fzf.vim'
-    PlugAdd 'fern-preview.vim'
+    PackAdd 'vim-fern'
+    PackAdd 'vim-nerdfont'
+    PackAdd 'vim-glyph-palette'
+    PackAdd 'vim-fern-git-status'
+    PackAdd 'vim-fern-hijack'
+    PackAdd 'vim-fern-renderer-nerdfont'
+    PackAdd 'fern-mapping-fzf.vim'
+    PackAdd 'fern-preview.vim'
     augroup my-glyph-palette
         autocmd!
         autocmd FileType fern,startify call glyph_palette#apply()
     augroup END
 else
-    PlugAdd 'vim-vinegar'
+    PackAdd 'vim-vinegar'
 endif
 " --------------------------------
 " lightline
 " --------------------------------
-PlugAdd 'lightline.vim'
-PlugAdd 'lightline-bufferline'
+PackAdd 'lightline.vim'
+PackAdd 'lightline-bufferline'
 " ----------------------------
 " scheme
 " ----------------------------
 if !pack#planned_treesitter() && pack#get('c') && pack#planned_adv_comp_eng()
-    PlugAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
+    PackAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
 endif
 if g:has_truecolor
-    PlugAdd 'sainnhe/sonokai'
+    PackAdd 'sainnhe/sonokai'
     if has('nvim')
-        " PlugAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
-        PlugAdd 'EdenEast/nightfox.nvim'
-        PlugAdd 'folke/tokyonight.nvim'
-        PlugAdd 'craftzdog/solarized-osaka.nvim'
+        " PackAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
+        PackAdd 'EdenEast/nightfox.nvim'
+        PackAdd 'folke/tokyonight.nvim'
+        PackAdd 'craftzdog/solarized-osaka.nvim'
     else
-        " PlugAdd 'joshdick/onedark.vim'
-        PlugAdd 'catppuccin/vim', {'as': 'catppuccin-vim'}
-        PlugAdd 'bluz71/vim-moonfly-colors'
-        PlugAdd 'bluz71/vim-nightfly-colors'
+        " PackAdd 'joshdick/onedark.vim'
+        PackAdd 'catppuccin/vim', {'as': 'catppuccin-vim'}
+        PackAdd 'bluz71/vim-moonfly-colors'
+        PackAdd 'bluz71/vim-nightfly-colors'
     endif
 endif
 " --------------------------
 " ui && frame
 " --------------------------
 if has('nvim')
-    PlugAdd 'nvim-tree/nvim-web-devicons'
-    PlugAdd 'kevinhwang91/promise-async'
-    PlugAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
-    PlugAdd 'MunifTanjim/nui.nvim'
-    PlugAdd 'nvim-lua/plenary.nvim'
-    PlugAdd 'stevearc/dressing.nvim'
+    PackAdd 'nvim-tree/nvim-web-devicons'
+    PackAdd 'kevinhwang91/promise-async'
+    PackAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
+    PackAdd 'MunifTanjim/nui.nvim'
+    PackAdd 'nvim-lua/plenary.nvim'
+    PackAdd 'stevearc/dressing.nvim'
     if  has('nvim-0.11')
-        PlugAdd 'Bekaboo/dropbar.nvim'
+        PackAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()
-            PlugAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
+            PackAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
         endif
     endif
     if pack#planned_lsp() || pack#planned_dap()
-        PlugAdd 'mason-org/mason.nvim'
+        PackAdd 'mason-org/mason.nvim'
     endif
 elseif v:version >= 800
-    PlugAdd 'ryanoasis/vim-devicons'
+    PackAdd 'ryanoasis/vim-devicons'
 endif
 " -------------------
 " vim-preview
 " -------------------
 let g:preview#preview_position = "rightbottom"
 let g:preview#preview_size = get(g:, 'asyncrun_open', 8)
-PlugAdd 'vim-preview'
+PackAdd 'vim-preview'
 nnoremap <silent><C-w><Space> <C-w>z:call preview#cmdmsg('close preview', 0)<Cr>
 " -------------------
 " vim-quickui
 " -------------------
 if v:version >= 802 || has('nvim')
     let g:quickui_preview_h = 24
-    PlugAdd 'vim-quickui'
+    PackAdd 'vim-quickui'
 endif
 " -------------------
 " which-key
@@ -261,7 +261,7 @@ if get(g:, 'leovim_whichkey', 1)
     let g:which_key_fallback_to_native_key = 0
     let g:which_key_run_map_on_popup = 0
     let g:which_key_use_floating_win = g:has_popup_floating
-    PlugAdd 'vim-which-key'
+    PackAdd 'vim-which-key'
 endif
 " ------------------------------
 " vim-header
@@ -270,7 +270,7 @@ if get(g:, 'header_field_author', '') != ''
     let g:header_auto_add_header = 0
     let g:header_auto_update_header = 0
     let g:header_field_timestamp_format = '%Y.%m.%d'
-    PlugAdd 'vim-header', {'on': [
+    PackAdd 'vim-header', {'on': [
                 \ 'AddHeader', 'AddMinHeader',
                 \ 'AddAGPLicense', 'AddApacheLicense', 'AddSHLLicense', 'AddEUPLicense',
                 \ 'AddGNULicense', 'AddLGPLLicense', 'AddMITLicense', 'AddMPLLicense',
@@ -281,14 +281,14 @@ endif
 " pairs && wiler
 " ----------------------------
 if pack#planned_lsp()
-    PlugAdd 'windwp/nvim-autopairs'
+    PackAdd 'windwp/nvim-autopairs'
 else
     if v:version >= 800
         if !pack#planned_coc()
-            PlugAdd 'tmsvg/pear-tree'
+            PackAdd 'tmsvg/pear-tree'
         endif
     elseif has('patch-7.4.849')
-        PlugAdd 'jiangmiao/auto-pairs'
+        PackAdd 'jiangmiao/auto-pairs'
     endif
     " wilder
     if g:python_version > 3 && has('nvim') && utils#is_unix()
@@ -298,33 +298,33 @@ else
         endfunction
         Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
     elseif (!utils#is_win() || pack#get('wilder')) && (!has('nvim') && v:version >= 801 || has('nvim'))
-        PlugAdd 'gelguy/wilder.nvim'
+        PackAdd 'gelguy/wilder.nvim'
     endif
 endif
 " ------------------------------
 " undo
 " ------------------------------
 if has('nvim') && utils#is_unix()
-    PlugAdd 'kevinhwang91/nvim-fundo'
+    PackAdd 'kevinhwang91/nvim-fundo'
 endif
 " ----------------------------
 " indentLine plugins
 " ----------------------------
 if has('nvim')
-    PlugAdd 'lukas-reineke/indent-blankline.nvim'
+    PackAdd 'lukas-reineke/indent-blankline.nvim'
 elseif has('conceal')
-    PlugAdd 'Yggdroot/indentLine'
+    PackAdd 'Yggdroot/indentLine'
 endif
 " ------------------------------
 " marks
 " ------------------------------
-PlugAdd 'kshenoy/vim-signature'
-PlugAdd 'vim-bookmarks'
+PackAdd 'kshenoy/vim-signature'
+PackAdd 'vim-bookmarks'
 " -------------------
 " startify
 " -------------------
-PlugAdd 'vim-startify'
+PackAdd 'vim-startify'
 " -------------------
 " quickfix
 " -------------------
-PlugAdd 'romainl/vim-qf'
+PackAdd 'romainl/vim-qf'

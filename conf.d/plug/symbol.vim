@@ -46,27 +46,27 @@ if get(g:, 'ctags_type', '') != ''
         endif
     endif
 endif
-PlugAdd 'vim-funky'
+PackAdd 'vim-funky'
 if g:has_popup_floating
     let g:matchup_matchparen_offscreen = {'method': 'popup'}
 else
     let g:matchup_matchparen_offscreen = {'method': 'status_manual'}
 endif
-PlugAdd 'vim-matchup'
+PackAdd 'vim-matchup'
 " ------------------------------
 " install
 " ------------------------------
 if s:planned_symbol('gutentags')
-    PlugAdd 'skywind3000/vim-gutentags'
+    PackAdd 'skywind3000/vim-gutentags'
 endif
 if s:planned_symbol('plus')
-    PlugAdd 'skywind3000/gutentags_plus'
+    PackAdd 'skywind3000/gutentags_plus'
 endif
 if s:planned_symbol('aerial')
-    PlugAdd 'stevearc/aerial.nvim', {'branch': 'nvim-0.11'}
+    PackAdd 'stevearc/aerial.nvim', {'branch': 'nvim-0.11'}
 endif
 if s:planned_symbol('vista')
-    PlugAdd 'vista.vim'
+    PackAdd 'vista.vim'
 elseif s:planned_symbol('tagbar')
-    PlugAdd 'tagbar'
+    PackAdd 'tagbar'
 endif

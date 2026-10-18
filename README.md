@@ -22,7 +22,7 @@
 
 新建文件时插入模板不等于自动为所有项目创建这些文件。离线运行也需要事先准备所选插件、语言服务器及外部工具。
 
-Fuzzbox 通过 `pack/clone/opt/update-clone.sh` 克隆到本地 opt，再由 `init.vim` 在 `plug#end()` 前通过 `PlugAdd 'fuzzbox.vim'` 注册。条件是未安装 LeaderF/FZF、非 Neovim，且有 vim9script/popupwin；不是只检查是否声明。默认插件快捷键关闭，后备沿用 `<Leader>ff`（当前文件目录）、`<Leader>p`（VCS 目录）、`<C-p>`（项目根）、`<Leader>b`、`<Leader>u`、`<M-l><M-l>`、`<Leader>T` 和 `t<CR>`；当前文件标签需要 ctags，读取已保存文件。Snacks 尚未在本轮接入。
+Fuzzbox 通过 `pack/clone/opt/update-clone.sh` 克隆到本地 opt，再由 `init.vim` 在 `plug#end()` 前通过 `PackAdd 'fuzzbox.vim'` 注册。条件是未安装 LeaderF/FZF、非 Neovim，且有 vim9script/popupwin；不是只检查是否声明。默认插件快捷键关闭，后备沿用 `<Leader>ff`（当前文件目录）、`<Leader>p`（VCS 目录）、`<C-p>`（项目根）、`<Leader>b`、`<Leader>u`、`<M-l><M-l>`、`<Leader>T` 和 `t<CR>`；当前文件标签需要 ctags，读取已保存文件。Snacks 尚未在本轮接入。
 
 Fuzzbox 使用顶部输入、结果自上而下的布局；`Ctrl-j` 向下、`Ctrl-k` 向上，同时保留 `Ctrl-n/p` 和方向键。当前文件标签列表的 `Ctrl-]` 仍为垂直分屏打开。
 
@@ -72,7 +72,7 @@ cd ~/.leovim
 ./install.sh
 ```
 
-**无参数运行也会联网并安装/更新插件**：脚本建立入口配置和启动脚本，克隆或更新 `~/.leovim.unix`，在缺失时复制 `~/.vimrc.opt`，默认调用启动包装脚本运行 `PlugAddUpdate`。
+**无参数运行也会联网并安装/更新插件**：脚本建立入口配置和启动脚本，克隆或更新 `~/.leovim.unix`，在缺失时复制 `~/.vimrc.opt`，默认调用启动包装脚本运行 `PackUpdate`。
 
 主要文件行为：
 
@@ -121,7 +121,7 @@ git pull
 :CocUpdate
 ```
 
-`CocUpdate` 只适用于 Coc。`PlugAddUpdate` 是 LeoVim 包装命令，会重新读取 `~/.vimrc.opt` 后调用 `PlugUpdate`；开关或插件声明变化后，重启再更新更容易确认实际选择。
+`CocUpdate` 只适用于 Coc。`PackUpdate` 是 LeoVim 包装命令，会重新读取 `~/.vimrc.opt` 后调用 `PlugUpdate`；开关或插件声明变化后，重启再更新更容易确认实际选择。
 
 [`scripts/compress.sh`](scripts/compress.sh) 输出 `~/leovim.tar.gz`，打包指定的 `.local` 工具、`.leovim`、`.leovim.d` 和 `.leovim.unix`，并排除 `.git`。它不是完整的个人配置备份：`~/.vimrc.opt` 和编辑器入口文件需单独备份，用户钩子随 `.leovim.d` 打包；缺失的工具路径也可能令 tar 报错。不同平台的二进制、Python 环境和动态库不能仅靠复制保证可用，解压后直接运行安装器仍可能联网。
 
@@ -177,7 +177,7 @@ git pull
 flowchart TD
     A[conf.d/init.vim] --> B[目录与运行时路径、扫描本地 opt 插件]
     B --> C[加载 ~/.vimrc.opt]
-    C --> D[plug#begin 与 PlugAdd]
+    C --> D[plug#begin 与 PackAdd]
     D --> E[加载 ~/.leovim.d/pack.vim]
     E --> F{VSCode 模式?}
     F -->|是| G[init/vscode.vim]
@@ -198,7 +198,7 @@ EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf
 | 文件 | 用途 |
 |---|---|
 | `~/.vimrc.opt` | 功能开关、工具路径、插件配置变量，尽早设置 |
-| `~/.leovim.d/pack.vim` | 通过 `PlugAdd` 声明额外插件 |
+| `~/.leovim.d/pack.vim` | 通过 `PackAdd` 声明额外插件 |
 | `~/.leovim.d/after.vim` | 用户配置钩子；它在后续 `plugin/*.vim` 自动加载之前执行，不能保证直接写的映射一定最后生效 |
 
 文件类型定制可在 `after.vim` 中使用带分组的 `FileType` 自动命令。不要假定 `~/.leovim.d/ftplugin/` 自动加入了 runtimepath；仓库未为该目录建立通用自动加载约定。

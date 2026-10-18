@@ -1,11 +1,11 @@
-PlugAdd 'vim-eunuch'
+PackAdd 'vim-eunuch'
 " ----------------------------------
 " hl searchindex && multi replace
 " ----------------------------------
 if has('nvim')
-    PlugAdd 'nvim-hlslens'
+    PackAdd 'nvim-hlslens'
 else
-    PlugAdd 'vim-searchindex'
+    PackAdd 'vim-searchindex'
 endif
 xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
 " --------------------------
@@ -14,7 +14,7 @@ xnoremap <silent><C-n> :<C-u>call utils#enhance_search()<Cr>/<C-R>=@/<Cr><Cr>gvc
 let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
 let g:easy_align_delimiters['*'] = {'pattern': '*', 'ignore_groups': ['String']}
-PlugAdd 'vim-easy-align', {'on': [
+PackAdd 'vim-easy-align', {'on': [
             \ 'EasyAlign', 'LiveEasyAlign',
             \ '<Plug>(EasyAlign)', '<Plug>(LiveEasyAlign)',
             \ '<Plug>(EasyAlignRepeat)', '<Plug>(EasyAlignOperator)']}
@@ -28,7 +28,7 @@ xmap g<Space> ga*<Space>
 " conflict marker
 " ------------------------------
 let g:conflict_marker_enable_mappings = 0
-PlugAdd 'conflict-marker.vim'
+PackAdd 'conflict-marker.vim'
 nnoremap <leader>ct :ConflictMarkerThemselves<Cr>
 nnoremap <leader>co :ConflictMarkerOurselves<Cr>
 nnoremap <leader>cx :ConflictMarkerNone<Cr>
@@ -52,24 +52,24 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
-PlugAdd 'nerdcommenter'
+PackAdd 'nerdcommenter'
 nnoremap <silent><leader>c] V}:call nerdcommenter#Comment('x', 'toggle')<CR>
 nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " ------------------------
 " quick jump in buffer
 " ------------------------
 if has('nvim')
-    PlugAdd 'flash.nvim'
+    PackAdd 'flash.nvim'
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
-    PlugAdd 'clever-f.vim'
+    PackAdd 'clever-f.vim'
 endif
 if utils#is_vscode()
-    PlugAdd 'hop.nvim'
+    PackAdd 'hop.nvim'
 else
-    PlugAdd 'vim-easymotion'
-    PlugAdd 'vim-easymotion-chs'
+    PackAdd 'vim-easymotion'
+    PackAdd 'vim-easymotion-chs'
 endif
 " --------------------------
 " textobj
@@ -86,11 +86,11 @@ for s:v in ['', 'v', 'V', '<C-V>']
     execute 'omap <expr>' s:v.'A%' "(v:count?'':'1').'".s:v."a%'"
 endfor
 if exists('*search') && exists('*getpos')
-    PlugAdd 'vim-textobj-user'
-    PlugAdd 'vim-textobj-uri'
-    PlugAdd 'vim-textobj-line'
-    PlugAdd 'vim-textobj-syntax'
-    PlugAdd 'vim-textobj-function'
+    PackAdd 'vim-textobj-user'
+    PackAdd 'vim-textobj-uri'
+    PackAdd 'vim-textobj-line'
+    PackAdd 'vim-textobj-syntax'
+    PackAdd 'vim-textobj-function'
     nmap <leader>vf vafo
     nmap <leader>vF vifo
     nmap <leader>vc vaco
@@ -116,11 +116,11 @@ if exists('*search') && exists('*getpos')
     let g:vindent_object_XX_ai     = 'ai' " select current block + one extra line  at beginning.
     let g:vindent_object_XX_aI     = 'aI' " select current block + two extra lines at beginning and end.
     let g:vindent_jumps            = 1    " make vindent motion count as a |jump-motion| (works with |jumplist|).
-    PlugAdd 'vindent.vim'
+    PackAdd 'vindent.vim'
     " -------------------
     " targets.vim
     " -------------------
-    PlugAdd 'targets.vim'
+    PackAdd 'targets.vim'
     nmap <leader>vt vit
     nmap <leader>vT vat
     nmap <leader>va via
@@ -140,7 +140,7 @@ if exists('*search') && exists('*getpos')
     " -------------------
     " sandwich
     " -------------------
-    PlugAdd 'vim-sandwich'
+    PackAdd 'vim-sandwich'
     nmap <leader>vs vis
     nmap <leader>vS vas
     nmap <leader>vb vib

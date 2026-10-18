@@ -14,13 +14,13 @@ endif
 " load contract
 " --------------------------
 " This file is the only supported entrypoint. It must initialize directory
-" variables, runtimepath, g:packs, g:plugs, PlugAdd, and the user config hooks
+" variables, runtimepath, g:packs, g:plugs, PackAdd, and the user config hooks
 " before plugin modules are loaded.
 "
 " Load order:
 "   1. scan local opt plugin directories into s:opt_plugs
 "   2. source ~/.vimrc.opt so users fill g:packs through pack#add()
-"   3. plug#begin() and define PlugAdd for both local and remote plugins
+"   3. plug#begin() and define PackAdd for both local and remote plugins
 "   4. source ~/.leovim.d/pack.vim, then vscode.vim or main.vim
 "   5. source ~/.leovim.d/after.vim, apply first-run completion fallback
 "   6. plug#end()
@@ -284,8 +284,8 @@ let g:plugs = {}
 let g:plug_threads = get(g:, 'plug_threads', 16)
 set rtp^=$MAIN_DIR
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-" unified PlugAdd (local/remote) + PlugAdd shim
-function! s:plug_add(plugin, ...) abort
+" unified PackAdd (local/remote) over vim-plug
+function! s:pack_add(plugin, ...) abort
     let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
     let opts = a:0 > 0 ? copy(a:1) : {}
     " derive key name for duplicate check
@@ -307,19 +307,19 @@ function! s:plug_add(plugin, ...) abort
         echoe plugin . " not exists"
     endif
 endfunction
-command! -nargs=+ PlugAdd call <sid>plug_add(<args>)
-function! s:plug_add_update() abort
+command! -nargs=+ PackAdd call <sid>pack_add(<args>)
+function! s:pack_update() abort
     let vimrc_opt = utils#expand('~/.vimrc.opt')
     if filereadable(vimrc_opt)
         execute "source " . vimrc_opt
     endif
     PlugUpdate
 endfunction
-command! PlugAddUpdate call s:plug_add_update()
-nnoremap <silent><Tab>u :PlugAddUpdate<Cr>
+command! PackUpdate call s:pack_update()
+nnoremap <silent><Tab>u :PackUpdate<Cr>
 nnoremap <silent><Tab>i :PlugInstall<Cr>
-command! PlugCommands call FzfCallCommands('PlugCommands', 'Plug')
-nnoremap <silent><Tab>: :PlugCommands<Cr>
+command! PackCommands call FzfCallCommands('PackCommands', 'Pack', 'Plug')
+nnoremap <silent><Tab>: :PackCommands<Cr>
 " addtional vim packs
 if filereadable(utils#expand("~/.leovim.d/pack.vim"))
     source ~/.leovim.d/pack.vim
@@ -354,14 +354,14 @@ elseif !pack#get('nocomplete')
     else
         let g:complete_engine = 'mcm'
         source $CFG_DIR/mcm.vim
-        PlugAdd 'vim-mucomplete'
-        PlugAdd 'hrsh7th/vim-vsnip-integ'
+        PackAdd 'vim-mucomplete'
+        PackAdd 'hrsh7th/vim-vsnip-integ'
     endif
 endif
 " Baseline finder only when neither advanced finder is actually installed.
 if !pack#installed_fzf() && !pack#installed_leaderf() && !has('nvim') && has('vim9script') && has('popupwin')
     source $CFG_DIR/fuzzbox.vim
-    PlugAdd 'fuzzbox.vim'
+    PackAdd 'fuzzbox.vim'
 endif
 call plug#end()
 let g:leovim_loaded = 1

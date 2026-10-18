@@ -7,46 +7,46 @@ else
     let g:R_exe = utils#expand(exepath(get(g:, 'R_exe', 'R')))
 endif
 if has('nvim') && pack#get('jupynium') && g:python_version > 3.07
-    PlugAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
+    PackAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .')}
 elseif pack#get('nvim-r') && (has('nvim') || v:version >= 802) && executable(g:R_exe)
-    PlugAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
+    PackAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
 " ------------------------------
 " helpful
 " ------------------------------
-PlugAdd 'tweekmonster/helpful.vim', {'for': ['vim', 'lua', 'help']}
+PackAdd 'tweekmonster/helpful.vim', {'for': ['vim', 'lua', 'help']}
 " ------------------------------
 " ps1
 " ------------------------------
 if utils#is_win()
-    PlugAdd 'pprovost/vim-ps1', {'for': 'ps1'}
+    PackAdd 'pprovost/vim-ps1', {'for': 'ps1'}
 endif
 " ------------------------------
 " web
 " ------------------------------
 if pack#get('web')
-    PlugAdd 'mattn/emmet-vim', {'for': g:web_filetypes}
-    PlugAdd 'chemzqm/wxapp.vim', {'for': g:web_filetypes}
+    PackAdd 'mattn/emmet-vim', {'for': g:web_filetypes}
+    PackAdd 'chemzqm/wxapp.vim', {'for': g:web_filetypes}
 endif
 " --------------------------
 " perl
 " --------------------------
 if pack#get('perl') || pack#get('bioinfo')
-    PlugAdd 'vim-perl/vim-perl', {'for': 'perl'}
+    PackAdd 'vim-perl/vim-perl', {'for': 'perl'}
 endif
 " --------------------------
 " bioinfo
 " --------------------------
 if pack#get('bioinfo')
-    PlugAdd 'bioSyntax/bioSyntax-vim', {'for': ['fq', 'fa', 'fasta', 'fastq', 'gtf', 'gtt', 'sam', 'bam']}
+    PackAdd 'bioSyntax/bioSyntax-vim', {'for': ['fq', 'fa', 'fasta', 'fastq', 'gtf', 'gtt', 'sam', 'bam']}
 endif
 " --------------------------
 " C language
 " --------------------------
 if pack#get('c')
-    PlugAdd 'leoatchina/a.vim', {'for': g:c_filetypes}
+    PackAdd 'leoatchina/a.vim', {'for': g:c_filetypes}
     if executable('cppman')
-        PlugAdd 'skywind3000/vim-cppman', {'for': g:c_filetypes}
+        PackAdd 'skywind3000/vim-cppman', {'for': g:c_filetypes}
     endif
 endif
 if pack#get('clangd') && executable(utils#expand(get(g:, 'clangd_exe', 'clangd')))
@@ -63,9 +63,9 @@ else
     let g:cargo_exe = ''
 endif
 if get(g:, 'cargo_exe', '') != '' && pack#get('rust') && v:version >= 800
-    PlugAdd 'rust-lang/rust.vim', {'for': 'rust'}
+    PackAdd 'rust-lang/rust.vim', {'for': 'rust'}
     if pack#planned_lsp() && has('nvim-0.12')
-        PlugAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
+        PackAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
 endif
 " --------------------------
@@ -77,32 +77,32 @@ else
     let g:gobin_exe = ''
 endif
 if get(g:, 'gobin_exe', '') != '' && pack#get('go') && (has('patch-8.1.2269') || has('nvim'))
-    PlugAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
+    PackAdd 'fatih/vim-go', {'for': ['go', 'gosum', 'gomod'], 'do': ':GoInstallBinaries'}
 endif
 " ------------------------------
 " nvim-java
 " ------------------------------
 if pack#planned_lsp() && pack#get('java')
-    PlugAdd 'nvim-java/nvim-java'
-    PlugAdd 'nvim-java/nvim-java-dap'
-    PlugAdd 'nvim-java/nvim-java-core'
-    PlugAdd 'nvim-java/nvim-java-test'
-    PlugAdd 'nvim-java/nvim-java-refactor'
-    PlugAdd 'nvim-java/lua-async-await'
-    PlugAdd 'JavaHello/spring-boot.nvim'
+    PackAdd 'nvim-java/nvim-java'
+    PackAdd 'nvim-java/nvim-java-dap'
+    PackAdd 'nvim-java/nvim-java-core'
+    PackAdd 'nvim-java/nvim-java-test'
+    PackAdd 'nvim-java/nvim-java-refactor'
+    PackAdd 'nvim-java/lua-async-await'
+    PackAdd 'JavaHello/spring-boot.nvim'
 endif
 " ------------------------------
 " latex
 " ------------------------------
 if pack#get('latex') && executable(get(g:, "vimtex_view_method", ''))
-    PlugAdd 'lervag/vimtex', {'for': 'latex'}
+    PackAdd 'lervag/vimtex', {'for': 'latex'}
 endif
 " ------------------------------
 " markdown
 " ------------------------------
 if has('nvim-0.10.3')
     let g:lazyload_render_markdown_config = {'file_types': ['markdown', 'vimwiki']}
-    PlugAdd 'MeanderingProgrammer/render-markdown.nvim', {'for': ['markdown', 'vimwiki']}
+    PackAdd 'MeanderingProgrammer/render-markdown.nvim', {'for': ['markdown', 'vimwiki']}
     augroup LeoRenderMarkdown
         autocmd!
         " Reattach the first buffer using only the renderer's own FileType hook.
@@ -112,22 +112,22 @@ if has('nvim-0.10.3')
     augroup END
 endif
 if pack#get('markdown')
-    PlugAdd 'leoatchina/vim-table-mode'
-    PlugAdd 'junegunn/vim-journal', {'for': 'markdown'}
-    PlugAdd 'ferrine/md-img-paste.vim', {'for': ['markdown', 'vim-plug', 'txt', 'latex']}
+    PackAdd 'leoatchina/vim-table-mode'
+    PackAdd 'junegunn/vim-journal', {'for': 'markdown'}
+    PackAdd 'ferrine/md-img-paste.vim', {'for': ['markdown', 'vim-plug', 'txt', 'latex']}
     if g:node_version > 12 && (has('nvim') || v:version >= 801)
-        PlugAdd 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-        PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
+        PackAdd 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+        PackAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
     elseif g:python_version > 0
-        PlugAdd 'iamcco/markdown-preview.vim', {'for': ['markdown']}
-        PlugAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
+        PackAdd 'iamcco/markdown-preview.vim', {'for': ['markdown']}
+        PackAdd 'iamcco/mathjax-support-for-mkdp', {'for': ['markdown']}
     endif
 endif
 " ------------------------------
 " translate
 " ------------------------------
 if pack#get('translate') && v:version >= 800 && g:python_version >= 3.06
-    PlugAdd 'voldikss/vim-translator', {'on': [
+    PackAdd 'voldikss/vim-translator', {'on': [
                 \ 'Translate', 'TranslateW', 'TranslateR', 'TranslateX', 'TranslateH', 'TranslateL',
                 \ '<Plug>Translate', '<Plug>TranslateV', '<Plug>TranslateW', '<Plug>TranslateWV',
                 \ '<Plug>TranslateR', '<Plug>TranslateRV', '<Plug>TranslateX']}
