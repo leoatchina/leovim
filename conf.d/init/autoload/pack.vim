@@ -2,7 +2,7 @@
 " Package Management Functions
 " ----------------------------------------
 function! pack#get(pack) abort
-    return count(g:packs, a:pack) > 0
+    return index(g:packs, a:pack) >= 0
 endfunction
 
 function! pack#add(...) abort
@@ -10,34 +10,25 @@ function! pack#add(...) abort
         return
     endif
     for require in a:000
-        if !pack#get(require)
+        if index(g:packs, require) < 0
             call add(g:packs, require)
         endif
     endfor
 endfunction
 
 function! pack#planned(...) abort
-    if empty(a:000)
-        return 0
+    if a:0 <= 1
+        return a:0 == 1 && has_key(g:plugs, a:1)
     endif
-    for pack in a:000
-        if !has_key(g:plugs, pack)
-            return 0
-        endif
-    endfor
-    return 1
+    return empty(filter(copy(a:000), '!has_key(g:plugs, v:val)'))
 endfunction
 
 function! pack#installed(...) abort
-    if empty(a:000)
-        return 0
+    if a:0 <= 1
+        return a:0 == 1 && has_key(g:plugs, a:1) && isdirectory(get(g:plugs[a:1], 'dir', ''))
     endif
-    for pack in a:000
-        if !has_key(g:plugs, pack) || !isdirectory(get(g:plugs[pack], 'dir', ''))
-            return 0
-        endif
-    endfor
-    return 1
+    return empty(filter(copy(a:000),
+                \ '!has_key(g:plugs, v:val) || !isdirectory(get(g:plugs[v:val], "dir", ""))'))
 endfunction
 " -------------------------------------------
 " Extended Check Functions (from check.vim)
