@@ -33,12 +33,7 @@ function! pack#installed(...) abort
         return 0
     endif
     for pack in a:000
-        if !has_key(g:plugs, pack)
-            return 0
-        endif
-        let spec = g:plugs[pack]
-        let dir = get(spec, 'dir', '')
-        if !isdirectory(dir)
+        if !has_key(g:plugs, pack) || !isdirectory(get(g:plugs[pack], 'dir', ''))
             return 0
         endif
     endfor
