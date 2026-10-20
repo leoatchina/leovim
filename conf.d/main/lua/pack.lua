@@ -9,10 +9,11 @@ local state = {
   finished = false,
   groups = nil, -- cfg -> { members = {name,...}, order = number }
   group_order = nil, -- topo-ordered cfg names
-  init_state = {}, -- plugin name -> 'done' | 'failed' | 'pending'
+  init_state = {}, -- plugin name -> 'done' | 'failed' | 'pending' | 'running'
   cfg_called = {}, -- cfg module -> true once require was attempted
-  group_state = {}, -- cfg -> 'done' | 'failed' | 'pending'
+  group_state = {}, -- cfg -> 'done' | 'failed' | 'pending' | 'running'
   init_done = {}, -- plugin name -> true once scripts + init/cfg are complete
+  script_loaded = {}, -- plugin name -> true once plugin scripts are ready
 }
 
 local function err(fmt, ...)
@@ -29,6 +30,7 @@ function M.reset()
   state.cfg_called = {}
   state.group_state = {}
   state.init_done = {}
+  state.script_loaded = {}
 end
 
 local function as_list(v)
@@ -264,63 +266,96 @@ local function build_groups()
 end
 
 local function load_plugin(name)
-  local ok, e = pcall(vim.fn['pack#load'], name)
+  if state.script_loaded[name] then
+    return true
+  end
+  local ok, e = pcall(vim.fn['pack#load_raw'], name)
   if not ok then
     err('pack#load failed for %s: %s', name, tostring(e))
   end
+  state.script_loaded[name] = true
+  return true
 end
 
-local function run_group(cfg)
+local run_group
+
+local function execute_init(name, entry)
+  if not entry.init or state.init_state[name] == 'done' then
+    return true
+  end
+  local compile = loadstring or load
+  local chunk, compile_error = compile(entry.init, 'PackAdd init: ' .. name)
+  if not chunk then
+    state.init_state[name] = 'failed'
+    vim.notify(('pack.lua: init for %s failed: %s'):format(name, tostring(compile_error)), vim.log.levels.ERROR)
+    return false
+  end
+  local ok, e = pcall(chunk)
+  state.init_state[name] = ok and 'done' or 'failed'
+  if not ok then
+    vim.notify(('pack.lua: init for %s failed: %s'):format(name, tostring(e)), vim.log.levels.ERROR)
+  end
+  return ok
+end
+
+local function ensure_node(name, current_cfg)
+  if state.init_done[name] or state.init_state[name] == 'done' then
+    return true
+  end
+  local entry = state.registered[name]
+  if state.init_state[name] == 'failed' then
+    return false
+  end
+  if state.init_state[name] == 'running' then
+    err('initialization re-entry: %s', name)
+  end
+  if not installed(name) then
+    state.init_state[name] = 'pending'
+    return false
+  end
+  if entry and entry.cfg and entry.cfg ~= current_cfg then
+    run_group(entry.cfg)
+    return state.init_done[name] == true
+  end
+  state.init_state[name] = 'running'
+  if entry then
+    for _, dependency in ipairs(entry.deps) do
+      if not ensure_node(dependency, current_cfg) then
+        state.init_state[name] = 'pending'
+        return false
+      end
+    end
+  end
+  load_plugin(name)
+  if entry and not execute_init(name, entry) then
+    return false
+  end
+  state.init_state[name] = 'done'
+  if not entry or not entry.cfg then
+    state.init_done[name] = true
+  end
+  return true
+end
+
+run_group = function(cfg)
   if state.cfg_called[cfg] then
-    return
+    return state.group_state[cfg] == 'done'
   end
-  local g = state.groups[cfg]
-  local cache = {}
-  local pending = false
-  for _, member in ipairs(g.members) do
-    if not installed(member) then
-      pending = true
-      break
-    end
-    if state.registered[member].init and state.init_state[member] ~= 'done' then
-      pending = true
-      break
-    end
-    for _, q in ipairs(closure_of(member, cache)) do
-      if not installed(q) then
-        pending = true
-        break
-      end
-      if state.init_done[q] ~= true then
-        local entry = state.registered[q]
-        if entry and entry.cfg then
-          if entry.cfg ~= cfg then
-            -- Its own group runs first (topo order); not done means pending/failed.
-            pending = true
-            break
-          end
-          -- A dependency in this cfg group is initialized by the same require.
-        else
-          -- No cfg: only its scripts are required; lazy ones load on demand.
-          if is_lazy(q) then
-            load_plugin(q)
-          end
-          state.init_done[q] = true
-        end
-      end
-    end
-    if pending then
-      break
-    end
+  if state.group_state[cfg] == 'failed' then
+    return false
   end
-  if pending then
-    state.group_state[cfg] = 'pending'
-    return
+  if state.group_state[cfg] == 'running' then
+    err('cfg re-entry: %s', cfg)
   end
-  -- A startup member pulls the whole group: lazy members load their scripts now.
-  for _, member in ipairs(g.members) do
-    if is_lazy(member) then
-      load_plugin(member)
+  local group = state.groups[cfg]
+  if not group then
+    err('unknown cfg group: %s', cfg)
+  end
+  state.group_state[cfg] = 'running'
+  for _, member in ipairs(group.members) do
+    if not ensure_node(member, cfg) then
+      state.group_state[cfg] = state.init_state[member] == 'failed' and 'failed' or 'pending'
+      return false
     end
   end
   state.cfg_called[cfg] = true
@@ -329,51 +364,42 @@ local function run_group(cfg)
   if not ok then
     vim.notify(('pack.lua: cfg %s failed: %s'):format(cfg, tostring(e)), vim.log.levels.ERROR)
   end
-  for _, member in ipairs(g.members) do
+  for _, member in ipairs(group.members) do
     state.init_done[member] = ok
+    state.init_state[member] = ok and 'done' or 'failed'
   end
+  return ok
 end
 
-local function run_init(name)
-  local entry = state.registered[name]
-  if not entry.init then
-    return
+local function request_one(name)
+  if not vim.g.plugs or vim.g.plugs[name] == nil then
+    err('unknown plugin request: %s', name)
   end
-  if state.init_state[name] == 'done' or state.init_state[name] == 'failed' then
-    return
+  return ensure_node(name, nil)
+end
+
+function M.load_request(names)
+  if not state.finished then
+    err('load request before pack plan is finished')
   end
-  for _, dependency in ipairs(entry.deps) do
-    local dependency_entry = state.registered[dependency]
-    if dependency_entry and dependency_entry.init then
-      run_init(dependency)
-      if state.init_state[dependency] ~= 'done' then
-        state.init_state[name] = 'pending'
-        return
+  if type(names) == 'string' then
+    names = { names }
+  end
+  if type(names) ~= 'table' then
+    err('load request must be a plugin name or list')
+  end
+  local ok, e = pcall(function()
+    for _, name in ipairs(names) do
+      if not request_one(name) then
+        err('plugin is not ready: %s', name)
       end
     end
-  end
-  if not installed(name) then
-    state.init_state[name] = 'pending'
-    return
-  end
-  for _, dependency in ipairs(closure_of(name)) do
-    if not installed(dependency) then
-      state.init_state[name] = 'pending'
-      return
-    end
-  end
-  if is_lazy(name) then
-    load_plugin(name)
-  end
-  local compile = loadstring or load
-  local chunk = assert(compile(entry.init, 'PackAdd init: ' .. name))
-  local ok, e = pcall(chunk)
-  state.init_state[name] = ok and 'done' or 'failed'
+  end)
   if not ok then
-    vim.notify(('pack.lua: init for %s failed: %s'):format(name, tostring(e)), vim.log.levels.ERROR)
-  elseif not entry.cfg then
-    state.init_done[name] = true
+    vim.notify(tostring(e), vim.log.levels.ERROR)
+    return false
   end
+  return true
 end
 
 local function run_startup()
@@ -382,27 +408,21 @@ local function run_startup()
     return state.registered[a].order < state.registered[b].order
   end)
   for _, name in ipairs(names) do
-    run_init(name)
-  end
-  for _, cfg in ipairs(state.group_order) do
-    run_group(cfg)
-  end
-end
-
--- Plugins without init/cfg are init-complete once installed and their scripts
--- are loaded (startup plugins are loaded by plug#end; lazy ones wait for a
--- consumer group to force-load them).
-local function mark_plugin_done(name)
-  local entry = state.registered[name]
-  if entry and (entry.init or entry.cfg) then
-    return
-  end
-  if installed(name) then
-    state.init_done[name] = not is_lazy(name)
+    if not is_lazy(name) then
+      request_one(name)
+    end
   end
 end
 
---- Freeze the plan, then run startup cfg groups after plugin scripts load.
+-- Startup plugins are already loaded by plug#end. Lazy roots wait for a
+-- command, FileType, explicit request, or a non-lazy dependency.
+local function mark_plugin_scripts(name)
+  if installed(name) and not is_lazy(name) then
+    state.script_loaded[name] = true
+  end
+end
+
+--- Freeze the plan, then run only startup roots after plugin scripts load.
 --- Called from init.vim right after plug#end().
 function M.finish()
   if state.finished then
@@ -414,11 +434,11 @@ function M.finish()
   table.sort(names, function(a, b)
     return state.registered[a].order < state.registered[b].order
   end)
-  for _, name in ipairs(names) do
-    mark_plugin_done(name)
-  end
   validate()
   build_groups()
+  for _, name in ipairs(names) do
+    mark_plugin_scripts(name)
+  end
   if vim.v.vim_did_enter == 1 then
     run_startup()
   else
@@ -438,7 +458,9 @@ function M.status()
     cfg_called = state.cfg_called,
     init_state = state.init_state,
     init_done = state.init_done,
+    script_loaded = state.script_loaded,
   }
 end
+
 
 return M

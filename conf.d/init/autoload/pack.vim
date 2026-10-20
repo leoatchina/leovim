@@ -154,6 +154,9 @@ function! pack#installed_adv() abort
 endfunction
 
 function! pack#lazy(name) abort
+    if get(get(g:, 'pack_lazy', {}), a:name, 0)
+        return 1
+    endif
     if !has_key(g:plugs, a:name)
         return 0
     endif
@@ -161,8 +164,21 @@ function! pack#lazy(name) abort
     return has_key(spec, 'on') || has_key(spec, 'for')
 endfunction
 
+function! pack#load_raw(plugins) abort
+    let plugins = type(a:plugins) == v:t_list ? a:plugins : [a:plugins]
+    return call('plug#load', plugins)
+endfunction
+
 function! pack#load(plugins) abort
     let plugins = type(a:plugins) == v:t_list ? a:plugins : [a:plugins]
+    if has('nvim') && exists('*luaeval')
+        let g:pack_load_request = plugins
+        try
+            return luaeval("require('pack').load_request(vim.g.pack_load_request)")
+        finally
+            unlet! g:pack_load_request
+        endtry
+    endif
     return call('plug#load', plugins)
 endfunction
 
@@ -172,12 +188,19 @@ endfunction
 let s:on_patterns = []
 let s:on_sentinel = {}
 let s:opt_plugs = {}
+let s:on_exact = []
+let s:for_patterns = []
+let s:for_loaded = {}
 
 
 function! pack#begin(plugin_home) abort
     let g:pack_specs = {}
     let g:pack_order = []
+    let g:pack_lazy = {}
     let s:on_patterns = []
+    let s:on_exact = []
+    let s:for_patterns = []
+    let s:for_loaded = {}
     let s:on_sentinel = {}
     let s:opt_plugs = {}
     for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
@@ -219,8 +242,18 @@ function! pack#declare(plugin, ...) abort
     else
         let key_name = plugin
     endif
+    if has_key(opts, 'on') || has_key(opts, 'for')
+        let g:pack_lazy[key_name] = 1
+    endif
     if has_key(opts, 'on')
         let opts.on = pack#register_on(key_name, opts.on)
+    endif
+    if has('nvim') && has_key(opts, 'for')
+        call pack#register_for(key_name, opts.for)
+        call remove(opts, 'for')
+        if !has_key(opts, 'on')
+            let opts.on = []
+        endif
     endif
     let extras = {}
     for field in ['deps', 'init', 'cfg']
@@ -286,30 +319,56 @@ endfunction
 function! pack#register_on(plugin, value) abort
     let values = type(a:value) == v:t_list ? copy(a:value) : [a:value]
     let exact = []
-    let has_regex = 0
+    let has_native_regex = 0
     for value in values
         if type(value) != v:t_string || empty(value)
             throw printf('PackAdd: on for %s must be a string or string list', a:plugin)
         endif
         let is_map = stridx(value, '<Plug>') == 0
-        if s:is_on_regex(value, is_map)
+        let is_regex = s:is_on_regex(value, is_map)
+        if is_regex
             call s:validate_on_regex(value, a:plugin)
+        endif
+        if has('nvim') && !is_map
+            call add(s:on_patterns, {
+                        \ 'plugin': a:plugin,
+                        \ 'pattern': is_regex ? value : substitute(value, '!$', '', ''),
+                        \ 'map': 0,
+                        \ 'exact': !is_regex,
+                        \ 'managed': 1,
+                        \ })
+        elseif is_regex
             call add(s:on_patterns, {
                         \ 'plugin': a:plugin,
                         \ 'pattern': value,
                         \ 'map': is_map,
+                        \ 'exact': 0,
+                        \ 'managed': 0,
                         \ })
-            let has_regex = 1
+            let has_native_regex = 1
         else
             call add(exact, value)
         endif
     endfor
-    if has_regex
+    if has_native_regex
         let sentinel = 'PackRegex' . (len(s:on_sentinel) + 1)
         let s:on_sentinel[a:plugin] = sentinel
         call add(exact, sentinel)
     endif
     return exact
+endfunction
+
+function! pack#register_for(plugin, value) abort
+    let values = type(a:value) == v:t_list ? copy(a:value) : [a:value]
+    if empty(values)
+        throw printf('PackAdd: for for %s must not be empty', a:plugin)
+    endif
+    for value in values
+        if type(value) != v:t_string || empty(value)
+            throw printf('PackAdd: for for %s must be a string or string list', a:plugin)
+        endif
+    endfor
+    call add(s:for_patterns, {'plugin': a:plugin, 'filetypes': values})
 endfunction
 
 function! s:add_on_value(plugin, value) abort
@@ -325,7 +384,7 @@ function! s:prepare_on() abort
     if exists('*maplist')
         let mappings = maplist()
         for item in s:on_patterns
-            if !item.map || !has_key(g:plugs, item.plugin)
+            if !item.map || get(item, 'managed', 0) || !has_key(g:plugs, item.plugin)
                 continue
             endif
             for mapping in mappings
@@ -337,7 +396,7 @@ function! s:prepare_on() abort
         endfor
     else
         for item in s:on_patterns
-            if item.map
+            if item.map && !get(item, 'managed', 0)
                 throw 'PackAdd: <Plug> on regex requires maplist()'
             endif
         endfor
@@ -345,12 +404,83 @@ function! s:prepare_on() abort
     augroup PackOnRegex
         autocmd!
         autocmd CmdUndefined * call pack#on_cmd(expand('<amatch>'))
+        if has('nvim') && !empty(s:for_patterns)
+            autocmd FileType * call pack#on_ft(expand('<amatch>'))
+        endif
     augroup END
+endfunction
+
+function! s:plugin_root(plugin) abort
+    let spec = get(g:plugs, a:plugin, {})
+    let root = get(spec, 'dir', '')
+    if !empty(get(spec, 'rtp', ''))
+        let root .= '/' . get(spec, 'rtp', '')
+    endif
+    return root
+endfunction
+
+function! s:prepare_for() abort
+    if !has('nvim') || empty(s:for_patterns)
+        return
+    endif
+    augroup filetypedetect
+        for item in s:for_patterns
+            let root = s:plugin_root(item.plugin)
+            for pattern in [
+                        \ 'ftdetect/**/*.vim',
+                        \ 'ftdetect/**/*.lua',
+                        \ 'after/ftdetect/**/*.vim',
+                        \ 'after/ftdetect/**/*.lua',
+                        \ ]
+                for file in globpath(root, pattern, 0, 1)
+                    execute 'silent source ' . fnameescape(file)
+                endfor
+            endfor
+        endfor
+    augroup END
+endfunction
+
+function! s:source_for(plugin, filetype) abort
+    let root = s:plugin_root(a:plugin)
+    for file in globpath(root, 'syntax/' . a:filetype . '.vim', 0, 1)
+        execute 'silent source ' . fnameescape(file)
+    endfor
+    for file in globpath(root . '/after', 'syntax/' . a:filetype . '.vim', 0, 1)
+        if !empty(file)
+            execute 'silent source ' . fnameescape(file)
+        endif
+    endfor
+endfunction
+
+function! pack#on_ft(filetype) abort
+    let plugins = []
+    for item in s:for_patterns
+        if index(item.filetypes, a:filetype) >= 0
+                    \ && !get(s:for_loaded, item.plugin, 0)
+                    \ && index(plugins, item.plugin) < 0
+            call add(plugins, item.plugin)
+        endif
+    endfor
+    if empty(plugins)
+        return
+    endif
+    for plugin in plugins
+        let s:for_loaded[plugin] = 1
+    endfor
+    if !pack#load(plugins)
+        return
+    endif
+    for plugin in plugins
+        call s:source_for(plugin, a:filetype)
+    endfor
+    silent! doautocmd <nomodeline> filetypeplugin FileType
+    silent! doautocmd <nomodeline> filetypeindent FileType
 endfunction
 
 function! pack#end() abort
     call s:prepare_on()
     call plug#end()
+    call s:prepare_for()
     if has('nvim')
         lua require('pack').finish()
     endif
@@ -359,7 +489,9 @@ endfunction
 function! pack#on_cmd(command) abort
     let plugins = []
     for item in s:on_patterns
-        if !item.map && a:command =~# item.pattern
+        if !item.map && (get(item, 'managed', 0) || !has('nvim'))
+                    \ && ((get(item, 'exact', 0) && a:command ==# item.pattern)
+                    \ || (!get(item, 'exact', 0) && a:command =~# item.pattern))
                     \ && index(plugins, item.plugin) < 0
             call add(plugins, item.plugin)
         endif
