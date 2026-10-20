@@ -107,7 +107,7 @@ augroup END
 " ---------------------------------
 " make tabline in GuiMode
 " ---------------------------------
- if !has('nvim-0.11')
+ if !has('nvim')
     function! tab#neat_gui_tablabel()
         let l:num = v:lnum
         let l:buflist = tabpagebuflist(l:num)

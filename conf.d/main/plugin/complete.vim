@@ -23,7 +23,7 @@ endif
 if has('patch-7.4.784')
     set completeopt+=noinsert
 endif
-if has('nvim-0.11')
+if has('nvim')
     set completeopt+=fuzzy
 endif
 " Vim 8.1.1880+ popup completion window (requires textprop support, Neovim uses floating window)

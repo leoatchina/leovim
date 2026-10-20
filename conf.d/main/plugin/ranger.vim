@@ -16,9 +16,9 @@ if pack#installed_treesitter()
     endif
     command! TSCleanup call s:cleanup_ts()
 else
-    nmap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
-    xmap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
-    omap sv :call preview#errmsg('Please install treesitter in nvim-0.8+')<Cr>
+    nmap sv :call preview#errmsg('Please install treesitter')<Cr>
+    xmap sv :call preview#errmsg('Please install treesitter')<Cr>
+    omap sv :call preview#errmsg('Please install treesitter')<Cr>
     nmap <silent>}} ]m
     nmap <silent>{{ [m
     nmap <silent>}] ]M

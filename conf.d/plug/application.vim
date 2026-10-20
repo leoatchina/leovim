@@ -61,13 +61,13 @@ endif
 " debug tool install
 " ------------------------------
 " Python versions use two digits per component: 3.10.0 -> 3.1000.
-" Vimspector requires Python 3.10+, Vim 8.2.4797+ or Neovim 0.8+.
+" Vimspector requires Python 3.10+, Vim 8.2.4797+ or Neovim.
 if pack#get('debug') && g:python_version >= 3.10
             \ && ((!has('nvim') && has('patch-8.2.4797'))
-            \ || (has('nvim-0.8') && !pack#planned_lsp()))
+            \ || (has('nvim') && !pack#planned_lsp()))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PackAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install }
-elseif has('nvim-0.9.5') && pack#get('debug') || pack#planned_lsp() && pack#get('java')
+elseif has('nvim') && pack#get('debug') || pack#planned_lsp() && pack#get('java')
     if !pack#planned_lsp()
         PackAdd 'mason-org/mason.nvim', {'cfg': 'cfg.mason'}
     endif
@@ -79,7 +79,7 @@ endif
 " ------------------------------
 " textobj install
 " ------------------------------
-if has('nvim-0.9.2') && !has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
+if has('nvim') && !has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
     PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master', 'cfg': 'treesitter'}
     PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master', 'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
     PackAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
@@ -134,14 +134,10 @@ if executable('git')
     if v:version >= 800 && g:git_version >= 1.85
         PackAdd 'tpope/vim-fugitive'
         if has('nvim')
-            if has('nvim-0.10') && g:git_version >= 2.31
+            if g:git_version >= 2.31
                 PackAdd 'dlyongemallo/diffview-plus.nvim'
             endif
-            if has('nvim-0.11')
-                PackAdd 'lewis6991/gitsigns.nvim', {'cfg': 'cfg.gitsigns'}
-            elseif has('nvim-0.9')
-                PackAdd 'lewis6991/gitsigns.nvim', {'tag': 'v1.0.2', 'cfg': 'cfg.gitsigns'}
-            endif
+            PackAdd 'lewis6991/gitsigns.nvim', {'cfg': 'cfg.gitsigns'}
         else
             if !pack#planned_leaderf()
                 PackAdd 'junegunn/gv.vim', {'on': 'GV'}
@@ -230,14 +226,10 @@ if has('nvim')
     PackAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
     PackAdd 'MunifTanjim/nui.nvim'
     PackAdd 'nvim-lua/plenary.nvim'
-    if has('nvim-0.9.4')
-        PackAdd 'snacks.nvim', {'cfg': 'cfg.snacks'}
-    endif
-    if  has('nvim-0.11')
-        PackAdd 'Bekaboo/dropbar.nvim', {'cfg': 'cfg.dropbar'}
-        if utils#is_unix()
-            PackAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
-        endif
+    PackAdd 'snacks.nvim', {'cfg': 'cfg.snacks'}
+    PackAdd 'Bekaboo/dropbar.nvim', {'cfg': 'cfg.dropbar'}
+    if utils#is_unix()
+        PackAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
     endif
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'

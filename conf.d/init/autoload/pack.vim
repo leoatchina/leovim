@@ -46,15 +46,15 @@ function! pack#planned_coc() abort
 endfunction
 
 function! pack#planned_cmp() abort
-    return pack#get('cmp') && has('nvim-0.11')
+    return pack#get('cmp') && has('nvim')
 endfunction
 
 function! pack#planned_blink() abort
-    return (pack#get('blink') || pack#get('blink.lua')) && has('nvim-0.11')
+    return (pack#get('blink') || pack#get('blink.lua')) && has('nvim')
 endfunction
 
 function! pack#planned_lsp() abort
-    return (pack#get('cmp') || pack#get('blink') || pack#get('blink.lua')) && has('nvim-0.11')
+    return (pack#get('cmp') || pack#get('blink') || pack#get('blink.lua')) && has('nvim')
 endfunction
 
 function! pack#planned_adv_comp_eng() abort
@@ -86,7 +86,7 @@ function! pack#installed_leaderf()
 endfunction
 
 function! pack#installed_snacks() abort
-    return has('nvim-0.9.4') && pack#installed('snacks.nvim')
+    return has('nvim') && pack#installed('snacks.nvim')
 endfunction
 
 function! pack#installed_lsp() abort
@@ -153,20 +153,103 @@ function! pack#installed_adv() abort
     return pack#installed('coc.nvim') || pack#installed_lsp()
 endfunction
 
+function! pack#lazy(name) abort
+    if !has_key(g:plugs, a:name)
+        return 0
+    endif
+    let spec = g:plugs[a:name]
+    return has_key(spec, 'on') || has_key(spec, 'for')
+endfunction
+
+function! pack#load(plugins) abort
+    let plugins = type(a:plugins) == v:t_list ? a:plugins : [a:plugins]
+    return call('plug#load', plugins)
+endfunction
+
 " -------------------------------------------------
 " PackAdd extension registry and `on` patterns
 " -------------------------------------------------
 let s:on_patterns = []
 let s:on_sentinel = {}
+let s:opt_plugs = {}
 
-function! pack#reset() abort
+
+function! pack#begin(plugin_home) abort
     let g:pack_specs = {}
     let g:pack_order = []
     let s:on_patterns = []
     let s:on_sentinel = {}
+    let s:opt_plugs = {}
+    for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
+        for plug_dir in globpath(opt_dir, '*', 0, 1)
+            if isdirectory(plug_dir)
+                let abs_dir = substitute(fnamemodify(plug_dir, ':p'), '[\\/]$', '', '')
+                let s:opt_plugs[fnamemodify(abs_dir, ':t')] = abs_dir
+            endif
+        endfor
+    endfor
+    let g:plugs = {}
+    let g:plug_threads = get(g:, 'plug_threads', 16)
     augroup PackOnRegex
         autocmd!
     augroup END
+    execute 'set rtp^=' . fnameescape($MAIN_DIR)
+    if has('nvim')
+        lua require('pack').reset()
+    endif
+    call plug#begin(a:plugin_home)
+    command! -nargs=+ PackAdd call pack#declare(<args>)
+    command! PackUpdate call pack#update()
+    nnoremap <silent><Tab>u :PackUpdate<Cr>
+    nnoremap <silent><Tab>i :PlugInstall<Cr>
+    command! PackCommands call FzfCallCommands('PackCommands', 'Pack', 'Plug')
+    nnoremap <silent><Tab>: :PackCommands<Cr>
+    if filereadable(utils#expand("~/.leovim.d/pack.vim"))
+        source ~/.leovim.d/pack.vim
+    endif
+endfunction
+
+function! pack#declare(plugin, ...) abort
+    let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
+    let opts = a:0 > 0 ? copy(a:1) : {}
+    if has_key(opts, 'as') && !empty(opts.as)
+        let key_name = opts.as
+    elseif plugin =~ '/'
+        let key_name = split(plugin, '/')[-1]
+    else
+        let key_name = plugin
+    endif
+    if has_key(opts, 'on')
+        let opts.on = pack#register_on(key_name, opts.on)
+    endif
+    let extras = {}
+    for field in ['deps', 'init', 'cfg']
+        if has_key(opts, field)
+            let extras[field] = remove(opts, field)
+        endif
+    endfor
+    if !has('nvim') && !empty(extras)
+        echoerr 'PackAdd deps/init/cfg are Neovim-only: ' . key_name
+    endif
+    call pack#register(key_name, extras)
+    if has_key(g:plugs, key_name)
+        return
+    endif
+    if plugin =~ '/'
+        call plug#(plugin, opts)
+    elseif has_key(s:opt_plugs, plugin)
+        call plug#(s:opt_plugs[plugin], opts)
+    else
+        echoe plugin . ' not exists'
+    endif
+endfunction
+
+function! pack#update() abort
+    let vimrc_opt = utils#expand('~/.vimrc.opt')
+    if filereadable(vimrc_opt)
+        execute 'source ' . vimrc_opt
+    endif
+    PlugUpdate
 endfunction
 
 function! pack#register(name, extras) abort
@@ -238,17 +321,8 @@ function! s:add_on_value(plugin, value) abort
     let g:plugs[a:plugin].on = current
 endfunction
 
-function! pack#prepare_on() abort
-    if empty(s:on_patterns)
-        return
-    endif
-    if !exists('*maplist')
-        for item in s:on_patterns
-            if item.map
-                throw 'PackAdd: <Plug> on regex requires maplist()'
-            endif
-        endfor
-    else
+function! s:prepare_on() abort
+    if exists('*maplist')
         let mappings = maplist()
         for item in s:on_patterns
             if !item.map || !has_key(g:plugs, item.plugin)
@@ -261,11 +335,25 @@ function! pack#prepare_on() abort
                 endif
             endfor
         endfor
+    else
+        for item in s:on_patterns
+            if item.map
+                throw 'PackAdd: <Plug> on regex requires maplist()'
+            endif
+        endfor
     endif
     augroup PackOnRegex
         autocmd!
         autocmd CmdUndefined * call pack#on_cmd(expand('<amatch>'))
     augroup END
+endfunction
+
+function! pack#end() abort
+    call s:prepare_on()
+    call plug#end()
+    if has('nvim')
+        lua require('pack').finish()
+    endif
 endfunction
 
 function! pack#on_cmd(command) abort
@@ -277,6 +365,6 @@ function! pack#on_cmd(command) abort
         endif
     endfor
     if !empty(plugins)
-        call call('plug#load', plugins)
+        call pack#load(plugins)
     endif
 endfunction

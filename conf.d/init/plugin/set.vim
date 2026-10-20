@@ -88,7 +88,7 @@ endif
 " --------------------------
 set splitright
 set splitbelow
-if has('nvim-0.9') || has('patch-9.0.0647')
+if has('nvim') || has('patch-9.0.0647')
     set splitkeep=cursor
 endif
 " ---------------------------------------

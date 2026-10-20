@@ -1,8 +1,8 @@
 if v:version <= 703 || v:version == 704 && !has('patch399')
     echoe 'vim 7.4.399 is at least required when using leovim.'
     finish
-elseif !has('nvim-0.8') && has('nvim')
-    echoe 'neovim-0.8 is at least required to use leovim.'
+elseif has('nvim') && !has('nvim-0.11')
+    echoe 'Neovim 0.11+ is required.'
     finish
 else
     set nocompatible
@@ -18,14 +18,13 @@ endif
 " before plugin modules are loaded.
 "
 " Load order:
-"   1. scan local opt plugin directories into s:opt_plugs
-"   2. source ~/.vimrc.opt so users fill g:packs through pack#add()
-"   3. plug#begin() and define PackAdd for both local and remote plugins
-"   4. source ~/.leovim.d/pack.vim, then vscode.vim or main.vim
-"   5. source ~/.leovim.d/after.vim, apply first-run completion fallback
-"   6. plug#end()
+"   1. source ~/.vimrc.opt so users fill g:packs through pack#add()
+"   2. pack#begin() scans local plugins, starts vim-plug, and sources user packs
+"   3. source vscode.vim or main.vim
+"   4. source ~/.leovim.d/after.vim, apply first-run completion fallback
+"   5. pack#end()
 "
-" The completion fallback before plug#end() is intentional: when advanced
+" The completion fallback before pack#end() is intentional: when advanced
 " completion plugins are planned but not installed yet, the current session
 " falls back to builtin/mcm so LeoVim remains usable during first install.
 " --------------------------
@@ -53,10 +52,7 @@ set rtp^=$INIT_DIR
 " --------------------------
 " gui_running && OS
 " --------------------------
-if utils#is_vscode() && !has('nvim-0.10')
-    echoe "vscode-neovim required nvim-0.10+!"
-    finish
-elseif utils#is_win() && !has('nvim') && v:version < 900
+if utils#is_win() && !has('nvim') && v:version < 900
     echoe "In windows, please update to vim9.0+."
     finish
 endif
@@ -70,20 +66,6 @@ elseif utils#is_neovide()
     let g:neovide_position_animation_length = 0
     let g:neovide_cursor_animate_in_insert_mode = v:false
 endif
-" --------------------------
-" plugs
-" --------------------------
-let s:opt_plugs = {}
-for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
-    for plug_dir in globpath(opt_dir, '*', 0, 1)
-        if !isdirectory(plug_dir)
-            continue
-        endif
-        let abs_dir = substitute(fnamemodify(plug_dir, ':p'), '[\\/]$', '', '')
-        let plugin = fnamemodify(abs_dir, ':t')
-        let s:opt_plugs[plugin] = abs_dir
-    endfor
-endfor
 " ------------------------
 " mapleader
 " ------------------------
@@ -280,78 +262,12 @@ nnoremap <silent>gx :OpenLink<cr>
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
-call pack#reset()
-let g:plugs = {}
-let g:plug_threads = get(g:, 'plug_threads', 16)
-set rtp^=$MAIN_DIR
-if has('nvim')
-    lua require('pack').reset()
-endif
-call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
-" unified PackAdd (local/remote) over vim-plug
-function! s:pack_add(plugin, ...) abort
-    let plugin = substitute(a:plugin, '[\/]\+$', '', 'g')
-    let opts = a:0 > 0 ? copy(a:1) : {}
-    " derive key name for duplicate check
-    if has_key(opts, 'as') && !empty(opts['as'])
-        let key_name = opts['as']
-    elseif plugin =~ '/'
-        let key_name = split(plugin, '/')[-1]
-    else
-        let key_name = plugin
-    endif
-    if has_key(opts, 'on')
-        let opts.on = pack#register_on(key_name, opts.on)
-    endif
-    " deps/init/cfg are scheduler extensions, not vim-plug options; strip and
-    " register them before the dedup return so duplicate bindings error.
-    let extras = {}
-    for field in ['deps', 'init', 'cfg']
-        if has_key(opts, field)
-            let extras[field] = remove(opts, field)
-        endif
-    endfor
-    if !has('nvim') && !empty(extras)
-        echoerr 'PackAdd deps/init/cfg are Neovim-only: ' . key_name
-    endif
-    call pack#register(key_name, extras)
-    if has_key(g:plugs, key_name)
-        return
-    endif
-    if plugin =~ '/'
-        call plug#(plugin, opts)
-    elseif has_key(s:opt_plugs, plugin)
-        call plug#(s:opt_plugs[plugin], opts)
-    else
-        echoe plugin . " not exists"
-    endif
-endfunction
-command! -nargs=+ PackAdd call <sid>pack_add(<args>)
-function! s:pack_update() abort
-    let vimrc_opt = utils#expand('~/.vimrc.opt')
-    if filereadable(vimrc_opt)
-        execute "source " . vimrc_opt
-    endif
-    PlugUpdate
-endfunction
-command! PackUpdate call s:pack_update()
-nnoremap <silent><Tab>u :PackUpdate<Cr>
-nnoremap <silent><Tab>i :PlugInstall<Cr>
-command! PackCommands call FzfCallCommands('PackCommands', 'Pack', 'Plug')
-nnoremap <silent><Tab>: :PackCommands<Cr>
-" addtional vim packs
-if filereadable(utils#expand("~/.leovim.d/pack.vim"))
-    source ~/.leovim.d/pack.vim
-endif
+call pack#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
 " different for vscode and main config
 if utils#is_vscode()
     source $INIT_DIR/vscode.vim
 else
     source $MAIN_DIR/main.vim
-endif
-" addtional vim config
-if filereadable(utils#expand("~/.leovim.d/after.vim"))
-    source ~/.leovim.d/after.vim
 endif
 " -----------------------------------------------------------
 " NOTE: plug install and config end
@@ -363,9 +279,9 @@ elseif pack#installed_cmp()
 elseif pack#installed_blink()
     let g:complete_engine = 'blink'
 elseif !pack#get('nocomplete')
-    if !pack#get('mcm') && (has('nvim-0.11') || has('patch-9.1.1590'))
+    if !pack#get('mcm') && (has('nvim') || has('patch-9.1.1590'))
         let g:complete_engine = 'builtin'
-        if has('nvim-0.11')
+        if has('nvim')
             lua require("cfg/builtin")
         else
             source $CFG_DIR/builtin.vim
@@ -382,9 +298,9 @@ if !pack#installed_fzf() && !pack#installed_leaderf() && !has('nvim') && has('vi
     source $CFG_DIR/fuzzbox.vim
     PackAdd 'fuzzbox.vim'
 endif
-call pack#prepare_on()
-call plug#end()
-if has('nvim')
-    lua require('pack').finish()
+" addtional vim config
+if filereadable(utils#expand("~/.leovim.d/after.vim"))
+    source ~/.leovim.d/after.vim
 endif
+call pack#end()
 let g:leovim_loaded = 1

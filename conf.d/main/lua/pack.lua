@@ -92,18 +92,12 @@ local function import_specs()
   end
 end
 
-local function spec_of(name)
-  local plugs = vim.g.plugs or {}
-  return plugs[name]
-end
-
-local function is_lazy(spec)
-  return spec ~= nil and (spec.on ~= nil or spec['for'] ~= nil)
-end
-
 local function installed(name)
-  local spec = spec_of(name)
-  return spec ~= nil and type(spec.dir) == 'string' and vim.fn.isdirectory(spec.dir) == 1
+  return vim.fn['pack#installed'](name) == 1
+end
+
+local function is_lazy(name)
+  return vim.fn['pack#lazy'](name) == 1
 end
 
 local function closure_of(name, cache)
@@ -270,9 +264,9 @@ local function build_groups()
 end
 
 local function load_plugin(name)
-  local ok, e = pcall(vim.fn['plug#load'], name)
+  local ok, e = pcall(vim.fn['pack#load'], name)
   if not ok then
-    err('plug#load failed for %s: %s', name, tostring(e))
+    err('pack#load failed for %s: %s', name, tostring(e))
   end
 end
 
@@ -308,7 +302,7 @@ local function run_group(cfg)
           -- A dependency in this cfg group is initialized by the same require.
         else
           -- No cfg: only its scripts are required; lazy ones load on demand.
-          if is_lazy(spec_of(q)) then
+          if is_lazy(q) then
             load_plugin(q)
           end
           state.init_done[q] = true
@@ -325,7 +319,7 @@ local function run_group(cfg)
   end
   -- A startup member pulls the whole group: lazy members load their scripts now.
   for _, member in ipairs(g.members) do
-    if is_lazy(spec_of(member)) then
+    if is_lazy(member) then
       load_plugin(member)
     end
   end
@@ -368,7 +362,7 @@ local function run_init(name)
       return
     end
   end
-  if is_lazy(spec_of(name)) then
+  if is_lazy(name) then
     load_plugin(name)
   end
   local compile = loadstring or load
@@ -404,7 +398,7 @@ local function mark_plugin_done(name)
     return
   end
   if installed(name) then
-    state.init_done[name] = not is_lazy(spec_of(name))
+    state.init_done[name] = not is_lazy(name)
   end
 end
 

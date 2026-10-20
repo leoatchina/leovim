@@ -40,8 +40,8 @@ Snacks 同样克隆在 `pack/clone/opt/snacks.nvim`，由 `update-clone.sh` 维�
 
 | 用途 | 当前配置条件 |
 |---|---|
-| 配置入口 | Vim 7.4.399+ 或 Neovim 0.8+；Windows 上的 Vim 另要求 9.0+ |
-| VSCode Neovim 分支 | Neovim 0.10+，并安装 VSCode 的 `vscode-neovim` 扩展 |
+| 配置入口 | Vim 7.4.399+ 或 Neovim 0.11+；Windows 上的 Vim 另要求 9.0+ |
+| VSCode Neovim 分支 | Neovim 0.11+，并安装 VSCode 的 `vscode-neovim` 扩展 |
 | 安装与更新 | Git；Unix 安装脚本使用 Bash，下载步骤还会调用 curl / wget、tar 等工具 |
 | Coc | `coc` 开关、检测到 Node.js 24+，且 `has('patch-9.0.0438')` 成立；master 分支安装钩子运行 `npm ci` |
 | Neovim 原生 LSP | Neovim 0.11+，并选择 `cmp`、`blink` 或 `blink.lua` |
@@ -213,7 +213,7 @@ EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf
 
 ## 5. VSCode Neovim
 
-安装 VSCode 的 `vscode-neovim` 扩展，准备 Neovim 0.10+。将入口配置指向 `conf.d/init.vim`，例如 `settings.json`：
+安装 VSCode 的 `vscode-neovim` 扩展，准备 Neovim 0.11+。将入口配置指向 `conf.d/init.vim`，例如 `settings.json`：
 
 ```json
 {

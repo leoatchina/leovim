@@ -104,7 +104,7 @@ endif
 " ------------------------------
 " markdown
 " ------------------------------
-if has('nvim-0.10.3')
+if has('nvim')
     let g:lazyload_render_markdown_config = {'file_types': ['markdown', 'vimwiki']}
     PackAdd 'MeanderingProgrammer/render-markdown.nvim', {'for': ['markdown', 'vimwiki']}
     augroup LeoRenderMarkdown
