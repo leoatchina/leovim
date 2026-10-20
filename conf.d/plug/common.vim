@@ -3,7 +3,7 @@ PackAdd 'vim-eunuch'
 " hl searchindex && multi replace
 " ----------------------------------
 if has('nvim')
-    PackAdd 'nvim-hlslens', {'cfg': 'cfg.hlslens'}
+    PackAdd 'nvim-hlslens', {'init': "require('hlslens').setup()"}
 else
     PackAdd 'vim-searchindex'
 endif

@@ -1,17 +1,18 @@
--- pack.lua: Neovim-side scheduler for PackAdd deps/cfg extensions.
--- Loaded from conf.d/init/autoload/pack.vim (register) and init.vim (finish,
--- right after plug#end). Does not install anything; vim-plug owns install.
+-- Neovim-side scheduler for PackAdd deps/init/cfg extensions.
+-- vim-plug owns installation; this module only validates and orders loading.
 
 local M = {}
 
 local state = {
-  registered = {}, -- name -> { cfg?: string, deps: string[], order: number }
+  registered = {}, -- name -> { init?: string, cfg?: string, deps: string[], order: number }
   count = 0,
   finished = false,
   groups = nil, -- cfg -> { members = {name,...}, order = number }
   group_order = nil, -- topo-ordered cfg names
+  init_state = {}, -- plugin name -> 'done' | 'failed' | 'pending'
+  cfg_called = {}, -- cfg module -> true once require was attempted
   group_state = {}, -- cfg -> 'done' | 'failed' | 'pending'
-  init_done = {}, -- plugin name -> true once scripts + its cfg group are complete
+  init_done = {}, -- plugin name -> true once scripts + init/cfg are complete
 }
 
 local function err(fmt, ...)
@@ -31,12 +32,23 @@ local function as_list(v)
   return nil
 end
 
---- Register extras extracted by pack.vim from a PackAdd call.
---- Must run before the g:plugs dedup return so duplicate-cfg conflicts error.
+--- Register extensions extracted by pack.vim from a PackAdd call.
+--- Runs before g:plugs dedup so duplicate init/cfg bindings are errors.
 function M.register(name, extras)
   extras = extras or {}
   if state.finished then
     err('declaration after finish(): %s', name)
+  end
+  local init = extras.init
+  if init ~= nil then
+    if type(init) ~= 'string' or init == '' then
+      err('invalid init for %s: single non-empty Lua statement required', name)
+    end
+    local compile = loadstring or load
+    local chunk, e = compile(init, 'PackAdd init: ' .. name)
+    if not chunk then
+      err('invalid init for %s: %s', name, tostring(e))
+    end
   end
   local cfg = extras.cfg
   if cfg ~= nil and (
@@ -58,13 +70,16 @@ function M.register(name, extras)
   end
   local entry = state.registered[name]
   if entry then
+    if init ~= nil then
+      err('duplicate init binding for %s', name)
+    end
     if cfg ~= nil then
       err('duplicate cfg binding for %s: first %s, then %s', name, tostring(entry.cfg), cfg)
     end
     return
   end
   state.count = state.count + 1
-  state.registered[name] = { cfg = cfg, deps = deps, order = state.count }
+  state.registered[name] = { init = init, cfg = cfg, deps = deps, order = state.count }
 end
 
 local function spec_of(name)
@@ -252,11 +267,18 @@ local function load_plugin(name)
 end
 
 local function run_group(cfg)
+  if state.cfg_called[cfg] then
+    return
+  end
   local g = state.groups[cfg]
   local cache = {}
   local pending = false
   for _, member in ipairs(g.members) do
     if not installed(member) then
+      pending = true
+      break
+    end
+    if state.registered[member].init and state.init_state[member] ~= 'done' then
       pending = true
       break
     end
@@ -297,6 +319,7 @@ local function run_group(cfg)
       load_plugin(member)
     end
   end
+  state.cfg_called[cfg] = true
   local ok, e = pcall(require, cfg)
   state.group_state[cfg] = ok and 'done' or 'failed'
   if not ok then
@@ -307,18 +330,67 @@ local function run_group(cfg)
   end
 end
 
+local function run_init(name)
+  local entry = state.registered[name]
+  if not entry.init then
+    return
+  end
+  if state.init_state[name] == 'done' or state.init_state[name] == 'failed' then
+    return
+  end
+  for _, dependency in ipairs(entry.deps) do
+    local dependency_entry = state.registered[dependency]
+    if dependency_entry and dependency_entry.init then
+      run_init(dependency)
+      if state.init_state[dependency] ~= 'done' then
+        state.init_state[name] = 'pending'
+        return
+      end
+    end
+  end
+  if not installed(name) then
+    state.init_state[name] = 'pending'
+    return
+  end
+  for _, dependency in ipairs(closure_of(name)) do
+    if not installed(dependency) then
+      state.init_state[name] = 'pending'
+      return
+    end
+  end
+  if is_lazy(spec_of(name)) then
+    load_plugin(name)
+  end
+  local compile = loadstring or load
+  local chunk = assert(compile(entry.init, 'PackAdd init: ' .. name))
+  local ok, e = pcall(chunk)
+  state.init_state[name] = ok and 'done' or 'failed'
+  if not ok then
+    vim.notify(('pack.lua: init for %s failed: %s'):format(name, tostring(e)), vim.log.levels.ERROR)
+  elseif not entry.cfg then
+    state.init_done[name] = true
+  end
+end
+
 local function run_startup()
+  local names = vim.tbl_keys(state.registered)
+  table.sort(names, function(a, b)
+    return state.registered[a].order < state.registered[b].order
+  end)
+  for _, name in ipairs(names) do
+    run_init(name)
+  end
   for _, cfg in ipairs(state.group_order) do
     run_group(cfg)
   end
 end
 
--- Plugins without a cfg are init-complete once installed and their scripts
+-- Plugins without init/cfg are init-complete once installed and their scripts
 -- are loaded (startup plugins are loaded by plug#end; lazy ones wait for a
 -- consumer group to force-load them).
 local function mark_plugin_done(name)
   local entry = state.registered[name]
-  if entry and entry.cfg then
+  if entry and (entry.init or entry.cfg) then
     return
   end
   if installed(name) then
@@ -358,6 +430,8 @@ function M.status()
     groups = state.groups,
     group_order = state.group_order,
     group_state = state.group_state,
+    cfg_called = state.cfg_called,
+    init_state = state.init_state,
     init_done = state.init_done,
   }
 end

@@ -296,19 +296,18 @@ function! s:pack_add(plugin, ...) abort
     else
         let key_name = plugin
     endif
-    " deps/cfg are scheduler extensions, not vim-plug options; strip and
-    " register them before the dedup return so duplicate cfg bindings error.
+    " deps/init/cfg are scheduler extensions, not vim-plug options; strip and
+    " register them before the dedup return so duplicate bindings error.
     let extras = {}
-    if has_key(opts, 'cfg')
-        let extras.cfg = remove(opts, 'cfg')
-    endif
-    if has_key(opts, 'deps')
-        let extras.deps = remove(opts, 'deps')
-    endif
+    for field in ['deps', 'init', 'cfg']
+        if has_key(opts, field)
+            let extras[field] = remove(opts, field)
+        endif
+    endfor
     if has('nvim')
         call v:lua.require('pack').register(key_name, extras)
     elseif !empty(extras)
-        echoerr 'PackAdd deps/cfg are Neovim-only: ' . key_name
+        echoerr 'PackAdd deps/init/cfg are Neovim-only: ' . key_name
     endif
     if has_key(g:plugs, key_name)
         return

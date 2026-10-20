@@ -83,11 +83,11 @@ endif
 " nvim-java
 " ------------------------------
 if pack#planned_lsp() && pack#get('java')
-    PackAdd 'nvim-java/nvim-java-dap', {'cfg': 'cfg.java'}
-    PackAdd 'nvim-java/nvim-java-core', {'cfg': 'cfg.java'}
-    PackAdd 'nvim-java/nvim-java-test', {'cfg': 'cfg.java'}
-    PackAdd 'nvim-java/nvim-java-refactor', {'cfg': 'cfg.java'}
-    PackAdd 'nvim-java/lua-async-await', {'cfg': 'cfg.java'}
+    PackAdd 'nvim-java/nvim-java-dap'
+    PackAdd 'nvim-java/nvim-java-core'
+    PackAdd 'nvim-java/nvim-java-test'
+    PackAdd 'nvim-java/nvim-java-refactor'
+    PackAdd 'nvim-java/lua-async-await'
     PackAdd 'JavaHello/spring-boot.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'cfg.springboot'}
     PackAdd 'nvim-java/nvim-java', {
                 \ 'deps': [
@@ -95,7 +95,7 @@ if pack#planned_lsp() && pack#get('java')
                 \   'nvim-java-refactor', 'lua-async-await',
                 \   'spring-boot.nvim', 'nvim-dap',
                 \ ],
-                \ 'cfg': 'cfg.java',
+                \ 'init': "require('java').setup()",
                 \ }
 endif
 " ------------------------------

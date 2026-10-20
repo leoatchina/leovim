@@ -225,7 +225,7 @@ endif
 " ui && frame
 " --------------------------
 if has('nvim')
-    PackAdd 'nvim-tree/nvim-web-devicons', {'cfg': 'cfg.devicons'}
+    PackAdd 'nvim-tree/nvim-web-devicons', {'init': "require('nvim-web-devicons').setup({})"}
     PackAdd 'kevinhwang91/promise-async'
     PackAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
     PackAdd 'MunifTanjim/nui.nvim'
@@ -308,7 +308,7 @@ endif
 " undo
 " ------------------------------
 if has('nvim') && utils#is_unix()
-    PackAdd 'kevinhwang91/nvim-fundo', {'cfg': 'cfg.fundo'}
+    PackAdd 'kevinhwang91/nvim-fundo', {'init': "require('fundo').setup()"}
 endif
 " ----------------------------
 " indentLine plugins
