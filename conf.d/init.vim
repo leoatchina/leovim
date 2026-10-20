@@ -269,35 +269,6 @@ if utils#is_vscode()
 else
     source $MAIN_DIR/main.vim
 endif
-" -----------------------------------------------------------
-" NOTE: plug install and config end
-" -----------------------------------------------------------
-if pack#installed_coc()
-    let g:complete_engine = 'coc'
-elseif pack#installed_cmp()
-    let g:complete_engine = 'cmp'
-elseif pack#installed_blink()
-    let g:complete_engine = 'blink'
-elseif !pack#get('nocomplete')
-    if !pack#get('mcm') && (has('nvim') || has('patch-9.1.1590'))
-        let g:complete_engine = 'builtin'
-        if has('nvim')
-            lua require("cfg/builtin")
-        else
-            source $CFG_DIR/builtin.vim
-        endif
-    else
-        let g:complete_engine = 'mcm'
-        source $CFG_DIR/mcm.vim
-        PackAdd 'vim-mucomplete'
-        PackAdd 'hrsh7th/vim-vsnip-integ'
-    endif
-endif
-" Baseline finder only when neither advanced finder is actually installed.
-if !pack#installed_fzf() && !pack#installed_leaderf() && !has('nvim') && has('vim9script') && has('popupwin')
-    source $CFG_DIR/fuzzbox.vim
-    PackAdd 'fuzzbox.vim'
-endif
 " addtional vim config
 if filereadable(utils#expand("~/.leovim.d/after.vim"))
     source ~/.leovim.d/after.vim
