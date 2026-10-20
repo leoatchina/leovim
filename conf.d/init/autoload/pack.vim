@@ -154,10 +154,36 @@ function! pack#installed_adv() abort
 endfunction
 
 " -------------------------------------------------
-" Extended vim-plug `on` patterns
+" PackAdd extension registry and `on` patterns
 " -------------------------------------------------
 let s:on_patterns = []
 let s:on_sentinel = {}
+
+function! pack#reset() abort
+    let g:pack_specs = {}
+    let g:pack_order = []
+    let s:on_patterns = []
+    let s:on_sentinel = {}
+    augroup PackOnRegex
+        autocmd!
+    augroup END
+endfunction
+
+function! pack#register(name, extras) abort
+    if has_key(g:pack_specs, a:name)
+        if has_key(a:extras, 'init')
+            throw printf('PackAdd: duplicate init binding for %s', a:name)
+        endif
+        if has_key(a:extras, 'cfg')
+            throw printf('PackAdd: duplicate cfg binding for %s', a:name)
+        endif
+        return
+    endif
+    let spec = copy(a:extras)
+    let spec.order = len(g:pack_order) + 1
+    let g:pack_specs[a:name] = spec
+    call add(g:pack_order, a:name)
+endfunction
 
 function! s:is_on_regex(value, is_map) abort
     if a:is_map

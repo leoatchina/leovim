@@ -19,6 +19,18 @@ local function err(fmt, ...)
   error(('pack.lua: ' .. string.format(fmt, ...)), 0)
 end
 
+function M.reset()
+  state.registered = {}
+  state.count = 0
+  state.finished = false
+  state.groups = nil
+  state.group_order = nil
+  state.init_state = {}
+  state.cfg_called = {}
+  state.group_state = {}
+  state.init_done = {}
+end
+
 local function as_list(v)
   if v == nil then
     return {}
@@ -32,13 +44,9 @@ local function as_list(v)
   return nil
 end
 
---- Register extensions extracted by pack.vim from a PackAdd call.
---- Runs before g:plugs dedup so duplicate init/cfg bindings are errors.
-function M.register(name, extras)
+--- Import one PackAdd extension spec from pack.vim's registry.
+local function add_spec(name, extras)
   extras = extras or {}
-  if state.finished then
-    err('declaration after finish(): %s', name)
-  end
   local init = extras.init
   if init ~= nil then
     if type(init) ~= 'string' or init == '' then
@@ -68,18 +76,20 @@ function M.register(name, extras)
       err('invalid deps entry for %s', name)
     end
   end
-  local entry = state.registered[name]
-  if entry then
-    if init ~= nil then
-      err('duplicate init binding for %s', name)
-    end
-    if cfg ~= nil then
-      err('duplicate cfg binding for %s: first %s, then %s', name, tostring(entry.cfg), cfg)
-    end
-    return
-  end
   state.count = state.count + 1
   state.registered[name] = { init = init, cfg = cfg, deps = deps, order = state.count }
+end
+
+local function import_specs()
+  local specs = vim.g.pack_specs or {}
+  local order = vim.g.pack_order or {}
+  for _, name in ipairs(order) do
+    local spec = specs[name]
+    if type(spec) ~= 'table' then
+      err('invalid pack.vim spec for %s', name)
+    end
+    add_spec(name, spec)
+  end
 end
 
 local function spec_of(name)
@@ -405,6 +415,7 @@ function M.finish()
     return
   end
   state.finished = true
+  import_specs()
   local names = vim.tbl_keys(state.registered)
   table.sort(names, function(a, b)
     return state.registered[a].order < state.registered[b].order

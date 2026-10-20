@@ -280,9 +280,13 @@ nnoremap <silent>gx :OpenLink<cr>
 if filereadable(expand("~/.vimrc.opt"))
     source $HOME/.vimrc.opt
 endif
+call pack#reset()
 let g:plugs = {}
 let g:plug_threads = get(g:, 'plug_threads', 16)
 set rtp^=$MAIN_DIR
+if has('nvim')
+    lua require('pack').reset()
+endif
 call plug#begin(utils#expand("$LEOVIMD_DIR/pack/add/opt"))
 " unified PackAdd (local/remote) over vim-plug
 function! s:pack_add(plugin, ...) abort
@@ -307,11 +311,10 @@ function! s:pack_add(plugin, ...) abort
             let extras[field] = remove(opts, field)
         endif
     endfor
-    if has('nvim')
-        call v:lua.require('pack').register(key_name, extras)
-    elseif !empty(extras)
+    if !has('nvim') && !empty(extras)
         echoerr 'PackAdd deps/init/cfg are Neovim-only: ' . key_name
     endif
+    call pack#register(key_name, extras)
     if has_key(g:plugs, key_name)
         return
     endif

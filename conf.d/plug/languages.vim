@@ -1,11 +1,8 @@
 " --------------------------
 " R & python
 " --------------------------
-if utils#is_win()
-    let g:R_exe = utils#expand(exepath(get(g:, 'R_exe', 'R.exe')))
-else
-    let g:R_exe = utils#expand(exepath(get(g:, 'R_exe', 'R')))
-endif
+let s:R_cmd = get(g:, 'R_exe', utils#is_win() ? 'R.exe' : 'R')
+let g:R_exe = empty(s:R_cmd) ? '' : utils#expand(exepath(s:R_cmd))
 if has('nvim') && pack#get('jupynium') && g:python_version > 3.07
     PackAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .'), 'cfg': 'cfg.jupynium'}
 elseif pack#get('nvim-r') && (has('nvim') || v:version >= 802) && executable(g:R_exe)
