@@ -85,6 +85,10 @@ function! pack#installed_leaderf()
     return pack#installed('LeaderF')
 endfunction
 
+function! pack#installed_snacks() abort
+    return has('nvim-0.9.4') && pack#installed('snacks.nvim')
+endfunction
+
 function! pack#installed_lsp() abort
     return pack#installed(
                 \ 'nvim-lspconfig',

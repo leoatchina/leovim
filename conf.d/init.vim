@@ -364,4 +364,7 @@ if !pack#installed_fzf() && !pack#installed_leaderf() && !has('nvim') && has('vi
     PackAdd 'fuzzbox.vim'
 endif
 call plug#end()
+if pack#installed_snacks()
+    lua require('cfg.snacks')
+endif
 let g:leovim_loaded = 1

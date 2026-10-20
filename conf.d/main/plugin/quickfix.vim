@@ -60,7 +60,7 @@ if g:has_terminal
     tnoremap <silent><M-,> <C-\><C-n>:QuickfixToggle<Cr>
     tnoremap <silent><M-;> <C-\><C-n>:LoclistToggle<Cr>
 endif
-if pack#planned_leaderf()
+if pack#installed_leaderf()
     function! s:leaderf_qf_loc()
         if s:loc_exists()
             lclose
@@ -71,6 +71,17 @@ if pack#planned_leaderf()
         endif
     endfunction
     command! OpenQfLoc call s:leaderf_qf_loc()
+elseif pack#installed_snacks()
+    function! s:snacks_qf_loc()
+        if s:loc_exists()
+            lclose
+            lua Snacks.picker.loclist()
+        elseif s:qf_exists()
+            cclose
+            lua Snacks.picker.qflist()
+        endif
+    endfunction
+    command! OpenQfLoc call s:snacks_qf_loc()
 else
     command! OpenQfLoc call fzf#open_qfloc()
 endif

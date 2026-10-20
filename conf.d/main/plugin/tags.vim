@@ -51,6 +51,8 @@ if get(g:, 'ctags_type', '') != ''
         nnoremap <silent><leader>T :FzfTags<Cr>
     elseif pack#installed('fuzzbox.vim')
         nnoremap <silent><leader>T :FuzzyTags<Cr>
+    elseif g:symbol_tool =~ 'snackstags'
+        nnoremap <silent><leader>T :SnacksTagsWorkspace<Cr>
     endif
     if pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
         nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
@@ -62,6 +64,8 @@ if get(g:, 'ctags_type', '') != ''
         nnoremap <silent>t<Cr> :FzfBTags<Cr>
     elseif pack#installed('fuzzbox.vim')
         nnoremap <silent>t<Cr> :FuzzboxBufferTags<Cr>
+    elseif g:symbol_tool =~ 'snackstags'
+        nnoremap <silent>t<Cr> :SnacksTagsBuf<Cr>
     endif
 endif
 " f<Cr> to useing native functions show

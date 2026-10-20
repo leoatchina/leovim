@@ -226,7 +226,9 @@ if has('nvim')
     PackAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
     PackAdd 'MunifTanjim/nui.nvim'
     PackAdd 'nvim-lua/plenary.nvim'
-    PackAdd 'stevearc/dressing.nvim'
+    if has('nvim-0.9.4')
+        PackAdd 'snacks.nvim'
+    endif
     if  has('nvim-0.11')
         PackAdd 'Bekaboo/dropbar.nvim'
         if utils#is_unix()

@@ -4,6 +4,10 @@
 rm -rf fuzzbox.vim
 git clone --depth 1 https://github.com/vim-fuzzbox/fuzzbox.vim.git
 
+# snacks (Neovim UI and picker)
+rm -rf snacks.nvim
+git clone --depth 1 https://github.com/folke/snacks.nvim.git
+
 # tagbar
 rm -rf tagbar
 git clone --depth 1 https://github.com/preservim/tagbar.git

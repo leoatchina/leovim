@@ -47,6 +47,9 @@ elseif pack#installed_fzf()
 elseif pack#installed('fuzzbox.vim')
     nnoremap <silent><nowait><leader>ff :call fuzzbox#Launch('files', {'cwd': expand('%:p') == '' ? getcwd() : expand('%:p:h')})<Cr>
     nnoremap <silent><nowait><leader>p :call fuzzbox#Launch('files', {'cwd': utils#get_vcs_dir()})<Cr>
+elseif pack#installed_snacks()
+    nnoremap <silent><nowait><leader>ff <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('%:p:h') } })<Cr>
+    nnoremap <silent><nowait><leader>p  <Cmd>lua Snacks.picker.files({ dirs = { require('cfg.snacks').root('vcs') } })<Cr>
 endif
 if pack#installed_fzf()
     nnoremap <nowait>\F :FzfGitFiles <C-r>=@"<Cr>
@@ -54,6 +57,8 @@ if pack#installed_fzf()
     nnoremap <nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 elseif pack#installed('fuzzbox.vim')
     nnoremap <silent><nowait><C-p> :call fuzzbox#Launch('files', {'cwd': utils#get_root_dir()})<Cr>
+elseif pack#installed_snacks()
+    nnoremap <silent><nowait><C-p> <Cmd>lua Snacks.picker.files({ dirs = { require('cfg.snacks').root() } })<Cr>
 endif
 " ---------------------------------
 " open gitroot getroot
@@ -233,19 +238,26 @@ if get(g:, 'leovim_openmap', 1)
     nnoremap <silent><M-h>u :call file#open_in_tab("$INIT_DIR/autoload/utils.vim")<Cr>
     nnoremap <silent><M-h>a :call file#open_in_tab("$PLUG_DIR/application.vim")<Cr>
     nnoremap <silent><M-h>m :call file#open_in_tab("$MAIN_DIR/main.vim")<Cr>
-    if pack#planned_leaderf()
+    if pack#installed_leaderf()
         nnoremap <silent><M-h>p :Leaderf file --regex --no-sort ~/.leovim/conf.d/main/plugin<Cr>
         nnoremap <silent><M-h>d :Leaderf file --regex --no-sort ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :Leaderf file --regex --no-sort ~/.leovim<Cr>
         if utils#is_unix()
             nnoremap <silent><M-h>L :Leaderf file --regex --no-sort ~/.local/bin<Cr>
         endif
-    elseif pack#planned_fzf()
+    elseif pack#installed_fzf()
         nnoremap <silent><M-h>p :FzfFiles ~/.leovim/conf.d/main/plugin<Cr>
         nnoremap <silent><M-h>d :FzfFiles ~/.leovim/conf.d<Cr>
         nnoremap <silent><M-h>l :FzfFiles ~/.leovim<Cr>
         if utils#is_unix()
             nnoremap <silent><M-h>L :FzfFiles ~/.local/bin<Cr>
+        endif
+    elseif pack#installed_snacks()
+        nnoremap <silent><M-h>p <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('~/.leovim/conf.d/main/plugin') } })<Cr>
+        nnoremap <silent><M-h>d <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('~/.leovim/conf.d') } })<Cr>
+        nnoremap <silent><M-h>l <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('~/.leovim') } })<Cr>
+        if utils#is_unix()
+            nnoremap <silent><M-h>L <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('~/.local/bin') } })<Cr>
         endif
     endif
     nnoremap <silent><M-h>A :call <SID>open_or_create_file("~/.leovim.d/after.vim")<Cr>

@@ -9,7 +9,7 @@
 | 功能 | 实现与配置入口 |
 |---|---|
 | 补全、片段与语言服务 | builtin / mucomplete / Coc / nvim-cmp / blink.cmp；[`application.vim`](conf.d/plug/application.vim)、[`complete.vim`](conf.d/main/plugin/complete.vim)、[`lsp.lua`](conf.d/main/lua/lsp.lua) |
-| 文件、内容与符号搜索 | FZF、LeaderF；未安装两者时由 Vim9 Fuzzbox 托底（替代 CtrlP）；LSP、Ctags/Gtags 与 Grep；[`search.vim`](conf.d/main/plugin/search.vim)、[`tags.vim`](conf.d/main/plugin/tags.vim) |
+| 文件、内容与符号搜索 | FZF、LeaderF；未安装两者时 Neovim 使用 Snacks、Vim9 使用 Fuzzbox 托底；LSP、Ctags/Gtags 与 Grep；[`search.vim`](conf.d/main/plugin/search.vim)、[`tags.vim`](conf.d/main/plugin/tags.vim) |
 | 语法树与文本对象 | 符合版本条件时使用 Treesitter，另有 Vim 文本对象插件；[`treesitter.lua`](conf.d/main/lua/treesitter.lua)、[`textobj.vim`](conf.d/init/plugin/textobj.vim) |
 | 文件树、符号侧栏与状态栏 | 根据已选插件启用；[`sidebar.vim`](conf.d/main/plugin/sidebar.vim)、[`lightline.vim`](conf.d/main/plugin/lightline.vim) |
 | 主题、窗口与标签页 | [`scheme.vim`](conf.d/main/plugin/scheme.vim)、[`window.vim`](conf.d/main/plugin/window.vim)、[`tab.vim`](conf.d/main/plugin/tab.vim) |
@@ -22,9 +22,17 @@
 
 新建文件时插入模板不等于自动为所有项目创建这些文件。离线运行也需要事先准备所选插件、语言服务器及外部工具。
 
-Fuzzbox 通过 `pack/clone/opt/update-clone.sh` 克隆到本地 opt，再由 `init.vim` 在 `plug#end()` 前通过 `PackAdd 'fuzzbox.vim'` 注册。条件是未安装 LeaderF/FZF、非 Neovim，且有 vim9script/popupwin；不是只检查是否声明。默认插件快捷键关闭，后备沿用 `<Leader>ff`（当前文件目录）、`<Leader>p`（VCS 目录）、`<C-p>`（项目根）、`<Leader>b`、`<Leader>u`、`<M-l><M-l>`、`<Leader>T` 和 `t<CR>`；当前文件标签需要 ctags，读取已保存文件。Snacks 尚未在本轮接入。
+Fuzzbox 通过 `pack/clone/opt/update-clone.sh` 克隆到本地 opt，再由 `init.vim` 在 `plug#end()` 前通过 `PackAdd 'fuzzbox.vim'` 注册。条件是未安装 LeaderF/FZF、非 Neovim，且有 vim9script/popupwin；不是只检查是否声明。默认插件快捷键关闭，后备沿用 `<Leader>ff`（当前文件目录）、`<Leader>p`（VCS 目录）、`<C-p>`（项目根）、`<Leader>b`、`<Leader>u`、`<M-l><M-l>`、`<Leader>T` 和 `t<CR>`；当前文件标签需要 ctags，读取已保存文件。
 
 Fuzzbox 使用顶部输入、结果自上而下的布局；`Ctrl-j` 向下、`Ctrl-k` 向上，同时保留 `Ctrl-n/p` 和方向键。当前文件标签列表的 `Ctrl-]` 仍为垂直分屏打开。
+
+Snacks 同样克隆在 `pack/clone/opt/snacks.nvim`，由 `update-clone.sh` 维护，使用 `PackAdd 'snacks.nvim'` 注册，不交给 vim-plug 下载。Neovim 0.9.4+ 在启动时执行 [`cfg/snacks.lua`](conf.d/main/lua/cfg/snacks.lua)，启用 input / picker，接管 `vim.ui.input` 和 `vim.ui.select`，替代 dressing.nvim；这部分不受 FZF / LeaderF 是否安装影响。Dropbar 不再覆盖 `vim.ui.select`。
+
+仅在 FZF、LeaderF 都未安装时，通用文件、缓冲区、历史、搜索与标签快捷键才回退到 Snacks；已有 FZF / LeaderF 的优先级保留。无论是否安装它们，都可以通过 `:SnacksPicker` 打开 Snacks 的全部 picker 入口（例如诊断、LSP、撤销历史等，各自仍需相应数据或服务）。Snacks 选择器使用 `Ctrl-j/k` 上下移动，`Ctrl-]` 垂直分屏打开。文件枚举无需 fzf，内容搜索需要 rg；标签 picker 读取已有的 tags，沿用本配置的 ctags / gutentags 流程，当前文件标签仅保留该文件条目，Coc / Vista 的原有专用入口仍优先。
+
+`<M-l><M-a>` 搜索已加载且列出的普通缓冲区，包含未保存修改，不用磁盘上的 rg 结果冒充缓冲区内容。Snacks 跳转期间会临时清空 `switchbuf`，防止 `useopen` 复用即将关闭的预览浮窗；动作结束（包括报错）后恢复原值。项目 / VCS 路径使用原始 Lua 路径，支持目录名中的空格，不把 Ex 命令转义后的字符串交给 finder。
+
+这里只自动启用 input / picker，不默认打开 dashboard、notifier、scroll 或终端等其他模块，避免覆盖现有启动页、通知和 Floaterm 配置。
 
 ## 2. 系统要求与补全选型
 
