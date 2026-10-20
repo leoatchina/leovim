@@ -296,6 +296,20 @@ function! s:pack_add(plugin, ...) abort
     else
         let key_name = plugin
     endif
+    " deps/cfg are scheduler extensions, not vim-plug options; strip and
+    " register them before the dedup return so duplicate cfg bindings error.
+    let extras = {}
+    if has_key(opts, 'cfg')
+        let extras.cfg = remove(opts, 'cfg')
+    endif
+    if has_key(opts, 'deps')
+        let extras.deps = remove(opts, 'deps')
+    endif
+    if has('nvim')
+        call v:lua.require('pack').register(key_name, extras)
+    elseif !empty(extras)
+        echoerr 'PackAdd deps/cfg are Neovim-only: ' . key_name
+    endif
     if has_key(g:plugs, key_name)
         return
     endif
@@ -364,7 +378,7 @@ if !pack#installed_fzf() && !pack#installed_leaderf() && !has('nvim') && has('vi
     PackAdd 'fuzzbox.vim'
 endif
 call plug#end()
-if pack#installed_snacks()
-    lua require('cfg.snacks')
+if has('nvim')
+    lua require('pack').finish()
 endif
 let g:leovim_loaded = 1

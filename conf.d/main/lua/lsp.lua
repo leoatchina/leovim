@@ -330,7 +330,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end
       end
       M.codelens_toggle()
-      map(nx, "<leader>C", require("lsp").codelens_toggle, opts_echo)
+      map(nx, "<leader>C", M.codelens_toggle, opts_echo)
       map(nx, "<M-c>", vim.lsp.codelens.run, opts_echo)
     else
       map(nx, "<leader>C", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)

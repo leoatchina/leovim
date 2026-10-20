@@ -65,7 +65,7 @@ if s:planned_symbol('plus')
     PackAdd 'skywind3000/gutentags_plus'
 endif
 if s:planned_symbol('aerial')
-    PackAdd 'stevearc/aerial.nvim', {'branch': 'nvim-0.11'}
+    PackAdd 'stevearc/aerial.nvim', {'branch': 'nvim-0.11', 'cfg': 'cfg.aerial'}
 endif
 if s:planned_symbol('vista')
     PackAdd 'vista.vim'

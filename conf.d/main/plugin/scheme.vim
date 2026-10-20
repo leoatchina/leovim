@@ -53,8 +53,3 @@ else
     call scheme#set('onedark', 'one')
 endif
 " --------------------------
-" nvim-web-devicons
-" --------------------------
-if pack#installed('nvim-web-devicons')
-    lua require('nvim-web-devicons').setup({})
-endif

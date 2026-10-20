@@ -24,7 +24,6 @@ if pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
     nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
 endif
 if pack#installed('aerial.nvim')
-    lua require('cfg/aerial')
     function! s:check_aerial(nr) abort
         return tolower(getwinvar(a:nr, '&filetype')) =~ 'aerial'
     endfunction

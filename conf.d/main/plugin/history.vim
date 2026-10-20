@@ -22,9 +22,6 @@ endtry
 " --------------------------
 " undo
 " --------------------------
-if pack#installed('nvim-fundo')
-    lua require('fundo').setup()
-endif
 " ------------------------------
 " Fzf jumps
 " ------------------------------

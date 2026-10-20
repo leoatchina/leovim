@@ -1,5 +1,4 @@
 if pack#installed('nvim-hlslens')
-    lua require('hlslens').setup()
     nnoremap <silent><nowait>n <Cmd>execute('normal! ' . v:count1 . 'n')<Cr><Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait>N <Cmd>execute('normal! ' . v:count1 . 'N')<Cr><Cmd>lua require('hlslens').start()<Cr>
     nnoremap <silent><nowait>* *``<Cmd>lua require('hlslens').start()<Cr>
@@ -19,7 +18,6 @@ if pack#installed('hop.nvim')
     imap <C-x> <C-o>"*
     xmap <C-x> "*x
     nmap <C-x> "*x
-    lua require("cfg/hop")
 else
     nmap <M-f> <Plug>(easymotion-w)
     xmap <M-f> <Plug>(easymotion-w)
@@ -55,7 +53,6 @@ else
     endif
 endif
 if pack#installed('flash.nvim')
-    lua require("cfg/flash")
     nmap SJ vt<Space><Cr>S
     nmap SK vT<Space><Cr>S
 else

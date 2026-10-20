@@ -3,7 +3,7 @@ PackAdd 'vim-eunuch'
 " hl searchindex && multi replace
 " ----------------------------------
 if has('nvim')
-    PackAdd 'nvim-hlslens'
+    PackAdd 'nvim-hlslens', {'cfg': 'cfg.hlslens'}
 else
     PackAdd 'vim-searchindex'
 endif
@@ -59,14 +59,14 @@ nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " quick jump in buffer
 " ------------------------
 if has('nvim')
-    PackAdd 'flash.nvim'
+    PackAdd 'flash.nvim', {'cfg': 'cfg.flash'}
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
     PackAdd 'clever-f.vim'
 endif
-if utils#is_vscode()
-    PackAdd 'hop.nvim'
+if has('nvim') && utils#is_vscode()
+    PackAdd 'hop.nvim', {'cfg': 'cfg.hop'}
 else
     PackAdd 'vim-easymotion'
     PackAdd 'vim-easymotion-chs'

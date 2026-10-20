@@ -1,19 +1,26 @@
+" ------------------------------
+" snippets install
+" ------------------------------
+if !pack#get('nocomplete') && exists('v:true') && exists("##TextChangedP")
+    PackAdd 'rafamadriz/friendly-snippets'
+    PackAdd 'hrsh7th/vim-vsnip'
+endif
 if pack#planned_cmp()
-    PackAdd 'hrsh7th/nvim-cmp'
-    PackAdd 'hrsh7th/cmp-nvim-lsp'
-    PackAdd 'hrsh7th/cmp-nvim-lua'
-    PackAdd 'hrsh7th/cmp-buffer'
-    PackAdd 'hrsh7th/cmp-cmdline'
-    PackAdd 'hrsh7th/cmp-vsnip'
-    PackAdd 'hrsh7th/cmp-nvim-lsp-signature-help'
-    PackAdd 'FelipeLema/cmp-async-path'
-    PackAdd 'onsails/lspkind-nvim'
-    PackAdd 'xzbdmw/colorful-menu.nvim'
+    PackAdd 'hrsh7th/nvim-cmp', {'cfg': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-nvim-lsp', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-nvim-lua', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-buffer', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-cmdline', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-vsnip', {'deps': ['vim-vsnip', 'nvim-cmp'], 'cfg': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-nvim-lsp-signature-help', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
+    PackAdd 'FelipeLema/cmp-async-path', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
+    PackAdd 'onsails/lspkind-nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
+    PackAdd 'xzbdmw/colorful-menu.nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
 elseif pack#planned_blink()
     if executable('cargo') && !pack#get('blink.lua')
-        PackAdd 'Saghen/blink.cmp', {'do': 'cargo build --release', 'branch': 'v1'}
+        PackAdd 'Saghen/blink.cmp', {'do': 'cargo build --release', 'branch': 'v1', 'cfg': 'cfg.blink'}
     else
-        PackAdd 'Saghen/blink.cmp', {'branch': 'v1'}
+        PackAdd 'Saghen/blink.cmp', {'branch': 'v1', 'cfg': 'cfg.blink'}
     endif
 elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
@@ -24,29 +31,23 @@ elseif pack#planned_coc()
     PackAdd 'coc-fzf'
 endif
 " ------------------------------
-" snippets install
-" ------------------------------
-if !pack#get('nocomplete') && exists('v:true') && exists("##TextChangedP")
-    PackAdd 'rafamadriz/friendly-snippets'
-    PackAdd 'hrsh7th/vim-vsnip'
-endif
-" ------------------------------
 " lsp && linter tool install
 " ------------------------------
 if pack#planned_lsp()
+    PackAdd 'mason-org/mason.nvim', {'cfg': 'cfg.mason'}
     let g:lint_tool = 'lsp'
     " lsp related
-    PackAdd 'mason-org/mason-lspconfig.nvim'
-    PackAdd 'camilledejoye/nvim-lsp-selection-range'
-    PackAdd 'Wansmer/symbol-usage.nvim'
-    PackAdd 'ravenxrz/call-graph.nvim'
-    PackAdd 'neovim/nvim-lspconfig'
+    PackAdd 'neovim/nvim-lspconfig', {'cfg': 'lsp'}
+    PackAdd 'mason-org/mason-lspconfig.nvim', {'deps': ['mason.nvim', 'nvim-lspconfig'], 'cfg': 'lsp'}
+    PackAdd 'camilledejoye/nvim-lsp-selection-range', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
+    PackAdd 'Wansmer/symbol-usage.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
+    PackAdd 'ravenxrz/call-graph.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     " lightline
-    PackAdd 'josa42/nvim-lightline-lsp'
+    PackAdd 'josa42/nvim-lightline-lsp', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     " lspimport is only for pyright
-    PackAdd 'leoatchina/nvim-lspimport'
+    PackAdd 'leoatchina/nvim-lspimport', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     " codesettings
-    PackAdd 'mrjones2014/codesettings.nvim'
+    PackAdd 'mrjones2014/codesettings.nvim', {'cfg': 'cfg.codesettings'}
 elseif g:python_version > 3.06 && pack#get('ale')
     let g:lint_tool = 'ale'
     PackAdd 'dense-analysis/ale'
@@ -67,20 +68,23 @@ if pack#get('debug') && g:python_version >= 3.10
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
     PackAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install }
 elseif has('nvim-0.9.5') && pack#get('debug') || pack#planned_lsp() && pack#get('java')
-    PackAdd 'mfussenegger/nvim-dap'
+    if !pack#planned_lsp()
+        PackAdd 'mason-org/mason.nvim', {'cfg': 'cfg.mason'}
+    endif
+    PackAdd 'mfussenegger/nvim-dap', {'cfg': 'cfg.dap'}
     PackAdd 'nvim-neotest/nvim-nio'
-    PackAdd 'rcarriga/nvim-dap-ui'
-    PackAdd 'jay-babu/mason-nvim-dap.nvim'
+    PackAdd 'rcarriga/nvim-dap-ui', {'deps': ['nvim-dap', 'nvim-nio'], 'cfg': 'cfg.dap'}
+    PackAdd 'jay-babu/mason-nvim-dap.nvim', {'deps': ['nvim-dap', 'mason.nvim'], 'cfg': 'cfg.dap'}
 endif
 " ------------------------------
 " textobj install
 " ------------------------------
 if has('nvim-0.9.2') && !has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
-    PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master'}
-    PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master'}
+    PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master', 'cfg': 'treesitter'}
+    PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master', 'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
     PackAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
-    PackAdd 'nvim-treesitter/nvim-treesitter-refactor'
-    PackAdd 'm-demare/hlargs.nvim'
+    PackAdd 'nvim-treesitter/nvim-treesitter-refactor', {'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
+    PackAdd 'm-demare/hlargs.nvim', {'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
 elseif exists('*search') && exists('*getpos') && pack#planned_coc()
     PackAdd 'bps/vim-textobj-python', {'for': 'python'}
     PackAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
@@ -117,7 +121,7 @@ if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
     PackAdd 'fzf-registers'
     PackAdd 'fzf-tabs'
     if has('nvim')
-        PackAdd 'stevearc/oil.nvim'
+        PackAdd 'stevearc/oil.nvim', {'cfg': 'cfg.oil'}
         PackAdd 'benomahony/oil-git.nvim'
     endif
 endif
@@ -134,9 +138,9 @@ if executable('git')
                 PackAdd 'dlyongemallo/diffview-plus.nvim'
             endif
             if has('nvim-0.11')
-                PackAdd 'lewis6991/gitsigns.nvim'
+                PackAdd 'lewis6991/gitsigns.nvim', {'cfg': 'cfg.gitsigns'}
             elseif has('nvim-0.9')
-                PackAdd 'lewis6991/gitsigns.nvim', {'tag': 'v1.0.2'}
+                PackAdd 'lewis6991/gitsigns.nvim', {'tag': 'v1.0.2', 'cfg': 'cfg.gitsigns'}
             endif
         else
             if !pack#planned_leaderf()
@@ -221,22 +225,19 @@ endif
 " ui && frame
 " --------------------------
 if has('nvim')
-    PackAdd 'nvim-tree/nvim-web-devicons'
+    PackAdd 'nvim-tree/nvim-web-devicons', {'cfg': 'cfg.devicons'}
     PackAdd 'kevinhwang91/promise-async'
     PackAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
     PackAdd 'MunifTanjim/nui.nvim'
     PackAdd 'nvim-lua/plenary.nvim'
     if has('nvim-0.9.4')
-        PackAdd 'snacks.nvim'
+        PackAdd 'snacks.nvim', {'cfg': 'cfg.snacks'}
     endif
     if  has('nvim-0.11')
-        PackAdd 'Bekaboo/dropbar.nvim'
+        PackAdd 'Bekaboo/dropbar.nvim', {'cfg': 'cfg.dropbar'}
         if utils#is_unix()
             PackAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
         endif
-    endif
-    if pack#planned_lsp() || pack#planned_dap()
-        PackAdd 'mason-org/mason.nvim'
     endif
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'
@@ -283,7 +284,7 @@ endif
 " pairs && wiler
 " ----------------------------
 if pack#planned_lsp()
-    PackAdd 'windwp/nvim-autopairs'
+    PackAdd 'windwp/nvim-autopairs', {'cfg': 'lsp'}
 else
     if v:version >= 800
         if !pack#planned_coc()
@@ -307,13 +308,13 @@ endif
 " undo
 " ------------------------------
 if has('nvim') && utils#is_unix()
-    PackAdd 'kevinhwang91/nvim-fundo'
+    PackAdd 'kevinhwang91/nvim-fundo', {'cfg': 'cfg.fundo'}
 endif
 " ----------------------------
 " indentLine plugins
 " ----------------------------
 if has('nvim')
-    PackAdd 'lukas-reineke/indent-blankline.nvim'
+    PackAdd 'lukas-reineke/indent-blankline.nvim', {'cfg': 'cfg.ibl'}
 elseif has('conceal')
     PackAdd 'Yggdroot/indentLine'
 endif

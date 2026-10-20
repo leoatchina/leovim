@@ -213,7 +213,6 @@ if pack#planned('vimspector')
     au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteWatch()<Cr>
 elseif pack#installed_dap()
     let g:debug_tool = 'nvim-dap'
-    lua require("cfg/dap")
     " load template
     if pack#planned_fzf()
         function! ReadDapTemplate(template_file) abort

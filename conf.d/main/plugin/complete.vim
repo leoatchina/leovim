@@ -39,12 +39,6 @@ endif
 " -----------------------------
 " lsp && vista_default_executive
 " -----------------------------
-if pack#installed_mason()
-    lua require("cfg/mason")
-endif
-if pack#installed('codesettings.nvim')
-    lua require('cfg/codesettings')
-endif
 if pack#installed_lsp()
     let g:vista_default_executive = 'nvim_lsp'
     source $CFG_DIR/lsp.vim
@@ -56,11 +50,7 @@ endif
 " ------------------------------
 " normal complete_engine
 " ------------------------------
-if pack#installed_blink()
-    lua require("cfg/blink")
-elseif pack#installed_cmp()
-    lua require("cfg/cmp")
-elseif pack#installed_coc()
+if pack#installed_coc()
     source $CFG_DIR/coc.vim
 endif
 " ------------------------------

@@ -40,8 +40,6 @@ if pack#installed('jupynium.nvim')
     let g:jupynium_port = get(g:, 'jupynium_port', 9999)
     let g:jupynium_protocal = get(g:, 'jupynium_protocal', 'http')
     let g:jupynium_url = get(g:, 'jupynium_url', printf("%s://%s:%d/nbclassic", g:jupynium_protocal, g:jupynium_ip, g:jupynium_port))
-    " setup
-    lua require("jupynium").setup({ default_notebook_URL = vim.g.jupynium_url, use_default_keybindings = false })
     " self defined function
     function! s:jupynium_run(...)
         let jupynium_urls = get(g:, 'jupynium_urls', [g:jupynium_url])

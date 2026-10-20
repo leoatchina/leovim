@@ -89,7 +89,6 @@ elseif pack#planned('vim-fugitive')
 endif
 " inline blame: keep the shortcut stable while selecting the native backend.
 if pack#installed('gitsigns.nvim')
-    lua require('cfg/gitsigns')
     nnoremap <silent><Tab><Tab> :Gitsigns blame<Cr>
     nnoremap <silent><Tab><Cr> :Gitsigns toggle_current_line_blame<Cr>
     command! GCommands call FzfCallCommands('GCommands', 'Gitsigns', 'Diffview', 'LeaderfGit', 'G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])

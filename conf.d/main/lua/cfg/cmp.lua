@@ -158,17 +158,15 @@ cmp.setup({
     },
     ['<Cr>'] = {
       i = function(fallback)
-        if utils.installed('vim-vsnip') then
-          -- 光标前是完整 vsnip 触发词 -> 展开
-          if vim.fn['vsnip#expandable']() == 1 then
-            vim.fn['vsnip#expand']()
-            return
-          end
-          -- snippet 会话内 -> 跳下一占位符
-          if vim.fn['vsnip#jumpable'](1) == 1 then
-            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Plug>(vsnip-jump-next)', true, false, true), 'm', true)
-            return
-          end
+        -- 光标前是完整 vsnip 触发词 -> 展开
+        if vim.fn['vsnip#expandable']() == 1 then
+          vim.fn['vsnip#expand']()
+          return
+        end
+        -- snippet 会话内 -> 跳下一占位符
+        if vim.fn['vsnip#jumpable'](1) == 1 then
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Plug>(vsnip-jump-next)', true, false, true), 'm', true)
+          return
         end
         if cmp.visible() then
           if cmp.get_active_entry() then
@@ -219,13 +217,7 @@ cmp.setup({
         end
       end,
       s = function(fallback)
-        if utils.installed('vim-vsnip') then
-          vim.fn['vsnip#expand']()
-        elseif has_words_before() then
-          cmp.complete()
-        else
-          fallback()
-        end
+        vim.fn['vsnip#expand']()
       end,
     }
   },

@@ -70,7 +70,6 @@ nnoremap <leader>E :tabe <C-r>=utils#get_root_dir()<Cr>/
 " file browser
 " ---------------------------------
 if pack#installed('oil.nvim')
-    lua require('cfg/oil')
     nnoremap <silent><nowait><leader>fo <Cmd>Oil --float<Cr>
 endif
 if pack#installed('vim-floaterm')
