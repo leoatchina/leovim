@@ -152,3 +152,105 @@ endfunction
 function! pack#installed_adv() abort
     return pack#installed('coc.nvim') || pack#installed_lsp()
 endfunction
+
+" -------------------------------------------------
+" Extended vim-plug `on` patterns
+" -------------------------------------------------
+let s:on_patterns = []
+let s:on_sentinel = {}
+
+function! s:is_on_regex(value, is_map) abort
+    if a:is_map
+        return a:value =~# '[.*\[~^$\\]'
+    endif
+    return a:value !~# '^[A-Z][A-Za-z0-9]*!\?$'
+endfunction
+
+function! s:validate_on_regex(pattern, plugin) abort
+    try
+        call match('', a:pattern)
+    catch /^Vim\%((\a\+)\)\=:E/
+        throw printf('PackAdd: invalid on regex for %s: %s', a:plugin, a:pattern)
+    endtry
+endfunction
+
+function! pack#register_on(plugin, value) abort
+    let values = type(a:value) == v:t_list ? copy(a:value) : [a:value]
+    let exact = []
+    let has_regex = 0
+    for value in values
+        if type(value) != v:t_string || empty(value)
+            throw printf('PackAdd: on for %s must be a string or string list', a:plugin)
+        endif
+        let is_map = stridx(value, '<Plug>') == 0
+        if s:is_on_regex(value, is_map)
+            call s:validate_on_regex(value, a:plugin)
+            call add(s:on_patterns, {
+                        \ 'plugin': a:plugin,
+                        \ 'pattern': value,
+                        \ 'map': is_map,
+                        \ })
+            let has_regex = 1
+        else
+            call add(exact, value)
+        endif
+    endfor
+    if has_regex
+        let sentinel = 'PackRegex' . (len(s:on_sentinel) + 1)
+        let s:on_sentinel[a:plugin] = sentinel
+        call add(exact, sentinel)
+    endif
+    return exact
+endfunction
+
+function! s:add_on_value(plugin, value) abort
+    let current = get(g:plugs[a:plugin], 'on', [])
+    let current = type(current) == v:t_list ? current : [current]
+    if index(current, a:value) < 0
+        call add(current, a:value)
+    endif
+    let g:plugs[a:plugin].on = current
+endfunction
+
+function! pack#prepare_on() abort
+    if empty(s:on_patterns)
+        return
+    endif
+    if !exists('*maplist')
+        for item in s:on_patterns
+            if item.map
+                throw 'PackAdd: <Plug> on regex requires maplist()'
+            endif
+        endfor
+    else
+        let mappings = maplist()
+        for item in s:on_patterns
+            if !item.map || !has_key(g:plugs, item.plugin)
+                continue
+            endif
+            for mapping in mappings
+                let target = get(mapping, 'rhs', '')
+                if stridx(target, '<Plug>') == 0 && target =~# item.pattern
+                    call s:add_on_value(item.plugin, target)
+                endif
+            endfor
+        endfor
+    endif
+    augroup PackOnRegex
+        autocmd!
+        autocmd CmdUndefined * call pack#on_cmd(expand('<amatch>'))
+    augroup END
+endfunction
+
+function! pack#on_cmd(command) abort
+    let plugins = []
+    for item in s:on_patterns
+        if !item.map && a:command =~# item.pattern
+                    \ && index(plugins, item.plugin) < 0
+            call add(plugins, item.plugin)
+        endif
+    endfor
+    if !empty(plugins)
+        call call('plug#load', plugins)
+    endif
+endfunction

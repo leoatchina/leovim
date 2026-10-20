@@ -194,7 +194,7 @@ if pack#planned('vimspector')
         elseif a:type ==# 'Console'
             FloatermToggle
         elseif a:type ==# 'terminal'
-            FloatermNewOrFzfList
+            TermNewOrFzfList
         elseif a:type ==# 'eval'
             call diagnostic#show(1)
         endif
@@ -322,7 +322,7 @@ elseif pack#installed_dap()
         elseif a:type == "repl"
             FloatermToggle
         elseif a:type == "element"
-            FloatermNewOrFzfList
+            TermNewOrFzfList
         else
             call preview#errmsg('Please start dap session.') | sleep 2
         endif

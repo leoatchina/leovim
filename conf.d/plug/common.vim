@@ -15,9 +15,8 @@ let g:easy_align_delimiters = {}
 let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
 let g:easy_align_delimiters['*'] = {'pattern': '*', 'ignore_groups': ['String']}
 PackAdd 'vim-easy-align', {'on': [
-            \ 'EasyAlign', 'LiveEasyAlign',
-            \ '<Plug>(EasyAlign)', '<Plug>(LiveEasyAlign)',
-            \ '<Plug>(EasyAlignRepeat)', '<Plug>(EasyAlignOperator)']}
+            \ '^\%(Live\)\?EasyAlign$',
+            \ '<Plug>.*EasyAlign.*$']}
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 xmap g, ga*,

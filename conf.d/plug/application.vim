@@ -163,8 +163,8 @@ endif
 " terminal && tmux
 " --------------------------
 if g:has_terminal
-    PackAdd 'vim-floaterm'
-    PackAdd 'vim-floaterm-enhance'
+    PackAdd 'vim-floaterm', {'on': '^Floaterm.*$'}
+    PackAdd 'vim-floaterm-enhance', {'on': '^Floaterm.*$'}
 endif
 if v:version >= 800 && utils#has_gui() == 0
     if utils#is_unix() && $TMUX != ''
@@ -273,11 +273,7 @@ if get(g:, 'header_field_author', '') != ''
     let g:header_auto_add_header = 0
     let g:header_auto_update_header = 0
     let g:header_field_timestamp_format = '%Y.%m.%d'
-    PackAdd 'vim-header', {'on': [
-                \ 'AddHeader', 'AddMinHeader',
-                \ 'AddAGPLicense', 'AddApacheLicense', 'AddSHLLicense', 'AddEUPLicense',
-                \ 'AddGNULicense', 'AddLGPLLicense', 'AddMITLicense', 'AddMPLLicense',
-                \ 'AddWTFPLLicense', 'AddZlibLicense']}
+    PackAdd 'vim-header', {'on': '^Add.*$'}
     nnoremap <M-k>a :AddHeader<Cr>
 endif
 " ----------------------------

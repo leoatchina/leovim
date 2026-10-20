@@ -296,6 +296,9 @@ function! s:pack_add(plugin, ...) abort
     else
         let key_name = plugin
     endif
+    if has_key(opts, 'on')
+        let opts.on = pack#register_on(key_name, opts.on)
+    endif
     " deps/init/cfg are scheduler extensions, not vim-plug options; strip and
     " register them before the dedup return so duplicate bindings error.
     let extras = {}
@@ -376,6 +379,7 @@ if !pack#installed_fzf() && !pack#installed_leaderf() && !has('nvim') && has('vi
     source $CFG_DIR/fuzzbox.vim
     PackAdd 'fuzzbox.vim'
 endif
+call pack#prepare_on()
 call plug#end()
 if has('nvim')
     lua require('pack').finish()

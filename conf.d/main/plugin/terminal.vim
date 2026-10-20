@@ -37,7 +37,7 @@ else
     let g:floaterm_shell = get(g:, 'floaterm_shell', 'bash')
 endif
 command! FloatermCommands call FzfCallCommands('FloatermCommands', 'Floaterm')
-nnoremap <silent><leader>: :FloatermCommands<Cr>
+nnoremap <silent>\f: :FloatermCommands<Cr>
 " ---------------------------------------------------------
 " enhanced functions and commands
 " ---------------------------------------------------------
@@ -90,10 +90,10 @@ function! s:floaterm_new_list()
         FloatermFzfList
     endif
 endfunction
-command! FloatermNewOrFzfList call s:floaterm_new_list()
+command! TermNewOrFzfList call s:floaterm_new_list()
 call s:bind_keymap('<M-->', 'FloatermToggle')
 call s:bind_keymap('<M-_>', 'FloatermHide')
 call s:bind_keymap('<M-{>', 'FloatermPrev')
 call s:bind_keymap('<M-}>', 'FloatermNext')
 call s:bind_keymap('<M-+>', 'FloatermOpenPos')
-call s:bind_keymap('<M-=>', 'FloatermNewOrFzfList')
+call s:bind_keymap('<M-=>', 'TermNewOrFzfList')
