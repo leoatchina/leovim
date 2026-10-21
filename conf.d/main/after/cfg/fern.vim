@@ -20,6 +20,10 @@ command! FernSideGetRoot call FernOpen('getroot')
 nnoremap <silent><leader>F  :FernSideLCD<Cr>
 nnoremap <silent><leader>fg :FernSideGitRoot<Cr>
 nnoremap <silent><leader>fr :FernSideGetRoot<Cr>
+augroup my-glyph-palette
+    autocmd!
+    autocmd FileType fern,startify call glyph_palette#apply()
+augroup END
 " ---------------
 " fzf
 " ---------------

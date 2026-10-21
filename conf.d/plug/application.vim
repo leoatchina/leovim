@@ -185,10 +185,6 @@ if v:version >= 801 || has('nvim')
     PackAdd 'vim-fern-renderer-nerdfont'
     PackAdd 'fern-mapping-fzf.vim'
     PackAdd 'fern-preview.vim'
-    augroup my-glyph-palette
-        autocmd!
-        autocmd FileType fern,startify call glyph_palette#apply()
-    augroup END
 else
     PackAdd 'vim-vinegar'
 endif
