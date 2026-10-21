@@ -50,9 +50,9 @@ function! s:copy_clipboard(content) abort
     endif
     call setreg(empty(s:register) ? '"' : s:register, a:content)
 endfunction
-nnoremap <silent>yf :call  <SID>copy_clipboard(utils#abs_path())<Cr>
-nnoremap <silent>yd :call  <SID>copy_clipboard(utils#abs_dir())<Cr>
-nnoremap <silent>yb :call  <SID>copy_clipboard(utils#file_name())<Cr>
+nnoremap <silent>yf :call  <SID>copy_clipboard('@' . utils#abs_path())<Cr>
+nnoremap <silent>yd :call  <SID>copy_clipboard('@' . utils#abs_dir())<Cr>
+nnoremap <silent>yb :call  <SID>copy_clipboard('@' . utils#file_name())<Cr>
 xnoremap <silent>Y  y:call <SID>copy_clipboard(@")<Cr>
 " --------------------------------------------
 " yank command and position to editors
