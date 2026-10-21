@@ -63,29 +63,53 @@ nnoremap <M-k>r :echo utils#get_root_dir()<Cr>
 " --------------------------
 " python_support
 " --------------------------
-let g:python_prog = get(g:, 'python_prog', utils#get_python_prog())
+" Script runner and editor provider are separate interpreter choices.
 if has('nvim')
-    let g:python3_host_prog = get(g:, 'python3_host_prog', g:python_prog)
-endif
-if utils#is_win32unix()
-    let g:python_version = 0
-else
-    " NOTE, cannot use pyxeval/py3eval/pyeval, otherwise neovim will error when pip packages are not installed.
-    try
-        let py_version = utils#execute('py3 import sys; print(sys.version)')
-    catch
-        try
-            let py_version = utils#execute('py import sys; print(sys.version)')
-        catch
-            let py_version = ""
-        endtry
-    endtry
-    let py_version_match = matchstr(py_version, '\v\zs\d{1,}\.\d{1,}\.\d{1,}\ze')
-    if py_version_match == ''
-        let g:python_version = 0
-    else
-        let g:python_version = utils#string_to_float(py_version_match, 2)
+    " Neovim consumes this setting when starting its Python 3 provider.
+    if !exists('g:python3_host_prog')
+        if executable('python3')
+            let g:python3_host_prog = exepath('python3')
+        elseif executable('python')
+            let g:python3_host_prog = exepath('python')
+        else
+            let g:python3_host_prog = ''
+        endif
     endif
+elseif has('python3')
+    " Display Vim's actual embedded Python 3 interpreter.
+    try
+        let g:python3_host_prog = py3eval('__import__("sys").executable')
+    catch
+        let g:python3_host_prog = ''
+    endtry
+else
+    let g:python3_host_prog = ''
+endif
+if !exists('g:python_prog')
+    if executable('python3')
+        let g:python_prog = exepath('python3')
+    elseif executable('python')
+        let g:python_prog = exepath('python')
+    elseif exists('g:python3_host_prog')
+        let g:python_prog = g:python3_host_prog
+    else
+        let g:python_prog = ""
+    endif
+endif
+" --------------------------
+" python version
+" --------------------------
+let g:python_version = 0
+if !utils#is_win32unix() && has('python3')
+    try
+        let py_version = utils#execute('py3 import sys; print(sys.version.split()[0])')
+        let py_version = matchstr(py_version, '\d\+\.\d\+\.\d\+')
+        if !empty(py_version)
+            let g:python_version = utils#string_to_float(py_version, 2)
+        endif
+    catch
+        " A reported provider may still fail to initialize.
+    endtry
 endif
 " --------------------------
 " has_terminal
