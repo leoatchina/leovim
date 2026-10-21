@@ -29,6 +29,9 @@ local function get_spec(name)
   return specs()[name]
 end
 
+local installed_cache = {}
+local compiled_inits = {}
+
 function M.reset()
   state.finished = false
   state.groups = nil
@@ -37,6 +40,8 @@ function M.reset()
   state.cfg_called = {}
   state.group_state = {}
   state.init_done = {}
+  installed_cache = {}
+  compiled_inits = {}
 end
 
 local function as_list(value)
@@ -65,7 +70,13 @@ local function deps_of(name)
 end
 
 local function installed(name)
-  return vim.fn['pack#installed'](name) == 1
+  local cached = installed_cache[name]
+  if cached ~= nil then
+    return cached
+  end
+  cached = (vim.fn['pack#installed'](name) == 1)
+  installed_cache[name] = cached
+  return cached
 end
 
 local function lazy(name)
@@ -88,6 +99,7 @@ local function validate_entry(name, entry, plugs)
     if not chunk then
       err('invalid init for %s: %s', name, tostring(compile_error))
     end
+    compiled_inits[name] = chunk
   end
   if entry.cfg ~= nil and (
       type(entry.cfg) ~= 'string'
@@ -278,12 +290,17 @@ local function execute_init(name, entry)
   if not entry.init or state.init_state[name] == 'done' then
     return true
   end
-  local compile = loadstring or load
-  local chunk, compile_error = compile(entry.init, 'PackAdd init: ' .. name)
+  local chunk = compiled_inits[name]
   if not chunk then
-    state.init_state[name] = 'failed'
-    vim.notify(('pack.lua: init for %s failed: %s'):format(name, tostring(compile_error)), vim.log.levels.ERROR)
-    return false
+    local compile = loadstring or load
+    local compile_error
+    chunk, compile_error = compile(entry.init, 'PackAdd init: ' .. name)
+    if not chunk then
+      state.init_state[name] = 'failed'
+      vim.notify(('pack.lua: init for %s failed: %s'):format(name, tostring(compile_error)), vim.log.levels.ERROR)
+      return false
+    end
+    compiled_inits[name] = chunk
   end
   local ok, execution_error = pcall(chunk)
   state.init_state[name] = ok and 'done' or 'failed'

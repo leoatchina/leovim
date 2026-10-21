@@ -165,7 +165,14 @@ function! pack#lazy(name) abort
 endfunction
 
 function! pack#loaded(name) abort
-    return get(get(g:, 'pack_loaded', {}), a:name, 0)
+    if get(get(g:, 'pack_loaded', {}), a:name, 0)
+        return 1
+    endif
+    if !pack#lazy(a:name) && pack#installed(a:name)
+        let g:pack_loaded[a:name] = 1
+        return 1
+    endif
+    return 0
 endfunction
 
 let s:in_load = 0
@@ -213,6 +220,7 @@ endfunction
 " -------------------------------------------------
 let s:on_patterns = []
 let s:cmd_proxies = {}
+let s:map_plugins = {}
 let s:opt_plugs = {}
 let s:for_patterns = []
 let s:for_loaded = {}
@@ -225,6 +233,7 @@ function! pack#begin(plugin_home) abort
     let g:pack_loaded = {}
     let s:on_patterns = []
     let s:cmd_proxies = {}
+    let s:map_plugins = {}
     let s:opt_plugs = {}
     let s:for_patterns = []
     let s:for_loaded = {}
@@ -288,7 +297,7 @@ function! pack#declare(plugin, ...) abort
     if has_key(opts, 'on')
         let opts.on = pack#register_on(key_name, opts.on)
     endif
-    if has_key(opts, 'for')
+    if has('nvim') && has_key(opts, 'for')
         call pack#register_for(key_name, opts.for)
         call remove(opts, 'for')
         if !has_key(opts, 'on')
@@ -368,6 +377,7 @@ function! pack#register_on(plugin, value) abort
             call s:validate_on_regex(value, a:plugin)
         endif
         if is_map
+            let s:map_plugins[a:plugin] = 1
             if is_regex
                 call add(s:on_patterns, {
                             \ 'plugin': a:plugin,
@@ -379,20 +389,33 @@ function! pack#register_on(plugin, value) abort
                 call add(plug_exact, value)
             endif
         else
-            if is_regex
-                call add(s:on_patterns, {
-                            \ 'plugin': a:plugin,
-                            \ 'pattern': value,
-                            \ 'map': 0,
-                            \ 'exact': 0,
-                            \ })
-            else
-                let cmd_name = substitute(value, '!$', '', '')
-                if !has_key(s:cmd_proxies, cmd_name)
-                    let s:cmd_proxies[cmd_name] = []
+            if has('nvim')
+                if is_regex
+                    call add(s:on_patterns, {
+                                \ 'plugin': a:plugin,
+                                \ 'pattern': value,
+                                \ 'map': 0,
+                                \ 'exact': 0,
+                                \ })
+                else
+                    let cmd_name = substitute(value, '!$', '', '')
+                    if !has_key(s:cmd_proxies, cmd_name)
+                        let s:cmd_proxies[cmd_name] = []
+                    endif
+                    if index(s:cmd_proxies[cmd_name], a:plugin) < 0
+                        call add(s:cmd_proxies[cmd_name], a:plugin)
+                    endif
                 endif
-                if index(s:cmd_proxies[cmd_name], a:plugin) < 0
-                    call add(s:cmd_proxies[cmd_name], a:plugin)
+            else
+                if is_regex
+                    call add(s:on_patterns, {
+                                \ 'plugin': a:plugin,
+                                \ 'pattern': value,
+                                \ 'map': 0,
+                                \ 'exact': 0,
+                                \ })
+                else
+                    call add(plug_exact, value)
                 endif
             endif
         endif
@@ -484,22 +507,22 @@ function! s:plugin_root(plugin) abort
 endfunction
 
 function! s:prepare_for() abort
-    if empty(s:for_patterns)
+    if !has('nvim') || empty(s:for_patterns)
         return
     endif
     augroup filetypedetect
         for item in s:for_patterns
             let root = s:plugin_root(item.plugin)
-            for pattern in [
-                        \ 'ftdetect/**/*.vim',
-                        \ 'ftdetect/**/*.lua',
-                        \ 'after/ftdetect/**/*.vim',
-                        \ 'after/ftdetect/**/*.lua',
-                        \ ]
-                for file in globpath(root, pattern, 0, 1)
+            if isdirectory(root . '/ftdetect')
+                for file in globpath(root, 'ftdetect/**/*.{vim,lua}', 0, 1)
                     execute 'silent source ' . fnameescape(file)
                 endfor
-            endfor
+            endif
+            if isdirectory(root . '/after/ftdetect')
+                for file in globpath(root, 'after/ftdetect/**/*.{vim,lua}', 0, 1)
+                    execute 'silent source ' . fnameescape(file)
+                endfor
+            endif
         endfor
     augroup END
 endfunction
@@ -551,21 +574,18 @@ function! pack#end() abort
     call s:prepare_on()
     call plug#end()
     call s:prepare_for()
-    for name in g:pack_order
-        if !pack#lazy(name) && pack#installed(name)
-            let g:pack_loaded[name] = 1
-        endif
-        execute printf('autocmd PackHooks User %s call pack#on_user_loaded(%s)', name, string(name))
-    endfor
-    for [cmd, names] in items(s:cmd_proxies)
-        if exists(':' . cmd) != 2
-            let mods_expr = has('patch-7.4.1898') ? '<q-mods>' : '""'
-            execute printf(
-            \ 'command! -nargs=* -range -bang -complete=file %s call pack#lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s, %s)',
-            \ cmd, string(cmd), mods_expr, string(names))
-        endif
-    endfor
     if has('nvim')
+        for name in keys(s:map_plugins)
+            execute printf('autocmd PackHooks User %s call pack#on_user_loaded(%s)', name, string(name))
+        endfor
+        for [cmd, names] in items(s:cmd_proxies)
+            if exists(':' . cmd) != 2
+                let mods_expr = has('patch-7.4.1898') ? '<q-mods>' : '""'
+                execute printf(
+                \ 'command! -nargs=* -range -bang -complete=file %s call pack#lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s, %s)',
+                \ cmd, string(cmd), mods_expr, string(names))
+            endif
+        endfor
         lua require('pack').finish()
         for filetype in s:pending_fts
             call pack#on_ft(filetype)
