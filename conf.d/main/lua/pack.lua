@@ -236,6 +236,27 @@ local function build_groups()
   for _, cfg in ipairs(declaration_order) do
     emit(cfg)
   end
+  for cfg, group in pairs(groups) do
+    local intra_deps = {}
+    for _, member in ipairs(group.members) do
+      intra_deps[member] = {}
+      for _, dep in ipairs(deps_of(member)) do
+        local dep_entry = get_spec(dep)
+        if dep_entry and dep_entry.cfg == cfg then
+          intra_deps[member][dep] = true
+        end
+      end
+    end
+    table.sort(group.members, function(a, b)
+      if intra_deps[a] and intra_deps[a][b] then
+        return false
+      elseif intra_deps[b] and intra_deps[b][a] then
+        return true
+      end
+      local sa, sb = get_spec(a), get_spec(b)
+      return (sa and sa.order or 0) < (sb and sb.order or 0)
+    end)
+  end
   state.groups = groups
   state.group_order = sorted
 end
@@ -245,8 +266,8 @@ local function load_plugin(name)
     return true
   end
   local ok, result = pcall(vim.fn['pack#load_raw'], name)
-  if not ok then
-    err('pack#load failed for %s: %s', name, tostring(result))
+  if not ok or result == 0 then
+    return false
   end
   return vim.fn['pack#loaded'](name) == 1
 end
@@ -273,10 +294,16 @@ local function execute_init(name, entry)
 end
 
 local function ensure_node(name, current_cfg)
-  if state.init_done[name] or state.init_state[name] == 'done' then
+  if state.init_done[name] then
     return true
   end
   local entry = get_spec(name)
+  if entry and entry.cfg and entry.cfg == current_cfg and state.init_state[name] == 'done' then
+    return true
+  end
+  if (not entry or not entry.cfg) and state.init_state[name] == 'done' then
+    return true
+  end
   if state.init_state[name] == 'failed' then
     return false
   end
@@ -381,9 +408,27 @@ function M.load_request(names)
 end
 
 local function run_startup()
+  for _, cfg in ipairs(state.group_order or {}) do
+    local group = state.groups[cfg]
+    if group then
+      local has_startup = false
+      for _, member in ipairs(group.members) do
+        if not lazy(member) then
+          has_startup = true
+          break
+        end
+      end
+      if has_startup then
+        run_group(cfg)
+      end
+    end
+  end
   for _, name in ipairs(order()) do
     if not lazy(name) then
-      request_one(name)
+      local entry = get_spec(name)
+      if not entry or not entry.cfg then
+        request_one(name)
+      end
     end
   end
 end
