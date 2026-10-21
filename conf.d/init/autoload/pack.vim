@@ -164,9 +164,23 @@ function! pack#lazy(name) abort
     return has_key(spec, 'on') || has_key(spec, 'for')
 endfunction
 
+function! pack#loaded(name) abort
+    return get(get(g:, 'pack_loaded', {}), a:name, 0)
+endfunction
+
 function! pack#load_raw(plugins) abort
     let plugins = type(a:plugins) == v:t_list ? a:plugins : [a:plugins]
-    return call('plug#load', plugins)
+    let unloaded = filter(copy(plugins), '!pack#loaded(v:val)')
+    if empty(unloaded)
+        return 1
+    endif
+    let result = call('plug#load', unloaded)
+    if result
+        for plugin in unloaded
+            let g:pack_loaded[plugin] = 1
+        endfor
+    endif
+    return result
 endfunction
 
 function! pack#load(plugins) abort
@@ -188,7 +202,6 @@ endfunction
 let s:on_patterns = []
 let s:on_sentinel = {}
 let s:opt_plugs = {}
-let s:on_exact = []
 let s:for_patterns = []
 let s:for_loaded = {}
 
@@ -197,12 +210,12 @@ function! pack#begin(plugin_home) abort
     let g:pack_specs = {}
     let g:pack_order = []
     let g:pack_lazy = {}
+    let g:pack_loaded = {}
     let s:on_patterns = []
-    let s:on_exact = []
-    let s:for_patterns = []
-    let s:for_loaded = {}
     let s:on_sentinel = {}
     let s:opt_plugs = {}
+    let s:for_patterns = []
+    let s:for_loaded = {}
     for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
         for plug_dir in globpath(opt_dir, '*', 0, 1)
             if isdirectory(plug_dir)
@@ -438,6 +451,17 @@ function! s:prepare_for() abort
             endfor
         endfor
     augroup END
+    " Managed for plugins lose their native proxies; load their plugin/
+    " scripts so PlugLOD stays a no-op while FileType stays with pack.lua.
+    let targets = []
+    for item in s:for_patterns
+        if has_key(g:plugs, item.plugin) && !get(s:for_loaded, item.plugin, 0)
+            call add(targets, item.plugin)
+        endif
+    endfor
+    if !empty(targets)
+        call pack#load_raw(targets)
+    endif
 endfunction
 
 function! s:source_for(plugin, filetype) abort
