@@ -30,6 +30,16 @@ function! pack#installed(...) abort
     return empty(filter(copy(a:000),
                 \ '!has_key(g:plugs, v:val) || !isdirectory(get(g:plugs[v:val], "dir", ""))'))
 endfunction
+
+" Cached scheduler queries; pack#installed() remains a live directory check.
+let s:installed_cache = {}
+
+function! pack#installed_cached(name) abort
+    if !has_key(s:installed_cache, a:name)
+        let s:installed_cache[a:name] = pack#installed(a:name)
+    endif
+    return s:installed_cache[a:name]
+endfunction
 " -------------------------------------------
 " Extended Check Functions (from check.vim)
 " -------------------------------------------
@@ -198,20 +208,15 @@ function! pack#load_raw(plugins) abort
 endfunction
 
 function! pack#load(plugins) abort
+    let was_loading = s:in_load
     let s:in_load = 1
     try
-        let plugins = type(a:plugins) == v:t_list ? a:plugins : [a:plugins]
-        if has('nvim') && exists('*luaeval')
-            let g:pack_load_request = plugins
-            try
-                return luaeval("require('pack').load_request(vim.g.pack_load_request)")
-            finally
-                unlet! g:pack_load_request
-            endtry
+        if has('nvim')
+            return luaeval("require('pack').load_request(_A)", a:plugins)
         endif
-        return pack#load_raw(plugins)
+        return pack#load_raw(a:plugins)
     finally
-        let s:in_load = 0
+        let s:in_load = was_loading
     endtry
 endfunction
 
@@ -239,6 +244,7 @@ function! pack#begin(plugin_home) abort
     let s:for_loaded = {}
     let s:pending_fts = []
     let s:in_load = 0
+    let s:installed_cache = {}
     for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
         for plug_dir in globpath(opt_dir, '*', 0, 1)
             if isdirectory(plug_dir)
@@ -378,45 +384,22 @@ function! pack#register_on(plugin, value) abort
         endif
         if is_map
             let s:map_plugins[a:plugin] = 1
-            if is_regex
-                call add(s:on_patterns, {
-                            \ 'plugin': a:plugin,
-                            \ 'pattern': value,
-                            \ 'map': 1,
-                            \ 'exact': 0,
-                            \ })
-            else
-                call add(plug_exact, value)
-            endif
+        endif
+        if is_regex
+            call add(s:on_patterns, {
+                        \ 'plugin': a:plugin,
+                        \ 'pattern': value,
+                        \ 'map': is_map,
+                        \ })
+        elseif is_map || !has('nvim')
+            call add(plug_exact, value)
         else
-            if has('nvim')
-                if is_regex
-                    call add(s:on_patterns, {
-                                \ 'plugin': a:plugin,
-                                \ 'pattern': value,
-                                \ 'map': 0,
-                                \ 'exact': 0,
-                                \ })
-                else
-                    let cmd_name = substitute(value, '!$', '', '')
-                    if !has_key(s:cmd_proxies, cmd_name)
-                        let s:cmd_proxies[cmd_name] = []
-                    endif
-                    if index(s:cmd_proxies[cmd_name], a:plugin) < 0
-                        call add(s:cmd_proxies[cmd_name], a:plugin)
-                    endif
-                endif
-            else
-                if is_regex
-                    call add(s:on_patterns, {
-                                \ 'plugin': a:plugin,
-                                \ 'pattern': value,
-                                \ 'map': 0,
-                                \ 'exact': 0,
-                                \ })
-                else
-                    call add(plug_exact, value)
-                endif
+            let cmd_name = substitute(value, '!$', '', '')
+            if !has_key(s:cmd_proxies, cmd_name)
+                let s:cmd_proxies[cmd_name] = []
+            endif
+            if index(s:cmd_proxies[cmd_name], a:plugin) < 0
+                call add(s:cmd_proxies[cmd_name], a:plugin)
             endif
         endif
     endfor
