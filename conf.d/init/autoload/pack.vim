@@ -34,11 +34,12 @@ endfunction
 " Cached scheduler queries; pack#installed() remains a live directory check.
 let s:installed_cache = {}
 
+" Positive-only cache: missing plugins stay retryable after a later install.
 function! pack#installed_cached(name) abort
-    if !has_key(s:installed_cache, a:name)
-        let s:installed_cache[a:name] = pack#installed(a:name)
+    if !get(s:installed_cache, a:name, 0) && pack#installed(a:name)
+        let s:installed_cache[a:name] = 1
     endif
-    return s:installed_cache[a:name]
+    return get(s:installed_cache, a:name, 0)
 endfunction
 " -------------------------------------------
 " Extended Check Functions (from check.vim)
@@ -178,14 +179,17 @@ function! pack#loaded(name) abort
     if get(get(g:, 'pack_loaded', {}), a:name, 0)
         return 1
     endif
-    if !pack#lazy(a:name) && pack#installed(a:name)
+    " Non-lazy plugins that were missing at pack#end() never got sourced;
+    " they stay retryable through plug#load instead of being pre-marked.
+    if !pack#lazy(a:name) && !get(get(g:, 'pack_pending', {}), a:name, 0)
+                \ && pack#installed_cached(a:name)
         let g:pack_loaded[a:name] = 1
         return 1
     endif
     return 0
 endfunction
 
-let s:in_load = 0
+let s:finished = 0
 
 function! pack#load_raw(plugins) abort
     let plugins = type(a:plugins) == v:t_list ? a:plugins : [a:plugins]
@@ -193,31 +197,25 @@ function! pack#load_raw(plugins) abort
     if empty(unloaded)
         return 1
     endif
-    let missing = filter(copy(unloaded), '!pack#installed(v:val)')
+    let missing = filter(copy(unloaded), '!pack#installed_cached(v:val)')
     if !empty(missing)
         return 0
     endif
-    let to_load = filter(copy(unloaded), 'pack#lazy(v:val)')
-    if !empty(to_load)
-        call call('plug#load', to_load)
-    endif
+    call call('plug#load', unloaded)
     for plugin in unloaded
+        if has_key(g:pack_pending, plugin)
+            call remove(g:pack_pending, plugin)
+        endif
         let g:pack_loaded[plugin] = 1
     endfor
     return 1
 endfunction
 
 function! pack#load(plugins) abort
-    let was_loading = s:in_load
-    let s:in_load = 1
-    try
-        if has('nvim')
-            return luaeval("require('pack').load_request(_A)", a:plugins)
-        endif
-        return pack#load_raw(a:plugins)
-    finally
-        let s:in_load = was_loading
-    endtry
+    if has('nvim')
+        return luaeval("require('pack').load_request(_A)", a:plugins)
+    endif
+    return pack#load_raw(a:plugins)
 endfunction
 
 " -------------------------------------------------
@@ -236,6 +234,7 @@ function! pack#begin(plugin_home) abort
     let g:pack_order = []
     let g:pack_lazy = {}
     let g:pack_loaded = {}
+    let g:pack_pending = {}
     let s:on_patterns = []
     let s:cmd_proxies = {}
     let s:map_plugins = {}
@@ -243,7 +242,7 @@ function! pack#begin(plugin_home) abort
     let s:for_patterns = []
     let s:for_loaded = {}
     let s:pending_fts = []
-    let s:in_load = 0
+    let s:finished = 0
     let s:installed_cache = {}
     for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
         for plug_dir in globpath(opt_dir, '*', 0, 1)
@@ -467,17 +466,53 @@ function! s:prepare_on() abort
     augroup END
 endfunction
 
-function! pack#on_user_loaded(name) abort
-    if !has_key(g:plugs, a:name)
+" Capture the editing context before loading scripts can change it.
+function! pack#lod_map(target, names, with_prefix, visual) abort
+    let prefix = ''
+    if a:with_prefix
+        let prefix = (v:count ? v:count : '') . '"' . v:register . a:visual
+        if mode(1) ==# 'no'
+            let prefix = (v:operator ==# 'c' ? "\<Esc>" : '') . prefix . v:operator
+        endif
+    endif
+    if !pack#load(a:names)
         return
     endif
-    let g:pack_loaded[a:name] = 1
-    if s:in_load
-        return
-    endif
-    if has('nvim') && luaeval("require('pack').is_finished()")
-        call pack#load(a:name)
-    endif
+    " Insert replay before pending input; do not drain getchar() or lose typeahead.
+    let target = substitute(a:target, '^<Plug>', "\<Plug>", '')
+    call feedkeys(prefix . target, 'mi')
+endfunction
+
+function! s:prepare_maps() abort
+    let targets = {}
+    for name in g:pack_order
+        if !has_key(s:map_plugins, name)
+            continue
+        endif
+        for target in get(g:plugs[name], 'on', [])
+            if stridx(target, '<Plug>') == 0
+                if !has_key(targets, target)
+                    let targets[target] = []
+                endif
+                if index(targets[target], name) < 0
+                    call add(targets[target], name)
+                endif
+            endif
+        endfor
+    endfor
+    for [target, names] in items(targets)
+        for [mode, enter, visual] in [
+                    \ ['i', '<C-\><C-O>', ''], ['n', '', ''],
+                    \ ['v', '', 'gv'], ['o', '', '']]
+            " Only replace vim-plug's proxy, never a real/user mapping.
+            if maparg(target, mode) =~# '\Ccall <SNR>\d\+_lod_map('
+                execute printf(
+                            \ '%snoremap <silent> %s %s:<C-U>call pack#lod_map(%s, %s, %d, %s)<CR>',
+                            \ mode, target, enter, string(target), string(names),
+                            \ mode !=# 'i', string(visual))
+            endif
+        endfor
+    endfor
 endfunction
 
 function! s:plugin_root(plugin) abort
@@ -523,7 +558,7 @@ function! s:source_for(plugin, filetype) abort
 endfunction
 
 function! pack#on_ft(filetype) abort
-    if has('nvim') && !luaeval("require('pack').is_finished()")
+    if has('nvim') && !s:finished
         " FileType fired while pack#end() is still preparing (e.g. BufRead
         " inside plug#load); defer until the plan is frozen.
         if index(s:pending_fts, a:filetype) < 0
@@ -555,12 +590,17 @@ endfunction
 
 function! pack#end() abort
     call s:prepare_on()
+    for name in g:pack_order
+        if !pack#lazy(name) && !pack#installed(name)
+            let g:pack_pending[name] = 1
+            " Keep vim-plug from pre-marking an absent startup plugin loaded.
+            let g:plugs[name].on = []
+        endif
+    endfor
     call plug#end()
     call s:prepare_for()
     if has('nvim')
-        for name in keys(s:map_plugins)
-            execute printf('autocmd PackHooks User %s call pack#on_user_loaded(%s)', name, string(name))
-        endfor
+        call s:prepare_maps()
         for [cmd, names] in items(s:cmd_proxies)
             if exists(':' . cmd) != 2
                 let mods_expr = has('patch-7.4.1898') ? '<q-mods>' : '""'
@@ -570,6 +610,7 @@ function! pack#end() abort
             endif
         endfor
         lua require('pack').finish()
+        let s:finished = 1
         for filetype in s:pending_fts
             call pack#on_ft(filetype)
         endfor

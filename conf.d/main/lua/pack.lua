@@ -5,6 +5,9 @@ local M = {}
 
 local state = {
   finished = false,
+  specs = {}, -- snapshot of vim.g.pack_specs
+  order = {}, -- snapshot of vim.g.pack_order
+  lazy = {}, -- snapshot of vim.g.pack_lazy
   groups = nil, -- cfg -> { members = { name, ... }, order = number }
   group_order = nil,
   init_state = {}, -- plugin -> pending | running | done | failed
@@ -17,22 +20,17 @@ local function err(fmt, ...)
   error(('pack.lua: ' .. string.format(fmt, ...)), 0)
 end
 
-local function specs()
-  return vim.g.pack_specs or {}
-end
-
-local function order()
-  return vim.g.pack_order or {}
-end
-
 local function get_spec(name)
-  return specs()[name]
+  return state.specs[name]
 end
 
 local compiled_inits = {}
 
 function M.reset()
   state.finished = false
+  state.specs = {}
+  state.order = {}
+  state.lazy = {}
   state.groups = nil
   state.group_order = nil
   state.init_state = {}
@@ -72,7 +70,7 @@ local function installed(name)
 end
 
 local function lazy(name)
-  return vim.fn['pack#lazy'](name) == 1
+  return state.lazy[name] == 1
 end
 
 local function validate_entry(name, entry, plugs)
@@ -117,7 +115,7 @@ end
 
 local function validate()
   local plugs = vim.g.plugs or {}
-  for _, name in ipairs(order()) do
+  for _, name in ipairs(state.order) do
     validate_entry(name, get_spec(name), plugs)
   end
 
@@ -138,7 +136,7 @@ local function validate()
     visiting[name] = nil
     done[name] = true
   end
-  for _, name in ipairs(order()) do
+  for _, name in ipairs(state.order) do
     visit(name, {})
   end
 end
@@ -171,7 +169,7 @@ end
 
 local function build_groups()
   local groups, declaration_order = {}, {}
-  for _, name in ipairs(order()) do
+  for _, name in ipairs(state.order) do
     local entry = get_spec(name)
     if entry.cfg then
       local group = groups[entry.cfg]
@@ -266,14 +264,8 @@ local function build_groups()
 end
 
 local function load_plugin(name)
-  if vim.fn['pack#loaded'](name) == 1 then
-    return true
-  end
   local ok, result = pcall(vim.fn['pack#load_raw'], name)
-  if not ok or result == 0 then
-    return false
-  end
-  return vim.fn['pack#loaded'](name) == 1
+  return ok and result == 1
 end
 
 local run_group
@@ -296,10 +288,9 @@ local function ensure_node(name, current_cfg)
     return true
   end
   local entry = get_spec(name)
-  if entry and entry.cfg and entry.cfg == current_cfg and state.init_state[name] == 'done' then
-    return true
-  end
-  if (not entry or not entry.cfg) and state.init_state[name] == 'done' then
+  local has_no_cfg = entry == nil or entry.cfg == nil
+  -- A cfg-bound member only counts as done inside its own group run.
+  if state.init_state[name] == 'done' and (has_no_cfg or entry.cfg == current_cfg) then
     return true
   end
   if state.init_state[name] == 'failed' then
@@ -421,7 +412,7 @@ local function run_startup()
       end
     end
   end
-  for _, name in ipairs(order()) do
+  for _, name in ipairs(state.order) do
     if not lazy(name) then
       local entry = get_spec(name)
       if not entry or not entry.cfg then
@@ -435,6 +426,9 @@ function M.finish()
   if state.finished then
     return
   end
+  state.specs = vim.g.pack_specs or {}
+  state.order = vim.g.pack_order or {}
+  state.lazy = vim.g.pack_lazy or {}
   validate()
   build_groups()
   state.finished = true
@@ -447,11 +441,6 @@ function M.finish()
     })
   end
 end
-function M.is_finished()
-  return state.finished == true
-end
-
-
 function M.status()
   return {
     finished = state.finished,
