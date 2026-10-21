@@ -58,6 +58,10 @@ else
     nnoremap ! :!
     xnoremap ! :<C-u>!<C-R>=utils#get_visual()<Cr>
 endif
+
+" Probe once on the first Python run: -1 unknown, 0 unavailable, 1 available.
+let s:pretty_errors = -1
+
 function! s:asyncrun(...)
     let ft = &ft
     if ft == '' || &buftype != ''
@@ -114,11 +118,13 @@ function! s:asyncrun(...)
     elseif (ft ==# 'sh' || ft ==# 'bash') && executable('bash')
         let run_cmd = s:run_command . params . ' bash %'
     elseif ft ==# 'python' && executable(g:python_prog)
-        if get(g:, 'pretty_errors_import', 0)
-            let run_cmd = s:run_command . params . ' ' . g:python_prog . ' -m pretty_errors %'
-        else
-            let run_cmd = s:run_command . params . ' ' . g:python_prog . ' %'
+        let python = g:python_prog
+        if s:pretty_errors == -1
+            call system(shellescape(python) . ' -c ' . shellescape('import pretty_errors'))
+            let s:pretty_errors = v:shell_error == 0
         endif
+        let module = s:pretty_errors ? ' -m pretty_errors' : ''
+        let run_cmd = s:run_command . params . ' ' . shellescape(python) . module . ' %'
     elseif ft ==# 'r' && executable('Rscript')
         let run_cmd = s:run_command . params . ' Rscript %'
     elseif ft ==# 'go' && executable('go')

@@ -85,20 +85,6 @@ else
         let g:python_version = 0
     else
         let g:python_version = utils#string_to_float(py_version_match, 2)
-        if g:python_version > 3
-            try
-                call utils#execute('py3 import pygments')
-                let g:pygments_import = get(g:, 'pygments_import', 1)
-            catch /.*/
-                let g:pygments_import = get(g:, 'pygments_import', 0)
-            endtry
-            try
-                call utils#execute('py3 import pretty_errors')
-                let g:pretty_errors_import = get(g:, 'pretty_errors_import', 1)
-            catch /.*/
-                let g:pretty_errors_import = get(g:, 'pretty_errors_import', 0)
-            endtry
-        endif
     endif
 endif
 " --------------------------
@@ -253,6 +239,15 @@ if utils#is_win() && pack#get('tags') || utils#is_unix()
     if executable('gtags') && get(g:, 'ctags_type', '') != '' && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
         let s:gtags_version = matchstr(system('gtags --version'), '\v\zs\d+\.\d+\.\d+\ze')
         let g:gtags_version = utils#string_to_float(s:gtags_version, 2)
+        " Only probe Pygments when Gtags needs a parser label.
+        if !exists('g:pygments_import') && g:python_version > 3
+            try
+                call utils#execute('py3 import pygments')
+                let g:pygments_import = 1
+            catch /.*/
+                let g:pygments_import = 0
+            endtry
+        endif
         if get(g:, 'pygments_import', 0)
             let $GTAGSLABEL = 'native-pygments'
         elseif g:ctags_type =~ 'Universal'
