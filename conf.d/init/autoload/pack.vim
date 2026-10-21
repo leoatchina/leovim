@@ -204,7 +204,7 @@ let s:on_sentinel = {}
 let s:opt_plugs = {}
 let s:for_patterns = []
 let s:for_loaded = {}
-
+let s:pending_fts = []
 
 function! pack#begin(plugin_home) abort
     let g:pack_specs = {}
@@ -216,6 +216,7 @@ function! pack#begin(plugin_home) abort
     let s:opt_plugs = {}
     let s:for_patterns = []
     let s:for_loaded = {}
+    let s:pending_fts = []
     for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
         for plug_dir in globpath(opt_dir, '*', 0, 1)
             if isdirectory(plug_dir)
@@ -477,6 +478,14 @@ function! s:source_for(plugin, filetype) abort
 endfunction
 
 function! pack#on_ft(filetype) abort
+    if has('nvim') && !luaeval("require('pack').is_finished()")
+        " FileType fired while pack#end() is still preparing (e.g. BufRead
+        " inside plug#load); defer until the plan is frozen.
+        if index(s:pending_fts, a:filetype) < 0
+            call add(s:pending_fts, a:filetype)
+        endif
+        return
+    endif
     let plugins = []
     for item in s:for_patterns
         if index(item.filetypes, a:filetype) >= 0
@@ -507,6 +516,10 @@ function! pack#end() abort
     call s:prepare_for()
     if has('nvim')
         lua require('pack').finish()
+        for filetype in s:pending_fts
+            call pack#on_ft(filetype)
+        endfor
+        let s:pending_fts = []
     endif
 endfunction
 

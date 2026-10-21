@@ -404,6 +404,10 @@ function M.finish()
     })
   end
 end
+function M.is_finished()
+  return state.finished == true
+end
+
 
 function M.status()
   return {
