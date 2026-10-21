@@ -45,8 +45,10 @@ if get(g:, 'leovim_whichkey', 1)
     nnoremap Z<Space> :WhichKey 'Z'<Cr>
     " C- keys
     nnoremap <C-\> :WhichKey "\<C-Bslash\>"<Cr>
-    nnoremap <C-f> :WhichKey "\<C-f\>"<Cr>
-    xnoremap <C-f> :WhichKeyVisual "\<C-f\>"<Cr>
+    if pack#installed_leaderf()
+        nnoremap <C-f> :WhichKey "\<C-f\>"<Cr>
+        xnoremap <C-f> :WhichKeyVisual "\<C-f\>"<Cr>
+    endif
     " M- keys
     nnoremap <M-g> :WhichKey "\<M-g\>"<Cr>
     nnoremap <M-h> :WhichKey "\<M-h\>"<Cr>
