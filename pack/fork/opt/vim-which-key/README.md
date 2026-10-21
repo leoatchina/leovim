@@ -109,7 +109,7 @@ Please note that no matter which mappings and menus you configure, your original
 
 ### Special keys
 
-Key-code names in prefixes are case-insensitive: `<C-f>` matches Vim's `<C-F>` notation without adding an extra submenu. Literal prefixes and suffixes remain case-sensitive, so `g`/`G` and `x`/`X` stay distinct.
+Only `<C-…>` key-code names in prefixes are normalized: `<C-f>` matches Vim's `<C-F>` notation without adding an extra submenu. Alt prefixes such as `<M-g>`/`<M-G>` and literal prefixes and suffixes such as `g`/`G` and `x`/`X` remain case-sensitive.
 
 - Use <kbd>BS</kbd> to show the upper level mappings.
 

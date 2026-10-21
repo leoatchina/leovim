@@ -42,9 +42,9 @@ function! s:get_raw_map_info(key) abort
 endfunction
 
 function! s:strip_prefix(lhs, prefix) abort
-  " Vim prints <C-f> as <C-F>; normalize keycodes, not literal g/G prefixes.
-  let lhs = substitute(a:lhs, '<[^>]\+>', '\=toupper(submatch(0))', 'g')
-  let prefix = substitute(a:prefix, '<[^>]\+>', '\=toupper(submatch(0))', 'g')
+  " Only Ctrl notation is case-insensitive; preserve Alt and literal key case.
+  let lhs = substitute(a:lhs, '<C-[^>]\+>', '\=toupper(submatch(0))', 'g')
+  let prefix = substitute(a:prefix, '<C-[^>]\+>', '\=toupper(submatch(0))', 'g')
   if strpart(lhs, 0, strlen(prefix)) ==# prefix
     return a:lhs[strlen(a:prefix) :]
   endif
