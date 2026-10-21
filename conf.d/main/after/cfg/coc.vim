@@ -53,7 +53,8 @@ inoremap <silent><expr><C-n>
       \ CheckBackspace() ? "\<C-n>" :
       \ coc#refresh()
 inoremap <silent><expr><C-p> coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"
-inoremap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
+inoremap <silent><expr><C-e> coc#pum#visible() ? coc#pum#cancel()
+            \ : pumvisible() ? "\<C-e>" : "\<C-o>A"
 inoremap <silent><expr><C-y> coc#pum#visible() ? coc#pum#stop() : "\<C-y>"
 " ----------------------------
 " map
