@@ -326,47 +326,6 @@ nnoremap <silent><M-?> :call tags#lsp_tag_search("type_definition")<Cr>
 " implementation
 nnoremap <silent><M-.> :call tags#lsp_tag_search("implementation")<Cr>
 " --------------------------
-" usage navigation (sj/sk/sh), replaces treesitter-refactor
-" goto_next_usage/goto_previous_usage; see docs/nvim-0.12-treesitter-upgrade.md
-" coc backend: CocUsageSearch (main/after/cfg/coc.vim)
-" lsp backend: M.UsageNav (main/lua/lsp.lua), sets g:lsp_usage_found
-" on failure fall back to whole-word search next/prev (sj/sk) and gd (sh)
-" --------------------------
-function! tags#usage_fallback(word, direction) abort
-    if empty(a:word)
-        return
-    endif
-    let pat = '\V\<' . escape(a:word, '\') . '\>'
-    if a:direction ==# 'first'
-        normal! gd
-    elseif a:direction ==# 'prev'
-        call search(pat, 'bw')
-    else
-        call search(pat, 'w')
-    endif
-endfunction
-function! tags#usage_search(direction) abort
-    if empty(expand('<cword>'))
-        call preview#errmsg('No symbol under cursor.')
-        return
-    endif
-    " chain: coc -> lsp -> word search / gd; only tags.vim decides the fallback
-    if pack#installed_coc() && exists('*CocUsageSearch')
-        if CocUsageSearch(a:direction)
-            return
-        endif
-    elseif pack#installed_lsp()
-        call utils#execute(printf('lua require("lsp").UsageNav("%s")', a:direction))
-        if get(g:, 'lsp_usage_found', 0)
-            return
-        endif
-    endif
-    call tags#usage_fallback(expand('<cword>'), a:direction)
-endfunction
-nnoremap <silent>sj :call tags#usage_search("next")<Cr>
-nnoremap <silent>sk :call tags#usage_search("prev")<Cr>
-nnoremap <silent>sh :call tags#usage_search("first")<Cr>
-" --------------------------
 " gtags
 " --------------------------
 if pack#planned('gutentags_plus')

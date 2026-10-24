@@ -45,6 +45,11 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 map("n", "<M-l>U", ":TSUpdate ", { noremap = true, silent = false })
 map("n", "<M-l>I", ":TSInstall ", { noremap = true, silent = true })
+vim.api.nvim_create_user_command("TSCleanup", function()
+  vim.fn.delete(install_dir .. "/parser", "rf")
+  vim.fn.delete(install_dir .. "/queries", "rf")
+  vim.notify("Cleaned treesitter directory: " .. install_dir)
+end, { desc = "Clean up installed treesitter parsers and queries" })
 -------------------------
 -- incremental selection (replaces removed master module)
 -- <M-s> start(normal)/expand(visual), <Tab> expand, <M-S> shrink

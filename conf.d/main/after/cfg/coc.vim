@@ -79,8 +79,8 @@ imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<C
 imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-k>"
 " inlayHint/codeLens/codeaction
 nmap <silent><leader>i :CocCommand document.toggleInlayHint<Cr>
-nmap <silent><M-c> :CocCommand document.toggleCodeLens<Cr>
-nmap <leader>C <Plug>(coc-codelens-action)
+nmap <leader>C :CocCommand document.toggleCodeLens<Cr>
+nmap <M-c> <Plug>(coc-codelens-action)
 " call hierarchy
 nnoremap <silent>gh :call CocAction('showIncomingCalls')<Cr>
 nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>
@@ -211,102 +211,3 @@ augroup FixCocColorScheme
     endfunction
     autocmd SafeStateAgain,InsertEnter * call s:CocPumSelFix()
 augroup END
-" ----------------------------
-" usage navigation core (sj/sk/sh entry lives in main/plugin/tags.vim),
-" replaces treesitter-refactor goto_next_usage/goto_previous_usage;
-" see docs/nvim-0.12-treesitter-upgrade.md
-" synchronous: returns 1 when the cursor moved, 0 on any failure;
-" the caller (tags.vim) owns the fallback, never the other way round
-" ----------------------------
-function! s:usage_pos_cmp(l1, c1, l2, c2) abort
-    if a:l1 != a:l2 | return a:l1 < a:l2 ? -1 : 1 | endif
-    if a:c1 != a:c2 | return a:c1 < a:c2 ? -1 : 1 | endif
-    return 0
-endfunction
-" coc Range: dict {start:{line,character},end:{...}} (0-based)
-" tolerate [[line,col],[line,col]] list form across coc versions
-function! s:usage_range_parts(range) abort
-    if type(a:range) == type([])
-        return [a:range[0][0], a:range[0][1], a:range[1][0], a:range[1][1]]
-    endif
-    return [a:range.start.line + 1, a:range.start.character + 1,
-                \ a:range.end.line + 1, a:range.end.character + 1]
-endfunction
-function! CocUsageSearch(direction) abort
-    if empty(expand('<cword>')) || !get(g:, 'coc_service_initialized', 0)
-        return 0
-    endif
-    try
-        let ranges = CocAction('symbolRanges')
-        let symbols = CocAction('documentSymbols')
-    catch
-        return 0
-    endtry
-    if type(ranges) != type([]) || empty(ranges) || type(symbols) != type([])
-        return 0
-    endif
-    let [cl, cc] = getcurpos()[1:2]
-    " deepest (smallest) symbol range containing the cursor
-    let best = []
-    let best_size = -1
-    for sym in symbols
-        if type(sym) == type({}) && has_key(sym, 'range')
-            let [sl, sc, el, ec] = s:usage_range_parts(sym.range)
-            if s:usage_pos_cmp(sl, sc, cl, cc) <= 0 && s:usage_pos_cmp(cl, cc, el, ec) <= 0
-                let size = (el - sl) * 1000000 + (ec - sc)
-                if best_size < 0 || size < best_size
-                    let best_size = size
-                    let best = [sl, sc, el, ec]
-                endif
-            endif
-        endif
-    endfor
-    if best_size < 0
-        return 0
-    endif
-    " occurrences fully inside the scope
-    let occ = []
-    for range in ranges
-        if type(range) == type({}) || type(range) == type([])
-            let [sl, sc, el, ec] = s:usage_range_parts(range)
-            if s:usage_pos_cmp(best[0], best[1], sl, sc) <= 0 && s:usage_pos_cmp(el, ec, best[2], best[3]) <= 0
-                call add(occ, [sl, sc, el, ec])
-            endif
-        endif
-    endfor
-    if empty(occ)
-        return 0
-    endif
-    call sort(occ, {a, b -> s:usage_pos_cmp(a[0], a[1], b[0], b[1])})
-    let uniq = []
-    for o in occ
-        if empty(uniq) || s:usage_pos_cmp(uniq[-1][0], uniq[-1][1], o[0], o[1]) != 0
-            call add(uniq, o)
-        endif
-    endfor
-    " next: first start strictly after cursor, cycle to first;
-    " prev: first end strictly before cursor, cycle to last (skips current item);
-    " first: head of the same set, i.e. the definition in scope (sh).
-    let target = []
-    if a:direction ==# 'first'
-        let target = uniq[0]
-    elseif a:direction ==# 'prev'
-        for o in reverse(copy(uniq))
-            if s:usage_pos_cmp(o[2], o[3], cl, cc) < 0
-                let target = o
-                break
-            endif
-        endfor
-        if empty(target) | let target = uniq[-1] | endif
-    else
-        for o in uniq
-            if s:usage_pos_cmp(o[0], o[1], cl, cc) > 0
-                let target = o
-                break
-            endif
-        endfor
-        if empty(target) | let target = uniq[0] | endif
-    endif
-    call cursor(target[0], target[1])
-    return 1
-endfunction

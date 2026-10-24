@@ -10,9 +10,8 @@ lsp_capabilities.textDocument.foldingRange = {
     dynamicRegistration = true,
     lineFoldingOnly = true
 }
-lsp_capabilities.textDocument.selectionRange = { dynamicRegistration = false }
- lsp_capabilities.textDocument.semanticTokens.multilineTokenSupport = true
- lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
+lsp_capabilities.textDocument.semanticTokens.multilineTokenSupport = true
+lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
 --------------------------------------------
 -- diagnostic
 --------------------------------------------
@@ -66,7 +65,6 @@ function _G.toggle_virtual_text()
   })
 end
 vim.lsp.config("*", {
-  capabilities = lsp_capabilities,
   on_attach = function(client, bufnr)
     local ok, diag = pcall(require, "rj.extras.workspace-diagnostic")
     if ok then
@@ -254,130 +252,6 @@ function M.LspAction(method, open_position)
     vim.api.nvim_set_var("lsp_found", 0)
   end
 end
----------------------------
--- Usage navigation (sj/sk/sh)
--- Replaces treesitter-refactor goto_next_usage/goto_previous_usage:
--- navigate documentHighlight occurrences of the current symbol,
--- restricted to the deepest documentSymbol range enclosing the cursor.
--- 'first' (sh) jumps to the first occurrence in scope, i.e. the definition.
----------------------------
-local function usage_cmp(a, b)
-  if a.line ~= b.line then
-    return a.line < b.line and -1 or 1
-  end
-  if a.character ~= b.character then
-    return a.character < b.character and -1 or 1
-  end
-  return 0
-end
-
-function M.UsageNav(direction)
-  local bufnr = vim.api.nvim_get_current_buf()
-  local has_highlight = false
-  local has_symbols = false
-  for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
-    local cap = client.server_capabilities or {}
-    if cap.documentHighlightProvider then
-      has_highlight = true
-    end
-    if cap.documentSymbolProvider then
-      has_symbols = true
-    end
-  end
-  if not (has_highlight and has_symbols) then
-    vim.api.nvim_set_var('lsp_usage_found', 0)
-    return false
-  end
-  -- buf_request_sync blocks the loop, so buffer/window cannot change mid-call.
-  local cursor = vim.api.nvim_win_get_cursor(0)
-  local pos = { line = cursor[1] - 1, character = cursor[2] }
-  local text_document = vim.lsp.util.make_text_document_params(bufnr)
-  -- 1) deepest symbol range containing the cursor = current function/class scope
-  local sym_results = vim.lsp.buf_request_sync(bufnr, 'textDocument/documentSymbol', { textDocument = text_document }, 1000)
-  local scope = nil
-  local scope_size = nil
-  local function consider(range)
-    if usage_cmp(range.start, pos) <= 0 and usage_cmp(pos, range['end']) <= 0 then
-      local size = (range['end'].line - range.start.line) * 1000000 + (range['end'].character - range.start.character)
-      if scope_size == nil or size < scope_size then
-        scope = range
-        scope_size = size
-      end
-    end
-  end
-  local function walk(symbols)
-    for _, sym in ipairs(symbols) do
-      if sym.range then
-        consider(sym.range)
-        if sym.children then
-          walk(sym.children)
-        end
-      elseif sym.location and sym.location.range then
-        consider(sym.location.range)
-      end
-    end
-  end
-  for _, res in pairs(sym_results or {}) do
-    if res.result and not vim.tbl_isempty(res.result) then
-      walk(res.result)
-    end
-  end
-  if not scope then
-    vim.api.nvim_set_var('lsp_usage_found', 0)
-    return false
-  end
-  -- 2) documentHighlight occurrences inside the scope
-  local params = { textDocument = text_document, position = pos }
-  local hl_results = vim.lsp.buf_request_sync(bufnr, 'textDocument/documentHighlight', params, 1000)
-  local occurrences = {}
-  for _, res in pairs(hl_results or {}) do
-    for _, h in ipairs(res.result or {}) do
-      local r = h.range
-      if r and usage_cmp(scope.start, r.start) <= 0 and usage_cmp(r['end'], scope['end']) <= 0 then
-        table.insert(occurrences, r)
-      end
-    end
-  end
-  if #occurrences == 0 then
-    vim.api.nvim_set_var('lsp_usage_found', 0)
-    return false
-  end
-  table.sort(occurrences, function(a, b)
-    return usage_cmp(a.start, b.start) < 0
-  end)
-  local uniq = {}
-  for _, r in ipairs(occurrences) do
-    if #uniq == 0 or usage_cmp(uniq[#uniq].start, r.start) ~= 0 then
-      table.insert(uniq, r)
-    end
-  end
-  -- next: first start strictly after cursor, cycle to first;
-  -- prev: first end strictly before cursor, cycle to last (skips current item);
-  -- first: head of the same set (sh).
-  local target = nil
-  if direction == 'first' then
-    target = uniq[1]
-  elseif direction == 'prev' then
-    for i = #uniq, 1, -1 do
-      if usage_cmp(uniq[i]['end'], pos) < 0 then
-        target = uniq[i]
-        break
-      end
-    end
-    target = target or uniq[#uniq]
-  else
-    for _, r in ipairs(uniq) do
-      if usage_cmp(r.start, pos) > 0 then
-        target = r
-        break
-      end
-    end
-    target = target or uniq[1]
-  end
-  vim.api.nvim_win_set_cursor(0, { target.start.line + 1, target.start.character })
-  vim.api.nvim_set_var('lsp_usage_found', 1)
-  return true
-end
 -----------------
 -- lsp functions
 -----------------
@@ -456,17 +330,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end
       end
       M.codelens_toggle()
-      map(nx, "<leader>S", M.codelens_toggle, opts_echo)
-      map(nx, "<leader>C", vim.lsp.codelens.run, opts_echo)
+      map(nx, "<leader>C", M.codelens_toggle, opts_echo)
+      map(nx, "<M-c>", vim.lsp.codelens.run, opts_echo)
     else
-      map(nx, "<leader>S", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
       map(nx, "<leader>C", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
+      map(nx, "<M-c>", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
     end
     -- code action
     map(n, "<F2>", vim.lsp.buf.rename, opts_echo)
     map(n, "<M-C>", vim.lsp.buf.code_action, opts_echo)
     -- symbol-usage
-    map(nx, "<M-c>", require('symbol-usage').toggle, opts_echo)
+    map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
     ---------------------------
     -- semantic token highlight
     ---------------------------
