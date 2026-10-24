@@ -36,7 +36,14 @@ map("n", "<M-l>I", ":TSInstall ", { noremap = true, silent = true })
 -------------------------
 -- incremental selection (replaces removed master module)
 -- <M-s> start(normal)/expand(visual), <Tab> expand, <M-S> shrink
--------------------------
+-- TSNode userdata cannot be stored in vim.b (not convertible to Vim types),
+-- keep per-buffer stacks in a script-local table instead
+local sel_stacks = {}
+vim.api.nvim_create_autocmd('BufWipeout', {
+  callback = function(args)
+    sel_stacks[args.buf] = nil
+  end,
+})
 local function select_node(node)
   local sr, sc, er, ec = node:range()
   vim.api.nvim_win_set_cursor(0, { sr + 1, sc })
@@ -48,11 +55,12 @@ local function init_selection()
   if not node then
     return
   end
-  vim.b.ts_sel_stack = { node }
+  sel_stacks[vim.api.nvim_get_current_buf()] = { node }
   select_node(node)
 end
 local function node_incremental()
-  local stack = vim.b.ts_sel_stack or {}
+  local buf = vim.api.nvim_get_current_buf()
+  local stack = sel_stacks[buf] or {}
   local node = stack[#stack] or vim.treesitter.get_node({ ignore_injections = false })
   if not node then
     return
@@ -62,18 +70,19 @@ local function node_incremental()
     return
   end
   stack[#stack + 1] = node
-  vim.b.ts_sel_stack = stack
+  sel_stacks[buf] = stack
   select_node(node)
 end
 local function node_decremental()
-  local stack = vim.b.ts_sel_stack or {}
+  local buf = vim.api.nvim_get_current_buf()
+  local stack = sel_stacks[buf] or {}
   if #stack <= 1 then
-    vim.b.ts_sel_stack = nil
+    sel_stacks[buf] = nil
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false)
     return
   end
   table.remove(stack)
-  vim.b.ts_sel_stack = stack
+  sel_stacks[buf] = stack
   select_node(stack[#stack])
 end
 map('n', '<M-s>', init_selection, { silent = true })
