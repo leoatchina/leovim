@@ -9,13 +9,24 @@ require("nvim-treesitter").setup({
   install_dir = install_dir,
 })
 vim.opt.runtimepath:prepend(install_dir)
--- async install, no-op when parsers already installed
-require("nvim-treesitter").install({
+-- main branch install() no-ops when parser/<lang>.so already exists, which
+-- leaves setups migrated from master without query files (and therefore
+-- without highlighting: vim.treesitter.start() disables regex syntax).
+-- Force-install any language whose parser OR query dir is missing.
+local missing = vim.tbl_filter(function(lang)
+  return vim.fn.filereadable(install_dir .. '/parser/' .. lang .. '.so') == 0
+      or vim.uv.fs_stat(install_dir .. '/queries/' .. lang) == nil
+end, {
   'python', 'vimdoc', 'markdown', 'markdown_inline',
   'java', 'javadoc', 'r', 'c', 'cpp', 'rust', 'typescript', 'javascript',
 })
--- highlight + fold + indent, skip files > 1MB (vim.treesitter.start
--- keeps vim regex syntax on, matching additional_vim_regex_highlighting)
+if #missing > 0 then
+  require("nvim-treesitter").install(missing, { force = true })
+end
+-- highlight + fold + indent, skip files > 1MB
+-- vim.treesitter.start() disables regex syntax highlighting by default;
+-- re-enable it after start to keep the old additional_vim_regex_highlighting
+-- layering (TS captures + $VIMRUNTIME syntax on top)
 vim.api.nvim_create_autocmd("FileType", {
   desc = "treesitter highlight/fold/indent",
   callback = function(args)
@@ -26,6 +37,7 @@ vim.api.nvim_create_autocmd("FileType", {
     if not pcall(vim.treesitter.start, args.buf) then
       return
     end
+    vim.bo[args.buf].syntax = 'ON'
     vim.wo[0][0].foldmethod = 'expr'
     vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
