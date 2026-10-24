@@ -58,6 +58,7 @@
   "dialog.floatBorderHighlight": "Normal",
   // ---- codeLens / inlayHint / git ----
   "codeLens.separator": "#",
+  "codeLens.position": "eol",
   "codeLens.enable": true,
   "codeLens.display": true,
   "inlayHint.enable": false,

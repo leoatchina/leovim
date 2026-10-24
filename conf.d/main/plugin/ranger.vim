@@ -23,13 +23,14 @@ else
     nmap <silent>{{ [m
     nmap <silent>}] ]M
     nmap <silent>{[ [M
-    if pack#installed_coc()
-        nmap <M-s> <Plug>(coc-range-select)
-        xmap <M-s> <Plug>(coc-range-select)
-        omap <M-s> <Plug>(coc-range-select)
-    elseif pack#installed('wildfire.vim')
-        let g:wildfire_fuel_map = '<M-s>'
-        let g:wildfire_water_map = '<M-S>'
-        let g:wildfire_objects = get(g:, "wildfire_objects", split("iw i' i\" i] i) iL ii i}"))
-    endif
+endif
+" wildfire and treesitter are independent plugins; they only exclude each
+" other on the M-s/M-S function. treesitter.lua defines its own M-s/M-S
+" (incremental_selection); wildfire takes over only when treesitter is absent.
+" Its default fuel map is <ENTER> — always override before the plugin loads,
+" otherwise it clobbers nnoremap <Cr> <C-i> from init.vim.
+if !pack#installed_treesitter()
+    let g:wildfire_fuel_map = '<M-s>'
+    let g:wildfire_water_map = '<M-S>'
+    let g:wildfire_objects = get(g:, "wildfire_objects", split("iw i' i\" i] i) iL ii i}"))
 endif

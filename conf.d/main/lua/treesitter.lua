@@ -128,15 +128,5 @@ require 'nvim-treesitter.configs'.setup {
     },
     highlight_current_scope = { enable = false },
     smart_rename = { enable = false },
-    navigation = {
-      enable = true,
-      keymaps = {
-        goto_definition = "sh",
-        goto_next_usage = "sj",
-        goto_previous_usage = "sk",
-        list_definitions = "sL",
-        list_definitions_toc = "sO",
-      },
-    },
   },
 }
