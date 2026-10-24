@@ -211,3 +211,111 @@ augroup FixCocColorScheme
     endfunction
     autocmd SafeStateAgain,InsertEnter * call s:CocPumSelFix()
 augroup END
+" ----------------------------
+" 符号局部使用跳转 (供 tags.vim 单向调用，纯同步服务，无反向依赖)
+" 返回值: 1 表示跳转成功, 0 表示未找到或不可用
+" ----------------------------
+function! s:compare_pos(l1, c1, l2, c2) abort
+    if a:l1 != a:l2 | return a:l1 < a:l2 ? -1 : 1 | endif
+    if a:c1 != a:c2 | return a:c1 < a:c2 ? -1 : 1 | endif
+    return 0
+endfunction
+
+function! s:to_vim_range(range) abort
+    if type(a:range) == type([])
+        return [a:range[0][0], a:range[0][1], a:range[1][0], a:range[1][1]]
+    endif
+    return [a:range.start.line + 1, a:range.start.character + 1,
+          \ a:range.end.line + 1, a:range.end.character + 1]
+endfunction
+
+function! CocUsageSearch(direction) abort
+    if empty(expand('<cword>')) || !get(g:, 'coc_service_initialized', 0)
+        return 0
+    endif
+
+    try
+        let ranges = CocAction('symbolRanges')
+        let symbols = CocAction('documentSymbols')
+    catch
+        return 0
+    endtry
+
+    if type(ranges) != type([]) || empty(ranges) || type(symbols) != type([])
+        return 0
+    endif
+
+    " 1. 获取包含当前光标的最内层作用域（行数跨度最小的那个函数或类）
+    let [cl, cc] = getcurpos()[1:2]
+    let scope = []
+    let min_lines = -1
+
+    for sym in symbols
+        if type(sym) == type({}) && has_key(sym, 'range')
+            let [sl, sc, el, ec] = s:to_vim_range(sym.range)
+            if s:compare_pos(sl, sc, cl, cc) <= 0 && s:compare_pos(cl, cc, el, ec) <= 0
+                let lines = el - sl
+                if min_lines < 0 || lines < min_lines
+                    let min_lines = lines
+                    let scope = [sl, sc, el, ec]
+                endif
+            endif
+        endif
+    endfor
+
+    if empty(scope)
+        return 0
+    endif
+
+    " 2. 筛选出完全在当前作用域内部的所有引用位置
+    let targets = []
+    for r in ranges
+        if type(r) == type({}) || type(r) == type([])
+            let [sl, sc, el, ec] = s:to_vim_range(r)
+            if s:compare_pos(scope[0], scope[1], sl, sc) <= 0 && s:compare_pos(el, ec, scope[2], scope[3]) <= 0
+                call add(targets, [sl, sc, el, ec])
+            endif
+        endif
+    endfor
+
+    if empty(targets)
+        return 0
+    endif
+
+    " 3. 按文本先后顺序排序并去重
+    call sort(targets, {a, b -> s:compare_pos(a[0], a[1], b[0], b[1])})
+    let uniq = []
+    for t in targets
+        if empty(uniq) || s:compare_pos(uniq[-1][0], uniq[-1][1], t[0], t[1]) != 0
+            call add(uniq, t)
+        endif
+    endfor
+
+    " 4. 根据方向跳转
+    "    first: 作用域内第一处定义
+    "    prev : 当前光标前最后一个位置 (首尾循环)
+    "    next : 当前光标后第一个位置 (首尾循环)
+    let dest = []
+    if a:direction ==# 'first'
+        let dest = uniq[0]
+    elseif a:direction ==# 'prev'
+        for t in reverse(copy(uniq))
+            if s:compare_pos(t[2], t[3], cl, cc) < 0
+                let dest = t
+                break
+            endif
+        endfor
+        let dest = empty(dest) ? uniq[-1] : dest
+    else
+        for t in uniq
+            if s:compare_pos(t[0], t[1], cl, cc) > 0
+                let dest = t
+                break
+            endif
+        endfor
+        let dest = empty(dest) ? uniq[0] : dest
+    endif
+
+    call cursor(dest[0], dest[1])
+    return 1
+endfunction

@@ -326,6 +326,53 @@ nnoremap <silent><M-?> :call tags#lsp_tag_search("type_definition")<Cr>
 " implementation
 nnoremap <silent><M-.> :call tags#lsp_tag_search("implementation")<Cr>
 " --------------------------
+" 局部使用导航 (sj/sk/sh)
+" 统一入口：按当前符号在当前函数/类作用域内跳转
+" 优先级：coc -> lsp -> tags.vim 内部正则/gd兜底 (单向调用，后端不反向依赖)
+" --------------------------
+function! s:usage_fallback(word, direction) abort
+    if empty(a:word)
+        return
+    endif
+    let pat = '\V\<' . escape(a:word, '\') . '\>'
+    if a:direction ==# 'first'
+        normal! gd
+    elseif a:direction ==# 'prev'
+        call search(pat, 'bw')
+    else
+        call search(pat, 'w')
+    endif
+endfunction
+
+function! tags#usage_search(direction) abort
+    let word = expand('<cword>')
+    if empty(word)
+        call preview#errmsg('No symbol under cursor.')
+        return
+    endif
+
+    " 1. 尝试 coc 后端
+    if pack#installed_coc() && exists('*CocUsageSearch')
+        if CocUsageSearch(a:direction)
+            return
+        endif
+    " 2. 尝试 lsp 后端
+    elseif pack#installed_lsp()
+        call utils#execute(printf('lua require("lsp").UsageNav("%s")', a:direction))
+        if get(g:, 'lsp_usage_found', 0)
+            return
+        endif
+    endif
+
+    " 3. 后端均未就绪或未找到，执行 tags.vim 内部兜底：
+    "    sj/sk 全文搜索下一处/上一处，sh 走原生 gd (当前函数内定义)
+    call s:usage_fallback(word, a:direction)
+endfunction
+
+nnoremap <silent>sj :call tags#usage_search("next")<Cr>
+nnoremap <silent>sk :call tags#usage_search("prev")<Cr>
+nnoremap <silent>sh :call tags#usage_search("first")<Cr>
+" --------------------------
 " gtags
 " --------------------------
 if pack#planned('gutentags_plus')

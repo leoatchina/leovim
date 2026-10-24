@@ -252,6 +252,117 @@ function M.LspAction(method, open_position)
     vim.api.nvim_set_var("lsp_found", 0)
   end
 end
+---------------------------
+-- 符号局部使用跳转 (供 tags.vim 单向调用，纯同步服务，无反向依赖)
+---------------------------
+local function compare_pos(a, b)
+  if a.line ~= b.line then
+    return a.line < b.line and -1 or 1
+  end
+  if a.character ~= b.character then
+    return a.character < b.character and -1 or 1
+  end
+  return 0
+end
+
+function M.UsageNav(direction)
+  local bufnr = vim.api.nvim_get_current_buf()
+  local has_hl, has_sym = false, false
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+    local cap = client.server_capabilities or {}
+    if cap.documentHighlightProvider then has_hl = true end
+    if cap.documentSymbolProvider then has_sym = true end
+  end
+  if not (has_hl and has_sym) then
+    vim.api.nvim_set_var('lsp_usage_found', 0)
+    return false
+  end
+
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local pos = { line = cursor[1] - 1, character = cursor[2] }
+  local text_document = vim.lsp.util.make_text_document_params(bufnr)
+
+  -- 1. 获取最内层的作用域范围（包含当前光标且行数跨度最小的符号）
+  local sym_res = vim.lsp.buf_request_sync(bufnr, 'textDocument/documentSymbol', { textDocument = text_document }, 1000)
+  local scope, min_lines = nil, -1
+  local function check_range(range)
+    if compare_pos(range.start, pos) <= 0 and compare_pos(pos, range['end']) <= 0 then
+      local lines = range['end'].line - range.start.line
+      if min_lines < 0 or lines < min_lines then
+        min_lines = lines
+        scope = range
+      end
+    end
+  end
+  local function walk(symbols)
+    for _, sym in ipairs(symbols) do
+      if sym.range then
+        check_range(sym.range)
+        if sym.children then walk(sym.children) end
+      elseif sym.location and sym.location.range then
+        check_range(sym.location.range)
+      end
+    end
+  end
+  for _, res in pairs(sym_res or {}) do
+    if res.result and not vim.tbl_isempty(res.result) then walk(res.result) end
+  end
+  if not scope then
+    vim.api.nvim_set_var('lsp_usage_found', 0)
+    return false
+  end
+
+  -- 2. 获取作用域内的所有高亮引用
+  local hl_res = vim.lsp.buf_request_sync(bufnr, 'textDocument/documentHighlight', { textDocument = text_document, position = pos }, 1000)
+  local occurrences = {}
+  for _, res in pairs(hl_res or {}) do
+    for _, h in ipairs(res.result or {}) do
+      local r = h.range
+      if r and compare_pos(scope.start, r.start) <= 0 and compare_pos(r['end'], scope['end']) <= 0 then
+        table.insert(occurrences, r)
+      end
+    end
+  end
+  if #occurrences == 0 then
+    vim.api.nvim_set_var('lsp_usage_found', 0)
+    return false
+  end
+
+  -- 3. 排序与去重
+  table.sort(occurrences, function(a, b) return compare_pos(a.start, b.start) < 0 end)
+  local uniq = {}
+  for _, r in ipairs(occurrences) do
+    if #uniq == 0 or compare_pos(uniq[#uniq].start, r.start) ~= 0 then
+      table.insert(uniq, r)
+    end
+  end
+
+  -- 4. 根据方向跳转
+  local dest = nil
+  if direction == 'first' then
+    dest = uniq[1]
+  elseif direction == 'prev' then
+    for i = #uniq, 1, -1 do
+      if compare_pos(uniq[i]['end'], pos) < 0 then
+        dest = uniq[i]
+        break
+      end
+    end
+    dest = dest or uniq[#uniq]
+  else
+    for _, r in ipairs(uniq) do
+      if compare_pos(r.start, pos) > 0 then
+        dest = r
+        break
+      end
+    end
+    dest = dest or uniq[1]
+  end
+
+  vim.api.nvim_win_set_cursor(0, { dest.start.line + 1, dest.start.character })
+  vim.api.nvim_set_var('lsp_usage_found', 1)
+  return true
+end
 -----------------
 -- lsp functions
 -----------------
