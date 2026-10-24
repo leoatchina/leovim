@@ -61,6 +61,7 @@
   "codeLens.position": "eol",
   "codeLens.enable": true,
   "codeLens.display": true,
+  "semanticTokens.enable": true,
   "inlayHint.enable": false,
   "git.enableGutters": false,
   "git.realtimeGutters": false,
@@ -99,7 +100,7 @@
     "typescript": [
       "javascript"
     ]
-  }
+  },
   // ---- python ----
   "python.analysis.diagnosticMode": "openFilesOnly",
   "python.analysis.typeCheckingMode": "off",
