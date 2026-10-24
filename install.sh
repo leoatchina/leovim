@@ -243,9 +243,9 @@ if [ $# -gt 0 ]; then
             cd ~/.local
             rm -rf nvim-*
             if [ $nvim_pkg == 'nvim-linux-x86_64' ]; then
-                wget https://github.com/neovim/neovim-releases/releases/download/v0.11.7/$nvim_pkg.tar.gz
+                wget https://github.com/neovim/neovim-releases/releases/download/v0.12.5/$nvim_pkg.tar.gz
             else
-                wget https://github.com/neovim/neovim/releases/download/v0.11.7/$nvim_pkg.tar.gz
+                wget https://github.com/neovim/neovim/releases/download/v0.12.5/$nvim_pkg.tar.gz
             fi
             tar xzf $nvim_pkg.tar.gz
             rm $nvim_pkg.tar.gz

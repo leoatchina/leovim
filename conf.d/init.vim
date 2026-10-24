@@ -1,8 +1,8 @@
 if v:version <= 703 || v:version == 704 && !has('patch399')
     echoe 'vim 7.4.399 is at least required when using leovim.'
     finish
-elseif has('nvim') && !has('nvim-0.11')
-    echoe 'Neovim 0.11+ is required.'
+elseif has('nvim') && !has('nvim-0.12')
+    echoe 'Neovim 0.12+ is required.'
     finish
 else
     set nocompatible

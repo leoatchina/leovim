@@ -5,13 +5,13 @@ endif
 if pack#installed_treesitter()
     if utils#is_win()
         function! s:cleanup_ts() abort
-            let dir = $HOME . '\.leovim.d\pack\add\opt\nvim-treesitter'
-            exec printf('!del %s\parser\*.* %s\parser-info\*.* /a /f /q', dir, dir)
+            let dir = $HOME . '\.leovim.d\treesitter'
+            exec printf('!rd /s /q %s\parser %s\query', dir, dir)
         endfunction
     else
         function! s:cleanup_ts() abort
-            let dir = $HOME . '/.leovim.d/pack/add/opt/nvim-treesitter'
-            exec printf('!rm -rf %s/parser/*.* %s/parser-info/*.*', dir, dir)
+            let dir = utils#expand('~/.leovim.d/treesitter')
+            exec printf('!rm -rf %s/parser/* %s/query/*', dir, dir)
         endfunction
     endif
     command! TSCleanup call s:cleanup_ts()

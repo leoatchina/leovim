@@ -61,7 +61,7 @@ else
 endif
 if get(g:, 'cargo_exe', '') != '' && pack#get('rust') && v:version >= 800
     PackAdd 'rust-lang/rust.vim', {'for': 'rust'}
-    if pack#planned_lsp() && has('nvim-0.12')
+    if pack#planned_lsp()
         PackAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
 endif

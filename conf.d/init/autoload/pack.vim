@@ -142,7 +142,6 @@ function! pack#installed_treesitter() abort
                 \ 'hlargs.nvim',
                 \ 'nvim-treesitter-textobjects',
                 \ 'nvim-treesitter-context',
-                \ 'nvim-treesitter-refactor',
                 \ )
 endfunction
 

@@ -79,11 +79,10 @@ endif
 " ------------------------------
 " textobj install
 " ------------------------------
-if has('nvim') && !has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
-    PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'master', 'cfg': 'treesitter'}
-    PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'master', 'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
+if has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
+    PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'main', 'cfg': 'treesitter'}
+    PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'main', 'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
     PackAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
-    PackAdd 'nvim-treesitter/nvim-treesitter-refactor', {'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
     PackAdd 'm-demare/hlargs.nvim', {'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
 elseif exists('*search') && exists('*getpos') && pack#planned_coc()
     PackAdd 'bps/vim-textobj-python', {'for': 'python'}
