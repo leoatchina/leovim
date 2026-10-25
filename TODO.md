@@ -48,7 +48,7 @@
 - [x] Ale show message
 - [x] enhanced grep! using rg
 - [x] coc-fzf toggle preview shortcut.
-- [x] lsp-lens.nvim or symbol-usage.nvim for cmp/nvim-lsp codeaction.
+- [x] LSP CodeLens at end of line, with toggle and command execution.
 - [x] symbol-tags-search lsp check update.
 - [x] leaderf TODO/NOTE bug
 - [x] Neoformat, config like REPLFloaterm.

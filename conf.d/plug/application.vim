@@ -40,7 +40,6 @@ if pack#planned_lsp()
     PackAdd 'neovim/nvim-lspconfig', {'cfg': 'lsp'}
     PackAdd 'mason-org/mason-lspconfig.nvim', {'deps': ['mason.nvim', 'nvim-lspconfig'], 'cfg': 'lsp'}
     PackAdd 'camilledejoye/nvim-lsp-selection-range', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
-    PackAdd 'Wansmer/symbol-usage.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     PackAdd 'ravenxrz/call-graph.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     " lightline
     PackAdd 'josa42/nvim-lightline-lsp', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}

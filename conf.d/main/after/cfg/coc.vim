@@ -72,15 +72,15 @@ nnoremap <silent><M-l><M-c> :CocFzfList<Cr>
 nnoremap <silent><M-l><M-r> :CocFzfListResume<Cr>
 " symbol
 inoremap <silent><C-x><C-x> <C-r>=CocActionAsync('showSignatureHelp')<Cr>
-nnoremap <leader>w :CocFzfList symbols <C-r><C-w>
-xnoremap <leader>w :<C-u>CocFzfList symbols <C-r>=utils#get_visual()<Cr>
+nnoremap <leader>S :CocFzfList symbols <C-r><C-w>
+xnoremap <leader>S :<C-u>CocFzfList symbols <C-r>=utils#get_visual()<Cr>
 " scroll
 imap <silent><expr><C-j> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(1)\<Cr>" : "\<C-\><C-n>:call utils#move_to_end_and_add_semicolon()\<CR>"
 imap <silent><expr><C-k> coc#float#has_scroll() ? "\<C-r>=coc#float#scroll(0)\<Cr>" : "\<C-k>"
 " inlayHint/codeLens/codeaction
 nmap <silent><leader>i :CocCommand document.toggleInlayHint<Cr>
-nmap <leader>C :CocCommand document.toggleCodeLens<Cr>
-nmap <M-c> <Plug>(coc-codelens-action)
+nmap <silent><leader>C :CocCommand document.toggleCodeLens<Cr>
+nmap <silent><M-c> <Plug>(coc-codelens-action)
 " call hierarchy
 nnoremap <silent>gh :call CocAction('showIncomingCalls')<Cr>
 nnoremap <silent>gl :call CocAction('showOutgoingCalls')<Cr>

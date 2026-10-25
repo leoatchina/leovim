@@ -341,6 +341,18 @@ Vim 的菜单式 WinBar 保留文件名，仅在 `pack#installed_coc()` 成立�
 
 Flash、Easymotion、Treesitter 和 Vim 文本对象是按环境提供的不同实现；不要把全部节点操作视为 Vim / Neovim 通用按键。语法树选区与移动见 [`treesitter.lua`](conf.d/main/lua/treesitter.lua)，其他文本对象见 [`textobj.vim`](conf.d/init/plugin/textobj.vim)。
 
+Neovim 原生 LSP 使用服务器提供的 CodeLens，不再加载独立的引用计数插件。支持 CodeLens 的缓冲区默认启用，提示通过 [`codelens.lua`](conf.d/main/lua/codelens.lua) 显示在代码行末，不占用上方虚拟行；执行动作仍使用 Neovim 的原生 CodeLens 接口。
+
+| 按键 | Neovim LSP 功能 |
+|---|---|
+| `<M-c>` | 开关当前缓冲区的行末 CodeLens |
+| `<leader>C` | 执行当前行 CodeLens 动作；多项动作时选择 |
+| `<leader>S` | 原引用计数开关已移除 |
+| `<M-C>` | Code Action，不是 CodeLens 开关 |
+
+CodeLens 的内容和动作由语言服务器决定，例如引用数量、运行测试等；服务器不支持时不会另行计算引用数量。这次 `<M-c>` / `<leader>C` 互换只作用于 [`lsp.lua`](conf.d/main/lua/lsp.lua)，Coc 的按键配置不变。
+
+
 ### 7.5. Git
 
 见 [`git.vim`](conf.d/main/plugin/git.vim)，Git 必须在当前环境可用，部分入口另需 GV、LeaderF 或 LazyGit。

@@ -103,41 +103,6 @@ local completion_kinds = vim.lsp.protocol.CompletionItemKind
 for i, kind in ipairs(completion_kinds) do
   completion_kinds[i] = icons[kind] and icons[kind] .. kind or kind
 end
------------------------
--- symbol usage
------------------------
-local function hl(name) return vim.api.nvim_get_hl(0, { name = name }) end
--- hl-groups can have any name
-vim.api.nvim_set_hl(0, 'SymbolUsageRounding', { fg = hl('CursorLine').bg, italic = true })
-vim.api.nvim_set_hl(0, 'SymbolUsageContent', { bg = hl('CursorLine').bg, fg = hl('Comment').fg, italic = true })
-vim.api.nvim_set_hl(0, 'SymbolUsageRef', { fg = hl('Function').fg, bg = hl('CursorLine').bg, italic = true })
-vim.api.nvim_set_hl(0, 'SymbolUsageDef', { fg = hl('Type').fg, bg = hl('CursorLine').bg, italic = true })
-vim.api.nvim_set_hl(0, 'SymbolUsageImpl', { fg = hl('@keyword').fg, bg = hl('CursorLine').bg, italic = true })
--- symbol_format
-local function text_format(symbol)
-  local res = {}
-  if symbol.references then
-    local round_start = { '', 'SymbolUsageRounding' }
-    local round_end = { '', 'SymbolUsageRounding' }
-    local num = symbol.references == 0 and 'no' or symbol.references
-    local usage = symbol.references <= 1 and 'usage' or 'usages'
-    table.insert(res, round_start)
-    table.insert(res, { '󰌹 ', 'SymbolUsageRef' })
-    table.insert(res, { ('%s %s'):format(num, usage), 'SymbolUsageContent' })
-    table.insert(res, round_end)
-  end
-  return res
-end
-require('symbol-usage').setup({
-  text_format = text_format,
-  vt_position = 'end_of_line',
-  references = { enabled = true, include_declaration = true },
-  implementation = { enabled = false },
-  definition = { enabled = false },
-  disable = {
-    filetypes = { 'txt', 'log' },
-  },
-})
 -------------------------
 -- mason lspconfig
 -------------------------
@@ -414,44 +379,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "<leader>D", [[<Cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<Cr>]], opts_silent)
     map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
     map(nx, "<leader>e", [[<Cmd>lua vim.diagnostic.setloclist({open=true, severity=vim.diagnostic.severity.ERROR})<Cr>]], opts_silent)
-    -- select range
-    local ok
-    ok, _ = pcall(function()
-      vim.treesitter.get_range(vim.treesitter.get_node(), bufnr)
-    end, bufnr)
-    if not ok then
-      map(n, "<M-s>", require('lsp-selection-range').trigger, opts_silent)
-      map(x, "<M-s>", require('lsp-selection-range').expand, opts_silent)
-    end
     -- inlay_hint
     if client.server_capabilities.inlayHintProvider then
       vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
     end
     map(nx, "<leader>i", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
     -- codelens
-    if client.server_capabilities.codeLensProvider then
+    if #vim.lsp.get_clients({ bufnr = bufnr, method = 'textDocument/codeLens' }) > 0 then
       vim.api.nvim_set_hl(0, 'LspCodeLens', { fg = '#888888', bg = '#432345', italic = false })
-      function M.codelens_toggle()
-        if vim.b.codelens_enable == nil or vim.b.codelens_enable == false then
-          vim.lsp.codelens.refresh({bufnr = bufnr})
-          vim.b.codelens_enable = true
-        else
-          vim.lsp.codelens.clear(nil, 0)
-          vim.b.codelens_enable = false
-        end
-      end
-      M.codelens_toggle()
-      map(nx, "<leader>C", M.codelens_toggle, opts_echo)
-      map(nx, "<M-c>", vim.lsp.codelens.run, opts_echo)
+      local codelens = require('codelens')
+      codelens.attach(bufnr)
+      map(nx, "<M-c>", function() codelens.toggle(bufnr) end, opts_echo)
+      map(nx, "<leader>C", vim.lsp.codelens.run, opts_echo)
     else
-      map(nx, "<leader>C", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
       map(nx, "<M-c>", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
+      map(nx, "<leader>C", [[<Cmd>echo "No codelens for current buffer."<Cr>]], opts_echo)
     end
     -- code action
     map(n, "<F2>", vim.lsp.buf.rename, opts_echo)
     map(n, "<M-C>", vim.lsp.buf.code_action, opts_echo)
-    -- symbol-usage
-    map(nx, "<leader>S", require('symbol-usage').toggle, opts_echo)
     ---------------------------
     -- semantic token highlight
     ---------------------------

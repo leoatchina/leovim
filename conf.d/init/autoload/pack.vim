@@ -105,7 +105,6 @@ function! pack#installed_lsp() abort
                 \ 'nvim-lspconfig',
                 \ 'mason-lspconfig.nvim',
                 \ 'call-graph.nvim',
-                \ 'symbol-usage.nvim',
                 \ 'nvim-lsp-selection-range',
                 \ 'aerial.nvim',
                 \ )
