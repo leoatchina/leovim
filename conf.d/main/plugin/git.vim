@@ -34,7 +34,7 @@ if pack#planned('vim-fugitive')
     " fugitive log workspace: cursor on a commit, then
     "   df -> gdv commit diff view (g:gdv_keymap)
     "   <Tab>/<Space> -> Gvdiff/Gdiff that revision (FileType git maps)
-    nnoremap <silent><Tab>g :Git log --graph --oneline --decorate<Cr>
+    nnoremap <silent><M-g><M-g> :Git log --graph --oneline --decorate<Cr>
     nnoremap <silent>g\ :Git log --oneline -- %<Cr>
     " compare with history version
     let g:fugitive_summary_format = "%as-[%an]: %s"
@@ -77,11 +77,11 @@ endif
 " Current-file history list: best backend first; GV replaces only on vim
 " without LeaderF (GV needs fugitive, zero python/node deps).
 if pack#planned('diffview-plus.nvim')
-    nnoremap <silent><Tab>G :DiffviewFileHistory %<Cr>
+    nnoremap <silent><M-g>\ :DiffviewFileHistory %<Cr>
 elseif pack#planned_leaderf()
-    nnoremap <silent><Tab>G :Leaderf git log --side-by-side --current-file<Cr>
+    nnoremap <silent><M-g>\ :Leaderf git log --side-by-side --current-file<Cr>
 elseif pack#planned('gv.vim') && !has('nvim')
-    nnoremap <silent><Tab>G :GV!<Cr>
+    nnoremap <silent><M-g>\ :GV!<Cr>
 endif
 " inline blame: keep the shortcut stable while selecting the native backend.
 if pack#installed('gitsigns.nvim')
