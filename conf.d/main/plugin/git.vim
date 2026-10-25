@@ -25,6 +25,34 @@ augroup END
 if pack#planned('vim-git-diffview')
     let g:gdv_keymap = 'df'
 endif
+" ---------------------------------
+" GV-unique features: -S origin search (when was the word/selection
+" added or removed); command line stays open for extra git-log args.
+" Range diff, `.` fugitive handoff and gb live inside the GV buffer.
+" ---------------------------------
+if pack#planned('gv.vim')
+    function! s:gv_search_argument(text) abort
+        " GV parses quotes, then :read ! consumes escapes for #, ! and newlines.
+        return '"' . escape(a:text, "\"#!\n") . '"'
+    endfunction
+    function! s:gv_visual_text() abort
+        " Let Vim handle multiline/block/exclusive selections without changing registers.
+        let saved_z = [getreg('z', 1, 1), getregtype('z')]
+        let saved_unnamed = [getreg('"', 1, 1), getregtype('"')]
+        let view = winsaveview()
+        try
+            silent noautocmd normal! gv"zy
+            return getreg('z')
+        finally
+            call setreg('z', saved_z[0], saved_z[1])
+            call setreg('"', saved_unnamed[0], saved_unnamed[1])
+            call winrestview(view)
+        endtry
+    endfunction
+    nnoremap <M-g>s :GV -S <C-r>=<SID>gv_search_argument(expand('<cword>'))<Cr>
+    xnoremap <M-g>s :<C-u>GV -S <C-r>=<SID>gv_search_argument(<SID>gv_visual_text())<Cr>
+    nnoremap <M-g>v :GV<Cr>
+endif
 if pack#planned('vim-fugitive')
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
@@ -152,33 +180,6 @@ elseif pack#planned('gv.vim')
     nnoremap <silent><M-g>f :GV!<Cr>
     nnoremap <silent><M-g>l V:GV?<Cr>
     xnoremap <silent><M-g>l :GV?<Cr>
-endif
-" ---------------------------------
-" GV-unique features: -S origin search (when was the word/selection
-" added or removed); command line stays open for extra git-log args.
-" Range diff, `.` fugitive handoff and gb live inside the GV buffer.
-" ---------------------------------
-if pack#planned('gv.vim')
-    function! s:gv_search_argument(text) abort
-        " GV parses quotes, then :read ! consumes escapes for #, ! and newlines.
-        return '"' . escape(a:text, "\"#!\n") . '"'
-    endfunction
-    function! s:gv_visual_text() abort
-        " Let Vim handle multiline/block/exclusive selections without changing registers.
-        let saved_z = [getreg('z', 1, 1), getregtype('z')]
-        let saved_unnamed = [getreg('"', 1, 1), getregtype('"')]
-        let view = winsaveview()
-        try
-            silent noautocmd normal! gv"zy
-            return getreg('z')
-        finally
-            call setreg('z', saved_z[0], saved_z[1])
-            call setreg('"', saved_unnamed[0], saved_unnamed[1])
-            call winrestview(view)
-        endtry
-    endfunction
-    nnoremap <M-g>s :GV -S <C-r>=<SID>gv_search_argument(expand('<cword>'))<Cr>
-    xnoremap <M-g>s :<C-u>GV -S <C-r>=<SID>gv_search_argument(<SID>gv_visual_text())<Cr>
 endif
 if pack#planned('vim-signify')
     let g:signify_disable_by_default = 0
