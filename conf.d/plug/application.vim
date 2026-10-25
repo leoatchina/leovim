@@ -85,11 +85,13 @@ if has('nvim') && get(g:, 'nvim_treesitter_install', utils#is_unix()) && executa
     PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'main', 'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
     PackAdd 'm-demare/hlargs.nvim', {'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
 elseif exists('*search') && exists('*getpos')
-    PackAdd 'gcmt/wildfire.vim'
     if !pack#planned_coc()
         PackAdd 'bps/vim-textobj-python', {'for': 'python'}
         PackAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
         PackAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+    endif
+    if v:version >= 800
+        PackAdd 'gcmt/wildfire.vim'
     endif
 endif
 " -----------------------
