@@ -144,7 +144,7 @@ if pack#planned_leaderf()
 elseif pack#planned('diffview-plus.nvim')
     nnoremap <silent><M-g>o :DiffviewFileHistory<Cr>
     nnoremap <silent><M-g>l :.DiffviewFileHistory --follow<Cr>
-elseif pack#planned('gv.vim') && !has('nvim')
+elseif pack#planned('gv.vim')
     nnoremap <silent><M-g>o :GV<Cr>
     nnoremap <silent><M-g>f :GV!<Cr>
     nnoremap <silent><M-g>l V:GV?<Cr>
