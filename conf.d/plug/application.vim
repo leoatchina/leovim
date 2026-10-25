@@ -79,16 +79,18 @@ endif
 " ------------------------------
 " textobj install
 " ------------------------------
-if has('nvim-0.12') && get(g:, 'nvim_treesitter_install', utils#is_unix())
+if has('nvim') && get(g:, 'nvim_treesitter_install', utils#is_unix()) && executable('tree-sitter') && executable('curl') && executable('tar')
     PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'main', 'cfg': 'treesitter'}
+    PackAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json'], 'cfg': 'treesitter'}
     PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'main', 'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
-    PackAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json']}
     PackAdd 'm-demare/hlargs.nvim', {'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
-elseif exists('*search') && exists('*getpos') && pack#planned_coc()
-    PackAdd 'bps/vim-textobj-python', {'for': 'python'}
-    PackAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
-    PackAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+elseif exists('*search') && exists('*getpos')
     PackAdd 'gcmt/wildfire.vim'
+    if !pack#planned_coc()
+        PackAdd 'bps/vim-textobj-python', {'for': 'python'}
+        PackAdd 'thinca/vim-textobj-function-perl', {'for': 'perl'}
+        PackAdd 'thinca/vim-textobj-function-javascript', {'for': ['javascript', 'typescript']}
+    endif
 endif
 " -----------------------
 " format install
