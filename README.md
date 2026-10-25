@@ -344,32 +344,39 @@ Flash、Easymotion、Treesitter 和 Vim 文本对象是按环境提供的不同�
 ### 7.5. Git
 
 见 [`git.vim`](conf.d/main/plugin/git.vim)，Git 必须在当前环境可用，部分入口另需 GV、LeaderF 或 LazyGit。
+Neovim 的 diffview 后端要求 Git ≥ 2.31.0，版本按整数分段比较，不用浮点数。
 
 | 按键 | 功能 |
 |---|---|
 | `<M-g>a` | `Git add -A`，会暂存仓库全部改动 |
 | `<M-g>u` | `Git push`，会推送远端 |
 | `<M-g><CR>` | `Git commit -av`，不是仅提交已暂存内容 |
-| `<M-g>v` | GV 历史视图，需 GV |
-| `<M-g>s` / `<M-g>b` | LeaderF Git 状态 / blame，需相应后端 |
-| `<M-g>f` / `<M-g>l` | 文件 / 行历史 |
-| `<M-g><M-l>` | LazyGit，检测到可执行文件才定义；不是 `<M-g><M-g>` |
+| `<M-g><M-g>` | Fugitive 仓库图形 log，光标停在提交行后可用 `df` / `Tab` / `Space` 操作 |
+| `<M-g>\` | Fugitive 当前文件 log |
+| `g\` | 当前文件历史列表，依次选择 diffview、LeaderF、GV |
+| `<M-g>o` | 仓库历史列表，依次选择 LeaderF、diffview、GV |
+| `<M-g>s` | GV `-S` 溯源：搜索光标词或可视选区的引入 / 删除历史；命令行保持打开，可追加 Git log 参数 |
+| `<M-g>f` / `<M-g>l` | 文件 / 行历史；diffview 分支也提供文件历史入口 |
+| `<Tab><Tab>` / `<Tab><CR>` | blame 视图 / 行内 blame 开关，按后端提供 |
+| `<M-g><M-l>` | LazyGit，检测到可执行文件才定义 |
 
-gitsigns 附着到 Git 文件后，会添加以下 buffer 局部映射；普通模式的 `gh` 前缀用于 hunk 操作，会影响原生 `gh` 进入 Select 模式的按键等待。
+Fugitive log 中 `Tab` / `Space` 按当前提交哈希垂直 / 水平对比文件版本；图形连接线等非提交行不关闭列表。GV 溯源保留选区中的引号、空格、特殊字符及换行，支持多行、块选区和 exclusive 选择，不改写用户寄存器。
+
+gitsigns 附着到 Git 文件后，会添加以下 buffer 局部映射；暂存键 `<M-g>h` 与 GV 溯源键 `<M-g>s` 分开：
 
 | 按键 | 模式 | 功能 |
 |---|---|---|
 | `;g` / `,g` | 普通 | 下一个 / 上一个 hunk；diff 窗口保留原生差异导航 |
-| `ghs` | 普通 / 可视 | 暂存当前 hunk / 选中行 |
-| `ghp` | 普通 | 行内预览当前 hunk |
-| `ghb` | 普通 | 浮窗查看当前行 blame |
-| `ghr` | 普通 / 可视 | 确认后丢弃当前 hunk / 选中行的工作区改动；默认取消 |
+| `<M-g>h` | 普通 / 可视 | 暂存当前 hunk / 选中行 |
+| `<M-g>p` | 普通 | 行内预览当前 hunk |
+| `<Tab><Space>` | 普通 | 浮窗查看当前行 blame |
+| `<M-g>r` | 普通 / 可视 | 确认后丢弃当前 hunk / 选中行的工作区改动；默认取消 |
 | `\` → `Space` | 普通 | 浮窗预览当前 hunk |
 | `\` → `Tab` | 普通 | 显示 / 隐藏变更标记 |
 | `\` → `Enter` | 普通 | 刷新变更标记 |
 | `ig` / `ag` | 可视 / 操作符等待 | 选择 hunk 文本对象 |
 
-`ghr` 不等于取消暂存，丢弃的未提交改动不能通过 Git 恢复。原来不经确认就重置 hunk 的 `\` → `Backspace` 映射已移除。实现见 [`gitsigns.lua`](conf.d/main/lua/cfg/gitsigns.lua)。
+`<M-g>r` 不等于取消暂存，丢弃的未提交改动不能通过 Git 恢复。原来不经确认就重置 hunk 的 `\` → `Backspace` 映射已移除。实现见 [`gitsigns.lua`](conf.d/main/lua/cfg/gitsigns.lua)。
 
 ### 7.6. 任务与运行
 

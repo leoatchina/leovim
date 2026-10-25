@@ -1,6 +1,18 @@
 " ----------------------------------------
 " Git Functions (from git.vim)
 " ----------------------------------------
+function! git#version_at_least(major, minor, patch) abort
+    " Git versions are integer components, never decimal fractions.
+    let required = [a:major, a:minor, a:patch]
+    for i in range(3)
+        let actual = get(g:git_version, i, 0)
+        if actual != required[i]
+            return actual > required[i]
+        endif
+    endfor
+    return 1
+endfunction
+
 function! git#branch() abort
     return get(b:, 'git_branch', '')
 endfunction
@@ -55,7 +67,7 @@ function! git#lcd_and_update() abort
     endif
     let b:git_root_dir = ''
     let b:git_branch = ''
-    if g:git_version > 1.8
+    if git#version_at_least(1, 8, 5)
         try
             " 一次 fork 输出三行：is-inside-work-tree / root / branch
             let l:null = utils#is_win() ? '2>nul' : '2>/dev/null'

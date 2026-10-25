@@ -139,7 +139,7 @@ if executable('git')
         PackAdd 'junegunn/gv.vim', {'on': 'GV'}
     endif
     if has('nvim')
-        if g:git_version >= 2.31
+        if git#version_at_least(2, 31, 0)
             PackAdd 'dlyongemallo/diffview-plus.nvim'
         endif
         PackAdd 'lewis6991/gitsigns.nvim', {'cfg': 'cfg.gitsigns'}

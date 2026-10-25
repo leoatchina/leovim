@@ -38,8 +38,18 @@ if pack#planned('vim-fugitive')
     nnoremap <silent><M-g>\ :Git log --oneline -- %<Cr>
     " compare with history version
     let g:fugitive_summary_format = "%as-[%an]: %s"
-    au FileType git nnoremap <silent><buffer><tab> 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
-    au FileType git nnoremap <silent><buffer><space> 0"ayiw:bw<cr>:rightbelow Gdiff <c-r>a<cr>
+    function! s:diff_log_revision(vertical) abort
+        " Accept oneline/graph/commit headers, not graph connectors or message text.
+        let revision = matchstr(getline('.'), '^[|/\\_* .-]*\%(commit \)\=\zs\x\{4,64}\ze\%(\s\|$\)')
+        if empty(revision)
+            echohl WarningMsg | echom 'No commit on the current line.' | echohl None
+            return
+        endif
+        bwipeout
+        execute 'rightbelow ' . (a:vertical ? 'Gvdiffsplit ' : 'Gdiffsplit ') . revision
+    endfunction
+    au FileType git nnoremap <silent><buffer><tab> :call <SID>diff_log_revision(1)<Cr>
+    au FileType git nnoremap <silent><buffer><space> :call <SID>diff_log_revision(0)<Cr>
     au FileType git nnoremap <silent><buffer>\ <Nop>
     " git diff
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
@@ -143,6 +153,7 @@ if pack#planned_leaderf()
     nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
 elseif pack#planned('diffview-plus.nvim')
     nnoremap <silent><M-g>o :DiffviewFileHistory<Cr>
+    nnoremap <silent><M-g>f :DiffviewFileHistory %<Cr>
     nnoremap <silent><M-g>l :.DiffviewFileHistory --follow<Cr>
 elseif pack#planned('gv.vim')
     nnoremap <silent><M-g>o :GV<Cr>
@@ -154,8 +165,26 @@ endif
 " added or removed); command line stays open for extra git-log args.
 " Range diff, `.` fugitive handoff and gb live inside the GV buffer.
 if pack#planned('gv.vim')
-    nnoremap <M-g>s :GV -S <C-r>=escape(expand('<cword>'), ' ')<Cr>
-    xnoremap <M-g>s :GV -S <C-r>=escape(utils#get_visual(), ' ')<Cr>
+    function! s:gv_search_argument(text) abort
+        " GV parses quotes, then :read ! consumes escapes for #, ! and newlines.
+        return '"' . escape(a:text, "\"#!\n") . '"'
+    endfunction
+    function! s:gv_visual_text() abort
+        " Let Vim handle multiline/block/exclusive selections without changing registers.
+        let saved_z = [getreg('z', 1, 1), getregtype('z')]
+        let saved_unnamed = [getreg('"', 1, 1), getregtype('"')]
+        let view = winsaveview()
+        try
+            silent noautocmd normal! gv"zy
+            return getreg('z')
+        finally
+            call setreg('z', saved_z[0], saved_z[1])
+            call setreg('"', saved_unnamed[0], saved_unnamed[1])
+            call winrestview(view)
+        endtry
+    endfunction
+    nnoremap <M-g>s :GV -S <C-r>=<SID>gv_search_argument(expand('<cword>'))<Cr>
+    xnoremap <M-g>s :<C-u>GV -S <C-r>=<SID>gv_search_argument(<SID>gv_visual_text())<Cr>
 endif
 if pack#planned('vim-signify')
     let g:signify_disable_by_default = 0

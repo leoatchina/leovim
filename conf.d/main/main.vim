@@ -152,9 +152,9 @@ endif
 " -----------------------------------
 if executable('git')
     let s:git_version_raw = matchstr(system('git --version'), '\v\zs\d+\.\d+\.\d+\ze')
-    let g:git_version = utils#string_to_float(s:git_version_raw)
+    let g:git_version = map(split(s:git_version_raw, '\.'), 'str2nr(v:val)')
 else
-    let g:git_version = 0
+    let g:git_version = [0, 0, 0]
 endif
 " ------------------------------
 " node install tool
