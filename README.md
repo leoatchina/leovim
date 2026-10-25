@@ -357,10 +357,14 @@ Neovim 的 diffview 后端要求 Git ≥ 2.31.0，版本按整数分段比较，
 | `<M-g>o` | 仓库历史列表，依次选择 LeaderF、diffview、GV |
 | `<M-g>s` | GV `-S` 溯源：搜索光标词或可视选区的引入 / 删除历史；命令行保持打开，可追加 Git log 参数 |
 | `<M-g>f` / `<M-g>l` | 文件 / 行历史；diffview 分支也提供文件历史入口 |
+| `<M-g>d` | diffview 任意双文件对比：`DiffviewDiffFiles {left} {right}` |
+| `<M-g>m` | diffview 文件合并：`DiffviewMergeFiles {output} [{base}] {left} {right}` |
 | `<Tab><Tab>` / `<Tab><CR>` | blame 视图 / 行内 blame 开关，按后端提供 |
 | `<M-g><M-l>` | LazyGit，检测到可执行文件才定义 |
 
 Fugitive log 中 `Tab` / `Space` 按当前提交哈希垂直 / 水平对比文件版本；图形连接线等非提交行不关闭列表。GV 溯源保留选区中的引号、空格、特殊字符及换行，支持多行、块选区和 exclusive 选择，不改写用户寄存器。
+
+`<M-g>d` / `<M-g>m` 仅在启用 diffview 时定义，命令行保持打开，填写路径后回车；无需 Git 仓库，含空格的路径需转义或引用。未启用 diffview 时不提供合并后备映射；旧的固定 buffer 编号命令 `GMergeTab` 已移除。
 
 gitsigns 附着到 Git 文件后，会添加以下 buffer 局部映射；暂存键 `<M-g>h` 与 GV 溯源键 `<M-g>s` 分开：
 
