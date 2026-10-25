@@ -74,7 +74,7 @@ if pack#planned('diffview-plus.nvim')
     nnoremap <silent>g\ :DiffviewFileHistory %<Cr>
 elseif pack#planned_leaderf()
     nnoremap <silent>g\ :Leaderf git log --side-by-side --current-file<Cr>
-elseif pack#planned('gv.vim') && !has('nvim')
+elseif pack#planned('gv.vim')
     nnoremap <silent>g\ :GV!<Cr>
 endif
 " inline blame: keep the shortcut stable while selecting the native backend.
