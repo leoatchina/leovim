@@ -134,28 +134,20 @@ endif
 " Git
 " ------------------------------
 if executable('git')
-    if v:version >= 800 && g:git_version >= 1.85
+    if v:version >= 800
         PackAdd 'tpope/vim-fugitive'
-        if has('nvim')
-            if g:git_version >= 2.31
-                PackAdd 'dlyongemallo/diffview-plus.nvim'
-            endif
-            PackAdd 'lewis6991/gitsigns.nvim', {'cfg': 'cfg.gitsigns'}
-        else
-            if !pack#planned_leaderf()
-                PackAdd 'junegunn/gv.vim', {'on': 'GV'}
-            endif
-        endif
+        PackAdd 'junegunn/gv.vim', {'on': 'GV'}
     endif
-    if !has('nvim') && has('patch-8.0.902')
+    if has('nvim')
+        if g:git_version >= 2.31
+            PackAdd 'dlyongemallo/diffview-plus.nvim'
+        endif
+        PackAdd 'lewis6991/gitsigns.nvim', {'cfg': 'cfg.gitsigns'}
+    elseif has('patch-8.0.902')
         PackAdd 'vim-signify'
     endif
     if g:has_popup_floating
         PackAdd 'skywind3000/vim-git-diffview'
-        " LeaderF supplies inline blame on recent Vim versions.
-        if utils#is_unix() && (!pack#planned_leaderf() || !has('patch-9.0.200'))
-            PackAdd 'APZelos/blamer.nvim'
-        endif
     endif
 endif
 " --------------------------

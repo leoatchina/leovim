@@ -25,20 +25,17 @@ augroup END
 if pack#planned('vim-git-diffview')
     let g:gdv_keymap = 'df'
 endif
-if pack#planned('gv.vim')
-    nnoremap <silent><M-g>v :GV<Cr>
-    nnoremap <silent><M-g>? :GV?<Cr>
-    xnoremap <silent><M-g>v :GV<Cr>
-    xnoremap <silent><M-g>? :GV?<Cr>
-    au FileType GV nmap <buffer><nowait><M-q> q
-    au FileType GV nmap <buffer><nowait>Q q
-endif
 if pack#planned('vim-fugitive')
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
     nnoremap <silent><M-g><Cr> :Git commit -av<Cr>
     nnoremap <M-G>  :Git
     nnoremap <M-g>U :Git push<Space>
+    " fugitive log workspace: cursor on a commit, then
+    "   df -> gdv commit diff view (g:gdv_keymap)
+    "   <Tab>/<Space> -> Gvdiff/Gdiff that revision (FileType git maps)
+    nnoremap <silent><Tab>g :Git log --graph --oneline --decorate<Cr>
+    nnoremap <silent>g\ :Git log --oneline -- %<Cr>
     " compare with history version
     let g:fugitive_summary_format = "%as-[%an]: %s"
     au FileType git nnoremap <silent><buffer><tab> 0"ayiw:bw<cr>:rightbelow Gvdiff <c-r>a<cr>
@@ -48,9 +45,9 @@ if pack#planned('vim-fugitive')
     nnoremap <silent><M-g>] :Gvdiffsplit!<Cr>
     nnoremap <silent><M-g>[ :Gdiffsplit!<Cr>
     " buffer map, nnoremap
-    au FileType fugitive,git,fugitiveblame nnoremap <silent><buffer><nowait>q :q!<Cr>
-    au FileType fugitive,git nnoremap <silent><buffer><nowait>Q :q!<Cr>
-    au FileType fugitive,git nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
+    au FileType fugitive,git,fugitiveblame,GV nnoremap <silent><buffer><nowait>q :q!<Cr>
+    au FileType fugitive,git,GV nnoremap <silent><buffer><nowait>Q :q!<Cr>
+    au FileType fugitive,git,GV nnoremap <silent><buffer><nowait><M-q> :q!<Cr>
     " buffer map, nmap
     au FileType fugitiveblame nmap <buffer><silent><nowait><Cr> o
     au FileType fugitive nnoremap <buffer><nowait>gg gg
@@ -77,33 +74,20 @@ else
     nnoremap <M-G> :!git
     nnoremap <M-g>U :!git push<Space>
 endif
-" Current-file history: keep g\ stable and select the best available backend.
+" Current-file history list: best backend first; GV replaces only on vim
+" without LeaderF (GV needs fugitive, zero python/node deps).
 if pack#planned('diffview-plus.nvim')
-    nnoremap <silent>g\ :DiffviewFileHistory %<Cr>
+    nnoremap <silent><Tab>G :DiffviewFileHistory %<Cr>
 elseif pack#planned_leaderf()
-    nnoremap <silent>g\ :Leaderf git log --side-by-side --current-file<Cr>
-elseif pack#planned('gv.vim')
-    nnoremap <silent>g\ :GV!<Cr>
-elseif pack#planned('vim-fugitive')
-    nnoremap <silent>g\ :Git log --pretty=format:"%h\|\|%as-[%an]: %s" -- %<Cr>
+    nnoremap <silent><Tab>G :Leaderf git log --side-by-side --current-file<Cr>
+elseif pack#planned('gv.vim') && !has('nvim')
+    nnoremap <silent><Tab>G :GV!<Cr>
 endif
 " inline blame: keep the shortcut stable while selecting the native backend.
 if pack#installed('gitsigns.nvim')
     nnoremap <silent><Tab><Tab> :Gitsigns blame<Cr>
     nnoremap <silent><Tab><Cr> :Gitsigns toggle_current_line_blame<Cr>
     command! GCommands call FzfCallCommands('GCommands', 'Gitsigns', 'Diffview', 'LeaderfGit', 'G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
-elseif pack#installed('blamer.nvim')
-    let g:blamer_date_format = '%Y/%m/%d'
-    let g:blamer_show_in_insert_modes = 0
-    let g:blamer_prefix = ' >> '
-    let g:blamer_delay = 500
-    command! GCommands call FzfCallCommands('GCommands','LeaderfGit','G', ['LeaderfGitInlineBlame', 'Gutentag', 'Grep', 'Get'])
-    if pack#planned_leaderf()
-        nnoremap <silent><Tab><Tab> :Leaderf git blame -w<Cr>
-    else
-        nnoremap <silent><Tab><Tab> :Git blame -w<Cr>
-    endif
-    nnoremap <silent><Tab><Cr> :BlamerToggle<Cr>
 elseif pack#planned_leaderf()
     nnoremap <silent><Tab><Tab> :Leaderf git blame -w<Cr>
     if has('patch-9.0.200') || has('nvim')
@@ -166,9 +150,18 @@ if pack#planned_leaderf()
 elseif pack#planned('diffview-plus.nvim')
     nnoremap <silent><M-g>o :DiffviewFileHistory<Cr>
     nnoremap <silent><M-g>l :.DiffviewFileHistory --follow<Cr>
-elseif pack#planned('gv.vim')
+elseif pack#planned('gv.vim') && !has('nvim')
     nnoremap <silent><M-g>o :GV<Cr>
-    nnoremap <silent><M-g>l V:GV<Cr>
+    nnoremap <silent><M-g>f :GV!<Cr>
+    nnoremap <silent><M-g>l V:GV?<Cr>
+    xnoremap <silent><M-g>l :GV?<Cr>
+endif
+" GV-unique features: -S origin search (when was the word/selection
+" added or removed); command line stays open for extra git-log args.
+" Range diff, `.` fugitive handoff and gb live inside the GV buffer.
+if pack#planned('gv.vim')
+    nnoremap <M-g>s :GV -S <C-r>=escape(expand('<cword>'), ' ')<Cr>
+    xnoremap <M-g>s :GV -S <C-r>=escape(utils#get_visual(), ' ')<Cr>
 endif
 if pack#planned('vim-signify')
     let g:signify_disable_by_default = 0
