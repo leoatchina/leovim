@@ -82,12 +82,29 @@ endif
 " without LeaderF (GV needs fugitive, zero python/node deps).
 if pack#planned('diffview-plus.nvim')
     nnoremap <silent>g\ :DiffviewFileHistory %<Cr>
+    nnoremap <silent>\| :DiffviewOpen<Cr>
+    nnoremap <M-g>m :DiffviewMergeFiles<Space>
+    nnoremap <M-g>d :DiffviewDiffFiles<Space>
 elseif pack#planned_leaderf()
     nnoremap <silent>g\ :Leaderf git log --side-by-side --current-file<Cr>
-elseif pack#planned('gv.vim')
-    nnoremap <silent>g\ :GV!<Cr>
+    nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
+else
+    if pack#planned('gv.vim')
+        nnoremap <silent>g\ :GV!<Cr>
+    endif
+    if pack#planned('vim-signify')
+        function! s:signifyDiff() abort
+            SignifyDiff
+            if winnr('$') == 2
+                wincmd H
+            endif
+        endfunction
+        nnoremap <silent>\| :call <SID>signifyDiff()<CR>
+    endif
 endif
+" ---------------------------------
 " inline blame: keep the shortcut stable while selecting the native backend.
+" ---------------------------------
 if pack#installed('gitsigns.nvim')
     nnoremap <silent><Tab><Tab> :Gitsigns blame<Cr>
     nnoremap <silent><Tab><Cr> :Gitsigns toggle_current_line_blame<Cr>
@@ -105,33 +122,8 @@ else
 endif
 nnoremap <silent><M-g>: :GCommands<Cr>
 " ---------------------------------
-" lazygit integrated
-" ---------------------------------
-if pack#installed('vim-floaterm') && executable('lazygit')
-    command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
-    if has('nvim')
-        nnoremap <M-g><M-l> :GLazyGit<Cr>
-    else
-        nnoremap <M-g><M-l> :GLazyGit<Cr>i
-    endif
-endif
-" -----------------------------------------------------
-" Primary diff workspace: preserve LeaderF and use editor-specific fallbacks.
-" -----------------------------------------------------
-if pack#planned('diffview-plus.nvim')
-    nnoremap <silent>\| :DiffviewOpen<Cr>
-elseif pack#planned_leaderf()
-    nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
-elseif pack#planned('vim-signify')
-    function! s:signifyDiff() abort
-        SignifyDiff
-        if winnr('$') == 2
-            wincmd H
-        endif
-    endfunction
-    nnoremap <silent>\| :call <SID>signifyDiff()<CR>
-endif
 " Git browser shortcuts by backend.
+" ---------------------------------
 if pack#planned_leaderf()
     let g:Lf_GitKeyMap = extend({
                 \ 'previous_change': ',g',
@@ -161,9 +153,11 @@ elseif pack#planned('gv.vim')
     nnoremap <silent><M-g>l V:GV?<Cr>
     xnoremap <silent><M-g>l :GV?<Cr>
 endif
+" ---------------------------------
 " GV-unique features: -S origin search (when was the word/selection
 " added or removed); command line stays open for extra git-log args.
 " Range diff, `.` fugitive handoff and gb live inside the GV buffer.
+" ---------------------------------
 if pack#planned('gv.vim')
     function! s:gv_search_argument(text) abort
         " GV parses quotes, then :read ! consumes escapes for #, ! and newlines.
@@ -204,10 +198,14 @@ if pack#planned('vim-signify')
     command! SignifyCommands call FzfCallCommands('SignifyCommands', 'Signify')
     nnoremap <silent>\: :SignifyCommands<Cr>
 endif
-" -----------------------------------------------------
-" Merge
-" -----------------------------------------------------
-if pack#planned('diffview-plus.nvim')
-    nnoremap <M-g>m :DiffviewMergeFiles<Space>
-    nnoremap <M-g>d :DiffviewDiffFiles<Space>
+" ---------------------------------
+" lazygit integrated
+" ---------------------------------
+if pack#installed('vim-floaterm') && executable('lazygit')
+    command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
+    if has('nvim')
+        nnoremap <M-g><M-l> :GLazyGit<Cr>
+    else
+        nnoremap <M-g><M-l> :GLazyGit<Cr>i
+    endif
 endif
