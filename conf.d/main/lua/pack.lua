@@ -382,16 +382,8 @@ function M.load_request(names)
   if type(names) ~= 'table' then
     err('load request must be a plugin name or list')
   end
-  local ok, execution_error = pcall(function()
-    for _, name in ipairs(names) do
-      if not request_one(name) then
-        err('plugin is not ready: %s', name)
-      end
-    end
-  end)
-  if not ok then
-    vim.notify(tostring(execution_error), vim.log.levels.ERROR)
-    return false
+  for _, name in ipairs(names) do
+    request_one(name)
   end
   return true
 end

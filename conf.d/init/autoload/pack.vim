@@ -237,9 +237,7 @@ let s:on_patterns = []
 let s:cmd_proxies = {}
 let s:map_plugins = {}
 let s:opt_plugs = {}
-let s:for_patterns = []
-let s:for_loaded = {}
-let s:pending_fts = []
+
 
 function! pack#begin(plugin_home) abort
     let g:pack_specs = {}
@@ -251,9 +249,7 @@ function! pack#begin(plugin_home) abort
     let s:cmd_proxies = {}
     let s:map_plugins = {}
     let s:opt_plugs = {}
-    let s:for_patterns = []
-    let s:for_loaded = {}
-    let s:pending_fts = []
+
     let s:finished = 0
     let s:installed_cache = {}
     for opt_dir in [$LEO_OPT_DIR, $FORK_OPT_DIR, $CLONE_OPT_DIR]
@@ -314,13 +310,7 @@ function! pack#declare(plugin, ...) abort
     if has_key(opts, 'on')
         let opts.on = pack#register_on(key_name, opts.on)
     endif
-    if has('nvim') && has_key(opts, 'for')
-        call pack#register_for(key_name, opts.for)
-        call remove(opts, 'for')
-        if !has_key(opts, 'on')
-            let opts.on = []
-        endif
-    endif
+
     if plugin =~ '/'
         call plug#(plugin, opts)
     elseif has_key(s:opt_plugs, plugin)
@@ -426,18 +416,7 @@ function! pack#lod_cmd(cmd, bang, l1, l2, args, mods, names) abort
     execute printf('%s %s%s%s %s', a:mods, range, a:cmd, a:bang, a:args)
 endfunction
 
-function! pack#register_for(plugin, value) abort
-    let values = type(a:value) == v:t_list ? copy(a:value) : [a:value]
-    if empty(values)
-        throw printf('PackAdd: for for %s must not be empty', a:plugin)
-    endif
-    for value in values
-        if type(value) != v:t_string || empty(value)
-            throw printf('PackAdd: for for %s must be a string or string list', a:plugin)
-        endif
-    endfor
-    call add(s:for_patterns, {'plugin': a:plugin, 'filetypes': values})
-endfunction
+
 
 function! s:add_on_value(plugin, value) abort
     let current = get(g:plugs[a:plugin], 'on', [])
@@ -472,9 +451,7 @@ function! s:prepare_on() abort
     augroup PackHooks
         autocmd!
         autocmd CmdUndefined * call pack#on_cmd(expand('<amatch>'))
-        if !empty(s:for_patterns)
-            autocmd FileType * call pack#on_ft(expand('<amatch>'))
-        endif
+
     augroup END
 endfunction
 
@@ -536,69 +513,7 @@ function! s:plugin_root(plugin) abort
     return root
 endfunction
 
-function! s:prepare_for() abort
-    if !has('nvim') || empty(s:for_patterns)
-        return
-    endif
-    augroup filetypedetect
-        for item in s:for_patterns
-            let root = s:plugin_root(item.plugin)
-            if isdirectory(root . '/ftdetect')
-                for file in globpath(root, 'ftdetect/**/*.{vim,lua}', 0, 1)
-                    execute 'silent source ' . fnameescape(file)
-                endfor
-            endif
-            if isdirectory(root . '/after/ftdetect')
-                for file in globpath(root, 'after/ftdetect/**/*.{vim,lua}', 0, 1)
-                    execute 'silent source ' . fnameescape(file)
-                endfor
-            endif
-        endfor
-    augroup END
-endfunction
 
-function! s:source_for(plugin, filetype) abort
-    let root = s:plugin_root(a:plugin)
-    for file in globpath(root, 'syntax/' . a:filetype . '.vim', 0, 1)
-        execute 'silent source ' . fnameescape(file)
-    endfor
-    for file in globpath(root . '/after', 'syntax/' . a:filetype . '.vim', 0, 1)
-        if !empty(file)
-            execute 'silent source ' . fnameescape(file)
-        endif
-    endfor
-endfunction
-
-function! pack#on_ft(filetype) abort
-    if has('nvim') && !s:finished
-        " FileType fired while pack#end() is still preparing (e.g. BufRead
-        " inside plug#load); defer until the plan is frozen.
-        if index(s:pending_fts, a:filetype) < 0
-            call add(s:pending_fts, a:filetype)
-        endif
-        return
-    endif
-    let plugins = []
-    for item in s:for_patterns
-        if index(item.filetypes, a:filetype) >= 0
-                    \ && !get(s:for_loaded, item.plugin, 0)
-                    \ && index(plugins, item.plugin) < 0
-            call add(plugins, item.plugin)
-        endif
-    endfor
-    if empty(plugins)
-        return
-    endif
-    if !pack#load(plugins)
-        return
-    endif
-    for plugin in plugins
-        let s:for_loaded[plugin] = 1
-        call s:source_for(plugin, a:filetype)
-    endfor
-    silent! doautocmd <nomodeline> filetypeplugin FileType
-    silent! doautocmd <nomodeline> filetypeindent FileType
-endfunction
 
 function! pack#end() abort
     call s:prepare_on()
@@ -614,7 +529,7 @@ function! pack#end() abort
     " skipped them (seen-missing-at-end race on slow mounts).
     call s:ensure_rtp(filter(copy(g:pack_order),
                 \ '!pack#lazy(v:val) && pack#installed(v:val)'))
-    call s:prepare_for()
+
     if has('nvim')
         call s:prepare_maps()
         for [cmd, names] in items(s:cmd_proxies)
@@ -627,10 +542,7 @@ function! pack#end() abort
         endfor
         lua require('pack').finish()
         let s:finished = 1
-        for filetype in s:pending_fts
-            call pack#on_ft(filetype)
-        endfor
-        let s:pending_fts = []
+
     endif
 endfunction
 

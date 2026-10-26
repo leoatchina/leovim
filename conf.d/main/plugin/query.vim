@@ -42,4 +42,6 @@ nnoremap <silent>K :K<Cr>
 " --------------------------
 " helpful
 " --------------------------
-au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
+if pack#installed('helpful.vim')
+    au FileType vim,lua,help nnoremap <M-M> :HelpfulVersion<Space>
+endif
