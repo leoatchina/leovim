@@ -1,5 +1,0 @@
-# test
-
-## Wikilinks
-
-!![[test.jpg]]

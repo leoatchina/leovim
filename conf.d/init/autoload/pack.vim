@@ -187,7 +187,20 @@ function! pack#loaded(name) abort
     return 0
 endfunction
 
-let s:finished = 0
+" Guarantee a loaded plugin's dir stays on runtimepath. vim-plug can skip
+" its own rtp insert when its internal loaded-mark disagrees with ours
+" (e.g. a startup plugin briefly seen missing on slow/network mounts).
+function! s:ensure_rtp(names) abort
+    let rtp_dirs = map(split(&rtp, ','), 'substitute(v:val, "[/\\\\]*$", "", "")')
+    for name in a:names
+        let dir = substitute(get(get(g:plugs, name, {}), 'dir', ''), "[/\\\\]*$", "", '')
+        if dir !=# '' && isdirectory(dir) && index(rtp_dirs, dir) < 0
+            execute 'set rtp^=' . fnameescape(dir)
+            call add(rtp_dirs, dir)
+        endif
+    endfor
+endfunction
+
 
 function! pack#load_raw(plugins) abort
     let plugins = type(a:plugins) == v:t_list ? a:plugins : [a:plugins]
@@ -200,6 +213,7 @@ function! pack#load_raw(plugins) abort
         return 0
     endif
     call call('plug#load', unloaded)
+    call s:ensure_rtp(unloaded)
     for plugin in unloaded
         if has_key(g:pack_pending, plugin)
             call remove(g:pack_pending, plugin)
@@ -596,6 +610,10 @@ function! pack#end() abort
         endif
     endfor
     call plug#end()
+    " Startup plugins must be on rtp even when vim-plug's own bookkeeping
+    " skipped them (seen-missing-at-end race on slow mounts).
+    call s:ensure_rtp(filter(copy(g:pack_order),
+                \ '!pack#lazy(v:val) && pack#installed(v:val)'))
     call s:prepare_for()
     if has('nvim')
         call s:prepare_maps()
