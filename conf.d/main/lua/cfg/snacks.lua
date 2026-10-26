@@ -62,6 +62,14 @@ snacks.setup({
 
 snacks.toggle.indent():map("<leader>I")
 
+vim.keymap.set('n', 'ZF', function()
+  snacks.zen()
+end, { silent = true, desc = 'Toggle Zen' })
+
+vim.keymap.set('n', 'ZO', function()
+  snacks.zen.zoom()
+end, { silent = true, desc = 'Toggle Zoom' })
+
 -- Available even when FZF or LeaderF owns the common finder mappings.
 vim.api.nvim_create_user_command('SnacksPicker', function()
   snacks.picker()
