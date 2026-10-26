@@ -69,8 +69,11 @@ nnoremap <leader>E :tabe <C-r>=utils#get_root_dir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
-if pack#installed('oil.nvim')
-    nnoremap <silent><nowait><leader>fo <Cmd>Oil --float<Cr>
+if pack#installed_snacks()
+    nnoremap <silent><nowait><leader>fo <Cmd>lua Snacks.explorer()<Cr>
+    nnoremap <silent><nowait><leader>fn <Cmd>SnacksNote<Cr>
+    nnoremap <silent><nowait><leader>fe <Cmd>lua Snacks.scratch()<Cr>
+    nnoremap <silent><nowait><leader>fs <Cmd>lua Snacks.scratch.select()<Cr>
 endif
 if pack#installed('vim-floaterm')
     function! s:floaterm_float(prg)
@@ -108,8 +111,8 @@ if utils#has_gui() || utils#is_win()
     nnoremap <silent><M-P> :tabm -1<Cr>
     nnoremap <M-]> :vsplit<Space>
     nnoremap <M-[> :split<Space>
-    if pack#installed('oil.nvim')
-        nnoremap <silent><nowait><M-o> <Cmd>Oil --float<Cr>
+    if pack#installed_snacks()
+        nnoremap <silent><nowait><M-o> <Cmd>lua Snacks.explorer()<Cr>
     elseif !has('nvim') && get(g:, 'use_system_browser', utils#is_win())
         let g:browsefilter = ''
         function! s:filter_push(desc, wildcard) abort

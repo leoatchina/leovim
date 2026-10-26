@@ -181,6 +181,10 @@ elseif pack#planned('gv.vim')
     nnoremap <silent><M-g>l V:GV?<Cr>
     xnoremap <silent><M-g>l :GV?<Cr>
 endif
+if pack#installed_snacks()
+    nnoremap <silent><M-g><M-b> <Cmd>lua Snacks.gitbrowse()<Cr>
+    xnoremap <silent><M-g><M-b> :<C-u>lua Snacks.gitbrowse()<Cr>
+endif
 if pack#planned('vim-signify')
     let g:signify_disable_by_default = 0
     nnoremap \<Cr> :SignifyRefresh<Cr>
@@ -202,11 +206,16 @@ endif
 " ---------------------------------
 " lazygit integrated
 " ---------------------------------
-if pack#installed('vim-floaterm') && executable('lazygit')
-    command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
-    if has('nvim')
-        nnoremap <M-g><M-l> :GLazyGit<Cr>
-    else
-        nnoremap <M-g><M-l> :GLazyGit<Cr>i
+if executable('lazygit')
+    if pack#installed_snacks()
+        command! GLazyGit lua Snacks.lazygit()
+        nnoremap <silent><M-g><M-l> :GLazyGit<Cr>
+    elseif pack#installed('vim-floaterm')
+        command! GLazyGit exec "FloatermNew --height=0.9 --width=0.9 --title=lazygit --wintype=float --position=center lazygit"
+        if has('nvim')
+            nnoremap <M-g><M-l> :GLazyGit<Cr>
+        else
+            nnoremap <M-g><M-l> :GLazyGit<Cr>i
+        endif
     endif
 endif

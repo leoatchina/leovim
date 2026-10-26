@@ -122,10 +122,6 @@ if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
     endif
     PackAdd 'fzf-registers'
     PackAdd 'fzf-tabs'
-    if has('nvim')
-        PackAdd 'stevearc/oil.nvim', {'cfg': 'cfg.oil'}
-        PackAdd 'benomahony/oil-git.nvim'
-    endif
 endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 3 && !pack#get('noleaderf') && !pack#get('no-leaderf')
     PackAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
@@ -291,9 +287,7 @@ endif
 " ----------------------------
 " indentLine plugins
 " ----------------------------
-if has('nvim')
-    PackAdd 'lukas-reineke/indent-blankline.nvim', {'cfg': 'cfg.ibl'}
-elseif has('conceal')
+if !has('nvim') && has('conceal')
     PackAdd 'Yggdroot/indentLine'
 endif
 " ------------------------------

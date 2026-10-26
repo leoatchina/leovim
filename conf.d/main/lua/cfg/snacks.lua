@@ -34,9 +34,16 @@ end
 
 snacks.setup({
   input = { enabled = true },
+  explorer = { enabled = true },
+  indent = { enabled = false },
   picker = {
     enabled = true,
     ui_select = true,
+    sources = {
+      explorer = {
+        layout = { preset = "default", preview = false },
+      },
+    },
     actions = { confirm = jump, jump = jump, edit = jump },
     win = {
       input = {
@@ -53,10 +60,25 @@ snacks.setup({
   },
 })
 
+snacks.toggle.indent():map("<leader>I")
+
 -- Available even when FZF or LeaderF owns the common finder mappings.
 vim.api.nvim_create_user_command('SnacksPicker', function()
   snacks.picker()
 end, { desc = 'Choose a Snacks picker' })
+
+vim.api.nvim_create_user_command('SnacksNote', function()
+  vim.ui.input({ prompt = '笔记名称：' }, function(name)
+    if not name or vim.trim(name) == '' then
+      return
+    end
+    snacks.scratch({
+      name = vim.trim(name),
+      ft = 'markdown',
+      filekey = { cwd = false, branch = false, count = false },
+    })
+  end)
+end, { desc = 'Open a named notebook' })
 
 vim.api.nvim_create_user_command('SnacksBufferLines', function()
   local sources = {}
