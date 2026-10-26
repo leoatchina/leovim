@@ -36,6 +36,7 @@ snacks.setup({
   input = { enabled = true },
   explorer = { enabled = true },
   indent = { enabled = false },
+  notifier = { enabled = true, timeout = 3000 },
   picker = {
     enabled = true,
     ui_select = true,
@@ -61,6 +62,10 @@ snacks.setup({
 })
 
 snacks.toggle.indent():map("<leader>I")
+
+vim.keymap.set('n', '<M-k>n', function()
+  snacks.picker.notifications()
+end, { silent = true, desc = 'Search notification history' })
 
 vim.keymap.set('n', 'ZF', function()
   snacks.zen()
