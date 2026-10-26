@@ -16,6 +16,21 @@ function M.root(kind)
   return found and vim.fs.dirname(found) or dir
 end
 
+-- Ensure snacks' own lua root stays discoverable by require() even if
+-- runtimepath is reorganized or trimmed by subshells/runners.
+do
+  local plug = (vim.g.plugs or {})['snacks.nvim']
+  local dir = plug and plug.dir or (vim.fn.expand('$HOME/.leovim/pack/clone/opt/snacks.nvim') .. '/')
+  local lua_dir = dir .. 'lua'
+  if vim.fn.isdirectory(lua_dir) == 1 then
+    local p1 = lua_dir .. '/?.lua'
+    local p2 = lua_dir .. '/?/init.lua'
+    if not package.path:find(p1, 1, true) then
+      package.path = p1 .. ';' .. p2 .. ';' .. package.path
+    end
+  end
+end
+
 local snacks = require('snacks')
 
 local function jump(picker, item, action)
