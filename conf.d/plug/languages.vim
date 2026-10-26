@@ -80,19 +80,10 @@ endif
 " nvim-java
 " ------------------------------
 if pack#planned_lsp() && pack#get('java')
-    PackAdd 'nvim-java/nvim-java-dap'
-    PackAdd 'nvim-java/nvim-java-core'
-    PackAdd 'nvim-java/nvim-java-test'
-    PackAdd 'nvim-java/nvim-java-refactor'
-    PackAdd 'nvim-java/lua-async-await'
-    PackAdd 'JavaHello/spring-boot.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'cfg.springboot'}
+    PackAdd 'JavaHello/spring-boot.nvim', {'commit': '218c0c26c14d99feca778e4d13f5ec3e8b1b60f0'}
     PackAdd 'nvim-java/nvim-java', {
-                \ 'deps': [
-                \   'nvim-java-dap', 'nvim-java-core', 'nvim-java-test',
-                \   'nvim-java-refactor', 'lua-async-await',
-                \   'spring-boot.nvim', 'nvim-dap',
-                \ ],
-                \ 'init': "require('java').setup()",
+                \ 'deps': ['spring-boot.nvim', 'nui.nvim', 'nvim-dap'],
+                \ 'init': "require('java').setup(); vim.lsp.enable('jdtls')",
                 \ }
 endif
 " ------------------------------
