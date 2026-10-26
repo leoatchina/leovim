@@ -649,14 +649,14 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = {"java"},
   callback = function()
     map(nx, "<leader>A", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts_silent)
-    map(n, "sev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
-    map(n, "sec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
-    map(n, "stc", "<Cmd>lua require('jdtls').test_class()<CR>", opts_silent)
-    map(n, "stm", "<Cmd>lua require('jdtls').test_nearest_method()<CR>", opts_silent)
+    map(n, "Mev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
+    map(n, "Mec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
+    map(n, "Mtc", "<Cmd>lua require('jdtls').test_class()<CR>", opts_silent)
+    map(n, "Mtm", "<Cmd>lua require('jdtls').test_nearest_method()<CR>", opts_silent)
     -- Visual 模式下的映射
-    map(x, "sev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
-    map(x, "sec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
-    map(x, "sem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
+    map(x, "Mev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
+    map(x, "Mec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
+    map(x, "Mem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
   end,
 })
 ---------------------------
