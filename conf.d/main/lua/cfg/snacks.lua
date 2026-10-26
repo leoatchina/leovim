@@ -105,6 +105,21 @@ vim.api.nvim_create_user_command('SnacksNote', function()
   end)
 end, { desc = 'Open a named notebook' })
 
+vim.keymap.set('n', '<leader>fo', function()
+  snacks.explorer()
+end, { silent = true, nowait = true, desc = 'Open file explorer' })
+
+vim.keymap.set('n', '<leader>fn', '<Cmd>SnacksNote<Cr>',
+  { silent = true, nowait = true, desc = 'Open a named notebook' })
+
+vim.keymap.set('n', '<leader>fe', function()
+  snacks.scratch()
+end, { silent = true, nowait = true, desc = 'Toggle scratch buffer' })
+
+vim.keymap.set('n', '<leader>fs', function()
+  snacks.scratch.select()
+end, { silent = true, nowait = true, desc = 'Select scratch buffer' })
+
 vim.api.nvim_create_user_command('SnacksBufferLines', function()
   local sources = {}
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do

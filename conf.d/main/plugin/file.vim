@@ -69,12 +69,6 @@ nnoremap <leader>E :tabe <C-r>=utils#get_root_dir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
-if pack#installed_snacks()
-    nnoremap <silent><nowait><leader>fo <Cmd>lua Snacks.explorer()<Cr>
-    nnoremap <silent><nowait><leader>fn <Cmd>SnacksNote<Cr>
-    nnoremap <silent><nowait><leader>fe <Cmd>lua Snacks.scratch()<Cr>
-    nnoremap <silent><nowait><leader>fs <Cmd>lua Snacks.scratch.select()<Cr>
-endif
 if pack#installed('vim-floaterm')
     function! s:floaterm_float(prg)
         let prg = a:prg
