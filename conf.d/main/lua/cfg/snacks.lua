@@ -53,6 +53,7 @@ snacks.setup({
     ui_select = true,
     sources = {
       explorer = {
+        jump = { close = true },
         layout = { preset = "default", preview = false },
       },
     },
