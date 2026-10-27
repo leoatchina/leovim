@@ -19,11 +19,7 @@ if pack#planned_cmp()
     PackAdd 'xzbdmw/colorful-menu.nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
 elseif pack#planned_blink()
     PackAdd 'Saghen/blink.lib'
-    if executable('cargo') && !pack#get('blink.lua')
-        PackAdd 'Saghen/blink.cmp', {'do': ':lua local ok, err = require("blink.cmp").build():pwait(); if not ok then error(err) end', 'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets'], 'cfg': 'cfg.blink'}
-    else
-        PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets'], 'cfg': 'cfg.blink'}
-    endif
+    PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets'], 'cfg': 'cfg.blink'}
 elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
         PackAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}

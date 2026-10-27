@@ -61,11 +61,11 @@ function! pack#planned_cmp() abort
 endfunction
 
 function! pack#planned_blink() abort
-    return (pack#get('blink') || pack#get('blink.lua')) && has('nvim')
+    return pack#get('blink') && has('nvim')
 endfunction
 
 function! pack#planned_lsp() abort
-    return (pack#get('cmp') || pack#get('blink') || pack#get('blink.lua')) && has('nvim')
+    return (pack#get('cmp') || pack#get('blink')) && has('nvim')
 endfunction
 
 function! pack#planned_adv_comp_eng() abort

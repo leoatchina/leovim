@@ -59,8 +59,8 @@ Snacks 同样克隆在 `pack/clone/opt/snacks.nvim`，由 `update-clone.sh` 维�
 | 方案 | 配置方式 | 说明 |
 |---|---|---|
 | nvim-cmp | `call pack#add('cmp')` | Neovim 0.11+，配合原生 LSP |
-| blink.cmp | `call pack#add('blink')` | Neovim 0.11+；有 cargo 时声明构建钩子 |
-| blink Lua 方案 | `call pack#add('blink.lua')` | 不走配置中的 cargo 构建分支 |
+| blink.cmp | `call pack#add('blink')` | Neovim 0.12+；统一使用 Lua matcher，无需 Cargo 或原生匹配库 |
+| blink Lua 方案 | `call pack#add('blink.lua')` | 同样使用 Lua matcher |
 | Coc | `call pack#add('coc')` | 满足上表 Node.js 和编辑器检测条件后声明插件；通过 Coc 扩展提供语言功能 |
 | builtin | 不选择高级引擎，也不强制 `mcm` | Neovim 0.11+ 或 Vim 9.1.1590+ 自动选择原生补全；不等于自动启用完整 LSP 配置 |
 | mucomplete | `call pack#add('mcm')`，或旧编辑器自动回退 | 路径、omni、关键字、字典等补全；不需要 Node.js |
@@ -570,7 +570,7 @@ vim --startuptime startup.log
 - builtin / mucomplete：不会因为能补全关键字就自动拥有跳转、重命名和诊断能力。
 - 扩展与语言服务器不是一回事。例如 C/C++ 需要实际 clangd，Go 需要 gopls；安装后仍需正确的项目配置、编译选项或模块环境。
 - 先只选择一个高级补全引擎，更新插件并重启。仓库支持的开关以 [`pack.vim`](conf.d/init/autoload/pack.vim) 和插件声明为准，不要照搬其他发行版的 `Lazy` / `Packer` 命令。
-- Neovim 0.12 的 Blink 使用 `main`（v2）及 `blink.lib`；已有 v1 安装需执行 `:PlugUpdate` 后重启。有 Cargo 时安装钩子使用新版 `build():pwait()`；`blink.lua` 或无 Cargo 时使用 Lua matcher。Blink 的 `<C-f>/<C-b>` 导航原生 `vim.snippet`，不再安装 vsnip。
+- Neovim 0.12 的 Blink 使用 `main`（v2）及 `blink.lib`；已有 v1 安装需执行 `:PlugInstall`、`:PlugUpdate` 后重启。统一使用 Lua matcher，不构建或下载原生匹配库。Blink 的 `<C-f>/<C-b>` 导航原生 `vim.snippet`，不再安装 vsnip。
 - CMP 命令行路径来源统一为 `async_path`；不再安装未启用的 signature-help 来源和未使用的 selection-range 插件。LSP 生命周期使用原生 `:lsp restart` / `:lsp stop`。
 - Java 的 `Mev/Mec/Mem` 使用 nvim-java 重构命令，`Mtc/Mtm` 保留调试当前测试类/方法的行为，均为 Java buffer 局部映射；重构命令须等待 JDTLS 附着后才由插件注册。
 - 不再安装 R.nvim / Nvim-R；保留普通 R 文件类型设置及独立的 LSP/Coc、REPL 入口。Neovim 使用自带 Rust runtime，不再额外安装 rust.vim。

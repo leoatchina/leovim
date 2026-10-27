@@ -1,10 +1,8 @@
-local utils = require('utils')
 require('blink.cmp').setup({
   appearance = {
     nerd_font_variant = 'mono'
   },
-  -- Main uses the v2 build API; without a local build, use the Lua matcher.
-  fuzzy = { implementation = vim.fn.executable('cargo') == 1 and not utils.get('blink.lua') and 'prefer_rust_with_warning' or 'lua' },
+  fuzzy = { implementation = 'lua' },
   signature = { enabled = true },
   completion = {
     trigger = { prefetch_on_insert = false },
