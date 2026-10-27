@@ -38,18 +38,18 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-if pack#installed_leaderf() && !has('nvim')
-    nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
-    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=utils#get_vcs_dir()<Cr><Cr>
-elseif pack#installed_fzf()
-    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
-    nnoremap <silent><nowait><leader>p  :FzfFiles <C-r>=utils#get_vcs_dir()<Cr><Cr>
-elseif pack#installed('fuzzbox.vim')
+if pack#installed('fuzzbox.vim')
     nnoremap <silent><nowait><leader>ff :call fuzzbox#Launch('files', {'cwd': expand('%:p') == '' ? getcwd() : expand('%:p:h')})<Cr>
     nnoremap <silent><nowait><leader>p :call fuzzbox#Launch('files', {'cwd': utils#get_vcs_dir()})<Cr>
 elseif pack#installed_snacks()
     nnoremap <silent><nowait><leader>ff <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('%:p:h') } })<Cr>
     nnoremap <silent><nowait><leader>p  <Cmd>lua Snacks.picker.files({ dirs = { require('cfg.snacks').root('vcs') } })<Cr>
+elseif pack#installed_leaderf() && !has('nvim')
+    nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
+    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=utils#get_vcs_dir()<Cr><Cr>
+elseif pack#installed_fzf()
+    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
+    nnoremap <silent><nowait><leader>p  :FzfFiles <C-r>=utils#get_vcs_dir()<Cr><Cr>
 endif
 if pack#installed_fzf()
     nnoremap <nowait>\F :FzfGitFiles <C-r>=@"<Cr>
