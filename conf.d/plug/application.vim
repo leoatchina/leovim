@@ -3,7 +3,9 @@
 " ------------------------------
 if !pack#get('nocomplete') && exists('v:true') && exists("##TextChangedP")
     PackAdd 'rafamadriz/friendly-snippets'
-    PackAdd 'hrsh7th/vim-vsnip'
+    if !pack#planned_blink() || pack#planned_cmp()
+        PackAdd 'hrsh7th/vim-vsnip'
+    endif
 endif
 if pack#planned_cmp()
     PackAdd 'hrsh7th/nvim-cmp', {'cfg': 'cfg.cmp'}
@@ -12,15 +14,15 @@ if pack#planned_cmp()
     PackAdd 'hrsh7th/cmp-buffer', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'hrsh7th/cmp-cmdline', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'hrsh7th/cmp-vsnip', {'deps': ['vim-vsnip', 'nvim-cmp'], 'cfg': 'cfg.cmp'}
-    PackAdd 'hrsh7th/cmp-nvim-lsp-signature-help', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'FelipeLema/cmp-async-path', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'onsails/lspkind-nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'xzbdmw/colorful-menu.nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
 elseif pack#planned_blink()
+    PackAdd 'Saghen/blink.lib'
     if executable('cargo') && !pack#get('blink.lua')
-        PackAdd 'Saghen/blink.cmp', {'do': 'cargo build --release', 'branch': 'v1', 'cfg': 'cfg.blink'}
+        PackAdd 'Saghen/blink.cmp', {'do': ':lua local ok, err = require("blink.cmp").build():pwait(); if not ok then error(err) end', 'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets'], 'cfg': 'cfg.blink'}
     else
-        PackAdd 'Saghen/blink.cmp', {'branch': 'v1', 'cfg': 'cfg.blink'}
+        PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets'], 'cfg': 'cfg.blink'}
     endif
 elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
@@ -39,7 +41,6 @@ if pack#planned_lsp()
     " lsp related
     PackAdd 'neovim/nvim-lspconfig', {'cfg': 'lsp'}
     PackAdd 'mason-org/mason-lspconfig.nvim', {'deps': ['mason.nvim', 'nvim-lspconfig'], 'cfg': 'lsp'}
-    PackAdd 'camilledejoye/nvim-lsp-selection-range', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     PackAdd 'ravenxrz/call-graph.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     " lightline
     PackAdd 'josa42/nvim-lightline-lsp', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}

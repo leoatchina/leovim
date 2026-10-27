@@ -3,7 +3,8 @@ require('blink.cmp').setup({
   appearance = {
     nerd_font_variant = 'mono'
   },
-  fuzzy = { implementation = executable("cargo") and not utils.get('blink.lua') and "prefer_rust_with_warning" or 'lua'},
+  -- Main uses the v2 build API; without a local build, use the Lua matcher.
+  fuzzy = { implementation = vim.fn.executable('cargo') == 1 and not utils.get('blink.lua') and 'prefer_rust_with_warning' or 'lua' },
   signature = { enabled = true },
   completion = {
     trigger = { prefetch_on_insert = false },
@@ -28,13 +29,17 @@ require('blink.cmp').setup({
     }
   },
   snippets = {
-    expand = function(snippet) vim.snippet.expand(snippet) end,
-    active = function(filter) return vim.snippet.active(filter) end,
-    jump = function(direction) vim.snippet.jump(direction) end,
+    preset = 'default', -- Native vim.snippet expansion and jumps.
   },
   sources = {
     default = { 'path', 'buffer', 'lsp', 'snippets' },
     providers = {
+      snippets = {
+        opts = {
+          search_paths = { vim.fn.stdpath('config') .. '/snippets', vim.fn.expand('~/.leovim/conf.d/snippets') },
+          global_snippets = { 'all', 'global' },
+        },
+      },
       lsp = {
         name = 'LSP',
         module = 'blink.cmp.sources.lsp',
@@ -62,5 +67,8 @@ require('blink.cmp').setup({
     ['<S-Tab>'] = { 'select_prev', 'fallback' },
     -- Enter: 已选中则确认并展开 snippet；未选中仅隐藏菜单保留文本（同 cmp.close，不换行不回滚）
     ['<CR>'] = { 'accept', 'hide', 'fallback' },
+    -- Keep the native snippet jumps and bracket fallbacks from complete.vim.
+    ['<C-f>'] = false,
+    ['<C-b>'] = false,
   }
 })

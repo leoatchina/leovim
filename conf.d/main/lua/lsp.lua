@@ -64,13 +64,11 @@ function _G.toggle_virtual_text()
     virtual_text = vim.g.diagnostic_virtual_text
   })
 end
+if utils.installed_cmp() then
+  lsp_capabilities = vim.tbl_deep_extend('force', lsp_capabilities, require('cmp_nvim_lsp').default_capabilities())
+end
 vim.lsp.config("*", {
-  on_attach = function(client, bufnr)
-    local ok, diag = pcall(require, "rj.extras.workspace-diagnostic")
-    if ok then
-      diag.populate_workspace_diagnostics(client, bufnr)
-    end
-  end,
+  capabilities = lsp_capabilities,
 })
 -----------------------
 -- symbol icons
@@ -500,7 +498,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map("i", "<C-x><C-x>", function() vim.lsp.buf.signature_help { border = 'single' } end, opts_silent)
     -- lsp info/restart
     map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
-    map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
+    map(nx, "<M-l>r", [[<Cmd>lsp restart<Cr>]], opts_silent)
     -- aerial
     map(nx, "F<Cr>", [[<Cmd>AerialNavToggle<Cr>]], opts_silent)
     -- call-graph
@@ -508,10 +506,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, "gh", [[<Cmd>CallGraphI<Cr>]], opts_silent)
     map(nx, "gl", vim.lsp.buf.outgoing_calls, opts_silent)
     -- diagnostic error
-    map(nx, ';d', vim.diagnostic.goto_next, opts_silent)
-    map(nx, ',d', vim.diagnostic.goto_prev, opts_silent)
-    map(nx, ';e', [[<Cmd>lua vim.diagnostic.goto_next({severity=vim.diagnostic.severity.ERROR, wrap=false})<CR>]], opts_silent)
-    map(nx, ',e', [[<Cmd>lua vim.diagnostic.goto_prev({severity=vim.diagnostic.severity.ERROR, wrap=false})<CR>]], opts_silent)
+    map(nx, ';d', function() vim.diagnostic.jump({ count = 1, wrap = true }) end, opts_silent)
+    map(nx, ',d', function() vim.diagnostic.jump({ count = -1, wrap = true }) end, opts_silent)
+    map(nx, ';e', function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR, wrap = false }) end, opts_silent)
+    map(nx, ',e', function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR, wrap = false }) end, opts_silent)
     -- native lsp
     map(nx, "<C-q>", [[<Cmd>FormatWrite<Cr>]], opts_echo)
     map(nx, "K", function() vim.lsp.buf.hover { border = "rounded" } end, opts_silent)
@@ -560,65 +558,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
           end,
         })
         -- fire it first time on load as well
-        vim.lsp.semantic_tokens.start(bufnr, client.id)
+        vim.lsp.semantic_tokens.enable(true, { bufnr = bufnr, client_id = client.id })
       end
     end
   end
-})
--- Stop
-vim.api.nvim_create_user_command("LspStop", function(opts)
-  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-    if opts.args == "" or opts.args == client.name then
-      client:stop(true)
-      vim.notify(client.name .. ": stopped")
-    end
-  end
-end, {
-desc = "Stop all LSP clients or a specific client attached to the current buffer.",
-nargs = "?",
-complete = function(_, _, _)
-  local clients = vim.lsp.get_clients({ bufnr = 0 })
-  local client_names = {}
-  for _, client in ipairs(clients) do
-    table.insert(client_names, client.name)
-  end
-  return client_names
-end,
-})
--- Restart
-vim.api.nvim_create_user_command("LspRestart", function()
-  local detach_clients = {}
-  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-    client:stop(true)
-    if vim.tbl_count(client.attached_buffers) > 0 then
-      detach_clients[client.name] = { client, vim.lsp.get_buffers_by_client_id(client.id) }
-    end
-  end
-  local timer = vim.uv.new_timer()
-  if not timer then
-    return vim.notify("Servers are stopped but havent been restarted")
-  end
-  timer:start(
-  100,
-  50,
-  vim.schedule_wrap(function()
-    for name, client in pairs(detach_clients) do
-      local client_id = vim.lsp.start(client[1].config, { attach = false })
-      if client_id then
-        for _, buf in ipairs(client[2]) do
-          vim.lsp.buf_attach_client(buf, client_id)
-        end
-        vim.notify(name .. ": restarted")
-      end
-      detach_clients[name] = nil
-    end
-    if next(detach_clients) == nil and not timer:is_closing() then
-      timer:close()
-    end
-  end)
-  )
-end, {
-  desc = "Restart all the language client(s) attached to the current buffer",
 })
 -- Log
 vim.api.nvim_create_user_command("LspLog", function()
@@ -639,24 +582,6 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = {'python'},
   callback = function()
     map(nx, "<leader>A", require("lspimport").import, opts_silent)
-    local ok, venv = pcall(require, "rj.extras.venv")
-    if ok then
-      venv.setup()
-    end
-  end,
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"java"},
-  callback = function()
-    map(nx, "<leader>A", "<Cmd>lua require'jdtls'.organize_imports()<CR>", opts_silent)
-    map(n, "Mev", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts_silent)
-    map(n, "Mec", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts_silent)
-    map(n, "Mtc", "<Cmd>lua require('jdtls').test_class()<CR>", opts_silent)
-    map(n, "Mtm", "<Cmd>lua require('jdtls').test_nearest_method()<CR>", opts_silent)
-    -- Visual 模式下的映射
-    map(x, "Mev", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts_silent)
-    map(x, "Mec", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts_silent)
-    map(x, "Mem", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts_silent)
   end,
 })
 ---------------------------

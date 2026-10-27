@@ -5,8 +5,6 @@ let s:R_cmd = get(g:, 'R_exe', utils#is_win() ? 'R.exe' : 'R')
 let g:R_exe = empty(s:R_cmd) ? '' : utils#expand(exepath(s:R_cmd))
 if has('nvim') && pack#get('jupynium') && g:python_version > 3.07
     PackAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .'), 'cfg': 'cfg.jupynium'}
-elseif pack#get('nvim-r') && (has('nvim') || v:version >= 802) && executable(g:R_exe)
-    PackAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
 " ------------------------------
 " helpful
@@ -60,7 +58,9 @@ else
     let g:cargo_exe = ''
 endif
 if get(g:, 'cargo_exe', '') != '' && pack#get('rust') && v:version >= 800
-    PackAdd 'rust-lang/rust.vim', {'for': 'rust'}
+    if !has('nvim')
+        PackAdd 'rust-lang/rust.vim', {'for': 'rust'}
+    endif
     if pack#planned_lsp()
         PackAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif

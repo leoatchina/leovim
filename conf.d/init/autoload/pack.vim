@@ -105,7 +105,6 @@ function! pack#installed_lsp() abort
                 \ 'nvim-lspconfig',
                 \ 'mason-lspconfig.nvim',
                 \ 'call-graph.nvim',
-                \ 'nvim-lsp-selection-range',
                 \ 'aerial.nvim',
                 \ )
 endfunction
@@ -115,7 +114,7 @@ function! pack#installed_coc() abort
 endfunction
 
 function! pack#installed_blink() abort
-    return pack#installed('blink.cmp', 'friendly-snippets', 'nvim-autopairs')
+    return pack#installed('blink.cmp', 'blink.lib', 'friendly-snippets', 'nvim-autopairs')
 endfunction
 
 function! pack#installed_cmp() abort
@@ -126,7 +125,6 @@ function! pack#installed_cmp() abort
                 \ 'cmp-buffer',
                 \ 'cmp-cmdline',
                 \ 'cmp-vsnip',
-                \ 'cmp-nvim-lsp-signature-help',
                 \ 'cmp-async-path',
                 \ 'lspkind-nvim',
                 \ 'colorful-menu.nvim',
