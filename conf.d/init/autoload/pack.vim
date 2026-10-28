@@ -114,7 +114,7 @@ function! pack#installed_coc() abort
 endfunction
 
 function! pack#installed_blink() abort
-    return pack#installed('blink.cmp', 'blink.lib', 'friendly-snippets', 'nvim-autopairs')
+    return pack#installed('blink.cmp', 'blink.lib', 'blink-cmp-deps', 'friendly-snippets', 'nvim-autopairs')
 endfunction
 
 function! pack#installed_cmp() abort

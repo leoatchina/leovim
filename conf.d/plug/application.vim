@@ -19,7 +19,8 @@ if pack#planned_cmp()
     PackAdd 'xzbdmw/colorful-menu.nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
 elseif pack#planned_blink()
     PackAdd 'Saghen/blink.lib'
-    PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets'], 'cfg': 'cfg.blink'}
+    PackAdd 'Mestane/blink-cmp-deps'
+    PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets', 'blink-cmp-deps'], 'cfg': 'cfg.blink'}
 elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
         PackAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}

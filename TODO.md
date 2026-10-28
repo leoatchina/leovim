@@ -2,6 +2,7 @@
 ## config:
 - [x] Remove unused telescope-fzf-native.nvim accelerator.
 - [x] Restore GitHub undotree declaration and layout 4; toggle with `zu`.
+- [x] Register blink-cmp-deps as a blink.cmp dependency and enable its async completion provider.
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
 - [x] better lightline schemes

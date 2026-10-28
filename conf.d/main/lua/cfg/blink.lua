@@ -30,8 +30,13 @@ require('blink.cmp').setup({
     preset = 'default', -- Native vim.snippet expansion and jumps.
   },
   sources = {
-    default = { 'path', 'buffer', 'lsp', 'snippets' },
+    default = { 'path', 'buffer', 'lsp', 'snippets', 'deps' },
     providers = {
+      deps = {
+        name = 'Dependencies',
+        module = 'blink_deps',
+        async = true,
+      },
       snippets = {
         opts = {
           search_paths = { vim.fn.stdpath('config') .. '/snippets', vim.fn.expand('~/.leovim/conf.d/snippets') },
