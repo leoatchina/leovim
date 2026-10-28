@@ -4,7 +4,7 @@ endif
 
 let g:leovim_whichkey = 1
 let g:leovim_openmap = 1
-let g:nvim_treesitter_install = utils#is_unix()
+" let g:nvim_treesitter_install = 1
 
 " if v:version < 800
 "     call pack#add('notags')
