@@ -211,9 +211,6 @@ if has('nvim')
     PackAdd 'nvim-lua/plenary.nvim'
     PackAdd 'snacks.nvim', {'cfg': 'cfg.snacks'}
     PackAdd 'Bekaboo/dropbar.nvim', {'cfg': 'cfg.dropbar'}
-    if utils#is_unix()
-        PackAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
-    endif
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'
 endif
@@ -281,6 +278,7 @@ endif
 if has('nvim') && utils#is_unix()
     PackAdd 'kevinhwang91/nvim-fundo', {'init': "require('fundo').setup()"}
 endif
+PackAdd 'mbbill/undotree'
 " ----------------------------
 " indentLine plugins
 " ----------------------------

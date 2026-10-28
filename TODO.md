@@ -1,5 +1,7 @@
 # TODO:
 ## config:
+- [x] Remove unused telescope-fzf-native.nvim accelerator.
+- [x] Restore GitHub undotree declaration and layout 4; toggle with `zu`.
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
 - [x] better lightline schemes

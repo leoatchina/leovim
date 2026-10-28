@@ -22,6 +22,10 @@ endtry
 " --------------------------
 " undo
 " --------------------------
+if pack#installed('undotree')
+    let g:undotree_WindowLayout = 4
+    nnoremap <silent>zu :UndotreeToggle<Cr>
+endif
 " ------------------------------
 " Fzf jumps
 " ------------------------------
