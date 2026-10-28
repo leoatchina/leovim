@@ -14,4 +14,4 @@ else
   echo "nvim not executable"
   exit 1
 fi
-$NVIMCMD --cmd "let g:packs=['blink']" "$@"
+NVIM_NOTTYFAST=1 "$NVIMCMD" --cmd "let g:packs=['blink']" "$@"

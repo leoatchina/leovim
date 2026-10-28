@@ -563,6 +563,8 @@ REPL 见 [`repl.vim`](conf.d/main/plugin/repl.vim)，实际解释器需可执行
 vim --startuptime startup.log
 ```
 
+Neovim 启动脚本 `n.sh`、`ni.sh`、`nv.sh` 在启动进程时设置 `NVIM_NOTTYFAST=1`，跳过启动阶段的终端查询，避免 SSH / 不响应背景色查询的终端产生等待和 E1568。此设置不影响 Vim，且必须早于 `init.vim` 执行；主题背景仍由配置显式指定。
+
 ### 8.2. 补全与语言服务器
 
 - Coc：检查 `:CocInfo`、`:CocList extensions` 和实际 Node.js 路径。当前配置门槛是 Node.js 24+，不是旧文档的 16.18。
