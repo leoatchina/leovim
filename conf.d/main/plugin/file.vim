@@ -38,18 +38,18 @@ nnoremap cdl :lcd %:p:h<Cr>
 "------------------------
 " search files
 "------------------------
-if pack#installed_leaderf() && !has('nvim')
-    nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
-    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=utils#get_vcs_dir()<Cr><Cr>
-elseif pack#installed_fzf()
-    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
-    nnoremap <silent><nowait><leader>p  :FzfFiles <C-r>=utils#get_vcs_dir()<Cr><Cr>
-elseif pack#installed('fuzzbox.vim')
+if pack#installed('fuzzbox.vim')
     nnoremap <silent><nowait><leader>ff :call fuzzbox#Launch('files', {'cwd': expand('%:p') == '' ? getcwd() : expand('%:p:h')})<Cr>
     nnoremap <silent><nowait><leader>p :call fuzzbox#Launch('files', {'cwd': utils#get_vcs_dir()})<Cr>
 elseif pack#installed_snacks()
     nnoremap <silent><nowait><leader>ff <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('%:p:h') } })<Cr>
     nnoremap <silent><nowait><leader>p  <Cmd>lua Snacks.picker.files({ dirs = { require('cfg.snacks').root('vcs') } })<Cr>
+elseif pack#installed_leaderf() && !has('nvim')
+    nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
+    nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=utils#get_vcs_dir()<Cr><Cr>
+elseif pack#installed_fzf()
+    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
+    nnoremap <silent><nowait><leader>p  :FzfFiles <C-r>=utils#get_vcs_dir()<Cr><Cr>
 endif
 if pack#installed_fzf()
     nnoremap <nowait>\F :FzfGitFiles <C-r>=@"<Cr>
@@ -69,9 +69,6 @@ nnoremap <leader>E :tabe <C-r>=utils#get_root_dir()<Cr>/
 " ---------------------------------
 " file browser
 " ---------------------------------
-if pack#installed('oil.nvim')
-    nnoremap <silent><nowait><leader>fo <Cmd>Oil --float<Cr>
-endif
 if pack#installed('vim-floaterm')
     function! s:floaterm_float(prg)
         let prg = a:prg
@@ -108,8 +105,8 @@ if utils#has_gui() || utils#is_win()
     nnoremap <silent><M-P> :tabm -1<Cr>
     nnoremap <M-]> :vsplit<Space>
     nnoremap <M-[> :split<Space>
-    if pack#installed('oil.nvim')
-        nnoremap <silent><nowait><M-o> <Cmd>Oil --float<Cr>
+    if pack#installed_snacks()
+        nnoremap <silent><nowait><M-o> <Cmd>lua Snacks.explorer()<Cr>
     elseif !has('nvim') && get(g:, 'use_system_browser', utils#is_win())
         let g:browsefilter = ''
         function! s:filter_push(desc, wildcard) abort
@@ -274,12 +271,35 @@ endif
 " save
 " -----------------------------
 if v:version >= 800 || has('nvim')
-    nnoremap <C-s> :w!<Cr>
-    xnoremap <C-s> <ESC>:w!<Cr>gv
-    cnoremap <C-s> w!<Cr>
-    inoremap <C-s> <C-o>:w!<Cr>
-    nnoremap <C-w><C-s> :redraw \| wa!<Cr>
+    function! s:confirm_save(all) abort
+        if a:all
+            let modified_bufs = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&modified")')
+            if !empty(modified_bufs)
+                let g:quickui#listbox#cursor = 0
+                let choice = utils#choose_one(['Yes', 'No'], 'Save all buffers?', 0, 'Cancel')
+                if choice ==# 'Yes'
+                    redraw | wa!
+                endif
+            endif
+        elseif &modified
+            let g:quickui#listbox#cursor = 0
+            let choice = utils#choose_one(['Yes', 'No'], 'Save current buffer?', 0, 'Cancel')
+            if choice ==# 'Yes'
+                w!
+            endif
+        endif
+    endfunction
+    command! ConfirmSave call s:confirm_save(0)
+    command! ConfirmSaveAll call s:confirm_save(1)
+    nnoremap <silent><C-s> :ConfirmSave<Cr>
+    xnoremap <silent><C-s> <ESC>:ConfirmSave<Cr>gv
+    inoremap <silent><C-s> <C-o>:ConfirmSave<Cr>
+    nnoremap <silent><C-w><C-s> :ConfirmSaveAll<Cr>
 endif
+nnoremap <leader>w :w!<Cr>
+xnoremap <leader>w <ESC>:w!<Cr>gv
+nnoremap <leader>W :redraw \| wa!<Cr>
+xnoremap <leader>W <ESC>:redraw \| wa!<Cr>gv
 function! s:toggle_modify() abort
     if &modifiable
         setl nomodifiable

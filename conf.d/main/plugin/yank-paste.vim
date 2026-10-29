@@ -50,6 +50,8 @@ function! s:copy_clipboard(content) abort
     endif
     call setreg(empty(s:register) ? '"' : s:register, a:content)
 endfunction
+nnoremap <silent>yg :call  <SID>copy_clipboard('@' . git#root_dir())<Cr>
+nnoremap <silent>yr :call  <SID>copy_clipboard('@' . utils#get_root_dir())<Cr>
 nnoremap <silent>yf :call  <SID>copy_clipboard('@' . utils#abs_path())<Cr>
 nnoremap <silent>yd :call  <SID>copy_clipboard('@' . utils#abs_dir())<Cr>
 nnoremap <silent>yb :call  <SID>copy_clipboard('@' . utils#file_name())<Cr>

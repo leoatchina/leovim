@@ -1,10 +1,6 @@
 return {
   filetypes = { "lua" },
-  root_markers = function ()
-    local lst = vim.g.root_patterns
-    table.insert(lst, '.luarc.json')
-    return lst
-  end,
+  root_markers = vim.list_extend({ '.luarc.json', '.luarc.jsonc' }, vim.g.root_patterns or { '.git' }),
   hint = {
     enable = true,
   },

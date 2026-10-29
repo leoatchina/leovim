@@ -5,6 +5,9 @@ return {
 
   root_dir = function(buf, cb)
     local root = vim.fs.root(buf, { "Cargo.toml", "rust-project.json" })
+    if not root then
+      return
+    end
     local out = vim.system({ "cargo", "metadata", "--no-deps", "--format-version", "1" }, { cwd = root }):wait()
     if out.code ~= 0 then
       return cb(root)

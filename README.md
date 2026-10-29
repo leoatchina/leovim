@@ -4,6 +4,8 @@
 
 本文描述仓库提供的能力和启用条件，不表示所有插件都默认安装。快捷键可能受模式、文件类型、插件是否安装及用户配置影响，最终以 `:verbose nmap` / `:verbose imap` / `:verbose xmap` 的结果为准。
 
+![LeoVim 快捷键菜单示例](assets/image.png)
+
 ## 1. 功能概览
 
 | 功能 | 实现与配置入口 |
@@ -57,8 +59,8 @@ Snacks 同样克隆在 `pack/clone/opt/snacks.nvim`，由 `update-clone.sh` 维�
 | 方案 | 配置方式 | 说明 |
 |---|---|---|
 | nvim-cmp | `call pack#add('cmp')` | Neovim 0.11+，配合原生 LSP |
-| blink.cmp | `call pack#add('blink')` | Neovim 0.11+；有 cargo 时声明构建钩子 |
-| blink Lua 方案 | `call pack#add('blink.lua')` | 不走配置中的 cargo 构建分支 |
+| blink.cmp | `call pack#add('blink')` | Neovim 0.12+；统一使用 Lua matcher，无需 Cargo 或原生匹配库 |
+| blink Lua 方案 | `call pack#add('blink.lua')` | 同样使用 Lua matcher |
 | Coc | `call pack#add('coc')` | 满足上表 Node.js 和编辑器检测条件后声明插件；通过 Coc 扩展提供语言功能 |
 | builtin | 不选择高级引擎，也不强制 `mcm` | Neovim 0.11+ 或 Vim 9.1.1590+ 自动选择原生补全；不等于自动启用完整 LSP 配置 |
 | mucomplete | `call pack#add('mcm')`，或旧编辑器自动回退 | 路径、omni、关键字、字典等补全；不需要 Node.js |
@@ -341,35 +343,60 @@ Vim 的菜单式 WinBar 保留文件名，仅在 `pack#installed_coc()` 成立�
 
 Flash、Easymotion、Treesitter 和 Vim 文本对象是按环境提供的不同实现；不要把全部节点操作视为 Vim / Neovim 通用按键。语法树选区与移动见 [`treesitter.lua`](conf.d/main/lua/treesitter.lua)，其他文本对象见 [`textobj.vim`](conf.d/init/plugin/textobj.vim)。
 
+Neovim 原生 LSP 使用服务器提供的 CodeLens，不再加载独立的引用计数插件。支持 CodeLens 的缓冲区默认启用，提示由 [`lsp.lua`](conf.d/main/lua/lsp.lua) 内的 CodeLens 配置显示在代码行末，不占用上方虚拟行；执行动作仍使用 Neovim 的原生 CodeLens 接口。
+
+| 按键 | Neovim LSP 功能 |
+|---|---|
+| `<M-c>` | 开关当前缓冲区的行末 CodeLens |
+| `<leader>C` | 执行当前行 CodeLens 动作；多项动作时选择 |
+| `<leader>S` | 原引用计数开关已移除 |
+| `<M-C>` | Code Action，不是 CodeLens 开关 |
+
+CodeLens 的内容和动作由语言服务器决定，例如引用数量、运行测试等；服务器不支持时不会另行计算引用数量。这次 `<M-c>` / `<leader>C` 互换只作用于 [`lsp.lua`](conf.d/main/lua/lsp.lua)，Coc 的按键配置不变。
+
+Coc 诊断默认关闭，沿用 `<leader>o` 开关当前缓冲区诊断；即使开启诊断，文本下划线也默认隐藏。沿用 `<leader>O` 单独开启 / 关闭诊断下划线，切换配色方案时保留当前显示状态；不通过 `diagnostic.highlightLimit: 0` 禁止高亮生成，因此显示开关仍可正常开启。
+
+
 ### 7.5. Git
 
 见 [`git.vim`](conf.d/main/plugin/git.vim)，Git 必须在当前环境可用，部分入口另需 GV、LeaderF 或 LazyGit。
+Neovim 的 diffview 后端要求 Git ≥ 2.31.0，版本按整数分段比较，不用浮点数。
 
 | 按键 | 功能 |
 |---|---|
 | `<M-g>a` | `Git add -A`，会暂存仓库全部改动 |
 | `<M-g>u` | `Git push`，会推送远端 |
 | `<M-g><CR>` | `Git commit -av`，不是仅提交已暂存内容 |
-| `<M-g>v` | GV 历史视图，需 GV |
-| `<M-g>s` / `<M-g>b` | LeaderF Git 状态 / blame，需相应后端 |
-| `<M-g>f` / `<M-g>l` | 文件 / 行历史 |
-| `<M-g><M-l>` | LazyGit，检测到可执行文件才定义；不是 `<M-g><M-g>` |
+| `<M-g><M-g>` | Fugitive 仓库图形 log，光标停在提交行后可用 `df` / `Tab` / `Space` 操作 |
+| `<M-g>\` | Fugitive 当前文件 log |
+| `g\` | 当前文件历史列表，依次选择 diffview、LeaderF、GV |
+| `<M-g>o` | 仓库历史列表，依次选择 LeaderF、diffview、GV |
+| `<M-g>s` | GV `-S` 溯源：搜索光标词或可视选区的引入 / 删除历史；命令行保持打开，可追加 Git log 参数 |
+| `<M-g>f` / `<M-g>l` | 文件 / 行历史；diffview 分支也提供文件历史入口 |
+| `<M-g>d` | diffview 任意双文件对比：`DiffviewDiffFiles {left} {right}` |
+| `<M-g>m` | diffview 文件合并：`DiffviewMergeFiles {output} [{base}] {left} {right}` |
+| `<Tab><Tab>` / `<Tab><CR>` | blame 视图 / 行内 blame 开关，按后端提供 |
+| `<M-g><M-l>` | LazyGit，检测到可执行文件才定义 |
 
-gitsigns 附着到 Git 文件后，会添加以下 buffer 局部映射；普通模式的 `gh` 前缀用于 hunk 操作，会影响原生 `gh` 进入 Select 模式的按键等待。
+Fugitive log 中 `Tab` / `Space` 按当前提交哈希垂直 / 水平对比文件版本；图形连接线等非提交行不关闭列表。GV 溯源保留选区中的引号、空格、特殊字符及换行，支持多行、块选区和 exclusive 选择，不改写用户寄存器。
+
+`<M-g>d` / `<M-g>m` 仅在启用 diffview 时定义，命令行保持打开，填写路径后回车；无需 Git 仓库，含空格的路径需转义或引用。未启用 diffview 时不提供合并后备映射；旧的固定 buffer 编号命令 `GMergeTab` 已移除。
+
+gitsigns 附着到 Git 文件后，会添加以下 buffer 局部映射；暂存键 `<M-g>h` 与 GV 溯源键 `<M-g>s` 分开：
 
 | 按键 | 模式 | 功能 |
 |---|---|---|
 | `;g` / `,g` | 普通 | 下一个 / 上一个 hunk；diff 窗口保留原生差异导航 |
-| `ghs` | 普通 / 可视 | 暂存当前 hunk / 选中行 |
-| `ghp` | 普通 | 行内预览当前 hunk |
-| `ghb` | 普通 | 浮窗查看当前行 blame |
-| `ghr` | 普通 / 可视 | 确认后丢弃当前 hunk / 选中行的工作区改动；默认取消 |
+| `<M-g>h` | 普通 / 可视 | 暂存当前 hunk / 选中行 |
+| `<M-g>p` | 普通 | 行内预览当前 hunk |
+| `<Tab><Space>` | 普通 | 浮窗查看当前行 blame |
+| `<M-g>r` | 普通 / 可视 | 确认后丢弃当前 hunk / 选中行的工作区改动；默认取消 |
 | `\` → `Space` | 普通 | 浮窗预览当前 hunk |
 | `\` → `Tab` | 普通 | 显示 / 隐藏变更标记 |
 | `\` → `Enter` | 普通 | 刷新变更标记 |
 | `ig` / `ag` | 可视 / 操作符等待 | 选择 hunk 文本对象 |
 
-`ghr` 不等于取消暂存，丢弃的未提交改动不能通过 Git 恢复。原来不经确认就重置 hunk 的 `\` → `Backspace` 映射已移除。实现见 [`gitsigns.lua`](conf.d/main/lua/cfg/gitsigns.lua)。
+`<M-g>r` 不等于取消暂存，丢弃的未提交改动不能通过 Git 恢复。原来不经确认就重置 hunk 的 `\` → `Backspace` 映射已移除。实现见 [`gitsigns.lua`](conf.d/main/lua/cfg/gitsigns.lua)。
 
 ### 7.6. 任务与运行
 
@@ -536,6 +563,8 @@ REPL 见 [`repl.vim`](conf.d/main/plugin/repl.vim)，实际解释器需可执行
 vim --startuptime startup.log
 ```
 
+Neovim 启动脚本 `n.sh`、`ni.sh`、`nv.sh` 在启动进程时设置 `NVIM_NOTTYFAST=1`，跳过启动阶段的终端查询，避免 SSH / 不响应背景色查询的终端产生等待和 E1568。此设置不影响 Vim，且必须早于 `init.vim` 执行；主题背景仍由配置显式指定。
+
 ### 8.2. 补全与语言服务器
 
 - Coc：检查 `:CocInfo`、`:CocList extensions` 和实际 Node.js 路径。当前配置门槛是 Node.js 24+，不是旧文档的 16.18。
@@ -543,6 +572,10 @@ vim --startuptime startup.log
 - builtin / mucomplete：不会因为能补全关键字就自动拥有跳转、重命名和诊断能力。
 - 扩展与语言服务器不是一回事。例如 C/C++ 需要实际 clangd，Go 需要 gopls；安装后仍需正确的项目配置、编译选项或模块环境。
 - 先只选择一个高级补全引擎，更新插件并重启。仓库支持的开关以 [`pack.vim`](conf.d/init/autoload/pack.vim) 和插件声明为准，不要照搬其他发行版的 `Lazy` / `Packer` 命令。
+- Neovim 0.12 的 Blink 使用 `main`（v2）及 `blink.lib`；已有 v1 安装需执行 `:PlugInstall`、`:PlugUpdate` 后重启。统一使用 Lua matcher，不构建或下载原生匹配库。Blink 的 `<C-f>/<C-b>` 导航原生 `vim.snippet`，不再安装 vsnip。
+- CMP 命令行路径来源统一为 `async_path`；不再安装未启用的 signature-help 来源和未使用的 selection-range 插件。LSP 生命周期使用原生 `:lsp restart` / `:lsp stop`。
+- Java 的 `Mev/Mec/Mem` 使用 nvim-java 重构命令，`Mtc/Mtm` 保留调试当前测试类/方法的行为，均为 Java buffer 局部映射；重构命令须等待 JDTLS 附着后才由插件注册。
+- 不再安装 R.nvim / Nvim-R；保留普通 R 文件类型设置及独立的 LSP/Coc、REPL 入口。Neovim 使用自带 Rust runtime，不再额外安装 rust.vim。
 
 ### 8.3. 调试、REPL 与快捷键
 

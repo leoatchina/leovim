@@ -66,8 +66,8 @@ reasonix.toml
 nvim.log
 .netrwhist
 .vibeyardignore
-core
-core.[0-9]*
+/core
+/core.[0-9]*
 Gemfile
 GPATH
 GRTAGS

@@ -40,31 +40,31 @@ endif
 " --------------------
 let s:python_lint_ignore = "E101,E302,E251,E231,E226,E221,E127,E126,E123,E402,E501,W291,F405,F403"
 if pack#installed('coc.nvim')
-    " highlight group
     let g:diagnostic_virtualtext_underline = v:false
-    highlight def link CocErrorHighlight   NONE
-    highlight def link CocWarningHighlight NONE
-    highlight def link CocInfoHighlight    NONE
-    highlight def link CocHintHighlight    NONE
-    function! s:toggle_diagnostics_highlight()
-        if g:diagnostic_virtualtext_underline
-            echo "virtualtext_underline off"
-            let g:diagnostic_virtualtext_underline = v:false
-            highlight! def link CocErrorHighlight   NONE
-            highlight! def link CocWarningHighlight NONE
-            highlight! def link CocInfoHighlight    NONE
-            highlight! def link CocHintHighlight    NONE
-        else
-            echo "virtualtext_underline on"
-            let g:diagnostic_virtualtext_underline = v:true
-            highlight! def link CocErrorHighlight   DiagnosticUnderLineError
-            highlight! def link CocWarningHighlight DiagnosticUnderLineWarn
-            highlight! def link CocInfoHighlight    DiagnosticUnderLineInfo
-            highlight! def link CocHintHighlight    DiagnosticUnderLineHint
-        endif
+    function! s:apply_diagnostics_highlight() abort
+        highlight default CocUnderline term=underline cterm=underline gui=underline
+        for [kind, suffix] in [['Error', 'Error'], ['Warning', 'Warn'], ['Info', 'Info'], ['Hint', 'Hint']]
+            let group = 'Coc' . kind . 'Highlight'
+            let target = 'NONE'
+            if g:diagnostic_virtualtext_underline
+                let target = hlexists('DiagnosticUnderline' . suffix) ? 'DiagnosticUnderline' . suffix : 'CocUnderline'
+            endif
+            execute 'highlight clear ' . group
+            execute 'highlight! link ' . group . ' ' . target
+        endfor
+    endfunction
+    call s:apply_diagnostics_highlight()
+    function! s:toggle_diagnostics_highlight() abort
+        let g:diagnostic_virtualtext_underline = !g:diagnostic_virtualtext_underline
+        call s:apply_diagnostics_highlight()
+        echo 'virtualtext_underline ' . (g:diagnostic_virtualtext_underline ? 'on' : 'off')
     endfunction
     command! ToggleDiagnosticsHighLight call s:toggle_diagnostics_highlight()
     nnoremap <silent><leader>O :ToggleDiagnosticsHighLight<Cr>
+    augroup CocDiagnosticsHighlight
+        autocmd!
+        autocmd ColorScheme * call <SID>apply_diagnostics_highlight()
+    augroup END
     if g:lint_tool == 'ale'
         call coc#config('diagnostic.displayByAle', v:true)
     else

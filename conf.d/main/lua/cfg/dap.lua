@@ -16,19 +16,15 @@ fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl
 -------------------------------------
 require("mason-nvim-dap").setup({
   ensure_installed = { "bash" },
-  handlers = {
-    function(config)
-      require('mason-nvim-dap').default_setup(config)
-    end,
-  }
+  handlers = {},
 })
 ------------------------------------------------------------
 -- 配置调试适配
 ------------------------------------------------------------
-local mason_dir = fn.expand("~/.leovim.d/mason")
--- bash
+local mason_dir = require("mason.settings").current.install_root_dir
+-- Use Mason's public bin/opt links rather than package-internal paths.
 local bash_debug_adapter = mason_dir .. "/bin/bash-debug-adapter"
-local bashdb_dir = mason_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
+local bashdb_dir = mason_dir .. "/opt/bashdb"
 dap.adapters.bashdb = {
   type = "executable";
   command = bash_debug_adapter;
@@ -263,7 +259,7 @@ local function dapui_toggle(open)
   end
   local windows = require("dapui.windows")
   -- width > height
-  if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
+  if vim.o.columns > vim.o.lines * 3 then
     if windows.layouts[1]:is_open() or open then
       dapui.close()
       dapui.open(2)
@@ -292,7 +288,7 @@ keymap.set({"n", "x"}, "<M-m><M-m>",
 function _G.DapUIOpen()
   local windows = require("dapui.windows")
   -- 根据屏幕宽高比选择合适的布局
-  if api.nvim_get_option("columns") > api.nvim_get_option("lines") * 3 then
+  if vim.o.columns > vim.o.lines * 3 then
     dapui.open(2)
     dapui.open(3)
   else

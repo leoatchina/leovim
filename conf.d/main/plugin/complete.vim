@@ -54,15 +54,14 @@ if pack#installed_coc()
     source $CFG_DIR/coc.vim
 endif
 " ------------------------------
-" vsnip
+" snippets
 " ------------------------------
-if pack#planned('vim-vsnip')
+let s:blink_snippets = pack#planned_blink() && !pack#planned_cmp()
+if s:blink_snippets || pack#planned('vim-vsnip')
     fun! CtrlFSkipBracket()
         call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
         return ''
     endfunction
-    let g:vsnip_snippet_dir = utils#expand("~/.leovim/conf.d/snippets")
-    nnoremap <M-h>n :VsnipOpen<Cr>
     if pack#planned_leaderf()
         nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
         nnoremap <silent><M-h>s :Leaderf file --no-sort ~/.leovim/conf.d/snippets<Cr>
@@ -70,7 +69,13 @@ if pack#planned('vim-vsnip')
         nnoremap <silent><M-h>f :FzfFiles ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
         nnoremap <silent><M-h>s :FzfFiles ~/.leovim/conf.d/snippets<Cr>
     endif
-    if pack#installed_coc()
+    if s:blink_snippets
+        nnoremap <M-h>n :execute 'edit ' . fnameescape(expand('~/.leovim/conf.d/snippets') . '/' . (&filetype == '' ? 'global' : &filetype) . '.json')<Cr>
+        snoremap <silent><expr><C-b> luaeval('vim.snippet.active({ direction = -1 })') ? "\<Cmd>lua vim.snippet.jump(-1)\<CR>" : "\<C-o>I"
+        snoremap <silent><expr><C-f> luaeval('vim.snippet.active({ direction = 1 })') ? "\<Cmd>lua vim.snippet.jump(1)\<CR>" : "\<C-o>A"
+        inoremap <silent><expr><C-b> luaeval('vim.snippet.active({ direction = -1 })') ? "\<Cmd>lua vim.snippet.jump(-1)\<CR>" : "\<C-o>I"
+        inoremap <silent><expr><C-f> luaeval('vim.snippet.active({ direction = 1 })') ? "\<Cmd>lua vim.snippet.jump(1)\<CR>" : CtrlFSkipBracket()
+    elseif pack#installed_coc()
         call coc#config("snippets.userSnippetsDirectory", utils#expand("~/.leovim/conf.d/snippets"))
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
@@ -81,6 +86,10 @@ if pack#planned('vim-vsnip')
         smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
         imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
         imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
+    endif
+    if !s:blink_snippets
+        let g:vsnip_snippet_dir = utils#expand("~/.leovim/conf.d/snippets")
+        nnoremap <M-h>n :VsnipOpen<Cr>
     endif
 else
     imap <silent><C-b> <C-o>I

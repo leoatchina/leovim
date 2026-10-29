@@ -3,7 +3,9 @@
 " ------------------------------
 if !pack#get('nocomplete') && exists('v:true') && exists("##TextChangedP")
     PackAdd 'rafamadriz/friendly-snippets'
-    PackAdd 'hrsh7th/vim-vsnip'
+    if !pack#planned_blink() || pack#planned_cmp()
+        PackAdd 'hrsh7th/vim-vsnip'
+    endif
 endif
 if pack#planned_cmp()
     PackAdd 'hrsh7th/nvim-cmp', {'cfg': 'cfg.cmp'}
@@ -12,16 +14,13 @@ if pack#planned_cmp()
     PackAdd 'hrsh7th/cmp-buffer', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'hrsh7th/cmp-cmdline', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'hrsh7th/cmp-vsnip', {'deps': ['vim-vsnip', 'nvim-cmp'], 'cfg': 'cfg.cmp'}
-    PackAdd 'hrsh7th/cmp-nvim-lsp-signature-help', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'FelipeLema/cmp-async-path', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'onsails/lspkind-nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
     PackAdd 'xzbdmw/colorful-menu.nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
 elseif pack#planned_blink()
-    if executable('cargo') && !pack#get('blink.lua')
-        PackAdd 'Saghen/blink.cmp', {'do': 'cargo build --release', 'branch': 'v1', 'cfg': 'cfg.blink'}
-    else
-        PackAdd 'Saghen/blink.cmp', {'branch': 'v1', 'cfg': 'cfg.blink'}
-    endif
+    PackAdd 'Saghen/blink.lib'
+    PackAdd 'Mestane/blink-cmp-deps'
+    PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets', 'blink-cmp-deps'], 'cfg': 'cfg.blink'}
 elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
         PackAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}
@@ -39,8 +38,6 @@ if pack#planned_lsp()
     " lsp related
     PackAdd 'neovim/nvim-lspconfig', {'cfg': 'lsp'}
     PackAdd 'mason-org/mason-lspconfig.nvim', {'deps': ['mason.nvim', 'nvim-lspconfig'], 'cfg': 'lsp'}
-    PackAdd 'camilledejoye/nvim-lsp-selection-range', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
-    PackAdd 'Wansmer/symbol-usage.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     PackAdd 'ravenxrz/call-graph.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     " lightline
     PackAdd 'josa42/nvim-lightline-lsp', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
@@ -98,6 +95,9 @@ endif
 " format install
 " -----------------------
 PackAdd 'sbdchd/neoformat', {'on': 'Neoformat'}
+if pack#planned_lsp()
+    PackAdd 'stevearc/conform.nvim', {'cfg': 'lsp'}
+endif
 " --------------------------------
 " run
 " --------------------------------
@@ -123,10 +123,6 @@ if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
     endif
     PackAdd 'fzf-registers'
     PackAdd 'fzf-tabs'
-    if has('nvim')
-        PackAdd 'stevearc/oil.nvim', {'cfg': 'cfg.oil'}
-        PackAdd 'benomahony/oil-git.nvim'
-    endif
 endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 3 && !pack#get('noleaderf') && !pack#get('no-leaderf')
     PackAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
@@ -139,7 +135,7 @@ if executable('git')
         PackAdd 'junegunn/gv.vim', {'on': 'GV'}
     endif
     if has('nvim')
-        if g:git_version >= 2.31
+        if git#version_at_least(2, 31, 0)
             PackAdd 'dlyongemallo/diffview-plus.nvim'
         endif
         PackAdd 'lewis6991/gitsigns.nvim', {'cfg': 'cfg.gitsigns'}
@@ -219,9 +215,6 @@ if has('nvim')
     PackAdd 'nvim-lua/plenary.nvim'
     PackAdd 'snacks.nvim', {'cfg': 'cfg.snacks'}
     PackAdd 'Bekaboo/dropbar.nvim', {'cfg': 'cfg.dropbar'}
-    if utils#is_unix()
-        PackAdd 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
-    endif
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'
 endif
@@ -289,12 +282,11 @@ endif
 if has('nvim') && utils#is_unix()
     PackAdd 'kevinhwang91/nvim-fundo', {'init': "require('fundo').setup()"}
 endif
+PackAdd 'mbbill/undotree'
 " ----------------------------
 " indentLine plugins
 " ----------------------------
-if has('nvim')
-    PackAdd 'lukas-reineke/indent-blankline.nvim', {'cfg': 'cfg.ibl'}
-elseif has('conceal')
+if !has('nvim') && has('conceal')
     PackAdd 'Yggdroot/indentLine'
 endif
 " ------------------------------

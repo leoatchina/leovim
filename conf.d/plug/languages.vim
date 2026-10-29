@@ -5,8 +5,6 @@ let s:R_cmd = get(g:, 'R_exe', utils#is_win() ? 'R.exe' : 'R')
 let g:R_exe = empty(s:R_cmd) ? '' : utils#expand(exepath(s:R_cmd))
 if has('nvim') && pack#get('jupynium') && g:python_version > 3.07
     PackAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .'), 'cfg': 'cfg.jupynium'}
-elseif pack#get('nvim-r') && (has('nvim') || v:version >= 802) && executable(g:R_exe)
-    PackAdd 'jalvesaq/Nvim-R', {'for': ['r', 'rmd']}
 endif
 " ------------------------------
 " helpful
@@ -60,7 +58,9 @@ else
     let g:cargo_exe = ''
 endif
 if get(g:, 'cargo_exe', '') != '' && pack#get('rust') && v:version >= 800
-    PackAdd 'rust-lang/rust.vim', {'for': 'rust'}
+    if !has('nvim')
+        PackAdd 'rust-lang/rust.vim', {'for': 'rust'}
+    endif
     if pack#planned_lsp()
         PackAdd 'mrcjkb/rustaceanvim', {'for': 'rust'}
     endif
@@ -80,19 +80,10 @@ endif
 " nvim-java
 " ------------------------------
 if pack#planned_lsp() && pack#get('java')
-    PackAdd 'nvim-java/nvim-java-dap'
-    PackAdd 'nvim-java/nvim-java-core'
-    PackAdd 'nvim-java/nvim-java-test'
-    PackAdd 'nvim-java/nvim-java-refactor'
-    PackAdd 'nvim-java/lua-async-await'
-    PackAdd 'JavaHello/spring-boot.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'cfg.springboot'}
+    PackAdd 'JavaHello/spring-boot.nvim', {'commit': '218c0c26c14d99feca778e4d13f5ec3e8b1b60f0'}
     PackAdd 'nvim-java/nvim-java', {
-                \ 'deps': [
-                \   'nvim-java-dap', 'nvim-java-core', 'nvim-java-test',
-                \   'nvim-java-refactor', 'lua-async-await',
-                \   'spring-boot.nvim', 'nvim-dap',
-                \ ],
-                \ 'init': "require('java').setup()",
+                \ 'deps': ['spring-boot.nvim', 'nui.nvim', 'nvim-dap'],
+                \ 'init': "require('java').setup(); vim.lsp.enable('jdtls')",
                 \ }
 endif
 " ------------------------------

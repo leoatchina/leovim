@@ -1,7 +1,7 @@
 return {
   name = 'pyright',
   filetypes = { "python" },
-  cmd = executable("delance-langserver") and {"delance-langserver", "--stdio"} or {"pyright-langserver", "--stdio"},
+  cmd = vim.fn.executable("delance-langserver") == 1 and {"delance-langserver", "--stdio"} or {"pyright-langserver", "--stdio"},
   settings = {
     pyright = {
       disableOrganizeImports = false,
@@ -30,15 +30,8 @@ return {
       "Pipfile",
       "pyrightconfig.json",
       ".git",
-      vim.uv.cwd(),
-    })
+    }) or vim.uv.cwd()
     client.config.root_dir = root
     return true
-  end,
-  -- 添加附加函数
-  on_attach = function(client, bufnr)
-    if client then
-      vim.lsp.buf_attach_client(bufnr, client.id)
-    end
   end,
 }

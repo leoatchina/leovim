@@ -1,5 +1,12 @@
 # TODO:
 ## config:
+- [x] Remove unused telescope-fzf-native.nvim accelerator.
+- [x] Restore GitHub undotree declaration and layout 4; toggle with `zu`.
+- [x] Register blink-cmp-deps as a blink.cmp dependency and enable its async completion provider.
+- [x] Add conform.nvim: format entry for Neovim, remap broken LSP `<C-q>` to it.
+- [x] Enable `snacks.nvim` `bigfile`/`words` modules and close `Snacks.picker` on single `<Esc>`.
+- [x] Use `Snacks.picker` for LSP `<leader>d`/`<leader>D`/`<leader>e` diagnostics in `lsp.lua`.
+- [x] Append `$MAIN_DIR/after` to `runtimepath` in `pack.vim` and fix `after/lsp/*.lua` (`gopls.lua`, `pyright.lua`, `lua_ls.lua`, `jdtls.lua`, `clangd.lua`, `bashls.lua`, `rust_analyzer.lua`).
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
 - [x] better lightline schemes
@@ -48,7 +55,7 @@
 - [x] Ale show message
 - [x] enhanced grep! using rg
 - [x] coc-fzf toggle preview shortcut.
-- [x] lsp-lens.nvim or symbol-usage.nvim for cmp/nvim-lsp codeaction.
+- [x] LSP CodeLens at end of line, with toggle and command execution.
 - [x] symbol-tags-search lsp check update.
 - [x] leaderf TODO/NOTE bug
 - [x] Neoformat, config like REPLFloaterm.
