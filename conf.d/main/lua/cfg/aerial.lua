@@ -8,7 +8,7 @@ require("aerial").setup({
     -- Keymaps in the nav window
     keymaps = {
       ["<C-]>"] = "actions.jump_vsplit",
-      ["<C-s>"] = "actions.jump_split",
+      ["<C-x>"] = "actions.jump_split",
       ["q"] = "actions.close"
     },
   },

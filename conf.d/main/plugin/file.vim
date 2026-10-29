@@ -271,12 +271,35 @@ endif
 " save
 " -----------------------------
 if v:version >= 800 || has('nvim')
-    nnoremap <C-s> :w!<Cr>
-    xnoremap <C-s> <ESC>:w!<Cr>gv
-    cnoremap <C-s> w!<Cr>
-    inoremap <C-s> <C-o>:w!<Cr>
-    nnoremap <C-w><C-s> :redraw \| wa!<Cr>
+    function! s:confirm_save(all) abort
+        if a:all
+            let modified_bufs = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&modified")')
+            if !empty(modified_bufs)
+                let g:quickui#listbox#cursor = 0
+                let choice = utils#choose_one(['Yes', 'No'], 'Do you want to save all modified buffers? Ctrl+C to cancel.', 0, 'Cancel')
+                if choice ==# 'Yes'
+                    redraw | wa!
+                endif
+            endif
+        elseif &modified
+            let g:quickui#listbox#cursor = 0
+            let choice = utils#choose_one(['Yes', 'No'], 'Do you want to save current modified buffer? Ctrl+C to cancel.', 0, 'Cancel')
+            if choice ==# 'Yes'
+                w!
+            endif
+        endif
+    endfunction
+    command! ConfirmSave call s:confirm_save(0)
+    command! ConfirmSaveAll call s:confirm_save(1)
+    nnoremap <silent><C-s> :ConfirmSave<Cr>
+    xnoremap <silent><C-s> <ESC>:ConfirmSave<Cr>gv
+    inoremap <silent><C-s> <C-o>:ConfirmSave<Cr>
+    nnoremap <silent><C-w><C-s> :ConfirmSaveAll<Cr>
 endif
+nnoremap <leader>w :w!<Cr>
+xnoremap <leader>w <ESC>:w!<Cr>gv
+nnoremap <leader>W :redraw \| wa!<Cr>
+xnoremap <leader>W <ESC>:redraw \| wa!<Cr>gv
 function! s:toggle_modify() abort
     if &modifiable
         setl nomodifiable
