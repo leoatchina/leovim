@@ -276,14 +276,14 @@ if v:version >= 800 || has('nvim')
             let modified_bufs = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&modified")')
             if !empty(modified_bufs)
                 let g:quickui#listbox#cursor = 0
-                let choice = utils#choose_one(['Yes', 'No'], 'Do you want to save all modified buffers? Ctrl+C to cancel.', 0, 'Cancel')
+                let choice = utils#choose_one(['Yes', 'No'], 'Save all buffers?', 0, 'Cancel')
                 if choice ==# 'Yes'
                     redraw | wa!
                 endif
             endif
         elseif &modified
             let g:quickui#listbox#cursor = 0
-            let choice = utils#choose_one(['Yes', 'No'], 'Do you want to save current modified buffer? Ctrl+C to cancel.', 0, 'Cancel')
+            let choice = utils#choose_one(['Yes', 'No'], 'Save current buffer?', 0, 'Cancel')
             if choice ==# 'Yes'
                 w!
             endif
