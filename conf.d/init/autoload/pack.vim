@@ -106,6 +106,7 @@ function! pack#installed_lsp() abort
                 \ 'mason-lspconfig.nvim',
                 \ 'call-graph.nvim',
                 \ 'aerial.nvim',
+                \ 'conform.nvim',
                 \ )
 endfunction
 

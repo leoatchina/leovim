@@ -511,7 +511,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(nx, ';e', function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR, wrap = false }) end, opts_silent)
     map(nx, ',e', function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR, wrap = false }) end, opts_silent)
     -- native lsp
-    map(nx, "<C-q>", [[<Cmd>FormatWrite<Cr>]], opts_echo)
+    map(nx, "<C-q>", function() require('conform').format({ lsp_format = 'fallback' }) end, opts_echo)
     map(nx, "K", function() vim.lsp.buf.hover { border = "rounded" } end, opts_silent)
     -- get workspace_symbol
     map(n, "<leader>w", ":lua vim.lsp.buf.workspace_symbol('<C-r><C-w>')<left><left>", opts_silent)
@@ -574,6 +574,35 @@ vim.api.nvim_create_user_command("LspInfo", function()
   vim.cmd("silent checkhealth vim.lsp")
 end, {
   desc = "Get all the information about all LSP attached",
+})
+------------------------------------
+-- conform.nvim formatting
+------------------------------------
+local conform = require('conform')
+conform.setup({
+  -- 常用语言：按序执行，stop_after_first 用第一个可用的
+  formatters_by_ft = {
+    lua = { 'stylua' },
+    python = { 'ruff_format', 'black', stop_after_first = true },
+    javascript = { 'prettierd', 'prettier', stop_after_first = true },
+    typescript = { 'prettierd', 'prettier', stop_after_first = true },
+    javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+    typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+    json = { 'prettierd', 'prettier', stop_after_first = true },
+    yaml = { 'prettierd', 'prettier', stop_after_first = true },
+    markdown = { 'prettierd', 'prettier', stop_after_first = true },
+    go = { 'gofmt' },
+    rust = { 'rustfmt' },
+    c = { 'clang-format' },
+    cpp = { 'clang-format' },
+    sh = { 'beautysh' },
+  },
+  -- 不自动保存格式化；<C-q> 语义由 LspAttach 映射决定
+  format_on_save = false,
+  default_format_opts = {
+    -- 有配置的格式化器用配置的，否则回退 LSP
+    lsp_format = 'fallback',
+  },
 })
 ------------------------------------
 -- AutoCmd for different filetypes
