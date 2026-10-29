@@ -95,8 +95,8 @@ endif
 " format install
 " -----------------------
 PackAdd 'sbdchd/neoformat', {'on': 'Neoformat'}
-if has('nvim')
-    PackAdd 'stevearc/conform.nvim'
+if pack#planned_lsp()
+    PackAdd 'stevearc/conform.nvim', {'cfg': 'lsp'}
 endif
 " --------------------------------
 " run
