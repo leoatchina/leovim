@@ -251,14 +251,20 @@ end
 -------------------------
 -- mason lspconfig
 -------------------------
+local lsp_exclude = { 'rust_analyzer', 'jdtls' }
+if vim.g.ensure_installed then
+  if vim.fn.index(vim.g.ensure_installed, 'pyright') >= 0 then
+    table.insert(lsp_exclude, 'basedpyright')
+  elseif vim.fn.index(vim.g.ensure_installed, 'basedpyright') >= 0 then
+    table.insert(lsp_exclude, 'pyright')
+  end
+end
 require("mason-lspconfig").setup({
   ensure_installed = vim.g.ensure_installed and vim.tbl_filter(function(server)
     return server ~= "debugpy"
   end, vim.g.ensure_installed) or {},
   automatic_enable = {
-    exclude = {
-      vim.fn.index(vim.g.ensure_installed, 'pyright') >= 0 and 'basedpyright' or vim.fn.index(vim.g.ensure_installed, 'basedpyright') >= 0 and 'pyright'
-    }
+    exclude = lsp_exclude,
   }
 })
 ---------------------

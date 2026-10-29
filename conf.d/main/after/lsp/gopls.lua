@@ -5,7 +5,7 @@ return {
     enable = true,
   },
   codeLens = {
-    enable = true
+    enable = true,
   },
   settings = {
     gopls = {

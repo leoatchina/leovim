@@ -23,6 +23,5 @@ return {
     "configure.ac",
     ".git",
     ".root",
-    vim.uv.cwd(),
   }
 }

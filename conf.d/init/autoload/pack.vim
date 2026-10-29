@@ -265,6 +265,7 @@ function! pack#begin(plugin_home) abort
         autocmd!
     augroup END
     execute 'set rtp^=' . fnameescape($MAIN_DIR)
+    execute 'set rtp+=' . fnameescape($MAIN_DIR . '/after')
     if has('nvim')
         lua require('pack').reset()
     endif
@@ -528,6 +529,8 @@ function! pack#end() abort
     " skipped them (seen-missing-at-end race on slow mounts).
     call s:ensure_rtp(filter(copy(g:pack_order),
                 \ '!pack#lazy(v:val) && pack#installed(v:val)'))
+    execute 'set rtp-=' . fnameescape($MAIN_DIR . '/after')
+    execute 'set rtp+=' . fnameescape($MAIN_DIR . '/after')
 
     if has('nvim')
         call s:prepare_maps()
