@@ -520,10 +520,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- diagnostic
     map(nx, "<leader>o", toggle_diagnostics, opts_silent)
     map(nx, "<leader>O", toggle_virtual_text, opts_silent)
-    map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
-    map(nx, "<leader>D", [[<Cmd>lua vim.diagnostic.setloclist({open=true, workspace=true})<Cr>]], opts_silent)
-    map(nx, "<leader>d", [[<Cmd>lua vim.diagnostic.setloclist({open=true})<Cr>]], opts_silent)
-    map(nx, "<leader>e", [[<Cmd>lua vim.diagnostic.setloclist({open=true, severity=vim.diagnostic.severity.ERROR})<Cr>]], opts_silent)
+    map(nx, "<leader>d", function() Snacks.picker.diagnostics_buffer() end, opts_silent)
+    map(nx, "<leader>D", function() Snacks.picker.diagnostics() end, opts_silent)
+    map(nx, "<leader>e", function() Snacks.picker.diagnostics({ severity = vim.diagnostic.severity.ERROR }) end, opts_silent)
     -- inlay_hint
     if client.server_capabilities.inlayHintProvider then
       vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })

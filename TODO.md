@@ -4,6 +4,8 @@
 - [x] Restore GitHub undotree declaration and layout 4; toggle with `zu`.
 - [x] Register blink-cmp-deps as a blink.cmp dependency and enable its async completion provider.
 - [x] Add conform.nvim: format entry for Neovim, remap broken LSP `<C-q>` to it.
+- [x] Enable `snacks.nvim` `bigfile`/`words` modules and close `Snacks.picker` on single `<Esc>`.
+- [x] Use `Snacks.picker` for LSP `<leader>d`/`<leader>D`/`<leader>e` diagnostics in `lsp.lua`.
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
 - [x] better lightline schemes

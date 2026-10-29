@@ -33,6 +33,8 @@ local function jump(picker, item, action)
 end
 
 snacks.setup({
+  bigfile = { enabled = true },
+  words = { enabled = true },
   input = { enabled = true },
   explorer = { enabled = true },
   indent = { enabled = false },
@@ -61,6 +63,7 @@ snacks.setup({
     win = {
       input = {
         keys = {
+          ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
           ['<C-]>'] = { 'edit_vsplit', mode = { 'i', 'n' } },
         },
       },
