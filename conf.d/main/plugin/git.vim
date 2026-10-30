@@ -121,13 +121,11 @@ if pack#planned('gv.vim')
         command! -bang -nargs=* -range=0 -complete=customlist,fugitive#CompleteObject GV
                     \ call <SID>gv_override(<bang>0, <count>, <line1>, <line2>, <q-args>)
     endfunction
-
-    nnoremap <M-g>s :GV -S <C-r>=<SID>gv_search_argument(expand('<cword>'))<Cr>
-    xnoremap <M-g>s :<C-u>GV -S <C-r>=<SID>gv_search_argument(<SID>gv_visual_text())<Cr>
-    nnoremap <M-g>/ :GV
-    xnoremap <M-g>/ :GV
+    nnoremap <M-g>/ :GV -S <C-r>=<SID>gv_search_argument(expand('<cword>'))<Cr>
+    xnoremap <M-g>/ :<C-u>GV -S <C-r>=<SID>gv_search_argument(<SID>gv_visual_text())<Cr>
+    nnoremap <M-g><M-g> :GV
+    xnoremap <M-g><M-g> :GV
 endif
-
 augroup LeoGitLogFix
     autocmd!
     if pack#planned('vim-git-diffview')
@@ -146,7 +144,6 @@ if pack#planned('vim-fugitive')
     " fugitive log workspace: cursor on a commit, then
     "   df -> gdv commit diff view (g:gdv_keymap)
     "   <Tab>/<Space> -> Gvdiff/Gdiff that revision (FileType git maps)
-    nnoremap <silent><M-g><M-g> :Git log --graph --oneline --decorate<Cr>
     nnoremap <silent><M-g>\ :Git log --oneline -- %<Cr>
     " compare with history version
     let g:fugitive_summary_format = "%as-[%an]: %s"
