@@ -19,11 +19,21 @@ augroup LcdAndGitUpdate
     au!
     autocmd BufEnter * call git#lcd_and_update()
 augroup END
-"------------------------------------
-" fugitive and others git FileType
-"------------------------------------
+"----------------------------------------------------------------------
+" git commit browser & diffview integration (gv.vim + vim-git-diffview)
+"----------------------------------------------------------------------
 if pack#planned('vim-git-diffview')
     let g:gdv_keymap = 'df'
+    function! s:gdv_commit_hash() abort
+        if &ft ==# 'GV'
+            return exists('*gv#sha') ? gv#sha() : matchstr(getline('.'), '\<[0-9a-f]\{7,40}\>')
+        elseif &ft ==# 'git'
+            return matchstr(getline('.'), '^[|/\\_* .-]*\%(commit \)\=\zs\x\{4,64}\ze\%(\s\|$\)')
+        elseif &ft ==# 'fugitiveblame'
+            return gdv#matcher#blame_commit()
+        endif
+        return ''
+    endfunction
     function! s:gdv_start(...) abort
         let commit = a:0 >= 1 ? a:1 : ''
         if (&ft ==# 'GV' || (&bt ==# 'nowrite' && (&ft ==# 'git' || &ft ==# 'fugitiveblame'))) && get(b:, 'git_dir', '') !=# ''
@@ -31,38 +41,20 @@ if pack#planned('vim-git-diffview')
                 return 0
             endif
             let root = gdv#git#git2root(b:git_dir)
-            if commit ==# ''
-                if &ft ==# 'GV'
-                    let commit = exists('*gv#sha') ? gv#sha() : matchstr(getline('.'), '\<[0-9a-f]\{7,40}\>')
-                elseif &ft ==# 'git'
-                    let commit = matchstr(getline('.'), '^[|/\\_* .-]*\%(commit \)\=\zs\x\{4,64}\ze\%(\s\|$\)')
-                else
-                    let commit = gdv#matcher#blame_commit()
-                endif
-            endif
+            let commit = empty(commit) ? s:gdv_commit_hash() : commit
             if root !=# '' && commit !=# ''
                 return gdv#diffview#open(root, commit, get(g:, 'gdv_tab_right', 0) ? 0 : 1)
             endif
         endif
         return gdv#diffview#start(commit)
     endfunction
-    augroup LeoGdvFix
-        autocmd!
-        autocmd FileType git,fugitiveblame,GV command! -nargs=? GitDiffView call <SID>gdv_start(<f-args>)
-    augroup END
 endif
-" ---------------------------------
-" GV-unique features: -S origin search (when was the word/selection
-" added or removed); command line stays open for extra git-log args.
-" Range diff, `.` fugitive handoff and gb live inside the GV buffer.
-" ---------------------------------
+
 if pack#planned('gv.vim')
     function! s:gv_search_argument(text) abort
-        " GV parses quotes, then :read ! consumes escapes for #, ! and newlines.
         return '"' . escape(a:text, "\"#!\n") . '"'
     endfunction
     function! s:gv_visual_text() abort
-        " Let Vim handle multiline/block/exclusive selections without changing registers.
         let saved_z = [getreg('z', 1, 1), getregtype('z')]
         let saved_unnamed = [getreg('"', 1, 1), getregtype('"')]
         let view = winsaveview()
@@ -75,11 +67,76 @@ if pack#planned('gv.vim')
             call winrestview(view)
         endtry
     endfunction
+    function! s:gld() range
+        let [to, from] = map([a:firstline, a:lastline], 'split(getline(v:val), "|")[0]')
+        execute (tabpagenr()-1).'tabedit' escape(to, ' ')
+        if from !=# to
+            execute 'vsplit' escape(from, ' ')
+            windo diffthis
+        endif
+    endfunction
+    function! s:gv_question(visual, line1, line2) abort
+        if !exists(':Gllog')
+            return
+        endif
+        let buf = bufnr('')
+        tab split
+        silent execute (a:visual ? a:line1 . ',' . a:line2 . 'Gllog' : '0Gllog')
+        call setloclist(0, insert(getloclist(0), {'bufnr': buf}, 0))
+        noautocmd b #
+        lopen
+        xnoremap <buffer><silent> o :call <sid>gld()<cr>
+        nnoremap <buffer><silent> o <cr><c-w><c-w>
+        nnoremap <buffer><silent> O :call <sid>gld()<cr>
+        nnoremap <buffer><silent> q :tabclose<cr>
+        nnoremap <buffer><silent> gq :tabclose<cr>
+        call matchadd('Conceal', '^fugitive://.\{-}\.git//')
+        call matchadd('Conceal', '^fugitive://.\{-}\.git//\x\{7}\zs.\{-}||')
+        setlocal concealcursor=nv conceallevel=3 nowrap
+        let w:quickfix_title = 'o: open / o (in visual): diff / O: open tab / q: quit'
+    endfunction
+    function! s:gv_override(bang, count, line1, line2, args) abort
+        if a:args =~# '?$'
+            if len(a:args) > 1
+                echohl WarningMsg | echom 'invalid arguments' | echohl None
+                return
+            endif
+            return s:gv_question(a:count, a:line1, a:line2)
+        endif
+        if !exists('s:gv_orig_func')
+            let sn = execute('scriptnames')
+            for line in split(sn, "\n")
+                let m = matchlist(line, '^\s*\(\d\+\):\s*\(.*[/\\]plugin[/\\]gv\.vim\)$')
+                if !empty(m)
+                    let s:gv_orig_func = '<SNR>' . m[1] . '_gv'
+                    break
+                endif
+            endfor
+        endif
+        if exists('s:gv_orig_func')
+            return call(s:gv_orig_func, [a:bang, a:count, a:line1, a:line2, a:args])
+        endif
+    endfunction
+    function! s:define_gv_command() abort
+        command! -bang -nargs=* -range=0 -complete=customlist,fugitive#CompleteObject GV
+                    \ call <SID>gv_override(<bang>0, <count>, <line1>, <line2>, <q-args>)
+    endfunction
+
     nnoremap <M-g>s :GV -S <C-r>=<SID>gv_search_argument(expand('<cword>'))<Cr>
     xnoremap <M-g>s :<C-u>GV -S <C-r>=<SID>gv_search_argument(<SID>gv_visual_text())<Cr>
     nnoremap <M-g>/ :GV
     xnoremap <M-g>/ :GV
 endif
+
+augroup LeoGitLogFix
+    autocmd!
+    if pack#planned('vim-git-diffview')
+        autocmd FileType git,fugitiveblame,GV command! -nargs=? GitDiffView call <SID>gdv_start(<f-args>)
+    endif
+    if pack#planned('gv.vim')
+        autocmd SourcePost */plugin/gv.vim call s:define_gv_command()
+    endif
+augroup END
 if pack#planned('vim-fugitive')
     nnoremap <silent><M-g>a :Git add -A<CR>
     nnoremap <silent><M-g>u :Git push<CR>
