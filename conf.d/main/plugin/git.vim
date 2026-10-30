@@ -73,7 +73,8 @@ if pack#planned('gv.vim')
     endfunction
     nnoremap <M-g>s :GV -S <C-r>=<SID>gv_search_argument(expand('<cword>'))<Cr>
     xnoremap <M-g>s :<C-u>GV -S <C-r>=<SID>gv_search_argument(<SID>gv_visual_text())<Cr>
-    nnoremap <M-g>v :GV<Cr>
+    nnoremap <M-g>/ :GV
+    xnoremap <M-g>/ :GV
 endif
 if pack#planned('vim-fugitive')
     nnoremap <silent><M-g>a :Git add -A<CR>
