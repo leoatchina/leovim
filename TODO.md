@@ -7,6 +7,7 @@
 - [x] Enable `snacks.nvim` `bigfile`/`words` modules and close `Snacks.picker` on single `<Esc>`.
 - [x] Use `Snacks.picker` for LSP `<leader>d`/`<leader>D`/`<leader>e` diagnostics in `lsp.lua`.
 - [x] Append `$MAIN_DIR/after` to `runtimepath` in `pack.vim` and fix `after/lsp/*.lua` (`gopls.lua`, `pyright.lua`, `lua_ls.lua`, `jdtls.lua`, `clangd.lua`, `bashls.lua`, `rust_analyzer.lua`).
+- [x] Fix `vim-git-diffview` (`df`) on Fugitive `:Git log` / `:Git blame` buffers by resolving root from `b:git_dir` instead of `/tmp` tempfiles.
 - [x] fixed GetPyxVerion when not has 'execute'
 - [x] `tab drop problem` in legacy vim
 - [x] better lightline schemes

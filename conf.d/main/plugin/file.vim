@@ -270,7 +270,7 @@ endif
 " -----------------------------
 " save
 " -----------------------------
-if v:version >= 800 || has('nvim')
+if v:version >= 800
     function! s:confirm_save(all) abort
         if a:all
             let modified_bufs = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&modified")')
@@ -310,7 +310,7 @@ function! s:toggle_modify() abort
     endif
 endfunction
 command! ToggleModify call s:toggle_modify()
-nnoremap <M-k><space> :ToggleModify<Cr>
+nnoremap <M-k><Tab> :ToggleModify<Cr>
 " -----------------------------
 " mklink
 " -----------------------------
