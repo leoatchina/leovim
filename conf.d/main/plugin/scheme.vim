@@ -38,7 +38,7 @@ if g:complete_engine == 'mcm'
     call scheme#set('moonfly', 'codedark')
 elseif g:complete_engine == 'builtin'
     if has('nvim')
-        call scheme#set('solarized-osaka-vivid', 'default')
+        call scheme#set('solarized-osaka-vivid', 'sublime')
     else
         call scheme#set('nightfly', 'codedark')
     endif
