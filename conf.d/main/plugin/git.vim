@@ -17,7 +17,7 @@ endif
 " ----------------------------------------------------------------------
 augroup LcdAndGitUpdate
     au!
-    autocmd BufEnter,WinEnter * call git#lcd_and_update()
+    autocmd BufEnter * call git#lcd_and_update()
 augroup END
 "------------------------------------
 " fugitive and others git FileType
@@ -26,15 +26,19 @@ if pack#planned('vim-git-diffview')
     let g:gdv_keymap = 'df'
     function! s:gdv_start(...) abort
         let commit = a:0 >= 1 ? a:1 : ''
-        if &bt ==# 'nowrite' && (&ft ==# 'git' || &ft ==# 'fugitiveblame') && get(b:, 'git_dir', '') !=# ''
+        if (&ft ==# 'GV' || (&bt ==# 'nowrite' && (&ft ==# 'git' || &ft ==# 'fugitiveblame'))) && get(b:, 'git_dir', '') !=# ''
             if gdv#diffview#check() == 0
                 return 0
             endif
             let root = gdv#git#git2root(b:git_dir)
             if commit ==# ''
-                let commit = &ft ==# 'git'
-                            \ ? matchstr(getline('.'), '^[|/\\_* .-]*\%(commit \)\=\zs\x\{4,64}\ze\%(\s\|$\)')
-                            \ : gdv#matcher#blame_commit()
+                if &ft ==# 'GV'
+                    let commit = exists('*gv#sha') ? gv#sha() : matchstr(getline('.'), '\<[0-9a-f]\{7,40}\>')
+                elseif &ft ==# 'git'
+                    let commit = matchstr(getline('.'), '^[|/\\_* .-]*\%(commit \)\=\zs\x\{4,64}\ze\%(\s\|$\)')
+                else
+                    let commit = gdv#matcher#blame_commit()
+                endif
             endif
             if root !=# '' && commit !=# ''
                 return gdv#diffview#open(root, commit, get(g:, 'gdv_tab_right', 0) ? 0 : 1)
@@ -44,7 +48,7 @@ if pack#planned('vim-git-diffview')
     endfunction
     augroup LeoGdvFix
         autocmd!
-        autocmd FileType git,fugitiveblame command! -nargs=? GitDiffView call <SID>gdv_start(<f-args>)
+        autocmd FileType git,fugitiveblame,GV command! -nargs=? GitDiffView call <SID>gdv_start(<f-args>)
     augroup END
 endif
 " ---------------------------------
