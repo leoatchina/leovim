@@ -504,7 +504,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map("i", "<C-x><C-x>", function() vim.lsp.buf.signature_help { border = 'single' } end, opts_silent)
     -- lsp info/restart
     map(nx, "<M-l>i", [[<Cmd>LspInfo<Cr>]], opts_silent)
-    map(nx, "<M-l>r", [[<Cmd>lsp restart<Cr>]], opts_silent)
+    map(nx, "<M-l>r", [[<Cmd>LspRestart<Cr>]], opts_silent)
     -- aerial
     map(nx, "F<Cr>", [[<Cmd>AerialNavToggle<Cr>]], opts_silent)
     -- call-graph
@@ -533,7 +533,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client.server_capabilities.inlayHintProvider then
       vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
     end
-    map(nx, "<leader>i", [[<Cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<Cr>]], opts_echo)
+    map(nx, "<leader>i", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr }) end, opts_echo)
     -- codelens
     if #vim.lsp.get_clients({ bufnr = bufnr, method = 'textDocument/codeLens' }) > 0 then
       vim.api.nvim_set_hl(0, 'LspCodeLens', { fg = '#888888', bg = '#432345', italic = false })
@@ -614,8 +614,8 @@ conform.setup({
 ------------------------------------
 vim.api.nvim_create_autocmd('FileType', {
   pattern = {'python'},
-  callback = function()
-    map(nx, "<leader>A", require("lspimport").import, opts_silent)
+  callback = function(args)
+    map(nx, "<leader>A", require("lspimport").import, { buffer = args.buf, silent = true, desc = "LSP import" })
   end,
 })
 ---------------------------
