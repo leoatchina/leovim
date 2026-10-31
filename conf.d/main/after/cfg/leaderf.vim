@@ -92,5 +92,5 @@ let g:Lf_NormalCommandMap = {
             \ "Colorscheme": {}
             \ }
 " gtags
-let g:Lf_Gtags = 'gtags'
 let g:Lf_Global = "global"
+let g:Lf_Gtags = "gtags"

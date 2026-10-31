@@ -39,7 +39,6 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " ----------------------------
 " completion map
 " ----------------------------
-let g:coc_snippet_next = '<tab>'
 " 菜单未选中时回车仅结束补全，保留输入且不换行；选中后保持原确认逻辑。
 imap <silent><expr><Cr> coc#pum#visible() ?
             \ !coc#pum#has_item_selected() ? coc#pum#stop() :

@@ -38,9 +38,31 @@ vim.api.nvim_create_autocmd("FileType", {
       return
     end
     vim.bo[args.buf].syntax = 'ON'
-    vim.wo[0][0].foldmethod = 'expr'
-    vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    local function apply_fold()
+      -- Window-local options must target windows that really show this buffer.
+      -- During FileType triggered by bufload(), bufwinid() still points at the
+      -- temporary autocmd window, so this must run after the event finished.
+      if not vim.api.nvim_buf_is_valid(args.buf) then
+        return false
+      end
+      local wins = vim.fn.win_findbuf(args.buf)
+      for _, win in ipairs(wins) do
+        vim.wo[win].foldmethod = 'expr'
+        vim.wo[win].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      end
+      return #wins > 0
+    end
+    vim.schedule(function()
+      if apply_fold() then
+        return
+      end
+      vim.api.nvim_create_autocmd('BufWinEnter', {
+        buffer = args.buf,
+        once = true,
+        callback = apply_fold,
+      })
+    end)
   end,
 })
 map("n", "<M-l>U", ":TSUpdate ", { noremap = true, silent = false })

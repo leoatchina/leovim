@@ -242,7 +242,9 @@ local refresh_handler = vim.lsp.handlers['workspace/codeLens/refresh']
 vim.lsp.handlers['workspace/codeLens/refresh'] = function(err, result, ctx, config)
   local response = refresh_handler(err, result, ctx, config)
   if not err then
-    for _, bufnr in ipairs(vim.lsp.get_buffers_by_client_id(ctx.client_id)) do
+    -- get_buffers_by_client_id() is deprecated in 0.12 (removed in 0.13).
+    local client = vim.lsp.get_client_by_id(ctx.client_id)
+    for bufnr in pairs(client and client.attached_buffers or {}) do
       codelens.refresh(bufnr)
     end
   end

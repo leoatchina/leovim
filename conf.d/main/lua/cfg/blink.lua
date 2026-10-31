@@ -60,7 +60,6 @@ require('blink.cmp').setup({
         score_offset = 0, -- Boost/penalize the score of the items
         override = nil, -- Override the source's functions
       },
-      codeium = { name = 'Codeium', module = 'codeium.blink', async = true },
     },
   },
   keymap = {
