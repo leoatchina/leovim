@@ -18,6 +18,7 @@ if pack#installed('vista.vim')
     if g:ctags_type != ''
         let g:vista_executive_for.go = 'ctags'
     endif
+    nnoremap <Tab>v :Vista
 endif
 " --------------------------
 " symbol_tool
