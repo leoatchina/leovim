@@ -238,7 +238,7 @@ endif
 " tags conf
 " ------------------------------
 if utils#is_win() && pack#get('tags') || utils#is_unix()
-    if utils#is_win() && filereadable(utils#expand("~/.leovim.windows/tools/ctags.exe"))
+    if utils#is_win() && filereadable(utils#expand('$HOME/.leovim.windows/tools/ctags.exe'))
         let g:ctags_type = 'Universal-json'
     elseif executable('ctags')
         try
