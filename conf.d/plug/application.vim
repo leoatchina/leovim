@@ -33,9 +33,9 @@ endif
 " lsp && linter tool install
 " ------------------------------
 if pack#planned_lsp()
-    PackAdd 'mason-org/mason.nvim', {'cfg': 'cfg.mason'}
     let g:lint_tool = 'lsp'
     " lsp related
+    PackAdd 'mason-org/mason.nvim', {'cfg': 'cfg.mason'}
     PackAdd 'neovim/nvim-lspconfig', {'cfg': 'lsp'}
     PackAdd 'mason-org/mason-lspconfig.nvim', {'deps': ['mason.nvim', 'nvim-lspconfig'], 'cfg': 'lsp'}
     PackAdd 'ravenxrz/call-graph.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
@@ -45,6 +45,8 @@ if pack#planned_lsp()
     PackAdd 'leoatchina/nvim-lspimport', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
     " codesettings
     PackAdd 'mrjones2014/codesettings.nvim', {'cfg': 'cfg.codesettings'}
+    " nvim-tree
+    PackAdd 'nvim-tree/nvim-tree.lua', {'cfg': 'cfg.nvimtree'}
 elseif g:python_version > 3.06 && pack#get('ale')
     let g:lint_tool = 'ale'
     PackAdd 'dense-analysis/ale'
@@ -209,7 +211,6 @@ endif
 " --------------------------
 if has('nvim')
     PackAdd 'nvim-tree/nvim-web-devicons', {'init': "require('nvim-web-devicons').setup({})"}
-    PackAdd 'nvim-tree/nvim-tree.lua', {'cfg': 'cfg.nvimtree'}
     PackAdd 'kevinhwang91/promise-async'
     PackAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
     PackAdd 'MunifTanjim/nui.nvim'
