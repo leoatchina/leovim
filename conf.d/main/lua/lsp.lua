@@ -546,10 +546,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map(n, "<F2>", vim.lsp.buf.rename, opts_echo)
     map(n, "<M-C>", vim.lsp.buf.code_action, opts_echo)
     ---------------------------
-    -- semantic token highlight
+    -- semantic token highlight: 仅在没有 Treesitter 的情况下才启用 LSP semantic tokens
     ---------------------------
-    local has_ts = pcall(vim.treesitter.get_parser, bufnr)
-    local has_st = client.server_capabilities.semanticTokensProvider or (client.supports_method and client:supports_method('textDocument/semanticTokens'))
+    local ok, parser = pcall(vim.treesitter.get_parser, bufnr)
+    local has_ts = (ok and parser ~= nil) or (vim.treesitter.highlighter.active[bufnr] ~= nil)
+    local has_st = client.server_capabilities.semanticTokensProvider
+      or (client.supports_method and client:supports_method('textDocument/semanticTokens'))
     if has_st then
       if has_ts then
         vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr, client_id = client.id })
@@ -570,6 +572,54 @@ vim.api.nvim_create_user_command("LspInfo", function()
   vim.cmd("silent checkhealth vim.lsp")
 end, {
   desc = "Get all the information about all LSP attached",
+})
+-- Restart
+vim.api.nvim_create_user_command("LspRestart", function(opts)
+  local target_name = opts.args ~= "" and opts.args or nil
+  local clients = vim.lsp.get_clients(target_name and { name = target_name } or {})
+  if #clients == 0 then
+    if target_name then
+      local ok = pcall(vim.lsp.enable, target_name)
+      if ok then
+        vim.notify("Starting LSP: " .. target_name, vim.log.levels.INFO)
+      else
+        vim.notify("No active LSP client named: " .. target_name, vim.log.levels.WARN)
+      end
+    else
+      vim.notify("No active LSP clients to restart", vim.log.levels.WARN)
+    end
+    return
+  end
+
+  for _, client in ipairs(clients) do
+    local client_name = client.name
+    local attached_buffers = vim.tbl_keys(client.attached_buffers or {})
+    vim.notify("Restarting LSP: " .. client_name, vim.log.levels.INFO)
+    client:stop()
+    vim.defer_fn(function()
+      local ok = pcall(vim.lsp.enable, client_name)
+      if not ok then
+        for _, bufnr in ipairs(attached_buffers) do
+          if vim.api.nvim_buf_is_valid(bufnr) then
+            vim.api.nvim_exec_autocmds("FileType", { buffer = bufnr })
+          end
+        end
+      end
+      vim.notify("LSP restarted: " .. client_name, vim.log.levels.INFO)
+    end, 500)
+  end
+end, {
+  nargs = "?",
+  complete = function()
+    local names = {}
+    for _, client in ipairs(vim.lsp.get_clients()) do
+      if not vim.tbl_contains(names, client.name) then
+        table.insert(names, client.name)
+      end
+    end
+    return names
+  end,
+  desc = "Restart LSP client(s)",
 })
 ------------------------------------
 -- conform.nvim formatting

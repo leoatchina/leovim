@@ -18,7 +18,7 @@ endfunction
 " asyncrun
 " --------------------------
 if pack#planned('asyncrun.vim')
-    let g:asyncrun_rootmarks = g:root_patterns
+    let g:asyncrun_rootmarks = g:root_patterns + g:root_files
     let s:run_command = "AsyncRun"
     if utils#is_win()
         let g:asyncrun_encs = get(g:, 'asyncrun_encs', 'gbk')
@@ -189,66 +189,10 @@ endfunction
 command! RunQfSilent call s:asyncrun('bottom', 'qf', 1)
 command! RunQfBottom call s:asyncrun('bottom', 'qf')
 command! RunQfRight  call s:asyncrun('right',  'qf')
-" -------------------------
-" run in floaterm
-" -------------------------
-if pack#planned('asynctasks.vim')
-    " Task check firstly, if not, run in special position
-    function s:task_check(task_name)
-        let tasks = asynctasks#list('')
-        if len(tasks) == 0
-            return 0
-        endif
-        for task in tasks
-            if utils#trim(task['name']) == a:task_name
-                return 1
-            endif
-        endfor
-        return 0
-    endfunc
-    function s:task_run_or_pos(task_name, pos)
-        let task_name = a:task_name
-        let pos = a:pos
-        if s:task_check(task_name)
-            execute('AsyncTask ' . task_name)
-        else
-            if !has('nvim') && pos == 'floaterm_float' || pos == 'qf'
-                RunQfSilent
-            else
-                call s:asyncrun(pos, 'term')
-            endif
-        endif
-    endfunction
-    " set commands
-    command! TaskTestOrTab       call s:task_run_or_pos('task-test', 'tab')
-    command! TaskFinalizeOrQf    call s:task_run_or_pos('task-finalize', 'qf')
-    command! TaskRunOrRight      call s:task_run_or_pos('task-run', 'floaterm_right')
-    command! TaskBuildOrBottom   call s:task_run_or_pos('task-build', 'floaterm_bottom')
-    command! TaskFinalizeOrFloat call s:task_run_or_pos('task-finalize', 'floaterm_float')
-    " map
-    if has('nvim')
-        nnoremap <silent><M-F> :TaskFinalizeOrFloat<CR>
-    else
-        nnoremap <silent><M-F> :TaskFinalizeOrQf<CR>
-    endif
-    nnoremap <silent><M-T> :TaskTestOrTab<CR>
-    nnoremap <silent><M-R> :TaskRunOrRight<CR>
-    nnoremap <silent><M-B> :TaskBuildOrBottom<CR>
-else
-    nnoremap <M-T> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
-    nnoremap <silent><M-B> :RunQfBottom<CR>
-    nnoremap <silent><M-R> :RunQfRight<CR>
-    nnoremap <silent><M-F> :RunQfSilent<CR>
-endif
-if utils#is_win() || executable('gnome-terminal') && utils#has_gui()
-    command! RunExternal call s:asyncrun('external')
-    nnoremap <silent><M-"> :RunExternal<CR>
-endif
 " ----------------
 " asynctasks
 " ----------------
-if pack#planned('asyncrun.vim')
-    let g:asyncrun_rootmarks     = g:root_patterns
+if pack#planned('asynctasks.vim')
     let g:asynctasks_config_name = [".vim/tasks.ini", ".git/tasks.ini", ".vscode/tasks.ini"]
     let g:asynctasks_rtp_config  = "tasks.ini"
     let g:asynctasks_term_reuse  = 1
@@ -343,4 +287,56 @@ if pack#planned('asyncrun.vim')
         command! -nargs=0 FzfAsyncTasks call s:fzf_tasks()
         nnoremap <silent><M-a> :FzfAsyncTasks<Cr>
     endif
+    " ---------------------------------------------------
+    " Task check firstly, if not, run in special position
+    " ---------------------------------------------------
+    function s:task_check(task_name)
+        let tasks = asynctasks#list('')
+        if len(tasks) == 0
+            return 0
+        endif
+        for task in tasks
+            if utils#trim(task['name']) == a:task_name
+                return 1
+            endif
+        endfor
+        return 0
+    endfunc
+    function s:task_run_or_pos(task_name, pos)
+        let task_name = a:task_name
+        let pos = a:pos
+        if s:task_check(task_name)
+            execute('AsyncTask ' . task_name)
+        else
+            if !has('nvim') && pos == 'floaterm_float' || pos == 'qf'
+                RunQfSilent
+            else
+                call s:asyncrun(pos, 'term')
+            endif
+        endif
+    endfunction
+    " set commands
+    command! TaskTestOrTab       call s:task_run_or_pos('task-test', 'tab')
+    command! TaskFinalizeOrQf    call s:task_run_or_pos('task-finalize', 'qf')
+    command! TaskRunOrRight      call s:task_run_or_pos('task-run', 'floaterm_right')
+    command! TaskBuildOrBottom   call s:task_run_or_pos('task-build', 'floaterm_bottom')
+    command! TaskFinalizeOrFloat call s:task_run_or_pos('task-finalize', 'floaterm_float')
+    " map
+    if has('nvim')
+        nnoremap <silent><M-F> :TaskFinalizeOrFloat<CR>
+    else
+        nnoremap <silent><M-F> :TaskFinalizeOrQf<CR>
+    endif
+    nnoremap <silent><M-T> :TaskTestOrTab<CR>
+    nnoremap <silent><M-R> :TaskRunOrRight<CR>
+    nnoremap <silent><M-B> :TaskBuildOrBottom<CR>
+else
+    nnoremap <M-T> :call preview#errmsg("Please update to vim8.1+/nvim to run script in terminal.")<Cr>
+    nnoremap <silent><M-B> :RunQfBottom<CR>
+    nnoremap <silent><M-R> :RunQfRight<CR>
+    nnoremap <silent><M-F> :RunQfSilent<CR>
+endif
+if utils#is_win() || executable('gnome-terminal') && utils#has_gui()
+    command! RunExternal call s:asyncrun('external')
+    nnoremap <silent><M-"> :RunExternal<CR>
 endif

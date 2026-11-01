@@ -28,11 +28,17 @@ if pack#installed('aerial.nvim') && pack#installed('nvim-tree.lua')
         let ft = getwinvar(a:nr, '&filetype')
         return ft ==# 'NvimTree' || ft ==# 'aerial'
     endfunction
+    function! s:open_symbol_tree() abort
+        lua require('cfg.aerial').open_symbol_tree()
+    endfunction
+    function! s:close_symbol_tree() abort
+        lua require('cfg.aerial').close_symbol_tree()
+    endfunction
     let g:sidebars.symbol_tree = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_symbol_tree'),
-                \ 'open': 'SymbolTreeOpen',
-                \ 'close': 'SymbolTreeClose'
+                \ 'open': function('s:open_symbol_tree'),
+                \ 'close': function('s:close_symbol_tree')
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
 elseif pack#installed('vista.vim') && pack#planned('vim-fern')

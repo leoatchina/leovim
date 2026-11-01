@@ -33,9 +33,9 @@ function M.open_symbol_tree()
       pcall(vim.api.nvim_win_close, w, true)
     end
   end
-
-  -- 2. Open NvimTree
-  api.tree.open({ focus = false })
+  -- 2. Open NvimTree (ensure setup has been called)
+  pcall(require, 'cfg.nvimtree')
+  pcall(function() api.tree.open({ focus = false }) end)
 
   local tree_win = nil
   for _, w in ipairs(vim.api.nvim_list_wins()) do
@@ -46,7 +46,7 @@ function M.open_symbol_tree()
     end
   end
 
-  -- 3. Split below inside tree_win and open Aerial
+  -- 3. Split below inside tree_win and open Aerial, or open Aerial standalone
   if tree_win and vim.api.nvim_win_is_valid(tree_win) then
     vim.api.nvim_win_set_width(tree_win, width)
     vim.api.nvim_set_current_win(tree_win)
@@ -55,6 +55,8 @@ function M.open_symbol_tree()
     require('aerial').open_in_win(lower_win, code_win)
     vim.api.nvim_win_set_width(lower_win, width)
     vim.api.nvim_set_current_win(code_win)
+  else
+    require('aerial').open({ focus = false, winid = code_win })
   end
 end
 
