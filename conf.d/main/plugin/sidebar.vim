@@ -35,6 +35,37 @@ if pack#installed('aerial.nvim') && pack#installed('nvim-tree.lua')
                 \ 'close': 'SymbolTreeClose'
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
+elseif pack#installed('vista.vim') && pack#planned('vim-fern')
+    function! s:open_fern_vista() abort
+        let code_win = win_getid()
+        let width = get(g:, 'sidebar_width', 40)
+        execute printf('Fern . -drawer -stay -width=%d', width)
+        call win_gotoid(code_win)
+        let exec_type = get(g:, 'vista_default_executive', 'ctags')
+        execute 'Vista ' . exec_type
+        call win_gotoid(code_win)
+    endfunction
+    function! s:close_fern_vista() abort
+        silent! Vista!
+        silent! Fern . -drawer -toggle
+        for i in range(1, winnr('$'))
+            let ft = getwinvar(i, '&filetype')
+            if ft ==# 'fern' || ft =~# '^vista'
+                silent! execute i . 'wincmd c'
+            endif
+        endfor
+    endfunction
+    function! s:check_fern_vista(nr) abort
+        let ft = getwinvar(a:nr, '&filetype')
+        return ft ==# 'fern' || ft =~# '^vista'
+    endfunction
+    let g:sidebars.symbol_tree = {
+                \ 'position': 'left',
+                \ 'check_win': function('s:check_fern_vista'),
+                \ 'open': function('s:open_fern_vista'),
+                \ 'close': function('s:close_fern_vista')
+                \ }
+    nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
 elseif pack#installed('vista.vim')
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort

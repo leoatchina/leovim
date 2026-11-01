@@ -14,9 +14,23 @@ function! vista#sidebar#WhichFileType() abort
   endif
 endfunction
 
+function! s:GetLeftFileTreeWin() abort
+  for i in range(1, winnr('$'))
+    let ft = getwinvar(i, '&filetype')
+    if ft =~# '^\%(fern\|nerdtree\|defx\|NvimTree\)$' || bufname(winbufnr(i)) =~# '^fern://'
+      if win_screenpos(i)[1] <= 1
+        return i
+      endif
+    endif
+  endfor
+  return 0
+endfunction
+
 function! s:NewWindow() abort
   if exists('g:vista_sidebar_open_cmd')
     let open = g:vista_sidebar_open_cmd
+  elseif get(g:, 'vista_stay_below_filetree', 1) && s:GetLeftFileTreeWin() > 0
+    let open = s:GetLeftFileTreeWin() . 'wincmd w | belowright new'
   else
     let open = g:vista_sidebar_position.' '.g:vista_sidebar_width.'new'
   endif
