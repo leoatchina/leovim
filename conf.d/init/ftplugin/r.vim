@@ -1,5 +1,5 @@
 setlocal commentstring=#\ %s
-inoremap <buffer><M-a>  # %%
+inoremap <buffer><M-r>  # %%
 inoremap <buffer><Esc>a # %%
 inoremap <buffer><M-e>  # STEP
 inoremap <buffer><Esc>e # STEP

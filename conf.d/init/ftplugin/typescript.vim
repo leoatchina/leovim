@@ -1,6 +1,6 @@
 setlocal tw=160 shiftwidth=2 softtabstop=2 tabstop=2
 setlocal commentstring=//\ %s
-inoremap <buffer><M-a>  // %%
+inoremap <buffer><M-r>  // %%
 inoremap <buffer><ESC>a // %%
 inoremap <buffer><M-e>  // STEP
 inoremap <buffer><ESC>e // STEP

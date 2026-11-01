@@ -51,7 +51,7 @@ if pack#planned('asyncrun.vim')
     xnoremap ! :<C-u>AsyncRun <C-R>=utils#get_visual()<Cr>
     nnoremap <Tab>q :AsyncStop!<CR>
     nnoremap <Tab>Q :AsyncStop<CR>
-    xnoremap <M-r> :AsyncRun -raw<Space>
+    xnoremap <M-a> :AsyncRun -raw<Space>
     au FileType qf nnoremap <buffer><silent><C-c> :if get(g:, 'asyncrun_status', '') == 'running' \| AsyncStop! \| else \| echo 'No job running' \| endif<Cr>
 else
     let s:run_command = "!"
@@ -341,6 +341,6 @@ if pack#planned('asyncrun.vim')
             call fzf#run(opts)
         endfunction
         command! -nargs=0 FzfAsyncTasks call s:fzf_tasks()
-        nnoremap <silent><M-r> :FzfAsyncTasks<Cr>
+        nnoremap <silent><M-a> :FzfAsyncTasks<Cr>
     endif
 endif

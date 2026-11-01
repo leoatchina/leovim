@@ -62,8 +62,8 @@ if get(g:, 'leovim_whichkey', 1)
         xnoremap <M-t> :WhichKeyVisual "\<M-t\>"<Cr>
     endif
     if pack#installed('vim-floaterm-enhance')
-        nnoremap <M-a> :WhichKey       "\<M-a\>"<Cr>
-        xnoremap <M-a> :WhichKeyVisual "\<M-a\>"<Cr>
+        nnoremap <M-a> :WhichKey       "\<M-r\>"<Cr>
+        xnoremap <M-a> :WhichKeyVisual "\<M-r\>"<Cr>
         nnoremap <M-i> :WhichKey       "\<M-i\>"<Cr>
         xnoremap <M-i> :WhichKeyVisual "\<M-i\>"<Cr>
     endif

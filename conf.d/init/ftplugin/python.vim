@@ -3,7 +3,7 @@ au BufWritePre <buffer> :%retab
 if pack#installed('vim-quickui')
     au BufNew,BufEnter,BufNewFile,BufRead * nnoremap <buffer>gm :call quickui#tools#python_help("")<Cr>
 endif
-inoremap <buffer><M-a>  # %%
+inoremap <buffer><M-r>  # %%
 inoremap <buffer><Esc>a # %%
 inoremap <buffer><M-e>  # STEP
 inoremap <buffer><Esc>e # STEP
