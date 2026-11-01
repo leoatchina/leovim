@@ -41,7 +41,9 @@ function! s:RunAsync() abort
   endif
   call vista#SetProvider(s:provider)
   lua << EOF
-    local params = vim.lsp.util.make_position_params()
+    local first_client = vim.lsp.get_clients({ bufnr = 0 })[1]
+    local encoding = first_client and first_client.offset_encoding or 'utf-16'
+    local params = vim.lsp.util.make_position_params(0, encoding)
     local callback = function(err, method_or_result, result_or_context)
         -- signature for the handler changed in neovim 0.6/master. The block
         -- below allows users to check the compatibility.

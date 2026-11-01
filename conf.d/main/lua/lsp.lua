@@ -304,12 +304,8 @@ function M.LspAction(method, open_position)
   }
   local handler = handler_dict[method]
   local clients = vim.lsp.get_clients({ bufnr = 0 })
-  local params
-  if #clients > 0 then
-    params = vim.tbl_extend('force', vim.lsp.util.make_position_params(0, clients[1].offset_encoding), method == 'references' and { context = { includeDeclaration = false } } or {})
-  else
-    params = vim.tbl_extend('force', vim.lsp.util.make_position_params(), method == 'references' and { context = { includeDeclaration = false } } or {})
-  end
+  local encoding = clients[1] and clients[1].offset_encoding or 'utf-16'
+  local params = vim.tbl_extend('force', vim.lsp.util.make_position_params(0, encoding), method == 'references' and { context = { includeDeclaration = false } } or {})
   local all_results = vim.lsp.buf_request_sync(0, handler, params, 500)
   if type(all_results) ~= 'table' then
     vim.api.nvim_set_var("lsp_found", 0)
