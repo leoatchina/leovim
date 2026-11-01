@@ -16,11 +16,17 @@ require("aerial").setup({
       ["q"] = "actions.close"
     },
   },
+  lsp = {
+    -- 不要等慢速的 publishDiagnostics 诊断广播，拿到了 documentSymbol 立即渲染
+    diagnostics_trigger_update = false,
+    update_when_errors = true,
+  },
 })
 
 function M.open_symbol_tree()
   local code_win = vim.api.nvim_get_current_win()
   local width = vim.g.sidebar_width or 40
+  pcall(require, 'cfg.nvimtree')
   local api = require('nvim-tree.api')
 
   -- 1. Close any conflicting sidebars (Fern, existing Aerial/NvimTree)
@@ -33,8 +39,7 @@ function M.open_symbol_tree()
       pcall(vim.api.nvim_win_close, w, true)
     end
   end
-  -- 2. Open NvimTree (ensure setup has been called)
-  pcall(require, 'cfg.nvimtree')
+  -- 2. Open NvimTree
   pcall(function() api.tree.open({ focus = false }) end)
 
   local tree_win = nil
