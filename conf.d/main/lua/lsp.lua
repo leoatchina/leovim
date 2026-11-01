@@ -552,19 +552,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     ---------------------------
     -- semantic token highlight
     ---------------------------
-    ok, _ = pcall(function()
-      vim.treesitter.get_parser(bufnr)
-    end, bufnr)
-    if not ok then
-      if client.server_capabilities.semanticTokensProvider then
-        autocmd("TextChanged", {
-          group = vim.api.nvim_create_augroup("SemanticTokens", {}),
-          buffer = bufnr,
-          callback = function()
-            vim.lsp.semantic_tokens.force_refresh(bufnr)
-          end,
-        })
-        -- fire it first time on load as well
+    local has_ts = pcall(vim.treesitter.get_parser, bufnr)
+    local has_st = client.server_capabilities.semanticTokensProvider or (client.supports_method and client:supports_method('textDocument/semanticTokens'))
+    if has_st then
+      if has_ts then
+        vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr, client_id = client.id })
+      else
         vim.lsp.semantic_tokens.enable(true, { bufnr = bufnr, client_id = client.id })
       end
     end
