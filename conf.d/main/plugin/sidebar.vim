@@ -23,17 +23,18 @@ if pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
                 \ }
     nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
 endif
-if pack#installed('aerial.nvim')
-    function! s:check_aerial(nr) abort
-        return s:check_buf_ft('aerial', a:nr)
+if pack#installed('aerial.nvim') && pack#installed('nvim-tree.lua')
+    function! s:check_symbol_tree(nr) abort
+        let ft = getwinvar(a:nr, '&filetype')
+        return ft ==# 'NvimTree' || ft ==# 'aerial'
     endfunction
-    let g:sidebars.aerial = {
+    let g:sidebars.symbol_tree = {
                 \ 'position': 'left',
-                \ 'check_win': function('s:check_aerial'),
-                \ 'open': 'AerialOpen left',
-                \ 'close': 'AerialClose'
+                \ 'check_win': function('s:check_symbol_tree'),
+                \ 'open': 'SymbolTreeOpen',
+                \ 'close': 'SymbolTreeClose'
                 \ }
-    nnoremap <silent><C-t> :call sidebar#toggle('aerial')<CR>
+    nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
 elseif pack#installed('vista.vim')
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort

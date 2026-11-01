@@ -209,6 +209,7 @@ endif
 " --------------------------
 if has('nvim')
     PackAdd 'nvim-tree/nvim-web-devicons', {'init': "require('nvim-web-devicons').setup({})"}
+    PackAdd 'nvim-tree/nvim-tree.lua', {'cfg': 'cfg.nvimtree'}
     PackAdd 'kevinhwang91/promise-async'
     PackAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
     PackAdd 'MunifTanjim/nui.nvim'

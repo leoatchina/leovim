@@ -1,5 +1,8 @@
 " fern_open
 function! FernOpen(type, ...) abort
+    if !get(a:, 1, 0) && exists(':SymbolTreeClose') == 2
+        silent! SymbolTreeClose
+    endif
     if a:type == 'lcd'
         let l:dir = '.'
     elseif a:type == 'gitroot'
@@ -9,7 +12,8 @@ function! FernOpen(type, ...) abort
     endif
     let l:cmd = 'Fern ' . l:dir
     if !get(a:, 1, 0)
-        let l:cmd .= ' -drawer -stay -reveal=%:p'
+        let l:width = get(g:, 'sidebar_width', 40)
+        let l:cmd .= printf(' -drawer -stay -width=%d -reveal=%%:p', l:width)
     endif
     execute l:cmd
 endfunction
