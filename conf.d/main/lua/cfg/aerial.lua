@@ -7,13 +7,17 @@ require("aerial").setup({
     max_width = { 60, 0.4 },
     min_width = 35,
   },
+  keymaps = {
+    ["<M-q>"] = "actions.close",
+  },
   -- Options for the floating nav windows
   nav = {
     preview = true,
     keymaps = {
       ["<C-]>"] = "actions.jump_vsplit",
       ["<C-x>"] = "actions.jump_split",
-      ["q"] = "actions.close"
+      ["q"] = "actions.close",
+      ["<M-q>"] = "actions.close",
     },
   },
   lsp = {
