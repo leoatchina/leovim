@@ -7,6 +7,7 @@ set noeb
 set nocursorcolumn
 set nowrap
 set nolist
+set listchars+=trail:·
 set nobackup
 set nowritebackup
 set vb

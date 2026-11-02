@@ -227,6 +227,8 @@ EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf
 
 平台键及路径设置以所安装扩展的[设置 schema](https://github.com/vscode-neovim/vscode-neovim/blob/master/package.json) 为准，路径请替换为本机绝对路径。参考 [`conf.d/init/keybindings.json`](conf.d/init/keybindings.json) 合并需要的键位，而不是直接覆盖已有文件。
 
+键位参考中的 `Ctrl+Q` 在可编辑的文本编辑器内用于格式化：有选区时格式化选区，否则格式化全文；不接管终端按键。
+
 该模式走 [`init/vscode.vim`](conf.d/init/vscode.vim)，不加载常规 `main/main.vim` 的整套配置。下面的终端、调试和插件键位主要描述普通 Vim / Neovim；例如 VSCode 分支把 `M` 映射为 VSCode 格式化操作，不能直接套用普通模式说明。
 
 ## 6. 快捷键约定与核查
@@ -272,6 +274,8 @@ EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf
 :verbose tmap <M-->
 :scriptnames
 ```
+
+文本显示开关：`<M-z>` 切换折行，`<M-Z>` 切换当前窗口的不可见字符显示（`list`），行尾空格以 `·` 标记，不修改文件内容。
 
 ## 7. 常用功能
 

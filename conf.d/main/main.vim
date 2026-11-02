@@ -307,6 +307,7 @@ for k in s:metacode_group
     endfor
 endfor
 nnoremap <M-z> :set nowrap! nowrap?<Cr>
+nnoremap <M-Z> :setlocal list! list?<Cr>
 " ------------------------------
 " set mason PATH
 " ------------------------------

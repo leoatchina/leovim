@@ -1,4 +1,15 @@
 [
+  // format
+  {
+    "key": "ctrl+q",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus && !editorReadonly && !editorHasSelection"
+  },
+  {
+    "key": "ctrl+q",
+    "command": "editor.action.formatSelection",
+    "when": "editorTextFocus && !editorReadonly && editorHasSelection"
+  },
   // some disable
   {
     "key": "ctrl+alt+e",

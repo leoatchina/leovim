@@ -69,10 +69,14 @@ if pack#installed('neoformat')
         return 1
     endfunction
     command! -bang -range ChooseFormatPrg call format#choose_fmtprg(<bang>0)
-    nnoremap <silent>Q :ChooseFormatPrg<Cr>
-    xnoremap <silent>Q :ChooseFormatPrg!<Cr>
+    nnoremap <silent><leader>= :ChooseFormatPrg<Cr>
+    xnoremap <silent><leader>= :ChooseFormatPrg!<Cr>
+    if !pack#installed_coc() && !pack#installed_lsp()
+        nnoremap <silent><C-q> :ChooseFormatPrg<Cr>
+        xnoremap <silent><C-q> :ChooseFormatPrg!<Cr>
+    endif
 else
-    nnoremap <silent>Q :call format#builtin_fmt(0)<Cr>
+    nnoremap <silent><leader>= :call format#builtin_fmt(0)<Cr>
 endif
 " ----------------------------
 " table_mode
