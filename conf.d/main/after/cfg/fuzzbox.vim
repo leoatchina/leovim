@@ -10,6 +10,13 @@ let g:fuzzbox_include_hidden = 0
 let g:fuzzbox_exclude_dir = ['.git', '.hg', '.svn', '.vscode', '.idea', '.root', '.ccls']
 let g:fuzzbox_exclude_file = ['*.swp', 'tags', '*.exe', '*.so', '*.dll', '*.pyd', '*.msi']
 
+" FuzzyFilesIn {directory}: load Fuzzbox on demand and search the given directory.
+function! s:files(directory) abort
+    call pack#load('fuzzbox.vim')
+    call fuzzbox#Launch('files', {'cwd': a:directory})
+endfunction
+command! -nargs=1 -complete=dir FuzzyFilesIn call <SID>files(<f-args>)
+
 " CtrlPBufTag generated symbols for a standalone file, without project tags.
 function! s:buffer_tags() abort
     let path = expand('%:p')
@@ -36,6 +43,7 @@ function! s:buffer_tags() abort
         return
     endif
     let target = bufnr('%')
+    call pack#load('fuzzbox.vim')
     call fuzzbox#Select(items, {
                 \ 'title': 'Current File Tags',
                 \ 'select_cb': function('s:jump', ['buffer', target]),
@@ -84,6 +92,7 @@ function! s:all_buffer_tags() abort
         echo 'No tags found in loaded buffers.'
         return
     endif
+    call pack#load('fuzzbox.vim')
     call fuzzbox#Select(items, {
                 \ 'title': 'All Buffers Tags',
                 \ 'select_cb': function('s:jump_buf_tag', ['buffer', tag_map]),

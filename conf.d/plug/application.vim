@@ -220,7 +220,7 @@ if has('nvim')
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'
     if has('vim9script') && has('popupwin')
-        PackAdd 'fuzzbox.vim'
+        PackAdd 'fuzzbox.vim', {'on': '^Fuzzy.*$'}
     endif
 endif
 " -------------------

@@ -39,8 +39,8 @@ nnoremap cdl :lcd %:p:h<Cr>
 " search files
 "------------------------
 if pack#installed('fuzzbox.vim')
-    nnoremap <silent><nowait><leader>ff :call fuzzbox#Launch('files', {'cwd': expand('%:p') == '' ? getcwd() : expand('%:p:h')})<Cr>
-    nnoremap <silent><nowait><leader>p :call fuzzbox#Launch('files', {'cwd': utils#get_vcs_dir()})<Cr>
+    nnoremap <silent><nowait><leader>ff :FuzzyFilesIn <C-r>=fnameescape(expand('%:p') == '' ? getcwd() : expand('%:p:h'))<Cr><Cr>
+    nnoremap <silent><nowait><leader>p :FuzzyFilesIn <C-r>=fnameescape(utils#get_vcs_dir())<Cr><Cr>
 elseif pack#installed_snacks()
     nnoremap <silent><nowait><leader>ff <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('%:p:h') } })<Cr>
     nnoremap <silent><nowait><leader>p  <Cmd>lua Snacks.picker.files({ dirs = { require('cfg.snacks').root('vcs') } })<Cr>
@@ -56,7 +56,7 @@ if pack#installed_fzf()
     xnoremap <nowait>\F :<C-u>FzfGitFiles <C-r>=utils#get_visual(1)<Cr>
     nnoremap <nowait><C-p> :FzfFiles <C-r>=utils#get_root_dir()<Cr><Cr>
 elseif pack#installed('fuzzbox.vim')
-    nnoremap <silent><nowait><C-p> :call fuzzbox#Launch('files', {'cwd': utils#get_root_dir()})<Cr>
+    nnoremap <silent><nowait><C-p> :FuzzyFilesIn <C-r>=fnameescape(utils#get_root_dir())<Cr><Cr>
 elseif pack#installed_snacks()
     nnoremap <silent><nowait><C-p> <Cmd>lua Snacks.picker.files({ dirs = { require('cfg.snacks').root() } })<Cr>
 endif
