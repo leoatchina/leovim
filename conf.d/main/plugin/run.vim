@@ -18,7 +18,7 @@ endfunction
 " asyncrun
 " --------------------------
 if pack#planned('asyncrun.vim')
-    let g:asyncrun_rootmarks = g:root_patterns + g:root_files
+    let g:asyncrun_rootmarks = g:root_patterns
     let s:run_command = "AsyncRun"
     if utils#is_win()
         let g:asyncrun_encs = get(g:, 'asyncrun_encs', 'gbk')

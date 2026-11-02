@@ -130,7 +130,7 @@ function! utils#get_root_dir(...) abort
     if a:0
         let l:root = a:000
     else
-        let l:root = g:root_patterns + g:root_files
+        let l:root = g:root_patterns
     endif
     while 1
         for each in l:root

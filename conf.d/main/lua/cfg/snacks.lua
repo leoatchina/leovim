@@ -10,7 +10,7 @@ function M.root(kind)
   elseif kind == 'vcs' then
     markers = { '.git', '.svn', '.hg', '.cvs', '.bzr' }
   else
-    markers = vim.list_extend(vim.deepcopy(vim.g.root_patterns), vim.g.root_files)
+    markers = vim.g.root_patterns
   end
   local found = vim.fs.find(markers, { path = dir, upward = true })[1]
   return found and vim.fs.dirname(found) or dir
