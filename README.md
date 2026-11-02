@@ -56,6 +56,8 @@ Gutentags Plus 的安装条件对 Vim / Neovim 一致：沿用 Ctags、Vim 版�
 
 查询后端按 `has('cscope')` 选择：Vim 原生 Cscope 或 Neovim 外部 `gtags-cscope`；数据库连接由 Plus 管理，禁用 Gutentags 自动连接。`<leader>gk` 仅在原生 Cscope 后端提供。
 
+LeaderF 的 Gtags 解析器标签默认复用 `$GTAGSLABEL`：Pygments 导入成功用 `native-pygments`，否则 Universal Ctags 用 `new-ctags`，其他 Ctags 用 `ctags`；显式设置 `g:Lf_Gtagslabel` 可覆盖默认值。
+
 ### 2.2. 补全引擎
 
 在 `~/.vimrc.opt` 中选择所需方案。高级引擎声明顺序为 **cmp → blink → Coc**，不要同时启用多个方案来依赖这个优先级。

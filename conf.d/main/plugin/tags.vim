@@ -410,7 +410,7 @@ if pack#planned('gutentags_plus')
     if pack#planned_leaderf() && utils#is_unix()
         let g:Lf_Gtags = utils#expand(exepath('gtags'))
         let g:Lf_Gtagsconf = $GTAGSCONF
-        let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', 'native-pygments')
+        let g:Lf_Gtagslabel = get(g:, 'Lf_Gtagslabel', $GTAGSLABEL)
         let g:Lf_GtagsGutentags = 1
         let g:Lf_GtagsSkipSymlink = 'a'
         let g:Lf_GtagsAutoGenerate = 0
