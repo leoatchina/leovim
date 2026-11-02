@@ -151,7 +151,6 @@ cp_n $APP_PATH/scripts/n.sh  $HOME/.local/bin
 cp_n $APP_PATH/scripts/vi.sh $HOME/.local/bin
 cp_n $APP_PATH/scripts/nv.sh $HOME/.local/bin
 cp_n $APP_PATH/scripts/ni.sh $HOME/.local/bin
-cp_n $APP_PATH/scripts/nn.sh $HOME/.local/bin
 
 # dirdiff
 cp_n $APP_PATH/scripts/dirdiff $HOME/.local/bin
