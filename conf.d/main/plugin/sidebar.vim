@@ -14,7 +14,7 @@ endfunction
 let s:use_aerial = has('nvim') && pack#installed('aerial.nvim')
 function! s:open_symbols() abort
     if s:use_aerial && (&filetype !=# 'java' || utils#is_unix())
-        AerialOpen
+        lua require('cfg.aerial').open()
     else
         Vista
     endif
