@@ -276,7 +276,7 @@ else
             let &rtp=&rtp
             UpdateRemotePlugins
         endfunction
-        Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+        PackAdd 'gelguy/wilder.nvim', {'do': function('UpdateRemotePlugins')}
     elseif (!utils#is_win() || pack#get('wilder')) && (!has('nvim') && v:version >= 801 || has('nvim'))
         PackAdd 'gelguy/wilder.nvim'
     endif

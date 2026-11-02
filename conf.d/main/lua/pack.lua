@@ -250,14 +250,30 @@ local function build_groups()
       end
     end
     table.sort(group.members, function(a, b)
-      if intra_deps[a] and intra_deps[a][b] then
-        return false
-      elseif intra_deps[b] and intra_deps[b][a] then
-        return true
-      end
       local sa, sb = get_spec(a), get_spec(b)
       return (sa and sa.order or 0) < (sb and sb.order or 0)
     end)
+    -- Intra-group dependency order via DFS topological sort (stable by
+    -- declaration order); validate() already rejects dependency cycles.
+    local sorted, emitted = {}, {}
+    local function emit(member)
+      if emitted[member] then
+        return
+      end
+      emitted[member] = true
+      local deps = vim.tbl_keys(intra_deps[member])
+      table.sort(deps, function(x, y)
+        return get_spec(x).order < get_spec(y).order
+      end)
+      for _, dep in ipairs(deps) do
+        emit(dep)
+      end
+      sorted[#sorted + 1] = member
+    end
+    for _, member in ipairs(group.members) do
+      emit(member)
+    end
+    group.members = sorted
   end
   state.groups = groups
   state.group_order = sorted

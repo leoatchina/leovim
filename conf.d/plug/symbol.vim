@@ -40,9 +40,6 @@ if get(g:, 'ctags_type', '') != ''
     endif
     if pack#installed_fzf()
         call s:add_symbol("fzftags")
-        if has('nvim') || v:version >= 802
-            call s:add_symbol('quickui')
-        endif
     endif
     if v:version >= 800
         call s:add_symbol("gutentags")
