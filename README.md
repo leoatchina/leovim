@@ -284,6 +284,7 @@ EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf
 | `<C-p>` | 文件搜索入口，具体后端与目录以当前映射为准，不是固定的树浏览器 |
 | `<C-b>` | 文件树侧栏，需已配置对应插件 |
 | `<C-t>` | 符号侧栏：Neovim 安装 Aerial 时，非 Unix 的 Java 使用 Vista，其余使用 Aerial；保留文件树联动。Vim 沿用 Vista / Tagbar |
+| 组合侧栏布局 | Fern / NvimTree 在上、Vista / Aerial 在下；仅使用 Tagbar 时，上方使用 Fern（未安装则用 netrw）、下方使用 Tagbar。上下按可用行数取整为 4:6，打开后焦点仍在代码窗口 |
 | `<Leader>Q` | 关闭其他 buffer，不是关闭当前 buffer |
 | `;b` / `,b` | buffer 导航 |
 | `<M-n>` / `<M-p>` | 下一个 / 上一个标签页 |

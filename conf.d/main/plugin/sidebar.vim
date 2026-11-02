@@ -5,15 +5,16 @@ if utils#is_vscode()
     finish
 endif
 let g:sidebars = {}
+" Match a filetype pattern, or an exact buffer name.
 function! s:check_buf_ft(name, nr) abort
-    return getwinvar(a:nr, '&filetype') ==# a:name || bufname(winbufnr(a:nr)) ==# a:name
+    return getwinvar(a:nr, '&filetype') =~# a:name || bufname(winbufnr(a:nr)) ==# a:name
 endfunction
 " --------------------------
 " symbol
 " --------------------------
 let s:use_aerial = has('nvim') && pack#installed('aerial.nvim')
 function! s:open_symbols() abort
-    if s:use_aerial && (&filetype !=# 'java' || utils#is_unix())
+    if s:use_aerial && (!s:check_buf_ft('^java$', 0) || utils#is_unix())
         lua require('cfg.aerial').open()
     else
         Vista
@@ -31,12 +32,33 @@ function! s:close_symbols() abort
     endif
 endfunction
 function! s:check_symbols(nr) abort
-    let ft = getwinvar(a:nr, '&filetype')
-    return ft =~# 'vista' || (s:use_aerial && ft ==# 'aerial')
+    return s:check_buf_ft('vista', a:nr) || (s:use_aerial && s:check_buf_ft('^aerial$', a:nr))
 endfunction
+function! s:resize_vista(tab, timer) abort
+    let tree = {}
+    let symbols = {}
+    for win in getwininfo()
+        if win.tabnr != a:tab
+            continue
+        endif
+        if s:check_buf_ft('^\%(fern\|NvimTree\)$', win.winid)
+            let tree = win
+        elseif s:check_buf_ft('vista', win.winid)
+            let symbols = win
+        endif
+    endfor
+    if !empty(tree) && !empty(symbols) && tree.wincol == symbols.wincol
+        let height = max([1, (tree.height + symbols.height) * 4 / 10])
+        call win_execute(tree.winid, 'resize ' . height)
+    endif
+endfunction
+augroup LeoVistaLayout
+    autocmd!
+    autocmd FileType vista* call timer_start(0, function('s:resize_vista', [tabpagenr()]))
+augroup END
 if pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
     function! s:check_vista_kind(nr) abort
-        return getwinvar(a:nr, '&filetype') =~# 'vista'
+        return s:check_buf_ft('vista', a:nr)
     endfunction
     let g:sidebars.vista_ctags = {
                 \ 'position': 'left',
@@ -60,8 +82,7 @@ if (pack#installed('vista.vim') || s:use_aerial) && pack#installed('nvim-tree.lu
         lua pcall(function() require('nvim-tree.api').tree.close() end)
     endfunction
     function! s:check_nvimtree_vista(nr) abort
-        let ft = getwinvar(a:nr, '&filetype')
-        return ft ==# 'NvimTree' || s:check_symbols(a:nr)
+        return s:check_buf_ft('^NvimTree$', a:nr) || s:check_symbols(a:nr)
     endfunction
     let g:sidebars.symbol_tree = {
                 \ 'position': 'left',
@@ -107,7 +128,7 @@ elseif s:use_aerial
 elseif pack#installed('vista.vim')
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort
-            return tolower(getwinvar(a:nr, '&filetype')) =~ 'vista'
+            return s:check_buf_ft('\cvista', a:nr)
         endfunction
         let g:sidebars.vista = {
                     \ 'position': 'left',
@@ -117,7 +138,7 @@ elseif pack#installed('vista.vim')
                     \ }
     else
         function! s:check_vista_all(nr) abort
-            return getwinvar(a:nr, '&filetype') =~# 'vista'
+            return s:check_buf_ft('vista', a:nr)
         endfunction
         let g:sidebars.vista = {
                     \ 'position': 'left',
@@ -132,6 +153,7 @@ elseif pack#installed('tagbar')
     let g:tagbar_sort  = 0
     let g:tagbar_width = 35
     let g:tagbar_autoclose_netrw = 1
+    let g:tagbar_autofocus = 0
     let g:tagbar_type_css = {
                 \ 'ctagstype' : 'css',
                 \ 'kinds' : [
@@ -139,16 +161,68 @@ elseif pack#installed('tagbar')
                     \ 's:selectors',
                     \ 'i:identities'
                     \ ]}
-    function! s:check_tags(nr) abort
-        return s:check_buf_ft('tagbar', a:nr)
+    function! s:tagbar_tree_win() abort
+        let ft = pack#planned('vim-fern') ? 'fern' : 'netrw'
+        for nr in range(1, winnr('$'))
+            if s:check_buf_ft(ft, nr)
+                return win_getid(nr)
+            endif
+        endfor
+        return 0
     endfunction
-    let g:sidebars.tagbar = {
+    function! s:open_tagbar_tree() abort
+        let code = win_getid()
+        let position = g:tagbar_position
+        try
+            if pack#planned('vim-fern')
+                execute printf('Fern . -drawer -stay -width=%d', get(g:, 'sidebar_width', 40))
+            else
+                NetrwOpen
+            endif
+            let tree = s:tagbar_tree_win()
+            call win_gotoid(code)
+            if tree
+                let g:tagbar_position = win_id2win(tree) . 'wincmd w | belowright '
+            endif
+            TagbarOpen
+            if tree && win_gotoid(tree)
+                let symbol = 0
+                for nr in range(1, winnr('$'))
+                    if s:check_buf_ft('tagbar', nr)
+                        let symbol = nr
+                        break
+                    endif
+                endfor
+                if symbol
+                    execute 'resize ' . max([1, (winheight(0) + winheight(symbol)) * 4 / 10])
+                endif
+            endif
+        finally
+            let g:tagbar_position = position
+            call win_gotoid(code)
+        endtry
+    endfunction
+    function! s:close_tagbar_tree() abort
+        let code = win_getid()
+        TagbarClose
+        let tree = s:tagbar_tree_win()
+        if tree && win_gotoid(tree)
+            close
+        endif
+        call win_gotoid(code)
+    endfunction
+    function! s:check_tagbar_tree(nr) abort
+        return s:check_buf_ft('tagbar', a:nr)
+                    \ || win_getid(a:nr) == s:tagbar_tree_win()
+    endfunction
+    let g:sidebars.symbol_tree = {
                 \ 'position': 'left',
-                \ 'check_win': function('s:check_tags'),
-                \ 'open': 'TagbarOpen',
-                \ 'close': 'TagbarClose'
+                \ 'check_win': function('s:check_tagbar_tree'),
+                \ 'open': function('s:open_tagbar_tree'),
+                \ 'close': function('s:close_tagbar_tree')
                 \ }
-    nnoremap <silent><C-t> :call sidebar#toggle('tagbar')<CR>
+    nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
+    command! -bar SymbolTreeClose call sidebar#close('symbol_tree')
 endif
 " --------------------------
 " tree_browser
@@ -159,7 +233,7 @@ if pack#planned('vim-fern')
     function! s:check_fern_tree_browser(nr) abort
         if s:check_buf_ft('fern', a:nr)
             for w in range(1, winnr('$'))
-                if getwinvar(w, '&filetype') =~# '^vista'
+                if s:check_buf_ft('vista\|^aerial$\|^tagbar$', w)
                     return 0
                 endif
             endfor
@@ -200,6 +274,11 @@ else
     endfunction
     command! NetrwOpen call s:netrw_open()
     function! s:check_netrw(nr) abort
+        for nr in range(1, winnr('$'))
+            if s:check_buf_ft('tagbar', nr)
+                return 0
+            endif
+        endfor
         return s:check_buf_ft('netrw', a:nr)
     endfunction
     let g:sidebars.tree_browser = {
