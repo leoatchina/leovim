@@ -87,63 +87,6 @@ if pack#installed_coc()
 elseif pack#installed_lsp()
     nnoremap <silent><leader>t :Vista finder nvim_lsp<Cr>
 endif
-" -------------------------------
-" vim-gutentags
-" -------------------------------
-set tags=./tags;,tags,./.tags;,.tags
-let g:Lf_CacheDirectory = utils#expand("~/.vim", 1)
-let g:gutentags_cache_dir = g:Lf_CacheDirectory . '/LeaderF/gtags'
-if !isdirectory(g:gutentags_cache_dir)
-    silent! call mkdir(g:gutentags_cache_dir, 'p')
-endif
-let g:gutentags_modules = []
-if pack#planned('vim-gutentags')
-    " exclude files
-    let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", "node_modules", "*.vim/bundle/*", ".ccls_cache", "__pycache__"] + g:root_patterns
-    " gutentags search project directory markers, stop recursion when encountering these files/directories
-    let g:gutentags_project_root = g:root_patterns
-    let g:gutentags_add_default_project_roots = 0
-    let g:gutentags_define_advanced_commands = 1
-    " name of generated data files
-    let g:gutentags_ctags_tagfile = '.tags'
-    " modules
-    if g:ctags_type != ''
-        let g:gutentags_modules += ['ctags']
-        " configure ctags
-        let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=q', '--c-kinds=+px', '--c++-kinds=+pxl']
-        if g:ctags_type =~ "Universal"
-            let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
-        endif
-    endif
-    function! s:delete_tags() abort
-        if exists("b:gutentags_files")
-            let del_cmds = []
-            let col = col('.')
-            let line = line('.')
-            for [key, path] in items(b:gutentags_files)
-                if filereadable(path)
-                    if utils#is_win()
-                        let cmd = printf('!del %s /a /q', path)
-                    else
-                        let cmd = printf('!rm -f %s', path)
-                    endif
-                    call add(del_cmds, cmd)
-                endif
-            endfor
-            for del_cmd in del_cmds
-                silent! exec del_cmd
-            endfor
-            call cursor(line, col)
-        endif
-        call lightline#update()
-    endfunction
-    command! -bar GutentagsDelTags call s:delete_tags()
-    command! GutentagsDelTagsAndUpdate GutentagsDelTags | GutentagsUpdate
-    nnoremap <leader>g<Cr> :GutentagsUpdate<Cr>
-    nnoremap <leader>g<Space> :GutentagsDelTagsAndUpdate<Cr>
-    command! GutentagsCommands call FzfCallCommands('GutentagsCommands', 'Gutentags')
-    nnoremap <leader>g: :GutentagsCommands<Cr>
-endif
 " --------------------------
 " set tagstack and view tag
 " --------------------------
@@ -371,6 +314,63 @@ endfunction
 nnoremap <silent>sj :call tags#usage_search("next")<Cr>
 nnoremap <silent>sk :call tags#usage_search("prev")<Cr>
 nnoremap <silent>sh :call tags#usage_search("first")<Cr>
+" -------------------------------
+" vim-gutentags
+" -------------------------------
+set tags=./tags;,tags,./.tags;,.tags
+let g:Lf_CacheDirectory = utils#expand("~/.vim", 1)
+let g:gutentags_cache_dir = g:Lf_CacheDirectory . '/LeaderF/gtags'
+if !isdirectory(g:gutentags_cache_dir)
+    silent! call mkdir(g:gutentags_cache_dir, 'p')
+endif
+let g:gutentags_modules = []
+if pack#planned('vim-gutentags')
+    " exclude files
+    let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", "node_modules", "*.vim/bundle/*", ".ccls_cache", "__pycache__"] + g:root_patterns
+    " gutentags search project directory markers, stop recursion when encountering these files/directories
+    let g:gutentags_project_root = g:root_patterns
+    let g:gutentags_add_default_project_roots = 0
+    let g:gutentags_define_advanced_commands = 1
+    " name of generated data files
+    let g:gutentags_ctags_tagfile = '.tags'
+    " modules
+    if g:ctags_type != ''
+        let g:gutentags_modules += ['ctags']
+        " configure ctags
+        let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=q', '--c-kinds=+px', '--c++-kinds=+pxl']
+        if g:ctags_type =~ "Universal"
+            let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+        endif
+    endif
+    function! s:delete_tags() abort
+        if exists("b:gutentags_files")
+            let del_cmds = []
+            let col = col('.')
+            let line = line('.')
+            for [key, path] in items(b:gutentags_files)
+                if filereadable(path)
+                    if utils#is_win()
+                        let cmd = printf('!del %s /a /q', path)
+                    else
+                        let cmd = printf('!rm -f %s', path)
+                    endif
+                    call add(del_cmds, cmd)
+                endif
+            endfor
+            for del_cmd in del_cmds
+                silent! exec del_cmd
+            endfor
+            call cursor(line, col)
+        endif
+        call lightline#update()
+    endfunction
+    command! -bar GutentagsDelTags call s:delete_tags()
+    command! GutentagsDelTagsAndUpdate GutentagsDelTags | GutentagsUpdate
+    nnoremap <leader>g<Cr> :GutentagsUpdate<Cr>
+    nnoremap <leader>g<Space> :GutentagsDelTagsAndUpdate<Cr>
+    command! GutentagsCommands call FzfCallCommands('GutentagsCommands', 'Gutentags')
+    nnoremap <leader>g: :GutentagsCommands<Cr>
+endif
 " --------------------------
 " gtags
 " --------------------------
@@ -383,7 +383,6 @@ if pack#planned('gutentags_plus')
     endif
     let g:gutentags_modules += ['gtags_cscope']
     let g:gutentags_define_advanced_commands = 1
-    let g:gutentags_auto_add_gtags_cscope = 0
     let g:gutentags_plus_switch = 1
     let g:gutentags_plus_nomap  = 1
     nnoremap <silent><leader>gs :GscopeFind s <C-R><C-W><Cr>
