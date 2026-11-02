@@ -23,47 +23,47 @@ if pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
                 \ }
     nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
 endif
-if pack#installed('aerial.nvim') && pack#installed('nvim-tree.lua')
-    function! s:check_symbol_tree(nr) abort
+if pack#installed('vista.vim') && pack#installed('nvim-tree.lua')
+    function! s:open_nvimtree_vista() abort
+        let code_win = win_getid()
+        lua pcall(require, 'cfg.nvimtree')
+        lua pcall(function() require('nvim-tree.api').tree.open({ focus = false }) end)
+        call win_gotoid(code_win)
+        Vista
+        call win_gotoid(code_win)
+    endfunction
+    function! s:close_nvimtree_vista() abort
+        silent! Vista!
+        lua pcall(function() require('nvim-tree.api').tree.close() end)
+    endfunction
+    function! s:check_nvimtree_vista(nr) abort
         let ft = getwinvar(a:nr, '&filetype')
-        return ft ==# 'NvimTree' || ft ==# 'aerial'
-    endfunction
-    function! s:open_symbol_tree() abort
-        lua require('cfg.aerial').open_symbol_tree()
-    endfunction
-    function! s:close_symbol_tree() abort
-        lua require('cfg.aerial').close_symbol_tree()
+        return ft ==# 'NvimTree' || ft =~# '^vista'
     endfunction
     let g:sidebars.symbol_tree = {
                 \ 'position': 'left',
-                \ 'check_win': function('s:check_symbol_tree'),
-                \ 'open': function('s:open_symbol_tree'),
-                \ 'close': function('s:close_symbol_tree')
+                \ 'check_win': function('s:check_nvimtree_vista'),
+                \ 'open': function('s:open_nvimtree_vista'),
+                \ 'close': function('s:close_nvimtree_vista')
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
+    command! -bar SymbolTreeClose call sidebar#close('symbol_tree')
 elseif pack#installed('vista.vim') && pack#planned('vim-fern')
     function! s:open_fern_vista() abort
         let code_win = win_getid()
         let width = get(g:, 'sidebar_width', 40)
         execute printf('Fern . -drawer -stay -width=%d', width)
         call win_gotoid(code_win)
-        let exec_type = get(g:, 'vista_default_executive', 'ctags')
-        execute 'Vista ' . exec_type
+        Vista
         call win_gotoid(code_win)
     endfunction
     function! s:close_fern_vista() abort
         silent! Vista!
         silent! Fern . -drawer -toggle
-        for i in range(1, winnr('$'))
-            let ft = getwinvar(i, '&filetype')
-            if ft ==# 'fern' || ft =~# '^vista'
-                silent! execute i . 'wincmd c'
-            endif
-        endfor
     endfunction
     function! s:check_fern_vista(nr) abort
         let ft = getwinvar(a:nr, '&filetype')
-        return ft ==# 'fern' || ft =~# '^vista'
+        return ft =~# '^vista'
     endfunction
     let g:sidebars.symbol_tree = {
                 \ 'position': 'left',
@@ -72,6 +72,7 @@ elseif pack#installed('vista.vim') && pack#planned('vim-fern')
                 \ 'close': function('s:close_fern_vista')
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
+    command! -bar SymbolTreeClose call sidebar#close('symbol_tree')
 elseif pack#installed('vista.vim')
     if get(g:, 'ctags_type', '') =~ 'Universal' && g:vista_default_executive != 'ctags'
         function! s:check_vista(nr) abort
@@ -124,9 +125,20 @@ endif
 if pack#planned('vim-fern')
     source $CFG_DIR/fern.vim
     let g:tree_browser = 'fern'
+    function! s:check_fern_tree_browser(nr) abort
+        if s:check_buf_ft('fern', a:nr)
+            for w in range(1, winnr('$'))
+                if getwinvar(w, '&filetype') =~# '^vista'
+                    return 0
+                endif
+            endfor
+            return 1
+        endif
+        return 0
+    endfunction
     let g:sidebars.tree_browser = {
                 \ 'position': 'left',
-                \ 'check_win': function('s:check_buf_ft', ["fern"]),
+                \ 'check_win': function('s:check_fern_tree_browser'),
                 \ 'open': 'FernSideGetRoot',
                 \ 'close': 'Fern . -drawer -toggle'
                 \ }

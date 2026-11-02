@@ -66,6 +66,9 @@ if pack#planned_leaderf()
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
     source $CFG_DIR/leaderf.vim
 endif
+if pack#installed('fuzzbox.vim')
+    source $CFG_DIR/fuzzbox.vim
+endif
 " --------------------------------
 " common maps
 " --------------------------------

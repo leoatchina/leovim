@@ -342,8 +342,3 @@ elseif !pack#get('nocomplete')
         PackAdd 'hrsh7th/vim-vsnip-integ'
     endif
 endif
-" Baseline finder only when neither advanced finder is actually installed.
-if !pack#installed_fzf() && !pack#installed_leaderf() && !has('nvim') && has('vim9script') && has('popupwin')
-    source $CFG_DIR/fuzzbox.vim
-    PackAdd 'fuzzbox.vim'
-endif

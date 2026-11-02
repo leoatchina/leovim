@@ -96,7 +96,11 @@ function! vista#sidebar#OpenOrUpdate(rows) abort
   endif
 
   if !g:vista_stay_on_open
-    wincmd p
+    if has_key(g:vista, 'source') && has_key(g:vista.source, 'winid') && win_id2win(g:vista.source.winid) > 0
+      call win_gotoid(g:vista.source.winid)
+    else
+      wincmd p
+    endif
   endif
 endfunction
 

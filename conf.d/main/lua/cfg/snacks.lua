@@ -151,4 +151,37 @@ vim.api.nvim_create_user_command('SnacksTagsBuf', function()
   })
 end, { desc = 'Snacks: search current-buffer ctags' })
 
+vim.api.nvim_create_user_command('SnacksTagsBufAll', function()
+  local lsp_kinds = {
+    c = "Class", d = "Constant", e = "Enum", f = "Function",
+    g = "EnumMember", l = "Variable", m = "Method", s = "Struct",
+    t = "TypeParameter", v = "Variable", F = "Field", M = "Module",
+    n = "Namespace", P = "Property", S = "Struct", T = "TypeParameter",
+  }
+  snacks.picker.pick({
+    title = 'Tags (all buffers)',
+    finder = function(opts, ctx)
+      local ret = {}
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.bo[buf].buflisted and vim.api.nvim_buf_is_loaded(buf) then
+          local fname = vim.api.nvim_buf_get_name(buf)
+          if fname ~= '' and vim.fn.filereadable(fname) == 1 then
+            for _, tag in ipairs(vim.fn.taglist('.*', fname)) do
+              ret[#ret + 1] = {
+                text = tag.name,
+                name = tag.name,
+                file = tag.filename,
+                search = tag.cmd,
+                kind = tag.kind,
+                lsp_kind = lsp_kinds[tag.kind] or "Text",
+              }
+            end
+          end
+        end
+      end
+      return ctx.filter(ret)
+    end,
+  })
+end, { desc = 'Snacks: search all-buffers ctags' })
+
 return M

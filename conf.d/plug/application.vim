@@ -219,6 +219,9 @@ if has('nvim')
     PackAdd 'Bekaboo/dropbar.nvim', {'cfg': 'cfg.dropbar'}
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'
+    if has('vim9script') && has('popupwin')
+        PackAdd 'fuzzbox.vim'
+    endif
 endif
 " -------------------
 " vim-preview

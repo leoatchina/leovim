@@ -48,12 +48,14 @@ if get(g:, 'ctags_type', '') != ''
         let g:Lf_Ctags = g:fzf_tags_command
         nnoremap <silent><leader>T :LeaderfTag<Cr>
         nnoremap <silent>T<Cr> :LeaderfBufTagAll<Cr>
-    elseif g:symbol_tool =~ 'fzftags' && executable('perl')
-        nnoremap <silent><leader>T :FzfTags<Cr>
-    elseif pack#installed('fuzzbox.vim')
-        nnoremap <silent><leader>T :FuzzyTags<Cr>
     elseif g:symbol_tool =~ 'snackstags'
         nnoremap <silent><leader>T :SnacksTagsWorkspace<Cr>
+        nnoremap <silent>T<Cr> :SnacksTagsBufAll<Cr>
+    elseif g:symbol_tool =~ 'fuzzboxtags'
+        nnoremap <silent><leader>T :FuzzyTags<Cr>
+        nnoremap <silent>T<Cr> :FuzzboxAllBufferTags<Cr>
+    elseif g:symbol_tool =~ 'fzftags' && executable('perl')
+        nnoremap <silent><leader>T :FzfTags<Cr>
     endif
     if pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
         nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
@@ -61,12 +63,12 @@ if get(g:, 'ctags_type', '') != ''
         nnoremap <silent>t<Cr> :Vista finder ctags<Cr>
     elseif g:symbol_tool =~ 'leaderftags'
         nnoremap <silent>t<Cr> :LeaderfBufTag<Cr>
-    elseif g:symbol_tool =~ 'fzftags'
-        nnoremap <silent>t<Cr> :FzfBTags<Cr>
-    elseif pack#installed('fuzzbox.vim')
-        nnoremap <silent>t<Cr> :FuzzboxBufferTags<Cr>
     elseif g:symbol_tool =~ 'snackstags'
         nnoremap <silent>t<Cr> :SnacksTagsBuf<Cr>
+    elseif g:symbol_tool =~ 'fuzzboxtags'
+        nnoremap <silent>t<Cr> :FuzzboxBufferTags<Cr>
+    elseif g:symbol_tool =~ 'fzftags'
+        nnoremap <silent>t<Cr> :FzfBTags<Cr>
     endif
 endif
 " f<Cr> to useing native functions show

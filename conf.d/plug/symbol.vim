@@ -31,15 +31,18 @@ endif
 if get(g:, 'ctags_type', '') != ''
     if pack#installed_leaderf()
         call s:add_symbol("leaderftags")
-    elseif pack#installed_fzf()
+    endif
+    if pack#installed_snacks()
+        call s:add_symbol("snackstags")
+    endif
+    if pack#installed('fuzzbox.vim')
+        call s:add_symbol("fuzzboxtags")
+    endif
+    if pack#installed_fzf()
         call s:add_symbol("fzftags")
         if has('nvim') || v:version >= 802
             call s:add_symbol('quickui')
         endif
-    elseif pack#installed('fuzzbox.vim')
-        call s:add_symbol("fuzzboxtags")
-    elseif pack#installed_snacks()
-        call s:add_symbol("snackstags")
     endif
     if v:version >= 800
         call s:add_symbol("gutentags")

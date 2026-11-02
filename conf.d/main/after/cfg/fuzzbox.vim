@@ -58,3 +58,52 @@ function! s:jump(command, target, winid, result, ...) abort
     normal! zvzz
 endfunction
 command! FuzzboxBufferTags call <SID>buffer_tags()
+
+function! s:all_buffer_tags() abort
+    let items = []
+    let tag_map = {}
+    let ctags = utils#is_win() ? utils#expand('~/.leovim.windows/tools/ctags.exe') : 'ctags'
+    for b in getbufinfo({'buflisted': 1})
+        if b.loaded && !empty(b.name) && filereadable(b.name)
+            let output = systemlist(shellescape(ctags) . ' -f - --sort=no --fields=+n ' . shellescape(b.name))
+            if !v:shell_error
+                let fname = fnamemodify(b.name, ':t')
+                for entry in output
+                    let fields = split(entry, "\t")
+                    let lnum = str2nr(matchstr(entry, '\tline:\zs\d\+'))
+                    if len(fields) >= 3 && lnum > 0 && entry !~# '^!'
+                        let display = printf("%-20s %s:%d", fields[0], fname, lnum)
+                        call add(items, display)
+                        let tag_map[display] = [b.bufnr, lnum]
+                    endif
+                endfor
+            endif
+        endif
+    endfor
+    if empty(items)
+        echo 'No tags found in loaded buffers.'
+        return
+    endif
+    call fuzzbox#Select(items, {
+                \ 'title': 'All Buffers Tags',
+                \ 'select_cb': function('s:jump_buf_tag', ['buffer', tag_map]),
+                \ 'default_actions': 0,
+                \ 'actions': {
+                \ "\<C-x>": function('s:jump_buf_tag', ['sbuffer', tag_map]),
+                \ "\<C-]>": function('s:jump_buf_tag', ['vertical sbuffer', tag_map]),
+                \ "\<C-t>": function('s:jump_buf_tag', ['tab sbuffer', tag_map]),
+                \ }})
+endfunction
+
+function! s:jump_buf_tag(command, tag_map, winid, result, ...) abort
+    if empty(a:result) || !has_key(a:tag_map, a:result)
+        return
+    endif
+    let [bufnr, lnum] = a:tag_map[a:result]
+    call popup_close(a:winid)
+    execute a:command . ' ' . bufnr
+    normal! m'
+    call cursor(lnum, 1)
+    normal! zvzz
+endfunction
+command! FuzzboxAllBufferTags call <SID>all_buffer_tags()
