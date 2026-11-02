@@ -109,6 +109,7 @@ local api = vim.api
 local namespace = api.nvim_create_namespace('LeoCodeLens')
 local group = api.nvim_create_augroup('LeoCodeLens', { clear = true })
 local buffers = {}
+local codelens_enabled = true
 
 local function render(bufnr, entries)
   local rows = {}
@@ -203,7 +204,7 @@ function codelens.attach(bufnr)
   -- Disable only the built-in display; codelens.run() still requests/executes lenses.
   vim.lsp.codelens.enable(false, { bufnr = bufnr })
   if not buffers[bufnr] then
-    buffers[bufnr] = { enabled = true, generation = 0 }
+    buffers[bufnr] = { enabled = codelens_enabled, generation = 0 }
     api.nvim_create_autocmd({ 'BufEnter', 'TextChanged', 'TextChangedI', 'InsertLeave' }, {
       group = group,
       buffer = bufnr,
@@ -228,12 +229,15 @@ function codelens.toggle(bufnr)
   if not state then
     return
   end
-  state.enabled = not state.enabled
-  state.generation = state.generation + 1
-  if state.enabled then
-    codelens.refresh(bufnr)
-  else
-    api.nvim_buf_clear_namespace(bufnr, namespace, 0, -1)
+  codelens_enabled = not state.enabled
+  for buffer, attached in pairs(buffers) do
+    attached.enabled = codelens_enabled
+    attached.generation = attached.generation + 1
+    if attached.enabled then
+      codelens.refresh(buffer)
+    elseif api.nvim_buf_is_valid(buffer) then
+      api.nvim_buf_clear_namespace(buffer, namespace, 0, -1)
+    end
   end
 end
 

@@ -13,7 +13,7 @@ endfunction
 " --------------------------
 if pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
     function! s:check_vista_kind(nr) abort
-        return s:check_buf_ft('vista_kind', a:nr)
+        return getwinvar(a:nr, '&filetype') =~# 'vista'
     endfunction
     let g:sidebars.vista_ctags = {
                 \ 'position': 'left',
@@ -86,7 +86,7 @@ elseif pack#installed('vista.vim')
                     \ }
     else
         function! s:check_vista_all(nr) abort
-            return s:check_buf_ft('vista_kind', a:nr) || s:check_buf_ft('vista', a:nr)
+            return getwinvar(a:nr, '&filetype') =~# 'vista'
         endfunction
         let g:sidebars.vista = {
                     \ 'position': 'left',

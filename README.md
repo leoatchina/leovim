@@ -347,7 +347,7 @@ Neovim 原生 LSP 使用服务器提供的 CodeLens，不再加载独立的引�
 
 | 按键 | Neovim LSP 功能 |
 |---|---|
-| `<M-c>` | 开关当前缓冲区的行末 CodeLens |
+| `<M-c>` | 开关本次会话的行末 CodeLens，切换文件及新打开文件沿用该状态 |
 | `<leader>C` | 执行当前行 CodeLens 动作；多项动作时选择 |
 | `<leader>S` | 原引用计数开关已移除 |
 | `<M-C>` | Code Action，不是 CodeLens 开关 |
