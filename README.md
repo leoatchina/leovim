@@ -52,6 +52,10 @@ Snacks 同样克隆在 `pack/clone/opt/snacks.nvim`，由 `update-clone.sh` 维�
 
 最低入口版本只保证通过入口检查，不保证所有可选插件能在该版本运行。语言服务器、调试器、AI CLI、解释器及编译器有各自的运行要求。Ctags/Gtags、ripgrep、FZF、Python provider 等按所选功能准备，不是互相的替代品。
 
+Gutentags Plus 的安装条件对 Vim / Neovim 一致：沿用 Ctags、Vim 版本和 Gtags 版本门槛（`gtags_version > 6.0606`），要求 `$GTAGSCONF` 可读，并同时找到 `global` 和 `gtags-cscope`。
+
+查询后端按 `has('cscope')` 选择：Vim 原生 Cscope 或 Neovim 外部 `gtags-cscope`；数据库连接由 Plus 管理，禁用 Gutentags 自动连接。`<leader>gk` 仅在原生 Cscope 后端提供。
+
 ### 2.2. 补全引擎
 
 在 `~/.vimrc.opt` 中选择所需方案。高级引擎声明顺序为 **cmp → blink → Coc**，不要同时启用多个方案来依赖这个优先级。
@@ -289,6 +293,7 @@ EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf
 | `<C-b>` | 文件树侧栏，需已配置对应插件 |
 | `<C-t>` | 符号侧栏：Neovim 安装 Aerial 时，非 Unix 的 Java 使用 Vista，其余使用 Aerial；保留文件树联动。Vim 沿用 Vista / Tagbar |
 | 组合侧栏布局 | Fern / NvimTree 在上、Vista / Aerial 在下；仅使用 Tagbar 时，上方使用 Fern（未安装则用 netrw）、下方使用 Tagbar。上下按可用行数取整为 4:6，打开后焦点仍在代码窗口 |
+| `:AerialTreeOpen` | 打开 Aerial 组合布局的封装命令；匹配 `^Aerial.*` 命令懒加载，不切换代码窗口焦点 |
 | `<Leader>Q` | 关闭其他 buffer，不是关闭当前 buffer |
 | `;b` / `,b` | buffer 导航 |
 | `<M-n>` / `<M-p>` | 下一个 / 上一个标签页 |

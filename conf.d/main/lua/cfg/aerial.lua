@@ -39,4 +39,8 @@ function M.open()
   end
 end
 
+vim.api.nvim_create_user_command('AerialTreeOpen', M.open, {
+  desc = 'Open symbols below the file tree at 4:6 without changing focus',
+})
+
 return M

@@ -46,7 +46,8 @@ if get(g:, 'ctags_type', '') != ''
     endif
     if v:version >= 800
         call s:add_symbol("gutentags")
-        if get(g:, 'gtags_version', 0) > 6.0606 && exists('$GTAGSCONF') && filereadable($GTAGSCONF) && !has('nvim')
+        if get(g:, 'gtags_version', 0) > 6.0606 && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
+                    \ && executable('global') && executable('gtags-cscope')
             call s:add_symbol('plus')
         endif
     endif
@@ -68,7 +69,7 @@ if s:planned_symbol('plus')
     PackAdd 'skywind3000/gutentags_plus'
 endif
 if s:planned_symbol('aerial')
-    PackAdd 'stevearc/aerial.nvim', {'cfg': 'cfg.aerial'}
+    PackAdd 'stevearc/aerial.nvim', {'cfg': 'cfg.aerial', 'on': '^Aerial.*'}
 endif
 if s:planned_symbol('vista')
     PackAdd 'vista.vim'

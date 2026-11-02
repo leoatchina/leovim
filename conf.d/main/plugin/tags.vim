@@ -346,14 +346,12 @@ function! s:usage_fallback(word, direction) abort
         call search(pat, 'w')
     endif
 endfunction
-
 function! tags#usage_search(direction) abort
     let word = expand('<cword>')
     if empty(word)
         call preview#errmsg('No symbol under cursor.')
         return
     endif
-
     " 1. 尝试 coc 后端
     if pack#installed_coc() && exists('*CocUsageSearch')
         if CocUsageSearch(a:direction)
@@ -366,12 +364,10 @@ function! tags#usage_search(direction) abort
             return
         endif
     endif
-
     " 3. 后端均未就绪或未找到，执行 tags.vim 内部兜底：
     "    sj/sk 全文搜索下一处/上一处，sh 走原生 gd (当前函数内定义)
     call s:usage_fallback(word, a:direction)
 endfunction
-
 nnoremap <silent>sj :call tags#usage_search("next")<Cr>
 nnoremap <silent>sk :call tags#usage_search("prev")<Cr>
 nnoremap <silent>sh :call tags#usage_search("first")<Cr>
@@ -379,14 +375,15 @@ nnoremap <silent>sh :call tags#usage_search("first")<Cr>
 " gtags
 " --------------------------
 if pack#planned('gutentags_plus')
-    if has('+cscope') && executable('gtags-cscope')
+    if has('cscope')
+        let g:gutentags_plus_native = 1
         set cscopeprg=gtags-cscope
-    elseif has('+cscope')
-        set cscopeprg=
+    else
+        let g:gutentags_plus_native = 0
     endif
     let g:gutentags_modules += ['gtags_cscope']
     let g:gutentags_define_advanced_commands = 1
-    let g:gutentags_auto_add_gtags_cscope = 1
+    let g:gutentags_auto_add_gtags_cscope = 0
     let g:gutentags_plus_switch = 1
     let g:gutentags_plus_nomap  = 1
     nnoremap <silent><leader>gs :GscopeFind s <C-R><C-W><Cr>
@@ -395,6 +392,14 @@ if pack#planned('gutentags_plus')
     nnoremap <silent><leader>ge :GscopeFind e <C-R><C-W><Cr>
     nnoremap <silent><leader>ga :GscopeFind a <C-R><C-W><Cr>
     nnoremap <silent><leader>gz :GscopeFind z <C-R><C-W><Cr>
+    " file
+    nnoremap <silent><leader>gf :GscopeFind f <C-R>=utils#expand("<cfile>")<Cr><Cr>
+    nnoremap <silent><leader>gi :GscopeFind i <C-R>=utils#expand("<cfile>")<Cr><Cr>
+    " Only the native backend maintains persistent cscope connections.
+    if has('cscope')
+        nnoremap <silent><leader>gk :GscopeKill<Cr>
+    endif
+    " hierarchy
     if pack#installed_adv()
         nnoremap <silent><leader>gl :GscopeFind d <C-R><C-W><Cr>
         nnoremap <silent><leader>gh :GscopeFind c <C-R><C-W><Cr>
@@ -402,11 +407,6 @@ if pack#planned('gutentags_plus')
         nnoremap <silent>gl :GscopeFind d <C-R><C-W><Cr>
         nnoremap <silent>gh :GscopeFind c <C-R><C-W><Cr>
     endif
-    " file
-    nnoremap <silent><leader>gf :GscopeFind f <C-R>=utils#expand("<cfile>")<Cr><Cr>
-    nnoremap <silent><leader>gi :GscopeFind i <C-R>=utils#expand("<cfile>")<Cr><Cr>
-    " kill
-    nnoremap <silent><leader>gk :GscopeKill<Cr>
     " leaderfgtags
     if pack#planned_leaderf() && utils#is_unix()
         let g:Lf_Gtags = utils#expand(exepath('gtags'))
@@ -423,6 +423,4 @@ if pack#planned('gutentags_plus')
         nnoremap <silent><leader>g? :Leaderf gtags -g <C-r><C-w><Cr>
         nnoremap <silent><leader>g/ :Leaderf gtags --by-context<Cr>
     endif
-elseif has('+cscope')
-    set cscopeprg=
 endif
