@@ -293,7 +293,7 @@ EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf
 | `<Leader>p` | 在版本控制目录下搜索文件，不等于 `git ls-files` |
 | `<C-p>` | 文件搜索入口，具体后端与目录以当前映射为准，不是固定的树浏览器 |
 | `<C-b>` | 文件树侧栏，需已配置对应插件 |
-| `<C-t>` | 符号侧栏：Neovim 安装 Aerial 时，非 Unix 的 Java 使用 Vista，其余使用 Aerial；保留文件树联动。Vim 沿用 Vista / Tagbar |
+| `<C-t>` | 符号侧栏：Neovim 安装 Aerial 时统一使用 Aerial（含 Java），保留文件树联动；未安装时及 Vim 下沿用 Vista / Tagbar |
 | 组合侧栏布局 | Fern / NvimTree 在上、Vista / Aerial 在下；仅使用 Tagbar 时，上方使用 Fern（未安装则用 netrw）、下方使用 Tagbar。上下按可用行数取整为 4:6，打开后焦点仍在代码窗口 |
 | `:AerialTreeOpen` | 打开 Aerial 组合布局的封装命令；匹配 `^Aerial.*` 命令懒加载，不切换代码窗口焦点 |
 | `<Leader>Q` | 关闭其他 buffer，不是关闭当前 buffer |
@@ -587,6 +587,7 @@ Neovim 启动脚本 `n.sh`、`ni.sh`、`nv.sh` 在启动进程时设置 `NVIM_NO
 - Neovim 0.12 的 Blink 使用 `main`（v2）及 `blink.lib`；已有 v1 安装需执行 `:PlugInstall`、`:PlugUpdate` 后重启。统一使用 Lua matcher，不构建或下载原生匹配库。Blink 的 `<C-f>/<C-b>` 导航原生 `vim.snippet`，不再安装 vsnip。
 - CMP 命令行路径来源统一为 `async_path`；不再安装未启用的 signature-help 来源和未使用的 selection-range 插件。LSP 生命周期使用原生 `:lsp restart` / `:lsp stop`。
 - Java 的 `Mev/Mec/Mem` 使用 nvim-java 重构命令，`Mtc/Mtm` 保留调试当前测试类/方法的行为，均为 Java buffer 局部映射；重构命令须等待 JDTLS 附着后才由插件注册。
+- Java 初始化集中在 `cfg/java.lua`，关闭 JDTLS 的客户端符号提供器声明，使服务器正确声明符号能力；Aerial 优先使用 JDTLS，排除会对 Java 返回空符号的 Spring Boot 客户端。
 - 不再安装 R.nvim / Nvim-R；保留普通 R 文件类型设置及独立的 LSP/Coc、REPL 入口。Neovim 使用自带 Rust runtime，不再额外安装 rust.vim。
 
 ### 8.3. 调试、REPL 与快捷键

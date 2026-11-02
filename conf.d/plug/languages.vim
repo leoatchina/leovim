@@ -83,7 +83,7 @@ if pack#planned_lsp() && pack#get('java')
     PackAdd 'JavaHello/spring-boot.nvim', {'commit': '218c0c26c14d99feca778e4d13f5ec3e8b1b60f0'}
     PackAdd 'nvim-java/nvim-java', {
                 \ 'deps': ['spring-boot.nvim', 'nui.nvim', 'nvim-dap'],
-                \ 'init': "require('java').setup(); vim.lsp.enable('jdtls')",
+                \ 'cfg': 'cfg.java',
                 \ }
 endif
 " ------------------------------

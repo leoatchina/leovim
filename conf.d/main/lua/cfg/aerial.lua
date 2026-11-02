@@ -17,6 +17,8 @@ require("aerial").setup({
     },
   },
   lsp = {
+    -- Spring Boot advertises document symbols but returns none for Java source.
+    priority = { jdtls = 20, ['spring-boot'] = -1 },
     diagnostics_trigger_update = false,
     update_when_errors = true,
   },

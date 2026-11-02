@@ -14,7 +14,7 @@ endfunction
 " --------------------------
 let s:use_aerial = has('nvim') && pack#installed('aerial.nvim')
 function! s:open_symbols() abort
-    if s:use_aerial && (!s:check_buf_ft('^java$', 0) || utils#is_unix())
+    if s:use_aerial
         AerialTreeOpen
     else
         Vista
