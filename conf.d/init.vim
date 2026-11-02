@@ -39,7 +39,7 @@ let $INIT_DIR = expand($CONF_D_DIR . '/init')
 let $MAIN_DIR = expand($CONF_D_DIR . '/main')
 let $PLUG_DIR = expand($CONF_D_DIR . '/plug')
 " cfg for special plugins
-let $CFG_DIR = expand($MAIN_DIR . '/after/cfg')
+let $CFG_DIR = expand($MAIN_DIR . '/cfg')
 " opt dirs
 let $LEO_OPT_DIR = expand($CONF_D_DIR . '/pack/leo/opt')
 let $FORK_OPT_DIR = expand($PACK_DIR . '/fork/opt')
