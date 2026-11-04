@@ -76,20 +76,20 @@ if pack#installed('jupynium.nvim')
     endfunction
     command JupyniumExecuteSelectedCellsForward call s:execute_and_forward()
     function! s:map() abort
-        nnoremap <buffer><silent>q<Cr> <Cmd>JupyniumRun<Cr>
-        nnoremap <buffer><silent>qr <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
-        nnoremap <buffer><silent>qh <Cmd>JupyniumKernelHover<Cr>
-        nnoremap <buffer><silent>qk <Cmd>JupyniumKernelSelect<Cr>
-        nnoremap <buffer><silent>qt <Cmd>JupyniumRunInTerminal<Cr>
-        nnoremap <buffer><silent>qq <Cmd>JupyniumStopSync<Cr>
-        nnoremap <buffer><silent>qb <Cmd>JupyniumScrollToCell<Cr>
-        nnoremap <buffer><silent>qu <Cmd>JupyniumScrollUp<Cr>
-        nnoremap <buffer><silent>qd <Cmd>JupyniumScrollDown<Cr>
-        nnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
-        xnoremap <buffer><silent>ql <Cmd>JupyniumExecuteSelectedCells<Cr>
-        nnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        xnoremap <buffer><silent>qL <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
-        nnoremap <buffer><silent>qf <Cmd>JupyniumExecuteSelectedCellsForward<Cr>
+        nnoremap <buffer><silent>M<Cr>    <Cmd>JupyniumRun<Cr>
+        nnoremap <buffer><silent>M<Space> <Cmd>JupyniumStartSync <C-r>=get(t:, 'jupynium_url', '')<Cr>
+        nnoremap <buffer><silent>MK <Cmd>JupyniumKernelHover<Cr>
+        nnoremap <buffer><silent>MH <Cmd>JupyniumKernelSelect<Cr>
+        nnoremap <buffer><silent>MT <Cmd>JupyniumRunInTerminal<Cr>
+        nnoremap <buffer><silent>MQ <Cmd>JupyniumStopSync<Cr>
+        nnoremap <buffer><silent>MB <Cmd>JupyniumScrollToCell<Cr>
+        nnoremap <buffer><silent>MU <Cmd>JupyniumScrollUp<Cr>
+        nnoremap <buffer><silent>MD <Cmd>JupyniumScrollDown<Cr>
+        nnoremap <buffer><silent>ML <Cmd>JupyniumExecuteSelectedCells<Cr>
+        xnoremap <buffer><silent>ML <Cmd>JupyniumExecuteSelectedCells<Cr>
+        nnoremap <buffer><silent>MC <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        xnoremap <buffer><silent>MC <Cmd>JupyniumClearSelectedCellsOutputs<Cr>
+        nnoremap <buffer><silent>M; <Cmd>JupyniumExecuteSelectedCellsForward<Cr>
         nnoremap <buffer><silent><M-M> <Cmd>JupyniumCommands<Cr>
     endfunction
     au FileType python,r call s:map()
