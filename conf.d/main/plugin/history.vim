@@ -2,14 +2,15 @@
 if utils#is_vscode()
     finish
 endif
-if pack#installed_leaderf()
+" Snacks.picker is the preferred provider for recent files.
+if pack#installed_snacks()
+    nnoremap <silent><leader>u <Cmd>lua Snacks.picker.recent()<Cr>
+elseif pack#installed_fuzzbox()
+    nnoremap <silent><leader>u :FuzzyMru<Cr>
+elseif pack#installed_leaderf()
     nnoremap <silent><leader>u :LeaderfMru<Cr>
 elseif pack#installed_fzf()
     nnoremap <silent><leader>u :FzfHistory<Cr>
-elseif pack#installed('fuzzbox.vim')
-    nnoremap <silent><leader>u :FuzzyMru<Cr>
-elseif pack#installed_snacks()
-    nnoremap <silent><leader>u <Cmd>lua Snacks.picker.recent()<Cr>
 endif
 " --------------------------
 " jumpoption
@@ -27,9 +28,17 @@ if pack#installed('undotree')
     nnoremap <silent>zu :UndotreeToggle<Cr>
 endif
 " ------------------------------
-" Fzf jumps
+" jumps && history
 " ------------------------------
-if pack#installed_fzf()
+if pack#installed_snacks()
+    nnoremap <silent><M-j><M-j> <Cmd>lua Snacks.picker.jumps()<Cr>
+    nnoremap <silent><M-k>/ <Cmd>lua Snacks.picker.search_history()<Cr>
+    nnoremap <silent><M-k>: <Cmd>lua Snacks.picker.command_history()<Cr>
+elseif pack#installed_leaderf()
+    nnoremap <silent><M-j><M-j> :Leaderf jumps<cr>
+    nnoremap <silent><M-k>/ :LeaderfHistorySearch<Cr>
+    nnoremap <silent><M-k>: :LeaderfHistoryCmd<Cr>
+elseif pack#installed_fzf()
     function! s:jump_list_format(val) abort
         let l:file_name = bufname('%')
         let l:file_name = empty(l:file_name) ? 'Unknown file name' : l:file_name
@@ -88,14 +97,6 @@ if pack#installed_fzf()
     nnoremap <silent><M-j><M-j> :FzfJumps<cr>
     nnoremap <silent><M-k>/ :FzfHistory/<Cr>
     nnoremap <silent><M-k>: :FzfHistory:<Cr>
-elseif pack#installed_leaderf()
-    nnoremap <silent><M-j><M-j> :Leaderf jumps<cr>
-    nnoremap <silent><M-k>/ :LeaderfHistorySearch<Cr>
-    nnoremap <silent><M-k>: :LeaderfHistoryCmd<Cr>
-elseif pack#installed_snacks()
-    nnoremap <silent><M-j><M-j> <Cmd>lua Snacks.picker.jumps()<Cr>
-    nnoremap <silent><M-k>/ <Cmd>lua Snacks.picker.search_history()<Cr>
-    nnoremap <silent><M-k>: <Cmd>lua Snacks.picker.command_history()<Cr>
 endif
 " ------------------------------
 " current project files
@@ -127,9 +128,11 @@ function! s:recent_project_files()
                 \ }))
 endfunction
 command! FzfProjectMru call s:recent_project_files()
-if pack#installed_fzf()
-    nnoremap <leader>U :FzfProjectMru<Cr>
-elseif pack#installed_snacks()
+if pack#installed_snacks()
     nnoremap <silent><leader>U <Cmd>lua Snacks.picker.recent({ filter = { cwd = true } })<Cr>
+elseif pack#installed_fuzzbox()
+    nnoremap <leader>U :FuzzyMruRoot<Cr>
+elseif pack#installed_fzf()
+    nnoremap <leader>U :FzfProjectMru<Cr>
 endif
 

@@ -60,18 +60,7 @@ if g:has_terminal
     tnoremap <silent><M-,> <C-\><C-n>:QuickfixToggle<Cr>
     tnoremap <silent><M-;> <C-\><C-n>:LoclistToggle<Cr>
 endif
-if pack#installed_leaderf()
-    function! s:leaderf_qf_loc()
-        if s:loc_exists()
-            lclose
-            LeaderfLocList
-        elseif s:qf_exists()
-            cclose
-            LeaderfQuickFix
-        endif
-    endfunction
-    command! OpenQfLoc call s:leaderf_qf_loc()
-elseif pack#installed_snacks()
+if pack#installed_snacks()
     function! s:snacks_qf_loc()
         if s:loc_exists()
             lclose
@@ -82,6 +71,28 @@ elseif pack#installed_snacks()
         endif
     endfunction
     command! OpenQfLoc call s:snacks_qf_loc()
+elseif pack#installed_fuzzbox()
+    function! s:fuzzbox_qf_loc()
+        if s:loc_exists()
+            lclose
+            FuzzyLoclist
+        elseif s:qf_exists()
+            cclose
+            FuzzyQuickfix
+        endif
+    endfunction
+    command! OpenQfLoc call s:fuzzbox_qf_loc()
+elseif pack#installed_leaderf()
+    function! s:leaderf_qf_loc()
+        if s:loc_exists()
+            lclose
+            LeaderfLocList
+        elseif s:qf_exists()
+            cclose
+            LeaderfQuickFix
+        endif
+    endfunction
+    command! OpenQfLoc call s:leaderf_qf_loc()
 else
     command! OpenQfLoc call fzf#open_qfloc()
 endif

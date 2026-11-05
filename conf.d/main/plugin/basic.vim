@@ -56,7 +56,6 @@ if pack#planned_fzf()
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
     command! FzfRunCommands call FzfCallCommands('FzfRunCommands', 'Fzf', ['FzfAg', 'FzfRG'])
-    nnoremap <silent><M-k><M-f> :FzfRunCommands<Cr>
 endif
 if pack#planned_leaderf()
     nnoremap <leader>F :Leaderf
@@ -66,13 +65,30 @@ if pack#planned_leaderf()
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
     source $CFG_DIR/leaderf.vim
 endif
-if pack#installed('fuzzbox.vim')
+if pack#installed_fuzzbox()
     source $CFG_DIR/fuzzbox.vim
+endif
+" --------------------------------
+" commands && highlights
+" --------------------------------
+if pack#installed_snacks()
+    nnoremap <silent><M-k><M-f> <Cmd>lua Snacks.picker.commands()<Cr>
+    nnoremap <silent><M-k>h <Cmd>lua Snacks.picker.highlights()<Cr>
+elseif pack#installed_fuzzbox()
+    nnoremap <silent><M-k><M-f> :FuzzyCommands<Cr>
+    nnoremap <silent><M-k>h :FuzzyHighlights<Cr>
+elseif pack#planned_fzf()
+    nnoremap <silent><M-k><M-f> :FzfRunCommands<Cr>
+    nnoremap <silent><M-k>h :FzfHighlight<Cr>
 endif
 " --------------------------------
 " common maps
 " --------------------------------
-if pack#installed_leaderf()
+if pack#installed_snacks()
+    nnoremap <silent><M-k>t <Cmd>lua Snacks.picker.colorschemes()<Cr>
+    nnoremap <silent><M-k>f :filetype<Space>
+    nnoremap <silent><M-k><M-k> <Cmd>lua Snacks.picker.commands()<Cr>
+elseif pack#installed_leaderf()
     nnoremap <silent><M-k>t :LeaderfColorscheme<Cr>
     nnoremap <silent><M-k>f :LeaderfFiletype<Cr>
     nnoremap <silent><M-k><M-k> :LeaderfCommand<Cr>
@@ -80,21 +96,17 @@ elseif pack#installed_fzf()
     nnoremap <silent><M-k>t :FzfColors<Cr>
     nnoremap <silent><M-k>f :FzfFiletypes<Cr>
     nnoremap <silent><M-k><M-k> :FzfCommands<Cr>
-elseif pack#installed_snacks()
-    nnoremap <silent><M-k>t <Cmd>lua Snacks.picker.colorschemes()<Cr>
-    nnoremap <silent><M-k>f :filetype<Space>
-    nnoremap <silent><M-k><M-k> <Cmd>lua Snacks.picker.commands()<Cr>
 else
     nnoremap <M-k>t :colorscheme<Space>
     nnoremap <M-k>f :filetype<Space>
     nnoremap <M-k><M-k> :command<Space>
 endif
-if pack#installed_leaderf()
+if pack#installed_snacks()
+    nnoremap <silent><M-h><M-h> <Cmd>lua Snacks.picker.help()<Cr>
+elseif pack#installed_leaderf()
     nnoremap <silent><M-h><M-h> :LeaderfHelp<Cr>
 elseif pack#installed_fzf() && executable('perl')
     nnoremap <silent><M-h><M-h> :FzfHelptags<Cr>
-elseif pack#installed_snacks()
-    nnoremap <silent><M-h><M-h> <Cmd>lua Snacks.picker.help()<Cr>
 else
     nnoremap <M-h><M-h> :h<Space>
 endif

@@ -13,10 +13,10 @@ elseif pack#installed_snacks()
 endif
 if pack#installed_leaderf()
     nnoremap <nowait><M-l><M-a> :Leaderf line --fuzzy --all --no-sort<Cr>
-elseif pack#installed_fzf()
-    nnoremap <nowait><M-l><M-a> :FzfLines<Cr>
 elseif pack#installed_snacks()
     nnoremap <silent><nowait><M-l><M-a> :SnacksBufferLines<Cr>
+elseif pack#installed_fzf()
+    nnoremap <nowait><M-l><M-a> :FzfLines<Cr>
 endif
 " ------------------------
 " y register for replace

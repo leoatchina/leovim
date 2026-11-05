@@ -62,7 +62,13 @@ if s:blink_snippets || pack#planned('vim-vsnip')
         call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
         return ''
     endfunction
-    if pack#planned_leaderf()
+    if pack#installed_snacks()
+        nnoremap <silent><M-h>f <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('~/.leovim.d/pack/add/opt/friendly-snippets/snippets') } })<Cr>
+        nnoremap <silent><M-h>s <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('~/.leovim/conf.d/snippets') } })<Cr>
+    elseif pack#installed_fuzzbox()
+        nnoremap <silent><M-h>f :FuzzyFilesIn <C-r>=fnameescape(expand('~/.leovim.d/pack/add/opt/friendly-snippets/snippets'))<Cr><Cr>
+        nnoremap <silent><M-h>s :FuzzyFilesIn <C-r>=fnameescape(expand('~/.leovim/conf.d/snippets'))<Cr><Cr>
+    elseif pack#planned_leaderf()
         nnoremap <silent><M-h>f :Leaderf file --no-sort ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
         nnoremap <silent><M-h>s :Leaderf file --no-sort ~/.leovim/conf.d/snippets<Cr>
     elseif pack#planned_fzf()

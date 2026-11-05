@@ -100,6 +100,10 @@ function! pack#installed_snacks() abort
     return has('nvim') && pack#installed('snacks.nvim')
 endfunction
 
+function! pack#installed_fuzzbox() abort
+    return pack#installed('fuzzbox.vim')
+endfunction
+
 function! pack#installed_lsp() abort
     return pack#installed(
                 \ 'nvim-lspconfig',

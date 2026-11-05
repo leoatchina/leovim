@@ -2,14 +2,14 @@
 if utils#is_vscode()
     finish
 endif
-if pack#installed_leaderf()
+if pack#installed_snacks()
+    nnoremap <silent><leader>b <Cmd>lua Snacks.picker.buffers()<Cr>
+elseif pack#installed_fuzzbox()
+    nnoremap <silent><leader>b :FuzzyBuffers<Cr>
+elseif pack#installed_leaderf()
     nnoremap <silent><leader>b :LeaderfBuffer<Cr>
 elseif pack#installed_fzf()
     nnoremap <silent><leader>b :FzfBuffers<Cr>
-elseif pack#installed('fuzzbox.vim')
-    nnoremap <silent><leader>b :FuzzyBuffers<Cr>
-elseif pack#installed_snacks()
-    nnoremap <silent><leader>b <Cmd>lua Snacks.picker.buffers()<Cr>
 elseif pack#planned('vim-quickui')
     nnoremap <silent><leader>b :call quickui#tools#list_buffer('e')<Cr>
 endif

@@ -29,17 +29,16 @@ endif
 " tags
 " ------------------------------
 if get(g:, 'ctags_type', '') != ''
-    if pack#installed_leaderf()
-        call s:add_symbol("leaderftags")
-    endif
+    " tags reader: single choice, keep priority in sync with main/plugin/tags.vim
+    let g:tags_tool = ''
     if pack#installed_snacks()
-        call s:add_symbol("snackstags")
-    endif
-    if pack#installed('fuzzbox.vim')
-        call s:add_symbol("fuzzboxtags")
-    endif
-    if pack#installed_fzf()
-        call s:add_symbol("fzftags")
+        let g:tags_tool = 'snackstags'
+    elseif pack#installed_fuzzbox()
+        let g:tags_tool = 'fuzzboxtags'
+    elseif pack#installed_leaderf()
+        let g:tags_tool = 'leaderftags'
+    elseif pack#installed_fzf()
+        let g:tags_tool = 'fzftags'
     endif
     if v:version >= 800
         call s:add_symbol("gutentags")

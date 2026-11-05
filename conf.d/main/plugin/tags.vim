@@ -44,30 +44,35 @@ if get(g:, 'ctags_type', '') != ''
         let s:fzf_tags_command = 'ctags'
     endif
     let g:fzf_tags_command = s:fzf_tags_command . ' -R --exclude=' . join(lst, " --exclude=")
-    if g:symbol_tool =~ 'leaderftags'
+    " LeaderF builds its own tag cache, so it needs the ctags command even when
+    " another reader is selected.
+    if pack#installed_leaderf()
         let g:Lf_Ctags = g:fzf_tags_command
-        nnoremap <silent><leader>T :LeaderfTag<Cr>
-        nnoremap <silent>T<Cr> :LeaderfBufTagAll<Cr>
-    elseif g:symbol_tool =~ 'snackstags'
+    endif
+    let s:tags_tool = get(g:, 'tags_tool', '')
+    if s:tags_tool ==# 'snackstags'
         nnoremap <silent><leader>T :SnacksTagsWorkspace<Cr>
         nnoremap <silent>T<Cr> :SnacksTagsBufAll<Cr>
-    elseif g:symbol_tool =~ 'fuzzboxtags'
+    elseif s:tags_tool ==# 'fuzzboxtags'
         nnoremap <silent><leader>T :FuzzyTags<Cr>
         nnoremap <silent>T<Cr> :FuzzboxAllBufferTags<Cr>
-    elseif g:symbol_tool =~ 'fzftags' && executable('perl')
+    elseif s:tags_tool ==# 'leaderftags'
+        nnoremap <silent><leader>T :LeaderfTag
+        nnoremap <silent>T<Cr> :LeaderfBufTagAll
+    elseif s:tags_tool ==# 'fzftags' && executable('perl')
         nnoremap <silent><leader>T :FzfTags<Cr>
     endif
-    if pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
+    if s:tags_tool ==# 'snackstags'
+        nnoremap <silent>t<Cr> :SnacksTagsBuf<Cr>
+    elseif s:tags_tool ==# 'fuzzboxtags'
+        nnoremap <silent>t<Cr> :FuzzboxBufferTags<Cr>
+    elseif pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
         nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
     elseif pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
         nnoremap <silent>t<Cr> :Vista finder ctags<Cr>
-    elseif g:symbol_tool =~ 'leaderftags'
+    elseif s:tags_tool ==# 'leaderftags'
         nnoremap <silent>t<Cr> :LeaderfBufTag<Cr>
-    elseif g:symbol_tool =~ 'snackstags'
-        nnoremap <silent>t<Cr> :SnacksTagsBuf<Cr>
-    elseif g:symbol_tool =~ 'fuzzboxtags'
-        nnoremap <silent>t<Cr> :FuzzboxBufferTags<Cr>
-    elseif g:symbol_tool =~ 'fzftags'
+    elseif s:tags_tool ==# 'fzftags'
         nnoremap <silent>t<Cr> :FzfBTags<Cr>
     endif
 endif

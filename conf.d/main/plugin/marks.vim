@@ -2,7 +2,11 @@
 if utils#is_vscode()
     finish
 endif
-if pack#planned_fzf()
+if pack#installed_snacks()
+    nnoremap <silent><leader>m <Cmd>lua Snacks.picker.marks()<Cr>
+elseif pack#installed_fuzzbox()
+    nnoremap <silent><leader>m :FuzzyMarks<CR>
+elseif pack#planned_fzf()
     nnoremap <silent><leader>m :FzfMarks<CR>
 endif
 if pack#installed('vim-signature')
