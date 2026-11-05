@@ -214,7 +214,7 @@ elseif v:version >= 800
     if has('vim9script') && has('popupwin')
         " Options must exist before plugin/fuzzbox.vim runs.
         source $CFG_DIR/fuzzbox.vim
-        PackAdd 'fuzzbox.vim', {'on': '^Fuzzy.*$'}
+        PackAdd 'fuzzbox.vim'
     endif
 endif
 " -------------------
