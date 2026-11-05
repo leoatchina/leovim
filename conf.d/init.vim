@@ -74,7 +74,7 @@ endif
 " mapleader
 " ------------------------
 let g:mapleader = ' '
-let g:maplocalleader = 'q'
+let g:maplocalleader = '\'
 " -----------------------------------
 " filetypes definition
 " -----------------------------------
