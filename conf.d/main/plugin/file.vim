@@ -44,18 +44,15 @@ if pack#installed_fzf()
 endif
 if pack#installed_snacks()
     nnoremap <silent><nowait><leader>ff <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('%:p:h') } })<Cr>
-elseif pack#installed_fuzzbox()
+    nnoremap <silent><nowait><leader>p  <Cmd>lua Snacks.picker.files({ dirs = { require('cfg.snacks').root('vcs') } })<Cr>
+elseif pack#installed_fuzzbox() && pack#is_unix()
     nnoremap <silent><nowait><leader>ff :FuzzyFiles<Cr>
+    nnoremap <silent><nowait><leader>p :FuzzyFilesRoot<Cr>
 elseif pack#installed_leaderf()
     nnoremap <silent><nowait><leader>ff :LeaderfFile ./<Cr>
-elseif pack#installed_fzf()
-    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
-endif
-if pack#installed_snacks()
-    nnoremap <silent><nowait><leader>p  <Cmd>lua Snacks.picker.files({ dirs = { require('cfg.snacks').root('vcs') } })<Cr>
-elseif pack#installed_leaderf()
     nnoremap <silent><nowait><leader>p  :LeaderfFile <C-r>=utils#get_vcs_dir()<Cr><Cr>
 elseif pack#installed_fzf()
+    nnoremap <silent><nowait><leader>ff :FzfFiles<Cr>
     nnoremap <silent><nowait><leader>p  :FzfFiles <C-r>=utils#get_vcs_dir()<Cr><Cr>
 endif
 if pack#installed_snacks()
