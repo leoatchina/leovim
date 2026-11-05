@@ -6,7 +6,7 @@ if pack#installed_leaderf()
     nnoremap <nowait><M-l><M-l> :Leaderf line --fuzzy --no-sort<Cr>
 elseif pack#installed_fzf() && executable('rg')
     nnoremap <nowait><M-l><M-l> :FzfBLines<Cr>
-elseif pack#installed('fuzzbox.vim')
+elseif pack#installed_fuzzbox()
     nnoremap <silent><nowait><M-l><M-l> :FuzzyInBuffer<Cr>
 elseif pack#installed_snacks()
     nnoremap <silent><nowait><M-l><M-l> <Cmd>lua Snacks.picker.lines()<Cr>

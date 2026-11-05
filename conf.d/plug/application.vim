@@ -186,21 +186,13 @@ endif
 " --------------------------------
 PackAdd 'lightline.vim'
 PackAdd 'lightline-bufferline'
-" ----------------------------
-" scheme
-" ----------------------------
-if !pack#planned_treesitter() && pack#get('c') && pack#planned_adv_comp_eng()
-    PackAdd 'jackguo380/vim-lsp-cxx-highlight', {'for': g:c_filetypes}
-endif
 if g:has_truecolor
     PackAdd 'sainnhe/sonokai'
     if has('nvim')
-        " PackAdd 'catppuccin/nvim', {'as': 'catppuccin-nvim'}
         PackAdd 'EdenEast/nightfox.nvim'
         PackAdd 'folke/tokyonight.nvim'
         PackAdd 'craftzdog/solarized-osaka.nvim'
     else
-        " PackAdd 'joshdick/onedark.vim'
         PackAdd 'catppuccin/vim', {'as': 'catppuccin-vim'}
         PackAdd 'bluz71/vim-moonfly-colors'
         PackAdd 'bluz71/vim-nightfly-colors'
@@ -220,6 +212,8 @@ if has('nvim')
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'
     if has('vim9script') && has('popupwin')
+        " Options must exist before plugin/fuzzbox.vim runs.
+        source $CFG_DIR/fuzzbox.vim
         PackAdd 'fuzzbox.vim', {'on': '^Fuzzy.*$'}
     endif
 endif

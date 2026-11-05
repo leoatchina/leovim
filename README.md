@@ -24,9 +24,9 @@
 
 新建文件时插入模板不等于自动为所有项目创建这些文件。离线运行也需要事先准备所选插件、语言服务器及外部工具。
 
-Fuzzbox 通过 `pack/clone/opt/update-clone.sh` 克隆到本地 opt，再由 `init.vim` 在 `plug#end()` 前通过 `PackAdd 'fuzzbox.vim'` 注册。条件是未安装 LeaderF/FZF、非 Neovim，且有 vim9script/popupwin；不是只检查是否声明。默认插件快捷键关闭，后备沿用 `<Leader>ff`（当前文件目录）、`<Leader>p`（VCS 目录）、`<C-p>`（项目根）、`<Leader>b`、`<Leader>u`、`<M-l><M-l>`、`<Leader>T` 和 `t<CR>`；当前文件标签需要 ctags，读取已保存文件。
+Fuzzbox 通过 `pack/clone/opt/update-clone.sh` 克隆到本地 opt，再由 `init.vim` 在 `plug#end()` 前通过 `source $CFG_DIR/fuzzbox.vim` 设置选项、`PackAdd 'fuzzbox.vim'` 注册。条件是未安装 LeaderF/FZF、非 Neovim，且有 vim9script/popupwin；不是只检查是否声明。默认插件快捷键关闭，后备沿用 `<Leader>b`、`<Leader>u`、`<Leader>m`、`<M-l><M-l>` 和 `<Leader>T`。
 
-Fuzzbox 使用顶部输入、结果自上而下的布局；`Ctrl-j` 向下、`Ctrl-k` 向上，同时保留 `Ctrl-n/p` 和方向键。当前文件标签列表的 `Ctrl-]` 仍为垂直分屏打开。
+Fuzzbox 使用顶部输入、结果自上而下的布局；`Ctrl-j` 向下、`Ctrl-k` 向上，同时保留 `Ctrl-n/p` 和方向键。
 
 Snacks 同样克隆在 `pack/clone/opt/snacks.nvim`，由 `update-clone.sh` 维护，使用 `PackAdd 'snacks.nvim'` 注册，不交给 vim-plug 下载。Neovim 0.9.4+ 在启动时执行 [`cfg/snacks.lua`](conf.d/main/lua/cfg/snacks.lua)，启用 input / picker，接管 `vim.ui.input` 和 `vim.ui.select`，替代 dressing.nvim；这部分不受 FZF / LeaderF 是否安装影响。Dropbar 不再覆盖 `vim.ui.select`。
 

@@ -55,7 +55,6 @@ if get(g:, 'ctags_type', '') != ''
         nnoremap <silent>T<Cr> :SnacksTagsBufAll<Cr>
     elseif s:tags_tool ==# 'fuzzboxtags'
         nnoremap <silent><leader>T :FuzzyTags<Cr>
-        nnoremap <silent>T<Cr> :FuzzboxAllBufferTags<Cr>
     elseif s:tags_tool ==# 'leaderftags'
         nnoremap <silent><leader>T :LeaderfTag
         nnoremap <silent>T<Cr> :LeaderfBufTagAll
@@ -64,8 +63,6 @@ if get(g:, 'ctags_type', '') != ''
     endif
     if s:tags_tool ==# 'snackstags'
         nnoremap <silent>t<Cr> :SnacksTagsBuf<Cr>
-    elseif s:tags_tool ==# 'fuzzboxtags'
-        nnoremap <silent>t<Cr> :FuzzboxBufferTags<Cr>
     elseif pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
         nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
     elseif pack#installed('vista.vim') && g:ctags_type =~ 'Universal'

@@ -65,9 +65,6 @@ if pack#planned_leaderf()
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
     source $CFG_DIR/leaderf.vim
 endif
-if pack#installed_fuzzbox()
-    source $CFG_DIR/fuzzbox.vim
-endif
 " --------------------------------
 " commands && highlights
 " --------------------------------
