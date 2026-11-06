@@ -158,8 +158,7 @@ if pack#get('c')
         let g:coc_global_extensions += ['coc-clangd']
     endif
 endif
-call coc#config('python.pythonPath', g:python_prog)
-if pack#get('R') && g:R_exe != ''
+if pack#get('r') && g:R_exe != ''
     let g:coc_global_extensions += ['coc-r-lsp']
 endif
 if pack#get('rust') && g:cargo_exe != ''
