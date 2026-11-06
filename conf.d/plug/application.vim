@@ -23,11 +23,11 @@ elseif pack#planned_blink()
     PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets', 'blink-cmp-deps'], 'lua': 'cfg.blink'}
 elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
-        PackAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}
+        PackAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release"), 'vim': 'coc'}
     else
-        PackAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci', 'dir': utils#expand("~/.leovim.d/coc/master")}
+        PackAdd 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci', 'dir': utils#expand("~/.leovim.d/coc/master"), 'vim': 'coc'}
     endif
-    PackAdd 'coc-fzf'
+    PackAdd 'coc-fzf', {'deps': 'coc.nvim', 'vim': 'coc'}
 endif
 " ------------------------------
 " lsp && linter tool install
@@ -36,7 +36,7 @@ if pack#planned_lsp()
     let g:lint_tool = 'lsp'
     " lsp related
     PackAdd 'mason-org/mason.nvim', {'lua': 'cfg.mason'}
-    PackAdd 'neovim/nvim-lspconfig', {'lua': 'lsp'}
+    PackAdd 'neovim/nvim-lspconfig', {'lua': 'lsp', 'vim': 'lsp'}
     PackAdd 'mason-org/mason-lspconfig.nvim', {'deps': ['mason.nvim', 'nvim-lspconfig'], 'lua': 'lsp'}
     PackAdd 'ravenxrz/call-graph.nvim', {'deps': 'nvim-lspconfig', 'lua': 'lsp'}
     " lightline
@@ -117,17 +117,17 @@ endif
 " fuzzy finders
 " ------------------------------
 if exists('*systemlist') && (has('patch-7.4.1304') || has('nvim'))
-    PackAdd 'junegunn/fzf.vim'
+    PackAdd 'junegunn/fzf.vim', {'deps': 'fzf', 'vim': 'fzf'}
     if utils#is_win()
-        PackAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\.local\\fzf')}
+        PackAdd 'junegunn/fzf', {'do': 'Powershell ./install.ps1 --all', 'dir': utils#expand('$HOME\\.local\\fzf'), 'vim': 'fzf'}
     else
-        PackAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf')}
+        PackAdd 'junegunn/fzf', {'do': './install --all', 'dir': utils#expand('~/.local/fzf'), 'vim': 'fzf'}
     endif
-    PackAdd 'fzf-registers'
-    PackAdd 'fzf-tabs'
+    PackAdd 'fzf-registers', {'deps': 'fzf.vim'}
+    PackAdd 'fzf-tabs', {'deps': 'fzf.vim'}
 endif
 if (has('nvim') || has('patch-7.4.1126')) && g:python_version > 3 && !pack#get('noleaderf') && !pack#get('no-leaderf')
-    PackAdd 'Yggdroot/LeaderF', {'do': ':LeaderfInstallCExtension'}
+    PackAdd 'Yggdroot/LeaderF', {'vim': 'leaderf', 'do': ':LeaderfInstallCExtension'}
 endif
 " Git
 " ------------------------------
@@ -170,14 +170,14 @@ PackAdd 'vim-sidebar-manager'
 if v:version >= 801 || has('nvim')
     let g:fern_disable_startup_warnings = 1
     let g:fern#renderer = "nerdfont"
-    PackAdd 'vim-fern'
+    PackAdd 'vim-fern', {'vim': 'fern'}
     PackAdd 'vim-nerdfont'
     PackAdd 'vim-glyph-palette'
-    PackAdd 'vim-fern-git-status'
-    PackAdd 'vim-fern-hijack'
-    PackAdd 'vim-fern-renderer-nerdfont'
-    PackAdd 'fern-mapping-fzf.vim'
-    PackAdd 'fern-preview.vim'
+    PackAdd 'vim-fern-git-status', {'deps': 'vim-fern'}
+    PackAdd 'vim-fern-hijack', {'deps': 'vim-fern'}
+    PackAdd 'vim-fern-renderer-nerdfont', {'deps': 'vim-fern'}
+    PackAdd 'fern-mapping-fzf.vim', {'deps': 'vim-fern'}
+    PackAdd 'fern-preview.vim', {'deps': 'vim-fern'}
 else
     PackAdd 'vim-vinegar'
 endif
@@ -212,9 +212,7 @@ if has('nvim')
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'
     if has('vim9script') && has('popupwin')
-        " Options must exist before plugin/fuzzbox.vim runs.
-        source $CFG_DIR/fuzzbox.vim
-        PackAdd 'fuzzbox.vim'
+        PackAdd 'fuzzbox.vim', {'vim': 'fuzzbox'}
     endif
 endif
 " -------------------

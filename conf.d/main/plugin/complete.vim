@@ -41,17 +41,10 @@ endif
 " -----------------------------
 if pack#installed_lsp()
     let g:vista_default_executive = 'nvim_lsp'
-    source $CFG_DIR/lsp.vim
 elseif pack#installed_coc()
     let g:vista_default_executive = 'coc'
 elseif pack#planned('vista.vim')
     let g:vista_default_executive = 'ctags'
-endif
-" ------------------------------
-" normal complete_engine
-" ------------------------------
-if pack#installed_coc()
-    source $CFG_DIR/coc.vim
 endif
 " ------------------------------
 " snippets

@@ -51,7 +51,6 @@ xmap <C-k> g%
 " funzzy finder
 " --------------------------------
 if pack#planned_fzf()
-    source $CFG_DIR/fzf.vim
     nmap m<tab> <plug>(fzf-maps-n)
     xmap m<tab> <plug>(fzf-maps-x)
     omap m<tab> <plug>(fzf-maps-o)
@@ -63,7 +62,6 @@ if pack#planned_leaderf()
     nnoremap <silent><leader>; :Leaderf --next<Cr>
     nnoremap <silent><leader>, :Leaderf --previous<Cr>
     nnoremap <silent><M-k><M-l> :LeaderfSelf<Cr>
-    source $CFG_DIR/leaderf.vim
 endif
 " --------------------------------
 " commands && highlights

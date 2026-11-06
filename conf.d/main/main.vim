@@ -336,8 +336,7 @@ elseif !pack#get('nocomplete')
         endif
     else
         let g:complete_engine = 'mcm'
-        source $CFG_DIR/mcm.vim
-        PackAdd 'vim-mucomplete'
-        PackAdd 'hrsh7th/vim-vsnip-integ'
+        PackAdd 'vim-mucomplete', {'vim': 'mcm'}
+        PackAdd 'hrsh7th/vim-vsnip-integ', {'deps': 'vim-mucomplete', 'vim': 'mcm'}
     endif
 endif

@@ -215,6 +215,15 @@ function! pack#load_raw(plugins) abort
     if !empty(missing)
         return 0
     endif
+    for plugin in unloaded
+        let spec = get(g:pack_specs, plugin, {})
+        for dep in get(spec, 'deps', [])
+            if !empty(dep) && !pack#loaded(dep) && pack#installed(dep)
+                call pack#load_raw(dep)
+            endif
+        endfor
+        call s:prepare_vim_cfg(plugin)
+    endfor
     call call('plug#load', unloaded)
     call s:ensure_rtp(unloaded)
     for plugin in unloaded
@@ -240,7 +249,9 @@ let s:on_patterns = []
 let s:cmd_proxies = {}
 let s:map_plugins = {}
 let s:opt_plugs = {}
-
+let s:vim_groups = {}
+let s:vim_sourced = {}
+let s:vim_loading = {}
 
 function! pack#begin(plugin_home) abort
     let g:pack_specs = {}
@@ -252,6 +263,9 @@ function! pack#begin(plugin_home) abort
     let s:cmd_proxies = {}
     let s:map_plugins = {}
     let s:opt_plugs = {}
+    let s:vim_groups = {}
+    let s:vim_sourced = {}
+    let s:vim_loading = {}
 
     let s:finished = 0
     let s:installed_cache = {}
@@ -296,13 +310,17 @@ function! pack#declare(plugin, ...) abort
         let key_name = plugin
     endif
     let extras = {}
-    for field in ['deps', 'init', 'lua']
+    for field in ['deps', 'init', 'lua', 'vim']
         if has_key(opts, field)
             let extras[field] = remove(opts, field)
         endif
     endfor
-    if !has('nvim') && !empty(extras)
-        echoerr 'PackAdd deps/init/lua are Neovim-only: ' . key_name
+    let nvim_extras = filter(copy(extras), 'v:key !=# "vim" && v:key !=# "deps"')
+    if !has('nvim') && !empty(nvim_extras)
+        echoerr 'PackAdd init/lua are Neovim-only: ' . key_name
+    endif
+    if has_key(extras, 'vim') && (type(extras.vim) != v:t_string || empty(extras.vim))
+        echoerr 'PackAdd: vim must be a non-empty string: ' . key_name
     endif
     call pack#register(key_name, extras)
     if has_key(g:plugs, key_name)
@@ -332,6 +350,15 @@ function! pack#update() abort
     PlugUpdate
 endfunction
 
+function! s:register_vim_group(plugin, group) abort
+    if !has_key(s:vim_groups, a:group)
+        let s:vim_groups[a:group] = []
+    endif
+    if index(s:vim_groups[a:group], a:plugin) < 0
+        call add(s:vim_groups[a:group], a:plugin)
+    endif
+endfunction
+
 function! pack#register(name, extras) abort
     if has_key(g:pack_specs, a:name)
         let existing = g:pack_specs[a:name]
@@ -340,6 +367,13 @@ function! pack#register(name, extras) abort
         endif
         if has_key(a:extras, 'lua')
             throw printf('PackAdd: duplicate lua binding for %s', a:name)
+        endif
+        if has_key(a:extras, 'vim')
+            if has_key(existing, 'vim') && existing.vim !=# a:extras.vim
+                throw printf('PackAdd: duplicate vim binding for %s', a:name)
+            endif
+            let existing.vim = a:extras.vim
+            call s:register_vim_group(a:name, a:extras.vim)
         endif
         if has_key(a:extras, 'deps')
             let new_deps = type(a:extras.deps) == v:t_list ? a:extras.deps : [a:extras.deps]
@@ -358,6 +392,74 @@ function! pack#register(name, extras) abort
     let spec.order = len(g:pack_order) + 1
     let g:pack_specs[a:name] = spec
     call add(g:pack_order, a:name)
+    if has_key(a:extras, 'vim')
+        call s:register_vim_group(a:name, a:extras.vim)
+    endif
+endfunction
+
+function! s:source_vim_group(group) abort
+    if get(s:vim_sourced, a:group, 0)
+        return 1
+    endif
+    if get(s:vim_loading, a:group, 0)
+        return 0
+    endif
+    let members = get(s:vim_groups, a:group, [])
+    if empty(members)
+        return 0
+    endif
+
+    " 1. 多个插件对一个vim时，对应的插件必须全部已安装
+    for member in members
+        if !pack#installed(member)
+            return 0
+        endif
+    endfor
+
+    let s:vim_loading[a:group] = 1
+    try
+        " 2. 计划好deps后 (所有依赖必须已安装，未加载的依赖先加载)
+        for member in members
+            let spec = get(g:pack_specs, member, {})
+            let deps = get(spec, 'deps', [])
+            let deps = type(deps) == v:t_list ? deps : [deps]
+            for dep in deps
+                if empty(dep) | continue | endif
+                if !pack#installed(dep)
+                    return 0
+                endif
+                if !pack#loaded(dep)
+                    call pack#load_raw(dep)
+                endif
+            endfor
+        endfor
+
+        " 3. 才source，当然只source一次
+        let file = utils#expand('$CFG_DIR/' . a:group . '.vim')
+        if filereadable(file)
+            let s:vim_sourced[a:group] = 1
+            execute 'source ' . fnameescape(file)
+            return 1
+        endif
+    finally
+        unlet s:vim_loading[a:group]
+    endtry
+    return 0
+endfunction
+
+function! s:prepare_vim_cfg(plugin) abort
+    let spec = get(g:pack_specs, a:plugin, {})
+    if has_key(spec, 'vim')
+        call s:source_vim_group(spec.vim)
+    endif
+endfunction
+
+function! pack#source_vim(group) abort
+    return s:source_vim_group(a:group)
+endfunction
+
+function! pack#vim_sourced(group) abort
+    return get(s:vim_sourced, a:group, 0)
 endfunction
 
 function! s:is_on_regex(value, is_map) abort
@@ -396,7 +498,7 @@ function! pack#register_on(plugin, value) abort
                         \ 'pattern': value,
                         \ 'map': is_map,
                         \ })
-        elseif is_map || !has('nvim')
+        elseif is_map
             call add(plug_exact, value)
         else
             let cmd_name = substitute(value, '!$', '', '')
@@ -528,6 +630,11 @@ function! pack#end() abort
             let g:plugs[name].on = []
         endif
     endfor
+    for name in g:pack_order
+        if !pack#lazy(name) && pack#installed(name)
+            call s:prepare_vim_cfg(name)
+        endif
+    endfor
     call plug#end()
     " Startup plugins must be on rtp even when vim-plug's own bookkeeping
     " skipped them (seen-missing-at-end race on slow mounts).
@@ -536,19 +643,31 @@ function! pack#end() abort
     execute 'set rtp-=' . fnameescape($MAIN_DIR . '/after')
     execute 'set rtp+=' . fnameescape($MAIN_DIR . '/after')
 
-    if has('nvim')
-        call s:prepare_maps()
-        for [cmd, names] in items(s:cmd_proxies)
-            if exists(':' . cmd) != 2
-                let mods_expr = has('patch-7.4.1898') ? '<q-mods>' : '""'
-                execute printf(
-                \ 'command! -nargs=* -range -bang -complete=file %s call pack#lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s, %s)',
-                \ cmd, string(cmd), mods_expr, string(names))
+    augroup PackVimFor
+        autocmd!
+        for [name, spec] in items(g:pack_specs)
+            if has_key(spec, 'vim') && has_key(g:plugs, name) && has_key(g:plugs[name], 'for')
+                let for_fts = g:plugs[name].for
+                let for_fts = type(for_fts) == v:t_list ? for_fts : [for_fts]
+                for ft in for_fts
+                    execute printf('autocmd FileType %s ++once call <SID>prepare_vim_cfg(%s)', ft, string(name))
+                endfor
             endif
         endfor
+    augroup END
+
+    call s:prepare_maps()
+    for [cmd, names] in items(s:cmd_proxies)
+        if exists(':' . cmd) != 2
+            let mods_expr = has('patch-7.4.1898') ? '<q-mods>' : '""'
+            execute printf(
+            \ 'command! -nargs=* -range -bang -complete=file %s call pack#lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s, %s)',
+            \ cmd, string(cmd), mods_expr, string(names))
+        endif
+    endfor
+    if has('nvim')
         lua require('pack').finish()
         let s:finished = 1
-
     endif
 endfunction
 

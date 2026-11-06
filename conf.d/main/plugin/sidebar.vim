@@ -228,7 +228,6 @@ endif
 " tree_browser
 " --------------------------
 if pack#planned('vim-fern')
-    source $CFG_DIR/fern.vim
     let g:tree_browser = 'fern'
     function! s:check_fern_tree_browser(nr) abort
         if s:check_buf_ft('fern', a:nr)
