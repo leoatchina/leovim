@@ -1,20 +1,34 @@
--- Neovim scheduler for PackAdd deps/init/cfg extensions.
--- pack.vim owns declarations, lazy state, installation state, and plug#load().
+-- Lua owns declaration validation, dependency/config ordering, init and startup.
+-- pack.vim remains the source of truth for installation and script loading.
+--
+-- pack#end() calls prepare() before Vim preloads/plug#end(), then finish().
+-- prepare() validates snapshots and listens only for managed `for` User events;
+-- it never runs user init/config. finish() drains queued events and schedules startup.
+-- `ready` means scripts/init succeeded but the shared Lua group is still pending.
+-- Missing plugins/dependencies can retry; failed init/require are session-terminal.
+-- reset() clears PackLua callbacks and execution state, not Lua's require cache.
 
 local M = {}
 
-local state = {
-  finished = false,
-  specs = {}, -- snapshot of vim.g.pack_specs
-  order = {}, -- snapshot of vim.g.pack_order
-  lazy = {}, -- snapshot of vim.g.pack_lazy
-  groups = nil, -- cfg -> { members = { name, ... }, order = number }
-  group_order = nil,
-  init_state = {}, -- plugin -> pending | running | done | failed
-  cfg_called = {}, -- cfg -> true once require was attempted
-  group_state = {}, -- cfg -> pending | running | done | failed
-  init_done = {}, -- plugin -> true once scripts + init/cfg are complete
-}
+-- State and declaration snapshots.
+local function new_state()
+  return {
+    prepared = false,
+    finished = false,
+    specs = {}, -- declaration snapshots, not script/installation truth
+    order = {},
+    lazy = {},
+    groups = nil, -- cfg -> { members = { name, ... }, order = number }
+    group_order = nil,
+    compiled_inits = {},
+    node_state = {}, -- plugin -> pending | running | ready | done | failed
+    group_state = {}, -- cfg -> pending | running | done | failed
+    native_pending = {}, -- ordered User events received before finish()
+    native_seen = {}, -- deduplicate only the pending event queue
+  }
+end
+
+local state = new_state()
 
 local function err(fmt, ...)
   error(('pack.lua: ' .. string.format(fmt, ...)), 0)
@@ -24,42 +38,13 @@ local function get_spec(name)
   return state.specs[name]
 end
 
-local compiled_inits = {}
-
-function M.reset()
-  state.finished = false
-  state.specs = {}
-  state.order = {}
-  state.lazy = {}
-  state.groups = nil
-  state.group_order = nil
-  state.init_state = {}
-  state.cfg_called = {}
-  state.group_state = {}
-  state.init_done = {}
-  compiled_inits = {}
-end
-
-local function as_list(value)
-  if value == nil then
-    return {}
-  end
-  if type(value) == 'string' then
-    return { value }
-  end
-  if type(value) == 'table' then
-    return value
-  end
-  return nil
-end
-
 local function deps_of(name)
   local entry = get_spec(name)
-  if not entry then
+  if not entry or entry.deps == nil then
     return {}
   end
-  local deps = as_list(entry.deps)
-  if not deps then
+  local deps = entry.deps
+  if type(deps) ~= 'table' then
     err('invalid deps for %s: string or list of strings required', name)
   end
   return deps
@@ -73,6 +58,7 @@ local function lazy(name)
   return state.lazy[name] == 1
 end
 
+-- Declaration validation.
 local function validate_entry(name, entry, plugs)
   if type(entry) ~= 'table' then
     err('invalid pack.vim spec for %s', name)
@@ -89,7 +75,7 @@ local function validate_entry(name, entry, plugs)
     if not chunk then
       err('invalid init for %s: %s', name, tostring(compile_error))
     end
-    compiled_inits[name] = chunk
+    state.compiled_inits[name] = chunk
   end
   if entry.lua ~= nil and (
       type(entry.lua) ~= 'string'
@@ -141,6 +127,7 @@ local function validate()
   end
 end
 
+-- Stable dependency and configuration-group ordering.
 local function dependency_closure(name, cache)
   cache = cache or {}
   if cache[name] then
@@ -217,7 +204,7 @@ local function build_groups()
     visit(cfg, {})
   end
 
-  local sorted, emitted = {}, {}
+  local ordered_groups, emitted = {}, {}
   local function emit(cfg)
     if emitted[cfg] then
       return
@@ -230,7 +217,7 @@ local function build_groups()
     for _, dependency_cfg in ipairs(dependencies) do
       emit(dependency_cfg)
     end
-    sorted[#sorted + 1] = cfg
+    ordered_groups[#ordered_groups + 1] = cfg
   end
   table.sort(declaration_order, function(a, b)
     return groups[a].order < groups[b].order
@@ -255,7 +242,7 @@ local function build_groups()
     end)
     -- Intra-group dependency order via DFS topological sort (stable by
     -- declaration order); validate() already rejects dependency cycles.
-    local sorted, emitted = {}, {}
+    local sorted_members, emitted = {}, {}
     local function emit(member)
       if emitted[member] then
         return
@@ -268,17 +255,18 @@ local function build_groups()
       for _, dep in ipairs(deps) do
         emit(dep)
       end
-      sorted[#sorted + 1] = member
+      sorted_members[#sorted_members + 1] = member
     end
     for _, member in ipairs(group.members) do
       emit(member)
     end
-    group.members = sorted
+    group.members = sorted_members
   end
   state.groups = groups
-  state.group_order = sorted
+  state.group_order = ordered_groups
 end
 
+-- Node and configuration-group execution.
 local function load_plugin(name)
   local ok, result = pcall(vim.fn['pack#load_raw'], name)
   return ok and result == 1
@@ -287,12 +275,11 @@ end
 local run_group
 
 local function execute_init(name, entry)
-  if not entry.init or state.init_state[name] == 'done' then
+  if not entry.init then
     return true
   end
-  -- finish() validates and compiles every init before requests are accepted.
-  local ok, execution_error = pcall(compiled_inits[name])
-  state.init_state[name] = ok and 'done' or 'failed'
+  -- prepare() validates and compiles every init before execution.
+  local ok, execution_error = pcall(state.compiled_inits[name])
   if not ok then
     vim.notify(('pack.lua: init for %s failed: %s'):format(name, tostring(execution_error)), vim.log.levels.ERROR)
   end
@@ -300,54 +287,50 @@ local function execute_init(name, entry)
 end
 
 local function ensure_node(name, current_cfg)
-  if state.init_done[name] then
+  local node_state = state.node_state[name]
+  if node_state == 'done' then
     return true
   end
-  local entry = get_spec(name)
-  local has_no_cfg = entry == nil or entry.lua == nil
-  -- A cfg-bound member only counts as done inside its own group run.
-  if state.init_state[name] == 'done' and (has_no_cfg or entry.lua == current_cfg) then
-    return true
-  end
-  if state.init_state[name] == 'failed' then
+  if node_state == 'failed' then
     return false
   end
-  if state.init_state[name] == 'running' then
+  if node_state == 'running' then
     err('initialization re-entry: %s', name)
   end
+  local entry = get_spec(name)
+  if node_state == 'ready' and entry.lua == current_cfg then
+    return true
+  end
   if not installed(name) then
-    state.init_state[name] = 'pending'
+    state.node_state[name] = 'pending'
     return false
   end
   if entry and entry.lua and entry.lua ~= current_cfg then
-    run_group(entry.lua)
-    return state.init_done[name] == true
+    return run_group(entry.lua)
   end
 
-  state.init_state[name] = 'running'
+  state.node_state[name] = 'running'
   for _, dependency in ipairs(deps_of(name)) do
     if not ensure_node(dependency, current_cfg) then
-      state.init_state[name] = 'pending'
+      state.node_state[name] = 'pending'
       return false
     end
   end
   if not load_plugin(name) then
-    state.init_state[name] = 'pending'
+    state.node_state[name] = 'pending'
     return false
   end
   if entry and not execute_init(name, entry) then
+    state.node_state[name] = 'failed'
     return false
   end
-  state.init_state[name] = 'done'
-  if not entry or not entry.lua then
-    state.init_done[name] = true
-  end
+  state.node_state[name] = entry and entry.lua and 'ready' or 'done'
   return true
 end
 
 run_group = function(cfg)
-  if state.cfg_called[cfg] then
-    return state.group_state[cfg] == 'done'
+  if state.group_state[cfg] == 'done' then
+    return true
   end
   if state.group_state[cfg] == 'failed' then
     return false
@@ -363,29 +346,45 @@ run_group = function(cfg)
   state.group_state[cfg] = 'running'
   for _, member in ipairs(group.members) do
     if not ensure_node(member, cfg) then
-      state.group_state[cfg] = state.init_state[member] == 'failed' and 'failed' or 'pending'
+      state.group_state[cfg] = state.node_state[member] == 'failed' and 'failed' or 'pending'
       return false
     end
   end
 
-  state.cfg_called[cfg] = true
   local ok, execution_error = pcall(require, cfg)
   state.group_state[cfg] = ok and 'done' or 'failed'
   if not ok then
     vim.notify(('pack.lua: cfg %s failed: %s'):format(cfg, tostring(execution_error)), vim.log.levels.ERROR)
   end
   for _, member in ipairs(group.members) do
-    state.init_done[member] = ok
-    state.init_state[member] = ok and 'done' or 'failed'
+    state.node_state[member] = ok and 'done' or 'failed'
   end
   return ok
 end
 
+-- Explicit requests and native vim-plug User notifications.
 local function request_one(name)
   if not vim.g.plugs or vim.g.plugs[name] == nil then
     err('unknown plugin request: %s', name)
   end
   return ensure_node(name, nil)
+end
+
+local function on_native_load(args)
+  local name = args.match
+  local node_state = state.node_state[name]
+  -- Scheduler -> plug#load -> User is already being handled by ensure_node().
+  if node_state == 'running' or node_state == 'done' or node_state == 'failed' then
+    return
+  end
+  if not state.finished then
+    if not state.native_seen[name] then
+      state.native_seen[name] = true
+      state.native_pending[#state.native_pending + 1] = name
+    end
+    return
+  end
+  request_one(name)
 end
 
 function M.load_request(names)
@@ -398,12 +397,16 @@ function M.load_request(names)
   if type(names) ~= 'table' then
     err('load request must be a plugin name or list')
   end
+  local success = true
   for _, name in ipairs(names) do
-    request_one(name)
+    if not request_one(name) then
+      success = false
+    end
   end
-  return true
+  return success
 end
 
+-- Lifecycle and status queries.
 local function run_startup()
   for _, cfg in ipairs(state.group_order or {}) do
     local group = state.groups[cfg]
@@ -430,8 +433,13 @@ local function run_startup()
   end
 end
 
-function M.finish()
-  if state.finished then
+function M.reset()
+  vim.api.nvim_create_augroup('PackLua', { clear = true })
+  state = new_state()
+end
+
+function M.prepare()
+  if state.prepared then
     return
   end
   state.specs = vim.g.pack_specs or {}
@@ -439,25 +447,55 @@ function M.finish()
   state.lazy = vim.g.pack_lazy or {}
   validate()
   build_groups()
+  local group = vim.api.nvim_create_augroup('PackLua', { clear = true })
+  local plugs, native_names = vim.g.plugs or {}, {}
+  for _, name in ipairs(state.order) do
+    if plugs[name] and plugs[name]['for'] ~= nil then
+      native_names[#native_names + 1] = name
+    end
+  end
+  if #native_names > 0 then
+    vim.api.nvim_create_autocmd('User', {
+      group = group,
+      pattern = native_names,
+      callback = on_native_load,
+    })
+  end
+  state.prepared = true
+end
+
+function M.finish()
+  if not state.prepared then
+    err('finish before prepare')
+  end
+  if state.finished then
+    return
+  end
   state.finished = true
+  local pending = state.native_pending
+  state.native_pending = {}
+  state.native_seen = {}
+  for _, name in ipairs(pending) do
+    request_one(name)
+  end
   if vim.v.vim_did_enter == 1 then
     run_startup()
   else
     vim.api.nvim_create_autocmd('VimEnter', {
+      group = 'PackLua',
       once = true,
       callback = run_startup,
     })
   end
 end
+
 function M.status()
   return {
     finished = state.finished,
     groups = state.groups,
     group_order = state.group_order,
     group_state = state.group_state,
-    cfg_called = state.cfg_called,
-    init_state = state.init_state,
-    init_done = state.init_done,
+    node_state = state.node_state,
   }
 end
 
