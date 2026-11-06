@@ -296,13 +296,13 @@ function! pack#declare(plugin, ...) abort
         let key_name = plugin
     endif
     let extras = {}
-    for field in ['deps', 'init', 'cfg']
+    for field in ['deps', 'init', 'lua']
         if has_key(opts, field)
             let extras[field] = remove(opts, field)
         endif
     endfor
     if !has('nvim') && !empty(extras)
-        echoerr 'PackAdd deps/init/cfg are Neovim-only: ' . key_name
+        echoerr 'PackAdd deps/init/lua are Neovim-only: ' . key_name
     endif
     call pack#register(key_name, extras)
     if has_key(g:plugs, key_name)
@@ -338,8 +338,8 @@ function! pack#register(name, extras) abort
         if has_key(a:extras, 'init')
             throw printf('PackAdd: duplicate init binding for %s', a:name)
         endif
-        if has_key(a:extras, 'cfg')
-            throw printf('PackAdd: duplicate cfg binding for %s', a:name)
+        if has_key(a:extras, 'lua')
+            throw printf('PackAdd: duplicate lua binding for %s', a:name)
         endif
         if has_key(a:extras, 'deps')
             let new_deps = type(a:extras.deps) == v:t_list ? a:extras.deps : [a:extras.deps]

@@ -58,14 +58,14 @@ nnoremap <silent><leader>c[ V{:call nerdcommenter#Comment('x', 'toggle')<CR>
 " quick jump in buffer
 " ------------------------
 if has('nvim')
-    PackAdd 'flash.nvim', {'cfg': 'cfg.flash'}
+    PackAdd 'flash.nvim', {'lua': 'cfg.flash'}
 else
     let g:clever_f_smart_case = 1
     let g:clever_f_repeat_last_char_inputs = ['<Tab>']
     PackAdd 'clever-f.vim'
 endif
 if has('nvim') && utils#is_vscode()
-    PackAdd 'hop.nvim', {'cfg': 'cfg.hop'}
+    PackAdd 'hop.nvim', {'lua': 'cfg.hop'}
 else
     PackAdd 'vim-easymotion'
     PackAdd 'vim-easymotion-chs'

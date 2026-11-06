@@ -8,19 +8,19 @@ if !pack#get('nocomplete') && exists('v:true') && exists("##TextChangedP")
     endif
 endif
 if pack#planned_cmp()
-    PackAdd 'hrsh7th/nvim-cmp', {'cfg': 'cfg.cmp'}
-    PackAdd 'hrsh7th/cmp-nvim-lsp', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
-    PackAdd 'hrsh7th/cmp-nvim-lua', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
-    PackAdd 'hrsh7th/cmp-buffer', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
-    PackAdd 'hrsh7th/cmp-cmdline', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
-    PackAdd 'hrsh7th/cmp-vsnip', {'deps': ['vim-vsnip', 'nvim-cmp'], 'cfg': 'cfg.cmp'}
-    PackAdd 'FelipeLema/cmp-async-path', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
-    PackAdd 'onsails/lspkind-nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
-    PackAdd 'xzbdmw/colorful-menu.nvim', {'deps': 'nvim-cmp', 'cfg': 'cfg.cmp'}
+    PackAdd 'hrsh7th/nvim-cmp', {'lua': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-nvim-lsp', {'deps': 'nvim-cmp', 'lua': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-nvim-lua', {'deps': 'nvim-cmp', 'lua': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-buffer', {'deps': 'nvim-cmp', 'lua': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-cmdline', {'deps': 'nvim-cmp', 'lua': 'cfg.cmp'}
+    PackAdd 'hrsh7th/cmp-vsnip', {'deps': ['vim-vsnip', 'nvim-cmp'], 'lua': 'cfg.cmp'}
+    PackAdd 'FelipeLema/cmp-async-path', {'deps': 'nvim-cmp', 'lua': 'cfg.cmp'}
+    PackAdd 'onsails/lspkind-nvim', {'deps': 'nvim-cmp', 'lua': 'cfg.cmp'}
+    PackAdd 'xzbdmw/colorful-menu.nvim', {'deps': 'nvim-cmp', 'lua': 'cfg.cmp'}
 elseif pack#planned_blink()
     PackAdd 'Saghen/blink.lib'
     PackAdd 'Mestane/blink-cmp-deps'
-    PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets', 'blink-cmp-deps'], 'cfg': 'cfg.blink'}
+    PackAdd 'Saghen/blink.cmp', {'branch': 'main', 'deps': ['blink.lib', 'friendly-snippets', 'blink-cmp-deps'], 'lua': 'cfg.blink'}
 elseif pack#planned_coc()
     if get(g:, 'coc_install_release', 0)
         PackAdd 'neoclide/coc.nvim', {'branch': 'release', 'dir': utils#expand("~/.leovim.d/coc/release")}
@@ -35,18 +35,18 @@ endif
 if pack#planned_lsp()
     let g:lint_tool = 'lsp'
     " lsp related
-    PackAdd 'mason-org/mason.nvim', {'cfg': 'cfg.mason'}
-    PackAdd 'neovim/nvim-lspconfig', {'cfg': 'lsp'}
-    PackAdd 'mason-org/mason-lspconfig.nvim', {'deps': ['mason.nvim', 'nvim-lspconfig'], 'cfg': 'lsp'}
-    PackAdd 'ravenxrz/call-graph.nvim', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
+    PackAdd 'mason-org/mason.nvim', {'lua': 'cfg.mason'}
+    PackAdd 'neovim/nvim-lspconfig', {'lua': 'lsp'}
+    PackAdd 'mason-org/mason-lspconfig.nvim', {'deps': ['mason.nvim', 'nvim-lspconfig'], 'lua': 'lsp'}
+    PackAdd 'ravenxrz/call-graph.nvim', {'deps': 'nvim-lspconfig', 'lua': 'lsp'}
     " lightline
-    PackAdd 'josa42/nvim-lightline-lsp', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
+    PackAdd 'josa42/nvim-lightline-lsp', {'deps': 'nvim-lspconfig', 'lua': 'lsp'}
     " lspimport is only for pyright
-    PackAdd 'leoatchina/nvim-lspimport', {'deps': 'nvim-lspconfig', 'cfg': 'lsp'}
+    PackAdd 'leoatchina/nvim-lspimport', {'deps': 'nvim-lspconfig', 'lua': 'lsp'}
     " codesettings
-    PackAdd 'mrjones2014/codesettings.nvim', {'cfg': 'cfg.codesettings'}
+    PackAdd 'mrjones2014/codesettings.nvim', {'lua': 'cfg.codesettings'}
     " nvim-tree
-    PackAdd 'nvim-tree/nvim-tree.lua', {'cfg': 'cfg.nvimtree'}
+    PackAdd 'nvim-tree/nvim-tree.lua', {'lua': 'cfg.nvimtree'}
 elseif g:python_version > 3.06 && pack#get('ale')
     let g:lint_tool = 'ale'
     PackAdd 'dense-analysis/ale'
@@ -68,21 +68,21 @@ if pack#get('debug') && g:python_version >= 3.10
     PackAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install }
 elseif has('nvim') && pack#get('debug') || pack#planned_lsp() && pack#get('java')
     if !pack#planned_lsp()
-        PackAdd 'mason-org/mason.nvim', {'cfg': 'cfg.mason'}
+        PackAdd 'mason-org/mason.nvim', {'lua': 'cfg.mason'}
     endif
-    PackAdd 'mfussenegger/nvim-dap', {'cfg': 'cfg.dap'}
+    PackAdd 'mfussenegger/nvim-dap', {'lua': 'cfg.dap'}
     PackAdd 'nvim-neotest/nvim-nio'
-    PackAdd 'rcarriga/nvim-dap-ui', {'deps': ['nvim-dap', 'nvim-nio'], 'cfg': 'cfg.dap'}
-    PackAdd 'jay-babu/mason-nvim-dap.nvim', {'deps': ['nvim-dap', 'mason.nvim'], 'cfg': 'cfg.dap'}
+    PackAdd 'rcarriga/nvim-dap-ui', {'deps': ['nvim-dap', 'nvim-nio'], 'lua': 'cfg.dap'}
+    PackAdd 'jay-babu/mason-nvim-dap.nvim', {'deps': ['nvim-dap', 'mason.nvim'], 'lua': 'cfg.dap'}
 endif
 " ------------------------------
 " textobj install
 " ------------------------------
 if has('nvim') && get(g:, 'nvim_treesitter_install', utils#is_unix()) && executable('tree-sitter') && executable('curl') && executable('tar')
-    PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'main', 'cfg': 'treesitter'}
-    PackAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json'], 'cfg': 'treesitter'}
-    PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'main', 'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
-    PackAdd 'm-demare/hlargs.nvim', {'deps': 'nvim-treesitter', 'cfg': 'treesitter'}
+    PackAdd 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate', 'branch': 'main', 'lua': 'treesitter'}
+    PackAdd 'nvim-treesitter/nvim-treesitter-context', {'for': ['toml', 'yaml', 'json'], 'lua': 'treesitter'}
+    PackAdd 'nvim-treesitter/nvim-treesitter-textobjects', {'branch': 'main', 'deps': 'nvim-treesitter', 'lua': 'treesitter'}
+    PackAdd 'm-demare/hlargs.nvim', {'deps': 'nvim-treesitter', 'lua': 'treesitter'}
 elseif exists('*search') && exists('*getpos')
     if !pack#planned_coc()
         PackAdd 'bps/vim-textobj-python', {'for': 'python'}
@@ -98,7 +98,7 @@ endif
 " -----------------------
 PackAdd 'sbdchd/neoformat', {'on': 'Neoformat'}
 if pack#planned_lsp()
-    PackAdd 'stevearc/conform.nvim', {'cfg': 'lsp'}
+    PackAdd 'stevearc/conform.nvim', {'lua': 'lsp'}
 endif
 " --------------------------------
 " run
@@ -140,7 +140,7 @@ if executable('git')
         if git#version_at_least(2, 31, 0)
             PackAdd 'dlyongemallo/diffview-plus.nvim'
         endif
-        PackAdd 'lewis6991/gitsigns.nvim', {'cfg': 'cfg.gitsigns'}
+        PackAdd 'lewis6991/gitsigns.nvim', {'lua': 'cfg.gitsigns'}
     elseif has('patch-8.0.902')
         PackAdd 'vim-signify'
     endif
@@ -207,8 +207,8 @@ if has('nvim')
     PackAdd 'kevinhwang91/nvim-bqf', {'for': 'qf'}
     PackAdd 'MunifTanjim/nui.nvim'
     PackAdd 'nvim-lua/plenary.nvim'
-    PackAdd 'snacks.nvim', {'cfg': 'cfg.snacks'}
-    PackAdd 'Bekaboo/dropbar.nvim', {'cfg': 'cfg.dropbar'}
+    PackAdd 'snacks.nvim', {'lua': 'cfg.snacks'}
+    PackAdd 'Bekaboo/dropbar.nvim', {'lua': 'cfg.dropbar'}
 elseif v:version >= 800
     PackAdd 'ryanoasis/vim-devicons'
     if has('vim9script') && has('popupwin')
@@ -255,7 +255,7 @@ endif
 " pairs && wiler
 " ----------------------------
 if pack#planned_lsp()
-    PackAdd 'windwp/nvim-autopairs', {'cfg': 'lsp'}
+    PackAdd 'windwp/nvim-autopairs', {'lua': 'lsp'}
 else
     if v:version >= 800
         if !pack#planned_coc()

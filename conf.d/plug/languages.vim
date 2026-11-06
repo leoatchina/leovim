@@ -4,10 +4,10 @@
 let s:R_cmd = get(g:, 'R_exe', utils#is_win() ? 'R.exe' : 'R')
 let g:R_exe = empty(s:R_cmd) ? '' : utils#expand(exepath(s:R_cmd))
 if has('nvim') && pack#get('jupynium') && g:python_version > 3.07
-    PackAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .'), 'cfg': 'cfg.jupynium'}
+    PackAdd 'kiyoon/jupynium.nvim', {'do': get(g:, 'jupynium_install', 'pip3 install --user .'), 'lua': 'cfg.jupynium'}
 endif
 if has('nvim') && pack#get('r') && executable(g:R_exe)
-    PackAdd 'R-nvim/R.nvim', {'for': ['r', 'rmd'], 'cfg': 'cfg.rnvim'}
+    PackAdd 'R-nvim/R.nvim', {'for': ['r', 'rmd'], 'lua': 'cfg.rnvim'}
 endif
 " ------------------------------
 " helpful
@@ -86,7 +86,7 @@ if pack#planned_lsp() && pack#get('java')
     PackAdd 'JavaHello/spring-boot.nvim', {'commit': '218c0c26c14d99feca778e4d13f5ec3e8b1b60f0'}
     PackAdd 'nvim-java/nvim-java', {
                 \ 'deps': ['spring-boot.nvim', 'nui.nvim', 'nvim-dap'],
-                \ 'cfg': 'cfg.java',
+                \ 'lua': 'cfg.java',
                 \ }
 endif
 " ------------------------------

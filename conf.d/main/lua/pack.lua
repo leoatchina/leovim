@@ -91,13 +91,13 @@ local function validate_entry(name, entry, plugs)
     end
     compiled_inits[name] = chunk
   end
-  if entry.cfg ~= nil and (
-      type(entry.cfg) ~= 'string'
-      or not entry.cfg:match('^[%w_][%w_.%-]*$')
-      or entry.cfg:sub(-1) == '.'
-      or entry.cfg:find('..', 1, true)
+  if entry.lua ~= nil and (
+      type(entry.lua) ~= 'string'
+      or not entry.lua:match('^[%w_][%w_.%-]*$')
+      or entry.lua:sub(-1) == '.'
+      or entry.lua:find('..', 1, true)
     ) then
-    err('invalid cfg for %s: single Lua module name required', name)
+    err('invalid lua for %s: single Lua module name required', name)
   end
   local deps = deps_of(name)
   for _, dependency in ipairs(deps) do
@@ -171,12 +171,12 @@ local function build_groups()
   local groups, declaration_order = {}, {}
   for _, name in ipairs(state.order) do
     local entry = get_spec(name)
-    if entry.cfg then
-      local group = groups[entry.cfg]
+    if entry.lua then
+      local group = groups[entry.lua]
       if not group then
         group = { members = {}, order = #declaration_order + 1 }
-        groups[entry.cfg] = group
-        declaration_order[#declaration_order + 1] = entry.cfg
+        groups[entry.lua] = group
+        declaration_order[#declaration_order + 1] = entry.lua
       end
       group.members[#group.members + 1] = name
     end
@@ -189,8 +189,8 @@ local function build_groups()
     for _, member in ipairs(group.members) do
       for _, dependency in ipairs(dependency_closure(member, cache)) do
         local dependency_entry = get_spec(dependency)
-        if dependency_entry and dependency_entry.cfg and dependency_entry.cfg ~= cfg then
-          edges[cfg][dependency_entry.cfg] = true
+        if dependency_entry and dependency_entry.lua and dependency_entry.lua ~= cfg then
+          edges[cfg][dependency_entry.lua] = true
         end
       end
     end
@@ -244,7 +244,7 @@ local function build_groups()
       intra_deps[member] = {}
       for _, dep in ipairs(deps_of(member)) do
         local dep_entry = get_spec(dep)
-        if dep_entry and dep_entry.cfg == cfg then
+        if dep_entry and dep_entry.lua == cfg then
           intra_deps[member][dep] = true
         end
       end
@@ -304,9 +304,9 @@ local function ensure_node(name, current_cfg)
     return true
   end
   local entry = get_spec(name)
-  local has_no_cfg = entry == nil or entry.cfg == nil
+  local has_no_cfg = entry == nil or entry.lua == nil
   -- A cfg-bound member only counts as done inside its own group run.
-  if state.init_state[name] == 'done' and (has_no_cfg or entry.cfg == current_cfg) then
+  if state.init_state[name] == 'done' and (has_no_cfg or entry.lua == current_cfg) then
     return true
   end
   if state.init_state[name] == 'failed' then
@@ -319,8 +319,8 @@ local function ensure_node(name, current_cfg)
     state.init_state[name] = 'pending'
     return false
   end
-  if entry and entry.cfg and entry.cfg ~= current_cfg then
-    run_group(entry.cfg)
+  if entry and entry.lua and entry.lua ~= current_cfg then
+    run_group(entry.lua)
     return state.init_done[name] == true
   end
 
@@ -339,7 +339,7 @@ local function ensure_node(name, current_cfg)
     return false
   end
   state.init_state[name] = 'done'
-  if not entry or not entry.cfg then
+  if not entry or not entry.lua then
     state.init_done[name] = true
   end
   return true
@@ -423,7 +423,7 @@ local function run_startup()
   for _, name in ipairs(state.order) do
     if not lazy(name) then
       local entry = get_spec(name)
-      if not entry or not entry.cfg then
+      if not entry or not entry.lua then
         request_one(name)
       end
     end
