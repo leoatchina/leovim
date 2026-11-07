@@ -208,8 +208,8 @@ if pack#planned_leaderf()
                 \ 'diff_get_theirs': '<leader>3',
                 \ }, get(g:, 'Lf_GitKeyMap', {}))
     nnoremap <silent><M-g>i :Leaderf git<Cr>
-    nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
     nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
+    nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
     nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
     nnoremap <silent>g\ :Leaderf git log --side-by-side --current-file<Cr>
     nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
