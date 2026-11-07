@@ -28,6 +28,8 @@ Fuzzbox 通过 `pack/clone/opt/update-clone.sh` 克隆到本地 opt，再由 `in
 
 Fuzzbox 使用顶部输入、结果自上而下的布局；`Ctrl-j` 向下、`Ctrl-k` 向上，同时保留 `Ctrl-n/p` 和方向键。
 
+`cfg/fuzzbox.vim` 定义接受搜索词参数的 `FuzzSearch`（当前目录）、`FuzzSearchAll`（项目根目录）、`FuzzGitSearch`（Git 内容）和 `FuzzGitFiles`（Git 文件）；`FuzzSearchLast` 恢复最近的 Fuzzbox 选择器。搜索映射只调用这些命令，根目录复用 `utils#get_root_dir()`。
+
 Snacks 同样克隆在 `pack/clone/opt/snacks.nvim`，由 `update-clone.sh` 维护，使用 `PackAdd 'snacks.nvim'` 注册，不交给 vim-plug 下载。Neovim 0.9.4+ 在启动时执行 [`cfg/snacks.lua`](conf.d/main/lua/cfg/snacks.lua)，启用 input / picker，接管 `vim.ui.input` 和 `vim.ui.select`，替代 dressing.nvim；这部分不受 FZF / LeaderF 是否安装影响。Dropbar 不再覆盖 `vim.ui.select`。
 
 仅在 FZF、LeaderF 都未安装时，通用文件、缓冲区、历史与搜索快捷键才回退到 Snacks；已有 FZF / LeaderF 的优先级保留。无论是否安装它们，都可以通过唯一的自定义 Snacks 命令 `:SnacksPicker` 打开内置 picker 总菜单（例如诊断、LSP、撤销历史、tags 等，各自仍需相应数据或服务）。Snacks 选择器使用 `Ctrl-j/k` 上下移动，`Ctrl-]` 垂直分屏打开。文件枚举无需 fzf，内容搜索需要 rg。

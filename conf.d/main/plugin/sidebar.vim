@@ -216,7 +216,11 @@ endif
 " tree_browser
 " --------------------------
 if pack#planned('vim-fern')
-    let g:tree_browser = 'fern'
+    if pack#planned('nvim-tree.lua')
+        let g:tree_browser = 'nvimtree-fern'
+    else
+        let g:tree_browser = 'fern'
+    endif
     function! s:check_fern_tree_browser(nr) abort
         if s:check_buf_ft('fern', a:nr)
             for w in range(1, winnr('$'))
