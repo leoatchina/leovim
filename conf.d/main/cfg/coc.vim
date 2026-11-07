@@ -207,7 +207,10 @@ augroup FixCocColorScheme
             endif
         endfor
     endfunction
-    autocmd SafeStateAgain,InsertEnter * call s:CocPumSelFix()
+    " SafeStateAgain is Vim-only; nvim must keep sourcing the rest of this file.
+    if has('vim')
+        autocmd SafeStateAgain,InsertEnter * call s:CocPumSelFix()
+    endif
 augroup END
 " ----------------------------
 " 符号局部使用跳转 (供 tags.vim 单向调用，纯同步服务，无反向依赖)
@@ -317,3 +320,81 @@ function! CocUsageSearch(direction) abort
     call cursor(dest[0], dest[1])
     return 1
 endfunction
+" ----------------------------
+" diagnostics (moved from plugin/diagnostic.vim)
+" ----------------------------
+let s:python_lint_ignore = "E101,E302,E251,E231,E226,E221,E127,E126,E123,E402,E501,W291,F405,F403"
+let g:diagnostic_virtualtext_underline = v:false
+function! s:apply_diagnostics_highlight() abort
+    highlight default CocUnderline term=underline cterm=underline gui=underline
+    for [kind, suffix] in [['Error', 'Error'], ['Warning', 'Warn'], ['Info', 'Info'], ['Hint', 'Hint']]
+        let group = 'Coc' . kind . 'Highlight'
+        let target = 'NONE'
+        if g:diagnostic_virtualtext_underline
+            let target = hlexists('DiagnosticUnderline' . suffix) ? 'DiagnosticUnderline' . suffix : 'CocUnderline'
+        endif
+        execute 'highlight clear ' . group
+        execute 'highlight! link ' . group . ' ' . target
+    endfor
+endfunction
+call s:apply_diagnostics_highlight()
+function! s:toggle_diagnostics_highlight() abort
+    let g:diagnostic_virtualtext_underline = !g:diagnostic_virtualtext_underline
+    call s:apply_diagnostics_highlight()
+    echo 'virtualtext_underline ' . (g:diagnostic_virtualtext_underline ? 'on' : 'off')
+endfunction
+command! ToggleDiagnosticsHighLight call s:toggle_diagnostics_highlight()
+nnoremap <silent><leader>O :ToggleDiagnosticsHighLight<Cr>
+augroup CocDiagnosticsHighlight
+    autocmd!
+    autocmd ColorScheme * call <SID>apply_diagnostics_highlight()
+augroup END
+if g:lint_tool == 'ale'
+    " cfg sources before plug#end puts coc's autoload on rtp; defer coc#config.
+    au SourcePost */plugin/coc.vim call coc#config('diagnostic.displayByAle', v:true)
+else
+    function! s:Diagnostics(...) abort
+        if a:0 && a:1 ==# 'error'
+            let l:all = CocAction('diagnosticList')
+            if type(l:all) != type([])
+                echo "No diagnostics"
+                return
+            endif
+            let l:errs = filter(copy(l:all), {_, d -> has_key(d, 'severity') && (d.severity ==# 'Error' || d.severity ==# 'error' || d.severity ==# 'E' || d.severity ==# 1)})
+            if empty(l:errs)
+                echo "No errors"
+                call setqflist([], 'r')
+                cclose
+                return
+            endif
+            let l:items = map(l:errs, {_, d -> {'filename': d.file, 'lnum': d.lnum, 'col': d.col, 'text': d.message, 'type': 'E'}})
+            call setqflist(l:items, 'r')
+            copen
+        else
+            CocDiagnostics
+        endif
+    endfunction
+    command! Diagnostics call s:Diagnostics()
+    command! DiagnosticsError call s:Diagnostics('error')
+    nnoremap <silent><leader>d :Diagnostics<Cr>
+    nnoremap <silent><leader>D :CocFzfList diagnostics<CR>
+    nnoremap <silent><leader>e :DiagnosticsError<Cr>
+    nmap <silent>;d <Plug>(coc-diagnostic-next)
+    nmap <silent>,d <Plug>(coc-diagnostic-prev)
+    nmap <silent>;e <Plug>(coc-diagnostic-next-error)
+    nmap <silent>,e <Plug>(coc-diagnostic-prev-error)
+    " config ignore (deferred: coc autoload unavailable while cfg groups source)
+    au SourcePost */plugin/coc.vim call coc#config('python.linting.flake8Args', ['--max-line-length=200', '--ignore=' . s:python_lint_ignore])
+    au SourcePost */plugin/coc.vim call coc#config('python.linting.pylintArgs', ['--max-line-length=200', '--ignore=' . s:python_lint_ignore])
+    " toggle diagnostic
+    function! s:CocDiagnosticToggleBuffer()
+        call CocAction('diagnosticToggleBuffer')
+        if get(b:, 'coc_diagnostic_disable', 0) > 0
+            setlocal signcolumn=no
+        else
+            setlocal signcolumn=yes
+        endif
+    endfunction
+    command! CocDiagnosticToggleBuffer call s:CocDiagnosticToggleBuffer()
+    nnoremap <silent><leader>o :CocDiagnosticToggleBuffer<Cr>
+endif

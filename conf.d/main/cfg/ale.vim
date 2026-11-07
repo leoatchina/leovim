@@ -1,3 +1,4 @@
+command! ALECommands call FzfCallCommands('ALECommands', 'ALE')
 " --------------------------
 " ale
 " --------------------------
@@ -48,3 +49,13 @@ let g:ale_linters = {
             \ 'zsh': ['shell']
             \ }
 let g:ale_python_flake8_options = "--max-line-length=200 --ignore=E101,E302,E251,E231,E226,E221,E127,E126,E123,E402,E501,W291,F405,F403"
+" map
+if !pack#installed('coc.nvim')
+    nnoremap <silent><leader>d :ALELint<Cr>
+    nnoremap <silent><leader>o :ALEToggleBuffer<Cr>
+    nnoremap <silent><leader>O :ALEToggle<Cr>
+    nmap ;d <Plug>(ale_next)
+    nmap ,d <Plug>(ale_previous)
+    nmap ;e <Plug>(ale_next_error)
+    nmap ,e <Plug>(ale_previous_error)
+endif
