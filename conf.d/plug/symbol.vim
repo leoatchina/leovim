@@ -59,7 +59,7 @@ PackAdd 'vim-matchup'
 " install
 " ------------------------------
 if s:planned_symbol('gutentags')
-    PackAdd 'skywind3000/vim-gutentags'
+    PackAdd 'skywind3000/vim-gutentags', {'vim': 'gutentags'}
 endif
 if s:planned_symbol('plus')
     PackAdd 'skywind3000/gutentags_plus'
@@ -68,7 +68,7 @@ if s:planned_symbol('aerial')
     PackAdd 'stevearc/aerial.nvim', {'lua': 'cfg.aerial', 'on': '^Aerial.*'}
 endif
 if s:planned_symbol('vista')
-    PackAdd 'vista.vim'
+    PackAdd 'vista.vim', {'vim': 'vista'}
 elseif s:planned_symbol('tagbar')
     PackAdd 'tagbar'
 endif

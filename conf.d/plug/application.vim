@@ -49,7 +49,7 @@ if pack#planned_lsp()
     PackAdd 'nvim-tree/nvim-tree.lua', {'lua': 'cfg.nvimtree'}
 elseif g:python_version > 3.06 && pack#get('ale')
     let g:lint_tool = 'ale'
-    PackAdd 'dense-analysis/ale'
+    PackAdd 'dense-analysis/ale', {'vim': 'ale'}
     PackAdd 'maximbaz/lightline-ale'
 elseif pack#planned_coc()
     let g:lint_tool = 'coc'
@@ -65,12 +65,12 @@ if pack#get('debug') && g:python_version >= 3.10
             \ && ((!has('nvim') && has('patch-8.2.4797'))
             \ || (has('nvim') && !pack#planned_lsp()))
     let vimspector_install = " ./install_gadget.py --update-gadget-config"
-    PackAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install }
+    PackAdd 'puremourning/vimspector', { 'do': g:python_prog . vimspector_install, 'vim': 'vimspector' }
 elseif has('nvim') && pack#get('debug') || pack#planned_lsp() && pack#get('java')
     if !pack#planned_lsp()
         PackAdd 'mason-org/mason.nvim', {'lua': 'cfg.mason'}
     endif
-    PackAdd 'mfussenegger/nvim-dap', {'lua': 'cfg.dap'}
+    PackAdd 'mfussenegger/nvim-dap', {'lua': 'cfg.dap', 'vim': 'dap'}
     PackAdd 'nvim-neotest/nvim-nio'
     PackAdd 'rcarriga/nvim-dap-ui', {'deps': ['nvim-dap', 'nvim-nio'], 'lua': 'cfg.dap'}
     PackAdd 'jay-babu/mason-nvim-dap.nvim', {'deps': ['nvim-dap', 'mason.nvim'], 'lua': 'cfg.dap'}
@@ -111,7 +111,7 @@ if has('nvim') || has('timers') && has('channel') && has('job')
     endif
 endif
 if has('nvim') || v:version >= 801
-    PackAdd 'asynctasks.vim'
+    PackAdd 'asynctasks.vim', {'vim': 'asynctasks'}
 endif
 " ------------------------------
 " fuzzy finders
@@ -152,7 +152,7 @@ endif
 " terminal && tmux
 " --------------------------
 if g:has_terminal
-    PackAdd 'vim-floaterm', {'on': '^Floaterm.*$'}
+    PackAdd 'vim-floaterm', {'on': '^Floaterm.*$', 'vim': 'floaterm'}
     PackAdd 'vim-floaterm-enhance', {'on': '^Floaterm.*$'}
 endif
 if v:version >= 800 && utils#has_gui() == 0
@@ -184,7 +184,7 @@ endif
 " --------------------------------
 " lightline
 " --------------------------------
-PackAdd 'lightline.vim'
+PackAdd 'lightline.vim', {'vim': 'lightline'}
 PackAdd 'lightline-bufferline'
 if g:has_truecolor
     PackAdd 'sainnhe/sonokai'
@@ -227,7 +227,7 @@ nnoremap <silent><C-w><Space> <C-w>z:call preview#cmdmsg('close preview', 0)<Cr>
 " -------------------
 if v:version >= 802 || has('nvim')
     let g:quickui_preview_h = 24
-    PackAdd 'vim-quickui'
+    PackAdd 'vim-quickui', {'vim': 'quickui'}
 endif
 " -------------------
 " which-key
@@ -294,7 +294,7 @@ PackAdd 'vim-bookmarks'
 " -------------------
 " startify
 " -------------------
-PackAdd 'vim-startify'
+PackAdd 'vim-startify', {'vim': 'startify'}
 " -------------------
 " quickfix
 " -------------------

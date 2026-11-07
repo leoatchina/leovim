@@ -13,11 +13,11 @@
 | 补全、片段与语言服务 | builtin / mucomplete / Coc / nvim-cmp / blink.cmp；[`application.vim`](conf.d/plug/application.vim)、[`complete.vim`](conf.d/main/plugin/complete.vim)、[`lsp.lua`](conf.d/main/lua/lsp.lua) |
 | 文件、内容与符号搜索 | FZF、LeaderF；未安装两者时 Neovim 使用 Snacks、Vim9 使用 Fuzzbox 托底；LSP、Ctags/Gtags 与 Grep；[`search.vim`](conf.d/main/plugin/search.vim)、[`tags.vim`](conf.d/main/plugin/tags.vim) |
 | 语法树与文本对象 | 符合版本条件时使用 Treesitter，另有 Vim 文本对象插件；[`treesitter.lua`](conf.d/main/lua/treesitter.lua)、[`textobj.vim`](conf.d/init/plugin/textobj.vim) |
-| 文件树、符号侧栏与状态栏 | 根据已选插件启用；[`sidebar.vim`](conf.d/main/plugin/sidebar.vim)、[`lightline.vim`](conf.d/main/plugin/lightline.vim) |
+| 文件树、符号侧栏与状态栏 | 根据已选插件启用；[`sidebar.vim`](conf.d/main/plugin/sidebar.vim)、[`lightline.vim`](conf.d/main/cfg/lightline.vim) |
 | 主题、窗口与标签页 | [`scheme.vim`](conf.d/main/plugin/scheme.vim)、[`window.vim`](conf.d/main/plugin/window.vim)、[`tab.vim`](conf.d/main/plugin/tab.vim) |
 | Git | Fugitive、GV、LeaderF Git、可选 LazyGit；[`git.vim`](conf.d/main/plugin/git.vim) |
 | 异步任务与文件运行 | AsyncRun / AsyncTasks；[`run.vim`](conf.d/main/plugin/run.vim)、[`任务模板`](conf.d/tasks/) |
-| 调试 | Vimspector、nvim-dap 或 Vim termdebug；[`debug.vim`](conf.d/main/plugin/debug.vim) |
+| 调试 | Vimspector、nvim-dap 或 Vim termdebug；[`debug.vim`](conf.d/main/plugin/debug.vim)、[`cfg/vimspector.vim`](conf.d/main/cfg/vimspector.vim)、[`cfg/dap.vim`](conf.d/main/cfg/dap.vim) |
 | 终端、REPL 与 AI CLI | Floaterm 及本地增强插件；[`terminal.vim`](conf.d/main/plugin/terminal.vim)、[`repl.vim`](conf.d/main/plugin/repl.vim)、[`vim-floaterm-enhance`](conf.d/pack/leo/opt/vim-floaterm-enhance/) |
 | 会话与文件历史 | Startify、FZF 会话选择与历史工具；[`session.vim`](conf.d/main/plugin/session.vim)、[`history.vim`](conf.d/main/plugin/history.vim) |
 | 项目文件模板 | 新建 `.gitignore`、`.gitconfig`、`.lintr`、`.Rprofile`、`.wildignore`、`.radian_profile` 时插入对应模板；[`set.vim`](conf.d/init/plugin/set.vim)、[`templates`](conf.d/templates/) |
@@ -305,7 +305,7 @@ EasyAlign、GV、vim-header、vim-translator、Neoformat 按需加载；nvim-bqf
 | `<Leader>sv` / `sl` / `sd` | 预填保存 / 加载 / 删除会话命令，需继续输入或确认 |
 | `<Leader>sc` | 关闭当前会话 |
 
-会话功能由 [`session.vim`](conf.d/main/plugin/session.vim) 配置。不要把可保存会话等同于退出时必定自动保存所有工作。
+Startify 启动画面参数在 [`cfg/startify.vim`](conf.d/main/cfg/startify.vim)，会话管理入口由 [`session.vim`](conf.d/main/plugin/session.vim) 提供。不要把可保存会话等同于退出时必定自动保存所有工作。
 
 Vim 的菜单式 WinBar 保留文件名，仅在 `pack#installed_coc()` 成立时读取 [coc-symbol-line](https://github.com/xiyaowong/coc-symbol-line) 的符号路径；没安装 Coc 时保持文件名显示。扩展已加入 Coc 自动安装列表，也可执行 `:CocInstall coc-symbol-line`。使用 `b:coc_symbol_line_full_plain` 显示完整的当前符号路径，不受 `maxItems` 截断；`symbol-line.onlyNearestKinds` 设为空数组，保留同类型嵌套层级。层级仍取决于语言服务器和启用的符号类型。显示前清除高亮和点击格式码，并转义菜单特殊字符；光标停留时刷新，未提供符号时只显示文件名。这是菜单文本展示，不提供扩展状态栏版本的逐符号点击功能。Neovim 的 Dropbar 分支不变。
 
@@ -412,7 +412,7 @@ gitsigns 附着到 Git 文件后，会添加以下 buffer 局部映射；暂存�
 
 ### 7.6. 任务与运行
 
-配置见 [`run.vim`](conf.d/main/plugin/run.vim)，示例见第 9 节。
+AsyncRun 配置在 [`run.vim`](conf.d/main/plugin/run.vim)，AsyncTasks 选项与入口命令在 [`cfg/asynctasks.vim`](conf.d/main/cfg/asynctasks.vim)，示例见第 9 节。
 
 | 按键 | 优先匹配的任务名 | 功能或未找到任务时的行为 |
 |---|---|---|
@@ -439,7 +439,7 @@ gitsigns 附着到 Git 文件后，会添加以下 buffer 局部映射；暂存�
 | nvim-dap | 未选中 Vimspector，Neovim 0.9.5+ 且启用 `debug`；原生 LSP 配合 `java` 也会声明该插件 | 默认由项目根目录定位 `.vim/dap.json` |
 | termdebug | 前两种未选中，Vim 8.1+ 且启用 `termdebug` | 使用 Vim 的 GDB 调试配置 |
 
-Vimspector 在 Vim 中运行需要 `+python3`，在 Neovim 中需要可用的 Python 3 provider。安装条件来自 [`application.vim`](conf.d/plug/application.vim)，运行与按键来自 [`debug.vim`](conf.d/main/plugin/debug.vim)。
+Vimspector 在 Vim 中运行需要 `+python3`，在 Neovim 中需要可用的 Python 3 provider。安装条件来自 [`application.vim`](conf.d/plug/application.vim)；公共入口与 watch 来自 [`debug.vim`](conf.d/main/plugin/debug.vim)，Vimspector 按键与命令来自 [`cfg/vimspector.vim`](conf.d/main/cfg/vimspector.vim)，nvim-dap 按键与命令来自 [`cfg/dap.vim`](conf.d/main/cfg/dap.vim)。
 
 Neovim 保留 gitsigns，nvim-dap 打开调试界面不依赖 vim-signify，也不调用 `SignifyDisable`。Vimspector 仅在选择了 vim-signify 时注册调试期间禁用 Signify 的事件。
 
@@ -504,7 +504,7 @@ Floaterm 操作需要已安装 `vim-floaterm`。普通模式下：
 | `Alt+_` | 隐藏 Floaterm | 隐藏 Floaterm | 隐藏 Floaterm |
 | `Alt++` | 选择位置并新建 Floaterm | 选择位置并新建 Floaterm | 选择位置并新建 Floaterm |
 
-插入和终端输入模式的这些 Alt 键直接操作 Floaterm，不走调试分流。`Alt++` 不是移动已有终端。配置见 [`terminal.vim`](conf.d/main/plugin/terminal.vim)。
+插入和终端输入模式的这些 Alt 键直接操作 Floaterm，不走调试分流。`Alt++` 不是移动已有终端。按键引导在 [`terminal.vim`](conf.d/main/plugin/terminal.vim)，Floaterm 选项与 `FloatermOpenPos` 在 [`cfg/floaterm.vim`](conf.d/main/cfg/floaterm.vim)。
 
 ### 7.9. AI CLI 与 REPL
 

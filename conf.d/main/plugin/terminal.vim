@@ -20,59 +20,10 @@ tnoremap <silent><M-q> <C-\><C-n>:ConfirmQuit<Cr>
 tnoremap <silent><M-w> <C-\><C-n>:tabclose<Cr>
 tnoremap <silent><M-W> <C-\><C-n>:tabonly<Cr>i
 " ---------------------------------------------------------
-" floaterm
+" floaterm: settings in cfg/floaterm.vim, bootstrap keys here
 " ---------------------------------------------------------
-if !pack#installed('vim-floaterm')
-    finish
-endif
-let g:floaterm_open_command = 'drop'
-let g:floaterm_wintype  = 'split'
-let g:floaterm_position = 'belowright'
-let g:floaterm_height = 0.3
-if utils#is_win()
-    let g:floaterm_shell = get(g:, 'floaterm_shell', 'cmd.exe')
-elseif executable('zsh') && has('nvim')
-    let g:floaterm_shell = get(g:, 'floaterm_shell', 'zsh')
-else
-    let g:floaterm_shell = get(g:, 'floaterm_shell', 'bash')
-endif
 command! FloatermCommands call FzfCallCommands('FloatermCommands', 'Floaterm')
 nnoremap <silent>\f: :FloatermCommands<Cr>
-" ---------------------------------------------------------
-" enhanced functions and commands
-" ---------------------------------------------------------
-let s:floaterm_parameters = {}
-let s:floaterm_parameters.right = " --wintype=vsplit --width=0.382"
-let s:floaterm_parameters.belowright = " --wintype=split --height=0.3"
-if g:has_popup_floating
-    let s:floaterm_parameters.center = " --wintype=float --width=0.618 --height=0.618"
-    let s:floaterm_parameters.topright = " --wintype=float --width=0.45 --height=0.618"
-    let s:floaterm_parameters.bottomright = " --wintype=float --width=0.45 --height=0.3"
-endif
-function! s:floaterm_select_pos()
-    let positions = ['Right', 'Belowright', 'Tab', 'Center', 'Topright', 'BottomRight']
-    if g:has_popup_floating == 0
-        let positions = positions[:2]
-    endif
-    let title = 'Choose a Terminal Position'
-    let pos = tolower(utils#choose_one(positions, title, 0))
-    if empty(pos)
-        return
-    endif
-    if pos == 'tab'
-        if has('nvim')
-            tabnew | terminal
-            call feedkeys('i')
-        else
-            tab terminal
-        endif
-    else
-        let position = " --position=" . pos
-        let cmd = "FloatermNew" . s:floaterm_parameters[pos] . position
-        execute cmd
-    endif
-endfunction
-command! FloatermOpenPos call s:floaterm_select_pos()
 " ------------------------------
 " find key for floaterm
 " ------------------------------

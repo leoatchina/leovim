@@ -1,6 +1,3 @@
-if !pack#planned('lightline.vim')
-    finish
-endif
 " ---------------------------
 " lightline global settings
 " ---------------------------
@@ -19,14 +16,7 @@ function! lightline#bufferline_filter(buffer) abort
     return getbufvar(a:buffer, '&buftype') !=# 'terminal' && getbufvar(a:buffer, '&filetype') !=# '' && getbufvar(a:buffer, '&filetype') !=# 'startify'
 endfunction
 let g:lightline#bufferline#buffer_filter = "lightline#bufferline_filter"
-nmap ;b <Plug>lightline#bufferline#go_next()
-nmap ,b <Plug>lightline#bufferline#go_previous()
-nmap ;B <Plug>lightline#bufferline#go_next_category()
-nmap ,B <Plug>lightline#bufferline#go_previous_category()
-nmap ]b <Plug>lightline#bufferline#move_next()
-nmap [b <Plug>lightline#bufferline#move_previous()
-nmap [B <Plug>lightline#bufferline#move_first()
-nmap ]B <Plug>lightline#bufferline#move_last()
+" bufferline navigation mappings live in plugin/buffer.vim.
 " ------------------------
 " lightline init
 " ------------------------
@@ -167,4 +157,3 @@ augroup LightlineUpgrade
         autocmd User CocGitStatusChange,CocDiagnosticChange call lightline#update()
     endif
 augroup END
-" nnoremap <C-l> :redraw \| call lightline#update()<Cr>

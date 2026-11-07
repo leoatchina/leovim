@@ -11,7 +11,7 @@ endif
 " debug: load_json
 " ---------------------------------
 if pack#planned_fzf()
-    function! s:load_json(dap, ...)
+    function! debug#load_json(dap, ...)
         let dap = a:dap
         if a:0 && filereadable(a:1)
             let template_file = a:1
@@ -60,294 +60,29 @@ if pack#planned_fzf()
     endfunction
 endif
 " -----------------
-" vimspector
+" debug tool flag
 " -----------------
 if pack#planned('vimspector')
     let g:debug_tool = "vimspector"
-    let g:vimspector_enable_auto_hover = 0
-    let g:vimspector_base_dir = utils#expand("~/.leovim.d/vimspector")
-    " load template
-    if pack#planned_fzf()
-        function! ReadVimspectorTemplate(template_file) abort
-            call s:load_json(0, a:template_file)
-        endfunction
-        function! s:load_vimspector()
-            let options = ['--prompt', 'VimspectorTemplate> ', '--delimiter', ':']
-            let wrap = fzf#wrap('vimspector',{
-                        \ 'source': utils#is_win() ? 'dir /B /S ' . $CONF_D_DIR . '\\vimspector\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/vimspector/*.json',
-                        \ 'sink': function('ReadVimspectorTemplate'),
-                        \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
-                        \ })
-            call fzf#run(wrap)
-        endfunction
-        command! LoadVimspector call s:load_vimspector()
-        nnoremap <silent><leader>rl :LoadVimspector<Cr>
-        command! OpenVimspector call s:load_json(0)
-        nnoremap <silent><leader>ro :OpenVimspector<Cr>
-        nnoremap <leader>rO :tabe ~/.leovim/conf.d/vimspector/
-    endif
-    nmap <leader>rI :VimspectorInstall<Space>
-    nmap <leader>rL :call vimspector#GetConfigurations()<Left>
-    nmap <silent><M-e>, <Plug>VimspectorJumpToPreviousBreakpoint
-    nmap <silent><M-e>; <Plug>VimspectorJumpToNextBreakpoint
-    nmap <silent><M-e><Space> <Plug>VimspectorToggleBreakpoint
-    nmap <silent><M-e><M-e> <Plug>VimspectorRunToCursor
-    nmap <silent><M-e><Tab> <Plug>VimspectorDisassemble
-    nmap <silent><M-e><Cr> <Plug>VimspectorContinue
-    nmap <silent><M-e>n <Plug>VimspectorStepOver
-    nmap <silent><M-e>i <Plug>VimspectorStepInto
-    nmap <silent><M-e>o <Plug>VimspectorStepOut
-    nmap <silent><M-e>p <Plug>VimspectorPause
-    nmap <silent><M-e>q :call vimspector#Reset()<Cr>
-    nmap <silent><M-e>r :call vimspector#Launch()<Cr>
-    nmap <silent><F3> :VimspectorReset<Cr>
-    nmap <silent><F4> <Plug>VimspectorRunToCursor
-    nmap <silent><F5> <Plug>VimspectorContinue
-    nmap <silent><F6> <Plug>VimspectorPause
-    nmap <silent><F7> <Plug>VimspectorJumpToPreviousBreakpoint
-    nmap <silent><F8> <Plug>VimspectorJumpToNextBreakpoint
-    nmap <silent><F9> <Plug>VimspectorToggleBreakpoint
-    nmap <silent><F10> <Plug>VimspectorStepOver
-    nmap <silent><F11> <Plug>VimspectorStepInto
-    nmap <silent><F12> <Plug>VimspectorStepOut
-    " VimspectorDisassemble
-    nmap <silent><M-e>D <Plug>VimspectorDisassemble
-    " session
-    nnoremap <M-e><M-l> :VimspectorLoadSession
-    nnoremap <M-e><M-m> :VimspectorMkSession<Cr>
-    nnoremap <M-e><M-n> :VimspectorNewSession<Space>
-    nnoremap <M-e><M-q> :VimspectorDestroySession<Space>
-    nnoremap <M-e><M-r> :VimspectorRenameSession<Space>
-    nnoremap <M-e><M-s> :VimspectorSwitchToSession<Space>
-    " breakpoint
-    nnoremap <silent><M-e>c :call vimspector#ClearBreakpoints()<Cr>
-    nnoremap <silent><M-e>f :call vimspector#AddFunctionBreakpoint('')<left><left>
-    nnoremap <silent><M-e>b :call vimspector#ToggleAllBreakpointsViewBreakpoint()<Cr>
-    " start / stop
-    nnoremap <silent><M-e>. :call vimspector#Restart()<Cr>
-    nnoremap <silent><M-e>Q :call vimspector#Stop({'interactive': v:true})<Cr>
-    " function
-    nnoremap <silent><M-e>u :call vimspector#UpFrame()<Cr>
-    nnoremap <silent><M-e>d :call vimspector#DownFrame()<Cr>
-    " commands
-    command! VimspectorCommands call FzfCallCommands('VimspectorCommands', 'Vimspector')
-    nnoremap <M-e>: :VimspectorCommands<Cr>
-    nnoremap <M-e>v :call vimspector#
-    " --------------------------------------
-    " jump/show windows in vimspector
-    " --------------------------------------
-    function! GoToVimspectorWindow(name) abort
-        let name = a:name
-        try
-            if name ==# 'variables'
-                let windowNr = bufwinnr('vimspector.Variables')
-            elseif name ==# 'watches'
-                let windowNr = bufwinnr('vimspector.Watches')
-            elseif name ==# 'stacktrace'
-                let windowNr = bufwinnr('vimspector.StackTrace')
-            elseif name ==# 'terminal' || name ==# 'code'
-                let windowNr = bufwinnr(winbufnr(g:vimspector_session_windows[name]))
-            else
-                call vimspector#ShowOutput(name)
-                let windowNr = -1
-            endif
-        catch
-            call preview#errmsg('Wrong input name.')
-            let windowNr = -1
-        endtry
-        if windowNr >= 0
-            execute windowNr . 'wincmd w'
-        endif
-    endfunction
-    nnoremap <silent><M-m>b :call vimspector#ListBreakpoints()<Cr>
-    nnoremap <silent><M-m>i :call GoToVimspectorWindow('important')<Cr>
-    nnoremap <silent><M-m>s :call GoToVimspectorWindow('server')<Cr>
-    nnoremap <silent><M-m>e :call GoToVimspectorWindow('stderr')<Cr>
-    nnoremap <silent><M-m>v :call GoToVimspectorWindow('Vimspector')<Cr>
-    nnoremap <silent><M-m>t :call GoToVimspectorWindow('Telemetry')<Cr>
-    nnoremap <silent><M-m>1 :call GoToVimspectorWindow('variables')<Cr>
-    nnoremap <silent><M-m>2 :call GoToVimspectorWindow('watches')<Cr>
-    nnoremap <silent><M-m>3 :call GoToVimspectorWindow('stacktrace')<Cr>
-    " --------------------------------------
-    " special map
-    " ---------------------------------------
-    function! s:vimspector_opened()
-        return bufwinnr('vimspector.Variables') >= 0 || bufwinnr('vimspector.Watches') >= 0 || bufwinnr('vimspector.StackTrace') >= 0
-    endfunction
-    if pack#planned('vim-signify')
-        au BufEnter * if s:vimspector_opened() | SignifyDisable | endif
-    endif
-    function! s:vimspector_or_floaterm(type)
-        if s:vimspector_opened()
-            if index(['code', 'terminal'], a:type) >= 0
-                try
-                    let windowNr = bufwinnr(winbufnr(g:vimspector_session_windows[a:type]))
-                    execute windowNr . 'wincmd w'
-                catch /.*/
-                    call preview#errmsg('No ' . a:type . ' window')
-                endtry
-            elseif a:type ==# 'eval'
-                execute  "normal \<Plug>VimspectorBalloonEval"
-            else
-                call vimspector#ShowOutput(a:type)
-            endif
-        elseif a:type ==# 'Console'
-            FloatermToggle
-        elseif a:type ==# 'terminal'
-            TermNewOrFzfList
-        elseif a:type ==# 'eval'
-            call diagnostic#show(1)
-        endif
-    endfunction
-    command! BalloonEval call s:vimspector_or_floaterm('eval')
-    command! FocusCode call s:vimspector_or_floaterm("code")
-    command! ConsoleOrFloatermToggle call s:vimspector_or_floaterm('Console')
-    command! TerminalOrFloatermNewOrFzfList call s:vimspector_or_floaterm('terminal')
-    " other important map
-    nnoremap <silent><M-m>0 :FocusCode<Cr>
-    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :TerminalOrFloatermNewOrFzfList<Cr>
-    " view variables
-    nnoremap <silent>J :BalloonEval<Cr>
-    " deletewatch
-    au FileType VimspectorPrompt nnoremap <buffer><silent>x :call vimspector#DeleteWatch()<Cr>
 elseif pack#installed_dap()
     let g:debug_tool = 'nvim-dap'
-    " load template
-    if pack#planned_fzf()
-        function! ReadDapTemplate(template_file) abort
-            call s:load_json(1, a:template_file)
-        endfunction
-        function! s:load_dap() abort
-            let options = ['--prompt', 'DapTemplate> ', '--delimiter', ':']
-            let wrap = fzf#wrap('dap',{
-                        \ 'source': utils#is_win() ? 'dir /B /S ' . $CONF_D_DIR . '\\dap\\*.json' : 'ls -1 ' . $CONF_D_DIR . '/dap/*.json',
-                        \ 'sink': function('ReadDapTemplate'),
-                        \ 'options': extend(options, call('fzf#vim#with_preview', copy(g:fzf_vim.preview_window)).options)
-                        \ })
-            call fzf#run(wrap)
-        endfunction
-        command! LoadDap call s:load_dap()
-        nnoremap <silent><leader>rl :LoadDap<Cr>
-        command! OpenDap call s:load_json(1)
-        nnoremap <silent><leader>ro :OpenDap<Cr>
-        nnoremap <leader>rO :tabe ~/.leovim/conf.d/dap/
-    endif
-    nnoremap <leader>rI :DapInstall<Space>
-    nnoremap <leader>rU :DapUninstall<Space>
-    nnoremap <leader>rL :lua DapLoadConfig()<Left>
-    nnoremap <silent><M-e>, <cmd>lua DapBreakpointPrev()<Cr>
-    nnoremap <silent><M-e>; <cmd>lua DapBreakpointNext()<Cr>
-    nnoremap <silent><M-e><Space> <cmd>lua require"dap".toggle_breakpoint()<Cr>
-    nnoremap <silent><M-e><M-e> <cmd>lua DapRunToCursor()<Cr>
-    nnoremap <silent><M-e><Cr> <cmd>lua DapContinue()<Cr>
-    nnoremap <silent><M-e>p <cmd>lua DapPause()<Cr>
-    nnoremap <silent><M-e>q <cmd>lua DapReset()<Cr>
-    nnoremap <silent><M-e>n <cmd>lua require"dap".step_over()<Cr>
-    nnoremap <silent><M-e>N <cmd>lua require"dap".step_back()<Cr>
-    nnoremap <silent><M-e>i <cmd>lua require"dap".step_into()<Cr>
-    nnoremap <silent><M-e>o <cmd>lua require"dap".step_out()<Cr>
-    nnoremap <silent><F3> <cmd>lua DapReset()<Cr>
-    nnoremap <silent><F4> <cmd>lua DapRunToCursor()<Cr>
-    nnoremap <silent><F5> <cmd>lua DapContinue()<Cr>
-    nnoremap <silent><F6> <cmd>lua DapPause()<Cr>
-    nnoremap <silent><F7> <cmd>lua DapBreakpointPrev()<Cr>
-    nnoremap <silent><F8> <cmd>lua DapBreakpointNext()<Cr>
-    nnoremap <silent><F9> <cmd>lua require"dap".toggle_breakpoint()<Cr>
-    nnoremap <silent><F10> <cmd>lua require"dap".step_over()<Cr>
-    nnoremap <silent><F11> <cmd>lua require"dap".step_into()<Cr>
-    nnoremap <silent><F12> <cmd>lua require"dap".step_out()<Cr>
-    " basic <M-e> map
-    nnoremap <M-e>l :lua require"dap".
-    nnoremap <silent><M-e>. <cmd>lua require"dap".run_last()<Cr>
-    nnoremap <silent><M-e>a <cmd>lua require"dap".attach(vim.fn.input('Attatch to: '))<Cr>
-    " breakpoints
-    nnoremap <silent><M-e>c <cmd>lua require"dap".clear_breakpoints()<Cr>
-    nnoremap <silent><M-e>e <cmd>lua require"dap".set_exception_breakpoints("")<left><left>
-    nnoremap <silent><M-e>s <cmd>lua require"dap".set_breakpoint()<left>
-    " debug
-    nnoremap <silent><M-e>u <cmd>lua require"dap".up()<Cr>
-    nnoremap <silent><M-e>d <cmd>lua require"dap".down()<Cr>
-    " auto attach
-    au FileType dap-repl lua require('dap.ext.autocompl').attach()
-    " --------------------------------------
-    " nvim-dap-ui
-    " ---------------------------------------
-    nnoremap <M-m>l :lua require("dapui").
-    " watch
-    nnoremap <silent><M-m>s <cmd>lua require("dapui").float_element('scopes')<Cr>
-    nnoremap <silent><M-m>w <cmd>lua require("dapui").float_element('watches')<Cr>
-    nnoremap <silent><M-m>t <cmd>lua require("dapui").float_element('stacks')<Cr>
-    nnoremap <silent><M-m>c <cmd>lua require("dapui").float_element('console')<Cr>
-    nnoremap <silent><M-m>r <cmd>lua require("dapui").float_element('repl')<Cr>
-    function! GoToDAPWindows(name) abort
-        try
-            let windowNr = bufwinnr(a:name)
-            execute windowNr . 'wincmd w'
-        catch
-            if a:name == 'DAP Breakpoints'
-                lua require"dap".list_breakpoints(true)
-            endif
-        endtry
-    endfunction
-    nnoremap <silent><M-m>b <Cmd>call GoToDAPWindows("DAP Breakpoints")<Cr>
-    nnoremap <silent><M-m>1 <Cmd>call GoToDAPWindows("DAP Scopes")<Cr>
-    nnoremap <silent><M-m>2 <Cmd>call GoToDAPWindows("DAP Watches")<Cr>
-    nnoremap <silent><M-m>3 <Cmd>call GoToDAPWindows("DAP Stacks")<Cr>
-    " check dapui openned
-    function! s:dapui_opened()
-        return bufwinnr("DAP Scopes") >= 0 || bufwinnr("DAP Watches") >= 0 || bufwinnr("DAP Stacks") >= 0
-    endfunction
-    " --------------------------------------
-    " special map
-    " ---------------------------------------
-    function! s:dap_or_floaterm(type)
-        if a:type == "eval"
-            if luaeval('require"dap".session() ~= nil')
-                lua require('dapui').eval(nil, {context='hover', width=math.floor(vim.o.columns*0.5), height=math.floor(vim.o.lines*0.25), enter=false})
-            else
-                call diagnostic#show(1)
-            endif
-        elseif s:dapui_opened()
-            if a:type == "console"
-                lua require("dapui").float_element('console')
-            elseif a:type == "repl"
-                lua require("dapui").float_element('repl')
-            elseif a:type == "element"
-                lua require("dapui").float_element()
-            else
-                call GoToDAPWindows("DAP Breakpoints")
-                wincmd k
-            endif
-        elseif a:type == "repl"
-            FloatermToggle
-        elseif a:type == "element"
-            TermNewOrFzfList
-        else
-            call preview#errmsg('Please start dap session.') | sleep 2
-        endif
-    endfunction
-    command! DapUIEval call s:dap_or_floaterm("eval")
-    command! FocusCode call s:dap_or_floaterm("focus")
-    command! ReplOrFloatermToggle call s:dap_or_floaterm("repl")
-    command! ConsoleOrFloatermToggle call s:dap_or_floaterm("console")
-    command! ElementOrFloatermNewOrFzfList call s:dap_or_floaterm("element")
-    " other important map
-    nnoremap <silent><M-m>0 :FocusCode<Cr>
-    nnoremap <silent><M--> :ConsoleOrFloatermToggle<Cr>
-    nnoremap <silent><M-=> :ElementOrFloatermNewOrFzfList<Cr>
-    " view variables
-    nnoremap <silent>J :DapUIEval<Cr>
 endif
+" opened checkers shared with cfg/vimspector.vim and cfg/dap.vim
+function! debug#vimspector_opened()
+    return bufwinnr('vimspector.Variables') >= 0 || bufwinnr('vimspector.Watches') >= 0 || bufwinnr('vimspector.StackTrace') >= 0
+endfunction
+function! debug#dapui_opened()
+    return bufwinnr("DAP Scopes") >= 0 || bufwinnr("DAP Watches") >= 0 || bufwinnr("DAP Stacks") >= 0
+endfunction
 " watch Variable
-function! s:watch() range
+function! debug#watch() range
     if pack#installed('nvim-dap')
-        if !s:dapui_opened()
+        if !debug#dapui_opened()
             call preview#errmsg("Please start nvim-dap session first.")
             return
         endif
     elseif pack#installed('vimspector')
-        if !s:vimspector_opened()
+        if !debug#vimspector_opened()
             call preview#errmsg("Please start vimspector session first.")
             return
         endif
@@ -384,7 +119,7 @@ function! s:watch() range
             if pack#installed('vimspector')
                 call vimspector#AddWatch(l:selected_text)
             elseif pack#installed('nvim-dap')
-                let cmd = "lua require'dapui'.elements.watches.add(" .  l:selected_text . ")"
+                let cmd = "lua require'dapui'.elements.watches.add('" . substitute(l:selected_text, "'", "''", 'g') . "')"
                 execute(cmd)
             endif
         catch
@@ -394,6 +129,6 @@ function! s:watch() range
         call preview#errmsg("No valid text to watch")
     endif
 endfunction
-command! -range WatchCword call s:watch()
+command! -range WatchCword call debug#watch()
 xnoremap - :WatchCword<CR>
 nnoremap - :WatchCword<CR>

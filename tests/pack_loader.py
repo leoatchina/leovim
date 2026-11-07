@@ -393,6 +393,268 @@ call assert_equal(['leaf', 'dep', 'cfg', 'main'], g:trace)
       "main/plugin/main.vim": "call add(g:trace, 'main')\n",
       "cfg/probe.vim": "call add(g:trace, 'cfg')\n"})
 
+    def test_debug_vimspector_dap_groups_source_real_cfg(self):
+        "Step 1: plugin/debug.vim split into cfg/vimspector.vim + cfg/dap.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        user_opt = Path.home() / '.leovim.d' / 'pack' / 'add' / 'opt'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                for name in ('vimspector', 'nvim-dap', 'nvim-dap-ui', 'nvim-nio',
+                             'mason.nvim', 'mason-nvim-dap.nvim'):
+                    self.assertTrue((user_opt / name).is_dir(), f"missing {name}")
+                self.run_editor(editor, """
+let g:has_terminal = 1
+let $CFG_DIR = REAL_CFG
+call pack#declare(g:test_root . '/fzf', {'on': []})
+call pack#declare(g:test_root . '/fzf.vim', {'on': []})
+call pack#declare(g:test_root . '/vim-signify', {'on': []})
+call pack#declare(OPT . '/vimspector', {'on': [], 'vim': 'vimspector'})
+call pack#declare(OPT . '/nvim-dap', {'on': [], 'vim': 'dap'})
+call pack#declare(OPT . '/nvim-dap-ui', {'on': [], 'deps': ['nvim-dap', 'nvim-nio']})
+call pack#declare(OPT . '/nvim-nio', {'on': []})
+call pack#declare(OPT . '/mason.nvim', {'on': []})
+call pack#declare(OPT . '/mason-nvim-dap.nvim', {'on': [], 'deps': ['nvim-dap', 'mason.nvim']})
+call pack#end()
+call assert_true(pack#source_vim('vimspector'))
+call assert_true(pack#source_vim('dap'))
+call assert_true(pack#vim_sourced('vimspector'))
+call assert_true(pack#vim_sourced('dap'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/debug.vim')
+call assert_equal('vimspector', g:debug_tool)
+call assert_equal(2, exists(':LoadVimspector'))
+call assert_equal(2, exists(':LoadDap'))
+call assert_true(exists('*debug#load_json'))
+call assert_true(exists('*debug#watch'))
+call assert_true(exists('*debug#vimspector_opened'))
+call assert_true(exists('*debug#dapui_opened'))
+call assert_notequal('', maparg('<M-e><Cr>', 'n'))
+call assert_true(exists('#BufEnter'))
+call assert_match('debug#vimspector_opened', execute('au BufEnter'))
+call assert_equal(0, debug#vimspector_opened())
+""".replace('REAL_CFG', quote(real_cfg)).replace('OPT', quote(user_opt)))
+
+    def test_asynctasks_cfg_group_and_run_plugin_coordination(self):
+        "Step 2: plugin/run.vim asynctasks block split into cfg/asynctasks.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let g:root_patterns = ['.git']
+let $CFG_DIR = REAL_CFG
+call pack#declare(g:test_root . '/fzf', {'on': []})
+call pack#declare(g:test_root . '/fzf.vim', {'on': []})
+call pack#declare(g:test_root . '/asynctasks.vim', {'on': [], 'vim': 'asynctasks'})
+call pack#end()
+call assert_true(pack#source_vim('asynctasks'))
+call assert_true(pack#vim_sourced('asynctasks'))
+call assert_equal(2, exists(':AsyncTaskDeploy'))
+call assert_equal(2, exists(':AsyncTaskProfileLoop'))
+call assert_true(exists('*asynctasks#tasks_open'))
+call assert_true(exists('*asynctasks#profile_loop'))
+call assert_true(exists('*asynctasks#fzf_tasks'))
+call assert_notequal('', maparg('<M-a>', 'n'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/run.vim')
+call assert_equal(2, exists(':TaskRunOrRight'))
+call assert_equal(2, exists(':RunQfBottom'))
+""".replace('REAL_CFG', quote(real_cfg)), {
+    "asynctasks.vim/plugin/asynctasks.vim": "\" asynctasks stub plugin.\n"})
+
+    def test_gutentags_cfg_group_module_ordering(self):
+        "Step 3: plugin/tags.vim gutentags params moved to cfg/gutentags.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let g:ctags_type = 'Universal-json'
+let g:root_patterns = ['.git']
+let g:symbol_tool = 'vista-gutentags'
+let $HOME = g:test_root . '/home'
+let $CFG_DIR = REAL_CFG
+call pack#declare(g:test_root . '/vim-gutentags', {'on': [], 'vim': 'gutentags'})
+call pack#end()
+call assert_true(pack#source_vim('gutentags'))
+call assert_true(pack#vim_sourced('gutentags'))
+call assert_true(exists('*gutentags#delete_tags'))
+call assert_equal(2, exists(':GutentagsDelTagsAndUpdate'))
+call assert_notequal('', maparg('<leader>g<Cr>', 'n'))
+call assert_false(exists('g:gutentags_plus_native'))
+call assert_equal(['ctags'], g:gutentags_modules)
+call assert_true(stridx(g:gutentags_ctags_extra_args[0], '--fields') == 0)
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/tags.vim')
+call assert_equal(['ctags'], g:gutentags_modules)
+""".replace('REAL_CFG', quote(real_cfg)), {
+    "vim-gutentags/plugin/gutentags.vim": "\" vim-gutentags stub plugin.\n"})
+
+    def test_lightline_cfg_migration_and_buffer_nav_mapping(self):
+        "Step 4: plugin/lightline.vim moved to cfg/lightline.vim, nav maps into buffer.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        clone_opt = ROOT / 'pack' / 'clone' / 'opt'
+        fork_opt = ROOT / 'pack' / 'fork' / 'opt'
+        self.assertFalse((ROOT / 'conf.d' / 'main' / 'plugin' / 'lightline.vim').exists())
+        for editor in EDITORS:
+            with self.subTest(editor=editor, group='installed'):
+                self.run_editor(editor, """
+let $CFG_DIR = REAL_CFG
+call pack#declare(CLONE . '/lightline.vim', {'on': [], 'vim': 'lightline'})
+call pack#declare(FORK . '/lightline-bufferline', {'on': []})
+call pack#end()
+call assert_true(pack#source_vim('lightline'))
+call assert_true(pack#vim_sourced('lightline'))
+call assert_true(exists('g:lightline'))
+call assert_true(exists('*lightline#upgrade'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/buffer.vim')
+call assert_equal('<Plug>lightline#bufferline#go_next()', maparg(';b', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)).replace('CLONE', quote(clone_opt)).replace('FORK', quote(fork_opt)))
+            with self.subTest(editor=editor, group='missing'):
+                self.run_editor(editor, """
+let $CFG_DIR = REAL_CFG
+call pack#declare(FORK . '/lightline-bufferline', {'on': []})
+call pack#end()
+call assert_false(pack#vim_sourced('lightline'))
+call assert_false(exists('g:lightline'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/buffer.vim')
+call assert_equal('', maparg(';b', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)).replace('FORK', quote(fork_opt)))
+
+    def test_vista_cfg_group_params_and_plugin_mapping(self):
+        "Step 5: plugin/tags.vim vista params moved to cfg/vista.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        fork_opt = ROOT / 'pack' / 'fork' / 'opt'
+        for editor in EDITORS:
+            with self.subTest(editor=editor, group='installed'):
+                self.run_editor(editor, """
+let g:ctags_type = 'Universal-json'
+let g:root_patterns = ['.git']
+let g:symbol_tool = 'vista-gutentags'
+let $HOME = g:test_root . '/home'
+let $CFG_DIR = REAL_CFG
+call pack#declare(FORK . '/vista.vim', {'on': [], 'vim': 'vista'})
+call pack#end()
+call assert_true(pack#source_vim('vista'))
+call assert_equal('kind', g:vista#renderer#ctags)
+call assert_equal(35, g:vista_sidebar_width)
+call assert_equal('ctags', g:vista_executive_for.go)
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/tags.vim')
+call assert_notequal('', maparg('<Tab>v', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)).replace('FORK', quote(fork_opt)))
+            with self.subTest(editor=editor, group='missing'):
+                self.run_editor(editor, """
+let g:ctags_type = 'Universal-json'
+let g:root_patterns = ['.git']
+let g:symbol_tool = 'vista-gutentags'
+let $HOME = g:test_root . '/home'
+let $CFG_DIR = REAL_CFG
+call pack#end()
+call assert_false(pack#vim_sourced('vista'))
+call assert_false(exists('g:vista#renderer#ctags'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/tags.vim')
+call assert_equal('', maparg('<Tab>v', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)))
+
+    def test_startify_cfg_group_uses_temp_home(self):
+        "Step 6: plugin/session.vim startify params moved to cfg/startify.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let $HOME = g:test_root . '/home'
+let $CFG_DIR = REAL_CFG
+call pack#declare(g:test_root . '/vim-startify', {'on': [], 'vim': 'startify'})
+call pack#end()
+call assert_true(pack#source_vim('startify'))
+call assert_true(pack#vim_sourced('startify'))
+call assert_true(exists('g:startify_session_dir'))
+call assert_true(stridx(g:startify_session_dir, g:test_root) == 0)
+call assert_true(isdirectory(g:startify_session_dir))
+call assert_true(exists('#User#Startified'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/session.vim')
+call assert_notequal('', maparg('<leader>st', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)), {
+    "vim-startify/plugin/startify.vim": "\" vim-startify stub plugin.\n"})
+
+    def test_ale_cfg_group_params(self):
+        "Step 7: plugin/diagnostic.vim ale params moved to cfg/ale.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let g:has_popup_floating = 1
+let $CFG_DIR = REAL_CFG
+call pack#declare(g:test_root . '/ale', {'on': [], 'vim': 'ale'})
+call pack#end()
+call assert_true(pack#source_vim('ale'))
+call assert_true(pack#vim_sourced('ale'))
+call assert_equal('auto', g:ale_disable_lsp)
+call assert_equal(['cargo'], g:ale_linters.rust)
+call assert_equal(1, g:ale_virtualtext_cursor)
+call assert_true(stridx(g:ale_python_flake8_options, '--ignore=E101,E302') >= 0)
+call assert_true(stridx(g:ale_python_flake8_options, 'F403') >= 0)
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/diagnostic.vim')
+call assert_equal(2, exists(':ALECommands'))
+""".replace('REAL_CFG', quote(real_cfg)), {
+    "ale/plugin/ale.vim": "\" dense-analysis/ale stub plugin.\n"})
+
+    def test_zfdirdiff_params_live_in_diff_vim(self):
+        "ZFDirDiff keymaps stay in plugin/diff.vim (no cfg group)."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        clone_opt = ROOT / 'pack' / 'clone' / 'opt'
+        self.assertFalse((ROOT / 'conf.d' / 'main' / 'cfg' / 'zfdirdiff.vim').exists())
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let $CFG_DIR = REAL_CFG
+call pack#declare(CLONE . '/ZFVimDirDiff', {'on': []})
+call pack#end()
+call assert_false(pack#vim_sourced('zfdirdiff'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/diff.vim')
+call assert_equal(1, g:ZFDirDiff_ignoreEmptyDir)
+call assert_equal(['<Cr>', 'o'], g:ZFDirDiffKeymap_open)
+call assert_notequal('', maparg('<Leader>fd', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)).replace('CLONE', quote(clone_opt)))
+
+    def test_floaterm_cfg_group_and_bootstrap_keys(self):
+        "Step 9: plugin/terminal.vim floaterm params moved to cfg/floaterm.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        fork_opt = ROOT / 'pack' / 'fork' / 'opt'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let g:has_terminal = 1
+let g:has_popup_floating = 1
+let $CFG_DIR = REAL_CFG
+call pack#declare(FORK . '/vim-floaterm', {'on': '^Floaterm.*$', 'vim': 'floaterm'})
+call pack#end()
+call assert_true(pack#source_vim('floaterm'))
+call assert_true(pack#vim_sourced('floaterm'))
+call assert_equal('split', g:floaterm_wintype)
+call assert_equal(' --wintype=vsplit --width=0.382', g:floaterm#parameters.right)
+call assert_equal(2, exists(':FloatermOpenPos'))
+call assert_true(exists('*floaterm#select_pos'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/terminal.vim')
+call assert_notequal('', maparg('<M-->', 'n'))
+call assert_equal(2, exists(':TermNewOrFzfList'))
+""".replace('REAL_CFG', quote(real_cfg)).replace('FORK', quote(fork_opt)))
+
+    def test_quickui_cfg_group_params(self):
+        "Step 10: plugin/basic.vim quickui params moved to cfg/quickui.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        clone_opt = ROOT / 'pack' / 'clone' / 'opt'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let $CFG_DIR = REAL_CFG
+call pack#declare(CLONE . '/vim-quickui', {'on': [], 'vim': 'quickui'})
+call pack#end()
+call assert_true(pack#source_vim('quickui'))
+call assert_true(pack#vim_sourced('quickui'))
+call assert_equal(2, g:quickui_border_style)
+call assert_true(exists('*quickui#preview_popup_file'))
+call assert_equal(2, exists(':PreviewPopupFile'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/basic.vim')
+call assert_notequal('', maparg('<M-k>m', 'n'))
+call assert_notequal('', maparg('\o', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)).replace('CLONE', quote(clone_opt)))
+
     def test_invalid_dependency_shapes_are_rejected(self):
         for editor in EDITORS:
             for invalid in ("42", "{}"):

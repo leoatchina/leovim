@@ -1,3 +1,14 @@
+" lightline-bufferline navigation, usable while lightline.vim is planned
+if pack#planned('lightline.vim')
+    nmap ;b <Plug>lightline#bufferline#go_next()
+    nmap ,b <Plug>lightline#bufferline#go_previous()
+    nmap ;B <Plug>lightline#bufferline#go_next_category()
+    nmap ,B <Plug>lightline#bufferline#go_previous_category()
+    nmap ]b <Plug>lightline#bufferline#move_next()
+    nmap [b <Plug>lightline#bufferline#move_previous()
+    nmap [B <Plug>lightline#bufferline#move_first()
+    nmap ]B <Plug>lightline#bufferline#move_last()
+endif
 " Skip in VSCode environment
 if utils#is_vscode()
     finish
