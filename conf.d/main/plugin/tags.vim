@@ -2,10 +2,6 @@
 if utils#is_vscode()
     finish
 endif
-" vista settings live in cfg/vista.vim
-if pack#installed('vista.vim')
-    nnoremap <Tab>v :Vista
-endif
 " --------------------------
 " symbol_tool
 " --------------------------

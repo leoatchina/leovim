@@ -594,22 +594,24 @@ call assert_equal(2, exists(':ALECommands'))
 """.replace('REAL_CFG', quote(real_cfg)), {
     "ale/plugin/ale.vim": "\" dense-analysis/ale stub plugin.\n"})
 
-    def test_zfdirdiff_params_live_in_diff_vim(self):
-        "ZFDirDiff keymaps stay in plugin/diff.vim (no cfg group)."
+    def test_zfdirdiff_help_opens_config_without_search(self):
         real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
         clone_opt = ROOT / 'pack' / 'clone' / 'opt'
-        self.assertFalse((ROOT / 'conf.d' / 'main' / 'cfg' / 'zfdirdiff.vim').exists())
         for editor in EDITORS:
             with self.subTest(editor=editor):
-                self.run_editor(editor, """
+                self.run_editor(editor, r"""
 let $CFG_DIR = REAL_CFG
-call pack#declare(CLONE . '/ZFVimDirDiff', {'on': []})
+call pack#declare(CLONE . '/ZFVimDirDiff', {'on': [], 'vim': 'zfdirdiff'})
 call pack#end()
-call assert_false(pack#vim_sourced('zfdirdiff'))
-execute 'source ' . fnameescape($MAIN_DIR . '/plugin/diff.vim')
-call assert_equal(1, g:ZFDirDiff_ignoreEmptyDir)
-call assert_equal(['<Cr>', 'o'], g:ZFDirDiffKeymap_open)
-call assert_notequal('', maparg('<Leader>fd', 'n'))
+call pack#load('ZFVimDirDiff')
+new
+setfiletype ZFDirDiff
+let @/ = 'unchanged-search-pattern'
+let previous_tabs = tabpagenr('$')
+call feedkeys("\<F1>", 'xt')
+call assert_equal(previous_tabs + 1, tabpagenr('$'))
+call assert_equal(fnamemodify($CFG_DIR . '/zfdirdiff.vim', ':p'), expand('%:p'))
+call assert_equal('unchanged-search-pattern', @/)
 """.replace('REAL_CFG', quote(real_cfg)).replace('CLONE', quote(clone_opt)))
 
     def test_floaterm_cfg_group_and_bootstrap_keys(self):

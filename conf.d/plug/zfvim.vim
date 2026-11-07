@@ -1,5 +1,5 @@
 PackAdd 'ZFVimJob'
-PackAdd 'ZFVimDirDiff'
+PackAdd 'ZFVimDirDiff', {'vim': 'zfdirdiff'}
 " --------------------
 " ZFIgnore
 " --------------------

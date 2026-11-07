@@ -16,3 +16,4 @@ let g:vista_executive_for = {
 if g:ctags_type != ''
     let g:vista_executive_for.go = 'ctags'
 endif
+nnoremap <Tab>v :Vista

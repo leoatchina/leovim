@@ -149,18 +149,6 @@ elseif pack#installed('vista.vim')
     endif
     nnoremap <silent><C-t> :call sidebar#toggle('vista')<CR>
 elseif pack#installed('tagbar')
-    let g:tagbar_position = 'leftabove vertical'
-    let g:tagbar_sort  = 0
-    let g:tagbar_width = 35
-    let g:tagbar_autoclose_netrw = 1
-    let g:tagbar_autofocus = 0
-    let g:tagbar_type_css = {
-                \ 'ctagstype' : 'css',
-                \ 'kinds' : [
-                    \ 'c:classes',
-                    \ 's:selectors',
-                    \ 'i:identities'
-                    \ ]}
     function! s:tagbar_tree_win() abort
         let ft = pack#planned('vim-fern') ? 'fern' : 'netrw'
         for nr in range(1, winnr('$'))

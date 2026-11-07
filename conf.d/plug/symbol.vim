@@ -68,5 +68,5 @@ endif
 if s:planned_symbol('vista')
     PackAdd 'vista.vim', {'vim': 'vista'}
 elseif s:planned_symbol('tagbar')
-    PackAdd 'tagbar'
+    PackAdd 'tagbar', {'vim': 'tagbar'}
 endif

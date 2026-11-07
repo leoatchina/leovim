@@ -13,7 +13,7 @@
 | 补全、片段与语言服务 | builtin / mucomplete / Coc / nvim-cmp / blink.cmp；[`application.vim`](conf.d/plug/application.vim)、[`complete.vim`](conf.d/main/plugin/complete.vim)、[`lsp.lua`](conf.d/main/lua/lsp.lua) |
 | 文件、内容与符号搜索 | FZF、LeaderF；未安装两者时 Neovim 使用 Snacks、Vim9 使用 Fuzzbox 托底；LSP、Ctags/Gtags 与 Grep；[`search.vim`](conf.d/main/plugin/search.vim)、[`tags.vim`](conf.d/main/plugin/tags.vim) |
 | 语法树与文本对象 | 符合版本条件时使用 Treesitter，另有 Vim 文本对象插件；[`treesitter.lua`](conf.d/main/lua/treesitter.lua)、[`textobj.vim`](conf.d/init/plugin/textobj.vim) |
-| 文件树、符号侧栏与状态栏 | 根据已选插件启用；[`sidebar.vim`](conf.d/main/plugin/sidebar.vim)、[`lightline.vim`](conf.d/main/cfg/lightline.vim) |
+| 文件树、符号侧栏与状态栏 | 根据已选插件启用；[`sidebar.vim`](conf.d/main/plugin/sidebar.vim)、[`cfg/tagbar.vim`](conf.d/main/cfg/tagbar.vim)（通过 `vim: tagbar` 配置组加载）、[`lightline.vim`](conf.d/main/cfg/lightline.vim) |
 | 主题、窗口与标签页 | [`scheme.vim`](conf.d/main/plugin/scheme.vim)、[`window.vim`](conf.d/main/plugin/window.vim)、[`tab.vim`](conf.d/main/plugin/tab.vim) |
 | Git | Fugitive、GV、LeaderF Git、可选 LazyGit；[`git.vim`](conf.d/main/plugin/git.vim) |
 | 异步任务与文件运行 | AsyncRun / AsyncTasks；[`run.vim`](conf.d/main/plugin/run.vim)、[`任务模板`](conf.d/tasks/) |
@@ -373,6 +373,8 @@ Coc 诊断默认关闭，沿用 `<leader>o` 开关当前缓冲区诊断；即使
 
 见 [`git.vim`](conf.d/main/plugin/git.vim)，Git 必须在当前环境可用，部分入口另需 GV、LeaderF 或 LazyGit。
 Neovim 的 diffview 后端要求 Git ≥ 2.31.0，版本按整数分段比较，不用浮点数。
+
+目录对比 ZFVimDirDiff 的配置位于 [`cfg/zfdirdiff.vim`](conf.d/main/cfg/zfdirdiff.vim)，通过 `vim: zfdirdiff` 加载；在其界面按 `<F1>` 直接新标签页打开该文件，不执行搜索。
 
 | 按键 | 功能 |
 |---|---|
