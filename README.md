@@ -327,6 +327,8 @@ Vim 的菜单式 WinBar 保留文件名，仅在 `pack#installed_coc()` 成立�
 
 见 [`search.vim`](conf.d/main/plugin/search.vim)。后端依赖已配置的搜索工具，不能假定所有环境都使用 ripgrep。
 
+标记、书签与历史入口集中在 [`history.vim`](conf.d/main/plugin/history.vim)；帮助、翻译与文档查询入口集中在 [`basic.vim`](conf.d/main/plugin/basic.vim)。
+
 | 按键 | 功能 |
 |---|---|
 | `z/` / `z\` | 当前 buffer 搜索光标下词 / 输入搜索词 |
