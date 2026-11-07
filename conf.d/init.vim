@@ -165,7 +165,7 @@ nnoremap ZT zt
 cmap <C-a> <Home>
 cmap <C-e> <End>
 " Completion backends may override this; native menus still use Ctrl-e to cancel.
-imap <expr><C-a> pumvisible() ? "\<C-a>" : "\<C-o>I"
+imap <silent><C-a> <C-o>I
 imap <expr><C-e> pumvisible() ? "\<C-e>" : "\<C-o>A"
 imap <expr><C-b> pumvisible() ? "\<C-b>" : "\<C-o>I"
 imap <expr><C-f> pumvisible() ? "\<C-f>" : "\<C-o>A"

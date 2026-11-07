@@ -1322,27 +1322,23 @@ map('i', '<C-l>', function()
   end
 end, {expr = true, silent = true})
 
--- 代码片段占位符导航 - 仅在代码片段模式下激活
-map({'i', 's'}, '<C-f>', function()
+-- 代码片段占位符导航只在 select mode 生效；insert mode 由全局导航键处理。
+map('s', '<C-f>', function()
   if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
     local success = jump_to_next_placeholder()
     if not success then
       snippet_mode_active = false
     end
     return ''
-  else
-    return vim.api.nvim_replace_termcodes('<C-f>', true, true, true)
   end
+  return vim.api.nvim_replace_termcodes('<C-o>A', true, true, true)
 end, {expr = true, silent = true})
-
--- 跳转到上一个占位符
-map({'i', 's'}, '<C-b>', function()
+map('s', '<C-b>', function()
   if snippet_mode_active and not vim.tbl_isempty(current_snippet_placeholders) then
     jump_to_prev_placeholder()
     return ''
-  else
-    return vim.api.nvim_replace_termcodes('<C-b>', true, true, true)
   end
+  return vim.api.nvim_replace_termcodes('<C-o>I', true, true, true)
 end, {expr = true, silent = true})
 
 -- 补全菜单导航 - 仅在菜单可见时生效

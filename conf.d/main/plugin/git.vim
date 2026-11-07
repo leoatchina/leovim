@@ -189,16 +189,40 @@ if pack#planned('vim-fugitive')
 endif
 " Current-file history list: best backend first; GV replaces only on vim
 " without LeaderF (GV needs fugitive, zero python/node deps).
-if pack#planned('diffview-plus.nvim')
-    nnoremap <silent>g\ :DiffviewFileHistory %<Cr>
-    nnoremap <silent>\| :DiffviewOpen<Cr>
+if pack#installed('diffview-plus.nvim')
     nnoremap <M-g>m :DiffviewMergeFiles<Space>
     nnoremap <M-g>d :DiffviewDiffFiles<Space>
-elseif pack#planned_leaderf()
+endif
+if pack#planned_leaderf()
+    let g:Lf_GitKeyMap = extend({
+                \ 'previous_change': ',g',
+                \ 'next_change': ';g',
+                \ 'edit_file': '<CR>',
+                \ 'open_navigation': '<',
+                \ 'stage_unstage_hunk': 's',
+                \ 'stage_unstage_all_hunk': 'S',
+                \ 'discard_hunk': 'd',
+                \ 'discard_hunk_no_prompt': 'D',
+                \ 'diff_get_ours': '<leader>1',
+                \ 'diff_get_base': '<leader>2',
+                \ 'diff_get_theirs': '<leader>3',
+                \ }, get(g:, 'Lf_GitKeyMap', {}))
+    nnoremap <silent><M-g>i :Leaderf git<Cr>
+    nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
+    nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
+    nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
     nnoremap <silent>g\ :Leaderf git log --side-by-side --current-file<Cr>
     nnoremap <silent>\| :Leaderf git status --side-by-side<Cr>
+elseif pack#planned('diffview-plus.nvim')
+    nnoremap <silent><M-g>o :DiffviewFileHistory<Cr>
+    nnoremap <silent><M-g>l :.DiffviewFileHistory --follow<Cr>
+    nnoremap <silent>g\ :DiffviewFileHistory %<Cr>
+    nnoremap <silent>\| :DiffviewOpen<Cr>
 else
     if pack#planned('gv.vim')
+        nnoremap <silent><M-g>o :GV<Cr>
+        nnoremap <silent><M-g>l V:GV?<Cr>
+        xnoremap <silent><M-g>l :GV?<Cr>
         nnoremap <silent>g\ :GV!<Cr>
     endif
     if pack#planned('vim-signify')
@@ -233,38 +257,9 @@ nnoremap <silent><M-g>: :GCommands<Cr>
 " ---------------------------------
 " Git browser shortcuts by backend.
 " ---------------------------------
-if pack#planned_leaderf()
-    let g:Lf_GitKeyMap = extend({
-                \ 'previous_change': ',g',
-                \ 'next_change': ';g',
-                \ 'edit_file': '<CR>',
-                \ 'open_navigation': '<',
-                \ 'stage_unstage_hunk': 's',
-                \ 'stage_unstage_all_hunk': 'S',
-                \ 'discard_hunk': 'd',
-                \ 'discard_hunk_no_prompt': 'D',
-                \ 'diff_get_ours': '<leader>1',
-                \ 'diff_get_base': '<leader>2',
-                \ 'diff_get_theirs': '<leader>3',
-                \ }, get(g:, 'Lf_GitKeyMap', {}))
-    nnoremap <silent><M-g>i :Leaderf git<Cr>
-    nnoremap <silent><M-g>o :Leaderf git log --side-by-side<Cr>
-    nnoremap <silent><M-g>e :Leaderf git log --side-by-side --explorer<Cr>
-    nnoremap <silent><M-g>f :Leaderf git log --side-by-side --current-file<Cr>
-    nnoremap <silent><M-g>l :Leaderf git log --side-by-side --current-line<Cr>
-elseif pack#planned('diffview-plus.nvim')
-    nnoremap <silent><M-g>o :DiffviewFileHistory<Cr>
-    nnoremap <silent><M-g>f :DiffviewFileHistory %<Cr>
-    nnoremap <silent><M-g>l :.DiffviewFileHistory --follow<Cr>
-elseif pack#planned('gv.vim')
-    nnoremap <silent><M-g>o :GV<Cr>
-    nnoremap <silent><M-g>f :GV!<Cr>
-    nnoremap <silent><M-g>l V:GV?<Cr>
-    xnoremap <silent><M-g>l :GV?<Cr>
-endif
 if pack#installed_snacks()
-    nnoremap <silent><M-g><M-b> <Cmd>lua Snacks.gitbrowse()<Cr>
-    xnoremap <silent><M-g><M-b> :<C-u>lua Snacks.gitbrowse()<Cr>
+    nnoremap <silent><M-g>b <Cmd>lua Snacks.gitbrowse()<Cr>
+    xnoremap <silent><M-g>b :<C-u>lua Snacks.gitbrowse()<Cr>
 endif
 if pack#planned('vim-signify')
     let g:signify_disable_by_default = 0
