@@ -30,9 +30,9 @@ Fuzzbox 使用顶部输入、结果自上而下的布局；`Ctrl-j` 向下、`Ct
 
 Snacks 同样克隆在 `pack/clone/opt/snacks.nvim`，由 `update-clone.sh` 维护，使用 `PackAdd 'snacks.nvim'` 注册，不交给 vim-plug 下载。Neovim 0.9.4+ 在启动时执行 [`cfg/snacks.lua`](conf.d/main/lua/cfg/snacks.lua)，启用 input / picker，接管 `vim.ui.input` 和 `vim.ui.select`，替代 dressing.nvim；这部分不受 FZF / LeaderF 是否安装影响。Dropbar 不再覆盖 `vim.ui.select`。
 
-仅在 FZF、LeaderF 都未安装时，通用文件、缓冲区、历史、搜索与标签快捷键才回退到 Snacks；已有 FZF / LeaderF 的优先级保留。无论是否安装它们，都可以通过 `:SnacksPicker` 打开 Snacks 的全部 picker 入口（例如诊断、LSP、撤销历史等，各自仍需相应数据或服务）。Snacks 选择器使用 `Ctrl-j/k` 上下移动，`Ctrl-]` 垂直分屏打开。文件枚举无需 fzf，内容搜索需要 rg；标签 picker 读取已有的 tags，沿用本配置的 ctags / gutentags 流程，当前文件标签仅保留该文件条目，Coc / Vista 的原有专用入口仍优先。
+仅在 FZF、LeaderF 都未安装时，通用文件、缓冲区、历史与搜索快捷键才回退到 Snacks；已有 FZF / LeaderF 的优先级保留。无论是否安装它们，都可以通过唯一的自定义 Snacks 命令 `:SnacksPicker` 打开内置 picker 总菜单（例如诊断、LSP、撤销历史、tags 等，各自仍需相应数据或服务）。Snacks 选择器使用 `Ctrl-j/k` 上下移动，`Ctrl-]` 垂直分屏打开。文件枚举无需 fzf，内容搜索需要 rg。
 
-`<M-l><M-a>` 搜索已加载且列出的普通缓冲区，包含未保存修改，不用磁盘上的 rg 结果冒充缓冲区内容。Snacks 跳转期间会临时清空 `switchbuf`，防止 `useopen` 复用即将关闭的预览浮窗；动作结束（包括报错）后恢复原值。项目 / VCS 路径使用原始 Lua 路径，支持目录名中的空格，不把 Ex 命令转义后的字符串交给 finder。
+Snacks 跳转期间会临时清空 `switchbuf`，防止 `useopen` 复用即将关闭的预览浮窗；动作结束（包括报错）后恢复原值。项目 / VCS 路径使用原始 Lua 路径，支持目录名中的空格，不把 Ex 命令转义后的字符串交给 finder。
 
 这里只自动启用 input / picker，不默认打开 dashboard、notifier、scroll 或终端等其他模块，避免覆盖现有启动页、通知和 Floaterm 配置。
 

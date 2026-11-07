@@ -31,9 +31,7 @@ endif
 if get(g:, 'ctags_type', '') != ''
     " tags reader: single choice, keep priority in sync with main/plugin/tags.vim
     let g:tags_tool = ''
-    if pack#installed_snacks()
-        let g:tags_tool = 'snackstags'
-    elseif pack#installed_fuzzbox()
+    if pack#installed_fuzzbox()
         let g:tags_tool = 'fuzzboxtags'
     elseif pack#installed_leaderf()
         let g:tags_tool = 'leaderftags'

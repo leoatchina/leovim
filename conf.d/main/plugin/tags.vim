@@ -36,10 +36,7 @@ if get(g:, 'ctags_type', '') != ''
         let g:Lf_Ctags = g:fzf_tags_command
     endif
     let s:tags_tool = get(g:, 'tags_tool', '')
-    if s:tags_tool ==# 'snackstags'
-        nnoremap <silent><leader>T :SnacksTagsWorkspace<Cr>
-        nnoremap <silent>T<Cr> :SnacksTagsBufAll<Cr>
-    elseif s:tags_tool ==# 'fuzzboxtags'
+    if s:tags_tool ==# 'fuzzboxtags'
         nnoremap <silent><leader>T :FuzzyTags<Cr>
     elseif s:tags_tool ==# 'leaderftags'
         nnoremap <silent><leader>T :LeaderfTag
@@ -47,9 +44,7 @@ if get(g:, 'ctags_type', '') != ''
     elseif s:tags_tool ==# 'fzftags' && executable('perl')
         nnoremap <silent><leader>T :FzfTags<Cr>
     endif
-    if s:tags_tool ==# 'snackstags'
-        nnoremap <silent>t<Cr> :SnacksTagsBuf<Cr>
-    elseif pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
+    if pack#installed_coc() && utils#is_unix() && g:ctags_type != ''
         nnoremap <silent>t<Cr> :CocFzfList outline<Cr>
     elseif pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
         nnoremap <silent>t<Cr> :Vista finder ctags<Cr>

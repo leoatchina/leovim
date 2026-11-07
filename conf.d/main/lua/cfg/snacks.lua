@@ -95,25 +95,9 @@ vim.api.nvim_create_user_command('SnacksPicker', function()
   snacks.picker()
 end, { desc = 'Choose a Snacks picker' })
 
-vim.api.nvim_create_user_command('SnacksNote', function()
-  vim.ui.input({ prompt = '笔记名称：' }, function(name)
-    if not name or vim.trim(name) == '' then
-      return
-    end
-    snacks.scratch({
-      name = vim.trim(name),
-      ft = 'markdown',
-      filekey = { cwd = false, branch = false, count = false },
-    })
-  end)
-end, { desc = 'Open a named notebook' })
-
 vim.keymap.set('n', '<leader>fo', function()
   snacks.explorer()
 end, { silent = true, nowait = true, desc = 'Open file explorer' })
-
-vim.keymap.set('n', '<leader>fn', '<Cmd>SnacksNote<Cr>',
-  { silent = true, nowait = true, desc = 'Open a named notebook' })
 
 vim.keymap.set('n', '<leader>fe', function()
   snacks.scratch()
@@ -122,66 +106,5 @@ end, { silent = true, nowait = true, desc = 'Toggle scratch buffer' })
 vim.keymap.set('n', '<leader>fs', function()
   snacks.scratch.select()
 end, { silent = true, nowait = true, desc = 'Select scratch buffer' })
-
-vim.api.nvim_create_user_command('SnacksBufferLines', function()
-  local sources = {}
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.bo[buf].buflisted and vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == '' then
-      sources[#sources + 1] = { source = 'lines', buf = buf }
-    end
-  end
-  snacks.picker.pick({ title = 'Buffer Lines', multi = sources })
-end, { desc = 'Search loaded buffers, including unsaved changes' })
-
-vim.api.nvim_create_user_command('SnacksTagsWorkspace', function()
-  snacks.picker.tags({ title = 'Tags (workspace)' })
-end, { desc = 'Snacks: search workspace ctags' })
-
-vim.api.nvim_create_user_command('SnacksTagsBuf', function()
-  if vim.api.nvim_buf_get_name(0) == '' then
-    vim.notify('SnacksTagsBuf: buffer has no file name', vim.log.levels.WARN)
-    return
-  end
-  snacks.picker.tags({
-    title = 'Tags (buffer)',
-    filter = { buf = vim.api.nvim_get_current_buf() },
-    finder = function(opts, ctx)
-      return ctx.filter(require('snacks.picker.source.vim').tags(opts, ctx))
-    end,
-  })
-end, { desc = 'Snacks: search current-buffer ctags' })
-
-vim.api.nvim_create_user_command('SnacksTagsBufAll', function()
-  local lsp_kinds = {
-    c = "Class", d = "Constant", e = "Enum", f = "Function",
-    g = "EnumMember", l = "Variable", m = "Method", s = "Struct",
-    t = "TypeParameter", v = "Variable", F = "Field", M = "Module",
-    n = "Namespace", P = "Property", S = "Struct", T = "TypeParameter",
-  }
-  snacks.picker.pick({
-    title = 'Tags (all buffers)',
-    finder = function(opts, ctx)
-      local ret = {}
-      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.bo[buf].buflisted and vim.api.nvim_buf_is_loaded(buf) then
-          local fname = vim.api.nvim_buf_get_name(buf)
-          if fname ~= '' and vim.fn.filereadable(fname) == 1 then
-            for _, tag in ipairs(vim.fn.taglist('.*', fname)) do
-              ret[#ret + 1] = {
-                text = tag.name,
-                name = tag.name,
-                file = tag.filename,
-                search = tag.cmd,
-                kind = tag.kind,
-                lsp_kind = lsp_kinds[tag.kind] or "Text",
-              }
-            end
-          end
-        end
-      end
-      return ctx.filter(ret)
-    end,
-  })
-end, { desc = 'Snacks: search all-buffers ctags' })
 
 return M
