@@ -3,9 +3,8 @@
 " ------------------------------
 if !pack#get('nocomplete') && exists('v:true') && exists("##TextChangedP")
     PackAdd 'rafamadriz/friendly-snippets'
-    if !pack#planned_blink() || pack#planned_cmp()
-        PackAdd 'hrsh7th/vim-vsnip'
-    endif
+    " blink/cmp 都以 vsnip 为 snippet 引擎
+    PackAdd 'hrsh7th/vim-vsnip'
 endif
 if pack#planned_cmp()
     PackAdd 'hrsh7th/nvim-cmp', {'lua': 'cfg.cmp'}

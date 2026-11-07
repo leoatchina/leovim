@@ -120,6 +120,11 @@ function! utils#file_name_no_ext() abort
     return utils#expand('%:t:r', 1)
 endfunction
 
+function! utils#basename(...) abort
+    let path = a:0 ? a:1 : utils#file_name()
+    return substitute(path, '^.*[/\\]', '', '')
+endfunction
+
 function! utils#file_readonly() abort
     return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction

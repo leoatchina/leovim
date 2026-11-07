@@ -655,6 +655,107 @@ call assert_notequal('', maparg('<M-k>m', 'n'))
 call assert_notequal('', maparg('\o', 'n'))
 """.replace('REAL_CFG', quote(real_cfg)).replace('CLONE', quote(clone_opt)))
 
+    def test_coc_cfg_absorbs_diagnostic_block(self):
+        "Coc diagnostics block moved from plugin/diagnostic.vim into cfg/coc.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let g:lint_tool = 'coc'
+let g:root_patterns = ['.git']
+let g:clangd_exe = ''
+let g:R_exe = ''
+let g:cargo_exe = ''
+let g:gobin_exe = ''
+let g:packs = []
+let g:has_popup_floating = 1
+let $CFG_DIR = REAL_CFG
+call pack#declare(g:test_root . '/coc.nvim', {'on': [], 'vim': 'coc'})
+call pack#declare(g:test_root . '/coc-fzf', {'on': [], 'deps': 'coc.nvim', 'vim': 'coc'})
+call pack#declare(g:test_root . '/ale', {'on': [], 'vim': 'ale'})
+call pack#end()
+call assert_true(pack#source_vim('coc'))
+call assert_true(pack#vim_sourced('coc'))
+call assert_equal(v:false, g:diagnostic_virtualtext_underline)
+call assert_equal(2, exists(':ToggleDiagnosticsHighLight'))
+call assert_equal(2, exists(':Diagnostics'))
+call assert_equal(2, exists(':CocDiagnosticToggleBuffer'))
+call assert_match('CocDiagnosticsHighlight', execute('au ColorScheme'))
+call assert_match('coc#config', execute('au SourcePost'))
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/diagnostic.vim')
+call assert_true(pack#source_vim('ale'))
+call assert_equal(2, exists(':ALECommands'))
+""".replace('REAL_CFG', quote(real_cfg)), {
+    "coc.nvim/plugin/coc.vim": "\" coc.nvim stub plugin.\n",
+    "coc-fzf/plugin/coc-fzf.vim": "\" coc-fzf stub plugin.\n",
+    "ale/plugin/ale.vim": "\" dense-analysis/ale stub plugin.\n"})
+
+    def test_search_fzf_leaderf_blocks_moved_to_cfg(self):
+        "search.vim fzf/LeaderF blocks moved into cfg/fzf.vim and cfg/leaderf.vim."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        for editor in EDITORS:
+            with self.subTest(editor=editor):
+                self.run_editor(editor, """
+let g:root_patterns = ['.git']
+let g:python_version = 3.10
+let g:has_popup_floating = 1
+let $CFG_DIR = REAL_CFG
+call pack#declare(g:test_root . '/fzf', {'on': [], 'vim': 'fzf'})
+call pack#declare(g:test_root . '/fzf.vim', {'on': [], 'deps': 'fzf', 'vim': 'fzf'})
+call pack#declare(g:test_root . '/LeaderF', {'on': [], 'vim': 'leaderf'})
+call pack#end()
+call assert_true(pack#source_vim('fzf'))
+call assert_true(pack#source_vim('leaderf'))
+call assert_true(pack#vim_sourced('fzf'))
+call assert_true(pack#vim_sourced('leaderf'))
+call assert_equal(2, exists(':FzfSearchAll'))
+call assert_equal(2, exists(':FzfSearchGit'))
+call assert_equal(2, exists(':LeaderfSearchAll'))
+call assert_equal(2, exists(':LeaderfTODO'))
+call assert_notequal('', maparg('<C-f><Cr>', 'n'))
+if executable('rg')
+    call assert_equal('LeaderfSearchAll', g:search_all_cmd)
+endif
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/search.vim')
+call assert_equal('leaderf-fzf-grep', g:search_tool)
+call assert_notequal('', maparg('<M-l><M-l>', 'n'))
+call assert_notequal('', maparg('<leader>/', 'n'))
+call assert_notequal('', maparg('<Tab>/', 'n'))
+call assert_notequal('', maparg('\?', 'n'))
+call assert_notequal('', maparg('<leader>f/', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)), {
+    "fzf/plugin/fzf.vim": "\" fzf stub plugin.\n",
+    "fzf.vim/plugin/fzf.vim": "\" fzf.vim stub plugin.\n",
+    "LeaderF/plugin/LeaderF.vim": "\" LeaderF stub plugin.\n"})
+
+    def test_snippet_keys_are_smap_only(self):
+        "Snippet jump keys bind in select mode only; blink/cmp integrate vsnip in their cfgs."
+        real_cfg = ROOT / 'conf.d' / 'main' / 'cfg'
+        self.assertFalse((ROOT / 'conf.d' / 'main' / 'plugin' / 'complete.vim').read_text().find('s:blink_snippets') >= 0)
+        self.assertTrue('preset = \'vsnip\'' in (ROOT / 'conf.d' / 'main' / 'lua' / 'cfg' / 'blink.lua').read_text())
+        for editor in EDITORS:
+            with self.subTest(editor=editor, group='vsnip'):
+                self.run_editor(editor, """
+let $CFG_DIR = REAL_CFG
+call pack#declare(g:test_root . '/vim-vsnip', {'on': []})
+call pack#end()
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/complete.vim')
+call assert_notequal('', maparg('<C-f>', 's'))
+call assert_notequal('', maparg('<C-b>', 's'))
+call assert_equal('', maparg('<C-f>', 'i'))
+call assert_equal('', maparg('<C-b>', 'i'))
+call assert_notequal('', maparg('<M-h>n', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)), {
+    "vim-vsnip/plugin/vsnip.vim": "\" vim-vsnip stub plugin.\n"})
+            with self.subTest(editor=editor, group='gate'):
+                self.run_editor(editor, """
+let $CFG_DIR = REAL_CFG
+call pack#end()
+execute 'source ' . fnameescape($MAIN_DIR . '/plugin/complete.vim')
+call assert_equal('', maparg('<C-f>', 's'))
+call assert_equal('', maparg('<M-h>n', 'n'))
+""".replace('REAL_CFG', quote(real_cfg)))
+
     def test_invalid_dependency_shapes_are_rejected(self):
         for editor in EDITORS:
             for invalid in ("42", "{}"):

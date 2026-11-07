@@ -27,7 +27,8 @@ require('blink.cmp').setup({
     }
   },
   snippets = {
-    preset = 'default', -- Native vim.snippet expansion and jumps.
+    -- vsnip 引擎（同 cmp.lua 的 vsnip 集成）：补全源、展开与跳转全部走 vsnip
+    preset = 'vsnip',
   },
   sources = {
     default = { 'path', 'buffer', 'lsp', 'snippets', 'deps' },
@@ -69,8 +70,17 @@ require('blink.cmp').setup({
     ['<S-Tab>'] = { 'select_prev', 'fallback' },
     -- Enter: 已选中则确认并展开 snippet；未选中仅隐藏菜单保留文本（同 cmp.close，不换行不回滚）
     ['<CR>'] = { 'accept', 'hide', 'fallback' },
-    -- Keep the native snippet jumps and bracket fallbacks from complete.vim.
+    -- Global snippet jump keys (<C-b>/<C-f>) are mapped in plugin/complete.vim.
     ['<C-f>'] = false,
     ['<C-b>'] = false,
+    -- <C-e>: 菜单可见时取消（同 cmp.abort / coc#pum#cancel），否则行尾追加
+    ['<C-e>'] = {
+      function(cmp)
+        if cmp.is_menu_visible() then
+          return cmp.cancel()
+        end
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>A', true, false, true), 'm', true)
+      end,
+    },
   }
 })

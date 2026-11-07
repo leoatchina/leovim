@@ -1,6 +1,9 @@
 if utils#is_vscode() || !pack#installed('vim-floaterm-enhance')
     finish
 endif
+" ------------------------------
+" repl send
+" ------------------------------
 nnoremap <M-r><M-i> <C-w><C-w>
 xnoremap <M-r><M-i> <ESC><C-w><C-w>
 tnoremap <M-r><M-i> <C-\><C-n><C-w><C-w>
@@ -31,6 +34,27 @@ nnoremap <silent><M-r>m :FloatermReplMark<Cr>
 xnoremap <silent><M-r>m :FloatermReplMark<Cr>
 nnoremap <silent><M-r>s :FloatermReplSendMark<Cr>
 nnoremap <silent><M-r>S :FloatermReplShowMark<Cr>
+" ------------------------------
+" ai agent
+" ------------------------------
+nnoremap <M-i><M-i> <C-w><C-w>
+xnoremap <M-i><M-i> <ESC><C-w><C-w>
+tnoremap <M-i><M-i> <C-\><C-n><C-w><C-w>
+" start or cr
+nnoremap <silent><M-i><M-r>   :FloatermAiStart<Cr>
+nnoremap <silent><M-i><Cr>    :FloatermAiStart!<Cr>
+nnoremap <silent><M-i><Space> :FloatermAiSendCr<Cr>
+" send, NOTE ! means start in curr editing buffer
+nnoremap <silent><M-i>l :FloatermAiSendLine<Cr>
+xnoremap <silent><M-i>l :FloatermAiSendLine<Cr>
+nnoremap <silent><M-i>f :FloatermAiSendFile<Cr>
+nnoremap <silent><M-i>d :FloatermAiSendDir<Cr>
+nnoremap <silent><M-i>p :FloatermAiFzfFiles<Cr>
+nnoremap <silent><M-i><M-l> :FloatermAiSendLine!<Cr>
+xnoremap <silent><M-i><M-l> :FloatermAiSendLine!<Cr>
+nnoremap <silent><M-i><M-f> :FloatermAiSendFile!<Cr>
+nnoremap <silent><M-i><M-d> :FloatermAiSendDir!<Cr>
+nnoremap <silent><M-i><M-p> :FloatermAiFzfFiles!<Cr>
 " ---------------------------------------
 " jupynvim
 " ---------------------------------------

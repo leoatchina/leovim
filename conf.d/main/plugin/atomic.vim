@@ -12,7 +12,7 @@ endif
 let g:EasyMotion_keys = "123456789asdghklqwertyuiopzxcvbnmfj,;"
 let g:EasyMotion_leader_key = 's'
 if pack#installed('hop.nvim')
-    imap <C-a> <ESC>ggVG
+    " i_<C-a> stays the global <C-o>I from init.vim; select-all keeps x/n maps only.
     xmap <C-a> <ESC>ggVG
     nmap <C-a> ggVG
     imap <C-x> <C-o>"*

@@ -232,3 +232,86 @@ function! fzf#open_qfloc()
                 \ 'options': options
                 \ }, deepcopy(get(g:, 'fzf_layout', {'down': '~30%'}))), 0)
 endfunction
+
+" --------------------------
+" FzfSearch (moved from plugin/search.vim)
+" --------------------------
+if executable('rg')
+    command! -bang -nargs=* FzfBLines call fzf#vim#grep(
+                \ 'rg --with-filename --column --line-number --no-heading --smart-case . ' . fnameescape(utils#expand('%:p')),
+                \ fzf#vim#with_preview({'options': ' --no-sort --layout reverse --query '.shellescape(<q-args>).' --with-nth=4.. --delimiter=":"'}),
+                \ 1)
+    command! -bang -nargs=* FzfRg call fzf#vim#grep(
+                \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>) . ' ./',
+                \ fzf#vim#with_preview({'options': ' --nth 4.. --delimiter=":"'}),
+                \ <bang>0)
+    command! -bang -nargs=* FzfRoot call fzf#vim#grep(
+                \ 'rg  --column --line-number --no-heading --color=always --smart-case ' . fzf#shellescape(<q-args>) . ' ' . utils#get_root_dir(),
+                \ fzf#vim#with_preview({'options': ' --nth 4.. --delimiter=":"'}),
+                \ <bang>0)
+endif
+if executable('git')
+    command! -bang -nargs=* FzfGGrep call fzf#vim#grep(
+                \ 'git grep -I -n --color=always ' . fzf#shellescape(<q-args>) . ' -- ' . git#root_dir(),
+                \ fzf#vim#with_preview({'options': ' --nth 3..  --delimiter=":"'}),
+                \ <bang>0)
+endif
+if utils#is_unix()
+    command! -bang -nargs=* FzfGrep call fzf#vim#grep(
+                \ 'grep -I --line-number --color=always -r -- ' . fzf#shellescape(<q-args>) . ' . ',
+                \ fzf#vim#with_preview({'options': ' --nth 3..  --delimiter=":"'}),
+                \ <bang>0)
+elseif executable('findstr')
+    command! -bang -nargs=* FzfGrep call fzf#vim#grep(
+                \ 'findstr /N /S /I ' . fzf#shellescape(<q-args>) . ' *.*',
+                \ fzf#vim#with_preview({'options': ' --nth 3..  --delimiter=":"'}),
+                \ <bang>0)
+endif
+function! s:fzf_search(...)
+    if exists(':FzfRg')
+        let fzf_cmd = 'FzfRg'
+    else
+        let fzf_cmd = 'FzfGrep'
+    endif
+    if a:0 == 0
+        execute fzf_cmd
+    elseif a:000[-1] == 1
+        if a:0 == 1
+            let search_str = get(g:, 'fzf_search_last', '')
+        else
+            let search_str = a:1
+            let g:fzf_search_last = search_str
+        endif
+    elseif a:000[-1] == 2
+        if exists(':FzfRoot')
+            let fzf_cmd = 'FzfRoot'
+        endif
+        if a:0 == 1
+            let search_str = get(g:, 'fzf_searchall_last', '')
+        else
+            let search_str = a:1
+            let g:fzf_searchall_last = search_str
+        endif
+    elseif a:000[-1] == 3
+        if git#root_dir() != ''
+            let fzf_cmd = 'FzfGGrep'
+        endif
+        if a:0 == 1
+            let search_str = get(g:, 'fzf_searchgit_last', '')
+        else
+            let search_str = a:1
+            let g:fzf_searchall_last = search_str
+        endif
+    else
+        return
+    endif
+    execute fzf_cmd . ' ' . search_str
+endfunction
+command! -nargs=0 FzfSearchLast call s:fzf_search(1)
+command! -nargs=? FzfSearch call s:fzf_search(<q-args>, 1)
+command! -nargs=0 FzfSearchAllLast call s:fzf_search(2)
+command! -nargs=? FzfSearchAll call s:fzf_search(<q-args>, 2)
+command! -nargs=0 FzfSearchGitLast call s:fzf_search(3)
+command! -nargs=? FzfSearchGit call s:fzf_search(<q-args>, 3)
+" the <leader>/, <Tab>/ and \ key layers stay in plugin/search.vim, where the
+" snacks branch maps the same keys through its own backend.

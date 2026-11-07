@@ -49,12 +49,8 @@ endif
 " ------------------------------
 " snippets
 " ------------------------------
-let s:blink_snippets = pack#planned_blink() && !pack#planned_cmp()
-if s:blink_snippets || pack#planned('vim-vsnip')
-    fun! CtrlFSkipBracket()
-        call feedkeys(search('\%#[]>)}]', 'n') ? "\<Right>" : "\<C-o>A")
-        return ''
-    endfunction
+" blink/cmp 都以 vsnip 为 snippet 引擎，引擎侧集成见 cfg/blink.lua 与 cfg/cmp.lua
+if pack#planned('vim-vsnip')
     if pack#installed_snacks()
         nnoremap <silent><M-h>f <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('~/.leovim.d/pack/add/opt/friendly-snippets/snippets') } })<Cr>
         nnoremap <silent><M-h>s <Cmd>lua Snacks.picker.files({ dirs = { vim.fn.expand('~/.leovim/conf.d/snippets') } })<Cr>
@@ -65,31 +61,17 @@ if s:blink_snippets || pack#planned('vim-vsnip')
         nnoremap <silent><M-h>f :FzfFiles ~/.leovim.d/pack/add/opt/friendly-snippets/snippets<Cr>
         nnoremap <silent><M-h>s :FzfFiles ~/.leovim/conf.d/snippets<Cr>
     endif
-    if s:blink_snippets
-        nnoremap <M-h>n :execute 'edit ' . fnameescape(expand('~/.leovim/conf.d/snippets') . '/' . (&filetype == '' ? 'global' : &filetype) . '.json')<Cr>
-        snoremap <silent><expr><C-b> luaeval('vim.snippet.active({ direction = -1 })') ? "\<Cmd>lua vim.snippet.jump(-1)\<CR>" : "\<C-o>I"
-        snoremap <silent><expr><C-f> luaeval('vim.snippet.active({ direction = 1 })') ? "\<Cmd>lua vim.snippet.jump(1)\<CR>" : "\<C-o>A"
-        inoremap <silent><expr><C-b> luaeval('vim.snippet.active({ direction = -1 })') ? "\<Cmd>lua vim.snippet.jump(-1)\<CR>" : "\<C-o>I"
-        inoremap <silent><expr><C-f> luaeval('vim.snippet.active({ direction = 1 })') ? "\<Cmd>lua vim.snippet.jump(1)\<CR>" : CtrlFSkipBracket()
-    elseif pack#installed_coc()
+    if pack#installed_coc()
         call coc#config("snippets.userSnippetsDirectory", utils#expand("~/.leovim/conf.d/snippets"))
         let g:coc_snippet_next = "<C-f>"
         let g:coc_snippet_prev = "<C-b>"
-        smap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : '<C-o>A'
-        imap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : CtrlFSkipBracket()
+        smap <silent><expr><C-f> coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" : "\<C-o>A"
     else
-        smap <silent><expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
-        smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-o>A'
-        imap <silent><expr><C-b> vsnip#available(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-o>I'
-        imap <silent><expr><C-f> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : CtrlFSkipBracket()
+        smap <silent><expr><C-b> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : "\<C-o>I"
+        smap <silent><expr><C-f> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : "\<C-o>A"
     endif
-    if !s:blink_snippets
-        let g:vsnip_snippet_dir = utils#expand("~/.leovim/conf.d/snippets")
-        nnoremap <M-h>n :VsnipOpen<Cr>
-    endif
-else
-    imap <silent><C-b> <C-o>I
-    imap <silent><C-f> <C-o>A
+    let g:vsnip_snippet_dir = utils#expand("~/.leovim/conf.d/snippets")
+    nnoremap <M-h>n :VsnipOpen<Cr>
 endif
 " -----------------------
 " fzf snippet
@@ -196,27 +178,4 @@ if pack#planned('vim-go')
         let g:go_doc_keywordprg_enabled = 1
         let g:go_code_completion_enabled = 1
     endif
-endif
-" ------------------------------
-" ai complete
-" ------------------------------
-nnoremap <M-i><M-i> <C-w><C-w>
-xnoremap <M-i><M-i> <ESC><C-w><C-w>
-if pack#installed('vim-floaterm-enhance') && exists('g:floaterm_ai_programs') && !empty(g:floaterm_ai_programs) && type(g:floaterm_ai_programs) == type([])
-    tnoremap <M-i><M-i> <C-\><C-n><C-w><C-w>
-    " start or cr
-    nnoremap <silent><M-i><M-r>   :FloatermAiStart<Cr>
-    nnoremap <silent><M-i><Cr>    :FloatermAiStart!<Cr>
-    nnoremap <silent><M-i><Space> :FloatermAiSendCr<Cr>
-    " send, NOTE ! means start in curr editing buffer
-    nnoremap <silent><M-i>l :FloatermAiSendLine<Cr>
-    xnoremap <silent><M-i>l :FloatermAiSendLine<Cr>
-    nnoremap <silent><M-i>f :FloatermAiSendFile<Cr>
-    nnoremap <silent><M-i>d :FloatermAiSendDir<Cr>
-    nnoremap <silent><M-i>p :FloatermAiFzfFiles<Cr>
-    nnoremap <silent><M-i><M-l> :FloatermAiSendLine!<Cr>
-    xnoremap <silent><M-i><M-l> :FloatermAiSendLine!<Cr>
-    nnoremap <silent><M-i><M-f> :FloatermAiSendFile!<Cr>
-    nnoremap <silent><M-i><M-d> :FloatermAiSendDir!<Cr>
-    nnoremap <silent><M-i><M-p> :FloatermAiFzfFiles!<Cr>
 endif
