@@ -12,9 +12,8 @@ endfunction
 " --------------------------
 " symbol
 " --------------------------
-let s:use_aerial = has('nvim') && pack#installed('aerial.nvim')
 function! s:open_symbols() abort
-    if s:use_aerial
+    if pack#installed('aerial.nvim')
         AerialTreeOpen
     else
         Vista
@@ -23,16 +22,16 @@ endfunction
 function! s:close_symbols() abort
     if pack#installed('vista.vim')
         silent! Vista!
-        if s:use_aerial && exists('#VistaNvimLsp')
+        if pack#installed('aerial.nvim') && exists('#VistaNvimLsp')
             autocmd! VistaNvimLsp
         endif
     endif
-    if s:use_aerial
+    if pack#installed('aerial.nvim')
         AerialCloseAll
     endif
 endfunction
 function! s:check_symbols(nr) abort
-    return s:check_buf_ft('vista', a:nr) || (s:use_aerial && s:check_buf_ft('^aerial$', a:nr))
+    return s:check_buf_ft('vista', a:nr) || (pack#installed('aerial.nvim') && s:check_buf_ft('^aerial$', a:nr))
 endfunction
 function! s:resize_vista(tab, timer) abort
     let tree = {}
@@ -68,7 +67,7 @@ if pack#installed('vista.vim') && g:ctags_type =~ 'Universal'
                 \ }
     nnoremap <silent>t<tab> :call sidebar#toggle('vista_ctags')<CR>
 endif
-if (pack#installed('vista.vim') || s:use_aerial) && pack#installed('nvim-tree.lua')
+if (pack#installed('vista.vim') || pack#installed('aerial.nvim')) && pack#installed('nvim-tree.lua')
     function! s:open_nvimtree_vista() abort
         let code_win = win_getid()
         lua pcall(require, 'cfg.nvimtree')
@@ -92,7 +91,7 @@ if (pack#installed('vista.vim') || s:use_aerial) && pack#installed('nvim-tree.lu
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
     command! -bar SymbolTreeClose call sidebar#close('symbol_tree')
-elseif (pack#installed('vista.vim') || s:use_aerial) && pack#planned('vim-fern')
+elseif (pack#installed('vista.vim') || pack#installed('aerial.nvim')) && pack#planned('vim-fern')
     function! s:open_fern_vista() abort
         let code_win = win_getid()
         let width = get(g:, 'sidebar_width', 40)
@@ -116,7 +115,7 @@ elseif (pack#installed('vista.vim') || s:use_aerial) && pack#planned('vim-fern')
                 \ }
     nnoremap <silent><C-t> :call sidebar#toggle('symbol_tree')<CR>
     command! -bar SymbolTreeClose call sidebar#close('symbol_tree')
-elseif s:use_aerial
+elseif pack#installed('aerial.nvim')
     let g:sidebars.symbol_tree = {
                 \ 'position': 'left',
                 \ 'check_win': function('s:check_symbols'),
