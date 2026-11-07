@@ -2,9 +2,7 @@
 if utils#is_vscode()
     finish
 endif
-if pack#installed_fuzzbox()
-    nnoremap <silent><nowait><M-l><M-l> :FuzzyInBuffer<Cr>
-elseif pack#installed_snacks()
+if pack#installed_snacks()
     nnoremap <silent><nowait><M-l><M-l> <Cmd>lua Snacks.picker.lines()<Cr>
 elseif pack#installed_leaderf()
     nnoremap <nowait><M-l><M-l> :Leaderf line --fuzzy --no-sort<Cr>
@@ -170,30 +168,6 @@ if pack#installed_snacks()
         nnoremap <nowait><Tab>g <Cmd>lua Snacks.picker.git_files({ pattern = vim.fn.getreg('"'), cwd = require('cfg.snacks').root('git') })<Cr>
         xnoremap <nowait><Tab>g :<C-u>lua Snacks.picker.git_files({ pattern = vim.fn['utils#get_visual'](), cwd = require('cfg.snacks').root('git') })<Cr>
     endif
-elseif pack#installed_fuzzbox()
-    nnoremap <nowait><leader>/ :FuzzSearch<Cr>
-    nnoremap <nowait><leader>. :FuzzSearchLast<Cr>
-    nnoremap <nowait><leader>\ :FuzzSearch <C-r><C-w>
-    xnoremap <nowait><leader>\ :<C-u>FuzzSearch <C-r>=utils#get_visual()<Cr>
-    nnoremap <nowait><leader>? :FuzzSearch <C-r>=@"<Cr><Cr>
-    nnoremap <nowait>\/ :FuzzSearchAll<Cr>
-    nnoremap <nowait>\. :FuzzSearchLast<Cr>
-    nnoremap <nowait>\\ :FuzzSearchAll <C-r><C-w>
-    xnoremap <nowait>\\ :<C-u>FuzzSearchAll <C-r>=utils#get_visual()<Cr>
-    nnoremap <nowait>\? :FuzzSearchAll <C-r>=@"<Cr><Cr>
-    nnoremap <nowait><leader>f/ :FuzzSearch <C-r>=utils#file_name_no_ext()<Cr><Cr>
-    nnoremap <nowait><leader>f\ :FuzzSearch <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
-    if executable('git')
-        nnoremap <nowait><Tab>/ :FuzzGitSearch<Cr>
-        nnoremap <nowait><Tab>. :FuzzSearchLast<Cr>
-        nnoremap <nowait><Tab>\ :FuzzGitSearch <C-r><C-w>
-        xnoremap <nowait><Tab>\ :<C-u>FuzzGitSearch <C-r>=utils#get_visual()<Cr>
-        nnoremap <nowait><Tab>? :FuzzGitSearch <C-r>=@"<Cr><Cr>
-        nnoremap <nowait><Tab>f/ :FuzzGitSearch <C-r>=utils#file_name_no_ext()<Cr><Cr>
-        nnoremap <nowait><Tab>f\ :FuzzGitSearch <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
-        nnoremap <nowait><Tab>g :FuzzGitFiles <C-r>=@"<Cr>
-        xnoremap <nowait><Tab>g :<C-u>FuzzGitFiles <C-r>=utils#get_visual()<Cr>
-    endif
 elseif pack#installed_fzf()
     nnoremap <nowait><leader>/ :FzfSearch<Cr>
     nnoremap <nowait><leader>. :FzfSearchLast<Cr>
@@ -228,9 +202,6 @@ if pack#installed_leaderf() && executable('rg')
 elseif pack#installed_snacks()
     nnoremap <nowait>\f/ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:t:r'), dirs = { require('cfg.snacks').root() } })<Cr>
     nnoremap <nowait>\f\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:p:h:t'), dirs = { require('cfg.snacks').root() } })<Cr>
-elseif pack#installed_fuzzbox()
-    nnoremap <nowait>\f/ :FuzzSearchAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
-    nnoremap <nowait>\f\ :FuzzSearchAll <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
 elseif pack#installed_fzf()
     nnoremap <nowait>\f/ :FzfSearchAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
     nnoremap <nowait>\f\ :FzfSearchAll <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
@@ -245,8 +216,6 @@ if pack#installed_leaderf() && executable('rg')
 endif
 if pack#installed_snacks()
     call add(s:search_tool, 'snacks')
-elseif pack#installed_fuzzbox()
-    call add(s:search_tool, 'fuzzbox')
 elseif pack#installed_fzf()
     call add(s:search_tool, 'fzf')
 endif
