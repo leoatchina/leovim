@@ -27,3 +27,10 @@
 - Vimspector 模板必须保持完整的 `configurations` 结构；nvim-dap 模板必须保持单个配置对象结构。不要为了“看起来统一”改成同一种格式。
 - 修改后至少校验 JSON 格式，并确认对应的调试适配器已安装：Vimspector 使用 `:VimspectorInstall`，nvim-dap 通常使用 Mason 安装适配器。
 - 模板只提供可复制的起点，不会自动合并到项目配置；使用者仍需按项目目录、启动参数和适配器实际情况调整。
+
+# Fuzzyfinder / Picker 选择顺序
+
+- fuzzyfinder / picker 的默认优先级依次为：`Snacks → Fuzzbox → LeaderF → fzf`。
+- 该顺序是默认回退顺序，不代表任何场景下都必须使用 `Snacks`。
+- 现有选择逻辑可能根据总偏好、平台、插件可用性或功能评分，将 `fzf` 或 `LeaderF` 提升为首选；阅读和维护配置时应保留这种动态选择能力。
+- 不要为了固定默认顺序而修改现有代码、快捷键或后端判断；文档中的顺序只用于说明默认优先级。
