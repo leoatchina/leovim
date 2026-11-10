@@ -46,6 +46,11 @@ endfunction
 let s:git_cache = {}   " dir -> [git_root_dir, git_branch]
 
 function! git#lcd_and_update() abort
+    " BufEnter also fires for [No Name], terminal, popup and nofile buffers.
+    " They have no stable path for cwd/git detection.
+    if bufname('%') ==# '' || &buftype !=# ''
+        return
+    endif
     if utils#is_ignored() || tolower(getbufvar(winbufnr(winnr()), '&ft')) =~ 'fern' || utils#is_popup()
         return
     endif

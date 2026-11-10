@@ -6,14 +6,8 @@ let g:leovim_whichkey = 1
 let g:leovim_openmap = 1
 " let g:nvim_treesitter_install = 1
 
-" if v:version < 800
-"     call pack#add('notags')
-" else
-"     call pack#add('tags')
-" endif
-
-" call pack#add('fzfbin')
-
+" Optional feature packs. Normally put these in ~/.vimrc.opt.
+" call pack#add('tags')
 " call pack#add('web')
 " call pack#add('wubi')
 " call pack#add('pinyin')
@@ -28,47 +22,16 @@ let g:leovim_openmap = 1
 " call pack#add('markdown')
 
 " call pack#add('debug')
-" call pack#add('opencode')
 
-
+" Optional external editor / notebook settings.
 " let g:open_editor="code.exe"
 " let g:open_neovim="nvim.exe"
-
 " let g:jupynium_urls = ['localhost:9999/nbclassic']
-
 " let g:floaterm_ai_programs = [
 "     \ ["claude", "--wintype=vsplit --position=left --width=0.3"],
 "     \ ["opencode", "--wintype=float --position=topright --width=0.45 --height=0.8", "AI"],
 "   \ ]
 " let g:opencode_nvim_opts = '--wintype=vsplit --position=left --width=0.3'
-
-
-
-if has('nvim')
-    " if utils#has_gui()
-        " if exists('g:neovide')
-        "     call pack#add('blink')
-        " else
-        "     call pack#add('cmp')
-        " endif
-    " else
-        " call pack#add('builtin')
-    " endif
-else
-    " if utils#has_gui()
-        " call pack#add('coc')
-    " else
-        " call pack#add('mcm')
-    " endif
-endif
-
-" if utils#has_gui()
-    " set guifont=Cascadia\ Code\ NF:h11.5
-    " set guifont=Cascadia\ Mono\ NF:h11.5
-" else
-    " set guifont=Cascadia\ Code:h10.5
-    " set guifont=Cascadia\ Mono:h10.5
-" endif
 
 
 if utils#is_win()

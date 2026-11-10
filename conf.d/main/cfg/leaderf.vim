@@ -95,6 +95,16 @@ let g:Lf_NormalCommandMap = {
 let g:Lf_Global = "global"
 let g:Lf_Gtags = "gtags"
 
+" LeaderF's default MRU hook expands <afile> on [No Name] buffers.
+" Keep the hook, but skip buffers without a real file name.
+let g:Lf_MruEnable = 0
+augroup LeaderF_Mru
+    autocmd!
+    autocmd BufEnter,BufWritePost * if bufname('%') !=# '' && &buftype ==# '' |
+                \ call lfMru#record(fnamemodify(bufname('%'), ':p')) |
+                \ call lfMru#recordBuffer(bufnr('%'))
+augroup END
+
 " --------------------------
 " leaderf search commands (moved from plugin/search.vim)
 " --------------------------

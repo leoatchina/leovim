@@ -151,7 +151,7 @@ endif
 " git version
 " -----------------------------------
 if executable('git')
-    let s:git_version_raw = matchstr(system('git --version'), '\v\zs\d+\.\d+\.\d+\ze')
+    let s:git_version_raw = matchstr(utils#system_cached('git --version'), '\v\zs\d+\.\d+\.\d+\ze')
     let g:git_version = map(split(s:git_version_raw, '\.'), 'str2nr(v:val)')
 else
     let g:git_version = [0, 0, 0]
@@ -160,7 +160,7 @@ endif
 " node install tool
 " ------------------------------
 if executable('node') && executable('npm')
-    let s:node_version_raw = matchstr(system('node --version'), '\vv\zs\d+\.\d+\ze')
+    let s:node_version_raw = matchstr(utils#system_cached('node --version'), '\vv\zs\d+\.\d+\ze')
     let g:node_version = utils#string_to_float(s:node_version_raw)
 else
     let g:node_version = 0
@@ -199,7 +199,7 @@ else
         if utils#is_linux()
             let $PATH = $HOME . "/.leovim.unix/linux:" . $PATH
         elseif utils#is_macos()
-            if system('uname -m') =~? 'arm64'
+            if utils#system_cached('uname -m') =~? 'arm64'
                 let $PATH = $HOME . "/.leovim.unix/macos/arm64:" . $PATH
             else
                 let $PATH = $HOME . "/.leovim.unix/macos/x86_64:" . $PATH
@@ -242,9 +242,9 @@ if utils#is_win() && pack#get('tags') || utils#is_unix()
         let g:ctags_type = 'Universal-json'
     elseif executable('ctags')
         try
-            let g:ctags_type = split(system('ctags --version'), ' ')[0]
+            let g:ctags_type = split(utils#system_cached('ctags --version'), ' ')[0]
             if g:ctags_type =~ 'Universal'
-                if system('ctags --list-features') =~# 'json'
+                if utils#system_cached('ctags --list-features') =~# 'json'
                     let g:ctags_type = 'Universal-json'
                 else
                     let g:ctags_type = 'Universal'
@@ -261,7 +261,7 @@ if utils#is_win() && pack#get('tags') || utils#is_unix()
         let $GTAGSCONF = utils#expand($HOME . "/.leovim.windows/gtags/share/gtags/gtags.conf")
     endif
     if executable('gtags') && get(g:, 'ctags_type', '') != '' && exists('$GTAGSCONF') && filereadable($GTAGSCONF)
-        let s:gtags_version = matchstr(system('gtags --version'), '\v\zs\d+\.\d+\.\d+\ze')
+        let s:gtags_version = matchstr(utils#system_cached('gtags --version'), '\v\zs\d+\.\d+\.\d+\ze')
         let g:gtags_version = utils#string_to_float(s:gtags_version, 2)
         " Only probe Pygments when Gtags needs a parser label.
         try

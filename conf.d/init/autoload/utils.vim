@@ -12,6 +12,15 @@ function! utils#execute(cmd) abort
     endif
 endfunction
 
+" Cache stable, context-free command probes for this editor session.
+let s:system_cache = {}
+function! utils#system_cached(cmd) abort
+    if !has_key(s:system_cache, a:cmd)
+        let s:system_cache[a:cmd] = system(a:cmd)
+    endif
+    return s:system_cache[a:cmd]
+endfunction
+
 function! utils#is_neovide() abort
     return exists('g:neovide') && has('nvim')
 endfunction
