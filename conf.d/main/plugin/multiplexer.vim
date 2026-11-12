@@ -50,6 +50,19 @@ elseif pack#installed('vim-herdr-navigation')
         tnoremap <silent><M-L> <C-\><C-n>:MultiplexerNavigateRight<cr>
         tnoremap <C-w><C-w> <C-\><C-n><C-w><C-w>
     endif
+    " Self-report to herdr: it cannot track foreground processes on Windows,
+    " so navigate.cmd checks this pane token to forward <M-H/J/K/L> into Vim.
+    if !empty($HERDR_PANE_ID)
+        function! s:HerdrReport(on) abort
+            let l:herdr = empty($HERDR_BIN_PATH) ? 'herdr' : $HERDR_BIN_PATH
+            let l:cmd = shellescape(l:herdr) . ' pane report-metadata '
+                        \ . shellescape($HERDR_PANE_ID) . ' --source vim '
+            let l:cmd .= a:on ? '--token vim-herdr-nav=1' : '--clear-token vim-herdr-nav'
+            silent call system(l:cmd)
+        endfunction
+        autocmd VimEnter,FocusGained * call s:HerdrReport(1)
+        autocmd VimLeavePre * call s:HerdrReport(0)
+    endif
 else
     nnoremap <M-H> <C-w><C-h>
     nnoremap <M-J> <C-w><C-j>

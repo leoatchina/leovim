@@ -24,9 +24,10 @@ Two cooperating sides, like `vim-tmux-navigator`:
 ## Requirements
 
 - herdr `>= 0.7.0`
-- `jq` (used by `navigate.sh` to detect Vim; without it the keys still move
-  herdr panes, just without Vim awareness)
-- Tested on Linux or macOS
+- Linux/macOS: `jq` (used by `navigate.sh` to detect Vim; without it the keys
+  still move herdr panes, just without Vim awareness)
+- Windows: no extra tools — `navigate.cmd` detects Vim through a pane token
+  instead of process scanning
 
 ## Install
 
@@ -37,35 +38,68 @@ herdr plugin action list --plugin vim-herdr-navigation
 
 ### 1. Bind the keys in herdr
 
-Add to `~/.config/herdr/config.toml`:
+This fork forwards the `Alt+H/J/K/L` chords and binds them directly, so the
+editor side maps `<M-H/J/K/L>` (see `conf.d/main/plugin/multiplexer.vim`).
+
+Linux/macOS — add to `~/.config/herdr/config.toml`:
 
 ```toml
 [[keys.command]]
-key = "ctrl+h"
+key = "alt+shift+h"
 type = "plugin_action"
 command = "vim-herdr-navigation.left"
 description = "navigate left (vim/herdr)"
 
 [[keys.command]]
-key = "ctrl+j"
+key = "alt+shift+j"
 type = "plugin_action"
 command = "vim-herdr-navigation.down"
 description = "navigate down (vim/herdr)"
 
 [[keys.command]]
-key = "ctrl+k"
+key = "alt+shift+k"
 type = "plugin_action"
 command = "vim-herdr-navigation.up"
 description = "navigate up (vim/herdr)"
 
 [[keys.command]]
-key = "ctrl+l"
+key = "alt+shift+l"
 type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
 ```
 
-Reload herdr's config (`prefix+shift+r`) or restart.
+Windows — same chords, the `-win` actions (also in
+`%APPDATA%\herdr\config.toml`):
+
+```toml
+[[keys.command]]
+key = "alt+shift+h"
+type = "plugin_action"
+command = "vim-herdr-navigation.left-win"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "alt+shift+j"
+type = "plugin_action"
+command = "vim-herdr-navigation.down-win"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "alt+shift+k"
+type = "plugin_action"
+command = "vim-herdr-navigation.up-win"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "alt+shift+l"
+type = "plugin_action"
+command = "vim-herdr-navigation.right-win"
+description = "navigate right (vim/herdr)"
+```
+
+Reload herdr's config (`prefix+shift+r` or `herdr server reload-config`) or
+restart.
 
 ### 2. Wire up your editor
 
@@ -141,3 +175,25 @@ make build  # lint and validate the plugin manifest
   deleted binary and every keypress would fail with exit 127. `navigate.sh`
   detects this and falls back to `herdr` on `PATH`; if neither is usable it
   fails loudly instead of silently doing nothing.
+
+## Windows
+
+Windows cannot track Unix foreground process groups, so `navigate.sh`'s
+process detection does not work there. `navigate.cmd` (bound through the
+`*-win` actions) uses the reverse direction: the editor side self-reports its
+pane while it runs:
+
+```vim
+" on VimEnter / FocusGained
+herdr pane report-metadata $HERDR_PANE_ID --source vim --token vim-herdr-nav=1
+" on VimLeavePre
+herdr pane report-metadata $HERDR_PANE_ID --source vim --clear-token vim-herdr-nav
+```
+
+`navigate.cmd` reads the token from `herdr pane get`: present → forward the
+chord into the pane (`herdr pane send-keys ... alt+H`), absent → move herdr's
+pane focus. If Vim is killed without a chance to clear the token, the stale
+token makes one harmless dead keypress in the shell until the pane is reused.
+
+In this repository the reporting lives in
+`conf.d/main/plugin/multiplexer.vim` alongside the `<M-H/J/K/L>` mappings.
