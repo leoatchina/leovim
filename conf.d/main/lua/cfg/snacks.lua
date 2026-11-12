@@ -1,19 +1,17 @@
 local M = {}
 
--- Vimscript's Ex-oriented path helpers escape spaces; Lua finders need raw paths.
+-- Delegate to the user's own root detection (autoload/utils.vim, g:root_patterns / VCS markers).
+-- utils#get_root_dir returns a raw forward-slash path, safe for Lua finders.
 function M.root(kind)
-  local file = vim.api.nvim_buf_get_name(0)
-  local dir = file ~= '' and vim.fs.dirname(file) or vim.fn.getcwd()
-  local markers
+  local root
   if kind == 'git' then
-    markers = { '.git' }
+    root = vim.fn['utils#get_root_dir']('.git')
   elseif kind == 'vcs' then
-    markers = { '.git', '.svn', '.hg', '.cvs', '.bzr' }
+    root = vim.fn['utils#get_vcs_dir']()
   else
-    markers = vim.g.root_patterns
+    root = vim.fn['utils#get_root_dir']()
   end
-  local found = vim.fs.find(markers, { path = dir, upward = true })[1]
-  return found and vim.fs.dirname(found) or dir
+  return root ~= '' and root or vim.fn.getcwd()
 end
 
 

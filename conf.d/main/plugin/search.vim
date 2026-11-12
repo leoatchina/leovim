@@ -142,77 +142,52 @@ au Filetype qf nnoremap <buffer>r :cdo! s/<C-r>=get(g:, 'grep_word', '')<Cr>//ge
 au Filetype qf nnoremap <buffer>R :cdo! s/<C-r>=get(g:, 'grep_word', '')<Cr>//gc<Left><Left><Left>
 au Filetype qf nnoremap <buffer>W :cfdo! up
 " --------------------------
-" FzfSearch commands live in cfg/fzf.vim; keys mirror the snacks branch below
+" <leader>: search from get_root (utils#get_root_dir), \: from git root, <Tab>: from cwd
 " --------------------------
 if pack#installed_snacks()
-    nnoremap <nowait><leader>/ <Cmd>lua Snacks.picker.grep()<Cr>
+    nnoremap <nowait><leader>/ <Cmd>lua Snacks.picker.grep({ dirs = { vim.fn['utils#get_root_dir']() } })<Cr>
     nnoremap <nowait><leader>. <Cmd>lua Snacks.picker.resume()<Cr>
-    nnoremap <nowait><leader>\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('<cword>') })<Cr>
-    xnoremap <nowait><leader>\ :<C-u>lua Snacks.picker.grep({ search = vim.fn['utils#get_visual']() })<Cr>
-    nnoremap <nowait><leader>? <Cmd>lua Snacks.picker.grep({ search = vim.fn.getreg('"') })<Cr>
-    nnoremap <nowait>\/ <Cmd>lua Snacks.picker.grep({ dirs = { require('cfg.snacks').root() } })<Cr>
+    nnoremap <nowait><leader>\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('<cword>'), dirs = { vim.fn['utils#get_root_dir']() } })<Cr>
+    xnoremap <nowait><leader>\ :<C-u>lua Snacks.picker.grep({ search = vim.fn['utils#get_visual'](), dirs = { vim.fn['utils#get_root_dir']() } })<Cr>
+    nnoremap <nowait><leader>? <Cmd>lua Snacks.picker.grep({ search = vim.fn.getreg('"'), dirs = { vim.fn['utils#get_root_dir']() } })<Cr>
+    nnoremap <nowait><leader>f/ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:t:r'), dirs = { vim.fn['utils#get_root_dir']() } })<Cr>
+    nnoremap <nowait><leader>f\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:p:h:t'), dirs = { vim.fn['utils#get_root_dir']() } })<Cr>
+    nnoremap <nowait><Tab>/ <Cmd>lua Snacks.picker.grep({ dirs = { vim.fn.getcwd() } })<Cr>
+    nnoremap <nowait><Tab>. <Cmd>lua Snacks.picker.resume()<Cr>
+    nnoremap <nowait><Tab>\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('<cword>'), dirs = { vim.fn.getcwd() } })<Cr>
+    xnoremap <nowait><Tab>\ :<C-u>lua Snacks.picker.grep({ search = vim.fn['utils#get_visual'](), dirs = { vim.fn.getcwd() } })<Cr>
+    nnoremap <nowait><Tab>? <Cmd>lua Snacks.picker.grep({ search = vim.fn.getreg('"'), dirs = { vim.fn.getcwd() } })<Cr>
+    nnoremap <nowait><Tab>f/ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:t:r'), dirs = { vim.fn.getcwd() } })<Cr>
+    nnoremap <nowait><Tab>f\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:p:h:t'), dirs = { vim.fn.getcwd() } })<Cr>
+    nnoremap <nowait>\/ <Cmd>lua Snacks.picker.grep({ dirs = { vim.fn['utils#get_vcs_dir']() } })<Cr>
     nnoremap <nowait>\. <Cmd>lua Snacks.picker.resume()<Cr>
-    nnoremap <nowait>\\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('<cword>'), dirs = { require('cfg.snacks').root() } })<Cr>
-    xnoremap <nowait>\\ :<C-u>lua Snacks.picker.grep({ search = vim.fn['utils#get_visual'](), dirs = { require('cfg.snacks').root() } })<Cr>
-    nnoremap <nowait>\? <Cmd>lua Snacks.picker.grep({ search = vim.fn.getreg('"'), dirs = { require('cfg.snacks').root() } })<Cr>
-    nnoremap <nowait><leader>f/ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:t:r') })<Cr>
-    nnoremap <nowait><leader>f\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:p:h:t') })<Cr>
-    if executable('git')
-        nnoremap <nowait><Tab>/ <Cmd>lua Snacks.picker.grep({ dirs = { require('cfg.snacks').root('git') } })<Cr>
-        nnoremap <nowait><Tab>. <Cmd>lua Snacks.picker.resume()<Cr>
-        nnoremap <nowait><Tab>\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('<cword>'), dirs = { require('cfg.snacks').root('git') } })<Cr>
-        xnoremap <nowait><Tab>\ :<C-u>lua Snacks.picker.grep({ search = vim.fn['utils#get_visual'](), dirs = { require('cfg.snacks').root('git') } })<Cr>
-        nnoremap <nowait><Tab>? <Cmd>lua Snacks.picker.grep({ search = vim.fn.getreg('"'), dirs = { require('cfg.snacks').root('git') } })<Cr>
-        nnoremap <nowait><Tab>f/ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:t:r'), dirs = { require('cfg.snacks').root('git') } })<Cr>
-        nnoremap <nowait><Tab>f\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:p:h:t'), dirs = { require('cfg.snacks').root('git') } })<Cr>
-        nnoremap <nowait><Tab>g <Cmd>lua Snacks.picker.git_files({ pattern = vim.fn.getreg('"'), cwd = require('cfg.snacks').root('git') })<Cr>
-        xnoremap <nowait><Tab>g :<C-u>lua Snacks.picker.git_files({ pattern = vim.fn['utils#get_visual'](), cwd = require('cfg.snacks').root('git') })<Cr>
-    endif
+    nnoremap <nowait>\\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('<cword>'), dirs = { vim.fn['utils#get_vcs_dir']() } })<Cr>
+    xnoremap <nowait>\\ :<C-u>lua Snacks.picker.grep({ search = vim.fn['utils#get_visual'](), dirs = { vim.fn['utils#get_vcs_dir']() } })<Cr>
+    nnoremap <nowait>\? <Cmd>lua Snacks.picker.grep({ search = vim.fn.getreg('"'), dirs = { vim.fn['utils#get_vcs_dir']() } })<Cr>
+    nnoremap <nowait>\f/ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:t:r'), dirs = { vim.fn['utils#get_vcs_dir']() } })<Cr>
+    nnoremap <nowait>\f\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:p:h:t'), dirs = { vim.fn['utils#get_vcs_dir']() } })<Cr>
 elseif pack#installed_fzf()
-    nnoremap <nowait><leader>/ :FzfSearch<Cr>
-    nnoremap <nowait><leader>. :FzfSearchLast<Cr>
-    nnoremap <nowait><leader>\ :FzfSearch <C-r><C-w>
-    xnoremap <nowait><leader>\ :<C-u>FzfSearch <C-r>=utils#get_visual()<Cr>
-    nnoremap <nowait><leader>? :FzfSearch <C-r>=@"<Cr><Cr>
-    nnoremap <nowait>\/ :FzfSearchAll<Cr>
-    nnoremap <nowait>\. :FzfSearchAllLast<Cr>
-    nnoremap <nowait>\\ :FzfSearchAll <C-r><C-w>
-    xnoremap <nowait>\\ :<C-u>FzfSearchAll <C-r>=utils#get_visual()<Cr>
-    nnoremap <nowait>\? :FzfSearchAll <C-r>=@"<Cr><Cr>
-    nnoremap <nowait><leader>f/ :FzfSearch <C-r>=utils#file_name_no_ext()<Cr><Cr>
-    nnoremap <nowait><leader>f\ :FzfSearch <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
-    nnoremap <nowait><Tab>f/ :FzfSearchGit <C-r>=utils#file_name_no_ext()<Cr><Cr>
-    nnoremap <nowait><Tab>f\ :FzfSearchGit <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
-    if executable('git')
-        nnoremap <nowait><Tab>/ :FzfSearchGit<Cr>
-        nnoremap <nowait><Tab>. :FzfSearchGitLast<Cr>
-        nnoremap <nowait><Tab>\ :FzfSearchGit <C-r><C-w>
-        xnoremap <nowait><Tab>\ :<C-u>FzfSearchGit <C-r>=utils#get_visual()<Cr>
-        nnoremap <nowait><Tab>? :FzfSearchGit <C-r>=@"<Cr><Cr>
-        nnoremap <nowait><Tab>g :FzfGitFiles <C-r>=@"<Cr>
-        xnoremap <nowait><Tab>g y:<C-u>FzfGitFiles <C-r>=utils#get_visual()<Cr>
-    endif
-endif
-" --------------------------------------
-" search path && dir, ans set search-tool
-" --------------------------------------
-if pack#installed_leaderf() && executable('rg')
-    nnoremap <nowait>\f/ :LeaderfSearchAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
-    nnoremap <nowait>\f\ :LeaderfSearchAll <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
-elseif pack#installed_snacks()
-    nnoremap <nowait>\f/ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:t:r'), dirs = { require('cfg.snacks').root() } })<Cr>
-    nnoremap <nowait>\f\ <Cmd>lua Snacks.picker.grep({ search = vim.fn.expand('%:p:h:t'), dirs = { require('cfg.snacks').root() } })<Cr>
-elseif pack#installed_fzf()
-    nnoremap <nowait>\f/ :FzfSearchAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
-    nnoremap <nowait>\f\ :FzfSearchAll <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
-else
-    nnoremap <nowait>\f/ :GrepAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
-    nnoremap <nowait>\f\ :GrepAll <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
-endif
-" g:search_tool
-let s:search_tool = []
-if pack#installed_leaderf() && executable('rg')
-    call add(s:search_tool, 'leaderf')
+    nnoremap <nowait><leader>/ :FzfSearchAll<Cr>
+    nnoremap <nowait><leader>. :FzfSearchAllLast<Cr>
+    nnoremap <nowait><leader>\ :FzfSearchAll <C-r><C-w>
+    xnoremap <nowait><leader>\ :<C-u>FzfSearchAll <C-r>=utils#get_visual()<Cr>
+    nnoremap <nowait><leader>? :FzfSearchAll <C-r>=@"<Cr><Cr>
+    nnoremap <nowait><leader>f/ :FzfSearchAll <C-r>=utils#file_name_no_ext()<Cr><Cr>
+    nnoremap <nowait><leader>f\ :FzfSearchAll <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
+    nnoremap <nowait><Tab>/ :FzfSearch<Cr>
+    nnoremap <nowait><Tab>. :FzfSearchLast<Cr>
+    nnoremap <nowait><Tab>\ :FzfSearch <C-r><C-w>
+    xnoremap <nowait><Tab>\ :<C-u>FzfSearch <C-r>=utils#get_visual()<Cr>
+    nnoremap <nowait><Tab>? :FzfSearch <C-r>=@"<Cr><Cr>
+    nnoremap <nowait><Tab>f/ :FzfSearch <C-r>=utils#file_name_no_ext()<Cr><Cr>
+    nnoremap <nowait><Tab>f\ :FzfSearch <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
+    nnoremap <nowait>\/ :FzfSearchGit<Cr>
+    nnoremap <nowait>\. :FzfSearchGitLast<Cr>
+    nnoremap <nowait>\\ :FzfSearchGit <C-r><C-w>
+    xnoremap <nowait>\\ :<C-u>FzfSearchGit <C-r>=utils#get_visual()<Cr>
+    nnoremap <nowait>\? :FzfSearchGit <C-r>=@"<Cr><Cr>
+    nnoremap <nowait>\f/ :FzfSearchGit <C-r>=utils#file_name_no_ext()<Cr><Cr>
+    nnoremap <nowait>\f\ :FzfSearchGit <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
 endif
 if pack#installed_snacks()
     call add(s:search_tool, 'snacks')
