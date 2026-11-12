@@ -189,6 +189,10 @@ elseif pack#installed_fzf()
     nnoremap <nowait>\f/ :FzfSearchGit <C-r>=utils#file_name_no_ext()<Cr><Cr>
     nnoremap <nowait>\f\ :FzfSearchGit <C-r>=utils#basename(utils#abs_dir())<Cr><Cr>
 endif
+let s:search_tool = []
+if pack#installed_leaderf() && executable('rg')
+    call add(s:search_tool, 'leaderf')
+endif
 if pack#installed_snacks()
     call add(s:search_tool, 'snacks')
 elseif pack#installed_fzf()
